@@ -57,7 +57,6 @@ struct BikeDraft: Equatable {
 /// of the bike. Archiving a bike is offered here, because deleting it would orphan its rides.
 struct BikeEditorView: View {
     let target: BikeEditorTarget
-    @Environment(\.modelContext) private var modelContext
     @Environment(\.dismiss) private var dismiss
     @Query private var riders: [Rider]
     @Query private var bikes: [Bike]
@@ -340,7 +339,7 @@ struct BikeEditorView: View {
         }
         draft.apply(to: bike)
         if draft.makeActive { library.setActiveBike(bike) }
-        try? modelContext.save()
+        library.save()
         dismiss()
     }
 
