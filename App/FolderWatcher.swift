@@ -44,6 +44,9 @@ final class FolderWatcher {
     private var source: DispatchSourceFileSystemObject?
     private var accessing = false
     private var pendingScan: Task<Void, Never>?
+    /// A scan reads files off the main actor, so changes can arrive while one runs: they lead to one more.
+    private var scanning = false
+    private var rescanRequested = false
     private var periodicScan: Task<Void, Never>?
 
     private enum Keys {
@@ -160,14 +163,25 @@ final class FolderWatcher {
             problem = String(localized: "The folder cannot be opened. Was it moved or deleted?")
             return
         }
+        guard !scanning else { rescanRequested = true; return }
+        scanning = true
+        Task { [weak self] in await self?.scan(folderURL) }
+    }
+
+    private func scan(_ folderURL: URL) async {
         let importer = FolderImport(
             library: library, folder: folderURL,
             importedFolderName: String(localized: "folder.imported", defaultValue: "Imported",
                                        comment: "Subfolder of the watched folder for imported files"),
             failedFolderName: String(localized: "folder.failed", defaultValue: "Failed",
                                      comment: "Subfolder of the watched folder for files that could not be read"))
-        lastSummary = importer.run()
+        lastSummary = await importer.run()
         lastChecked = .now
+        scanning = false
+        if rescanRequested {
+            rescanRequested = false
+            checkNow()
+        }
     }
 
     /// Several changes in a row (a file being written, iCloud downloads) lead to one scan.
