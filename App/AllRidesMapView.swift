@@ -25,16 +25,16 @@ struct AllRidesMapView: View {
     let onImport: () -> Void
 
     @Query(sort: \Ride.startDate) private var rides: [Ride]
-    @AppStorage("mapPeriod") private var kind: AnalysisPeriodKind = .all
+    @AppStorage(SettingsKey.mapPeriod) private var kind: AnalysisPeriodKind = .all
     /// The bike filter of the map, remembered (B-137, B-110).
-    @AppStorage("bikeFilter.map") private var bikeFilterChoice: BikeFilter = .all
+    @AppStorage(SettingsKey.bikeFilterMap) private var bikeFilterChoice: BikeFilter = .all
     /// The source filter of the map, the same way (B-145).
-    @AppStorage("sourceFilter.map") private var sourceFilterChoice: SourceFilter = .all
+    @AppStorage(SettingsKey.sourceFilterMap) private var sourceFilterChoice: SourceFilter = .all
     private var hasGPXRides: Bool { rides.contains { $0.source == .gpx } }
     @Query private var bikes: [Bike]
-    @AppStorage("mapType") private var mapType: RideMapType = .standard
+    @AppStorage(SettingsKey.mapType) private var mapType: RideMapType = .standard
     /// Heat lines or heat map (B-107, B-108).
-    @AppStorage("mapMode") private var mode: RidesMapStyle.Mode = .lines
+    @AppStorage(SettingsKey.mapMode) private var mode: RidesMapStyle.Mode = .lines
     @State private var offset = 0
     @State private var customStart = Calendar.current.date(byAdding: .day, value: -30, to: .now) ?? .now
     @State private var customEnd = Date.now

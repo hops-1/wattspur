@@ -7,6 +7,22 @@ Every DMG handed out to testers corresponds to one entry below.
 
 ## [Unreleased]
 
+### Changed
+- Ride details: the map with the track stays in view at the top and only the part below it scrolls, so the spot you point at in a chart is always visible on the map. The map is a little shorter in small windows.
+- Ride map: the red (new) and blue (ridden before) lines are now equally wide; before, red looked heavier at most zoom levels.
+
+## [1.6.1] – 2026-10-25
+
+Security fix for damaged FIT files, and a tidier foundation. Nothing new to see.
+
+### Fixed
+- **A damaged or deliberately crafted FIT file could crash Wattspur** while importing or when its ride was opened: five cases are fixed (a time stamp near the end of the range, a negative serial number, huge power values, an extreme start time, and numbers that are not numbers in the distance). Such a file now imports with the bad values left out, or is reported as unreadable. The crash could come back at every launch when the file sat in the watched folder. A review of the 1.6.0 code found no way to run code through a file; all five were crashes only.
+- The charts of a ride no longer crash if its records start before the ride's start time.
+
+### Changed
+- Internal: the code is split into a part that reads files and calculates (`WattspurCore`, without database or screen code) and the part that stores rides (`WattspurKit`); the ride library hands its work to six small services; one library is shared by all windows; big views (Highlights, Analysis, Comparison) are split into folders; all settings keys are in one place with their old values.
+- The watched folder reads files in the background, and the housekeeping at launch (empty the old trash, read outdated rides again, trim the import log) now starts after the first window is shown.
+
 ## [1.6.0] – 2026-10-25
 
 GPX import: rides from other bikes, apps and bike computers, next to your Bosch rides.

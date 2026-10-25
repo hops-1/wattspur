@@ -30,15 +30,15 @@ struct RideListView: View {
     /// The rows show a bike symbol from two bikes on (B-136).
     @Query private var bikes: [Bike]
     /// The bike filter of this list, remembered (B-137).
-    @AppStorage("bikeFilter.rides") private var bikeFilterChoice: BikeFilter = .all
+    @AppStorage(SettingsKey.bikeFilterRides) private var bikeFilterChoice: BikeFilter = .all
     private var bikeFilter: BikeFilter { scope == nil ? bikeFilterChoice.resolved(knownBikeIDs: Set(bikes.map(\.id))) : .all }
     /// The source filter of this list, remembered (B-145); only with a ride from a GPX file.
-    @AppStorage("sourceFilter.rides") private var sourceFilterChoice: SourceFilter = .all
+    @AppStorage(SettingsKey.sourceFilterRides) private var sourceFilterChoice: SourceFilter = .all
     private var hasGPXRides: Bool { rides.contains { $0.source == .gpx } }
     private var sourceFilter: SourceFilter { scope == nil ? sourceFilterChoice.resolved(hasGPXRides: hasGPXRides) : .all }
     /// Copies of the list's filters for the year in review (B-145).
-    @AppStorage("bikeFilter.highlights") private var highlightsBikeFilter: BikeFilter = .all
-    @AppStorage("sourceFilter.highlights") private var highlightsSourceFilter: SourceFilter = .all
+    @AppStorage(SettingsKey.bikeFilterHighlights) private var highlightsBikeFilter: BikeFilter = .all
+    @AppStorage(SettingsKey.sourceFilterHighlights) private var highlightsSourceFilter: SourceFilter = .all
 
     @State private var searchText = ""
     @State private var showingImporter = false
@@ -47,9 +47,9 @@ struct RideListView: View {
     @State private var flow = ImportFlow()
     @State private var renaming: Ride?
     @State private var newName = ""
-    @AppStorage("rideSortOrder") private var sortOrder: RideSortOrder = .date
-    @AppStorage("ridePeriod") private var period: RidePeriod = .all
-    @AppStorage(MultiSelectTip.storageKey) private var multiSelectTipDone = false
+    @AppStorage(SettingsKey.rideSortOrder) private var sortOrder: RideSortOrder = .date
+    @AppStorage(SettingsKey.ridePeriod) private var period: RidePeriod = .all
+    @AppStorage(SettingsKey.multiSelectTipDone) private var multiSelectTipDone = false
     /// Rides waiting for "Move to trash?" when several are selected.
     @State private var trashCandidates: Set<UUID>?
     /// Rides waiting in the "Merge rides" sheet (B-095).
@@ -539,7 +539,7 @@ private struct RideRowBike: View {
 /// A quiet tip below the list (B-113): testers did not find out that ⌘-click selects
 /// several rides. It goes away after the first multiple selection or with ✕.
 struct MultiSelectTip: View {
-    static let storageKey = "multiSelectTipDone"
+    static let storageKey = SettingsKey.multiSelectTipDone
     let onHide: () -> Void
 
     var body: some View {

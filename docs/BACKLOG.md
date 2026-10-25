@@ -1,6 +1,6 @@
 # Backlog – Wattspur
 
-Stand: 25.10.2026 (v0.15, Release 1.5.0 mit B-133 bis B-138, B-067 als Gerüst und den Kalorien wie Flow (V-01); Plan für 1.6 bis 1.9) · Die IDs in Klammern verweisen auf `REQUIREMENTS.md`.
+Stand: 25.10.2026 (v0.16, Release 1.6.1 mit Sicherheits-Fix und Architektur-Aufräumen B-162 bis B-169; Plan für 1.7 bis 1.9) · Die IDs in Klammern verweisen auf `REQUIREMENTS.md`.
 Größe: **S** ≈ wenige Stunden, **M** ≈ 1–2 Tage, **L** ≈ mehrere Tage.
 Status: ☐ offen · ◐ in Arbeit · ☑ erledigt
 
@@ -20,6 +20,7 @@ Status: ☐ offen · ◐ in Arbeit · ☑ erledigt
 | **v1.4.3** | Aus dem Test von 1.4.1: keine Orte auf der Karte aller Fahrten, Zusammenfügen beim Import vorschlagen, Fügestellen, x-Achse Strecke oder Zeit, Diagramm und Karte gekoppelt | Freunde |
 | **v1.5** | Profil und mehrere Bikes: Bereich „Profil“, Bike-Filter je Bereich, Kalorien „mit Profil“ | Freunde |
 | **v1.6** | GPX-Import: Fahrten anderer Bikes und Radcomputer, FIT und GPX derselben Tour zusammenführen | Freunde, Tester mit anderen Bikes |
+| **v1.6.1** | Sicherheits-Fix für beschädigte FIT-Dateien und Aufräumen der Architektur (zwei Module, Dienste, geteilte Bibliothek); keine neuen Funktionen | Freunde |
 | **v1.7** | Ähnliche Strecken (suchen, vergleichen, Verlauf, Gruppen) und weitere Rekorde | Freunde |
 | **v1.8** | Ein Bereich „Fahrten“ mit Karte als Standard (B-125), Kalendertag als Filter (B-130) | Freunde |
 | **v1.9** | Bosch-Daten über die offizielle Data-Act-API (optional, eigenes Bosch-Konto): Bike, Akku und Wartung, Zusatzfelder je Fahrt und Import von Fahrten ohne Datei (Altbestand). **Motordaten je Fahrt gibt die API nicht her (Spezifikation 25.10.2026), Entscheidung Nils: Option B;** steht unter dem Vorbehalt des Spikes V-12 | Freunde mit Smart-System-Bike in der EU |
@@ -254,6 +255,27 @@ Wunsch von Nils: Die Zielgruppe wächst, wenn auch Fahrten anderer Bikes und Rad
 | B-145 | Anzeige: Quellen-Symbol, „–“ bei fehlenden Werten, Info „geschätzt“, Filter nach Quelle in Liste, Auswertung und Karte; VoiceOver. **Stand 25.10.2026:** umgesetzt nach dem Mockup „GPX-Fahrten anzeigen“. Kit: `SourceFilter` (Alle / Bosch-FIT inklusive angehängter GPX / GPX), `Ride.sourceBadge`, `MapFilter.source`, `Ride.hasPowerData`. App: Symbol „GPX“ bzw. „+GPX“ in der Listenzeile (Bosch-FIT ohne Symbol, VoiceOver „Quelle: GPX-Datei“); Quellenfilter in Liste (Filtermenü), Auswertung, Karte und Highlights, je Bereich gemerkt wie der Bike-Filter und nur, wenn es eine GPX-Fahrt gibt (Ziele zählen alle Quellen); die Jahreskarte der Liste folgt Bike- und Quellenfilter und öffnet die Jahresauswertung mit denselben Filtern; Tour-Detail mit Zeile „Quelle: GPX · Datei“, „≈ Summen geschätzt“ mit Erklärung (Pause 30 s, Stillstand 0,8 m/s, Höhen 3 m) und „≈“ an Fahrzeit, Strecke, Ø Geschwindigkeit und Anstieg; fehlende Werte „–“ mit „Nicht in der Datei“, Kalorien „–“ ohne Leistung („Braucht Leistung“), CO₂ „Aus der Strecke“, Arbeit „–“; Diagramme Höhe, Trittfrequenz und Leistung zeigen „Diese Datei enthält keine … Daten“. Abweichung vom Mockup: Das Quellenmenü steht im Filtermenü der Liste statt als eigener Knopf. Die Aggregate (Rekorde, Auswertung, Vergleich, „n von m Fahrten“) folgen mit B-146. Debug-Start `-WattspurDemoImport` legt Dateien in der Demo-Bibliothek an | M | ☑ |
 | B-146 | Berechnungen ohne Leistung: Rekorde, Highlights, Ziele, Auswertung und Vergleich mit fehlenden Werten; CO₂ aus der Strecke, Kalorien „–“; „n von m Fahrten“; mit Tests. **Stand 25.10.2026:** umgesetzt. Kit: `ValueCoverage` („n von m“) und `RideAggregate.powerCoverage/cadenceCoverage/ascentCoverage`; Arbeit und Kalorien summieren nur Fahrten mit Leistung (`RideFigures.hasPowerData`), ohne eine solche Fahrt gibt es keinen Wert (`…IfKnown`, in der App „–“); Strecke, Zeit und CO₂ (aus der Strecke) zählen alle Fahrten. Vergleich: Arbeit, Kalorien und Werte je Kilometer sind ohne Leistung leer und ziehen den Durchschnitt nicht auf 0 (`RideComparison.coverage`). Rekorde (Ø Leistung, meiste Höhenmeter) übergehen Fahrten ohne den Wert schon bisher, mit Test belegt. Ziele: Anstieg-Ziel zeigt „n von m Fahrten“, wenn Fahrten keine Höhen haben (`GoalProgress.ascentCoverage`). App: Hinweis „n von m Fahrten“ unter Anstieg, Arbeit, Kalorien, Ø Leistung und Ø Trittfrequenz in der Auswertung, unter dem Anstieg der Jahresauswertung, am Anstieg-Ziel und unter dem Durchschnitt im Vergleich; nur, wenn der Wert nicht für alle Fahrten da ist; ohne Wert „–“; Vorschau beim Zusammenfügen „–“ für die Arbeit. 11 Tests (`NoPowerTests`). Das Mockup für den Hinweis fehlt weiter; umgesetzt ist „9 von 12 Fahrten“ klein unter der Zahl (Vorschlag, mit Nils abzustimmen) | M | ☑ |
 | – | **Release 1.6.0** (25.10.2026): Version 1.6.0 in `project.yml`, Changelog, Handbuch EN/DE mit neuem Kapitel „GPX-Dateien importieren“ (08), Ergänzungen in Import, Ansichten, Kennzahlen, FAQ und Bikes, veraltete Texte (Einrichtungsassistent, Einstellungen › Import, Info, leere Karte) korrigiert; Tag `v1.6.0` und DMG nach dem Merge. Bilder für das neue Kapitel fehlen (Handbuch kommt ohne neue Screenshots) | S | ☑ |
+
+## v1.6.1 – Sicherheits-Fix und Architektur aufräumen (Plan 25.10.2026)
+
+Auslöser: Der Sicherheitscheck von 1.6.0 fand fünf Abstürze durch präparierte FIT-Dateien (PR #5, schon auf `main`). Der Architekturbericht danach zeigte Zyklen im Kit, eine zu große `RideLibrary`, Schreibzugriffe in Views, große View-Dateien, verstreute Einstellungsschlüssel und einen schweren Start. Entschieden mit Nils: Version 1.6.1 (Patch, keine neuen Funktionen), zwei Module, ein PR je Schritt.
+
+**Reihenfolge und PRs:** je Zeile ein PR, aufeinander aufgebaut; Check: `scripts/ci-local.sh`.
+
+| # | Story | Größe | Status |
+|---|---|---|---|
+| – | **Sicherheits-Fix** FIT-Import (Zeitstempel, Seriennummer, Leistungssumme, Zeitachse, NaN) mit `FITHostileInputTests` (PR #5) | M | ☑ |
+| B-162 | Eine geteilte `RideLibrary` über die Environment, Undo je Fenster mit `using(_:)` (PR #6) | M | ☑ |
+| B-163 | Schreibzugriffe aus den Views: Ziele, Speichern, Zeitzonen über die Bibliothek (PR #7) | S | ☑ |
+| B-164 | Modulschnitt `WattspurCore` / `WattspurKit`, Brücken in `RideBridges.swift`, Tests und Fixtures geteilt (PR #8) | L | ☑ |
+| B-165 | `RideLibrary` in sechs Dienste, Fassade bleibt, `defaultBikeName` als Parameter (PR #9) | L | ☑ |
+| B-166 | Große Views in Ordner: Highlights, Analysis, Compare (PR #10) | M | ☑ |
+| B-167 | Einstellungsschlüssel in `SettingsKey` (PR #11) | S | ☑ |
+| B-168 | Wartung nach dem ersten Fenster, Ordner-Import liest im Hintergrund (PR #12) | M | ☑ |
+| B-169 | `docs/ARCHITECTURE.md`, Regel-Prüfung `scripts/check-architecture.sh` in der CI, Lern-Notiz 25, Changelog, Version 1.6.1 | S | ☑ |
+| – | **Release 1.6.1:** DMG bauen, Tag `v1.6.1`, GitHub-Release (nach Freigabe durch Nils) | S | ☐ |
+| B-170 | Fahrtdetails: Karte mit Titelzeile bleibt oben stehen, nur der Teil darunter scrollt; Kartenhöhe 200–340 pt je nach Fensterhöhe (Wunsch 25.10.2026) | S | ☑ |
+| B-171 | Streckenkarte: neue (rote) und bekannte (blaue) Spur gleich dick, Legende angepasst (Wunsch 25.10.2026) | S | ☑ |
 
 ## v1.7 – Ähnliche Strecken und weitere Rekorde (Wunsch 22.10.2026)
 

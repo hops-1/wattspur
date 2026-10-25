@@ -35,9 +35,9 @@ private struct RideDetailContent: View {
     @Query(filter: Ride.listedPredicate)
     private var listedRides: [Ride]
 
-    @AppStorage("mapType") private var mapType: RideMapType = .standard
+    @AppStorage(SettingsKey.mapType) private var mapType: RideMapType = .standard
     /// "From pedal power" or "with profile" (SET-06, B-067).
-    @AppStorage("calorieMode") private var calorieMode: CalorieMode = .fromWork
+    @AppStorage(SettingsKey.calorieMode) private var calorieMode: CalorieMode = .fromWork
     @Query private var riders: [Rider]
     private var calories: CalorieModel { CalorieModel(mode: calorieMode, rider: riders.first) }
     @Environment(NewPathsStore.self) private var newPaths
@@ -47,7 +47,7 @@ private struct RideDetailContent: View {
     /// The same series over the time since the start (B-065).
     @State private var timePoints: [ChartPoint] = []
     /// x axis of the charts, remembered (TOUR-07).
-    @AppStorage("chartAxis") private var chartAxis: ChartAxis = .distance
+    @AppStorage(SettingsKey.chartAxis) private var chartAxis: ChartAxis = .distance
     /// Where the parts of a merged ride meet (B-131).
     @State private var joins: [RideMerge.Join] = []
     /// The spot shared by the charts and the map (B-062).
@@ -56,94 +56,23 @@ private struct RideDetailContent: View {
     @State private var exporting = false
 
     var body: some View {
-        ScrollView {
-            VStack(alignment: .leading, spacing: 22) {
-                if ride.isSample {
-                    SampleRideBanner()
+        GeometryReader { proxy in
+            // The map stays in view, so the spot the charts point at never scrolls away (B-170);
+            // only what is below it scrolls.
+            VStack(spacing: 0) {
+                header(mapHeight: Self.mapHeight(forWindow: proxy.size.height))
+                    .padding(.horizontal, 28)
+                    .padding(.top, 28)
+                    .padding(.bottom, 12)
+                    .column()
+                Divider()
+                ScrollView {
+                    content
+                        .padding(.horizontal, 28)
+                        .padding(.vertical, 22)
+                        .column()
                 }
-                if ride.isMerged {
-                    MergedRideBanner(ride: ride, onSplit: onSplit)
-                }
-                // PDF export at the top left, as in the comparison (P-20).
-                HStack(spacing: 8) {
-                    PDFExportButton(isExporting: exporting, isDisabled: points.isEmpty && route.isEmpty) { target in
-                        Task { await exportPDF(target) }
-                    }
-                    // GPX export next to it (B-112, IMP-09).
-                    Button("Export as GPX…", systemImage: "point.topleft.down.to.point.bottomright.curvepath") {
-                        GPXExport.save(ride)
-                    }
-                    .buttonStyle(.glass)
-                    .disabled(route.isEmpty)
-                    .help(Text("Save the track for komoot, a navigation device or another app"))
-                }
-                HStack(alignment: .top, spacing: 16) {
-                    VStack(alignment: .leading, spacing: 4) {
-                        Text(ride.name).font(.largeTitle.bold())
-                        Text(RideFormat.longDate(ride.startDate, timeZone: ride.timeZone))
-                            .foregroundStyle(.secondary)
-                    }
-                    Spacer(minLength: 0)
-                    RideBikeMenu(ride: ride)
-                        .padding(.top, 6)
-                }
-                // Where a GPX ride comes from and why its totals are estimated (B-145).
-                RideSourceLine(ride: ride)
-
-                let fresh = newPaths.result(for: ride)
-                RideMapView(route: route, mapType: mapType, joins: joins, newStretches: fresh?.stretches ?? [])
-                    .frame(height: 340)
-                    // A fresh map for each ride; route and new paths update it in place,
-                    // drawn in a fixed order (B-127).
-                    .id(ride.id)
-                    .overlay(alignment: .topTrailing) {
-                        Picker("Map type", selection: $mapType) {
-                            ForEach(RideMapType.allCases) { Text($0.label).tag($0) }
-                        }
-                        .pickerStyle(.segmented)
-                        .labelsHidden()
-                        .fixedSize()
-                        .padding(6)
-                        .glassEffect(.regular, in: Capsule())
-                        .padding(12)
-                    }
-                if ride.isSample {
-                    Text("The route is moved and shortened by 500 m at the start and end; power, cadence and totals are real.")
-                        .font(.caption)
-                        .foregroundStyle(.secondary)
-                }
-
-                let held = heldRecords
-                if !held.isEmpty {
-                    RecordBanner(records: held, onShowRecords: onShowRecords)
-                }
-                KeyFiguresGrid(ride: ride, records: Set(held.map(\.kind)), calories: calories)
-                if let fresh, !ride.isSample {
-                    NewPathsFigure(share: fresh.share, distance: fresh.share * ride.distance)
-                        .frame(maxWidth: 420, alignment: .leading)
-                }
-
-                DisclosureGroup("Details", isExpanded: $showDetails) {
-                    DetailsGrid(ride: ride)
-                        .padding(.top, 10)
-                        .frame(maxWidth: .infinity, alignment: .leading)
-                }
-                .padding(14)
-                .background(.quaternary.opacity(0.5), in: RoundedRectangle(cornerRadius: 12))
-
-                Picker("Chart axis", selection: $chartAxis) {
-                    Text("Distance").tag(ChartAxis.distance)
-                    Text("Time").tag(ChartAxis.time)
-                }
-                .pickerStyle(.segmented)
-                .labelsHidden()
-                .fixedSize()
-                .help(Text("What the charts show along the bottom"))
-                RideChartsView(ride: ride, points: chartPoints, axis: chartAxis, joins: joins)
             }
-            .padding(28)
-            .frame(maxWidth: 1100, alignment: .leading)
-            .frame(maxWidth: .infinity, alignment: .leading)
             .environment(cursor)
         }
         // Esc lets go of a held spot, and only then; without one it is left to the rest of the window.
@@ -167,6 +96,105 @@ private struct RideDetailContent: View {
 }
 
 extension RideDetailContent {
+    /// The map is a third of the window, between 200 and 340 points, so the text below keeps room.
+    static func mapHeight(forWindow height: CGFloat) -> CGFloat {
+        min(340, max(200, height * 0.36))
+    }
+
+    /// What stays in place: PDF and GPX export, name, source and the map.
+    private func header(mapHeight: CGFloat) -> some View {
+        VStack(alignment: .leading, spacing: 12) {
+            // PDF export at the top left, as in the comparison (P-20).
+            HStack(spacing: 8) {
+                PDFExportButton(isExporting: exporting, isDisabled: points.isEmpty && route.isEmpty) { target in
+                    Task { await exportPDF(target) }
+                }
+                // GPX export next to it (B-112, IMP-09).
+                Button("Export as GPX…", systemImage: "point.topleft.down.to.point.bottomright.curvepath") {
+                    GPXExport.save(ride)
+                }
+                .buttonStyle(.glass)
+                .disabled(route.isEmpty)
+                .help(Text("Save the track for komoot, a navigation device or another app"))
+            }
+            HStack(alignment: .top, spacing: 16) {
+                VStack(alignment: .leading, spacing: 4) {
+                    Text(ride.name).font(.largeTitle.bold())
+                    Text(RideFormat.longDate(ride.startDate, timeZone: ride.timeZone))
+                        .foregroundStyle(.secondary)
+                }
+                Spacer(minLength: 0)
+                RideBikeMenu(ride: ride)
+                    .padding(.top, 6)
+            }
+            // Where a GPX ride comes from and why its totals are estimated (B-145).
+            RideSourceLine(ride: ride)
+
+            RideMapView(route: route, mapType: mapType, joins: joins, newStretches: newPaths.result(for: ride)?.stretches ?? [])
+                .frame(height: mapHeight)
+                // A fresh map for each ride; route and new paths update it in place,
+                // drawn in a fixed order (B-127).
+                .id(ride.id)
+                .overlay(alignment: .topTrailing) {
+                    Picker("Map type", selection: $mapType) {
+                        ForEach(RideMapType.allCases) { Text($0.label).tag($0) }
+                    }
+                    .pickerStyle(.segmented)
+                    .labelsHidden()
+                    .fixedSize()
+                    .padding(6)
+                    .glassEffect(.regular, in: Capsule())
+                    .padding(12)
+                }
+        }
+    }
+
+    /// What scrolls below the map: banners, key figures, details and charts.
+    private var content: some View {
+        VStack(alignment: .leading, spacing: 22) {
+            if ride.isSample {
+                SampleRideBanner()
+            }
+            if ride.isMerged {
+                MergedRideBanner(ride: ride, onSplit: onSplit)
+            }
+            if ride.isSample {
+                Text("The route is moved and shortened by 500 m at the start and end; power, cadence and totals are real.")
+                    .font(.caption)
+                    .foregroundStyle(.secondary)
+            }
+
+            let held = heldRecords
+            if !held.isEmpty {
+                RecordBanner(records: held, onShowRecords: onShowRecords)
+            }
+            let fresh = newPaths.result(for: ride)
+            KeyFiguresGrid(ride: ride, records: Set(held.map(\.kind)), calories: calories)
+            if let fresh, !ride.isSample {
+                NewPathsFigure(share: fresh.share, distance: fresh.share * ride.distance)
+                    .frame(maxWidth: 420, alignment: .leading)
+            }
+
+            DisclosureGroup("Details", isExpanded: $showDetails) {
+                DetailsGrid(ride: ride)
+                    .padding(.top, 10)
+                    .frame(maxWidth: .infinity, alignment: .leading)
+            }
+            .padding(14)
+            .background(.quaternary.opacity(0.5), in: RoundedRectangle(cornerRadius: 12))
+
+            Picker("Chart axis", selection: $chartAxis) {
+                Text("Distance").tag(ChartAxis.distance)
+                Text("Time").tag(ChartAxis.time)
+            }
+            .pickerStyle(.segmented)
+            .labelsHidden()
+            .fixedSize()
+            .help(Text("What the charts show along the bottom"))
+            RideChartsView(ride: ride, points: chartPoints, axis: chartAxis, joins: joins)
+        }
+    }
+
     /// The records this ride holds now, each with the best value of all other rides.
     private var heldRecords: [RecordBanner.Held] {
         guard ride.countsInStatistics else { return [] }
@@ -386,5 +414,13 @@ private struct Figure: View {
             }
         }
         .accessibilityElement(children: .combine)
+    }
+}
+
+private extension View {
+    /// The reading width of the detail page, left aligned.
+    func column() -> some View {
+        frame(maxWidth: 1100, alignment: .leading)
+            .frame(maxWidth: .infinity, alignment: .leading)
     }
 }

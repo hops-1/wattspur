@@ -76,8 +76,8 @@ enum RecordCheck {
     /// Import log dates up to here were checked. The first launch with this feature
     /// starts from now, so older imports do not show up as new records.
     private static var checkedUntil: Double {
-        get { UserDefaults.standard.double(forKey: "recordsCheckedUntil") }
-        set { UserDefaults.standard.set(newValue, forKey: "recordsCheckedUntil") }
+        get { UserDefaults.standard.double(forKey: SettingsKey.recordsCheckedUntil) }
+        set { UserDefaults.standard.set(newValue, forKey: SettingsKey.recordsCheckedUntil) }
     }
 
     static func prepare() {

@@ -2,6 +2,8 @@ import Foundation
 import SwiftData
 import Testing
 @testable import WattspurKit
+@testable import WattspurCore
+import TestFixtures
 
 /// B-141: GPX rides in the store – source, "estimated" flag, original points, heart rate and temperature.
 @MainActor

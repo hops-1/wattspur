@@ -2,6 +2,8 @@ import Foundation
 import SwiftData
 import Testing
 @testable import WattspurKit
+@testable import WattspurCore
+import TestFixtures
 
 @Suite("Bike statistics")
 struct BikeStatisticsTests {
@@ -45,7 +47,6 @@ struct BikeTests {
     init() throws {
         container = try ModelContainer(for: Schema(WattspurSchema.models), configurations: ModelConfiguration(isStoredInMemoryOnly: true))
         library = RideLibrary(context: container.mainContext)
-        RideLibrary.defaultBikeName = "Mein eBike"
     }
 
     private func ride(_ name: String, day: Int, distance: Double, bike: Bike?) -> Ride {
@@ -257,8 +258,7 @@ struct BikeTests {
 
     @Test("Migration keeps a name the user chose and uses the localized default for the rest")
     func migrationNames() throws {
-        RideLibrary.defaultBikeName = "My eBike"
-        defer { RideLibrary.defaultBikeName = "Mein eBike" }
+        let library = RideLibrary(context: context, defaultBikeName: "My eBike")
         let named = Bike(name: "Cube")
         let unnamed = Bike(name: " ")
         context.insert(named)
@@ -323,7 +323,6 @@ struct BikeAssignTests {
         container = try ModelContainer(for: Schema(WattspurSchema.models), configurations: ModelConfiguration(isStoredInMemoryOnly: true))
         undo.groupsByEvent = false
         library = RideLibrary(context: container.mainContext, undoManager: undo)
-        RideLibrary.defaultBikeName = "Mein eBike"
     }
 
     /// One group per user action, as the app's event loop makes them.
@@ -440,7 +439,6 @@ struct FirstBikeTests {
     init() throws {
         container = try ModelContainer(for: Schema(WattspurSchema.models), configurations: ModelConfiguration(isStoredInMemoryOnly: true))
         library = RideLibrary(context: container.mainContext)
-        RideLibrary.defaultBikeName = "Mein eBike"
     }
 
     @Test("The first bike gets the chosen name and color; it stays the only one and the active one")

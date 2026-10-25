@@ -2,6 +2,8 @@ import Foundation
 import SwiftData
 import Testing
 @testable import WattspurKit
+@testable import WattspurCore
+import TestFixtures
 
 @MainActor
 @Suite("Watched folder and import log")
@@ -34,10 +36,10 @@ struct FolderImportTests {
     }
 
     @Test("Imported files move to the imported folder, broken ones to the failed folder")
-    func movesFiles() throws {
+    func movesFiles() async throws {
         try write(fixture, "\(rideName).fit")
         try write(fixture.prefix(500), "broken.fit")
-        let summary = importer.run()
+        let summary = await importer.run()
 
         #expect(summary.imported == 1)
         #expect(summary.failed == 1)
@@ -51,21 +53,21 @@ struct FolderImportTests {
     }
 
     @Test("Unsupported files stay in place and are logged only once")
-    func leavesUnsupportedFiles() throws {
+    func leavesUnsupportedFiles() async throws {
         try write(Data("<TrainingCenterDatabase/>".utf8), "tour.tcx")
-        #expect(importer.run().newlyUnsupported == 1)
-        #expect(importer.run().newlyUnsupported == 0)
+        #expect(await importer.run().newlyUnsupported == 1)
+        #expect(await importer.run().newlyUnsupported == 0)
         #expect(exists("tour.tcx"))
         #expect(library.importRecords().count == 1)
         #expect(library.importRecords().first?.outcome == .unsupported)
     }
 
     @Test("Duplicates are skipped, moved away and logged; name clashes get a number")
-    func skipsDuplicates() throws {
+    func skipsDuplicates() async throws {
         try write(fixture, "\(rideName).fit")
-        importer.run()
+        await importer.run()
         try write(fixture, "\(rideName).fit")
-        let summary = importer.run()
+        let summary = await importer.run()
 
         #expect(summary.duplicates == 1)
         #expect(exists("Importiert/\(rideName) 2.fit"))
@@ -74,13 +76,13 @@ struct FolderImportTests {
     }
 
     @Test("Subfolders, hidden files and iCloud placeholders are not imported")
-    func ignoresOtherEntries() throws {
+    func ignoresOtherEntries() async throws {
         let sub = folder.appendingPathComponent("Importiert")
         try FileManager.default.createDirectory(at: sub, withIntermediateDirectories: true)
         try write(fixture, "old.fit", in: sub)
         try write(Data(), ".DS_Store")
         try write(Data(), ".Morning ride.fit.icloud")
-        let summary = importer.run()
+        let summary = await importer.run()
 
         #expect(summary.imported == 0)
         #expect(summary.downloading == 1)
