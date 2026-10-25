@@ -1,6 +1,6 @@
 # Install Wattspur
 
-Wattspur comes as a disk image (`Wattspur-<version>-<build>.dmg`). It is a free hobby project and is not notarized by Apple, so macOS asks once before the first start.
+Wattspur comes as a disk image (`Wattspur-<version>-<build>.dmg`); get the latest version from [Releases](https://github.com/hops-1/wattspur/releases/latest). It is a free hobby project and is not notarized by Apple, so macOS asks once before the first start.
 
 ## Install
 1. Open the DMG with a double-click.
