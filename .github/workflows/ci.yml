@@ -19,7 +19,12 @@ jobs:
         run: xcodebuild -version && swift --version
       - name: Run tests
         working-directory: Packages/WattspurKit
-        run: swift test
+        # One test at a time: on macOS 26 SwiftData sometimes traps when many in-memory
+        # containers are created in parallel (signal 5); macOS 27 is not affected.
+        # A backtrace shows the place if a crash comes back.
+        env:
+          SWIFT_BACKTRACE: enable=yes,interactive=no
+        run: swift test --no-parallel
 
   app-build:
     name: Build app
