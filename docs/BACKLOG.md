@@ -1,6 +1,6 @@
 # Backlog – Wattspur
 
-Stand: 25.10.2026 (v0.16, Release 1.6.1 mit Sicherheits-Fix und Architektur-Aufräumen B-162 bis B-169; Plan für 1.7 bis 1.9) · Die IDs in Klammern verweisen auf `REQUIREMENTS.md`.
+Stand: 25.10.2026 (v0.16, Release 1.6.1 mit Sicherheits-Fix, Architektur-Aufräumen B-162 bis B-169 und zwei Karten-Verbesserungen B-170, B-171; Plan für 1.7 bis 1.9) · Die IDs in Klammern verweisen auf `REQUIREMENTS.md`.
 Größe: **S** ≈ wenige Stunden, **M** ≈ 1–2 Tage, **L** ≈ mehrere Tage.
 Status: ☐ offen · ◐ in Arbeit · ☑ erledigt
 
