@@ -218,6 +218,15 @@ Entschieden mit Nils (25.10.2026, Mockup auf dem Design-Canvas, Artboards „Pro
 | B-067 | Kalorienmodus „mit Profil“ (Standard bleibt „aus Arbeit“): Arbeit ÷ Wirkungsgrad + Grundumsatz × Dauer; Alter aus Geburtsjahr und Fahrtdatum; „keine Angabe“ = Mittelwert; fehlende Werte → Rückfall mit Hinweis; Info-Text zum Schätzwert anpassen; im Kit mit Tests, abgeglichen mit V-01 (PROF-01, SET-06) Stand 25.10.2026: Gerüst umgesetzt (Kit, Einstellung, Anzeige, Tests), **in 1.5.0 nicht freigeschaltet** (Schalter `CalorieMode.withProfileAvailable` in `App/CalorieSettings.swift`, Entscheidung von Nils: erst nach dem Abgleich). Abgleich mit V-01 erledigt: „aus Arbeit“ bildet Flow nach (0,97 × kJ + 64 kcal je Stunde Fahrzeit, ohne Körperdaten; Flow hat keine), „mit Profil“ rechnet mit Wirkungsgrad 25 % (Faktor 0,956) plus Grundumsatz über die Fahrzeit. Zum Freischalten fehlen noch: Info-Text, Handbuch- und Changelog-Text für den Modus, Schalter auf `true` | M | ◐ |
 | B-138 | Umstieg und Erststart: einmaliger Hinweis nach dem Update (`@AppStorage`) mit Sprung ins Profil; Schritt „Erstes Bike“ im Assistenten (Name, Farbe; Körperdaten überspringbar) | S | ☑ |
 
+### Rückmeldungen aus dem Test von 1.5.0 (25.10.2026, noch ohne Version)
+
+Getestet von Nils aus Xcode am Stand von `main` (nach PR #68): Update von 1.4.3 mit dem Hinweis, Profil und Bikes mit allen Prüfpunkten, zweites Bike mit Auswahl in den Ansichten, Zuordnen, Kalorien (Abweichung zu Flow bei geprüften Fahrten etwa ±3 kcal). Nicht getestet: der Erststart-Assistent mit dem Schritt „Erstes Bike“ (später). Die beiden Punkte unten sind nur gemerkt, ohne Priorität und ohne Entscheidung zur Version.
+
+| # | Story | Größe | Status |
+|---|---|---|---|
+| B-158 | Bike-Symbol in der Fahrtenliste in der kleinen Größe schlecht zu erkennen: Größe, Kontrast oder Form prüfen (Bugfix / Optimierung zu B-136; auch in Vergleich und Filter ansehen, VoiceOver bleibt) | S | ☐ |
+| B-159 | Die zuletzt gewählte Bike-Auswahl soll in allen Ansichten gelten (Fahrten, Auswertung, Karte, Highlights) statt je Bereich einzeln. Ändert die Entscheidung „Filter je Bereich“ aus REQUIREMENTS.md 10.16 und B-137; vorher mit Nils klären (ein gemeinsamer Filter, Umschalter „für alle Ansichten“ oder je Bereich lassen; Verhalten der Ziele) | M | ☐ |
+
 ## v1.6 – GPX-Import (Plan 25.10.2026)
 
 Wunsch von Nils: Die Zielgruppe wächst, wenn auch Fahrten anderer Bikes und Radcomputer, die eher GPX als FIT ausgeben, in Wattspur landen. Entschieden mit Nils am 25.10.2026 (REQUIREMENTS.md 10.17); ersetzt B-060. Als eigene Version nach 1.5, weil GPX auf Bikes (Bike-Frage beim Import, Filter nach Quelle) und dem erweiterten Datenmodell aufbaut.
