@@ -8,7 +8,7 @@ struct SetupAssistantView: View {
     @Environment(FolderWatcher.self) private var watcher
     @Environment(RideLibrary.self) private var sharedLibrary
     @Environment(\.dismiss) private var dismiss
-    @AppStorage("setupCompleted") private var setupCompleted = false
+    @AppStorage(SettingsKey.setupCompleted) private var setupCompleted = false
 
     @State private var step = 1
     @State private var name = ""
@@ -23,7 +23,7 @@ struct SetupAssistantView: View {
     @State private var height: Double?
     @State private var birthYear: Int?
     @State private var sex: RiderSex = .unspecified
-    @AppStorage("bikesHintDone") private var bikesHintDone = false
+    @AppStorage(SettingsKey.bikesHintDone) private var bikesHintDone = false
 
     private enum FolderChoice: Hashable { case iCloud, other, none }
     private static let stepCount = 5

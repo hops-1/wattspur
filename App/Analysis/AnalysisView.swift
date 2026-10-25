@@ -28,15 +28,15 @@ struct AnalysisView: View {
 
     private var hasGPXRides: Bool { allRides.contains { $0.source == .gpx } }
 
-    @AppStorage("analysisPeriod") private var kind: AnalysisPeriodKind = .year
-    @AppStorage("analysisBarMetric") private var barMetric: BarMetric = .distance
+    @AppStorage(SettingsKey.analysisPeriod) private var kind: AnalysisPeriodKind = .year
+    @AppStorage(SettingsKey.analysisBarMetric) private var barMetric: BarMetric = .distance
     /// The bike filter of the analysis, remembered (B-137).
-    @AppStorage("bikeFilter.analysis") private var bikeFilterChoice: BikeFilter = .all
+    @AppStorage(SettingsKey.bikeFilterAnalysis) private var bikeFilterChoice: BikeFilter = .all
     /// The source filter of the analysis, the same way (B-145).
-    @AppStorage("sourceFilter.analysis") private var sourceFilterChoice: SourceFilter = .all
+    @AppStorage(SettingsKey.sourceFilterAnalysis) private var sourceFilterChoice: SourceFilter = .all
     @Query private var bikes: [Bike]
     /// "From pedal power" or "with profile" (SET-06, B-067).
-    @AppStorage("calorieMode") private var calorieMode: CalorieMode = .fromWork
+    @AppStorage(SettingsKey.calorieMode) private var calorieMode: CalorieMode = .fromWork
     @Query private var riders: [Rider]
     @State private var offset = 0
     @State private var customStart = Calendar.current.date(byAdding: .day, value: -30, to: .now) ?? .now

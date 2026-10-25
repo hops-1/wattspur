@@ -32,9 +32,9 @@ struct HighlightsView: View {
     private var listedRides: [Ride]
     @Query private var goals: [Goal]
     /// The bike filter of the highlights: year and records follow it, goals never (B-137).
-    @AppStorage("bikeFilter.highlights") private var bikeFilterChoice: BikeFilter = .all
+    @AppStorage(SettingsKey.bikeFilterHighlights) private var bikeFilterChoice: BikeFilter = .all
     /// The source filter of the highlights, the same way (B-145).
-    @AppStorage("sourceFilter.highlights") private var sourceFilterChoice: SourceFilter = .all
+    @AppStorage(SettingsKey.sourceFilterHighlights) private var sourceFilterChoice: SourceFilter = .all
     @Query private var bikes: [Bike]
     @State private var exporting = false
     @State private var goalEditor: GoalEditor.Target?
