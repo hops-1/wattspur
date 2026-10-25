@@ -8,6 +8,9 @@ Lokale Auswerte-App für eBike-Fahrten auf dem Mac: Fahrten aus der Bosch eBike 
 - **Auswertung** nach Zeitraum oder Auswahl, **Highlights** mit Jahresrückblick, Rekorden und Zielen, **Karte aller Fahrten** mit Heatmap und neuen Wegen.
 - **Profil und mehrere Bikes:** jede Fahrt gehört zu einem Bike, jede Ansicht lässt sich nach Bike und Quelle filtern.
 
+## Download
+Die neueste Version als DMG unter [Releases](https://github.com/hops-1/wattspur/releases/latest), für macOS 26 oder neuer. Wattspur ist ein Hobbyprojekt und nicht von Apple notarisiert: Beim ersten Öffnen meldet macOS, dass die App nicht überprüft werden konnte. Dann unter Systemeinstellungen › Datenschutz & Sicherheit „Dennoch öffnen“ wählen, das ist nur einmal nötig. Schritt für Schritt steht es in „Read Me First.txt“ in der DMG und im [Handbuch](docs/user-guide/README.md).
+
 ## Dokumentation
 - [Benutzerhandbuch](docs/user-guide/README.md) (Englisch und Deutsch): Installation, erster Start, Import, Ansichten, Kennzahlen, FAQ
 - [Requirements](docs/REQUIREMENTS.md): Ziele, Datengrundlage, funktionale und nicht-funktionale Anforderungen
@@ -51,8 +54,6 @@ Falls `xcode-select` noch auf die Command Line Tools zeigt: Befehlen `DEVELOPER_
 **Aktuell: v1.6.0** mit GPX-Import (Fahrten anderer Bikes, Apps und Radcomputer neben den Bosch-Fahrten). Davor: v1.0 (erste Version für Freunde mit DMG, Beispielfahrt, Barrierefreiheit und [Handbuch](docs/user-guide/README.md)), v1.1 (Fahrten zusammenfügen), v1.2 (Tourenvergleich, PDF-Export), v1.3 (Highlights, GPX-Export), v1.4 (Karte aller Fahrten), v1.5 (Profil und mehrere Bikes). Details im [Changelog](CHANGELOG.md), Lern-Notizen in [docs/learning](docs/learning/README.md).
 
 Als Nächstes: v1.7 ähnliche Strecken und weitere Rekorde, v1.8 ein Bereich „Fahrten“ mit Karte, v1.9 Daten direkt von Bosch (siehe [Backlog](docs/BACKLOG.md)).
-
-Eine fertige DMG gibt es noch nicht öffentlich; bis dahin baust du die App selbst (siehe Entwicklung).
 
 ## Lizenz
 Code: [MIT](LICENSE) · Dokumentation: [CC BY 4.0](docs/LICENSE.md) · © 2026 Nils Wiese
