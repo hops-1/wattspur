@@ -36,7 +36,6 @@ struct HighlightsView: View {
     /// The source filter of the highlights, the same way (B-145).
     @AppStorage("sourceFilter.highlights") private var sourceFilterChoice: SourceFilter = .all
     @Query private var bikes: [Bike]
-    @Environment(\.modelContext) private var modelContext
     @State private var exporting = false
     @State private var goalEditor: GoalEditor.Target?
 
@@ -893,7 +892,7 @@ struct GoalEditor: View {
 
     let target: Target
     let goals: [Goal]
-    @Environment(\.modelContext) private var modelContext
+    @Environment(RideLibrary.self) private var library
     @Environment(\.dismiss) private var dismiss
     @State private var period: GoalPeriod = .week
     @State private var metric: GoalMetric = .distance
@@ -949,8 +948,7 @@ struct GoalEditor: View {
             if let editing {
                 ToolbarItem(placement: .destructiveAction) {
                     Button("Delete Goal", role: .destructive) {
-                        modelContext.delete(editing)
-                        try? modelContext.save()
+                        library.delete(editing)
                         dismiss()
                     }
                 }
@@ -992,13 +990,10 @@ struct GoalEditor: View {
     private func save() {
         let target = metric == .distance ? value * 1000 : value.rounded()
         if let editing {
-            editing.period = period
-            editing.metric = metric
-            editing.target = target
+            library.update(editing, metric: metric, period: period, target: target)
         } else {
-            modelContext.insert(Goal(metric: metric, period: period, target: target))
+            library.addGoal(metric: metric, period: period, target: target)
         }
-        try? modelContext.save()
         dismiss()
     }
 }

@@ -6,7 +6,6 @@ import WattspurKit
 /// and how to export from the Flow app. Can be shown again from Settings.
 struct SetupAssistantView: View {
     @Environment(FolderWatcher.self) private var watcher
-    @Environment(\.modelContext) private var modelContext
     @Environment(RideLibrary.self) private var sharedLibrary
     @Environment(\.dismiss) private var dismiss
     @AppStorage("setupCompleted") private var setupCompleted = false
@@ -305,7 +304,7 @@ struct SetupAssistantView: View {
         if let trimmed = name.nonEmpty {
             rider.name = trimmed.trimmingCharacters(in: .whitespacesAndNewlines)
         }
-        try? modelContext.save()
+        sharedLibrary.save()
     }
 
     /// The first bike and the body data go to the library when the step is left.

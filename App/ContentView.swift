@@ -43,7 +43,6 @@ struct ContentView: View {
     @AppStorage(MultiSelectTip.storageKey) private var multiSelectTipDone = false
     @AppStorage("sidebarWidth") private var sidebarWidth = 220.0
     @AppStorage("listWidth") private var listWidth = 340.0
-    @Environment(\.modelContext) private var modelContext
     @Environment(RideLibrary.self) private var sharedLibrary
     @Environment(FolderWatcher.self) private var watcher
     @Environment(NewPathsStore.self) private var newPaths
@@ -79,7 +78,7 @@ struct ContentView: View {
                 window?.makeKeyAndOrderFront(nil)
             }
             // Look up missing start-location time zones (new imports, or offline before).
-            .task(id: rideCount) { await TimeZoneResolver.resolveMissing(in: modelContext) }
+            .task(id: rideCount) { await TimeZoneResolver.resolveMissing(using: sharedLibrary) }
             // New paths follow every change of the rides (B-115); unchanged rides cost a hash.
             .onChange(of: allRides.map(\.overviewRouteVersion), initial: true) { newPaths.update(allRides) }
             .onChange(of: allRides.map(\.deletedAt)) { newPaths.update(allRides) }
