@@ -383,10 +383,12 @@ private final class RideRouteRenderer: MKOverlayRenderer {
             context.strokePath()
         }
         let white = CGColor(gray: 1, alpha: 1)
+        // Both lines are equally wide, so neither looks heavier at any zoom; the new stretches
+        // stand out by colour and by lying on top.
         stroke(overlay.route, width: 8, color: white)
         stroke(overlay.route, width: 4.5, color: overlay.routeColor)
-        for stretch in overlay.stretches { stroke(stretch, width: 10, color: white) }
-        for stretch in overlay.stretches { stroke(stretch, width: 6.5, color: overlay.newColor) }
+        for stretch in overlay.stretches { stroke(stretch, width: 8, color: white) }
+        for stretch in overlay.stretches { stroke(stretch, width: 4.5, color: overlay.newColor) }
         // A tick reaches a few points beyond the line on both sides.
         let half = 12 * scale
         context.setLineCap(.butt)
@@ -410,8 +412,8 @@ private struct NewPathsLegend: View {
     var body: some View {
         VStack(alignment: .leading, spacing: 6) {
             Text("Paths").font(.caption.weight(.bold))
-            row(Color.newPaths, width: 6, text: "New – never ridden before")
-            row(Color.accentColor, width: 3.5, text: "Ridden before")
+            row(Color.newPaths, width: 4.5, text: "New – never ridden before")
+            row(Color.accentColor, width: 4.5, text: "Ridden before")
         }
         .padding(.vertical, 8)
         .padding(.horizontal, 10)

@@ -9,6 +9,7 @@ Every DMG handed out to testers corresponds to one entry below.
 
 ### Changed
 - Ride details: the map with the track stays in view at the top and only the part below it scrolls, so the spot you point at in a chart is always visible on the map. The map is a little shorter in small windows.
+- Ride map: the red (new) and blue (ridden before) lines are now equally wide; before, red looked heavier at most zoom levels.
 
 ## [1.6.1] – 2026-10-25
 
