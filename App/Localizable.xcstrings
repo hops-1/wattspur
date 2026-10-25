@@ -191,12 +191,42 @@
         }
       }
     },
+    "Check for new versions": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Nach neuen Versionen suchen"
+          }
+        }
+      }
+    },
+    "Check for Updates…": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Nach Updates suchen …"
+          }
+        }
+      }
+    },
     "Choose another source or all sources.": {
       "localizations": {
         "de": {
           "stringUnit": {
             "state": "translated",
             "value": "Wähle eine andere Quelle oder alle Quellen."
+          }
+        }
+      }
+    },
+    "Could not check for updates": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Updates konnten nicht gesucht werden"
           }
         }
       }
@@ -4287,6 +4317,26 @@
         }
       }
     },
+    "OK": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "OK"
+          }
+        }
+      }
+    },
+    "Once a day Wattspur asks GitHub whether a newer version is out and shows a note. Nothing about you or your rides is sent. “Check for Updates…” in the Wattspur menu always works.": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Einmal am Tag fragt Wattspur bei GitHub nach, ob es eine neuere Version gibt, und zeigt dann einen Hinweis. Es werden keine Daten über dich oder deine Fahrten gesendet. „Nach Updates suchen …“ im Wattspur-Menü geht immer."
+          }
+        }
+      }
+    },
     "Only FIT and GPX files are imported. Other types are noted once in the log.": {
       "localizations": {
         "de": {
@@ -6119,6 +6169,16 @@
         }
       }
     },
+    "Updates:": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Updates:"
+          }
+        }
+      }
+    },
     "Use “Download FIT”: it has power and cadence, the GPX only the route. GPX files from other bikes and bike computers are imported as well.": {
       "localizations": {
         "de": {
@@ -6135,6 +6195,46 @@
           "stringUnit": {
             "state": "translated",
             "value": "Version %@"
+          }
+        }
+      }
+    },
+    "View on GitHub": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Auf GitHub ansehen"
+          }
+        }
+      }
+    },
+    "Wattspur %@ is available": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Wattspur %@ ist verfügbar"
+          }
+        }
+      }
+    },
+    "Wattspur could not reach GitHub. Check your internet connection and try again.": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Wattspur konnte GitHub nicht erreichen. Prüfe deine Internetverbindung und versuche es noch einmal."
+          }
+        }
+      }
+    },
+    "Wattspur is up to date": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Wattspur ist aktuell"
           }
         }
       }
@@ -6509,6 +6609,36 @@
         }
       }
     },
+    "You have the newest version, %@.": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Du hast die neueste Version, %@."
+          }
+        }
+      }
+    },
+    "You have version %@. Download the new one from GitHub and replace the app in Applications; your rides stay as they are.": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Du hast Version %@. Lade die neue von GitHub und ersetze die App im Ordner „Programme“; deine Fahrten bleiben unverändert."
+          }
+        }
+      }
+    },
+    "You have version %@. The new version is on GitHub; replace the app in Applications with it. Your rides stay as they are.": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Du hast Version %@. Die neue Version liegt auf GitHub; ersetze damit die App im Ordner „Programme“. Deine Fahrten bleiben unverändert."
+          }
+        }
+      }
+    },
     "Your %@": {
       "localizations": {
         "de": {
@@ -6555,16 +6685,6 @@
           "stringUnit": {
             "state": "translated",
             "value": "Dein Name"
-          }
-        }
-      }
-    },
-    "Your rides stay on this Mac. Wattspur sends no data; only the map loads map tiles and place information from Apple.": {
-      "localizations": {
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Deine Fahrten bleiben auf diesem Mac. Wattspur sendet keine Daten; nur die Karte lädt Kartenmaterial und Ortsinformationen von Apple."
           }
         }
       }
@@ -6959,6 +7079,16 @@
           "stringUnit": {
             "state": "translated",
             "value": "x-Achse: Strecke in km. Jede Fahrt hat eigene Farbe, Strichart und Form; kürzere Fahrten enden früher."
+          }
+        }
+      }
+    },
+    "Your rides stay on this Mac. Wattspur sends no data about you or your rides. The map loads map tiles and place information from Apple, and Wattspur asks GitHub once a day whether a new version is out (switch off in Settings).": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Deine Fahrten bleiben auf diesem Mac. Wattspur sendet keine Daten über dich oder deine Fahrten. Die Karte lädt Kartenmaterial und Ortsinformationen von Apple, und Wattspur fragt einmal am Tag bei GitHub nach, ob es eine neue Version gibt (in den Einstellungen abschaltbar)."
           }
         }
       }

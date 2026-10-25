@@ -38,7 +38,10 @@ Wattspur zeigt die Startzeit in der Zeitzone des Startorts. Die Zeitzone wird ei
 Nur bei der **Beispielfahrt**: Start und Ziel sind entfernt, damit niemand den Ort findet, an dem die echte Fahrt begann. Deine eigenen Fahrten werden vollständig gezeigt.
 
 ### Wo liegen meine Fahrten? Wird etwas hochgeladen?
-Alles bleibt auf deinem Mac, in `~/Library/Containers/io.github.hops-1.wattspur`. Wattspur hat kein Konto und sendet keine Daten. Ins Internet geht die App nur für Kartenkacheln und das Nachschlagen der Zeitzone über Apple Karten.
+Alles bleibt auf deinem Mac, in `~/Library/Containers/io.github.hops-1.wattspur`. Wattspur hat kein Konto und sendet keine Daten über dich oder deine Fahrten. Ins Internet geht die App nur für Kartenkacheln, das Nachschlagen der Zeitzone über Apple Karten und die tägliche Frage bei GitHub, ob es eine neue Version gibt (siehe unten).
+
+### Woher weiß ich, dass es eine neue Version gibt?
+Wattspur fragt einmal am Tag bei GitHub nach, ob eine neuere Version erschienen ist. Wenn ja, steht oben im Fenster ein Hinweis; **Auf GitHub ansehen** öffnet die Release-Seite, dort lädst du das DMG und ersetzt die App im Ordner „Programme“. **Später** blendet diese Version aus, bis eine neuere erscheint. **Wattspur › Nach Updates suchen …** fragt sofort nach. Gelesen wird nur die öffentliche Liste der Releases, über dich wird nichts gesendet. Abschalten: **Einstellungen › Allgemein › Nach neuen Versionen suchen**. Wattspur installiert Updates nicht selbst.
 
 ### Wie stelle ich die Sprache um?
 Wattspur folgt der Sprache von macOS. Nur für Wattspur: **Systemeinstellungen › Allgemein › Sprache & Region › Apps**, Wattspur hinzufügen und Deutsch oder Englisch wählen.

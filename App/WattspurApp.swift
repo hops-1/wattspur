@@ -17,6 +17,8 @@ struct WattspurApp: App {
     @State private var mergeSuggestions = MergeSuggestionCenter()
     /// The note "rides assigned to a bike" with Undo (B-135).
     @State private var assignmentNotice = BikeAssignmentNotice()
+    /// Whether GitHub has a newer version (B-172).
+    @State private var updates = UpdateChecker()
     @Environment(\.openWindow) private var openWindow
 
     init() {
@@ -48,6 +50,7 @@ struct WattspurApp: App {
                 .environment(newPaths)
                 .environment(mergeSuggestions)
                 .environment(assignmentNotice)
+                .environment(updates)
                 .task { await maintenance.run(library: library) }
         }
         .modelContainer(container)
@@ -55,6 +58,8 @@ struct WattspurApp: App {
         .commands {
             CommandGroup(replacing: .appInfo) {
                 Button("About Wattspur") { openWindow(id: "about") }
+                Button("Check for Updates…") { Task { await updates.checkManually() } }
+                    .disabled(updates.isChecking)
             }
             CommandGroup(after: .help) {
                 Button("Create Diagnostics…") { openWindow(id: "diagnostics") }

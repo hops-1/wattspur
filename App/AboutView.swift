@@ -24,7 +24,7 @@ struct AboutView: View {
 
             VStack(alignment: .leading, spacing: 10) {
                 Notice(systemImage: "lock.shield",
-                       text: "Your rides stay on this Mac. Wattspur sends no data; only the map loads map tiles and place information from Apple.")
+                       text: "Your rides stay on this Mac. Wattspur sends no data about you or your rides. The map loads map tiles and place information from Apple, and Wattspur asks GitHub once a day whether a new version is out (switch off in Settings).")
                 Notice(systemImage: "function",
                        text: "Calories and CO₂ savings are estimates based on your pedal power and distance.")
                 Notice(systemImage: "info.circle",
