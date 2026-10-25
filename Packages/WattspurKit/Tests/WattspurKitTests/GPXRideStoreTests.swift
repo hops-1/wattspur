@@ -101,7 +101,7 @@ struct GPXRideStoreTests {
         library.rename(ride, to: "Meine Tour")
         #expect(ride.summaryEstimatedFromGPS)
         let fit = try GPXFixture.fitData("pair-tour1-bosch-flow")
-        try library.update(ride, with: fit, fileName: "Beispielrunde-aab0c480-caec-11f1-9fee-000463be1448.fit")
+        try library.update(ride, with: fit, fileName: "Beispielrunde-5e1f0c2a-7b3d-4c8e-9a61-2f4d8b0c3e57.fit")
         #expect(ride.summaryEstimatedFromGPS == false)
         #expect(ride.timerTime == 2916)
         #expect(ride.distance > 19_000)
@@ -111,7 +111,7 @@ struct GPXRideStoreTests {
     @Test("Rides from FIT stay unmarked, and their samples carry no heart rate or temperature")
     func fitStaysUnmarked() throws {
         let fit = try Fixture.data("reinheim-rundfahrt")
-        library.importFile(data: fit, fileName: "Reinheim Rundfahrt-aab0c480-caec-11f1-9fee-000463be1448.fit")
+        library.importFile(data: fit, fileName: "Reinheim Rundfahrt-5e1f0c2a-7b3d-4c8e-9a61-2f4d8b0c3e57.fit")
         let ride = try #require(try container.mainContext.fetch(FetchDescriptor<Ride>()).first)
         #expect(ride.summaryEstimatedFromGPS == false)
         #expect(ride.source == .fit)

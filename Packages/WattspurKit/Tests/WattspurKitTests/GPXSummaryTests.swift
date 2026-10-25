@@ -58,12 +58,14 @@ struct GPXSummaryTests {
         #expect(abs(t.distance - 1650) < 100)
     }
 
-    @Test("Bosch Flow tour 1: ride time and ascent as the FIT reports them")
+    @Test("Bosch Flow tour 1 (anonymized): ride time, and ascent as the FIT reports it")
     func boschTour1() throws {
         let track = try GPXRideImporter().parseTrack(GPXFixture.data("pair-tour1-bosch-flow"))
         let t = track.totals()
-        #expect(abs(t.movingTime - 2916) / 2916 < 0.01)          // FIT timer 2 916 s
-        #expect(abs(t.distance - 18_488) < 5)
+        // Anonymized (V-05): the first and last 500 m stand still on one point, so
+        // about 200 s and 1.2 km less than the FIT's 2 916 s timer.
+        #expect(abs(t.movingTime - 2719) / 2719 < 0.01)
+        #expect(abs(t.distance - 17_271) < 5)
         #expect(t.maxSpeed.map { abs($0 - 15.142) / 15.142 < 0.1 } == true) // FIT max 54.5 km/h
         // 3 m threshold (standard) against the 1 m of the FIT: fewer metres on barometric heights.
         #expect(t.ascent == 147)
@@ -149,9 +151,9 @@ struct GPXSummaryTests {
         let ride = try GPXRideImporter(timeZone: utc).parse(GPXFixture.data("pair-tour1-bosch-flow"))
         let s = ride.summary
         #expect(ride.summaryEstimated)
-        #expect(abs(s.timerTime - 2893) < 1)
+        #expect(abs(s.timerTime - 2719) < 1)
         #expect(s.elapsedTime > 3300)
-        #expect(abs(s.distance - 18_488) < 5)
+        #expect(abs(s.distance - 17_271) < 5)
         #expect(abs((s.averageSpeed ?? 0) - s.distance / s.timerTime) < 1e-9)
         #expect(s.maxSpeed != nil)
         #expect(s.totalAscent == 147)

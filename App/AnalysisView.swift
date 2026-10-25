@@ -15,7 +15,7 @@ struct AnalysisView: View {
     /// The analysed rides, for the list beside the analysis (B-124).
     var onAnalysedRidesChange: (Set<UUID>) -> Void = { _ in }
 
-    @Query(filter: #Predicate<Ride> { $0.deletedAt == nil && $0.mergedInto == nil }, sort: \Ride.startDate)
+    @Query(filter: Ride.listedPredicate, sort: \Ride.startDate)
     private var allRides: [Ride]
 
     /// Rides picked by hand are analysed whatever their bike; otherwise the filter applies.
@@ -808,7 +808,7 @@ struct MultiSelectionView: View {
     /// Called with the merged ride (B-095).
     let onMerged: (UUID) -> Void
 
-    @Query(filter: #Predicate<Ride> { $0.deletedAt == nil && $0.mergedInto == nil }) private var rides: [Ride]
+    @Query(filter: Ride.listedPredicate) private var rides: [Ride]
     @State private var merging: MergeCandidates?
     @Environment(\.undoManager) private var undoManager
 

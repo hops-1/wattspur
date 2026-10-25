@@ -81,7 +81,7 @@ struct SourceFilterRideTests {
 
     @Test("A plain Bosch FIT has no symbol, a GPX ride has one, a Bosch ride with a GPX has the other")
     func badges() throws {
-        library.importFile(data: try GPXFixture.fitData("pair-tour1-bosch-flow"), fileName: "Beispielrunde-aab0c480-caec-11f1-9fee-000463be1448.fit")
+        library.importFile(data: try GPXFixture.fitData("pair-tour1-bosch-flow"), fileName: "Beispielrunde-5e1f0c2a-7b3d-4c8e-9a61-2f4d8b0c3e57.fit")
         library.importFile(data: try GPXFixture.data("pair-tour2-bosch-flow"), fileName: "tour2.gpx")
         let rides = try rides()
         #expect(rides.count == 2)
@@ -106,7 +106,7 @@ struct SourceFilterRideTests {
 
     @Test("The map shows only the rides of the chosen source")
     func map() throws {
-        library.importFile(data: try GPXFixture.fitData("pair-tour1-bosch-flow"), fileName: "Beispielrunde-aab0c480-caec-11f1-9fee-000463be1448.fit")
+        library.importFile(data: try GPXFixture.fitData("pair-tour1-bosch-flow"), fileName: "Beispielrunde-5e1f0c2a-7b3d-4c8e-9a61-2f4d8b0c3e57.fit")
         library.importFile(data: try GPXFixture.data("pair-tour2-bosch-flow"), fileName: "tour2.gpx")
         let rides = try rides()
         #expect(MapOverview(rides, filter: MapFilter()).rides.count == 2)
@@ -116,7 +116,7 @@ struct SourceFilterRideTests {
 
     @Test("A ride from a file without power says so; one with power does not")
     func powerData() throws {
-        library.importFile(data: try GPXFixture.fitData("pair-tour1-bosch-flow"), fileName: "Beispielrunde-aab0c480-caec-11f1-9fee-000463be1448.fit")
+        library.importFile(data: try GPXFixture.fitData("pair-tour1-bosch-flow"), fileName: "Beispielrunde-5e1f0c2a-7b3d-4c8e-9a61-2f4d8b0c3e57.fit")
         library.importFile(data: try GPXFixture.data("pair-tour2-bosch-flow"), fileName: "tour2.gpx")
         let rides = try rides()
         #expect(try #require(rides.first { $0.source == .fit }).hasPowerData)
