@@ -1,0 +1,41 @@
+<?xml version="1.0"?>
+<gpx version="1.0" creator="Test-Logger 1.0" xmlns="http://www.topografix.com/GPX/1/0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.topografix.com/GPX/1/0 http://www.topografix.com/GPX/1/0/gpx.xsd">
+<name>GPX-1.0-Logger</name>
+<desc>Fahrt im Format 1.0</desc>
+<time>2026-06-06T08:00:00Z</time>
+<trk>
+<name>Fahrt</name>
+<trkseg>
+<trkpt lat="50.000000" lon="9.000000"><ele>300.0</ele><time>2026-06-06T08:00:00Z</time><course>60.0</course><speed>5.50</speed><fix>3d</fix><sat>8</sat><hdop>1.1</hdop></trkpt>
+<trkpt lat="50.000025" lon="9.000067"><ele>300.0</ele><time>2026-06-06T08:00:01Z</time><course>60.1</course><speed>5.50</speed><fix>3d</fix><sat>9</sat><hdop>1.1</hdop></trkpt>
+<trkpt lat="50.000049" lon="9.000133"><ele>300.1</ele><time>2026-06-06T08:00:02Z</time><course>60.1</course><speed>5.50</speed><fix>3d</fix><sat>10</sat><hdop>1.1</hdop></trkpt>
+<trkpt lat="50.000074" lon="9.000200"><ele>300.1</ele><time>2026-06-06T08:00:03Z</time><course>60.2</course><speed>5.50</speed><fix>3d</fix><sat>8</sat><hdop>1.1</hdop></trkpt>
+<trkpt lat="50.000099" lon="9.000267"><ele>300.2</ele><time>2026-06-06T08:00:04Z</time><course>60.3</course><speed>5.50</speed><fix>3d</fix><sat>9</sat><hdop>1.1</hdop></trkpt>
+<trkpt lat="50.000123" lon="9.000334"><ele>300.2</ele><time>2026-06-06T08:00:05Z</time><course>60.3</course><speed>5.50</speed><fix>3d</fix><sat>10</sat><hdop>1.1</hdop></trkpt>
+<trkpt lat="50.000148" lon="9.000401"><ele>300.3</ele><time>2026-06-06T08:00:06Z</time><course>60.4</course><speed>5.50</speed><fix>3d</fix><sat>8</sat><hdop>1.1</hdop></trkpt>
+<trkpt lat="50.000172" lon="9.000467"><ele>300.3</ele><time>2026-06-06T08:00:07Z</time><course>60.5</course><speed>5.50</speed><fix>3d</fix><sat>9</sat><hdop>1.1</hdop></trkpt>
+<trkpt lat="50.000196" lon="9.000534"><ele>300.4</ele><time>2026-06-06T08:00:08Z</time><course>60.5</course><speed>5.50</speed><fix>3d</fix><sat>10</sat><hdop>1.1</hdop></trkpt>
+<trkpt lat="50.000221" lon="9.000601"><ele>300.4</ele><time>2026-06-06T08:00:09Z</time><course>60.6</course><speed>5.50</speed><fix>3d</fix><sat>8</sat><hdop>1.1</hdop></trkpt>
+<trkpt lat="50.000245" lon="9.000668"><ele>300.5</ele><time>2026-06-06T08:00:10Z</time><course>60.7</course><speed>5.50</speed><fix>3d</fix><sat>9</sat><hdop>1.1</hdop></trkpt>
+<trkpt lat="50.000269" lon="9.000735"><ele>300.5</ele><time>2026-06-06T08:00:11Z</time><course>60.7</course><speed>5.50</speed><fix>3d</fix><sat>10</sat><hdop>1.1</hdop></trkpt>
+<trkpt lat="50.000293" lon="9.000803"><ele>300.6</ele><time>2026-06-06T08:00:12Z</time><course>60.8</course><speed>5.50</speed><fix>3d</fix><sat>8</sat><hdop>1.1</hdop></trkpt>
+<trkpt lat="50.000318" lon="9.000870"><ele>300.6</ele><time>2026-06-06T08:00:13Z</time><course>60.9</course><speed>5.50</speed><fix>3d</fix><sat>9</sat><hdop>1.1</hdop></trkpt>
+<trkpt lat="50.000342" lon="9.000937"><ele>300.7</ele><time>2026-06-06T08:00:14Z</time><course>60.9</course><speed>5.50</speed><fix>3d</fix><sat>10</sat><hdop>1.1</hdop></trkpt>
+<trkpt lat="50.000366" lon="9.001004"><ele>300.7</ele><time>2026-06-06T08:00:15Z</time><course>61.0</course><speed>5.50</speed><fix>3d</fix><sat>8</sat><hdop>1.1</hdop></trkpt>
+<trkpt lat="50.000390" lon="9.001072"><ele>300.8</ele><time>2026-06-06T08:00:16Z</time><course>61.1</course><speed>5.50</speed><fix>3d</fix><sat>9</sat><hdop>1.1</hdop></trkpt>
+<trkpt lat="50.000414" lon="9.001139"><ele>300.8</ele><time>2026-06-06T08:00:17Z</time><course>61.1</course><speed>5.50</speed><fix>3d</fix><sat>10</sat><hdop>1.1</hdop></trkpt>
+<trkpt lat="50.000438" lon="9.001206"><ele>300.9</ele><time>2026-06-06T08:00:18Z</time><course>61.2</course><speed>5.50</speed><fix>3d</fix><sat>8</sat><hdop>1.1</hdop></trkpt>
+<trkpt lat="50.000461" lon="9.001274"><ele>300.9</ele><time>2026-06-06T08:00:19Z</time><course>61.3</course><speed>5.50</speed><fix>3d</fix><sat>9</sat><hdop>1.1</hdop></trkpt>
+<trkpt lat="50.000485" lon="9.001341"><ele>301.0</ele><time>2026-06-06T08:00:20Z</time><course>61.3</course><speed>5.50</speed><fix>3d</fix><sat>10</sat><hdop>1.1</hdop></trkpt>
+<trkpt lat="50.000509" lon="9.001409"><ele>301.0</ele><time>2026-06-06T08:00:21Z</time><course>61.4</course><speed>5.50</speed><fix>3d</fix><sat>8</sat><hdop>1.1</hdop></trkpt>
+<trkpt lat="50.000533" lon="9.001476"><ele>301.1</ele><time>2026-06-06T08:00:22Z</time><course>61.5</course><speed>5.50</speed><fix>3d</fix><sat>9</sat><hdop>1.1</hdop></trkpt>
+<trkpt lat="50.000556" lon="9.001544"><ele>301.1</ele><time>2026-06-06T08:00:23Z</time><course>61.5</course><speed>5.50</speed><fix>3d</fix><sat>10</sat><hdop>1.1</hdop></trkpt>
+<trkpt lat="50.000580" lon="9.001612"><ele>301.2</ele><time>2026-06-06T08:00:24Z</time><course>61.6</course><speed>5.50</speed><fix>3d</fix><sat>8</sat><hdop>1.1</hdop></trkpt>
+<trkpt lat="50.000603" lon="9.001679"><ele>301.2</ele><time>2026-06-06T08:00:25Z</time><course>61.7</course><speed>5.50</speed><fix>3d</fix><sat>9</sat><hdop>1.1</hdop></trkpt>
+<trkpt lat="50.000627" lon="9.001747"><ele>301.3</ele><time>2026-06-06T08:00:26Z</time><course>61.7</course><speed>5.50</speed><fix>3d</fix><sat>10</sat><hdop>1.1</hdop></trkpt>
+<trkpt lat="50.000650" lon="9.001815"><ele>301.3</ele><time>2026-06-06T08:00:27Z</time><course>61.8</course><speed>5.50</speed><fix>3d</fix><sat>8</sat><hdop>1.1</hdop></trkpt>
+<trkpt lat="50.000674" lon="9.001883"><ele>301.4</ele><time>2026-06-06T08:00:28Z</time><course>61.9</course><speed>5.50</speed><fix>3d</fix><sat>9</sat><hdop>1.1</hdop></trkpt>
+<trkpt lat="50.000697" lon="9.001950"><ele>301.4</ele><time>2026-06-06T08:00:29Z</time><course>61.9</course><speed>5.50</speed><fix>3d</fix><sat>10</sat><hdop>1.1</hdop></trkpt>
+</trkseg>
+</trk>
+</gpx>

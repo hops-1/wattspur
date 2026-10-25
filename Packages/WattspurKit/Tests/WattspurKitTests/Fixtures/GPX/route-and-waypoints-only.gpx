@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<gpx version="1.1" creator="Planer" xmlns="http://www.topografix.com/GPX/1/1">
+ <metadata><name>Geplante Route</name></metadata>
+ <wpt lat="50.000000" lon="9.000000"><name>Start</name><sym>Flag</sym></wpt>
+ <wpt lat="50.006324" lon="9.017582"><name>Ziel</name></wpt>
+ <rte>
+  <name>Geplante Route</name>
+  <rtept lat="50.000000" lon="9.000000"><ele>300.0</ele></rtept>
+  <rtept lat="50.000270" lon="9.000727"><ele>300.0</ele></rtept>
+  <rtept lat="50.000539" lon="9.001454"><ele>300.0</ele></rtept>
+  <rtept lat="50.000808" lon="9.002182"><ele>300.0</ele></rtept>
+  <rtept lat="50.001076" lon="9.002911"><ele>300.0</ele></rtept>
+  <rtept lat="50.001344" lon="9.003640"><ele>300.0</ele></rtept>
+  <rtept lat="50.001611" lon="9.004369"><ele>300.0</ele></rtept>
+  <rtept lat="50.001877" lon="9.005099"><ele>300.0</ele></rtept>
+  <rtept lat="50.002143" lon="9.005830"><ele>300.0</ele></rtept>
+  <rtept lat="50.002409" lon="9.006561"><ele>300.0</ele></rtept>
+  <rtept lat="50.002673" lon="9.007292"><ele>300.0</ele></rtept>
+  <rtept lat="50.002938" lon="9.008024"><ele>300.0</ele></rtept>
+  <rtept lat="50.003202" lon="9.008756"><ele>300.0</ele></rtept>
+  <rtept lat="50.003465" lon="9.009489"><ele>300.0</ele></rtept>
+  <rtept lat="50.003728" lon="9.010222"><ele>300.0</ele></rtept>
+  <rtept lat="50.003990" lon="9.010956"><ele>300.0</ele></rtept>
+  <rtept lat="50.004251" lon="9.011690"><ele>300.0</ele></rtept>
+  <rtept lat="50.004512" lon="9.012425"><ele>300.0</ele></rtept>
+  <rtept lat="50.004773" lon="9.013160"><ele>300.0</ele></rtept>
+  <rtept lat="50.005033" lon="9.013896"><ele>300.0</ele></rtept>
+  <rtept lat="50.005292" lon="9.014632"><ele>300.0</ele></rtept>
+  <rtept lat="50.005551" lon="9.015369"><ele>300.0</ele></rtept>
+  <rtept lat="50.005809" lon="9.016106"><ele>300.0</ele></rtept>
+  <rtept lat="50.006067" lon="9.016844"><ele>300.0</ele></rtept>
+  <rtept lat="50.006324" lon="9.017582"><ele>300.0</ele></rtept>
+ </rte>
+</gpx>

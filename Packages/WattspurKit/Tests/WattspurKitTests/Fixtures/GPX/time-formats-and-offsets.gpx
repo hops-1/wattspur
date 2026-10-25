@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<gpx version="1.1" creator="Zeitformate" xmlns="http://www.topografix.com/GPX/1/1"><trk><trkseg>
+<trkpt lat="50.000000" lon="9.000000"><ele>300</ele><time>2026-06-06T10:00:00+02:00</time></trkpt>
+<trkpt lat="50.000025" lon="9.000067"><ele>300</ele><time>2026-06-06T10:00:01.5+02:00</time></trkpt>
+<trkpt lat="50.000049" lon="9.000133"><ele>300</ele><time>2026-06-06T08:00:02.250Z</time></trkpt>
+<trkpt lat="50.000074" lon="9.000200"><ele>300</ele><time>2026-06-06T08:00:03.123456789Z</time></trkpt>
+<trkpt lat="50.000099" lon="9.000267"><ele>300</ele><time>2026-06-06T08:00:04Z</time></trkpt>
+<trkpt lat="50.000123" lon="9.000334"><ele>300</ele><time>2026-06-06T10:00:05.0+02:00</time></trkpt>
+<trkpt lat="50.000148" lon="9.000401"><ele>300</ele><time>2026-06-06T04:00:06-04:00</time></trkpt>
+<trkpt lat="50.000172" lon="9.000467"><ele>300</ele><time>2026-06-06T08:00:07</time></trkpt>
+</trkseg></trk></gpx>

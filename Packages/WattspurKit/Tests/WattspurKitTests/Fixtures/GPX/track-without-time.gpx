@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<gpx version="1.1" creator="Planer" xmlns="http://www.topografix.com/GPX/1/1">
+ <trk><name>Track ohne Zeit</name><trkseg>
+  <trkpt lat="50.000000" lon="9.000000"><ele>300.0</ele></trkpt>
+  <trkpt lat="50.000025" lon="9.000067"><ele>300.0</ele></trkpt>
+  <trkpt lat="50.000049" lon="9.000133"><ele>300.1</ele></trkpt>
+  <trkpt lat="50.000074" lon="9.000200"><ele>300.1</ele></trkpt>
+  <trkpt lat="50.000099" lon="9.000267"><ele>300.2</ele></trkpt>
+  <trkpt lat="50.000123" lon="9.000334"><ele>300.2</ele></trkpt>
+  <trkpt lat="50.000148" lon="9.000401"><ele>300.3</ele></trkpt>
+  <trkpt lat="50.000172" lon="9.000467"><ele>300.3</ele></trkpt>
+  <trkpt lat="50.000196" lon="9.000534"><ele>300.4</ele></trkpt>
+  <trkpt lat="50.000221" lon="9.000601"><ele>300.4</ele></trkpt>
+  <trkpt lat="50.000245" lon="9.000668"><ele>300.5</ele></trkpt>
+  <trkpt lat="50.000269" lon="9.000735"><ele>300.5</ele></trkpt>
+  <trkpt lat="50.000293" lon="9.000803"><ele>300.6</ele></trkpt>
+  <trkpt lat="50.000318" lon="9.000870"><ele>300.6</ele></trkpt>
+  <trkpt lat="50.000342" lon="9.000937"><ele>300.7</ele></trkpt>
+  <trkpt lat="50.000366" lon="9.001004"><ele>300.7</ele></trkpt>
+  <trkpt lat="50.000390" lon="9.001072"><ele>300.8</ele></trkpt>
+  <trkpt lat="50.000414" lon="9.001139"><ele>300.8</ele></trkpt>
+  <trkpt lat="50.000438" lon="9.001206"><ele>300.9</ele></trkpt>
+  <trkpt lat="50.000461" lon="9.001274"><ele>300.9</ele></trkpt>
+  <trkpt lat="50.000485" lon="9.001341"><ele>301.0</ele></trkpt>
+  <trkpt lat="50.000509" lon="9.001409"><ele>301.0</ele></trkpt>
+  <trkpt lat="50.000533" lon="9.001476"><ele>301.1</ele></trkpt>
+  <trkpt lat="50.000556" lon="9.001544"><ele>301.1</ele></trkpt>
+  <trkpt lat="50.000580" lon="9.001612"><ele>301.2</ele></trkpt>
+ </trkseg></trk>
+</gpx>

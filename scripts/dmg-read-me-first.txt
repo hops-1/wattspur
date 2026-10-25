@@ -1,0 +1,32 @@
+WATTSPUR – READ ME FIRST
+========================
+
+1. Drag Wattspur onto the Applications folder.
+2. Open Wattspur from the Applications folder.
+   macOS says that “Wattspur” could not be verified. Click “Done”.
+   (Wattspur is a free hobby project and not notarized by Apple.)
+3. Open System Settings › Privacy & Security and scroll down to “Security”.
+   Next to “Wattspur was blocked …” click “Open Anyway”, confirm with your
+   password or Touch ID, then click “Open Anyway” once more.
+
+You only need to do this once. After that Wattspur opens like any other app.
+
+Requires macOS 26 or later. Your rides stay on your Mac; nothing is sent anywhere.
+User guide: https://github.com/hops-1/wattspur/tree/main/docs/user-guide
+
+
+WATTSPUR – ZUERST LESEN
+=======================
+
+1. Wattspur auf den Ordner „Programme“ ziehen.
+2. Wattspur aus dem Ordner „Programme“ öffnen.
+   macOS meldet, dass „Wattspur“ nicht überprüft werden konnte. Auf „Fertig“ klicken.
+   (Wattspur ist ein kostenloses Hobbyprojekt und nicht von Apple notarisiert.)
+3. Systemeinstellungen › Datenschutz & Sicherheit öffnen und nach unten zu
+   „Sicherheit“ scrollen. Neben „Wattspur wurde blockiert …“ auf „Dennoch öffnen“
+   klicken, mit Passwort oder Touch ID bestätigen und noch einmal „Dennoch öffnen“ wählen.
+
+Das ist nur einmal nötig. Danach startet Wattspur wie jede andere App.
+
+Benötigt macOS 26 oder neuer. Deine Fahrten bleiben auf deinem Mac; es wird nichts gesendet.
+Handbuch: https://github.com/hops-1/wattspur/tree/main/docs/user-guide

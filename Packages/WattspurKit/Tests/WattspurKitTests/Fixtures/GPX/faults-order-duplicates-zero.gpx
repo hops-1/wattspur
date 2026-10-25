@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<gpx version="1.1" creator="Fehlerfaelle" xmlns="http://www.topografix.com/GPX/1/1"><trk><name>Fehlerfaelle</name>
+<trkseg>
+<trkpt lat="50.000000" lon="9.000000"><ele>300.0</ele><time>2026-06-06T08:00:00Z</time></trkpt>
+<trkpt lat="50.000025" lon="9.000067"><ele>300.0</ele><time>2026-06-06T08:00:01Z</time></trkpt>
+<trkpt lat="50.000049" lon="9.000133"><ele>300.0</ele><time>2026-06-06T08:00:02Z</time></trkpt>
+<trkpt lat="50.000074" lon="9.000200"><ele>300.0</ele><time>2026-06-06T08:00:03Z</time></trkpt>
+<trkpt lat="50.000099" lon="9.000267"><ele>300.0</ele><time>2026-06-06T08:00:04Z</time></trkpt>
+<trkpt lat="50.000123" lon="9.000334"><ele>300.0</ele><time>2026-06-06T08:00:05Z</time></trkpt>
+<trkpt lat="50.000148" lon="9.000401"><ele>300.0</ele><time>2026-06-06T08:00:06Z</time></trkpt>
+<trkpt lat="50.000172" lon="9.000467"><ele>300.0</ele><time>2026-06-06T08:00:07Z</time></trkpt>
+<trkpt lat="50.000196" lon="9.000534"><ele>300.0</ele><time>2026-06-06T08:00:08Z</time></trkpt>
+<trkpt lat="50.000221" lon="9.000601"><ele>300.0</ele><time>2026-06-06T08:00:09Z</time></trkpt>
+<trkpt lat="50.000245" lon="9.000668"><ele>300.0</ele><time>2026-06-06T08:00:10Z</time></trkpt>
+<trkpt lat="50.000269" lon="9.000735"><ele>300.0</ele><time>2026-06-06T08:00:11Z</time></trkpt>
+<trkpt lat="50.000366" lon="9.001004"><ele>300</ele><time>2026-06-06T08:00:15Z</time></trkpt>
+<trkpt lat="50.000342" lon="9.000937"><ele>300</ele><time>2026-06-06T08:00:14Z</time></trkpt>
+<trkpt lat="50.000318" lon="9.000870"><ele>300</ele><time>2026-06-06T08:00:13Z</time></trkpt>
+<trkpt lat="50.000390" lon="9.001072"><ele>300</ele><time>2026-06-06T08:00:16Z</time></trkpt>
+<trkpt lat="50.000414" lon="9.001139"><ele>300</ele><time>2026-06-06T08:00:16Z</time></trkpt>
+<trkpt lat="50.000438" lon="9.001206"><ele>300</ele><time>2026-06-06T08:00:18Z</time></trkpt>
+<trkpt lat="50.000438" lon="9.001206"><ele>300</ele><time>2026-06-06T08:00:18Z</time></trkpt>
+<trkpt lat="0" lon="0"><ele>0</ele><time>2026-06-06T08:00:19Z</time></trkpt>
+<trkpt lon="9.001341" lat="50.000485"><ele>0</ele><time>2026-06-06T08:00:20Z</time></trkpt>
+<trkpt lat="50.000509" lon="9.001409"><time>2026-06-06T08:00:21Z</time></trkpt>
+<trkpt lat="50.360533" lon="9.001476"><ele>300</ele><time>2026-06-06T08:00:22Z</time></trkpt>
+<trkpt lat="50.000556" lon="9.001544"><ele>300</ele><time>2026-06-06T08:00:23Z</time></trkpt>
+</trkseg>
+<trkseg></trkseg>
+<trkseg>
+<trkpt lat="50.000603" lon="9.001679"><ele>300</ele><time>2026-06-06T08:00:25Z</time></trkpt>
+</trkseg>
+</trk>
+<trk><name>Leerer Track</name></trk>
+</gpx>

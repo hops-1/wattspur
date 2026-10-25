@@ -1,0 +1,45 @@
+{
+  "fill" : {
+    "automatic-gradient" : "srgb:0.11373,0.29020,0.41961,1.00000"
+  },
+  "groups" : [
+    {
+      "layers" : [
+        {
+          "image-name" : "start.svg",
+          "name" : "start"
+        },
+        {
+          "image-name" : "trail.svg",
+          "name" : "trail"
+        }
+      ],
+      "shadow" : {
+        "kind" : "neutral",
+        "opacity" : 0.5
+      },
+      "translucency" : {
+        "enabled" : true,
+        "value" : 0.2
+      }
+    },
+    {
+      "layers" : [
+        {
+          "image-name" : "contours.svg",
+          "name" : "contours",
+          "opacity" : 0.14
+        }
+      ],
+      "shadow" : {
+        "kind" : "none",
+        "opacity" : 0
+      }
+    }
+  ],
+  "supported-platforms" : {
+    "squares" : [
+      "macOS"
+    ]
+  }
+}

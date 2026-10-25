@@ -1,0 +1,30 @@
+# macOS
+.DS_Store
+
+# Xcode / SwiftPM
+xcuserdata/
+DerivedData/
+.build/
+.swiftpm/
+*.xcodeproj/
+!*.xcodeproj/project.pbxproj
+# The Xcode project is generated from project.yml (xcodegen generate)
+Wattspur.xcodeproj/
+
+# Real ride data never goes into the repository (NFR-12).
+# Only the anonymized test fixtures below are tracked (V-05).
+*.fit
+*.gpx
+!Packages/WattspurKit/Tests/WattspurKitTests/Fixtures/*.fit
+# GPX test files for the GPX import (anonymized or generated; docs/SPIKE-GPX-FORMATE.md)
+!Packages/WattspurKit/Tests/WattspurKitTests/Fixtures/GPX/*.gpx
+!Packages/WattspurKit/Tests/WattspurKitTests/Fixtures/GPX/*.fit
+# The anonymized sample ride shipped with the app (V-05, ONB-02)
+!App/SampleRide.fit
+docs/reference/sample-data/
+
+# Screenshots of the Bosch app: third-party copyright, local reference only (NFR-12)
+docs/reference/bosch-flow-screenshots/
+
+# DMG builds (scripts/build-dmg.sh)
+dist/

@@ -1,0 +1,72 @@
+# Xcode project definition. Generate the project with:  xcodegen generate
+name: Wattspur
+options:
+  bundleIdPrefix: io.github.hops-1
+  deploymentTarget:
+    macOS: "26.0"
+  developmentLanguage: en
+  createIntermediateGroups: true
+settings:
+  base:
+    SWIFT_VERSION: "6.0"
+    MARKETING_VERSION: "1.6.0"
+    CURRENT_PROJECT_VERSION: "1"
+    SWIFT_STRICT_CONCURRENCY: complete
+packages:
+  WattspurKit:
+    path: Packages/WattspurKit
+targets:
+  Wattspur:
+    type: application
+    platform: macOS
+    sources:
+      - path: App
+        excludes:
+          - Wattspur.icon
+      # Icon Composer document (macOS 26 Liquid Glass icon), compiled by actool (B-046)
+      - path: App/Wattspur.icon
+        type: file
+        buildPhase: resources
+    dependencies:
+      - package: WattspurKit
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: io.github.hops-1.wattspur
+        PRODUCT_NAME: Wattspur
+        GENERATE_INFOPLIST_FILE: YES
+        INFOPLIST_KEY_CFBundleDisplayName: Wattspur
+        ASSETCATALOG_COMPILER_APPICON_NAME: Wattspur
+        INFOPLIST_KEY_LSApplicationCategoryType: public.app-category.healthcare-fitness
+        INFOPLIST_KEY_NSHumanReadableCopyright: "© 2026 Nils Wiese"
+        CODE_SIGN_ENTITLEMENTS: App/Wattspur.entitlements
+        # Ad-hoc signing until a developer account exists (NFR-18)
+        CODE_SIGN_IDENTITY: "-"
+        CODE_SIGN_STYLE: Manual
+        ENABLE_HARDENED_RUNTIME: YES
+        LOCALIZATION_PREFERS_STRING_CATALOGS: YES
+        SWIFT_EMIT_LOC_STRINGS: YES
+        # The git commit for the About window: a pre-build script writes it into a
+        # header, which is used when the Info.plist is generated (no change after signing).
+        ENABLE_USER_SCRIPT_SANDBOXING: NO
+        INFOPLIST_FILE: Config/Info.plist
+        INFOPLIST_PREPROCESS: YES
+        INFOPLIST_PREFIX_HEADER: $(DERIVED_FILE_DIR)/WattspurGitInfo.h
+    preBuildScripts:
+      - name: Write git commit header
+        basedOnDependencyAnalysis: false
+        showEnvVars: false
+        outputFiles:
+          - $(DERIVED_FILE_DIR)/WattspurGitInfo.h
+        script: |
+          COMMIT=$(git -C "$SRCROOT" rev-parse --short HEAD 2>/dev/null || echo unknown)
+          if [ -n "$(git -C "$SRCROOT" status --porcelain 2>/dev/null)" ]; then COMMIT="${COMMIT}-dirty"; fi
+          mkdir -p "$DERIVED_FILE_DIR"
+          echo "#define WATTSPUR_GIT_COMMIT $COMMIT" > "$DERIVED_FILE_DIR/WattspurGitInfo.h"
+schemes:
+  Wattspur:
+    build:
+      targets:
+        Wattspur: all
+    test:
+      targets:
+        - package: WattspurKit/WattspurKitTests

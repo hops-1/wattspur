@@ -1,0 +1,19 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE gpx [
+  <!ENTITY tourname "Entity-Tour">
+]>
+<!-- Kommentar vor dem Wurzelelement -->
+<gpx version="1.1" creator="Sonderfaelle" xmlns="http://www.topografix.com/GPX/1/1" xmlns:vendor="urn:example:vendor">
+<metadata><name>&tourname; &amp; Co &lt;1&gt;</name><desc><![CDATA[Beschreibung mit <Zeichen> & mehr]]></desc></metadata>
+<trk><name>&tourname;</name><trkseg>
+<trkpt lat="50.000000" lon="9.000000"><ele>300.0</ele><time>2026-06-06T08:00:00Z</time><extensions><speed>5.5</speed><course>60.0</course><hAcc>3.0</hAcc><vAcc>2.0</vAcc><vendor:battery level="90"/><vendor:mode>eco</vendor:mode></extensions></trkpt>
+<trkpt lat="50.000025" lon="9.000067"><ele>300.0</ele><time>2026-06-06T08:00:01Z</time><extensions><speed>5.5</speed><course>60.0</course><hAcc>3.0</hAcc><vAcc>2.0</vAcc><vendor:battery level="89"/><vendor:mode>eco</vendor:mode></extensions></trkpt>
+<trkpt lat="50.000049" lon="9.000133"><ele>300.0</ele><time>2026-06-06T08:00:02Z</time><extensions><speed>5.5</speed><course>60.0</course><hAcc>3.0</hAcc><vAcc>2.0</vAcc><vendor:battery level="88"/><vendor:mode>eco</vendor:mode></extensions></trkpt>
+<trkpt lat="50.000074" lon="9.000200"><ele>300.0</ele><time>2026-06-06T08:00:03Z</time><extensions><speed>5.5</speed><course>60.0</course><hAcc>3.0</hAcc><vAcc>2.0</vAcc><vendor:battery level="87"/><vendor:mode>eco</vendor:mode></extensions></trkpt>
+<trkpt lat="50.000099" lon="9.000267"><ele>300.0</ele><time>2026-06-06T08:00:04Z</time><extensions><speed>5.5</speed><course>60.0</course><hAcc>3.0</hAcc><vAcc>2.0</vAcc><vendor:battery level="86"/><vendor:mode>eco</vendor:mode></extensions></trkpt>
+<trkpt lat="50.000123" lon="9.000334"><ele>300.0</ele><time>2026-06-06T08:00:05Z</time><extensions><speed>5.5</speed><course>60.0</course><hAcc>3.0</hAcc><vAcc>2.0</vAcc><vendor:battery level="85"/><vendor:mode>eco</vendor:mode></extensions></trkpt>
+<trkpt lat="50.000148" lon="9.000401"><ele>300.0</ele><time>2026-06-06T08:00:06Z</time><extensions><speed>5.5</speed><course>60.0</course><hAcc>3.0</hAcc><vAcc>2.0</vAcc><vendor:battery level="84"/><vendor:mode>eco</vendor:mode></extensions></trkpt>
+<trkpt lat="50.000172" lon="9.000467"><ele>300.0</ele><time>2026-06-06T08:00:07Z</time><extensions><speed>5.5</speed><course>60.0</course><hAcc>3.0</hAcc><vAcc>2.0</vAcc><vendor:battery level="83"/><vendor:mode>eco</vendor:mode></extensions></trkpt>
+<trkpt lat="50.000196" lon="9.000534"><ele>300.0</ele><time>2026-06-06T08:00:08Z</time><extensions><speed>5.5</speed><course>60.0</course><hAcc>3.0</hAcc><vAcc>2.0</vAcc><vendor:battery level="82"/><vendor:mode>eco</vendor:mode></extensions></trkpt>
+<trkpt lat="50.000221" lon="9.000601"><ele>300.0</ele><time>2026-06-06T08:00:09Z</time><extensions><speed>5.5</speed><course>60.0</course><hAcc>3.0</hAcc><vAcc>2.0</vAcc><vendor:battery level="81"/><vendor:mode>eco</vendor:mode></extensions></trkpt>
+</trkseg></trk></gpx>
