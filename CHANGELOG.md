@@ -7,6 +7,9 @@ Every DMG handed out to testers corresponds to one entry below.
 
 ## [Unreleased]
 
+### Changed
+- Ride details: the map with the track stays in view at the top and only the part below it scrolls, so the spot you point at in a chart is always visible on the map. The map is a little shorter in small windows.
+
 ## [1.6.1] – 2026-10-25
 
 Security fix for damaged FIT files, and a tidier foundation. Nothing new to see.

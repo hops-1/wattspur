@@ -274,6 +274,7 @@ Auslöser: Der Sicherheitscheck von 1.6.0 fand fünf Abstürze durch präpariert
 | B-168 | Wartung nach dem ersten Fenster, Ordner-Import liest im Hintergrund (PR #12) | M | ☑ |
 | B-169 | `docs/ARCHITECTURE.md`, Regel-Prüfung `scripts/check-architecture.sh` in der CI, Lern-Notiz 25, Changelog, Version 1.6.1 | S | ☑ |
 | – | **Release 1.6.1:** DMG bauen, Tag `v1.6.1`, GitHub-Release (nach Freigabe durch Nils) | S | ☐ |
+| B-170 | Fahrtdetails: Karte mit Titelzeile bleibt oben stehen, nur der Teil darunter scrollt; Kartenhöhe 200–340 pt je nach Fensterhöhe (Wunsch 25.10.2026) | S | ☑ |
 
 ## v1.7 – Ähnliche Strecken und weitere Rekorde (Wunsch 22.10.2026)
 
