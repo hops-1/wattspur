@@ -85,8 +85,7 @@ enum RecordCheck {
     }
 
     /// The notice for imports since the last check, or `nil`.
-    static func run(in context: ModelContext) -> RecordNotice? {
-        let library = RideLibrary(context: context)
+    static func run(using library: RideLibrary) -> RecordNotice? {
         let since = Date(timeIntervalSinceReferenceDate: checkedUntil)
         guard let latest = library.latestImportDate(), latest > since else { return nil }
         let breaks = library.newRecords(importedAfter: since, calendar: GoalPeriod.calendar())

@@ -35,7 +35,7 @@ enum DemoMode {
     static func makeContainer() throws -> ModelContainer {
         let container = try ModelContainer(for: Schema(WattspurSchema.models),
                                            configurations: ModelConfiguration(isStoredInMemoryOnly: true))
-        rideID = SampleRide.load(into: container.mainContext)?.id
+        rideID = SampleRide.load(into: RideLibrary(context: container.mainContext))?.id
         addCopies(UserDefaults.standard.integer(forKey: "WattspurDemoRides"), to: container.mainContext)
         if let paths = UserDefaults.standard.string(forKey: "WattspurDemoImport") {
             let library = RideLibrary(context: container.mainContext)

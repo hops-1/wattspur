@@ -7,6 +7,7 @@ import WattspurKit
 struct SetupAssistantView: View {
     @Environment(FolderWatcher.self) private var watcher
     @Environment(\.modelContext) private var modelContext
+    @Environment(RideLibrary.self) private var sharedLibrary
     @Environment(\.dismiss) private var dismiss
     @AppStorage("setupCompleted") private var setupCompleted = false
 
@@ -85,7 +86,7 @@ struct SetupAssistantView: View {
         }
         .frame(width: 600, height: 620)
         .onAppear {
-            let library = RideLibrary(context: modelContext)
+            let library = sharedLibrary
             let rider = library.defaultRider()
             name = rider.name
             let bike = library.activeBike()
@@ -299,7 +300,7 @@ struct SetupAssistantView: View {
     }
 
     private func saveName() {
-        let library = RideLibrary(context: modelContext)
+        let library = sharedLibrary
         let rider = library.defaultRider()
         if let trimmed = name.nonEmpty {
             rider.name = trimmed.trimmingCharacters(in: .whitespacesAndNewlines)
@@ -309,7 +310,7 @@ struct SetupAssistantView: View {
 
     /// The first bike and the body data go to the library when the step is left.
     private func saveBike() {
-        let library = RideLibrary(context: modelContext)
+        let library = sharedLibrary
         library.configureActiveBike(name: bikeName, color: bikeColor)
         library.setBodyData(weightKg: weight, heightCm: height, birthYear: birthYear, sex: sex)
     }
@@ -319,7 +320,7 @@ struct SetupAssistantView: View {
         saveBike()
         // The hint "Set up your bikes" is for libraries from before 1.5; this one has just done it.
         bikesHintDone = true
-        if loadSample { SampleRide.load(into: modelContext) }
+        if loadSample { SampleRide.load(into: sharedLibrary) }
         setupCompleted = true
         dismiss()
     }

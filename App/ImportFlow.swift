@@ -211,11 +211,11 @@ extension View {
 
 private struct ImportFlowModifier: ViewModifier {
     @Bindable var flow: ImportFlow
-    @Environment(\.modelContext) private var modelContext
     @Environment(\.undoManager) private var undoManager
     @Environment(ImportLog.self) private var importLog
 
-    private var library: RideLibrary { RideLibrary(context: modelContext, undoManager: undoManager) }
+    @Environment(RideLibrary.self) private var sharedLibrary
+    private var library: RideLibrary { sharedLibrary.using(undoManager) }
 
     func body(content: Content) -> some View {
         content

@@ -7,12 +7,11 @@ import WattspurKit
 /// and the bikes as tiles. The star marks the active bike, the one new rides go to.
 /// No password, no server – the macOS user account already protects the data.
 struct ProfileView: View {
-    @Environment(\.modelContext) private var modelContext
     @Query private var riders: [Rider]
     @Query private var bikes: [Bike]
     @State private var editor: BikeEditorTarget?
 
-    private var library: RideLibrary { RideLibrary(context: modelContext) }
+    @Environment(RideLibrary.self) private var library
     private var openBikes: [Bike] { Bike.sorted(bikes.filter { !$0.isArchived }) }
     private var archivedBikes: [Bike] { Bike.sorted(bikes.filter(\.isArchived)) }
 
@@ -148,7 +147,6 @@ extension RiderSex {
 /// only used for the calorie estimate "with profile" (B-067).
 private struct RiderCard: View {
     @Bindable var rider: Rider
-    @Environment(\.modelContext) private var modelContext
     @State private var choosingPhoto = false
     @State private var photoFailed = false
 

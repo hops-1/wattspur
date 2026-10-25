@@ -18,7 +18,6 @@ struct RideListView: View {
     /// Double-click, Return or "Open in Ride Detail" beside the map and the analysis.
     var onOpen: ((UUID) -> Void)? = nil
 
-    @Environment(\.modelContext) private var modelContext
     @Environment(ImportLog.self) private var importLog
     @Environment(FolderWatcher.self) private var watcher
     @Environment(MergeSuggestionCenter.self) private var suggestions
@@ -417,7 +416,8 @@ struct RideListView: View {
         }
     }
 
-    private var library: RideLibrary { RideLibrary(context: modelContext, undoManager: undoManager) }
+    @Environment(RideLibrary.self) private var sharedLibrary
+    private var library: RideLibrary { sharedLibrary.using(undoManager) }
 
     private static let importTypes: [UTType] = [UTType(filenameExtension: "fit") ?? .data, UTType(filenameExtension: "gpx") ?? .xml]
 

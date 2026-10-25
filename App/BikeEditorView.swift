@@ -66,7 +66,7 @@ struct BikeEditorView: View {
     @State private var choosingPhoto = false
     @State private var photoFailed = false
 
-    private var library: RideLibrary { RideLibrary(context: modelContext) }
+    @Environment(RideLibrary.self) private var library
     private var existing: Bike? {
         if case .edit(let bike) = target { return bike }
         return nil

@@ -51,8 +51,8 @@ final class FolderWatcher {
         static let bookmark = "watchFolderBookmark"
     }
 
-    init(context: ModelContext) {
-        library = RideLibrary(context: context)
+    init(library: RideLibrary) {
+        self.library = library
         isEnabled = UserDefaults.standard.bool(forKey: Keys.enabled)
     }
 

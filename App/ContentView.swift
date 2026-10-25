@@ -44,6 +44,7 @@ struct ContentView: View {
     @AppStorage("sidebarWidth") private var sidebarWidth = 220.0
     @AppStorage("listWidth") private var listWidth = 340.0
     @Environment(\.modelContext) private var modelContext
+    @Environment(RideLibrary.self) private var sharedLibrary
     @Environment(FolderWatcher.self) private var watcher
     @Environment(NewPathsStore.self) private var newPaths
     @Environment(BikeAssignmentNotice.self) private var assignmentNotice
@@ -352,7 +353,7 @@ struct ContentView: View {
     }
 
     private func checkRecords() {
-        if let notice = RecordCheck.run(in: modelContext) { recordNotice = notice }
+        if let notice = RecordCheck.run(using: sharedLibrary) { recordNotice = notice }
     }
 
     /// Dragging the sidebar narrower than the snap point switches to icons only,
