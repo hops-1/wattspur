@@ -28,6 +28,7 @@ Zu jeder Story steht hier kurz: **was** gebaut wurde, **warum** so und **welche 
 | [22](22-bike-filter.md) | Bike-Filter je Bereich: gemerkt, Ziele über alle Bikes, Karte (B-110) | B-137, B-110 |
 | [23](23-kalorien-mit-profil.md) | Kalorien „mit Profil“: Grundumsatz nach Mifflin-St Jeor, Rückfall, Einstellung (Gerüst) | B-067 |
 | [24](24-umstieg-erststart.md) | Umstieg auf 1.5: Hinweis nach dem Update, Schritt „Erstes Bike“ im Assistenten | B-138 |
+| [25](25-architektur-aufraeumen.md) | Architektur aufräumen: Sicherheits-Fix, zwei Module, Dienste, geteilte Bibliothek, Einstellungen, Start | B-162 … B-169 |
 
 **Begriffe, die oft vorkommen**
 - **Swift Package (`WattspurKit`)**: ein eigenständiges Code-Modul ohne Oberfläche. Es lässt sich mit `swift test` allein testen und später unverändert in der iOS-App nutzen.

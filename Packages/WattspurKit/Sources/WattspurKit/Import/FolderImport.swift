@@ -46,9 +46,10 @@ public struct FolderImport {
         self.fileManager = fileManager
     }
 
-    /// Looks at every file directly in the folder once.
+    /// Looks at every file directly in the folder once. Reading a file's bytes happens off the main
+    /// actor (a GPX can be hundreds of megabytes); everything that touches the library stays on it.
     @discardableResult
-    public func run(now: Date = .now) -> Summary {
+    public func run(now: Date = .now) async -> Summary {
         var summary = Summary()
         let contents = (try? fileManager.contentsOfDirectory(
             at: folder, includingPropertiesForKeys: [.isRegularFileKey], options: [])) ?? []
@@ -72,7 +73,7 @@ public struct FolderImport {
                 continue
             }
 
-            guard let data = try? Data(contentsOf: url) else { continue }
+            guard let data = await Self.readData(at: url) else { continue }
             let result = library.importFile(data: data, fileName: name)
             switch result.outcome {
             case .imported(let id):
@@ -105,6 +106,11 @@ public struct FolderImport {
             }
         }
         return summary
+    }
+
+    /// Reads a file on a background thread.
+    private static func readData(at url: URL) async -> Data? {
+        await Task.detached(priority: .utility) { try? Data(contentsOf: url) }.value
     }
 
     /// Moves a file into a subfolder, renaming it ("Ride 2.fit") if the name is taken.

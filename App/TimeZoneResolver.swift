@@ -7,15 +7,13 @@ import WattspurKit
 /// Bosch writes `local_timestamp` in UTC, so the file does not tell us the local time.
 @MainActor
 enum TimeZoneResolver {
-    static func resolveMissing(in context: ModelContext) async {
-        let descriptor = FetchDescriptor<Ride>(predicate: #Predicate { $0.timeZoneIdentifier == nil })
-        let rides = (try? context.fetch(descriptor)) ?? []
-        for ride in rides {
+    static func resolveMissing(using library: RideLibrary) async {
+        for ride in library.ridesWithoutTimeZone() {
             guard let start = ride.startCoordinate,
                   let request = MKReverseGeocodingRequest(location: CLLocation(latitude: start.latitude, longitude: start.longitude)),
                   let zone = try? await request.mapItems.first?.timeZone else { continue }
             ride.timeZoneIdentifier = zone.identifier
         }
-        try? context.save()
+        library.save()
     }
 }

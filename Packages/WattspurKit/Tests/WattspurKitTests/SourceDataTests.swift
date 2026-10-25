@@ -2,6 +2,8 @@ import Foundation
 import SwiftData
 import Testing
 @testable import WattspurKit
+@testable import WattspurCore
+import TestFixtures
 
 /// Fields for the GPX import (B-141): only the model, no parser. Rides and series
 /// stored before must read and write exactly as before.

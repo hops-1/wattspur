@@ -2,6 +2,8 @@ import Foundation
 import SwiftData
 import Testing
 @testable import WattspurKit
+@testable import WattspurCore
+import TestFixtures
 
 /// Reads a GPX file back with `XMLParser` (namespace-aware): a stand-in for the later
 /// GPX import (B-060), so the export is checked as a round trip.

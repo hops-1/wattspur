@@ -7,7 +7,7 @@ import WattspurKit
 @MainActor
 @Observable
 final class MergeSuggestionCenter {
-    static let gapKey = "mergeSuggestionGapMinutes"
+    static let gapKey = SettingsKey.mergeSuggestionGapMinutes
 
     private(set) var pending: [RideMergeSuggestion.Group] = []
 

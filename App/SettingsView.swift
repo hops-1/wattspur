@@ -28,8 +28,8 @@ struct SettingsView: View {
 }
 
 private struct GeneralSettingsView: View {
-    @AppStorage("mapType") private var mapType: RideMapType = .standard
-    @AppStorage("setupCompleted") private var setupCompleted = false
+    @AppStorage(SettingsKey.mapType) private var mapType: RideMapType = .standard
+    @AppStorage(SettingsKey.setupCompleted) private var setupCompleted = false
     @Query private var riders: [Rider]
     @Query(filter: #Predicate<Ride> { $0.isSample }) private var samples: [Ride]
     @Environment(RideLibrary.self) private var sharedLibrary
@@ -91,7 +91,7 @@ private struct GeneralSettingsView: View {
 struct ImportSettingsView: View {
     @Environment(FolderWatcher.self) private var watcher
     @Environment(\.openWindow) private var openWindow
-    @AppStorage(MergeSuggestionCenter.gapKey) private var mergeGapMinutes = RideMergeSuggestion.defaultGapMinutes
+    @AppStorage(SettingsKey.mergeSuggestionGapMinutes) private var mergeGapMinutes = RideMergeSuggestion.defaultGapMinutes
 
     var body: some View {
         @Bindable var watcher = watcher

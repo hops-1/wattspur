@@ -2,6 +2,7 @@ import Foundation
 import SwiftData
 import Testing
 @testable import WattspurKit
+@testable import WattspurCore
 
 @Suite("Suggesting rides to merge")
 struct RideMergeSuggestionTests {

@@ -57,7 +57,7 @@ extension BodyProfile.Field {
 
 /// The calorie settings in "Calculation".
 struct CalorieSettingsView: View {
-    @AppStorage("calorieMode") private var mode: CalorieMode = .fromWork
+    @AppStorage(SettingsKey.calorieMode) private var mode: CalorieMode = .fromWork
     @Query private var riders: [Rider]
 
     private var model: CalorieModel { CalorieModel(mode: mode, rider: riders.first) }

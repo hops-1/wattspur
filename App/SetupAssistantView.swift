@@ -6,10 +6,9 @@ import WattspurKit
 /// and how to export from the Flow app. Can be shown again from Settings.
 struct SetupAssistantView: View {
     @Environment(FolderWatcher.self) private var watcher
-    @Environment(\.modelContext) private var modelContext
     @Environment(RideLibrary.self) private var sharedLibrary
     @Environment(\.dismiss) private var dismiss
-    @AppStorage("setupCompleted") private var setupCompleted = false
+    @AppStorage(SettingsKey.setupCompleted) private var setupCompleted = false
 
     @State private var step = 1
     @State private var name = ""
@@ -24,7 +23,7 @@ struct SetupAssistantView: View {
     @State private var height: Double?
     @State private var birthYear: Int?
     @State private var sex: RiderSex = .unspecified
-    @AppStorage("bikesHintDone") private var bikesHintDone = false
+    @AppStorage(SettingsKey.bikesHintDone) private var bikesHintDone = false
 
     private enum FolderChoice: Hashable { case iCloud, other, none }
     private static let stepCount = 5
@@ -137,7 +136,7 @@ struct SetupAssistantView: View {
                 }
             }
             LabeledField("Bike name") {
-                TextField("Bike name", text: $bikeName, prompt: Text(verbatim: RideLibrary.defaultBikeName))
+                TextField("Bike name", text: $bikeName, prompt: Text(verbatim: sharedLibrary.defaultBikeName))
                     .textFieldStyle(.roundedBorder)
                     .labelsHidden()
             }
@@ -250,7 +249,7 @@ struct SetupAssistantView: View {
                 }
                 GridRow {
                     Text("Bike").foregroundStyle(.secondary)
-                    Text(verbatim: bikeName.nonEmpty ?? RideLibrary.defaultBikeName)
+                    Text(verbatim: bikeName.nonEmpty ?? sharedLibrary.defaultBikeName)
                 }
                 GridRow {
                     Text("Import folder").foregroundStyle(.secondary)
@@ -305,7 +304,7 @@ struct SetupAssistantView: View {
         if let trimmed = name.nonEmpty {
             rider.name = trimmed.trimmingCharacters(in: .whitespacesAndNewlines)
         }
-        try? modelContext.save()
+        sharedLibrary.save()
     }
 
     /// The first bike and the body data go to the library when the step is left.
