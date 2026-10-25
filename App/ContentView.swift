@@ -54,6 +54,8 @@ struct ContentView: View {
     @AppStorage(SettingsKey.setupCompleted) private var setupCompleted = false
     /// The one-time note after the update to 1.5 (B-138); the setup assistant sets it too.
     @AppStorage(SettingsKey.bikesHintDone) private var bikesHintDone = false
+    @AppStorage(SettingsKey.updateCheckEnabled) private var updateCheckEnabled = true
+    @Environment(UpdateChecker.self) private var updates
     @Query(filter: #Predicate<Bike> { !$0.isArchived }, sort: \Bike.sortOrder) private var openBikes: [Bike]
     @Query private var allRides: [Ride]
     private var rideCount: Int { allRides.count }
@@ -83,6 +85,7 @@ struct ContentView: View {
             .onChange(of: allRides.map(\.overviewRouteVersion), initial: true) { newPaths.update(allRides) }
             .onChange(of: allRides.map(\.deletedAt)) { newPaths.update(allRides) }
             .onChange(of: allRides.map { $0.mergedInto?.id }) { newPaths.update(allRides) }
+            .task { await updates.checkAtLaunch() }
             // Import what arrived in the watched folder while Wattspur was closed (IMP-05).
             .task {
                 RecordCheck.prepare()
@@ -209,7 +212,18 @@ struct ContentView: View {
                     .transition(.move(edge: .top).combined(with: .opacity))
                 }
             }
+            .overlay(alignment: .top) {
+                if let release = updates.available, showsUpdate {
+                    UpdateBanner(release: release) {
+                        updates.open(release)
+                    } onLater: { updates.dismiss() }
+                    .padding(.top, 14)
+                    .padding(.horizontal, 20)
+                    .transition(.move(edge: .top).combined(with: .opacity))
+                }
+            }
             .animation(.snappy, value: showsBikesHint)
+            .animation(.snappy, value: updates.available)
             .overlay(alignment: .bottom) {
                 if let notice = assignmentNotice.current {
                     BikeAssignmentNoticeView(notice: notice) {
@@ -269,6 +283,11 @@ struct ContentView: View {
         }
     }
     #endif
+
+    /// The update notice waits for the setup assistant and does not cover the other notes.
+    private var showsUpdate: Bool {
+        updateCheckEnabled && setupCompleted && recordNotice == nil && !showsBikesHint
+    }
 
     /// Only for a library that was there before 1.5: the assistant already asks fresh ones.
     private var showsBikesHint: Bool {

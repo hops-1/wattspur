@@ -33,4 +33,10 @@ enum SettingsKey {
     static let recordsCheckedUntil = "recordsCheckedUntil"
     static let watchFolderEnabled = "watchFolderEnabled"
     static let watchFolderBookmark = "watchFolderBookmark"
+    // Update notice (B-172); earlier versions did not write these.
+    static let updateCheckEnabled = "updateCheckEnabled"
+    static let updateCheckedAt = "updateCheckedAt"
+    static let updateLatestTag = "updateLatestTag"
+    static let updateLatestLink = "updateLatestLink"
+    static let updateDismissedVersion = "updateDismissedVersion"
 }

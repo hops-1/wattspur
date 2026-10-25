@@ -273,9 +273,11 @@ Auslöser: Der Sicherheitscheck von 1.6.0 fand fünf Abstürze durch präpariert
 | B-167 | Einstellungsschlüssel in `SettingsKey` (PR #11) | S | ☑ |
 | B-168 | Wartung nach dem ersten Fenster, Ordner-Import liest im Hintergrund (PR #12) | M | ☑ |
 | B-169 | `docs/ARCHITECTURE.md`, Regel-Prüfung `scripts/check-architecture.sh` in der CI, Lern-Notiz 25, Changelog, Version 1.6.1 | S | ☑ |
-| – | **Release 1.6.1:** DMG bauen, Tag `v1.6.1`, GitHub-Release (nach Freigabe durch Nils) | S | ☐ |
+| – | **Release 1.6.1:** DMG bauen, Tag `v1.6.1`, GitHub-Release (veröffentlicht 25.10.2026) | S | ☑ |
 | B-170 | Fahrtdetails: Karte mit Titelzeile bleibt oben stehen, nur der Teil darunter scrollt; Kartenhöhe 200–340 pt je nach Fensterhöhe (Wunsch 25.10.2026) | S | ☑ |
 | B-171 | Streckenkarte: neue (rote) und bekannte (blaue) Spur gleich dick, Legende angepasst (Wunsch 25.10.2026) | S | ☑ |
+| B-172 | Update-Hinweis: fragt höchstens einmal am Tag bei GitHub nach der neuesten Version und zeigt ein Banner mit Link zur Release-Seite; „Später“ blendet diese Version aus; Menü „Nach Updates suchen …“; Schalter in Einstellungen › Allgemein (Standard an); Info-Fenster, FAQ und NFR-01 angepasst (Wunsch 25.10.2026) | S | ☑ |
+| B-173 | Auto-Update (Sparkle): lädt die neue Version und ersetzt die App. **Auf einen späteren, unbestimmten Release verschoben:** braucht EdDSA-Schlüssel, einen gehosteten Appcast, XPC-Dienste mit zusätzlichen Sandbox-Rechten, und die App ist ad hoc signiert (die Signatur wechselt mit jedem Build, Bookmarks und Berechtigungen hängen daran); sinnvoll erst mit Developer-Account und Notarisierung (NFR-18) | L | ☐ |
 
 ## v1.7 – Ähnliche Strecken und weitere Rekorde (Wunsch 22.10.2026)
 

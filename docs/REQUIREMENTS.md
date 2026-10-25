@@ -309,7 +309,7 @@ Gesammelte Feature-Ideen, über deren Umsetzung und Release später entschieden 
 ## 5. Nicht-funktionale Anforderungen (NFR)
 | ID | Anforderung |
 |---|---|
-| NFR-01 | Offline-fähig; keine Pflicht zu einem Online-Konto (lokales Profil genügt), keine Telemetrie. Netz nur für Kartenkacheln und das Online-Handbuch, ab 1.9 zusätzlich für den **optionalen** Abruf von Bosch-Daten (MOT, NFR-20) |
+| NFR-01 | Offline-fähig; keine Pflicht zu einem Online-Konto (lokales Profil genügt), keine Telemetrie. Netz nur für Kartenkacheln, das Online-Handbuch und die Frage nach einer neuen Version bei GitHub (höchstens einmal am Tag, abschaltbar, es werden keine Daten gesendet; B-172), ab 1.9 zusätzlich für den **optionalen** Abruf von Bosch-Daten (MOT, NFR-20) |
 | NFR-02 | Import einer Fahrt (ca. 6 000 Records) unter 1 s; Liste mit über 1 000 Fahrten flüssig |
 | NFR-03 | Persistenz mit SwiftData im App-Container (CloudKit-fähig modelliert, siehe Kap. 7); Zeitreihen kompakt gespeichert; Originaldateien bleiben erhalten |
 | NFR-04 | Die Summenwerte stimmen **exakt** mit der `session` der FIT-Datei überein (Referenztest Beispielfahrt); selbst berechnete Werte sind dokumentiert und reproduzierbar |
@@ -326,7 +326,7 @@ Gesammelte Feature-Ideen, über deren Umsetzung und Release später entschieden 
 | NFR-15 | Mindestversion macOS 26; neueste SwiftUI-, SwiftData-, Charts- und MapKit-APIs ohne Fallbacks für ältere Systeme |
 | NFR-16 | Barrierefreiheit (Grundniveau): VoiceOver-Beschriftungen für Kennzahlen und Diagramme (Audio Graphs), vollständige Tastaturbedienung, ausreichende Kontraste, Farbe nie als einzige Information |
 | NFR-17 | Automatische Neu-Auswertung: jede Fahrt speichert die Parser-Version; nach einem Update werden betroffene Fahrten im Hintergrund aus der Originaldatei neu eingelesen; lokale Änderungen (Name, Notizen, Papierkorb-Status) bleiben erhalten |
-| NFR-18 | Verteilung ohne Developer-Account: ad-hoc signierte App im DMG; v1.0 nutzt keine Funktionen, die bezahlte Berechtigungen voraussetzen (CloudKit, App-Gruppen für Widgets o. Ä.). Das Handbuch erklärt das einmalige Öffnen trotz Gatekeeper-Warnung (Systemeinstellungen → Datenschutz & Sicherheit → „Trotzdem öffnen“). Mit Developer-Account: Notarisierung, ggf. Auto-Update (Sparkle) |
+| NFR-18 | Verteilung ohne Developer-Account: ad-hoc signierte App im DMG; v1.0 nutzt keine Funktionen, die bezahlte Berechtigungen voraussetzen (CloudKit, App-Gruppen für Widgets o. Ä.). Das Handbuch erklärt das einmalige Öffnen trotz Gatekeeper-Warnung (Systemeinstellungen → Datenschutz & Sicherheit → „Trotzdem öffnen“). Ein Hinweis auf neue Versionen (Banner, B-172) ersetzt das Auto-Update. Mit Developer-Account: Notarisierung, ggf. Auto-Update (Sparkle, B-173) |
 | NFR-19 | FIT-Parser: Entscheidung zwischen Garmin FIT SDK und eigenem Decoder im Spike B-002 nach Kriterien Vollständigkeit, Robustheit, Lizenz (Veröffentlichung auf GitHub), Größe und Wartungsaufwand |
 | NFR-20 | Bosch-Abruf (MOT): Verbindung nur nach ausdrücklicher Anmeldung des Nutzers und nur zu den Bosch-Servern; Tokens ausschließlich im Schlüsselbund (nie in SwiftData, Protokollen, Diagnose-Dateien oder im Repo); keine Client-ID und kein Geheimnis im Repo; Anfragen gedrosselt und mit Wiederholung bei 429/5xx; Diagnose enthält keine Tokens und keine abgerufenen Fahrtdaten; Zugriff nur lesend; Bedingungen von Bosch für Datenempfänger sind einzuhalten (V-12) |
 

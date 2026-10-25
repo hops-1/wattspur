@@ -30,6 +30,7 @@ struct SettingsView: View {
 private struct GeneralSettingsView: View {
     @AppStorage(SettingsKey.mapType) private var mapType: RideMapType = .standard
     @AppStorage(SettingsKey.setupCompleted) private var setupCompleted = false
+    @AppStorage(SettingsKey.updateCheckEnabled) private var updateCheckEnabled = true
     @Query private var riders: [Rider]
     @Query(filter: #Predicate<Ride> { $0.isSample }) private var samples: [Ride]
     @Environment(RideLibrary.self) private var sharedLibrary
@@ -67,6 +68,15 @@ private struct GeneralSettingsView: View {
                     Text("Go through profile, import folder and the export guide again.")
                         .font(.caption)
                         .foregroundStyle(.secondary)
+                }
+            }
+            LabeledContent("Updates:") {
+                VStack(alignment: .leading, spacing: 4) {
+                    Toggle("Check for new versions", isOn: $updateCheckEnabled)
+                    Text("Once a day Wattspur asks GitHub whether a newer version is out and shows a note. Nothing about you or your rides is sent. “Check for Updates…” in the Wattspur menu always works.")
+                        .font(.caption)
+                        .foregroundStyle(.secondary)
+                        .fixedSize(horizontal: false, vertical: true)
                 }
             }
             LabeledContent("Sample ride:") {

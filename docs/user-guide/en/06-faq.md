@@ -38,7 +38,10 @@ Wattspur shows the start time in the time zone of the start location. It looks t
 Only for the **sample ride**: its start and finish are removed so that nobody can find the place where the original ride began. Your own rides are shown completely.
 
 ### Where are my rides stored? Is anything uploaded?
-Everything stays on your Mac, in `~/Library/Containers/io.github.hops-1.wattspur`. Wattspur has no account and sends no data. It only goes online to load map tiles and to look up time zones with Apple Maps.
+Everything stays on your Mac, in `~/Library/Containers/io.github.hops-1.wattspur`. Wattspur has no account and sends no data about you or your rides. It only goes online to load map tiles, to look up time zones with Apple Maps, and to ask GitHub once a day whether a new version is out (see below).
+
+### How do I find out about a new version?
+Wattspur asks GitHub once a day whether a newer version has been released. If so, a banner at the top of the window says so; **View on GitHub** opens the release page, where you download the DMG and replace the app in Applications. **Later** hides that version until a newer one comes out. **Wattspur › Check for Updates…** asks right away. Only the public release list is read, nothing about you is sent. To switch it off: **Settings › General › Check for new versions**. Wattspur does not install updates by itself.
 
 ### How do I switch the language?
 Wattspur follows the language of macOS. For Wattspur only: **System Settings › General › Language & Region › Applications**, add Wattspur and choose English or German.
