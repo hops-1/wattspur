@@ -200,7 +200,7 @@ struct ContentView: View {
             }
             .overlay(alignment: .top) {
                 if showsBikesHint {
-                    BikesHintBanner(bikeName: openBikes.first?.name.nonEmpty ?? RideLibrary.defaultBikeName) {
+                    BikesHintBanner(bikeName: openBikes.first?.name.nonEmpty ?? sharedLibrary.defaultBikeName) {
                         bikesHintDone = true
                         section = .profile
                     } onLater: { bikesHintDone = true }
