@@ -27,10 +27,9 @@ struct WattspurApp: App {
         } catch {
             fatalError("Could not open the Wattspur library: \(error)")
         }
-        let library = RideLibrary(context: container.mainContext)
-        _library = State(initialValue: library)
         // The name of the first bike and of bikes without a name (REQUIREMENTS.md 10.16).
-        RideLibrary.defaultBikeName = String(localized: "My eBike")
+        let library = RideLibrary(context: container.mainContext, defaultBikeName: String(localized: "My eBike"))
+        _library = State(initialValue: library)
         // Rides in the trash for more than 30 days are deleted for good (LIST-08).
         library.purgeTrash()
         // Rides imported with an older parser are re-read from their original file (NFR-17).

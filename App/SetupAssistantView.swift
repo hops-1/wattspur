@@ -136,7 +136,7 @@ struct SetupAssistantView: View {
                 }
             }
             LabeledField("Bike name") {
-                TextField("Bike name", text: $bikeName, prompt: Text(verbatim: RideLibrary.defaultBikeName))
+                TextField("Bike name", text: $bikeName, prompt: Text(verbatim: sharedLibrary.defaultBikeName))
                     .textFieldStyle(.roundedBorder)
                     .labelsHidden()
             }
@@ -249,7 +249,7 @@ struct SetupAssistantView: View {
                 }
                 GridRow {
                     Text("Bike").foregroundStyle(.secondary)
-                    Text(verbatim: bikeName.nonEmpty ?? RideLibrary.defaultBikeName)
+                    Text(verbatim: bikeName.nonEmpty ?? sharedLibrary.defaultBikeName)
                 }
                 GridRow {
                     Text("Import folder").foregroundStyle(.secondary)
