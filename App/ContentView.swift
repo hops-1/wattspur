@@ -238,7 +238,7 @@ struct ContentView: View {
         .onChange(of: section) {
             // Whoever has seen the profile needs no hint about it.
             if section == .profile { bikesHintDone = true }
-            if section == .rides && returnSection == nil {
+            if section == .rides, returnSection == nil {
                 // Back in the list, the analysis and the map return to their periods.
                 analysisSelection = nil
                 mapAnalysisRides = nil

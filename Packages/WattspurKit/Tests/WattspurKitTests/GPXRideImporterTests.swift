@@ -311,14 +311,16 @@ struct GPXRideImporterTests {
 
     // MARK: - Real files
 
-    @Test("Bosch Flow tour 1: ride time within 1 % of the FIT, distance along the GPS path")
+    @Test("Bosch Flow tour 1 (anonymized): ride time and distance along the GPS path")
     func boschTour1() throws {
         let track = try importer.parseTrack(GPXFixture.data("pair-tour1-bosch-flow"))
         #expect(track.name == "Beispielrunde")
         #expect(track.parts.count == 4)
         let ride = try importer.parse(GPXFixture.data("pair-tour1-bosch-flow"))
-        #expect(abs(ride.summary.timerTime - 2916) < 29)       // the FIT session says 2 916 s
-        #expect(abs(ride.summary.distance - 18_488) < 5)      // GPS path, about 4.9 % below the FIT's 19 543 m
+        // Anonymized (V-05): the first and last 500 m stand still on one point, so the
+        // ride time is about 200 s below the FIT's 2 916 s and the GPS path 1.2 km shorter.
+        #expect(abs(ride.summary.timerTime - 2719) < 29)
+        #expect(abs(ride.summary.distance - 17_271) < 5)
         #expect(ride.workKilojoules == nil)
         #expect(ride.samples.allSatisfy { $0.power == nil && $0.heartRate == nil })
         #expect(track.discarded.total == 0)

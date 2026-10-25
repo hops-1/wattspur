@@ -47,7 +47,7 @@ private enum Edit {
     }
 }
 
-private let tour1UUID = "aab0c480-caec-11f1-9fee-000463be1448"
+private let tour1UUID = "5e1f0c2a-7b3d-4c8e-9a61-2f4d8b0c3e57"
 
 @MainActor
 @Suite("Same ride as FIT and GPX")
