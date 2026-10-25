@@ -32,7 +32,7 @@ private struct RideDetailContent: View {
     let onSplit: ([UUID]) -> Void
     let onShowRecords: () -> Void
     /// All rides that count, to find the records this ride holds (ADV-R2).
-    @Query(filter: #Predicate<Ride> { $0.deletedAt == nil && $0.mergedInto == nil })
+    @Query(filter: Ride.listedPredicate)
     private var listedRides: [Ride]
 
     @AppStorage("mapType") private var mapType: RideMapType = .standard

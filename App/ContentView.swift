@@ -66,191 +66,209 @@ struct ContentView: View {
     @Query(filter: #Predicate<ImportRecord> { $0.outcomeRaw == "imported" }, sort: \ImportRecord.date, order: .reverse)
     private var importEntries: [ImportRecord]
 
+    // The body is split into stages (columns, layout, notices, body): one long
+    // modifier chain was too much for the type checker of older Xcode versions.
     var body: some View {
+        notices
+            .frame(minWidth: 1000, minHeight: 640)
+            .background(WindowReader { window = $0 })
+            .onReceive(NotificationCenter.default.publisher(for: .showProfile)) { _ in
+                section = .profile
+                NSApplication.shared.activate()
+                window?.makeKeyAndOrderFront(nil)
+            }
+            // Look up missing start-location time zones (new imports, or offline before).
+            .task(id: rideCount) { await TimeZoneResolver.resolveMissing(in: modelContext) }
+            // New paths follow every change of the rides (B-115); unchanged rides cost a hash.
+            .onChange(of: allRides.map(\.overviewRouteVersion), initial: true) { newPaths.update(allRides) }
+            .onChange(of: allRides.map(\.deletedAt)) { newPaths.update(allRides) }
+            .onChange(of: allRides.map { $0.mergedInto?.id }) { newPaths.update(allRides) }
+            // Import what arrived in the watched folder while Wattspur was closed (IMP-05).
+            .task {
+                RecordCheck.prepare()
+                checkRecords()
+                watcher.start()
+            }
+            .sheet(isPresented: Binding(get: { !setupCompleted }, set: { if !$0 { setupCompleted = true } })) {
+                SetupAssistantView()
+                    .environment(watcher)
+            }
+            #if DEBUG
+            // Screenshots need a front window: MapKit does not draw in a window that is covered.
+            .task { startDemoMode() }
+            #endif
+            .onChange(of: section) { sectionChanged() }
+            // A single ride (or none) ends the comparison; more than 4 only pauses it.
+            .onChange(of: selectedRideIDs) {
+                if selectedRideIDs.count < 2 { comparing = false } else { multiSelectTipDone = true }
+            }
+    }
+
+    private var layout: some View {
         // A fixed layout instead of NavigationSplitView: the split view restores
         // stored column widths and ignores our minimums, which squeezed the list.
-        NavigationStack {
-            HStack(spacing: 0) {
-                SidebarRail(section: $section, compact: $sidebarCompact, width: sidebarWidth)
-                ColumnResizeHandle(
-                    width: Binding(get: { sidebarCompact ? SidebarRail.compactWidth : sidebarWidth },
-                                   set: { setSidebarWidth($0) }),
-                    range: SidebarRail.compactWidth...320
-                )
-                if section == .analysis {
-                    scopedList(.analysis(analysedRideIDs))
-                    AnalysisView(selection: analysisSelection) { analysisSelection = nil } onShowOnMap: { ids in
-                        mapAnalysisRides = ids
-                        section = .map
-                    } onAnalysedRidesChange: { analysedRideIDs = $0 }
-                        .frame(maxWidth: .infinity, maxHeight: .infinity)
-                } else if section == .highlights {
-                    HighlightsView(tab: $highlightsTab, year: $highlightsYear) { ids in
-                        // "Back to Highlights" returns to the same tab and year (B-128).
-                        returnSection = .highlights
-                        selectedRideIDs = Set(ids)
-                        section = .rides
-                    }
+        NavigationStack { columns }
+            // The title would overlap our own sidebar; the list shows its own header instead.
+            .toolbar(removing: .title)
+            // Keep a regular-height toolbar: without one, macOS moves the traffic-light
+            // buttons to the very top-left edge, outside our floating sidebar panel.
+            .toolbar {
+                ToolbarItem(placement: .primaryAction) {
+                    Color.clear.frame(width: 1, height: 1).accessibilityHidden(true)
+                }
+                .sharedBackgroundVisibility(.hidden)
+            }
+    }
+
+    private var columns: some View {
+        HStack(spacing: 0) {
+            SidebarRail(section: $section, compact: $sidebarCompact, width: sidebarWidth)
+            ColumnResizeHandle(
+                width: Binding(get: { sidebarCompact ? SidebarRail.compactWidth : sidebarWidth },
+                               set: { setSidebarWidth($0) }),
+                range: SidebarRail.compactWidth...320
+            )
+            if section == .analysis {
+                scopedList(.analysis(analysedRideIDs))
+                AnalysisView(selection: analysisSelection) { analysisSelection = nil } onShowOnMap: { ids in
+                    mapAnalysisRides = ids
+                    section = .map
+                } onAnalysedRidesChange: { analysedRideIDs = $0 }
                     .frame(maxWidth: .infinity, maxHeight: .infinity)
-                } else if section == .profile {
-                    ProfileView()
-                        .frame(maxWidth: .infinity, maxHeight: .infinity)
-                } else if section == .map {
-                    scopedList(.map(mapRidesInView.ids, total: mapRidesInView.total))
-                    AllRidesMapView(selectedRideIDs: selectedRideIDs, memory: $mapMemory, analysisRides: mapAnalysisRides,
-                                    onClearAnalysisRides: { mapAnalysisRides = nil },
-                                    onRidesInViewChange: { mapRidesInView = ($0, $1) },
-                                    onSelectRides: { selectedRideIDs = $0 },
-                                    onOpenRide: { id in
-                                        returnSection = .map
-                                        selectedRideIDs = [id]
-                                        section = .rides
-                                    }) { ids in
-                        analysisSelection = ids
-                        section = .analysis
-                    } onImport: {
-                        // The list beside the map opens the import dialog.
-                        importRequested = true
-                    }
+            } else if section == .highlights {
+                HighlightsView(tab: $highlightsTab, year: $highlightsYear) { ids in
+                    // "Back to Highlights" returns to the same tab and year (B-128).
+                    returnSection = .highlights
+                    selectedRideIDs = Set(ids)
+                    section = .rides
+                }
+                .frame(maxWidth: .infinity, maxHeight: .infinity)
+            } else if section == .profile {
+                ProfileView()
                     .frame(maxWidth: .infinity, maxHeight: .infinity)
-                } else {
-                    Group {
-                        switch section {
-                        case .trash: TrashView()
-                        default:
-                            RideListView(selection: $selectedRideIDs, importRequested: $importRequested) { comparing = true } onShowYear: {
-                                highlightsTab = .year
-                                highlightsYear = nil
-                                section = .highlights
-                            }
+            } else if section == .map {
+                scopedList(.map(mapRidesInView.ids, total: mapRidesInView.total))
+                AllRidesMapView(selectedRideIDs: selectedRideIDs, memory: $mapMemory, analysisRides: mapAnalysisRides,
+                                onClearAnalysisRides: { mapAnalysisRides = nil },
+                                onRidesInViewChange: { mapRidesInView = ($0, $1) },
+                                onSelectRides: { selectedRideIDs = $0 },
+                                onOpenRide: { id in
+                                    returnSection = .map
+                                    selectedRideIDs = [id]
+                                    section = .rides
+                                }) { ids in
+                    analysisSelection = ids
+                    section = .analysis
+                } onImport: {
+                    // The list beside the map opens the import dialog.
+                    importRequested = true
+                }
+                .frame(maxWidth: .infinity, maxHeight: .infinity)
+            } else {
+                Group {
+                    switch section {
+                    case .trash: TrashView()
+                    default:
+                        RideListView(selection: $selectedRideIDs, importRequested: $importRequested) { comparing = true } onShowYear: {
+                            highlightsTab = .year
+                            highlightsYear = nil
+                            section = .highlights
                         }
                     }
-                    .frame(width: listWidth)
-                    ColumnResizeHandle(width: $listWidth, range: 260...520, showsDivider: true)
-                    detail
-                        .frame(maxWidth: .infinity, maxHeight: .infinity)
                 }
+                .frame(width: listWidth)
+                ColumnResizeHandle(width: $listWidth, range: 260...520, showsDivider: true)
+                detail
+                    .frame(maxWidth: .infinity, maxHeight: .infinity)
             }
-        }
-        // The title would overlap our own sidebar; the list shows its own header instead.
-        .toolbar(removing: .title)
-        // Keep a regular-height toolbar: without one, macOS moves the traffic-light
-        // buttons to the very top-left edge, outside our floating sidebar panel.
-        .toolbar {
-            ToolbarItem(placement: .primaryAction) {
-                Color.clear.frame(width: 1, height: 1).accessibilityHidden(true)
-            }
-            .sharedBackgroundVisibility(.hidden)
-        }
-        .overlay(alignment: .top) {
-            if let notice = recordNotice {
-                RecordNoticeView(notice: notice) {
-                    if let id = notice.rideID { selectedRideIDs = [id] }
-                    section = .rides
-                    recordNotice = nil
-                } onClose: { recordNotice = nil }
-                .padding(.top, 14)
-                .transition(.move(edge: .top).combined(with: .opacity))
-            }
-        }
-        .overlay(alignment: .top) {
-            if showsBikesHint {
-                BikesHintBanner(bikeName: openBikes.first?.name.nonEmpty ?? RideLibrary.defaultBikeName) {
-                    bikesHintDone = true
-                    section = .profile
-                } onLater: { bikesHintDone = true }
-                .padding(.top, 14)
-                .padding(.horizontal, 20)
-                .transition(.move(edge: .top).combined(with: .opacity))
-            }
-        }
-        .animation(.snappy, value: showsBikesHint)
-        .overlay(alignment: .bottom) {
-            if let notice = assignmentNotice.current {
-                BikeAssignmentNoticeView(notice: notice) {
-                    undoManager?.undo()
-                    assignmentNotice.hide()
-                } onClose: { assignmentNotice.hide() }
-                .padding(.bottom, 18)
-                .transition(.move(edge: .bottom).combined(with: .opacity))
-            }
-        }
-        .animation(.snappy, value: recordNotice)
-        .animation(.snappy, value: assignmentNotice.current)
-        .task(id: assignmentNotice.current?.id) {
-            guard let notice = assignmentNotice.current else { return }
-            try? await Task.sleep(for: .seconds(10))
-            if assignmentNotice.current?.id == notice.id { assignmentNotice.hide() }
-        }
-        .task(id: recordNotice?.id) {
-            guard let notice = recordNotice else { return }
-            AccessibilityNotification.Announcement("\(notice.title). \(notice.lines.joined(separator: ". "))").post()
-            try? await Task.sleep(for: .seconds(20))
-            if recordNotice?.id == notice.id { recordNotice = nil }
-        }
-        .onChange(of: importEntries.first?.date) { checkRecords() }
-        .frame(minWidth: 1000, minHeight: 640)
-        .background(WindowReader { window = $0 })
-        .onReceive(NotificationCenter.default.publisher(for: .showProfile)) { _ in
-            section = .profile
-            NSApplication.shared.activate()
-            window?.makeKeyAndOrderFront(nil)
-        }
-        // Look up missing start-location time zones (new imports, or offline before).
-        .task(id: rideCount) { await TimeZoneResolver.resolveMissing(in: modelContext) }
-        // New paths follow every change of the rides (B-115); unchanged rides cost a hash.
-        .onChange(of: allRides.map(\.overviewRouteVersion), initial: true) { newPaths.update(allRides) }
-        .onChange(of: allRides.map(\.deletedAt)) { newPaths.update(allRides) }
-        .onChange(of: allRides.map { $0.mergedInto?.id }) { newPaths.update(allRides) }
-        // Import what arrived in the watched folder while Wattspur was closed (IMP-05).
-        .task {
-            RecordCheck.prepare()
-            checkRecords()
-            watcher.start()
-        }
-        .sheet(isPresented: Binding(get: { !setupCompleted }, set: { if !$0 { setupCompleted = true } })) {
-            SetupAssistantView()
-                .environment(watcher)
-        }
-        #if DEBUG
-        // Screenshots need a front window: MapKit does not draw in a window that is covered.
-        .task {
-            guard DemoMode.isOn else { return }
-            if let id = DemoMode.rideID { selectedRideIDs = [id] }
-            NSApplication.shared.activate()
-            switch DemoMode.section {
-            case "analysis"?: section = .analysis
-            case "highlights"?: section = .highlights
-            case "records"?: highlightsTab = .records; section = .highlights
-            case "goals"?: highlightsTab = .goals; section = .highlights
-            case "map"?: section = .map
-            case "profile"?: section = .profile
-            default: break
-            }
-            switch DemoMode.window {
-            case "settings"?: openSettings()
-            case let id?: openWindow(id: id)
-            case nil: break
-            }
-        }
-        #endif
-        // Back in the list, the analysis returns to periods.
-        .onChange(of: section) {
-            // Whoever has seen the profile needs no hint about it.
-            if section == .profile { bikesHintDone = true }
-            if section == .rides, returnSection == nil {
-                // Back in the list, the analysis and the map return to their periods.
-                analysisSelection = nil
-                mapAnalysisRides = nil
-            } else if section != .rides {
-                returnSection = nil
-            }
-        }
-        // A single ride (or none) ends the comparison; more than 4 only pauses it.
-        .onChange(of: selectedRideIDs) {
-            if selectedRideIDs.count < 2 { comparing = false } else { multiSelectTipDone = true }
         }
     }
+
+    /// Record, bike-hint and bike-assignment notices over the layout.
+    private var notices: some View {
+        layout
+            .overlay(alignment: .top) {
+                if let notice = recordNotice {
+                    RecordNoticeView(notice: notice) {
+                        if let id = notice.rideID { selectedRideIDs = [id] }
+                        section = .rides
+                        recordNotice = nil
+                    } onClose: { recordNotice = nil }
+                    .padding(.top, 14)
+                    .transition(.move(edge: .top).combined(with: .opacity))
+                }
+            }
+            .overlay(alignment: .top) {
+                if showsBikesHint {
+                    BikesHintBanner(bikeName: openBikes.first?.name.nonEmpty ?? RideLibrary.defaultBikeName) {
+                        bikesHintDone = true
+                        section = .profile
+                    } onLater: { bikesHintDone = true }
+                    .padding(.top, 14)
+                    .padding(.horizontal, 20)
+                    .transition(.move(edge: .top).combined(with: .opacity))
+                }
+            }
+            .animation(.snappy, value: showsBikesHint)
+            .overlay(alignment: .bottom) {
+                if let notice = assignmentNotice.current {
+                    BikeAssignmentNoticeView(notice: notice) {
+                        undoManager?.undo()
+                        assignmentNotice.hide()
+                    } onClose: { assignmentNotice.hide() }
+                    .padding(.bottom, 18)
+                    .transition(.move(edge: .bottom).combined(with: .opacity))
+                }
+            }
+            .animation(.snappy, value: recordNotice)
+            .animation(.snappy, value: assignmentNotice.current)
+            .task(id: assignmentNotice.current?.id) {
+                guard let notice = assignmentNotice.current else { return }
+                try? await Task.sleep(for: .seconds(10))
+                if assignmentNotice.current?.id == notice.id { assignmentNotice.hide() }
+            }
+            .task(id: recordNotice?.id) {
+                guard let notice = recordNotice else { return }
+                AccessibilityNotification.Announcement("\(notice.title). \(notice.lines.joined(separator: ". "))").post()
+                try? await Task.sleep(for: .seconds(20))
+                if recordNotice?.id == notice.id { recordNotice = nil }
+            }
+            .onChange(of: importEntries.first?.date) { checkRecords() }
+    }
+
+    private func sectionChanged() {
+        // Whoever has seen the profile needs no hint about it.
+        if section == .profile { bikesHintDone = true }
+        if section == .rides, returnSection == nil {
+            // Back in the list, the analysis and the map return to their periods.
+            analysisSelection = nil
+            mapAnalysisRides = nil
+        } else if section != .rides {
+            returnSection = nil
+        }
+    }
+
+    #if DEBUG
+    private func startDemoMode() {
+        guard DemoMode.isOn else { return }
+        if let id = DemoMode.rideID { selectedRideIDs = [id] }
+        NSApplication.shared.activate()
+        switch DemoMode.section {
+        case "analysis"?: section = .analysis
+        case "highlights"?: section = .highlights
+        case "records"?: highlightsTab = .records; section = .highlights
+        case "goals"?: highlightsTab = .goals; section = .highlights
+        case "map"?: section = .map
+        case "profile"?: section = .profile
+        default: break
+        }
+        switch DemoMode.window {
+        case "settings"?: openSettings()
+        case let id?: openWindow(id: id)
+        case nil: break
+        }
+    }
+    #endif
 
     /// Only for a library that was there before 1.5: the assistant already asks fresh ones.
     private var showsBikesHint: Bool {

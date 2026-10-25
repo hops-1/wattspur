@@ -28,7 +28,7 @@ struct HighlightsView: View {
 
     /// Rides outside the trash and merged rides instead of their parts; the sample
     /// ride is left out in `rides`.
-    @Query(filter: #Predicate<Ride> { $0.deletedAt == nil && $0.mergedInto == nil }, sort: \Ride.startDate)
+    @Query(filter: Ride.listedPredicate, sort: \Ride.startDate)
     private var listedRides: [Ride]
     @Query private var goals: [Goal]
     /// The bike filter of the highlights: year and records follow it, goals never (B-137).

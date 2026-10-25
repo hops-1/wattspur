@@ -15,7 +15,7 @@ struct CompareRidesView: View {
     let onRemove: (UUID) -> Void
     let onDone: () -> Void
 
-    @Query(filter: #Predicate<Ride> { $0.deletedAt == nil && $0.mergedInto == nil }) private var rides: [Ride]
+    @Query(filter: Ride.listedPredicate) private var rides: [Ride]
     @AppStorage("compareShowsDeviation") private var showsDeviation = false
     @State private var points: [UUID: [ChartPoint]] = [:]
     @State private var routes: [UUID: [RoutePoint]] = [:]

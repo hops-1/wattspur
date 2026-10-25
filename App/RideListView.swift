@@ -26,7 +26,7 @@ struct RideListView: View {
     /// The window's undo manager: ⌘Z undoes renaming, trashing, merging and splitting.
     @Environment(\.undoManager) private var undoManager
     /// Parts of a merged ride are hidden; the merged ride stands for them (B-095).
-    @Query(filter: #Predicate<Ride> { $0.deletedAt == nil && $0.mergedInto == nil }, sort: \Ride.startDate, order: .reverse)
+    @Query(filter: Ride.listedPredicate, sort: \Ride.startDate, order: .reverse)
     private var rides: [Ride]
     /// The rows show a bike symbol from two bikes on (B-136).
     @Query private var bikes: [Bike]

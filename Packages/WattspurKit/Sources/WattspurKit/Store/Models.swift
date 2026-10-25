@@ -212,6 +212,12 @@ extension Ride {
 
     public var isInTrash: Bool { deletedAt != nil }
 
+    /// Rides outside the trash and not merged into another ride, for `@Query`.
+    /// One shared predicate: each `#Predicate` written in a view was costly to type-check.
+    public static var listedPredicate: Predicate<Ride> {
+        #Predicate<Ride> { $0.deletedAt == nil && $0.mergedInto == nil }
+    }
+
     /// The kind of file the ride was imported from; `nil` for an empty or unknown `sourceFormat`.
     public var source: RideSource? { RideSource(rawValue: sourceFormat) }
 
