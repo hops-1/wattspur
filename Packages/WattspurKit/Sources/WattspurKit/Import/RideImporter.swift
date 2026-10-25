@@ -53,14 +53,14 @@ public struct FITRideImporter: RideImporter {
 
         // Work is summed over the raw records, as Bosch does: records sharing a
         // second each count as one second of pedalling (matches the Flow app's kcal).
-        let powers = records.compactMap { $0[FITProfile.Record.power]?.integerValue }
-        let work = powers.isEmpty ? nil : Double(powers.reduce(0, +)) / 1000
+        let powers = records.compactMap { Self.sensorValue($0[FITProfile.Record.power]) }
+        let work = powers.isEmpty ? nil : powers.reduce(0.0) { $0 + Double($1) } / 1000
 
         return ParsedRide(
             startDate: Date(fitTimestamp: startTimestamp),
             summary: summary,
             samples: samples,
-            deviceSerialNumber: serial.map { UInt64($0) },
+            deviceSerialNumber: serial.flatMap { UInt64(exactly: $0) },
             parserVersion: Self.parserVersion,
             workKilojoules: work
         )
@@ -70,32 +70,45 @@ public struct FITRideImporter: RideImporter {
 
     /// Bosch writes position and sensor values in separate `record` messages that
     /// share only the timestamp. They are merged into one sample per second.
+    /// A number from the file, unless it is NaN or infinite (a float field can hold both).
+    private static func finite(_ value: FITValue?) -> Double? {
+        guard let d = value?.doubleValue, d.isFinite else { return nil }
+        return d
+    }
+
+    /// Power and cadence are small whole numbers; anything else is damage and is ignored, which
+    /// also keeps the sums over a ride far from overflowing.
+    private static func sensorValue(_ value: FITValue?) -> Int? {
+        guard let v = value?.integerValue, (0...100_000).contains(v) else { return nil }
+        return Int(v)
+    }
+
     static func mergeRecords(_ records: [FITMessage], startTimestamp: Int64) -> [RideSample] {
         typealias F = FITProfile.Record
         var bySecond: [Int64: RideSample] = [:]
 
         for record in records {
             guard let timestamp = record[FITProfile.timestampField]?.integerValue else { continue }
-            var sample = bySecond[timestamp] ?? RideSample(time: TimeInterval(timestamp - startTimestamp))
+            var sample = bySecond[timestamp] ?? RideSample(time: TimeInterval(timestamp) - TimeInterval(startTimestamp))
 
-            if let lat = record[F.positionLat]?.doubleValue, let lon = record[F.positionLong]?.doubleValue {
+            if let lat = Self.finite(record[F.positionLat]), let lon = Self.finite(record[F.positionLong]) {
                 sample.latitude = FITProfile.degrees(fromSemicircles: lat)
                 sample.longitude = FITProfile.degrees(fromSemicircles: lon)
             }
-            if let alt = (record[F.enhancedAltitude] ?? record[F.altitude])?.doubleValue {
+            if let alt = Self.finite(record[F.enhancedAltitude] ?? record[F.altitude]) {
                 sample.altitude = alt / 5 - 500
             }
-            if let distance = record[F.distance]?.doubleValue {
+            if let distance = Self.finite(record[F.distance]) {
                 sample.distance = distance / 100
             }
-            if let speed = (record[F.enhancedSpeed] ?? record[F.speed])?.doubleValue {
+            if let speed = Self.finite(record[F.enhancedSpeed] ?? record[F.speed]) {
                 sample.speed = speed / 1000
             }
-            if let power = record[F.power]?.integerValue {
-                sample.power = Int(power)
+            if let power = Self.sensorValue(record[F.power]) {
+                sample.power = power
             }
-            if let cadence = record[F.cadence]?.integerValue {
-                sample.cadence = Int(cadence)
+            if let cadence = Self.sensorValue(record[F.cadence]) {
+                sample.cadence = cadence
                 sample.cadenceMeasured = true
             }
             bySecond[timestamp] = sample
@@ -119,8 +132,8 @@ public struct FITRideImporter: RideImporter {
 
     static func summary(from session: FITMessage) -> RideSummary {
         typealias S = FITProfile.Session
-        func value(_ field: UInt8) -> Double? { session[field]?.doubleValue }
-        func int(_ field: UInt8) -> Int? { session[field]?.integerValue.map(Int.init) }
+        func value(_ field: UInt8) -> Double? { session[field]?.doubleValue.flatMap { $0.isFinite ? $0 : nil } }
+        func int(_ field: UInt8) -> Int? { session[field]?.integerValue.flatMap { (0...10_000_000).contains($0) ? Int($0) : nil } }
 
         return RideSummary(
             timerTime: (value(S.totalTimerTime) ?? 0) / 1000,

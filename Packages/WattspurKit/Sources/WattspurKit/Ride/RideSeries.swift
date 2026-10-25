@@ -41,7 +41,7 @@ public enum RideSeries {
     /// Averages the samples into `bins` equal distance slices. Empty slices repeat
     /// the previous value so the line has no holes.
     public static func chartPoints(from samples: [RideSample], bins: Int = 400) -> [ChartPoint] {
-        let withDistance = samples.filter { $0.distance != nil }
+        let withDistance = samples.filter { $0.distance?.isFinite == true }
         guard bins > 0, let total = withDistance.last?.distance, total > 0 else { return [] }
 
         struct Accumulator {
@@ -52,7 +52,7 @@ public enum RideSeries {
         }
         var acc = [Accumulator](repeating: Accumulator(), count: bins)
         for sample in withDistance {
-            let index = min(bins - 1, Int((sample.distance ?? 0) / total * Double(bins)))
+            let index = max(0, min(bins - 1, Int((sample.distance ?? 0) / total * Double(bins))))
             if let v = sample.altitude { acc[index].altitude += v; acc[index].altitudeCount += 1 }
             if let v = sample.speed { acc[index].speed += v * 3.6; acc[index].speedCount += 1 }
             if let v = sample.cadence { acc[index].cadence += Double(v); acc[index].cadenceCount += 1 }
@@ -108,7 +108,7 @@ public enum RideSeries {
         }
         var acc = [Accumulator](repeating: Accumulator(), count: bins)
         for sample in sorted {
-            let index = min(bins - 1, Int(sample.time / width))
+            let index = max(0, min(bins - 1, Int(sample.time / width)))
             acc[index].count += 1
             if let v = sample.altitude { acc[index].altitude += v; acc[index].altitudeCount += 1 }
             if let v = sample.speed { acc[index].speed += v * 3.6; acc[index].speedCount += 1 }

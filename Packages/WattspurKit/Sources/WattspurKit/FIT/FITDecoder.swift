@@ -62,8 +62,9 @@ public struct FITDecoder: Sendable {
                 }
                 var message = try readData(definition, from: &reader)
                 let offset = UInt32(header & 0x1F)
-                var timestamp = (lastTimestamp & ~0x1F) + offset
-                if offset < (lastTimestamp & 0x1F) { timestamp += 0x20 }
+                // Wrapping: a hostile file may start near the end of the 32-bit range.
+                var timestamp = (lastTimestamp & ~0x1F) &+ offset
+                if offset < (lastTimestamp & 0x1F) { timestamp = timestamp &+ 0x20 }
                 lastTimestamp = timestamp
                 message.fields[FITProfile.timestampField] = .unsigned(UInt64(timestamp))
                 messages.append(message)
