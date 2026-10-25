@@ -34,6 +34,10 @@ trap 'status failure "Failed: $STEP"; echo "local-ci: failed at $STEP" >&2' ERR
 TOOLCHAIN="$(xcodebuild -version | head -1), macOS $(sw_vers -productVersion)"
 status pending "Running ($TOOLCHAIN)"
 
+STEP="Architecture rules"
+echo "== $STEP"
+scripts/check-architecture.sh
+
 STEP="WattspurKit tests"
 echo "== $STEP"
 (cd Packages/WattspurKit && swift test)
