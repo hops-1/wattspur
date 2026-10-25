@@ -7,6 +7,10 @@ Every DMG handed out to testers corresponds to one entry below.
 
 ## [Unreleased]
 
+## [1.6.2] – 2026-10-25
+
+Wattspur tells you when a new version is out.
+
 ### Added
 - **Update notice:** once a day Wattspur asks GitHub whether a newer version has been released and, if so, shows a banner at the top of the window with a link to the release page. **Later** hides that version; a still newer one shows again. **Wattspur › Check for Updates…** asks right away, and **Settings › General › Check for new versions** switches the daily check off. Only the public release list is read; nothing about you or your rides is sent. The app is not updated by itself: you download the DMG and replace the app (B-172).
 
