@@ -442,9 +442,9 @@ struct GPXFolderImportTests {
     }
 
     @Test("A GPX file is imported for the active bike, like a FIT")
-    func importsGPX() throws {
+    func importsGPX() async throws {
         try put(GPXFixture.data("strava-style-power-hr-cad"), "run.gpx")
-        let summary = watcher.run()
+        let summary = await watcher.run()
         #expect(summary.imported == 1)
         #expect(exists("Importiert/run.gpx"))
         let ride = try #require(library.ride(withID: summary.importedRideIDs[0]))
@@ -453,12 +453,12 @@ struct GPXFolderImportTests {
     }
 
     @Test("A GPX next to a Bosch ride is attached, a Bosch FIT for a GPX ride updates it, nobody is asked")
-    func attachesAndUpdates() throws {
+    func attachesAndUpdates() async throws {
         // FIT first, GPX second.
         try put(GPXFixture.fitData("pair-tour1-bosch-flow"), "Beispielrunde-\(tour1UUID).fit")
-        #expect(watcher.run().imported == 1)
+        #expect(await watcher.run().imported == 1)
         try put(GPXFixture.data("pair-tour1-komoot"), "komoot.gpx")
-        let second = watcher.run()
+        let second = await watcher.run()
         #expect(second.attached == 1)
         #expect(second.imported == 0)
         #expect(exists("Importiert/komoot.gpx"))
@@ -471,11 +471,11 @@ struct GPXFolderImportTests {
         try FileManager.default.createDirectory(at: folder2, withIntermediateDirectories: true)
         let watcher2 = FolderImport(library: lib2, folder: folder2, importedFolderName: "Importiert", failedFolderName: "Fehlerhaft")
         try GPXFixture.data("pair-tour1-bosch-flow").write(to: folder2.appendingPathComponent("tour.gpx"))
-        let first = watcher2.run()
+        let first = await watcher2.run()
         let ride = try #require(lib2.ride(withID: first.importedRideIDs[0]))
         lib2.rename(ride, to: "Meine Tour")
         try GPXFixture.fitData("pair-tour1-bosch-flow").write(to: folder2.appendingPathComponent("Beispielrunde-\(tour1UUID).fit"))
-        let summary = watcher2.run()
+        let summary = await watcher2.run()
         #expect(summary.updated == 1)
         #expect(summary.imported == 0)
         #expect(summary.failed == 0)
