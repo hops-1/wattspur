@@ -78,3 +78,24 @@ extension RideLibrary {
         }
     }
 }
+
+extension RideLibrary {
+    /// The facts of a file for the duplicate dialog; `nil` if no importer reads it.
+    public func facts(ofFileAt url: URL) -> DuplicateFacts? {
+        let accessing = url.startAccessingSecurityScopedResource()
+        defer { if accessing { url.stopAccessingSecurityScopedResource() } }
+        let ext = url.pathExtension.lowercased()
+        guard let data = try? Data(contentsOf: url),
+              let importer = importers.first(where: { $0.fileExtensions.contains(ext) }),
+              let parsed = try? importer.parse(data) else { return nil }
+        return DuplicateFacts(parsed: parsed, source: RideSource(fileExtension: ext))
+    }
+}
+
+extension DuplicateFacts {
+    public init(ride: Ride) {
+        self.init(source: ride.source, startDate: ride.startDate, distance: ride.distance, rideTime: ride.timerTime,
+                  ascent: ride.totalAscent, averagePower: ride.averagePower, pointCount: ride.samples.count,
+                  estimated: ride.summaryEstimatedFromGPS)
+    }
+}

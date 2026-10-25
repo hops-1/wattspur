@@ -2,6 +2,8 @@ import Foundation
 import SwiftData
 import Testing
 @testable import WattspurKit
+@testable import WattspurCore
+import TestFixtures
 
 /// Text edits on a GPX fixture, to make the files of other sources and recording errors.
 private enum Edit {
