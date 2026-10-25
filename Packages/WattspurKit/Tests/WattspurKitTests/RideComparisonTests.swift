@@ -2,6 +2,8 @@ import Foundation
 import SwiftData
 import Testing
 @testable import WattspurKit
+@testable import WattspurCore
+import TestFixtures
 
 @Suite("Comparing rides: values, best value, average, deviation")
 struct RideComparisonTests {

@@ -2,6 +2,8 @@ import Foundation
 import SwiftData
 import Testing
 @testable import WattspurKit
+@testable import WattspurCore
+import TestFixtures
 
 @Suite("Map of all rides: filter and visible area")
 struct MapOverviewTests {

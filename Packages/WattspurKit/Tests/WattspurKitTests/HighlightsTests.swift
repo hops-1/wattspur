@@ -1,6 +1,8 @@
 import Foundation
 import Testing
 @testable import WattspurKit
+@testable import WattspurCore
+import TestFixtures
 
 @Suite("Highlights: records, streak, year in review, goals")
 struct HighlightsTests {

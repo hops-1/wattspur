@@ -1,5 +1,5 @@
 import Foundation
-import WattspurKit
+import WattspurCore
 
 // Makes a FIT export safe to ship as the sample ride (V-05, NFR-12).
 //
