@@ -1,6 +1,6 @@
 # Backlog – Wattspur
 
-Stand: 25.10.2026 (v0.16, Release 1.6.1 mit Sicherheits-Fix, Architektur-Aufräumen B-162 bis B-169 und zwei Karten-Verbesserungen B-170, B-171; Plan für 1.7 bis 1.9) · Die IDs in Klammern verweisen auf `REQUIREMENTS.md`.
+Stand: 25.10.2026 (v0.17, Release 1.6.2 mit Update-Hinweis B-172; davor 1.6.1 mit Sicherheits-Fix, Architektur-Aufräumen B-162 bis B-169 und zwei Karten-Verbesserungen B-170, B-171; Plan für 1.7 bis 1.9) · Die IDs in Klammern verweisen auf `REQUIREMENTS.md`.
 Größe: **S** ≈ wenige Stunden, **M** ≈ 1–2 Tage, **L** ≈ mehrere Tage.
 Status: ☐ offen · ◐ in Arbeit · ☑ erledigt
 
@@ -21,6 +21,7 @@ Status: ☐ offen · ◐ in Arbeit · ☑ erledigt
 | **v1.5** | Profil und mehrere Bikes: Bereich „Profil“, Bike-Filter je Bereich, Kalorien „mit Profil“ | Freunde |
 | **v1.6** | GPX-Import: Fahrten anderer Bikes und Radcomputer, FIT und GPX derselben Tour zusammenführen | Freunde, Tester mit anderen Bikes |
 | **v1.6.1** | Sicherheits-Fix für beschädigte FIT-Dateien und Aufräumen der Architektur (zwei Module, Dienste, geteilte Bibliothek); keine neuen Funktionen | Freunde |
+| **v1.6.2** | Update-Hinweis: Banner, wenn auf GitHub eine neuere Version liegt (B-172); Auto-Update bleibt offen (B-173) | Freunde |
 | **v1.7** | Ähnliche Strecken (suchen, vergleichen, Verlauf, Gruppen) und weitere Rekorde | Freunde |
 | **v1.8** | Ein Bereich „Fahrten“ mit Karte als Standard (B-125), Kalendertag als Filter (B-130) | Freunde |
 | **v1.9** | Bosch-Daten über die offizielle Data-Act-API (optional, eigenes Bosch-Konto): Bike, Akku und Wartung, Zusatzfelder je Fahrt und Import von Fahrten ohne Datei (Altbestand). **Motordaten je Fahrt gibt die API nicht her (Spezifikation 25.10.2026), Entscheidung Nils: Option B;** steht unter dem Vorbehalt des Spikes V-12 | Freunde mit Smart-System-Bike in der EU |
