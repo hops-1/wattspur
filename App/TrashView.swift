@@ -4,7 +4,7 @@ import WattspurKit
 
 /// Rides in the trash, restorable for 30 days (LIST-08).
 struct TrashView: View {
-    @Environment(\.modelContext) private var modelContext
+    @Environment(RideLibrary.self) private var sharedLibrary
     @Environment(\.undoManager) private var undoManager
     @Query(filter: #Predicate<Ride> { $0.deletedAt != nil }, sort: \Ride.startDate, order: .reverse)
     private var rides: [Ride]
@@ -31,7 +31,7 @@ struct TrashView: View {
             ForEach(rides) { ride in
                 HStack {
                     RideRow(ride: ride)
-                    Button("Restore") { RideLibrary(context: modelContext, undoManager: undoManager).restore(ride) }
+                    Button("Restore") { sharedLibrary.using(undoManager).restore(ride) }
                         .buttonStyle(.bordered)
                 }
             }
@@ -50,7 +50,7 @@ struct TrashView: View {
         }
         .confirmationDialog("Delete all rides in the trash for good?", isPresented: $confirmingEmpty) {
             Button("Empty Trash", role: .destructive) {
-                RideLibrary(context: modelContext).purgeTrash(olderThan: 0)
+                sharedLibrary.purgeTrash(olderThan: 0)
             }
         } message: {
             Text("This also deletes the original files and cannot be undone.")

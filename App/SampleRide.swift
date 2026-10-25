@@ -7,20 +7,20 @@ import WattspurKit
 @MainActor
 enum SampleRide {
     @discardableResult
-    static func load(into context: ModelContext) -> Ride? {
+    static func load(into library: RideLibrary) -> Ride? {
         guard let url = Bundle.main.url(forResource: "SampleRide", withExtension: "fit"),
               let data = try? Data(contentsOf: url) else { return nil }
-        return RideLibrary(context: context).importSample(data: data, name: String(localized: "Sample Ride"))
+        return library.importSample(data: data, name: String(localized: "Sample Ride"))
     }
 
-    static func remove(from context: ModelContext) {
-        RideLibrary(context: context).removeSamples()
+    static func remove(from library: RideLibrary) {
+        library.removeSamples()
     }
 }
 
 /// Shown above the detail of the sample ride, with the button that removes it.
 struct SampleRideBanner: View {
-    @Environment(\.modelContext) private var modelContext
+    @Environment(RideLibrary.self) private var sharedLibrary
 
     var body: some View {
         HStack(spacing: 12) {
@@ -36,7 +36,7 @@ struct SampleRideBanner: View {
                     .fixedSize(horizontal: false, vertical: true)
             }
             Spacer(minLength: 12)
-            Button("Remove Sample Ride") { SampleRide.remove(from: modelContext) }
+            Button("Remove Sample Ride") { SampleRide.remove(from: sharedLibrary) }
         }
         .padding(.horizontal, 14)
         .padding(.vertical, 12)

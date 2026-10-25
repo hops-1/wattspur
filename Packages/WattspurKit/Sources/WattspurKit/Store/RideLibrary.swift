@@ -1,4 +1,5 @@
 import Foundation
+import Observation
 import SwiftData
 
 /// Result of importing one file (feeds the import log, IMP-06).
@@ -32,7 +33,11 @@ public struct ImportResult: Sendable, Identifiable {
 }
 
 /// Imports files into the library and manages rides (B-010 … B-015).
-@MainActor
+///
+/// One library is created at launch and put into the environment; it holds nothing that changes, so
+/// `Observable` only makes it usable with `@Environment`. Undo belongs to a window: `using(_:)` gives
+/// the same library for the undo manager of the window that asks.
+@MainActor @Observable
 public final class RideLibrary {
     public let context: ModelContext
     let importers: [any RideImporter]
@@ -47,6 +52,11 @@ public final class RideLibrary {
         self.context = context
         self.importers = importers
         self.undoManager = undoManager
+    }
+
+    /// The same library for another window's undo manager (⌘Z belongs to the window).
+    public func using(_ undoManager: UndoManager?) -> RideLibrary {
+        RideLibrary(context: context, importers: importers, undoManager: undoManager)
     }
 
     // MARK: - Import

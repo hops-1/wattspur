@@ -61,7 +61,7 @@ struct BikeAssignMenu<Title: View>: View {
     let rides: [Ride]
     @ViewBuilder let label: Title
     @Query private var bikes: [Bike]
-    @Environment(\.modelContext) private var modelContext
+    @Environment(RideLibrary.self) private var sharedLibrary
     @Environment(\.undoManager) private var undoManager
     @Environment(BikeAssignmentNotice.self) private var notice
 
@@ -71,7 +71,7 @@ struct BikeAssignMenu<Title: View>: View {
             Menu {
                 ForEach(open) { bike in
                     Button {
-                        RideLibrary(context: modelContext, undoManager: undoManager)
+                        sharedLibrary.using(undoManager)
                             .assign(rides, to: bike, undoManager: undoManager, notice: notice)
                     } label: {
                         BikeMenuImage.label(bike)
@@ -94,7 +94,7 @@ struct BikeAssignMenu<Title: View>: View {
 struct ImportBikeMenu: View {
     @Query private var bikes: [Bike]
     @Query private var riders: [Rider]
-    @Environment(\.modelContext) private var modelContext
+    @Environment(RideLibrary.self) private var sharedLibrary
 
     var body: some View {
         let open = Bike.sorted(bikes.filter { !$0.isArchived })
@@ -105,7 +105,7 @@ struct ImportBikeMenu: View {
                 Text("Import for").font(.caption).foregroundStyle(.secondary)
                 Menu {
                     Picker("Import for", selection: Binding(get: { active.id }, set: { id in
-                        if let bike = open.first(where: { $0.id == id }) { RideLibrary(context: modelContext).setActiveBike(bike) }
+                        if let bike = open.first(where: { $0.id == id }) { sharedLibrary.setActiveBike(bike) }
                     })) {
                         ForEach(open) { bike in
                             BikeMenuImage.label(bike).tag(bike.id)
@@ -146,7 +146,7 @@ struct ImportBikeMenu: View {
 struct RideBikeMenu: View {
     let ride: Ride
     @Query private var bikes: [Bike]
-    @Environment(\.modelContext) private var modelContext
+    @Environment(RideLibrary.self) private var sharedLibrary
     @Environment(\.undoManager) private var undoManager
     @Environment(BikeAssignmentNotice.self) private var notice
 
@@ -157,7 +157,7 @@ struct RideBikeMenu: View {
             Menu {
                 Picker("Bike of this ride", selection: Binding(get: { current.id }, set: { id in
                     if let bike = choices.first(where: { $0.id == id }) {
-                        RideLibrary(context: modelContext, undoManager: undoManager)
+                        sharedLibrary.using(undoManager)
                             .assign([ride], to: bike, undoManager: undoManager, notice: notice)
                     }
                 })) {

@@ -32,7 +32,7 @@ private struct GeneralSettingsView: View {
     @AppStorage("setupCompleted") private var setupCompleted = false
     @Query private var riders: [Rider]
     @Query(filter: #Predicate<Ride> { $0.isSample }) private var samples: [Ride]
-    @Environment(\.modelContext) private var modelContext
+    @Environment(RideLibrary.self) private var sharedLibrary
 
     var body: some View {
         Form {
@@ -72,9 +72,9 @@ private struct GeneralSettingsView: View {
             LabeledContent("Sample ride:") {
                 VStack(alignment: .leading, spacing: 4) {
                     if samples.isEmpty {
-                        Button("Load Sample Ride") { SampleRide.load(into: modelContext) }
+                        Button("Load Sample Ride") { SampleRide.load(into: sharedLibrary) }
                     } else {
-                        Button("Remove Sample Ride") { SampleRide.remove(from: modelContext) }
+                        Button("Remove Sample Ride") { SampleRide.remove(from: sharedLibrary) }
                     }
                     Text("An anonymized ride to try things out. It does not count in the analysis and can be removed with one click.")
                         .font(.caption)

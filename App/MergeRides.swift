@@ -10,7 +10,6 @@ struct MergeRidesSheet: View {
     /// Called with the new ride, so the list can select it.
     let onMerged: (UUID) -> Void
 
-    @Environment(\.modelContext) private var modelContext
     @Environment(\.dismiss) private var dismiss
     @Query private var rides: [Ride]
     @State private var name = ""
@@ -23,7 +22,8 @@ struct MergeRidesSheet: View {
         _rides = Query(filter: #Predicate<Ride> { ids.contains($0.id) })
     }
 
-    private var library: RideLibrary { RideLibrary(context: modelContext, undoManager: undoManager) }
+    @Environment(RideLibrary.self) private var sharedLibrary
+    private var library: RideLibrary { sharedLibrary.using(undoManager) }
     private var parts: [Ride] { library.mergeParts(of: rides) }
 
     var body: some View {
@@ -241,7 +241,7 @@ struct MergedBadge: View {
 struct MergedRideBanner: View {
     let ride: Ride
     let onSplit: ([UUID]) -> Void
-    @Environment(\.modelContext) private var modelContext
+    @Environment(RideLibrary.self) private var sharedLibrary
     @Environment(\.undoManager) private var undoManager
 
     var body: some View {
@@ -260,7 +260,7 @@ struct MergedRideBanner: View {
                     .fixedSize(horizontal: false, vertical: true)
             }
             Spacer(minLength: 12)
-            Button("Split") { onSplit(RideLibrary(context: modelContext, undoManager: undoManager).split(ride).map(\.id)) }
+            Button("Split") { onSplit(sharedLibrary.using(undoManager).split(ride).map(\.id)) }
                 .help(Text("Split into the original rides"))
         }
         .padding(.horizontal, 14)

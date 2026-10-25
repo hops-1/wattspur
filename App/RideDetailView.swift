@@ -41,7 +41,7 @@ private struct RideDetailContent: View {
     @Query private var riders: [Rider]
     private var calories: CalorieModel { CalorieModel(mode: calorieMode, rider: riders.first) }
     @Environment(NewPathsStore.self) private var newPaths
-    @Environment(\.modelContext) private var modelContext
+    @Environment(RideLibrary.self) private var sharedLibrary
     @State private var route: [RoutePoint] = []
     @State private var points: [ChartPoint] = []
     /// The same series over the time since the start (B-065).
@@ -161,7 +161,7 @@ private struct RideDetailContent: View {
             points = RideSeries.chartPoints(from: samples)
             timePoints = RideSeries.chartPoints(from: samples, axis: .time)
             cursor.reset(track: RideTrack(samples: samples))
-            joins = RideLibrary(context: modelContext).joins(of: ride)
+            joins = sharedLibrary.joins(of: ride)
         }
     }
 }

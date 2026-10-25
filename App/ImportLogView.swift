@@ -8,7 +8,7 @@ import WattspurKit
 /// row, so hundreds of other files never flood the list.
 struct ImportLogView: View {
     @Environment(FolderWatcher.self) private var watcher
-    @Environment(\.modelContext) private var modelContext
+    @Environment(RideLibrary.self) private var sharedLibrary
     @Environment(ImportLog.self) private var importLog
     @Environment(MergeSuggestionCenter.self) private var suggestions
     @Environment(\.dismiss) private var dismiss
@@ -198,7 +198,7 @@ struct ImportLogView: View {
     }
 
     private func importFiles(_ urls: [URL]) {
-        let library = RideLibrary(context: modelContext, undoManager: undoManager)
+        let library = sharedLibrary.using(undoManager)
         flow.onImported = { ids in suggestions.suggest(involving: ids, library: library) }
         flow.start(urls, library: library, importLog: importLog)
     }
@@ -233,7 +233,7 @@ private enum LogRow: Identifiable {
 private struct LogEntryRow: View {
     let record: ImportRecord
     @Environment(FolderWatcher.self) private var watcher
-    @Environment(\.modelContext) private var modelContext
+    @Environment(RideLibrary.self) private var sharedLibrary
     @Environment(\.undoManager) private var undoManager
     @Query private var rides: [Ride]
     /// Rides this one probably belongs with, while the entry is recent (B-096).
@@ -291,7 +291,7 @@ private struct LogEntryRow: View {
             suggestion = nil
             return
         }
-        suggestion = RideLibrary(context: modelContext)
+        suggestion = sharedLibrary
             .mergeSuggestions(involving: [ride.id], maxGapMinutes: MergeSuggestionCenter.gapMinutes).first
     }
 

@@ -6,6 +6,8 @@ import WattspurKit
 struct WattspurApp: App {
     let container: ModelContainer
     @State private var importLog = ImportLog()
+    /// The one library of the app; windows get their own undo manager from it (`RideLibrary.using(_:)`).
+    @State private var library: RideLibrary
     @State private var watcher: FolderWatcher
     /// "New paths" of every ride, for the ride detail and the map (B-115).
     @State private var newPaths = NewPathsStore()
@@ -26,6 +28,7 @@ struct WattspurApp: App {
             fatalError("Could not open the Wattspur library: \(error)")
         }
         let library = RideLibrary(context: container.mainContext)
+        _library = State(initialValue: library)
         // The name of the first bike and of bikes without a name (REQUIREMENTS.md 10.16).
         RideLibrary.defaultBikeName = String(localized: "My eBike")
         // Rides in the trash for more than 30 days are deleted for good (LIST-08).
@@ -34,7 +37,7 @@ struct WattspurApp: App {
         library.reparseOutdatedRides()
         // The import log is a help, not an archive (IMP-06).
         library.trimImportLog()
-        _watcher = State(initialValue: FolderWatcher(context: container.mainContext))
+        _watcher = State(initialValue: FolderWatcher(library: library))
         // Earlier versions created one bike per ride from the export's serial number; they become one.
         library.mergeBikes()
         // One bike named "Mein eBike" for the rider, active, all rides on it (B-074).
@@ -48,6 +51,7 @@ struct WattspurApp: App {
     var body: some Scene {
         WindowGroup {
             ContentView()
+                .environment(library)
                 .environment(importLog)
                 .environment(watcher)
                 .environment(newPaths)
@@ -71,6 +75,7 @@ struct WattspurApp: App {
 
         Window("Import", id: "importLog") {
             ImportLogView()
+                .environment(library)
                 .environment(importLog)
                 .environment(watcher)
                 .environment(mergeSuggestions)
@@ -80,6 +85,7 @@ struct WattspurApp: App {
 
         Settings {
             SettingsView()
+                .environment(library)
                 .environment(watcher)
         }
         .modelContainer(container)
@@ -92,6 +98,7 @@ struct WattspurApp: App {
 
         Window("Diagnostics", id: "diagnostics") {
             DiagnosticsView()
+                .environment(library)
                 .environment(importLog)
         }
         .modelContainer(container)
