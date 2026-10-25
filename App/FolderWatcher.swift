@@ -47,8 +47,8 @@ final class FolderWatcher {
     private var periodicScan: Task<Void, Never>?
 
     private enum Keys {
-        static let enabled = "watchFolderEnabled"
-        static let bookmark = "watchFolderBookmark"
+        static let enabled = SettingsKey.watchFolderEnabled
+        static let bookmark = SettingsKey.watchFolderBookmark
     }
 
     init(library: RideLibrary) {

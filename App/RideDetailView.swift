@@ -35,9 +35,9 @@ private struct RideDetailContent: View {
     @Query(filter: Ride.listedPredicate)
     private var listedRides: [Ride]
 
-    @AppStorage("mapType") private var mapType: RideMapType = .standard
+    @AppStorage(SettingsKey.mapType) private var mapType: RideMapType = .standard
     /// "From pedal power" or "with profile" (SET-06, B-067).
-    @AppStorage("calorieMode") private var calorieMode: CalorieMode = .fromWork
+    @AppStorage(SettingsKey.calorieMode) private var calorieMode: CalorieMode = .fromWork
     @Query private var riders: [Rider]
     private var calories: CalorieModel { CalorieModel(mode: calorieMode, rider: riders.first) }
     @Environment(NewPathsStore.self) private var newPaths
@@ -47,7 +47,7 @@ private struct RideDetailContent: View {
     /// The same series over the time since the start (B-065).
     @State private var timePoints: [ChartPoint] = []
     /// x axis of the charts, remembered (TOUR-07).
-    @AppStorage("chartAxis") private var chartAxis: ChartAxis = .distance
+    @AppStorage(SettingsKey.chartAxis) private var chartAxis: ChartAxis = .distance
     /// Where the parts of a merged ride meet (B-131).
     @State private var joins: [RideMerge.Join] = []
     /// The spot shared by the charts and the map (B-062).

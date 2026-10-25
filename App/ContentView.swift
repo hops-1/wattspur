@@ -38,11 +38,11 @@ struct ContentView: View {
     /// highlights, came from; the ride detail then offers "Back to Map", "Back to
     /// Analysis" or "Back to Highlights" (⌘[).
     @State private var returnSection: AppSection?
-    @AppStorage("sidebarCompact") private var sidebarCompact = false
+    @AppStorage(SettingsKey.sidebarCompact) private var sidebarCompact = false
     /// The ⌘-click tip goes away for good after the first multiple selection (B-113).
-    @AppStorage(MultiSelectTip.storageKey) private var multiSelectTipDone = false
-    @AppStorage("sidebarWidth") private var sidebarWidth = 220.0
-    @AppStorage("listWidth") private var listWidth = 340.0
+    @AppStorage(SettingsKey.multiSelectTipDone) private var multiSelectTipDone = false
+    @AppStorage(SettingsKey.sidebarWidth) private var sidebarWidth = 220.0
+    @AppStorage(SettingsKey.listWidth) private var listWidth = 340.0
     @Environment(RideLibrary.self) private var sharedLibrary
     @Environment(FolderWatcher.self) private var watcher
     @Environment(NewPathsStore.self) private var newPaths
@@ -51,9 +51,9 @@ struct ContentView: View {
     @Environment(\.openWindow) private var openWindow
     @Environment(\.openSettings) private var openSettings
     /// The setup assistant shows until it was finished or skipped once (ONB-01).
-    @AppStorage("setupCompleted") private var setupCompleted = false
+    @AppStorage(SettingsKey.setupCompleted) private var setupCompleted = false
     /// The one-time note after the update to 1.5 (B-138); the setup assistant sets it too.
-    @AppStorage("bikesHintDone") private var bikesHintDone = false
+    @AppStorage(SettingsKey.bikesHintDone) private var bikesHintDone = false
     @Query(filter: #Predicate<Bike> { !$0.isArchived }, sort: \Bike.sortOrder) private var openBikes: [Bike]
     @Query private var allRides: [Ride]
     private var rideCount: Int { allRides.count }

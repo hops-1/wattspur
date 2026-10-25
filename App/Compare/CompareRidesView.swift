@@ -16,15 +16,15 @@ struct CompareRidesView: View {
     let onDone: () -> Void
 
     @Query(filter: Ride.listedPredicate) private var rides: [Ride]
-    @AppStorage("compareShowsDeviation") private var showsDeviation = false
+    @AppStorage(SettingsKey.compareShowsDeviation) private var showsDeviation = false
     @State private var points: [UUID: [ChartPoint]] = [:]
     @State private var routes: [UUID: [RoutePoint]] = [:]
     @State private var gradients: [UUID: Double] = [:]
-    @AppStorage("mapType") private var mapType: RideMapType = .standard
+    @AppStorage(SettingsKey.mapType) private var mapType: RideMapType = .standard
     @State private var exporting = false
     @Query private var bikes: [Bike]
     /// "From pedal power" or "with profile" (SET-06, B-067).
-    @AppStorage("calorieMode") private var calorieMode: CalorieMode = .fromWork
+    @AppStorage(SettingsKey.calorieMode) private var calorieMode: CalorieMode = .fromWork
     @Query private var riders: [Rider]
     private var calories: CalorieModel { CalorieModel(mode: calorieMode, rider: riders.first) }
 
