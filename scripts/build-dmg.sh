@@ -13,8 +13,11 @@ cd "$ROOT"
 export DEVELOPER_DIR="${DEVELOPER_DIR:-/Applications/Xcode.app/Contents/Developer}"
 
 VERSION="$(sed -n 's/^ *MARKETING_VERSION: *"\(.*\)"/\1/p' project.yml)"
-# The build number counts the commits, so every DMG gets a higher one.
-BUILD="$(git rev-list --count HEAD)"
+# The build number counts the commits, so every DMG gets a higher one. The public
+# repository started without the 217 commits of the private one (V-05); they are
+# added, so 1.6.0 continues above the testers' 1.5.0 (build 179).
+ARCHIVED_COMMITS=217
+BUILD="$((ARCHIVED_COMMITS + $(git rev-list --count HEAD)))"
 NAME="Wattspur-${VERSION}-${BUILD}"
 WORK="$ROOT/.build/dmg"
 DIST="$ROOT/dist"
