@@ -174,8 +174,8 @@ Quelle: Wunsch von Nils (22.10.2026): „In der Fahrtenliste gleiche bzw. ähnli
 | ROUTE-04 | Schalter „Auch Gegenrichtung“: nimmt Fahrten auf derselben Strecke in umgekehrter Richtung dazu (z. B. Rückweg von der Arbeit), in der Liste mit Richtungs-Symbol gekennzeichnet | S |
 | ROUTE-05 | Aus den Treffern 2–4 Fahrten markieren und im bestehenden Tourenvergleich (CMP) öffnen | S |
 | ROUTE-06 | Verlauf über alle Treffer: je Fahrt Fahrzeit, Ø Geschwindigkeit, Ø Leistung und Ø Trittfrequenz über die Zeit (Punkte + gleitendes Mittel, wie TREND-01), Bestzeit und letzte Fahrt markiert, Veränderung zum Durchschnitt der Strecke | S |
-| ROUTE-07 | Strecken automatisch gruppieren: Wattspur erkennt wiederkehrende Strecken (mindestens 3 ähnliche Fahrten) und bietet sie als Gruppe an; Gruppen lassen sich benennen („Pendeln“, „Runde Reinheim“), umbenennen, auflösen; neue Fahrten werden beim Import zugeordnet. Ersetzt IDEA-10 (Lieblingsrunden) und ist Grundlage für die Pendel-Statistik IDEA-03 | S |
-| ROUTE-08 | Berechnung im Hintergrund, ohne die Oberfläche zu blockieren; Ergebnisse werden zwischengespeichert und bei neuen oder geänderten Fahrten aktualisiert. Ziel: „Ähnliche Fahrten zeigen“ in unter 1 s bei 1 000 Fahrten | S |
+| ROUTE-07 | Strecken automatisch gruppieren: Wattspur erkennt wiederkehrende Strecken (mindestens 3 ähnliche Fahrten) und bietet sie als Gruppe an; Gruppen lassen sich benennen („Pendeln“, „Runde Reinheim“), umbenennen, auflösen; neue Fahrten werden beim Import zugeordnet. Ersetzt IDEA-10 (Lieblingsrunden) und ist Grundlage für die Pendel-Statistik IDEA-03 **Umgesetzt in 1.7.1.** | S |
+| ROUTE-08 | Berechnung im Hintergrund, ohne die Oberfläche zu blockieren; Ergebnisse werden zwischengespeichert und bei neuen oder geänderten Fahrten aktualisiert. Ziel: „Ähnliche Fahrten zeigen“ in unter 1 s bei 1 000 Fahrten **Umgesetzt in 1.7.1.** | S |
 
 ### 4.6 Erweiterte Analysen (ADV), Flow+-ähnlich, alle v1.x
 | ID | Anforderung | Prio |

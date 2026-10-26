@@ -1,6 +1,6 @@
 # Architektur
 
-Stand: 1.7.0. Kurz gefasst, wo was liegt und welche Regeln gelten. Die Gründe stehen in der Lern-Notiz [25](learning/25-architektur-aufraeumen.md).
+Stand: 1.7.1. Kurz gefasst, wo was liegt und welche Regeln gelten. Die Gründe stehen in der Lern-Notiz [25](learning/25-architektur-aufraeumen.md).
 
 ## Überblick
 
@@ -44,6 +44,7 @@ Pfeile zeigen die erlaubte Richtung der Abhängigkeit; zurück darf es nie gehen
 | `Store/Models.swift`, `ImportRecord.swift` | SwiftData-Modelle |
 | `Store/RideLibrary.swift` | Die eine Tür für die App; reicht an die Dienste weiter (Übergangsfassade) |
 | `Store/Services/` | `ImportService`, `RideService`, `MergeService`, `BikeService`, `ImportLogService`, `GoalService`, `RouteGroupService`, dazu `LibraryService` (gemeinsame Umgebung und Rückgängig) |
+| `Store/LibraryBackup.swift` | Sicherung und Wiederherstellung der Mediathek als Ordner (SQLite-Backup, Austausch beim Start) |
 | `Store/RideBridges.swift` | Modell → Werttypen |
 | `Store/LibraryMaintenance.swift` | Aufräumen nach dem ersten Fenster |
 | `Import/FolderImport.swift` | Überwachter Ordner |
@@ -52,7 +53,7 @@ Pfeile zeigen die erlaubte Richtung der Abhängigkeit; zurück darf es nie gehen
 
 ## App
 
-Views in `App/`; die großen Bereiche haben eigene Ordner (`Highlights/`, `Analysis/`, `Compare/`). `@Observable`-Hilfsobjekte (`FolderWatcher`, `ImportLog`, `NewPathsStore`, `RouteSimilarityStore`, `MergeSuggestionCenter`, `BikeAssignmentNotice`) liegen in der Environment. `DemoMode` und `SampleRide` sind für Screenshots und die Beispielfahrt.
+Views in `App/`; die großen Bereiche haben eigene Ordner (`Highlights/`, `Analysis/`, `Compare/`). `@Observable`-Hilfsobjekte (`FolderWatcher`, `ImportLog`, `NewPathsStore`, `RouteSimilarityStore` (Suche, gespeicherte Strecken, Vorschläge), `LibraryBackupCenter`, `MergeSuggestionCenter`, `BikeAssignmentNotice`) liegen in der Environment. `DemoMode` und `SampleRide` sind für Screenshots und die Beispielfahrt.
 
 ## Tests
 

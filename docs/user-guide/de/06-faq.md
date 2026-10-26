@@ -48,6 +48,12 @@ Wattspur vergleicht die Routen: Eine Fahrt ist ähnlich, wenn mindestens so viel
 
 Zeigt die Liste eine Fahrt, die du nicht erwartest, hilft der umgekehrte Weg: Regler erhöhen, bis sie verschwindet.
 
+### Eine gespeicherte Strecke hat zu viele oder zu wenige Fahrten
+Eine Strecke behält die Ähnlichkeit und die Richtung, die du eingestellt hast. Öffne sie im Filter-Menü (**Gespeicherte Strecken**) und bewege den Regler **Ähnlichkeit** oder schalte **Beide Richtungen** um; die Strecke behält, was du einstellst (⌘Z macht es rückgängig). Warum eine Fahrt fehlt, steht oben unter „Warum ist diese Fahrt (nicht) ähnlich?“. **⋯ › Strecke auflösen** entfernt die Strecke; die Fahrten bleiben.
+
+### Warum schlägt Wattspur eine Strecke vor?
+Weil mindestens drei Fahrten dieselbe Strecke in derselben Richtung genommen haben und in keiner gespeicherten Strecke liegen. Gespeichert wird nichts, bis du **Als Strecke speichern …** klickst. **Nicht jetzt** blendet den Vorschlag für diese Fahrten aus; er kommt erst wieder, wenn eine neue Fahrt für die Strecke stünde. Der Vorschlag nutzt die Ähnlichkeit aus **Einstellungen › Allgemein › Ähnliche Fahrten**.
+
 ### Wo liegen meine Fahrten? Wird etwas hochgeladen?
 Alles bleibt auf deinem Mac, in `~/Library/Containers/io.github.hops-1.wattspur`. Wattspur hat kein Konto und sendet keine Daten über dich oder deine Fahrten. Ins Internet geht die App nur für Kartenkacheln, das Nachschlagen der Zeitzone über Apple Karten und die tägliche Frage bei GitHub, ob es eine neue Version gibt (siehe unten).
 
@@ -60,5 +66,10 @@ Wattspur folgt der Sprache von macOS. Nur für Wattspur: **Systemeinstellungen �
 ### Eine Fahrt liegt auf dem falschen Bike
 Bosch-Exporte enthalten keine Bike-Kennung, neue Fahrten gehen deshalb an das **aktive Bike** (der Stern im Profil). Eine Fahrt verschiebst du mit **Rechtsklick › Bike zuweisen** oder über das Bike neben dem Titel im Tour-Detail; ⌘Z nimmt es zurück. Siehe [Profil und Bikes](07-profile-and-bikes.md).
 
+### Wie sichere ich meine Fahrten oder ziehe auf einen neuen Mac um?
+**Ablage › Mediathek-Backup …** öffnet ein Fenster. **Sichern …** fragt nach einem Ort und legt dort einen Ordner („Wattspur Backup 2026-10-26 1230“) mit deinen Fahrten, Bikes, Zielen und Notizen an, auch während Wattspur läuft. Bewahre ihn auf einer anderen Platte oder in iCloud Drive auf. Deine Einstellungen und der überwachte Ordner gehören nicht dazu.
+
+**Wiederherstellen …** fragt nach einem solchen Ordner und sagt dir, welches Backup es ist. Danach beende Wattspur und öffne es wieder: Wattspur ersetzt die Mediathek durch das Backup und sagt „Backup vom … erfolgreich wiederhergestellt“. Die ersetzte Mediathek bleibt in einem Ordner „Library Before Restore …“ daneben erhalten, es geht also nichts verloren. Auf einem neuen Mac installierst du Wattspur, öffnest es einmal und stellst dort den Ordner wieder her. Ein Backup einer neueren Version von Wattspur kann eine ältere nicht wiederherstellen; aktualisiere vorher.
+
 ### Wie fange ich von vorn an?
-Wattspur beenden und den Ordner `~/Library/Containers/io.github.hops-1.wattspur` löschen. Beim nächsten Start ist Wattspur leer, und der Einrichtungsassistent erscheint wieder. Deine Dateien im Import-Ordner bleiben. Verschiebe sie aus **Importiert** zurück in den Import-Ordner, wenn du sie neu importieren willst.
+Mach vorher ein Backup, falls du deine Fahrten vielleicht zurückhaben willst (siehe oben). Wattspur beenden und den Ordner `~/Library/Containers/io.github.hops-1.wattspur` löschen. Beim nächsten Start ist Wattspur leer, und der Einrichtungsassistent erscheint wieder. Deine Dateien im Import-Ordner bleiben. Verschiebe sie aus **Importiert** zurück in den Import-Ordner, wenn du sie neu importieren willst.

@@ -48,6 +48,12 @@ Wattspur compares the routes: a ride is similar if at least as much of its route
 
 If the list shows a ride you do not expect, go the other way: raise the slider until it disappears.
 
+### A saved route has too many or too few rides
+A route keeps the similarity and the direction you set. Open it from the filter menu (**Saved Routes**) and move the **Similarity** slider or switch **Both directions**; the route keeps what you set (⌘Z undoes it). For the reasons a ride is missing, see “Why is this ride (not) similar?” above. **⋯ › Dissolve Route** removes the route; the rides stay.
+
+### Why does Wattspur suggest a route?
+Because at least three rides took the same route in the same direction and are in no saved route yet. Nothing is saved until you click **Save as Route…**. **Not Now** hides the suggestion for these rides; it returns only when a new ride would stand for the route. The suggestion uses the similarity from **Settings › General › Similar rides**.
+
 ### Where are my rides stored? Is anything uploaded?
 Everything stays on your Mac, in `~/Library/Containers/io.github.hops-1.wattspur`. Wattspur has no account and sends no data about you or your rides. It only goes online to load map tiles, to look up time zones with Apple Maps, and to ask GitHub once a day whether a new version is out (see below).
 
@@ -60,5 +66,10 @@ Wattspur follows the language of macOS. For Wattspur only: **System Settings ›
 ### A ride is on the wrong bike
 Bosch exports carry no bike identifier, so new rides go to the **active bike** (the star in the profile). Move a ride with **Right-click › Assign Bike**, or from the bike next to its title in the ride detail; ⌘Z takes it back. See [Profile and bikes](07-profile-and-bikes.md).
 
+### How do I back up my rides, or move them to a new Mac?
+**File › Library Backup…** opens a window. **Back Up…** asks for a place and creates a folder there (“Wattspur Backup 2026-10-26 1230”) with your rides, bikes, goals and notes, also while Wattspur is running. Keep it on another disk or in iCloud Drive. Your settings and the watched folder are not part of it.
+
+**Restore…** asks for such a folder and tells you which backup it is. Then quit Wattspur and open it again: Wattspur replaces the library with the backup and says “Backup from … restored successfully”. The library it replaced stays in a folder “Library Before Restore …” next to it, so nothing is lost. On a new Mac, install Wattspur, open it once, then restore the folder there. A backup made by a newer version of Wattspur cannot be restored by an older one; update first.
+
 ### How do I start from scratch?
-Quit Wattspur and delete the folder `~/Library/Containers/io.github.hops-1.wattspur`. At the next start Wattspur is empty and the setup assistant appears again. Your files in the import folder stay; move them from **Imported** back into the import folder if you want to import them again.
+Make a backup first if you might want your rides back (see above). Quit Wattspur and delete the folder `~/Library/Containers/io.github.hops-1.wattspur`. At the next start Wattspur is empty and the setup assistant appears again. Your files in the import folder stay; move them from **Imported** back into the import folder if you want to import them again.
