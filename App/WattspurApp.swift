@@ -21,9 +21,18 @@ struct WattspurApp: App {
     @State private var assignmentNotice = BikeAssignmentNotice()
     /// Whether GitHub has a newer version (B-172).
     @State private var updates = UpdateChecker()
+    /// "Library Backup…" (P-22).
+    @State private var backup = LibraryBackupCenter()
     @Environment(\.openWindow) private var openWindow
 
     init() {
+        // A restore from a backup is swapped in here, before the library opens (P-22). If it fails, the library stays as it was.
+        #if DEBUG
+        let usesDemo = DemoMode.isOn
+        #else
+        let usesDemo = false
+        #endif
+        if !usesDemo { _ = try? LibraryBackup.applyPendingRestore(storeURL: LibraryLocation.storeURL) }
         do {
             #if DEBUG
             container = DemoMode.isOn ? try DemoMode.makeContainer() : try ModelContainer(for: Schema(WattspurSchema.models))
@@ -68,6 +77,7 @@ struct WattspurApp: App {
                 Button("Create Diagnostics…") { openWindow(id: "diagnostics") }
             }
             CommandGroup(after: .importExport) {
+                Button("Library Backup…") { openWindow(id: "backup") }
                 Button("Import Log") { openWindow(id: "importLog") }
                     .keyboardShortcut("l", modifiers: [.command, .option])
             }
@@ -93,6 +103,14 @@ struct WattspurApp: App {
         Window("About Wattspur", id: "about") {
             AboutView()
         }
+        .windowResizability(.contentSize)
+        .restorationBehavior(.disabled)
+
+        Window("Library Backup", id: "backup") {
+            LibraryBackupView()
+                .environment(backup)
+        }
+        .modelContainer(container)
         .windowResizability(.contentSize)
         .restorationBehavior(.disabled)
 

@@ -444,7 +444,7 @@ Je Idee eine Story; Größe grob geschätzt. Details: REQUIREMENTS.md Kap. 4.12.
 | P-19 | PDF-Jahresbericht (IDEA-19) | S | ☐ |
 | P-20 | PDF-Tourbericht (IDEA-20): in v1.2 vorgezogen, Knopf „PDF exportieren“ oben links im Tour-Detail (Karte, Kennzahlen, Details, Diagramme); Anstiege und Notizen folgen mit B-056/B-079 | M | ◐ |
 | P-21 | Spotlight-Suche (IDEA-21) | S | ☐ |
-| P-22 | Backup und Wiederherstellung (IDEA-22) | S | ☐ |
+| P-22 | Backup und Wiederherstellung (IDEA-22) **Stand 26.10.2026 (1.7.1):** umgesetzt. „Bibliothek sichern …“ im Menü Ablage legt einen Ordner mit Datenbank (SQLite-Sicherung, auch bei laufender App) und Anhängen sowie `manifest.json` an; „Wiederherstellen …“ legt die Sicherung bereit und tauscht sie beim nächsten Start vor dem Öffnen der Bibliothek ein, die alte bleibt in einem Ordner daneben. Einstellungen und überwachter Ordner gehören nicht dazu | S | ☑ |
 | P-23 | Menüleisten-Symbol (IDEA-23) | S | ☐ |
 | P-24 | Gruppen mit Freunden (IDEA-24) | L | ☐ |
 | P-25 | Gemeinsame Touren (IDEA-25) | L | ☐ |
