@@ -150,7 +150,7 @@ struct BikeKindIcon: View {
 
     var body: some View {
         BikeKindShape(kind: kind)
-            .stroke(style: StrokeStyle(lineWidth: max(1.1, size / 16), lineCap: .round, lineJoin: .round))
+            .stroke(style: StrokeStyle(lineWidth: max(1.4, size / 16), lineCap: .round, lineJoin: .round))
             .frame(width: size, height: size)
     }
 }
@@ -166,11 +166,15 @@ struct BikeChip: View {
     /// tables); `nil` where the name stands next to it, so it is read once.
     var accessibilityName: String?
 
+    /// Small chips (lists, menus) give the symbol more of the circle and a stronger tint, so
+    /// the rider and the wheels stay readable at 18 to 24 pt (B-174).
+    private var isSmall: Bool { size < 28 }
+
     var body: some View {
-        BikeKindIcon(kind: kind, size: size * 0.62)
+        BikeKindIcon(kind: kind, size: size * (isSmall ? 0.8 : 0.62))
             .foregroundStyle(onAccent ? Color.white : color.color)
             .frame(width: size, height: size)
-            .background(onAccent ? Color.white.opacity(0.24) : color.color.opacity(0.14), in: Circle())
+            .background(onAccent ? Color.white.opacity(0.24) : color.color.opacity(isSmall ? 0.22 : 0.14), in: Circle())
             .accessibilityHidden(accessibilityName == nil)
             .accessibilityElement(children: .ignore)
             .accessibilityLabel(accessibilityName.map { Text("Bike: \($0)") } ?? Text(verbatim: ""))
