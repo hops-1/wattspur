@@ -375,7 +375,7 @@ Release 1.9.0 (Version, Changelog, Handbuch EN/DE mit Kapitel „Bosch-Daten abr
 |---|---|---|---|
 | B-082 | Erklärung der Kennzahlen und Formeln im Handbuch (DOC-03); erledigt mit B-080 | S | ☑ |
 | B-083 | FAQ und Fehlerbehebung (DOC-05); erledigt mit B-080 | S | ☑ |
-| B-084 | Hilfe-Menü mit Link zum Handbuch und Hinweise an leeren Ansichten (DOC-06) | S | ☐ |
+| B-084 | Hilfe-Menü mit Link zum Handbuch und Hinweise an leeren Ansichten (DOC-06) **Stand 26.10.2026 (1.7.1):** umgesetzt. Menü Hilfe: Handbuch (⌘?), Fahrten importieren, Fragen und Fehlerbehebung, Versionshinweise; Sprache der App (de/en); Link „Export aus der Flow-App“ in der leeren Fahrtenliste. Die Seiten liegen online im Repository, nichts wird mitgeliefert | S | ☑ |
 | B-085 | Profil-Daten exportieren und löschen (ACC-05) | M | ☐ |
 
 ## v1.x – Komfort & Karten

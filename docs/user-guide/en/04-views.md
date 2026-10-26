@@ -116,6 +116,7 @@ Rides you delete stay in the trash for 30 days. **Restore** puts a ride back int
 | ⌃⌘S | Collapse or expand the sidebar |
 | Delete, ⌘Z | Move to trash, undo |
 | ⌘, | Settings |
+| ⌘? | Open this handbook (Help menu) |
 
 ## Accessibility
 - Every key figure and button has a VoiceOver label.
