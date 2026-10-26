@@ -32,7 +32,10 @@ public struct HighlightRide: Sendable, Equatable, Identifiable {
 // MARK: - Records (ADV-R1, ADV-R2)
 
 public enum RecordKind: String, CaseIterable, Identifiable, Sendable {
-    case longestDistance, longestDuration, mostAscent, highestAverageSpeed, highestAveragePower, longestStreak
+    case longestDistance, longestDuration, mostAscent, highestAverageSpeed, highestAveragePower
+    /// The peaks (B-122, ADV-R3): the Bosch maximum of the file, and the best minute.
+    case highestSpeed, highestPower, highestCadence, bestPower1Min
+    case longestStreak
 
     public var id: Self { self }
 
@@ -40,8 +43,9 @@ public enum RecordKind: String, CaseIterable, Identifiable, Sendable {
     /// ride downhill sets no record (Requirements 10.10).
     public static let minimumDistanceForAverages = 5_000.0
 
-    /// The value of one ride: metres, seconds, metres, m/s, watts. `nil` for the streak,
-    /// which is not a value of one ride, and for averages of short rides.
+    /// The value of one ride: metres, seconds, metres, m/s, watts, m/s, watts, rpm, watts. `nil`
+    /// for the streak, which is not a value of one ride, for averages of short rides and for
+    /// peaks a ride does not have (a GPX file without power). Peaks have no minimum distance.
     public func value(of ride: RideFigures) -> Double? {
         switch self {
         case .longestDistance: ride.distance > 0 ? ride.distance : nil
@@ -51,6 +55,10 @@ public enum RecordKind: String, CaseIterable, Identifiable, Sendable {
             ride.distance >= Self.minimumDistanceForAverages ? ride.averageSpeed : nil
         case .highestAveragePower:
             ride.distance >= Self.minimumDistanceForAverages ? ride.averagePower.map(Double.init) : nil
+        case .highestSpeed: ride.maxSpeed.flatMap { $0 > 0 ? $0 : nil }
+        case .highestPower: ride.maxPower.flatMap { $0 > 0 ? Double($0) : nil }
+        case .highestCadence: ride.maxCadence.flatMap { $0 > 0 ? Double($0) : nil }
+        case .bestPower1Min: ride.bestPower1Min.flatMap { $0 > 0 ? Double($0) : nil }
         case .longestStreak: nil
         }
     }

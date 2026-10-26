@@ -22,7 +22,8 @@ extension Ride {
     public var figures: RideFigures {
         RideFigures(startDate: startDate, distance: distance, timerTime: timerTime, totalAscent: totalAscent,
                     workKilojoules: workKilojoules, averageSpeed: averageSpeed,
-                    averagePower: averagePower, averageCadence: averageCadence)
+                    averagePower: averagePower, averageCadence: averageCadence,
+                    maxSpeed: maxSpeed, maxPower: maxPower, maxCadence: maxCadence, bestPower1Min: bestPower1Min)
     }
 }
 

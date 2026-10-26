@@ -17,10 +17,17 @@ public struct RideFigures: Sendable, Equatable {
     public var averageSpeed: Double?
     public var averagePower: Int?
     public var averageCadence: Int?
+    /// The peaks, for the records (B-122): metres per second, watts, revolutions per minute.
+    public var maxSpeed: Double?
+    public var maxPower: Int?
+    public var maxCadence: Int?
+    /// The best average power over one minute, in watts (`PeakPower`).
+    public var bestPower1Min: Int?
 
     public init(startDate: Date, distance: Double, timerTime: TimeInterval, totalAscent: Int? = nil,
                 workKilojoules: Double = 0, averageSpeed: Double? = nil, averagePower: Int? = nil,
-                averageCadence: Int? = nil) {
+                averageCadence: Int? = nil, maxSpeed: Double? = nil, maxPower: Int? = nil,
+                maxCadence: Int? = nil, bestPower1Min: Int? = nil) {
         self.startDate = startDate
         self.distance = distance
         self.timerTime = timerTime
@@ -29,6 +36,10 @@ public struct RideFigures: Sendable, Equatable {
         self.averageSpeed = averageSpeed
         self.averagePower = averagePower
         self.averageCadence = averageCadence
+        self.maxSpeed = maxSpeed
+        self.maxPower = maxPower
+        self.maxCadence = maxCadence
+        self.bestPower1Min = bestPower1Min
     }
 }
 

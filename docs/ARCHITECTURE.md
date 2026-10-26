@@ -32,7 +32,7 @@ Pfeile zeigen die erlaubte Richtung der Abhängigkeit; zurück darf es nie gehen
 |---|---|
 | `FIT/` | Container-Decoder, Basistypen, Profil, Anonymisierer |
 | `Import/` | `RideImporter` (Protokoll), FIT- und GPX-Importer, `ImportResult` |
-| `Ride/` | `ParsedRide`, Samples, Zusammenführen, Reihen für Diagramme, GPX-Schreiber, Kalorienmodell, Routen, Routenähnlichkeit (`RouteSimilarity`, `RouteSignature`, `RouteIndex`) |
+| `Ride/` | `ParsedRide`, Samples, Zusammenführen, Reihen für Diagramme, GPX-Schreiber, Kalorienmodell, Routen, Routenähnlichkeit (`RouteSimilarity`, `RouteSignature`, `RouteIndex`), beste Minute (`PeakPower`) |
 | `Analysis/` | Summen und Trends, Rekorde, Vergleich, Karte (Filter, Dichte), neue Wege |
 | `Library/` | Reine Typen rund um die Bibliothek: Filter, Quellen, Bike-Statistik, Duplikat-Fakten |
 | `Support/` | Diagnosebericht |

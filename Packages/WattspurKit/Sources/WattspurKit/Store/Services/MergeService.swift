@@ -113,6 +113,7 @@ struct MergeService: LibraryService {
         encoder.outputFormat = .binary
         ride.samplesData = try? encoder.encode(result.samples)
         ride.updateOverviewRouteFromParts()
+        ride.updatePeakPowerFromParts()
     }
 
     private static func merged(_ parts: [Ride]) throws(RideMerge.MergeError) -> RideMerge.Result {

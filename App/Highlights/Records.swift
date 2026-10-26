@@ -31,10 +31,13 @@ struct RecordsContent: View {
                     }
                 }
             }
-            Text("Records come from the Bosch totals of each ride. Average speed and power count from 5 km on. The streak counts consecutive days with at least one ride, by the local time of the start. Merged rides count as one ride.")
-                .font(.caption)
-                .foregroundStyle(.secondary)
-                .frame(maxWidth: 820, alignment: .leading)
+            VStack(alignment: .leading, spacing: 6) {
+                Text("Records come from the Bosch totals of each ride. Average speed and power count from 5 km on. The streak counts consecutive days with at least one ride, by the local time of the start. Merged rides count as one ride.")
+                Text("Top speed, highest power and highest cadence are the maximum stored in the file. The best 1-minute power is the highest average power over 60 seconds without a break; rides without power values, like many GPX files, do not count for the power records.")
+            }
+            .font(.caption)
+            .foregroundStyle(.secondary)
+            .frame(maxWidth: 820, alignment: .leading)
         }
     }
 

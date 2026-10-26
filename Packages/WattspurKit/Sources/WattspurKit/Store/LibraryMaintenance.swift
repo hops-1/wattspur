@@ -24,5 +24,8 @@ public final class LibraryMaintenance {
         await Task.yield()
         // Rides imported before v1.4 get their simplified route for the map, in batches (B-104).
         await library.prepareOverviewRoutes()
+        await Task.yield()
+        // Rides imported before v1.7 get their best minute for the records, in batches (B-122).
+        await library.preparePeakPower()
     }
 }
