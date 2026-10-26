@@ -12,7 +12,7 @@ Wattspur ist eine kostenlose Mac-App für die Fahrten, die du mit einem Bosch-eB
 1. [Wattspur installieren](01-installation.md): Download, erstes Öffnen, Voraussetzungen
 2. [Erster Start](02-first-launch.md): Einrichtungsassistent und Beispielfahrt
 3. [Fahrten importieren](03-importing.md): Export aus der Flow-App, überwachter Ordner, Drag & Drop, Import-Protokoll
-4. [Ansichten](04-views.md): Fahrtenliste, Tour-Detail, Auswertung, Highlights, Karte, Papierkorb, Einstellungen, Tastatur
+4. [Ansichten](04-views.md): Fahrtenliste, ähnliche Fahrten und Verlauf, Tour-Detail, Auswertung, Highlights, Karte, Papierkorb, Einstellungen, Tastatur
 5. [Kennzahlen](05-metrics.md): woher jeder Wert kommt und wie Schätzwerte berechnet werden
 6. [Fragen und Fehlerbehebung](06-faq.md)
 7. [Profil und Bikes](07-profile-and-bikes.md): Körperdaten, mehrere Bikes, Fahrten zuweisen, Filter

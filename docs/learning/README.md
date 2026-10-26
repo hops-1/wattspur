@@ -29,6 +29,7 @@ Zu jeder Story steht hier kurz: **was** gebaut wurde, **warum** so und **welche 
 | [23](23-kalorien-mit-profil.md) | Kalorien „mit Profil“: Grundumsatz nach Mifflin-St Jeor, Rückfall, Einstellung (Gerüst) | B-067 |
 | [24](24-umstieg-erststart.md) | Umstieg auf 1.5: Hinweis nach dem Update, Schritt „Erstes Bike“ im Assistenten | B-138 |
 | [25](25-architektur-aufraeumen.md) | Architektur aufräumen: Sicherheits-Fix, zwei Module, Dienste, geteilte Bibliothek, Einstellungen, Start | B-162 … B-169 |
+| [26](26-aehnliche-strecken.md) | Ähnliche Strecken: Rasterindex, Ähnlichkeit in beide Richtungen, Suche im Hintergrund, Verlauf, beste Minute | B-116 … B-120, B-122 |
 
 **Begriffe, die oft vorkommen**
 - **Swift Package (`WattspurKit`)**: ein eigenständiges Code-Modul ohne Oberfläche. Es lässt sich mit `swift test` allein testen und später unverändert in der iOS-App nutzen.

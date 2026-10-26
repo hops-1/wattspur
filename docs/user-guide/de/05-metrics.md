@@ -22,6 +22,7 @@ Wattspur zeigt zwei Arten von Werten:
 | Arbeit | Deine Tretleistung über die Fahrt aufsummiert: Σ Leistung × 1 s, in Kilojoule. Enthält die Datei eine Gesamtarbeit, wird diese verwendet. Weil Rollen hier mit 0 W zählt, im Bosch-Durchschnitt aber nicht, ist die Arbeit meist kleiner als Ø Leistung × Fahrzeit, bei Fahrten mit viel Rollen deutlich |
 | Höhe min.–max. | Tiefster und höchster Punkt der Aufzeichnung |
 | Kalorien ⓘ | Wie in der Flow-App: Arbeit (kJ) × 0,97 plus 64 kcal je Stunde Fahrzeit. Der Körper setzt etwa ein Viertel der verbrauchten Energie in Tretarbeit um; der Zeitanteil steht für alles, was er nebenbei verbraucht. Die Flow-App hat keine Körperdaten, der Anteil ist dort ein fester Wert. Sechs Fahrten mit dem Flow-Wert werden auf wenige kcal genau getroffen. Ein Modus „Mit Profil“ mit deinen Körperdaten ist für eine spätere Version vorbereitet |
+| Beste 1-Minuten-Leistung | Die höchste durchschnittliche Leistung, die du 60 Sekunden am Stück gehalten hast. Wattspur schiebt ein Fenster von 60 Sekunden über die Fahrt; eine Pause von mehr als 5 Sekunden oder eine Sekunde ohne Leistungswert unterbricht es. Fahrten ohne Leistung (viele GPX-Dateien) und unter einer Minute haben keinen Wert. Bei einer zusammengefügten Fahrt zählt die beste ihrer Teile |
 | CO₂-Einsparung ⓘ | Strecke (km) × 0,159 kg: so viel hätte ein durchschnittliches Auto auf derselben Strecke ausgestoßen |
 
 Die Faktoren für Kalorien und CO₂ sind Annahmen, geprüft an wenigen Fahrten. Sie können sich in späteren Versionen ändern; der Changelog sagt dann Bescheid.
@@ -61,11 +62,20 @@ Summen über mehrere Fahrten nehmen die Fahrten, die einen Wert haben, und sagen
 ## Highlights
 | Wert | Wie |
 |---|---|
-| Rekorde | Aus den Bosch-Summen jeder Fahrt. Bei Gleichstand behält die frühere Fahrt den Rekord. Ø Geschwindigkeit und Ø Leistung zählen nur bei Fahrten ab 5 km, damit eine kurze Fahrt bergab keinen Rekord setzt |
+| Rekorde | Aus den Bosch-Summen jeder Fahrt. Bei Gleichstand behält die frühere Fahrt den Rekord. Ø Geschwindigkeit und Ø Leistung zählen nur bei Fahrten ab 5 km, damit eine kurze Fahrt bergab keinen Rekord setzt. Höchstgeschwindigkeit, höchste Leistung und höchste Trittfrequenz sind die Höchstwerte aus der Datei und haben keine Mindeststrecke; bei GPX-Dateien zählt nur die Geschwindigkeit (aus dem Track geschätzt), Leistung und Trittfrequenz nur, wo die Datei sie enthält |
 | Längste Serie | Aufeinanderfolgende Kalendertage mit mindestens einer Fahrt, nach dem Ortsdatum am Start der Fahrt. Zwei Fahrten an einem Tag zählen als ein Tag; ein Tag ohne Fahrt beendet die Serie; ein einzelner Tag ist keine Serie |
 | Jahr | Fahrten gehören zu Jahr und Monat ihres Ortsdatums am Start. Die Veränderung zum Vorjahr vergleicht die Strecke |
 | Ziele | Die Summe der Fahrten, die im Zeitraum begonnen haben. Wochen laufen von Montag bis Sonntag. „Im Plan“ heißt: das Ziel ist mindestens so weit wie der verstrichene Anteil des Zeitraums |
 | Zählt nicht | Die Beispielfahrt, Fahrten im Papierkorb und die Teile einer zusammengefügten Fahrt (die zusammengefügte Fahrt zählt als eine Fahrt) |
+
+## Ähnliche Fahrten
+| Wert | Wie |
+|---|---|
+| Ähnlichkeit | Der Anteil der Strecke, der höchstens 50 m von der anderen Strecke entfernt liegt, in beide Richtungen geprüft; der kleinere Anteil zählt. So ist eine kurze Fahrt, die auf einer langen liegt, ihr nicht ähnlich. Verglichen wird die vereinfachte Route, ungefähr alle 10 m ein Punkt |
+| Richtung | Start und Ziel beider Fahrten liegen höchstens 200 m auseinander: gleiche Richtung. Start der einen am Ziel der anderen und umgekehrt: Gegenrichtung. Beginnen oder enden die Fahrten an anderen Orten (eine Teilstrecke), zählen sie als Fahrt in keiner der beiden Richtungen. Bei Rundfahrten, die dort enden, wo sie beginnen, entscheidet der Umlaufsinn |
+| Schwelle | Standard 90 %, einstellbar von 80 bis 99 % |
+| Welche Fahrten zählen | Fahrten mit Route, auch aus GPX-Dateien, über alle Bikes. Nicht: die Beispielfahrt, der Papierkorb, die Teile einer zusammengefügten Fahrt (die zusammengefügte Fahrt zählt) |
+| Verlauf | Fahrzeit ist die Zeit in Bewegung. „Beste“ ist bei der Fahrzeit die kürzeste, sonst der höchste Wert; bei Gleichstand die frühere Fahrt. „Letzte“ ist die jüngste Fahrt, die den Wert hat. Der Durchschnitt ist das einfache Mittel der Fahrten, die den Wert haben |
 
 ## Karte
 | Wert | Wie |

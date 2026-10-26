@@ -1,6 +1,6 @@
 # Architektur
 
-Stand: 1.6.1. Kurz gefasst, wo was liegt und welche Regeln gelten. Die Gründe stehen in der Lern-Notiz [25](learning/25-architektur-aufraeumen.md).
+Stand: 1.7.0. Kurz gefasst, wo was liegt und welche Regeln gelten. Die Gründe stehen in der Lern-Notiz [25](learning/25-architektur-aufraeumen.md).
 
 ## Überblick
 

@@ -10,12 +10,26 @@ Das Fenster hat drei Teile: links die Seitenleiste, in der Mitte die Fahrtenlist
 - **Suchen** nach Namen im Feld über der Liste.
 - **Sortieren und filtern** mit dem Knopf neben dem Suchfeld: sortieren nach Datum, Strecke, Fahrzeit, Anstieg oder Ø Leistung. Anzeigen lassen sich diese Woche, dieser Monat, dieses Jahr, die letzten 30 oder 365 Tage oder alle Fahrten. Ab zwei Bikes lässt sich auch ein Bike zeigen, und sobald du eine GPX-Fahrt hast, eine Quelle: alle Quellen, Bosch-FIT (auch mit angehängter GPX) oder GPX.
 - **Umbenennen** per Rechtsklick › Umbenennen ….
+- **Ähnliche Fahrten zeigen** (Rechtsklick) filtert die Liste auf die Fahrten, die auf derselben Strecke liegen, siehe [Ähnliche Fahrten](#ähnliche-fahrten).
 - **Als GPX exportieren …** (Rechtsklick) sichert die Route einer Fahrt, siehe [Tour-Detail](#tour-detail).
 - **Löschen** mit der Rückschritt-Taste oder per Rechtsklick › In den Papierkorb. Das gilt für alle markierten Fahrten; bei mehr als einer fragt Wattspur vorher nach. ⌘Z holt sie zurück.
 - **Fahrten zusammenfügen**, die zusammengehören, z. B. eine Fahrt, die wegen einer Kaffeepause in zwei Teilen aufgezeichnet wurde: markieren, dann Rechtsklick › … Fahrten zusammenfügen … oder **Zusammenfügen …** neben der Auswahl. Fahrten, die sich zeitlich überschneiden, lassen sich nicht zusammenfügen. Eine Lücke am selben Tag zählt als Pause, über mehrere Tage zählen nur die Fahrzeiten. Die neue Fahrt trägt in der Liste „2 Teile“; **Trennen** über den Details holt die Originalfahrten zurück.
 - **Zusammenfügen vorgeschlagen:** Nach einem Import weist ein Hinweis über der Liste darauf hin, wenn Fahrten desselben Tages wohl zusammengehören („2 Fahrten vom 15. Okt. gehören wohl zusammen“): **Zusammenfügen** öffnet den Dialog zum Zusammenfügen, **Nicht jetzt** blendet den Hinweis aus. Das Import-Protokoll zeigt dieselbe Zeile mit einem Knopf. Wattspur fügt nie von selbst zusammen. Unter **Einstellungen › Import › Zusammenfügen** legst du die längste Pause zwischen den Fahrten fest oder schaltest den Hinweis aus.
 - **Mehrere Fahrten:** mit ⌘-Klick oder ⇧-Klick auswählen. Bis du das einmal gemacht hast, erinnert ein Tipp unter der Liste daran; ✕ blendet ihn aus. Wattspur zeigt ihre Gesamtstrecke und -zeit, und **Ausgewählte Fahrten auswerten** (⇧⌘A) öffnet die Auswertung für genau diese Fahrten.
 - **Fahrten vergleichen:** 2 bis 4 Fahrten markieren und **Vergleichen** (⇧⌘C) klicken oder Rechtsklick › … Fahrten vergleichen. Mehr dazu unter [Fahrten vergleichen](#fahrten-vergleichen).
+
+## Ähnliche Fahrten
+Pendelstrecke oder Lieblingsrunde: Wattspur findet die Fahrten, die denselben Weg genommen haben.
+- **Einstieg:** Rechtsklick auf eine Fahrt › **Ähnliche Fahrten zeigen** oder der Knopf **Ähnliche Fahrten** im Tour-Detail. Das geht nur bei Fahrten mit Route; die Beispielfahrt, Fahrten im Papierkorb und die Teile einer zusammengefügten Fahrt zählen nicht.
+- **Die Liste** zeigt dann nur noch die Fahrten auf dieser Strecke, in jeder Zeile steht, wie ähnlich sie ist („97 %“). Die Fahrt, nach der du gefragt hast, steht oben und trägt ein Zielsymbol (Bezugsfahrt). ⇄ kennzeichnet eine Fahrt in Gegenrichtung.
+- **Der Chip** über der Liste nennt die Bezugsfahrt und die Zahl der Treffer („12 von 15“, wenn der Bike-, Quellen- oder Zeitraumfilter oder die Suche welche ausblenden). Darin:
+  - **Ähnlichkeit:** der Regler von 80 bis 99 %. Je höher, desto genauer muss eine Fahrt der Strecke folgen. Wo der Regler beginnt, stellst du unter **Einstellungen › Allgemein › Ähnliche Fahrten** ein (Standard 90 %).
+  - **Beide Richtungen** nimmt Fahrten dazu, die dieselbe Strecke andersherum gefahren sind, zum Beispiel den Rückweg von der Arbeit.
+  - **Ähnlichste** oder **Neueste** zuerst.
+  - ✕ hebt den Filter auf. Der Filter bleibt, wenn du eine Fahrt öffnest oder die Seitenleiste wechselst.
+- **Vergleichen und auswerten:** Markiere 2 bis 4 Treffer und klicke **Vergleichen** ([Fahrten vergleichen](#fahrten-vergleichen)), oder markiere beliebig viele und klicke **Ausgewählte Fahrten auswerten**.
+- **Verlauf:** Solange der Filter an ist und keine Fahrt markiert ist, zeigt die rechte Seite, wie sich die Fahrten auf dieser Strecke entwickeln: Fahrzeit, Ø Geschwindigkeit, Ø Leistung oder Ø Trittfrequenz über die Zeit. Jede Fahrt ist ein Punkt, die Linie ist das Mittel der letzten fünf Fahrten. Die beste Fahrt trägt einen ★ (bei der Fahrzeit die kürzeste, sonst der höchste Wert), die letzte einen Ring. Darunter stehen Bestwert, letzte Fahrt (mit dem Unterschied zum Durchschnitt) und Durchschnitt. Fehlt der Wert bei manchen Fahrten, etwa die Leistung in GPX-Dateien, steht „9 von 12 Fahrten“ darunter. Ein Klick auf einen Punkt öffnet die Fahrt, **Zurück zum Verlauf** (⌘[) kommt zurück, und **Diese Fahrten auswerten** öffnet die Auswertung mit allen Fahrten der Strecke. Der Verlauf nimmt alle Treffer bei der gewählten Ähnlichkeit, unabhängig von den anderen Filtern der Liste.
+- Wie Wattspur „ähnlich“ meint, steht unter [Kennzahlen](05-metrics.md#ähnliche-fahrten).
 
 ## Fahrten vergleichen
 Der Vergleich zeigt 2 bis 4 Fahrten nebeneinander, rechts neben der Liste. Die in der Liste markierten Fahrten **sind** der Vergleich: Mit ⌘-Klick kommt eine weitere hinzu, ✕ über einer Spalte nimmt sie heraus, ↗ zeigt nur diese Fahrt. **Fertig** (Esc) führt zurück zur Auswahl.
@@ -55,7 +69,7 @@ In der Seitenleiste **Highlights** wählen (⌘4). Oben drei Reiter; jeder hat o
   - **Fahrtage:** ein Kalender mit einem Kästchen je Tag, von Montag bis Sonntag; je dunkler, desto mehr Kilometer (unter 10, 10–25, 25–50, ab 50 km). Mit dem Zeiger auf einem Tag steht seine Strecke da; ein Klick zeigt seine Fahrten in der Liste.
   - **Kilometer je Monat** als Balken; der beste Monat ist dunkler.
   - **Rekorde dieses Jahres.**
-- **Rekorde:** deine Bestwerte über alle Fahrten: längste Fahrt, längste Fahrzeit, meiste Höhenmeter, höchste Ø Geschwindigkeit, höchste Ø Leistung und längste Serie an Fahrtagen. Ein Klick auf eine Karte zeigt die Fahrt. „Neu“ markiert einen Rekord aus einer Fahrt, die in den letzten 7 Tagen importiert wurde. Siehe [Kennzahlen](05-metrics.md#highlights).
+- **Rekorde:** deine Bestwerte über alle Fahrten: längste Fahrt, längste Fahrzeit, meiste Höhenmeter, höchste Ø Geschwindigkeit, höchste Ø Leistung, längste Serie an Fahrtagen sowie Höchstgeschwindigkeit, höchste Leistung, höchste Trittfrequenz und beste 1-Minuten-Leistung. Ein Klick auf eine Karte zeigt die Fahrt. „Neu“ markiert einen Rekord aus einer Fahrt, die in den letzten 7 Tagen importiert wurde. Siehe [Kennzahlen](05-metrics.md#highlights).
 - **Ziele:** Kilometer, Fahrten oder Höhenmeter je Woche (Montag bis Sonntag), Monat oder Jahr. **Ziel hinzufügen …** legt eins an; je Zeitraum und Kennzahl gibt es höchstens ein Ziel. Jede Karte zeigt den Stand, was noch fehlt und ob du im Plan bist (mindestens so weit wie die verstrichene Zeit), dazu kleine Balken für die letzten Zeiträume. ✎ ändert oder löscht ein Ziel.
 - **Neuer Rekord nach einem Import:** Schlägt eine importierte Fahrt einen deiner Rekorde, nennt ein Hinweis oben im Fenster den Rekord und den bisherigen Wert; **Fahrt zeigen** öffnet sie. Das gilt für jeden Import, auch aus dem überwachten Ordner. Auch das Import-Protokoll vermerkt ihn.
 - Fahrten ohne Leistung oder Anstieg halten dafür keinen Rekord. Das Jahr zeigt „9 von 12 Fahrten“ unter dem Anstieg, wenn nicht jede Fahrt ihn hat; ein Anstiegsziel sagt es auch.
@@ -91,7 +105,7 @@ Gelöschte Fahrten bleiben 30 Tage im Papierkorb. **Wiederherstellen** holt eine
 |---|---|
 | ⌘1, ⌘2, ⌘3 | Fahrten, Auswertung, Papierkorb |
 | ⌘4, ⌘5, ⌘6 | Highlights, Karte, Profil |
-| ⌘[ | Zurück zur Karte, Auswertung oder zu Highlights (im Tour-Detail) |
+| ⌘[ | Zurück zur Karte, Auswertung, zu Highlights oder zum Verlauf (im Tour-Detail) |
 | ⌘← / ⌘→ | Vorheriges / nächstes Jahr in Highlights › Jahr |
 | ⌘O | Fahrten importieren |
 | ⌥⌘L | Import-Fenster und Protokoll |

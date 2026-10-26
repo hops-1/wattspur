@@ -51,9 +51,9 @@ scripts/ci-local.sh
 Falls `xcode-select` noch auf die Command Line Tools zeigt: Befehlen `DEVELOPER_DIR=/Applications/Xcode.app/Contents/Developer` voranstellen.
 
 ## Status
-**Aktuell: v1.6.2** (Update-Hinweis: ein Banner, wenn auf GitHub eine neuere Version liegt). Davor: v1.6.1 (Sicherheits-Fix für beschädigte FIT-Dateien und ein aufgeräumter Unterbau), v1.6 mit GPX-Import (Fahrten anderer Bikes, Apps und Radcomputer neben den Bosch-Fahrten), v1.0 (erste Version für Freunde mit DMG, Beispielfahrt, Barrierefreiheit und [Handbuch](docs/user-guide/README.md)), v1.1 (Fahrten zusammenfügen), v1.2 (Tourenvergleich, PDF-Export), v1.3 (Highlights, GPX-Export), v1.4 (Karte aller Fahrten), v1.5 (Profil und mehrere Bikes). Details im [Changelog](CHANGELOG.md), Lern-Notizen in [docs/learning](docs/learning/README.md).
+**Aktuell: v1.7.0** (ähnliche Strecken: Fahrten auf derselben Strecke finden, filtern, vergleichen und im Verlauf ansehen, dazu vier weitere Rekorde). Davor: v1.6.2 (Update-Hinweis), v1.6.1 (Sicherheits-Fix für beschädigte FIT-Dateien und ein aufgeräumter Unterbau), v1.6 mit GPX-Import (Fahrten anderer Bikes, Apps und Radcomputer neben den Bosch-Fahrten), v1.0 (erste Version für Freunde mit DMG, Beispielfahrt, Barrierefreiheit und [Handbuch](docs/user-guide/README.md)), v1.1 (Fahrten zusammenfügen), v1.2 (Tourenvergleich, PDF-Export), v1.3 (Highlights, GPX-Export), v1.4 (Karte aller Fahrten), v1.5 (Profil und mehrere Bikes). Details im [Changelog](CHANGELOG.md), Lern-Notizen in [docs/learning](docs/learning/README.md).
 
-Als Nächstes: v1.7 ähnliche Strecken und weitere Rekorde (1.7.0 Ähnlichkeit, Verlauf und Rekorde, 1.7.1 Strecken-Gruppen), v1.8 ein Bereich „Fahrten“ mit Karte, v1.9 Daten direkt von Bosch (siehe [Backlog](docs/BACKLOG.md)).
+Als Nächstes: v1.7.1 Strecken-Gruppen (wiederkehrende Strecken erkennen und benennen), v1.8 ein Bereich „Fahrten“ mit Karte, v1.9 Daten direkt von Bosch (siehe [Backlog](docs/BACKLOG.md)).
 
 ## Lizenz
 Code: [MIT](LICENSE) · Dokumentation: [CC BY 4.0](docs/LICENSE.md) · © 2026 Nils Wiese

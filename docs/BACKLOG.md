@@ -294,7 +294,7 @@ Auslöser: Der Sicherheitscheck von 1.6.0 fand fünf Abstürze durch präpariert
 | 4 | B-122 Rekorde und Rekord-Felder (Migration 1) |
 | 5 | B-118 und B-119 Liste mit Chip, Regler, Gegenrichtung, Vergleich (Mockup B-117 abgenommen) |
 | 6 | B-120 Verlauf |
-| 7 | Release 1.7.0 |
+| 7 | Release 1.7.0 (Tag `v1.7.0`, 26.10.2026) |
 | 8 | B-121 Gruppen mit `RouteGroup` (Migration 2) |
 | 9 | Release 1.7.1 |
 
