@@ -73,6 +73,28 @@ extension Ride {
     }
 }
 
+// From Ride/RouteIndex.swift
+extension Ride {
+    /// Does the ride take part in the search for similar routes? Not the sample ride, not the
+    /// trash and not the parts of a merged ride: the merged ride stands for them, with its
+    /// segments (Requirements 10.19).
+    public var countsForSimilarRoutes: Bool {
+        deletedAt == nil && !isSample && mergedInto == nil
+    }
+}
+
+extension RouteIndex {
+    /// The routes of all rides that count, without those that have no GPS or whose route is still
+    /// being prepared (`Ride.needsOverviewRoute`).
+    @MainActor
+    public init(_ rides: [Ride]) {
+        self.init()
+        for ride in rides where ride.countsForSimilarRoutes {
+            if let route = ride.overviewRoute { insert(ride.id, route: route) }
+        }
+    }
+}
+
 // From Ride/GPXWriter.swift
 extension Ride {
     /// The recordings to export: each part of a merged ride with its own start, so
