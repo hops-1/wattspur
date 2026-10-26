@@ -84,6 +84,14 @@ extension Ride {
     }
 }
 
+// From Ride/RouteGrouping.swift
+extension RouteGroup {
+    /// What the computation of the members needs to know.
+    public var spec: RouteGrouping.Spec {
+        RouteGrouping.Spec(id: id, route: referenceRoute, threshold: threshold, includeReverse: includeReverse)
+    }
+}
+
 extension RouteIndex {
     /// A ride that takes part in the search, with its route: what the (slow) building of the index
     /// needs, so it can run away from the main thread.

@@ -369,7 +369,47 @@ public final class Goal {
     }
 }
 
+/// A route the rider rides again and again, saved with a name (B-121, ROUTE-07).
+///
+/// It stores the *reference route* and how loosely to match it, not the rides: which rides belong
+/// to it is computed from their similarity to the reference route (`RouteGrouping`), so a new ride
+/// joins on its own and nothing can get out of date. The reference route is a copy, so the group
+/// outlives the ride it was made from. Migration 2 (a new table; nothing existing changes).
+@Model
+public final class RouteGroup {
+    public var id: UUID = UUID()
+    public var name: String = ""
+    public var createdAt: Date = Date.now
+    /// 0…1, in `RouteSimilarity.thresholdRange`.
+    public var threshold: Double = RouteSimilarity.defaultThreshold
+    /// Whether rides on the route the other way round belong to it too.
+    public var includeReverse: Bool = false
+    /// The reference route, `OverviewRoute.encoded()`.
+    public var referenceRouteData: Data?
+    /// The ride the route was made from; the ride may be gone since.
+    public var referenceRideID: UUID?
+
+    public init(name: String, threshold: Double, includeReverse: Bool, referenceRoute: OverviewRoute, referenceRideID: UUID?) {
+        self.name = name
+        self.threshold = threshold
+        self.includeReverse = includeReverse
+        self.referenceRouteData = referenceRoute.encoded()
+        self.referenceRideID = referenceRideID
+    }
+
+    public var referenceRoute: OverviewRoute {
+        referenceRouteData.flatMap { OverviewRoute(data: $0) } ?? OverviewRoute(segments: [])
+    }
+
+    /// Newest last, so a name that was typed first stays on top.
+    public static func sorted(_ groups: [RouteGroup]) -> [RouteGroup] {
+        groups.sorted { ($0.createdAt, $0.id.uuidString) < ($1.createdAt, $1.id.uuidString) }
+    }
+}
+
 /// All model types, for creating a `ModelContainer`.
 public enum WattspurSchema {
-    public static let models: [any PersistentModel.Type] = [Ride.self, Rider.self, Bike.self, SourceFile.self, ImportRecord.self, Goal.self]
+    public static let models: [any PersistentModel.Type] = [
+        Ride.self, Rider.self, Bike.self, SourceFile.self, ImportRecord.self, Goal.self, RouteGroup.self,
+    ]
 }
