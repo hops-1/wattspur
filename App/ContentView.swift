@@ -51,6 +51,7 @@ struct ContentView: View {
     @Environment(FolderWatcher.self) private var watcher
     @Environment(NewPathsStore.self) private var newPaths
     @Environment(BikeAssignmentNotice.self) private var assignmentNotice
+    @Environment(LibraryRestoreNotice.self) private var restoreNotice
     @Environment(\.undoManager) private var undoManager
     @Environment(\.openWindow) private var openWindow
     @Environment(\.openSettings) private var openSettings
@@ -237,6 +238,20 @@ struct ContentView: View {
                     .padding(.bottom, 18)
                     .transition(.move(edge: .bottom).combined(with: .opacity))
                 }
+            }
+            .overlay(alignment: .bottom) {
+                if let notice = restoreNotice.current {
+                    LibraryRestoreNoticeView(notice: notice) { restoreNotice.hide() }
+                        .padding(.bottom, 18)
+                        .transition(.move(edge: .bottom).combined(with: .opacity))
+                }
+            }
+            .animation(.snappy, value: restoreNotice.current)
+            .task(id: restoreNotice.current?.id) {
+                guard let notice = restoreNotice.current else { return }
+                AccessibilityNotification.Announcement(notice.text).post()
+                try? await Task.sleep(for: .seconds(12))
+                if restoreNotice.current?.id == notice.id { restoreNotice.hide() }
             }
             .animation(.snappy, value: recordNotice)
             .animation(.snappy, value: assignmentNotice.current)

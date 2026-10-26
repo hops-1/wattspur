@@ -294,7 +294,7 @@ Gesammelte Feature-Ideen, über deren Umsetzung und Release später entschieden 
 | IDEA-19 | PDF-Jahresbericht aus dem Jahresrückblick | Summen | ? |
 | IDEA-20 | PDF-Tourbericht: Karte, Kennzahlen, alle Diagramme, ggf. Anstiege und Notizen einer Tour als druckbares PDF. Grundform in v1.2 (Knopf oben links im Tour-Detail) | Tour | ? |
 | IDEA-21 | Spotlight-Suche: Fahrten über die Mac-Suche finden | – | ? |
-| IDEA-22 | Backup und Wiederherstellung der gesamten Bibliothek als Archiv (Umzug auf einen neuen Mac, unabhängig von iCloud) | – | ? |
+| IDEA-22 | Backup und Wiederherstellung der gesamten Bibliothek als Ordner (Umzug auf einen neuen Mac, unabhängig von iCloud); **umgesetzt in 1.7.1** | – | ✔ |
 | IDEA-23 | Menüleisten-Symbol mit Mini-Statistik und Import-Status | – | ? |
 | IDEA-24 | Gruppen mit Freunden: Vergleich der Monats-km, gemeinsame Ziele (setzt ACC-04 Serverkonto voraus) | Server | ? |
 | IDEA-25 | Gemeinsame Touren erkennen und nebeneinanderstellen (setzt ACC-04 voraus) | Server | ? |
