@@ -337,9 +337,11 @@ struct RideListView: View {
                 activeFilterChip
                     .padding(.top, 8)
             }
-            if scope == nil, let filter = Binding($similarFilter) {
-                let referenceID = filter.wrappedValue.referenceID
-                SimilarRidesBar(filter: filter,
+            if scope == nil, let current = similarFilter {
+                let referenceID = current.referenceID
+                // Not `Binding($similarFilter)`: that unwraps the optional again while the bar fades out
+                // after ✕ set it to nil, and crashes.
+                SimilarRidesBar(filter: Binding(get: { similarFilter ?? current }, set: { similarFilter = $0 }),
                                 referenceName: rides.first { $0.id == referenceID }?.name ?? "",
                                 found: similarHits?.count ?? 0,
                                 shown: filteredRides.count { $0.id != referenceID },
