@@ -9,6 +9,7 @@ Every DMG handed out to testers corresponds to one entry below.
 
 ### Changed
 - **Bike symbol:** in the ride list, menus, filters and the comparison, the small bike symbol is drawn larger, with a stronger line and tint, so the rider and the wheels are easier to see (B-174).
+- Internal: the groundwork for similar routes (B-116): a route can be compared with others (the share that lies within 50 m of the other route, both ways, and whether it runs the same way), and an index finds the similar rides among a thousand in well under a second. Nothing to see yet; the list gets its filter in a later step.
 
 ### Fixed
 - **Trash:** **Empty Trash…** now sits in the header of the trash instead of the title bar, where it reached into the sidebar. **Restore** is a small button with a symbol (also in the context menu), so the name and the figures of a ride no longer wrap onto several lines (B-161).
