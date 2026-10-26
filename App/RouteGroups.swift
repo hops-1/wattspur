@@ -1,3 +1,4 @@
+import SwiftData
 import SwiftUI
 import WattspurKit
 
@@ -152,5 +153,54 @@ struct SaveRouteSheet: View {
 
     private func save() {
         onSave(name, threshold, includeReverse)
+    }
+}
+
+/// Bottom of the window after an import: "New ride on your route “Name”" with a button to show it.
+struct RouteJoinNoticeHost: View {
+    @Environment(RouteSimilarityStore.self) private var similarity
+    @Query private var routeGroups: [RouteGroup]
+    let onShow: (RouteGroup) -> Void
+
+    var body: some View {
+        Group {
+            if let join = similarity.joined, let group = routeGroups.first(where: { $0.id == join.routeID }) {
+                HStack(spacing: 12) {
+                    Image(systemName: "point.3.connected.trianglepath.dotted")
+                        .foregroundStyle(Color.accentColor)
+                        .accessibilityHidden(true)
+                    text(join.rideIDs.count, route: group.name)
+                        .font(.callout)
+                    Button("Show Route") {
+                        onShow(group)
+                        similarity.dismissJoin()
+                    }
+                    .buttonStyle(.glass)
+                    .controlSize(.small)
+                    Button { similarity.dismissJoin() } label: { Image(systemName: "xmark").font(.caption.weight(.bold)) }
+                        .buttonStyle(.plain)
+                        .foregroundStyle(.secondary)
+                        .accessibilityLabel(Text("Close"))
+                }
+                .padding(.horizontal, 16)
+                .padding(.vertical, 10)
+                .background(.regularMaterial, in: Capsule())
+                .overlay(Capsule().strokeBorder(.separator.opacity(0.6)))
+                .shadow(color: .black.opacity(0.15), radius: 10, y: 3)
+                .padding(.bottom, 18)
+                .transition(.move(edge: .bottom).combined(with: .opacity))
+                .accessibilityElement(children: .combine)
+                .task(id: join.id) {
+                    AccessibilityNotification.Announcement(String(localized: "A new ride is on your route “\(group.name)”.")).post()
+                    try? await Task.sleep(for: .seconds(15))
+                    if similarity.joined?.id == join.id { similarity.dismissJoin() }
+                }
+            }
+        }
+        .animation(.snappy, value: similarity.joined)
+    }
+
+    private func text(_ count: Int, route: String) -> Text {
+        count == 1 ? Text("A new ride is on your route “\(route)”.") : Text("\(count) new rides are on your route “\(route)”.")
     }
 }
