@@ -316,7 +316,10 @@ struct ContentView: View {
 
     @ViewBuilder
     private var detail: some View {
-        if section == .trash || selectedRideIDs.isEmpty {
+        if section == .rides, selectedRideIDs.isEmpty, let filter = similarFilter {
+            // "Similar to" without a selected ride: how the rides on the route develop (B-120).
+            RouteHistoryView(filter: filter) { selectedRideIDs = [$0] }
+        } else if section == .trash || selectedRideIDs.isEmpty {
             ContentUnavailableView {
                 Label("Select a ride", systemImage: "bicycle")
             } description: {
@@ -328,11 +331,15 @@ struct ContentView: View {
             VStack(spacing: 0) {
                 if let back = returnSection {
                     backBar(to: back)
+                } else if similarFilter != nil {
+                    historyBar
                 }
                 RideDetailView(rideID: id) { selectedRideIDs = Set($0) } onShowRecords: {
                     highlightsTab = .records
                     section = .highlights
                 } onShowSimilar: {
+                    // No selection: the right side shows the history of the route.
+                    selectedRideIDs = []
                     withAnimation(.snappy) {
                         similarFilter = SimilarRidesFilter(referenceID: id, threshold: RouteSimilarity.clampedThreshold(similarThreshold))
                     }
@@ -369,6 +376,22 @@ struct ContentView: View {
                 case .highlights: Label("Back to Highlights", systemImage: "chevron.left")
                 default: Label("Back to Analysis", systemImage: "chevron.left")
                 }
+            }
+            .buttonStyle(.glass)
+            .keyboardShortcut("[", modifiers: .command)
+            Spacer()
+        }
+        .padding(.horizontal, 28)
+        .padding(.top, 14)
+    }
+
+    /// "‹ Back to History" above a ride opened while "Similar to" is on (⌘[).
+    private var historyBar: some View {
+        HStack {
+            Button {
+                selectedRideIDs = []
+            } label: {
+                Label("Back to History", systemImage: "chevron.left")
             }
             .buttonStyle(.glass)
             .keyboardShortcut("[", modifiers: .command)

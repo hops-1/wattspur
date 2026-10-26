@@ -481,7 +481,8 @@ struct RideListView: View {
         withAnimation(.snappy) {
             similarFilter = SimilarRidesFilter(referenceID: ride.id, threshold: RouteSimilarity.clampedThreshold(similarDefault))
         }
-        selection = [ride.id]
+        // No ride selected: the right side shows the history of the route (B-120).
+        selection = []
     }
 
     private func refreshSimilar() {
