@@ -92,9 +92,17 @@ final class RouteSimilarityStore {
         func count(in routeID: UUID) -> Int { routeOfRide.values.filter { $0 == routeID }.count }
     }
 
+    /// New rides that landed on a saved route since the app started (shown once, after an import).
+    struct RouteJoin: Equatable, Identifiable {
+        let id = UUID()
+        var routeID: UUID
+        var rideIDs: [UUID]
+    }
+
     private(set) var outcome: Outcome?
     private(set) var isSearching = false
     private(set) var routes: RouteOverview?
+    private(set) var joined: RouteJoin?
 
     /// The routes of all rides that count, built once per state of the library.
     private struct Built: Sendable {
@@ -107,6 +115,12 @@ final class RouteSimilarityStore {
     @ObservationIgnored private var running: Task<Void, Never>?
     @ObservationIgnored private var routesKey: Int?
     @ObservationIgnored private var routesRunning: Task<Void, Never>?
+    /// Rides imported before this do not count as new.
+    @ObservationIgnored private let startedAt = Date.now
+    @ObservationIgnored private var notified = Set<UUID>()
+    /// The saved routes of the last computation (id, threshold, direction): a route that was just
+    /// saved or changed does not announce the rides it now takes in.
+    @ObservationIgnored private var knownRoutes = Set<String>()
 
     /// The index for the current rides; builds it in the background unless it is there already.
     private func built(for rides: [Ride]) -> (key: Int, task: Task<Built, Never>) {
@@ -177,6 +191,8 @@ final class RouteSimilarityStore {
         routesKey = key
         routesRunning?.cancel()
         let specs = groups.map(\.spec)
+        let routeKeys = Dictionary(uniqueKeysWithValues: groups.map { ($0.id, "\($0.id)/\($0.threshold)/\($0.includeReverse)") })
+        let fresh = Set(rides.filter { $0.importedAt >= startedAt }.map(\.id))
         let build = built(for: rides)
         routesRunning = Task {
             let built = await build.task.value
@@ -188,8 +204,36 @@ final class RouteSimilarityStore {
                                      routeOfRide: routeOfRide)
             }.value
             guard !Task.isCancelled else { return }
+            let previous = routes?.routeOfRide ?? [:]
+            let newcomers = overview.routeOfRide.filter { ride, route in
+                fresh.contains(ride) && previous[ride] == nil && !notified.contains(ride)
+                    && routeKeys[route].map(knownRoutes.contains) == true
+            }
             routes = overview
+            knownRoutes = Set(routeKeys.values)
+            if !newcomers.isEmpty {
+                notified.formUnion(newcomers.keys)
+                // Several routes at once: the one with most new rides.
+                let byRoute = Dictionary(grouping: newcomers, by: \.value)
+                if let top = byRoute.max(by: { $0.value.count < $1.value.count }) {
+                    var ids = top.value.map(\.key)
+                    if let old = joined, old.routeID == top.key { ids += old.rideIDs }
+                    joined = RouteJoin(routeID: top.key, rideIDs: ids)
+                }
+            }
         }
+    }
+
+    func dismissJoin() { joined = nil }
+
+    /// How many other rides are on the route of a ride at `threshold`, from the index of the list.
+    /// `nil` while the index is not there yet.
+    func countSimilar(to rideID: UUID, threshold: Double) async -> Int? {
+        guard let build else { return nil }
+        let built = await build.task.value
+        return await Task.detached(priority: .userInitiated) {
+            built.index.contains(rideID) ? built.index.similar(to: rideID, threshold: threshold).count : nil
+        }.value
     }
 
     /// How many rides would be on a route at this similarity (for the dialog that saves it). Does

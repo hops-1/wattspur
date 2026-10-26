@@ -195,6 +195,9 @@ struct ContentView: View {
     /// Record, bike-hint and bike-assignment notices over the layout.
     private var notices: some View {
         layout
+            .overlay(alignment: .bottom) {
+                RouteJoinNoticeHost(onShow: showRoute)
+            }
             .overlay(alignment: .top) {
                 if let notice = recordNotice {
                     RecordNoticeView(notice: notice) {
@@ -361,6 +364,8 @@ struct ContentView: View {
                     withAnimation(.snappy) {
                         similarFilter = SimilarRidesFilter(referenceID: id, threshold: RouteSimilarity.clampedThreshold(similarThreshold))
                     }
+                } onShowRoute: { routeID in
+                    if let group = sharedLibrary.routeGroups().first(where: { $0.id == routeID }) { showRoute(group) }
                 }
             }
         } else if comparing && RideComparison.canCompare(count: selectedRideIDs.count) {
@@ -417,6 +422,15 @@ struct ContentView: View {
         }
         .padding(.horizontal, 28)
         .padding(.top, 14)
+    }
+
+    /// The rides of a saved route in the list, with its history on the right (B-121).
+    private func showRoute(_ group: RouteGroup) {
+        section = .rides
+        selectedRideIDs = []
+        withAnimation(.snappy) {
+            similarFilter = SimilarRidesFilter(routeID: group.id, threshold: group.threshold, includeReverse: group.includeReverse)
+        }
     }
 
     private func checkRecords() {

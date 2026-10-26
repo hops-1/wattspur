@@ -11,20 +11,24 @@ struct RideDetailView: View {
     var onShowRecords: () -> Void = {}
     /// Lists the rides on this ride's route (B-118).
     var onShowSimilar: () -> Void = {}
+    /// Lists the rides of the saved route this ride is on (B-121).
+    var onShowRoute: (UUID) -> Void = { _ in }
     @Query private var rides: [Ride]
 
     init(rideID: UUID, onSplit: @escaping ([UUID]) -> Void = { _ in }, onShowRecords: @escaping () -> Void = {},
-         onShowSimilar: @escaping () -> Void = {}) {
+         onShowSimilar: @escaping () -> Void = {}, onShowRoute: @escaping (UUID) -> Void = { _ in }) {
         self.rideID = rideID
         self.onSplit = onSplit
         self.onShowRecords = onShowRecords
         self.onShowSimilar = onShowSimilar
+        self.onShowRoute = onShowRoute
         _rides = Query(filter: #Predicate<Ride> { $0.id == rideID })
     }
 
     var body: some View {
         if let ride = rides.first {
-            RideDetailContent(ride: ride, onSplit: onSplit, onShowRecords: onShowRecords, onShowSimilar: onShowSimilar)
+            RideDetailContent(ride: ride, onSplit: onSplit, onShowRecords: onShowRecords, onShowSimilar: onShowSimilar,
+                              onShowRoute: onShowRoute)
         } else {
             ContentUnavailableView("Select a ride", systemImage: "bicycle")
         }
@@ -36,6 +40,7 @@ private struct RideDetailContent: View {
     let onSplit: ([UUID]) -> Void
     let onShowRecords: () -> Void
     let onShowSimilar: () -> Void
+    let onShowRoute: (UUID) -> Void
     /// All rides that count, to find the records this ride holds (ADV-R2).
     @Query(filter: Ride.listedPredicate)
     private var listedRides: [Ride]
@@ -46,7 +51,13 @@ private struct RideDetailContent: View {
     @Query private var riders: [Rider]
     private var calories: CalorieModel { CalorieModel(mode: calorieMode, rider: riders.first) }
     @Environment(NewPathsStore.self) private var newPaths
+    @Environment(RouteSimilarityStore.self) private var similarity
     @Environment(RideLibrary.self) private var sharedLibrary
+    /// The saved routes (B-121) and where the similarity search of a new filter starts (SET).
+    @Query private var routeGroups: [RouteGroup]
+    @AppStorage(SettingsKey.similarRoutesThreshold) private var similarDefault = RouteSimilarity.defaultThreshold
+    /// Other rides on this ride's route at that similarity; `nil` until the index is there.
+    @State private var similarCount: Int?
     @State private var route: [RoutePoint] = []
     @State private var points: [ChartPoint] = []
     /// The same series over the time since the start (B-065).
@@ -101,6 +112,24 @@ private struct RideDetailContent: View {
 }
 
 extension RideDetailContent {
+    struct SimilarCountKey: Hashable {
+        var ride: UUID
+        var ready: Bool
+    }
+
+    /// "Route: Pendeln" when the ride is on a saved route; a click lists the rides on it (B-121).
+    @ViewBuilder
+    private var routeLine: some View {
+        if let routeID = similarity.routes?.routeOfRide[ride.id], let group = routeGroups.first(where: { $0.id == routeID }) {
+            Button { onShowRoute(group.id) } label: {
+                Label { Text("Route: \(group.name)") } icon: { Image(systemName: "point.3.connected.trianglepath.dotted") }
+            }
+            .buttonStyle(.plain)
+            .foregroundStyle(Color.accentColor)
+            .help(Text("Show the rides on this route in the list"))
+        }
+    }
+
     /// The map is a third of the window, between 200 and 340 points, so the text below keeps room.
     static func mapHeight(forWindow height: CGFloat) -> CGFloat {
         min(340, max(200, height * 0.36))
@@ -122,10 +151,20 @@ extension RideDetailContent {
                 .disabled(route.isEmpty)
                 .help(Text("Save the track for komoot, a navigation device or another app"))
                 // The rides on the same route (B-118, ROUTE-02).
-                Button("Similar Rides", systemImage: "point.3.connected.trianglepath.dotted", action: onShowSimilar)
+                Button(action: onShowSimilar) {
+                    Label {
+                        if let similarCount, similarCount > 0 { Text("Similar Rides (\(similarCount))") } else { Text("Similar Rides") }
+                    } icon: {
+                        Image(systemName: "point.3.connected.trianglepath.dotted")
+                    }
+                }
                     .buttonStyle(.glass)
                     .disabled(!SimilarRidesFilter.canStart(from: ride))
                     .help(Text("Show the rides on this route in the list"))
+                    .task(id: SimilarCountKey(ride: ride.id, ready: similarity.routes != nil)) {
+                        similarCount = await similarity.countSimilar(
+                            to: ride.id, threshold: RouteSimilarity.clampedThreshold(similarDefault))
+                    }
             }
             HStack(alignment: .top, spacing: 16) {
                 VStack(alignment: .leading, spacing: 4) {
@@ -139,6 +178,7 @@ extension RideDetailContent {
             }
             // Where a GPX ride comes from and why its totals are estimated (B-145).
             RideSourceLine(ride: ride)
+            routeLine
 
             RideMapView(route: route, mapType: mapType, joins: joins, newStretches: newPaths.result(for: ride)?.stretches ?? [])
                 .frame(height: mapHeight)
