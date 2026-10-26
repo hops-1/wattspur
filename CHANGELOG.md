@@ -9,6 +9,7 @@ Every DMG handed out to testers corresponds to one entry below.
 
 ### Added
 
+- **Help menu:** *Help* now opens the handbook online (⌘?, in the language of the app), the chapters on importing and on questions and troubleshooting, and the release notes. The empty ride list links to the export guide (B-084).
 - **Library backup:** **File › Library Backup…** saves the whole library (rides, bikes, goals, notes) as a folder and restores it from one. A backup is made while the app runs; a restore replaces the library the next time you open Wattspur and keeps the old library in a folder beside it. After the restart a note says which backup came back (P-22).
 
 ## [1.7.0] – 2026-10-26

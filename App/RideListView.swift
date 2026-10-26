@@ -202,6 +202,8 @@ struct RideListView: View {
                     Text("Drop FIT files exported from the Bosch eBike Flow app here – or GPX files from other bikes and bike computers.")
                 } actions: {
                     Button("Import Rides…") { showingImporter = true }
+                    Link("How to Export from the Flow App", destination: HelpLinks.url(.importing))
+                        .font(.callout)
                 }
             }
         }

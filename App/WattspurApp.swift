@@ -84,7 +84,13 @@ struct WattspurApp: App {
                 Button("Check for Updates…") { Task { await updates.checkManually() } }
                     .disabled(updates.isChecking)
             }
-            CommandGroup(after: .help) {
+            CommandGroup(replacing: .help) {
+                Link("Wattspur Handbook", destination: HelpLinks.url(.handbook))
+                    .keyboardShortcut("?", modifiers: .command)
+                Link("Importing Rides", destination: HelpLinks.url(.importing))
+                Link("Questions and Troubleshooting", destination: HelpLinks.url(.faq))
+                Link("Release Notes", destination: HelpLinks.releases)
+                Divider()
                 Button("Create Diagnostics…") { openWindow(id: "diagnostics") }
             }
             CommandGroup(after: .importExport) {

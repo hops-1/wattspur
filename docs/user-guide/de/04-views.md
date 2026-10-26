@@ -116,6 +116,7 @@ Gelöschte Fahrten bleiben 30 Tage im Papierkorb. **Wiederherstellen** holt eine
 | ⌃⌘S | Seitenleiste verkleinern oder erweitern |
 | Rückschritt, ⌘Z | In den Papierkorb, widerrufen |
 | ⌘, | Einstellungen |
+| ⌘? | Dieses Handbuch öffnen (Menü Hilfe) |
 
 ## Bedienungshilfen
 - Jede Kennzahl und jeder Knopf hat eine VoiceOver-Beschriftung.
