@@ -19,7 +19,7 @@ Pfeile zeigen die erlaubte Richtung der Abhängigkeit; zurück darf es nie gehen
 ## Regeln
 
 1. **`WattspurCore` kennt weder SwiftData noch SwiftUI, AppKit oder MapKit.** Es rechnet auf Werttypen (`RideFigures`, `HighlightRide`, `MapRide`, `ParsedRide`, `RideSample`). Der Compiler erzwingt das für Module, die es nicht einbinden; `scripts/check-architecture.sh` prüft, dass keine solche Import-Zeile hineinkommt (läuft in der CI und in `scripts/ci-local.sh`).
-2. **`WattspurKit` behält seinen Namen und alle `@Model`-Klassen** (`Ride`, `Bike`, `Rider`, `Goal`, `SourceFile`, `ImportRecord`). Ein Umzug der Klassen in ein anderes Modul könnte bestehende Bibliotheken unlesbar machen.
+2. **`WattspurKit` behält seinen Namen und alle `@Model`-Klassen** (`Ride`, `Bike`, `Rider`, `Goal`, `RouteGroup`, `SourceFile`, `ImportRecord`). Ein Umzug der Klassen in ein anderes Modul könnte bestehende Bibliotheken unlesbar machen.
 3. **Die Brücke vom Modell zu den Werttypen steht an einem Ort:** `Store/RideBridges.swift` (und `Bike+Statistics.swift`). Neue Umrechnungen von `Ride` in einen reinen Typ kommen dorthin, nicht in einen Core-Ordner.
 4. **Views schreiben nur über `RideLibrary`.** `@Query` zum Lesen ist erlaubt, `modelContext.insert/delete/save` in einer View nicht. Ziele, Bikes, Papierkorb, Zusammenführen: immer eine Methode der Bibliothek.
 5. **Eine Bibliothek für die ganze App.** `WattspurApp` erzeugt sie und gibt sie in die Environment (`@Environment(RideLibrary.self)`). Das Rückgängig-Machen gehört zum Fenster: `library.using(undoManager)`.
@@ -32,7 +32,7 @@ Pfeile zeigen die erlaubte Richtung der Abhängigkeit; zurück darf es nie gehen
 |---|---|
 | `FIT/` | Container-Decoder, Basistypen, Profil, Anonymisierer |
 | `Import/` | `RideImporter` (Protokoll), FIT- und GPX-Importer, `ImportResult` |
-| `Ride/` | `ParsedRide`, Samples, Zusammenführen, Reihen für Diagramme, GPX-Schreiber, Kalorienmodell, Routen, Routenähnlichkeit (`RouteSimilarity`, `RouteSignature`, `RouteIndex`), beste Minute (`PeakPower`) |
+| `Ride/` | `ParsedRide`, Samples, Zusammenführen, Reihen für Diagramme, GPX-Schreiber, Kalorienmodell, Routen, Routenähnlichkeit (`RouteSimilarity`, `RouteSignature`, `RouteIndex`), gespeicherte Strecken (`RouteGrouping`: Mitgliedschaft und Vorschläge), beste Minute (`PeakPower`) |
 | `Analysis/` | Summen und Trends, Rekorde, Vergleich, Karte (Filter, Dichte), neue Wege, Verlauf einer Strecke (`RouteHistory`) |
 | `Library/` | Reine Typen rund um die Bibliothek: Filter, Quellen, Bike-Statistik, Duplikat-Fakten |
 | `Support/` | Diagnosebericht |
@@ -43,12 +43,12 @@ Pfeile zeigen die erlaubte Richtung der Abhängigkeit; zurück darf es nie gehen
 |---|---|
 | `Store/Models.swift`, `ImportRecord.swift` | SwiftData-Modelle |
 | `Store/RideLibrary.swift` | Die eine Tür für die App; reicht an die Dienste weiter (Übergangsfassade) |
-| `Store/Services/` | `ImportService`, `RideService`, `MergeService`, `BikeService`, `ImportLogService`, `GoalService`, dazu `LibraryService` (gemeinsame Umgebung und Rückgängig) |
+| `Store/Services/` | `ImportService`, `RideService`, `MergeService`, `BikeService`, `ImportLogService`, `GoalService`, `RouteGroupService`, dazu `LibraryService` (gemeinsame Umgebung und Rückgängig) |
 | `Store/RideBridges.swift` | Modell → Werttypen |
 | `Store/LibraryMaintenance.swift` | Aufräumen nach dem ersten Fenster |
 | `Import/FolderImport.swift` | Überwachter Ordner |
 
-**Dienste:** zustandslose Structs, die aus einer `LibraryEnvironment` (Kontext, Importer, UndoManager, Standard-Bikename) gebaut werden. Sie nutzen sich nur in eine Richtung: Import → Zusammenführen → Bikes. `RideService`, `ImportLogService` und `GoalService` stehen für sich.
+**Dienste:** zustandslose Structs, die aus einer `LibraryEnvironment` (Kontext, Importer, UndoManager, Standard-Bikename) gebaut werden. Sie nutzen sich nur in eine Richtung: Import → Zusammenführen → Bikes. `RideService`, `ImportLogService`, `GoalService` und `RouteGroupService` stehen für sich.
 
 ## App
 

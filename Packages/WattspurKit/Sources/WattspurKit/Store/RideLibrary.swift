@@ -44,6 +44,7 @@ public final class RideLibrary {
     private var bikes: BikeService { BikeService(env) }
     private var log: ImportLogService { ImportLogService(env) }
     private var goals: GoalService { GoalService(env) }
+    private var groupService: RouteGroupService { RouteGroupService(env) }
 
     // MARK: - Import
 
@@ -231,6 +232,27 @@ public final class RideLibrary {
     }
 
     public func latestImportDate() -> Date? { log.latestImportDate() }
+
+    // MARK: - Saved routes (B-121)
+
+    /// The saved routes, oldest first.
+    public func routeGroups() -> [RouteGroup] { groupService.groups() }
+
+    /// Saves the route of `ride` under `name`; `nil` if the name is empty or the ride has no usable route.
+    @discardableResult
+    public func addRouteGroup(from ride: Ride, name: String, threshold: Double = RouteSimilarity.defaultThreshold,
+                              includeReverse: Bool = false) -> RouteGroup? {
+        groupService.create(from: ride, name: name, threshold: threshold, includeReverse: includeReverse)
+    }
+
+    public func rename(_ group: RouteGroup, to name: String) { groupService.rename(group, to: name) }
+
+    public func update(_ group: RouteGroup, threshold: Double, includeReverse: Bool) {
+        groupService.update(group, threshold: threshold, includeReverse: includeReverse)
+    }
+
+    /// Dissolves a saved route; its rides stay.
+    public func dissolve(_ group: RouteGroup) { groupService.dissolve(group) }
 
     // MARK: - Goals and saving (B-053)
 
