@@ -169,7 +169,7 @@ Quelle: Wunsch von Nils (22.10.2026): „In der Fahrtenliste gleiche bzw. ähnli
 | ID | Anforderung | Prio |
 |---|---|---|
 | ROUTE-01 | Ähnlichkeit zweier Fahrten: Anteil der Route, der höchstens 50 m von der anderen Route entfernt liegt, **in beide Richtungen** geprüft (der kleinere Wert zählt), damit eine kurze Fahrt nicht als „ähnlich“ zu einer langen gilt, die sie nur enthält. Grundlage sind die vereinfachten Routen aus B-104. Die Richtung zählt: Gleiche Strecke heißt gleiche Fahrtrichtung (Start- und Zielbereich passen zueinander) | S |
-| ROUTE-02 | Schwellwert: Standard ≥ 95 %, per Regler zwischen 80 % und 99 % einstellbar (in der Ansicht und in den Einstellungen als Standard) | S |
+| ROUTE-02 | Schwellwert: Standard ≥ 90 % (am 26.10.2026 von 95 % gesenkt: an echten Pendelstrecken findet 90 % mehr und der Regler steht in der Mitte), per Regler zwischen 80 % und 99 % einstellbar (in der Ansicht und in den Einstellungen als Standard) | S |
 | ROUTE-03 | „Ähnliche Fahrten zeigen“: Rechtsklick auf eine Fahrt (und im Tour-Detail) filtert die Liste auf ähnliche Fahrten, sortiert nach Ähnlichkeit (in % je Zeile). Ein Chip „Ähnlich wie: ‹Name› (n) ✕“ zeigt den Filter wie beim Zeitraum; ✕ hebt ihn auf | S |
 | ROUTE-04 | Schalter „Auch Gegenrichtung“: nimmt Fahrten auf derselben Strecke in umgekehrter Richtung dazu (z. B. Rückweg von der Arbeit), in der Liste mit Richtungs-Symbol gekennzeichnet | S |
 | ROUTE-05 | Aus den Treffern 2–4 Fahrten markieren und im bestehenden Tourenvergleich (CMP) öffnen | S |
@@ -518,7 +518,7 @@ Auf iOS als Tab-Leiste mit Navigation-Stack.
 ### 10.12 Ähnliche Strecken und weitere Rekorde (22.10.2026)
 | Thema | Entscheidung | Auswirkung |
 |---|---|---|
-| Ähnlichkeit | Anteil der Route innerhalb 50 m der anderen, in beide Richtungen; Standard ≥ 95 %, Regler 80–99 % | ROUTE-01, ROUTE-02 |
+| Ähnlichkeit | Anteil der Route innerhalb 50 m der anderen, in beide Richtungen; Standard ≥ 90 %, Regler 80–99 % | ROUTE-01, ROUTE-02 |
 | Richtung | getrennt; Schalter „Auch Gegenrichtung“ | ROUTE-04 |
 | Nutzung | „Ähnliche Fahrten zeigen“ mit Filter-Chip, Vergleich bis 4, Verlauf über alle Treffer, automatische Gruppen | ROUTE-03, ROUTE-05 bis ROUTE-07 |
 | Weitere Rekorde | Max-Leistung, Max-Trittfrequenz, Max-Geschwindigkeit (Bosch-Maximum) und beste 1-Minuten-Leistung | ADV-R3 |
