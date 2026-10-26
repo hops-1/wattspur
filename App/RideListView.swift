@@ -608,7 +608,6 @@ struct RideRow: View {
                         .help(Text("Holds a record"))
                         .accessibilityLabel(Text("Holds a record"))
                 }
-                if let similarity { SimilarityTag(badge: similarity) }
                 Spacer()
                 Text(RideFormat.relativeDate(ride.startDate, timeZone: ride.timeZone))
                     .font(.caption)
@@ -619,7 +618,11 @@ struct RideRow: View {
                     .font(.subheadline)
                     .monospacedDigit()
                     .foregroundStyle(.secondary)
+                    .lineLimit(1)
+                    .layoutPriority(1)
                 Spacer(minLength: 4)
+                // Under the name, so a long name or the badges of a merged ride keep their room.
+                if let similarity { SimilarityTag(badge: similarity) }
                 if let badge = ride.sourceBadge { SourcePill(badge: badge) }
                 if showsBike, let bike = ride.bike {
                     RideRowBike(bike: bike)

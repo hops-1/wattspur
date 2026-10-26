@@ -11,8 +11,8 @@ struct SimilarRidesFilter: Equatable {
 
         var label: LocalizedStringKey {
             switch self {
-            case .similarity: "Most similar first"
-            case .date: "Newest first"
+            case .similarity: "Most similar"
+            case .date: "Newest"
             }
         }
     }
@@ -183,7 +183,9 @@ struct SimilarRidesBar: View {
 
             HStack(spacing: 8) {
                 Toggle(isOn: $filter.includeReverse) {
-                    Label("Opposite direction too", systemImage: "arrow.left.arrow.right")
+                    Label("Both directions", systemImage: "arrow.left.arrow.right")
+                        .lineLimit(1)
+                        .fixedSize()
                 }
                 .toggleStyle(.checkbox)
                 .help(Text("Also show rides on this route the other way round"))
@@ -221,7 +223,7 @@ struct SimilarityTag: View {
         Group {
             switch badge {
             case .reference:
-                Text("Reference")
+                Image(systemName: "scope")
             case .match(let score, let reverse):
                 HStack(spacing: 3) {
                     Text(verbatim: score.formatted(.percent.precision(.fractionLength(0)))).monospacedDigit()
@@ -230,10 +232,13 @@ struct SimilarityTag: View {
             }
         }
         .font(.caption2.weight(.semibold))
+        .lineLimit(1)
+        .fixedSize()
         .padding(.horizontal, 5)
         .padding(.vertical, 1)
         .overlay(RoundedRectangle(cornerRadius: 4).strokeBorder(.secondary, lineWidth: 1))
         .foregroundStyle(.secondary)
+        .help(label)
         .accessibilityElement(children: .ignore)
         .accessibilityLabel(label)
     }
