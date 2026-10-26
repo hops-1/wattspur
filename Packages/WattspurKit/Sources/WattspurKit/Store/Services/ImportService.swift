@@ -194,6 +194,45 @@ struct ImportService: LibraryService {
         return outdated.count
     }
 
+    /// Calculates the best minute (B-122) of every ride that has none or one from an older
+    /// `PeakPower.version`, i.e. every ride imported before 1.7. Like the overview routes: decoding
+    /// and calculating run off the main actor in batches, each batch is saved, so an interrupted
+    /// run goes on where it stopped. Returns the number of rides.
+    @discardableResult
+    func preparePeakPower(batchSize: Int = 20,
+                          progress: (_ done: Int, _ total: Int) -> Void = { _, _ in }) async -> Int {
+        let version = PeakPower.version
+        let descriptor = FetchDescriptor<Ride>(predicate: #Predicate { $0.peakPowerVersion != version })
+        let outdated = (try? context.fetch(descriptor)) ?? []
+        guard !outdated.isEmpty else { return 0 }
+        // Parts first: a merged ride takes the best of its parts.
+        let single = outdated.filter { !$0.isMerged }
+        let merged = outdated.filter(\.isMerged)
+        var done = 0
+        progress(0, outdated.count)
+        for start in stride(from: 0, to: single.count, by: max(1, batchSize)) {
+            let batch = Array(single[start..<min(start + max(1, batchSize), single.count)])
+            let inputs = batch.map(\.samplesData)
+            let values = await Task.detached(priority: .utility) {
+                inputs.map { data -> Int? in
+                    guard let data, let samples = try? PropertyListDecoder().decode([RideSample].self, from: data) else { return nil }
+                    return PeakPower.bestAverage(of: samples)
+                }
+            }.value
+            // The ride may have been deleted or updated meanwhile.
+            for (ride, value) in zip(batch, values) where !ride.isDeleted && ride.needsPeakPower {
+                ride.setPeakPower(value)
+            }
+            try? context.save()
+            done += batch.count
+            progress(done, outdated.count)
+        }
+        for ride in merged where !ride.isDeleted && ride.needsPeakPower { ride.updatePeakPowerFromParts() }
+        try? context.save()
+        progress(outdated.count, outdated.count)
+        return outdated.count
+    }
+
     /// Imports the anonymized sample ride (V-05) under the given name and marks it
     /// as a sample. If one is already there, it is returned (and restored from the trash).
     @discardableResult

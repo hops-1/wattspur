@@ -176,7 +176,7 @@ extension RideDetailContent {
             }
 
             DisclosureGroup("Details", isExpanded: $showDetails) {
-                DetailsGrid(ride: ride)
+                DetailsGrid(ride: ride, records: Set(held.map(\.kind)))
                     .padding(.top, 10)
                     .frame(maxWidth: .infinity, alignment: .leading)
             }
@@ -305,6 +305,8 @@ struct KeyFiguresGrid: View {
 /// Additional figures (TOUR-05).
 struct DetailsGrid: View {
     let ride: Ride
+    /// Records the ride holds; their figures get a badge (ADV-R2, B-122).
+    var records: Set<RecordKind> = []
 
     private var elevationRange: String {
         guard let lo = ride.minAltitude, let hi = ride.maxAltitude else { return "–" }
@@ -317,13 +319,18 @@ struct DetailsGrid: View {
                 Detail("Total time", RideFormat.duration(ride.elapsedTime))
                 Detail("Paused", RideFormat.duration(ride.pausedTime))
                 Detail("Descent", "\(ride.totalDescent.map(String.init) ?? "–") m")
-                Detail("Max speed", RideFormat.speed(ride.maxSpeed))
+                Detail("Max speed", RideFormat.speed(ride.maxSpeed), isRecord: records.contains(.highestSpeed))
             }
             GridRow {
-                Detail("Max power", "\(ride.maxPower.map(String.init) ?? "–") W")
-                Detail("Max cadence", "\(ride.maxCadence.map(String.init) ?? "–") \(String(localized: "rpm"))")
+                Detail("Max power", "\(ride.maxPower.map(String.init) ?? "–") W", isRecord: records.contains(.highestPower))
+                Detail("Max cadence", "\(ride.maxCadence.map(String.init) ?? "–") \(String(localized: "rpm"))",
+                       isRecord: records.contains(.highestCadence))
                 Detail("Work", ride.hasPowerData ? "\(Int(ride.workKilojoules.rounded())) kJ" : "–")
                 Detail("Elevation min–max", elevationRange)
+            }
+            GridRow {
+                Detail("Best 1-minute power", ride.bestPower1Min.map { "\($0) W" } ?? "–",
+                       isRecord: records.contains(.bestPower1Min))
             }
         }
     }
@@ -332,18 +339,40 @@ struct DetailsGrid: View {
 private struct Detail: View {
     let label: LocalizedStringKey
     let value: String
+    var isRecord = false
 
-    init(_ label: LocalizedStringKey, _ value: String) {
+    init(_ label: LocalizedStringKey, _ value: String, isRecord: Bool = false) {
         self.label = label
         self.value = value
+        self.isRecord = isRecord
     }
 
     var body: some View {
         VStack(alignment: .leading, spacing: 2) {
-            Text(label).font(.caption).foregroundStyle(.secondary)
+            HStack(spacing: 4) {
+                Text(label)
+                if isRecord { RecordTag() }
+            }
+            .font(.caption)
+            .foregroundStyle(.secondary)
             Text(verbatim: value).font(.body.weight(.medium)).monospacedDigit()
         }
         .accessibilityElement(children: .combine)
+    }
+}
+
+/// "★ Record" next to a figure that is one (ADV-R2).
+private struct RecordTag: View {
+    var body: some View {
+        // Text in the primary colour, so it stays readable; the star carries the accent.
+        HStack(spacing: 3) {
+            Image(systemName: "star.fill").foregroundStyle(Color.accentColor)
+            Text("Record").foregroundStyle(.primary)
+        }
+        .font(.caption2.bold())
+        .padding(.horizontal, 6)
+        .padding(.vertical, 1)
+        .background(Color.accentColor.opacity(0.16), in: Capsule())
     }
 }
 
@@ -388,17 +417,7 @@ private struct Figure: View {
                         .help(Text(verbatim: note))
                         .accessibilityLabel(Text(verbatim: note))
                 }
-                if isRecord {
-                    // Text in the primary colour, so it stays readable; the star carries the accent.
-                    HStack(spacing: 3) {
-                        Image(systemName: "star.fill").foregroundStyle(Color.accentColor)
-                        Text("Record").foregroundStyle(.primary)
-                    }
-                    .font(.caption2.bold())
-                    .padding(.horizontal, 6)
-                    .padding(.vertical, 1)
-                    .background(Color.accentColor.opacity(0.16), in: Capsule())
-                }
+                if isRecord { RecordTag() }
             }
             .font(.subheadline)
             .foregroundStyle(.secondary)

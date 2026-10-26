@@ -160,6 +160,10 @@ public final class Ride {
     public var workKilojoules: Double = 0
     public var minAltitude: Double?
     public var maxAltitude: Double?
+    /// The best average power over one minute (B-122); `nil` without power values.
+    public var bestPower1Min: Int?
+    /// `PeakPower.version` the value was calculated with; 0 = not yet calculated.
+    public var peakPowerVersion: Int = 0
 
     /// Encoded `[RideSample]` (binary property list).
     @Attribute(.externalStorage) public var samplesData: Data?
@@ -260,6 +264,7 @@ extension Ride {
 
         setSamples(parsed.samples)
         setOverviewRoute(OverviewRoute(samples: parsed.samples))
+        setPeakPower(PeakPower.bestAverage(of: parsed.samples))
     }
 
     /// Stores the time series.
@@ -282,6 +287,24 @@ extension Ride {
     func setOverviewRoute(_ route: OverviewRoute) {
         overviewRouteData = route.isEmpty ? nil : route.encoded()
         overviewRouteVersion = OverviewRoute.version
+    }
+
+    /// `true` while the best minute is not calculated or from an older version.
+    public var needsPeakPower: Bool { peakPowerVersion != PeakPower.version }
+
+    func setPeakPower(_ value: Int?) {
+        bestPower1Min = value
+        peakPowerVersion = PeakPower.version
+    }
+
+    /// A merged ride's best minute: the best of its parts, none across the seam. Parts without a
+    /// current value get one first.
+    func updatePeakPowerFromParts() {
+        let values = sortedParts.map { part -> Int? in
+            if part.needsPeakPower { part.setPeakPower(PeakPower.bestAverage(of: part.samples)) }
+            return part.bestPower1Min
+        }
+        setPeakPower(values.compactMap { $0 }.max())
     }
 
     /// A merged ride's route: its parts' routes one after another (B-095), so the

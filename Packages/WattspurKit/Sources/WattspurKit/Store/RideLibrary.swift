@@ -89,6 +89,13 @@ public final class RideLibrary {
         await imports.prepareOverviewRoutes(batchSize: batchSize, progress: progress)
     }
 
+    /// Calculates the best minute of the rides that have none yet (B-122), in batches.
+    @discardableResult
+    public func preparePeakPower(batchSize: Int = 20,
+                                 progress: (_ done: Int, _ total: Int) -> Void = { _, _ in }) async -> Int {
+        await imports.preparePeakPower(batchSize: batchSize, progress: progress)
+    }
+
     /// Imports the anonymized sample ride (V-05) under the given name and marks it
     /// as a sample. If one is already there, it is returned (and restored from the trash).
     @discardableResult

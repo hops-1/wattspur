@@ -7,6 +7,9 @@ Every DMG handed out to testers corresponds to one entry below.
 
 ## [Unreleased]
 
+### Added
+- **More records:** top speed, highest power, highest cadence and **best 1-minute power** (the highest average power you held for 60 seconds without a break) join the records in Highlights. They have no minimum distance. The values come from the file's maximum; power, cadence and the best minute need a file with power values, so many GPX files do not count for them. The ride detail marks a record in Details, and the notice after an import names the new ones too. Rides you already have get their best minute in the background after the update; your library is not changed otherwise (B-122, ADV-R3).
+
 ### Changed
 - **Bike symbol:** in the ride list, menus, filters and the comparison, the small bike symbol is drawn larger, with a stronger line and tint, so the rider and the wheels are easier to see (B-174).
 - Internal: the groundwork for similar routes (B-116): a route can be compared with others (the share that lies within 50 m of the other route, both ways, and whether it runs the same way), and an index finds the similar rides among a thousand in well under a second. Nothing to see yet; the list gets its filter in a later step.

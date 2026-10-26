@@ -25,9 +25,12 @@ struct HighlightsTests {
     }
 
     func ride(_ start: Date, km: Double, minutes: Double = 60, ascent: Int? = nil, speed: Double? = nil,
-              power: Int? = nil, zone: TimeZone = berlin) -> HighlightRide {
+              power: Int? = nil, zone: TimeZone = berlin, maxSpeed: Double? = nil, maxPower: Int? = nil,
+              maxCadence: Int? = nil, bestMinute: Int? = nil) -> HighlightRide {
         HighlightRide(figures: RideFigures(startDate: start, distance: km * 1000, timerTime: minutes * 60,
-                                           totalAscent: ascent, averageSpeed: speed, averagePower: power),
+                                           totalAscent: ascent, averageSpeed: speed, averagePower: power,
+                                           maxSpeed: maxSpeed, maxPower: maxPower, maxCadence: maxCadence,
+                                           bestPower1Min: bestMinute),
                       timeZone: zone)
     }
 
@@ -35,9 +38,12 @@ struct HighlightsTests {
 
     @Test("Each record comes from the best ride; ties stay with the earlier ride")
     func records() {
-        let early = ride(date(2026, 5, 2), km: 101.6, minutes: 336, ascent: 420, speed: 5.0, power: 140)
-        let hilly = ride(date(2026, 8, 16), km: 48.2, minutes: 150, ascent: 612, speed: 5.4, power: 150)
-        let fast = ride(date(2026, 10, 19), km: 19.5, minutes: 43, ascent: 166, speed: 7.58, power: 168)
+        let early = ride(date(2026, 5, 2), km: 101.6, minutes: 336, ascent: 420, speed: 5.0, power: 140,
+                         maxSpeed: 12, maxPower: 400, maxCadence: 90, bestMinute: 300)
+        let hilly = ride(date(2026, 8, 16), km: 48.2, minutes: 150, ascent: 612, speed: 5.4, power: 150,
+                         maxSpeed: 13, maxPower: 380, maxCadence: 88, bestMinute: 310)
+        let fast = ride(date(2026, 10, 19), km: 19.5, minutes: 43, ascent: 166, speed: 7.58, power: 168,
+                        maxSpeed: 15.1, maxPower: 460, maxCadence: 82, bestMinute: 350)
         let sameLength = ride(date(2026, 10, 20), km: 101.6, minutes: 300)
         let records = RideRecords.records([fast, sameLength, hilly, early], calendar: calendar)
         let byKind = Dictionary(uniqueKeysWithValues: records.map { ($0.kind, $0) })
@@ -48,7 +54,43 @@ struct HighlightsTests {
         #expect(byKind[.mostAscent]?.value == 612)
         #expect(byKind[.highestAverageSpeed]?.rideIDs == [fast.id])
         #expect(byKind[.highestAveragePower]?.value == 168)
+        #expect(byKind[.highestSpeed]?.rideIDs == [fast.id])
+        #expect(byKind[.highestPower]?.value == 460)
+        #expect(byKind[.highestCadence]?.rideIDs == [early.id])
+        #expect(byKind[.bestPower1Min]?.value == 350)
         #expect(byKind[.longestStreak]?.value == 2)
+    }
+
+    @Test("Peaks have no minimum distance, and a ride without a peak sets no record for it")
+    func peaks() {
+        // A short ride with a high peak sets the peak records, but no average record (under 5 km).
+        let sprint = ride(date(2026, 6, 1), km: 2, minutes: 5, speed: 6, power: 200,
+                          maxSpeed: 14, maxPower: 700, maxCadence: 110, bestMinute: 420)
+        let records = RideRecords.records([sprint], calendar: calendar)
+        let kinds = Set(records.map(\.kind))
+        #expect(kinds.isSuperset(of: [.highestSpeed, .highestPower, .highestCadence, .bestPower1Min]))
+        #expect(!kinds.contains(.highestAverageSpeed))
+
+        // A GPX ride has a speed but no power values (Requirements 10.19).
+        let gpx = ride(date(2026, 6, 2), km: 30, minutes: 90, speed: 5.5, maxSpeed: 16)
+        let both = RideRecords.records([sprint, gpx], calendar: calendar)
+        #expect(both.first { $0.kind == .highestSpeed }?.rideIDs == [gpx.id])
+        #expect(both.first { $0.kind == .highestPower }?.rideIDs == [sprint.id])
+        let onlyGPX = Set(RideRecords.records([gpx], calendar: calendar).map(\.kind))
+        #expect(onlyGPX.contains(.highestSpeed) && !onlyGPX.contains(.highestPower))
+        // Zero is no record.
+        let zero = ride(date(2026, 6, 3), km: 10, maxSpeed: 0, maxPower: 0, maxCadence: 0, bestMinute: 0)
+        #expect(Set(RideRecords.records([zero], calendar: calendar).map(\.kind)).isDisjoint(with: [.highestSpeed, .highestPower, .highestCadence, .bestPower1Min]))
+    }
+
+    @Test("A new peak is announced, the first rides announce nothing")
+    func newPeak() {
+        let old = ride(date(2026, 9, 1), km: 30, minutes: 80, maxSpeed: 12, maxPower: 400, maxCadence: 90, bestMinute: 300)
+        let imported = ride(date(2026, 10, 19), km: 10, minutes: 30, maxSpeed: 12, maxPower: 450, maxCadence: 85, bestMinute: 320)
+        let breaks = RideRecords.newRecords(existing: [old], imported: [imported], calendar: calendar)
+        #expect(Set(breaks.map(\.kind)) == [.highestPower, .bestPower1Min])  // speed ties: the earlier ride keeps it
+        #expect(breaks.first { $0.kind == .highestPower }?.previousValue == 400)
+        #expect(RideRecords.newRecords(existing: [], imported: [old, imported], calendar: calendar).isEmpty)
     }
 
     @Test("Averages of rides under 5 km set no record")
