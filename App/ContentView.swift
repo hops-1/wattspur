@@ -318,7 +318,10 @@ struct ContentView: View {
     private var detail: some View {
         if section == .rides, selectedRideIDs.isEmpty, let filter = similarFilter {
             // "Similar to" without a selected ride: how the rides on the route develop (B-120).
-            RouteHistoryView(filter: filter) { selectedRideIDs = [$0] }
+            RouteHistoryView(filter: filter) { selectedRideIDs = [$0] } onAnalyze: { ids in
+                analysisSelection = Set(ids)
+                section = .analysis
+            }
         } else if section == .trash || selectedRideIDs.isEmpty {
             ContentUnavailableView {
                 Label("Select a ride", systemImage: "bicycle")

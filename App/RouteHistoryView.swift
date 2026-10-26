@@ -8,6 +8,8 @@ struct RouteHistoryView: View {
     let filter: SimilarRidesFilter
     /// A click on a point selects that ride.
     let onSelect: (UUID) -> Void
+    /// "Analyze These Rides": opens the analysis with the rides of the history.
+    let onAnalyze: ([UUID]) -> Void
 
     @Query(filter: Ride.listedPredicate) private var rides: [Ride]
     @Environment(RouteSimilarityStore.self) private var similarity
@@ -37,10 +39,18 @@ struct RouteHistoryView: View {
         let series = history.series(metric)
         return ScrollView {
             VStack(alignment: .leading, spacing: 18) {
-                VStack(alignment: .leading, spacing: 4) {
-                    Text("History").font(.largeTitle.bold())
-                    Text("\(name) · \(history.rides.count) rides")
-                        .foregroundStyle(.secondary)
+                HStack(alignment: .top, spacing: 16) {
+                    VStack(alignment: .leading, spacing: 4) {
+                        Text("History").font(.largeTitle.bold())
+                        Text("\(name) · \(history.rides.count) rides")
+                            .foregroundStyle(.secondary)
+                    }
+                    Spacer(minLength: 0)
+                    Button("Analyze These Rides", systemImage: "chart.bar") {
+                        onAnalyze(history.rides.map(\.id))
+                    }
+                    .buttonStyle(.glass)
+                    .help(Text("Open the analysis with the rides on this route"))
                 }
                 Picker("Metric", selection: $metric) {
                     ForEach(RouteHistory.Metric.allCases) { Text($0.title).tag($0) }

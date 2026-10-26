@@ -314,12 +314,13 @@ Pendelstrecken und Lieblingsrunden wiederfinden und vergleichen. Details: REQUIR
 
 ## v1.8 – Ein Bereich „Fahrten“ mit Karte (Plan 24.10.2026, von v1.5 auf v1.8 verschoben am 25.10.2026)
 
-Zuerst Artboard für B-125 auf dem Design-Canvas und Abstimmung mit Nils, dann B-125 (eventuell in zwei PRs), dann B-130, zuletzt Release 1.8.0. B-125 führt dabei die Filter von „Fahrten“ und „Karte“ zusammen, auch den Bike-Filter (B-137) und den Chip „Ähnlich wie …“ (B-118).
+Zuerst Artboard für B-125 auf dem Design-Canvas und Abstimmung mit Nils, dann B-125 (eventuell in zwei PRs), dann B-130, zuletzt Release 1.8.0. B-125 führt dabei die Filter von „Fahrten“ und „Karte“ zusammen, auch den Bike-Filter (B-137) und den Chip „Ähnlich wie …“ (B-118). B-176 (Analyse nach Strecke filtern) wird dabei mitgedacht.
 
 | # | Story | Größe | Status |
 |---|---|---|---|
 | B-125 | Ein Bereich „Fahrten“ mit Karte als Standard (Wunsch von Nils nach dem Test von v1.4, REQUIREMENTS.md 10.13): links die Liste, rechts die Karte aller Fahrten der Liste (Heatmap, Kacheln, PDF) statt der leeren Ansicht. Eine markierte Fahrt öffnet rechts ihr Tour-Detail mit „‹ Karte“ (Esc) zurück, 2–4 markierte den Vergleich wie heute. Suche und Zeitraum der Liste bestimmen die Fahrten der Karte; ein Schalter „Nur Kartenausschnitt“ beschränkt die Liste zusätzlich auf den sichtbaren Ausschnitt. „Karte“ und ⌘5 entfallen in der Seitenleiste. Zuerst Artboard und Abstimmung; | L | ☐ |
 | B-130 | Kalendertag mit Fahrten in den Highlights anklicken: „Fahrten“ zeigt nur die Fahrten dieses Tages, mit Filter-Chip „15. Okt. ✕“ in der Liste und „‹ Zurück zu Highlights“ (⌘[, siehe B-128); bei genau einer Fahrt rechts gleich ihr Tour-Detail, bei mehreren rechts die Karte dieser Fahrten (mit B-125) bzw. bis dahin die Mehrfachauswahl. ✕ am Chip zeigt wieder alle Fahrten. Eine Serie in „Rekorde“ filtert entsprechend auf ihren Zeitraum, Chip „3.–9. Okt. ✕“ (Feedback 1.4.1, Entscheidung Nils 24.10.2026) | S | ☐ |
+| B-176 | Analyse nach Strecke filtern: „Ähnlich wie …“ als Filter direkt in der Analyse (Wunsch von Nils am 26.10.2026, nach dem Test des Verlaufs). In 1.7 geht es über den Knopf „Analyze These Rides“ im Verlauf und über die markierten Treffer. Mit B-125 prüfen, ob Filter und Chip in „Fahrten“ und „Analyse“ gemeinsam gebaut werden; die Suche läuft über `RouteSimilarityStore` (B-118) | M | ☐ |
 
 ## v1.9 – Bosch-Daten (Plan 25.10.2026)
 
