@@ -32,6 +32,11 @@ struct RideListView: View {
     private var rides: [Ride]
     /// The rows show a bike symbol from two bikes on (B-136).
     @Query private var bikes: [Bike]
+    /// The saved routes (B-121).
+    @Query private var routeGroupModels: [RouteGroup]
+    private var routeGroups: [RouteGroup] { RouteGroup.sorted(routeGroupModels) }
+    /// Suggestions sent away with "Not Now" (the rides they had).
+    @AppStorage(SettingsKey.dismissedRouteSuggestions) private var dismissedRoutes = ""
     /// The bike filter of this list, remembered (B-137).
     @AppStorage(SettingsKey.bikeFilterRides) private var bikeFilterChoice: BikeFilter = .all
     private var bikeFilter: BikeFilter { scope == nil ? bikeFilterChoice.resolved(knownBikeIDs: Set(bikes.map(\.id))) : .all }
@@ -59,6 +64,10 @@ struct RideListView: View {
     @State private var trashCandidates: Set<UUID>?
     /// Rides waiting in the "Merge rides" sheet (B-095).
     @State private var mergeCandidates: MergeCandidates?
+    /// The dialog that saves a route (B-121).
+    @State private var saveRequest: SaveRouteRequest?
+    @State private var renamingRoute: RouteGroup?
+    @State private var newRouteName = ""
 
     /// Search, period filter and sort order applied (LIST-05). With "Similar to" only the rides on that
     /// route, the ride asked about first.
@@ -111,6 +120,65 @@ struct RideListView: View {
     }
 
     var body: some View {
+        listWithRoutes
+            .confirmationDialog(
+                Text("Move \(trashCandidates?.count ?? 0) rides to the trash?"),
+                isPresented: Binding(get: { trashCandidates != nil }, set: { if !$0 { trashCandidates = nil } }),
+                presenting: trashCandidates
+            ) { ids in
+                Button("Move to Trash", role: .destructive) { moveToTrash(ids) }
+                Button("Cancel", role: .cancel) { trashCandidates = nil }
+            } message: { _ in
+                Text("You can restore them from the trash for 30 days.")
+            }
+            .sheet(item: $mergeCandidates) { candidates in
+                MergeRidesSheet(rideIDs: candidates.ids, undoManager: undoManager) {
+                    selection = [$0]
+                    if let suggestion = candidates.suggestion { suggestions.dismiss(suggestion) }
+                }
+            }
+            .importFlow(flow)
+            .alert("Rename Ride", isPresented: Binding(get: { renaming != nil }, set: { if !$0 { renaming = nil } })) {
+                TextField("Name", text: $newName)
+                Button("Rename") {
+                    if let ride = renaming { library.rename(ride, to: newName) }
+                    renaming = nil
+                }
+                Button("Cancel", role: .cancel) { renaming = nil }
+            }
+    }
+
+    /// The list with its search, drop target and reactions to the saved routes. Split from `body`
+    /// so each chain of modifiers stays quick to type-check.
+    private var listWithRoutes: some View {
+        listCore
+            .onChange(of: routeGroupModels.map { "\($0.id)\($0.threshold)\($0.includeReverse)" }) {
+                // The route asked about was dissolved (also with ⌘Z of its creation).
+                if scope == nil, let id = similarFilter?.routeID, !routeGroupModels.contains(where: { $0.id == id }) {
+                    similarFilter = nil
+                }
+                refreshSimilar()
+            }
+            .onChange(of: similarDefault) { refreshSimilar() }
+            .sheet(item: $saveRequest) { request in
+                SaveRouteSheet(request: request) { threshold, reverse in
+                    guard let ride = rides.first(where: { $0.id == request.rideID }), let route = ride.overviewRoute else { return 0 }
+                    return await similarity.countMatches(of: route, threshold: threshold, includeReverse: reverse, rides: rides)
+                } onSave: { name, threshold, reverse in
+                    saveRoute(request, name: name, threshold: threshold, includeReverse: reverse)
+                } onCancel: { saveRequest = nil }
+            }
+            .alert("Rename Route", isPresented: Binding(get: { renamingRoute != nil }, set: { if !$0 { renamingRoute = nil } })) {
+                TextField("Name", text: $newRouteName)
+                Button("Rename") {
+                    if let route = renamingRoute { library.rename(route, to: newRouteName) }
+                    renamingRoute = nil
+                }
+                Button("Cancel", role: .cancel) { renamingRoute = nil }
+            }
+    }
+
+    private var listCore: some View {
         VStack(spacing: 0) {
             header
             if let scope {
@@ -137,6 +205,16 @@ struct RideListView: View {
                     mergeCandidates = MergeCandidates(ids: Set(group.rideIDs), suggestion: group)
                 } onDismiss: {
                     suggestions.dismiss(group)
+                }
+                .padding(.horizontal, 12)
+                .padding(.top, 8)
+                .transition(.opacity)
+            } else if let suggestion = routeSuggestion, let ride = rides.first(where: { $0.id == suggestion.reference }) {
+                RouteSuggestionBanner(rideCount: suggestion.count, rideName: ride.name) {
+                    saveRequest = SaveRouteRequest(rideID: ride.id, name: ride.name,
+                                                   threshold: RouteSimilarity.clampedThreshold(similarDefault), includeReverse: false)
+                } onDismiss: {
+                    withAnimation(.snappy) { dismissedRoutes = DismissedRouteSuggestions.adding(suggestion, to: dismissedRoutes) }
                 }
                 .padding(.horizontal, 12)
                 .padding(.top, 8)
@@ -238,35 +316,10 @@ struct RideListView: View {
         .onChange(of: rides.map(\.overviewRouteVersion)) { refreshSimilar() }
         .onChange(of: rides.map(\.id)) {
             // The ride asked about went to the trash or into a merged ride.
-            if scope == nil, let filter = similarFilter, !rides.contains(where: { $0.id == filter.referenceID }) {
+            if scope == nil, let filter = similarFilter, let id = filter.referenceID, !rides.contains(where: { $0.id == id }) {
                 similarFilter = nil
             }
             refreshSimilar()
-        }
-        .confirmationDialog(
-            Text("Move \(trashCandidates?.count ?? 0) rides to the trash?"),
-            isPresented: Binding(get: { trashCandidates != nil }, set: { if !$0 { trashCandidates = nil } }),
-            presenting: trashCandidates
-        ) { ids in
-            Button("Move to Trash", role: .destructive) { moveToTrash(ids) }
-            Button("Cancel", role: .cancel) { trashCandidates = nil }
-        } message: { _ in
-            Text("You can restore them from the trash for 30 days.")
-        }
-        .sheet(item: $mergeCandidates) { candidates in
-            MergeRidesSheet(rideIDs: candidates.ids, undoManager: undoManager) {
-                selection = [$0]
-                if let suggestion = candidates.suggestion { suggestions.dismiss(suggestion) }
-            }
-        }
-        .importFlow(flow)
-        .alert("Rename Ride", isPresented: Binding(get: { renaming != nil }, set: { if !$0 { renaming = nil } })) {
-            TextField("Name", text: $newName)
-            Button("Rename") {
-                if let ride = renaming { library.rename(ride, to: newName) }
-                renaming = nil
-            }
-            Button("Cancel", role: .cancel) { renaming = nil }
         }
     }
 
@@ -341,14 +394,18 @@ struct RideListView: View {
             }
             if scope == nil, let current = similarFilter {
                 let referenceID = current.referenceID
+                let route = routeGroups.first { $0.id == current.routeID }
                 // Not `Binding($similarFilter)`: that unwraps the optional again while the bar fades out
                 // after ✕ set it to nil, and crashes.
                 SimilarRidesBar(filter: Binding(get: { similarFilter ?? current }, set: { similarFilter = $0 }),
-                                referenceName: rides.first { $0.id == referenceID }?.name ?? "",
+                                referenceName: route?.name ?? rides.first { $0.id == referenceID }?.name ?? "",
                                 found: similarHits?.count ?? 0,
                                 shown: filteredRides.count { $0.id != referenceID },
-                                isSearching: similarity.isSearching) {
+                                isSearching: similarity.isSearching,
+                                onCommit: commitRoute) {
                     withAnimation(.snappy) { similarFilter = nil }
+                } menu: {
+                    routesMenu(for: current, route: route)
                 }
                 .padding(.top, 8)
             }
@@ -421,6 +478,16 @@ struct RideListView: View {
                 }
                 BikeFilterPicker(filter: $bikeFilterChoice)
                 SourceFilterPicker(filter: $sourceFilterChoice, hasGPXRides: hasGPXRides)
+                if !routeGroups.isEmpty {
+                    Divider()
+                    Section("Saved Routes") {
+                        ForEach(routeGroups) { group in
+                            Button { showRoute(group) } label: {
+                                Label { Text(verbatim: group.name) } icon: { Image(systemName: "point.3.connected.trianglepath.dotted") }
+                            }
+                        }
+                    }
+                }
             }
         } label: {
             Image(systemName: isFiltered ? "line.3.horizontal.decrease.circle.fill" : "line.3.horizontal.decrease.circle")
@@ -490,7 +557,73 @@ struct RideListView: View {
     private func refreshSimilar() {
         // The lists beside the map and the analysis leave the search of the main list alone.
         guard scope == nil else { return }
-        similarity.refresh(similarFilter, rides: rides)
+        similarity.refresh(similarFilter, rides: rides, groups: routeGroups)
+        similarity.refreshRoutes(rides: rides, groups: routeGroups, threshold: RouteSimilarity.clampedThreshold(similarDefault))
+    }
+
+    // MARK: Saved routes (B-121)
+
+    /// The biggest suggestion that was not sent away; only in the plain main list.
+    private var routeSuggestion: RouteGrouping.Suggestion? {
+        guard scope == nil, similarFilter == nil, searchText.isEmpty, let overview = similarity.routes else { return nil }
+        let dismissed = DismissedRouteSuggestions.ids(dismissedRoutes)
+        return overview.suggestions.first { !dismissed.contains($0.reference) }
+    }
+
+    /// Starts the filter for a saved route; no ride is selected, so the right side shows its history.
+    private func showRoute(_ group: RouteGroup) {
+        withAnimation(.snappy) {
+            similarFilter = SimilarRidesFilter(routeID: group.id, threshold: group.threshold, includeReverse: group.includeReverse)
+        }
+        selection = []
+    }
+
+    /// The slider or the direction of a saved route was set: the route keeps it.
+    private func commitRoute() {
+        guard let filter = similarFilter, let id = filter.routeID, let group = routeGroups.first(where: { $0.id == id }) else { return }
+        library.update(group, threshold: filter.threshold, includeReverse: filter.includeReverse)
+    }
+
+    @ViewBuilder
+    private func routesMenu(for filter: SimilarRidesFilter, route: RouteGroup?) -> some View {
+        if let route {
+            Button("Rename Route…", systemImage: "pencil") {
+                newRouteName = route.name
+                renamingRoute = route
+            }
+            Button("Dissolve Route", systemImage: "rectangle.stack.badge.minus", role: .destructive) {
+                withAnimation(.snappy) { similarFilter = nil }
+                library.dissolve(route)
+            }
+        } else if let id = filter.referenceID, let ride = rides.first(where: { $0.id == id }) {
+            Button("Save as Route…", systemImage: "plus.circle") {
+                saveRequest = SaveRouteRequest(rideID: ride.id, name: ride.name, threshold: filter.threshold,
+                                               includeReverse: filter.includeReverse)
+            }
+        }
+        if !routeGroups.isEmpty {
+            Divider()
+            Section("Saved Routes") {
+                ForEach(routeGroups) { group in
+                    Button { showRoute(group) } label: {
+                        if group.id == route?.id {
+                            Label { Text(verbatim: group.name) } icon: { Image(systemName: "checkmark") }
+                        } else {
+                            Text(verbatim: group.name)
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    /// Saves the route of the ride in the dialog and shows it.
+    private func saveRoute(_ request: SaveRouteRequest, name: String, threshold: Double, includeReverse: Bool) {
+        saveRequest = nil
+        guard let ride = rides.first(where: { $0.id == request.rideID }),
+              let group = library.addRouteGroup(from: ride, name: name, threshold: threshold, includeReverse: includeReverse)
+        else { return }
+        showRoute(group)
     }
 
     private func similarBadge(for ride: Ride, hits: [UUID: RouteIndex.Hit]?) -> SimilarityBadge? {
@@ -508,13 +641,19 @@ struct RideListView: View {
                                    description: Text("Only rides with GPS can be compared by route."))
         } else if found == nil {
             ProgressView().controlSize(.small)
+        } else if found == 0, filter.routeID != nil {
+            ContentUnavailableView {
+                Label("No Rides on This Route", systemImage: "point.3.connected.trianglepath.dotted")
+            } description: {
+                Text("No ride is \(filter.threshold.formatted(.percent.precision(.fractionLength(0)))) similar to this route. Lower the similarity or include both directions.")
+            }
         } else if found == 0 {
             ContentUnavailableView {
                 Label("No Similar Rides", systemImage: "point.3.connected.trianglepath.dotted")
             } description: {
                 Text("No other ride is \(filter.threshold.formatted(.percent.precision(.fractionLength(0)))) similar. Lower the similarity or include the opposite direction.")
             }
-        } else if filteredRides.count <= 1 {
+        } else if filteredRides.count <= (filter.referenceID == nil ? 0 : 1) {
             ContentUnavailableView("No Matching Rides", systemImage: "line.3.horizontal.decrease.circle",
                                    description: Text("Change the search, the bike or the period."))
         }
