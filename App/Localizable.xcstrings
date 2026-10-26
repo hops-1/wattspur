@@ -11,12 +11,42 @@
         }
       }
     },
+    "A backup is a folder with all your rides, bikes, goals and notes. Keep it on another disk or in iCloud Drive. Your settings and the watched folder are not part of it.": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ein Backup ist ein Ordner mit allen deinen Fahrten, Bikes, Zielen und Notizen. Bewahre es auf einer anderen Platte oder in iCloud Drive auf. Deine Einstellungen und der überwachte Ordner gehören nicht dazu."
+          }
+        }
+      }
+    },
     "A history needs at least two rides on this route. Lower the similarity or include both directions.": {
       "localizations": {
         "de": {
           "stringUnit": {
             "state": "translated",
             "value": "Für einen Verlauf braucht es mindestens zwei Fahrten auf dieser Strecke. Senke die Ähnlichkeit oder zeige beide Richtungen."
+          }
+        }
+      }
+    },
+    "A new ride is on your route “%@”.": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Eine neue Fahrt liegt auf deiner Strecke „%@“."
+          }
+        }
+      }
+    },
+    "A saved route has a name. Rides on it, now and in the future, belong to it.": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Eine gespeicherte Strecke hat einen Namen. Fahrten auf ihr gehören dazu, jetzt und künftig."
           }
         }
       }
@@ -57,6 +87,56 @@
           "stringUnit": {
             "state": "translated",
             "value": "Zurück zum Verlauf"
+          }
+        }
+      }
+    },
+    "Back Up Here": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Hier sichern"
+          }
+        }
+      }
+    },
+    "Back Up…": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sichern …"
+          }
+        }
+      }
+    },
+    "Backing up the library …": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Mediathek wird gesichert …"
+          }
+        }
+      }
+    },
+    "Backup from %@ restored successfully.": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Backup vom %@ erfolgreich wiederhergestellt."
+          }
+        }
+      }
+    },
+    "Backup saved": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Backup gespeichert"
           }
         }
       }
@@ -111,6 +191,26 @@
         }
       }
     },
+    "Choose the backup folder to restore.": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Wähle den Backup-Ordner, der wiederhergestellt werden soll."
+          }
+        }
+      }
+    },
+    "Choose where to save the backup. Wattspur creates a folder there.": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Wähle, wo das Backup liegen soll. Wattspur legt dort einen Ordner an."
+          }
+        }
+      }
+    },
     "Click a point to open the ride.": {
       "localizations": {
         "de": {
@@ -161,6 +261,16 @@
         }
       }
     },
+    "%lld new rides are on your route “%@”.": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%1$lld neue Fahrten liegen auf deiner Strecke „%2$@“."
+          }
+        }
+      }
+    },
     "%lld of %lld rides have this value.": {
       "localizations": {
         "de": {
@@ -207,6 +317,26 @@
           "stringUnit": {
             "state": "translated",
             "value": "Noch kein Verlauf"
+          }
+        }
+      }
+    },
+    "No ride is %@ similar to this route. Lower the similarity or include both directions.": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Keine Fahrt ist zu %@ ähnlich zu dieser Strecke. Senke die Ähnlichkeit oder zeige beide Richtungen."
+          }
+        }
+      }
+    },
+    "No Rides on This Route": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Keine Fahrten auf dieser Strecke"
           }
         }
       }
@@ -281,12 +411,92 @@
         }
       }
     },
+    "Questions and Troubleshooting": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Fragen und Fehlerbehebung"
+          }
+        }
+      }
+    },
+    "Quit Wattspur": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Wattspur beenden"
+          }
+        }
+      }
+    },
+    "Quit Wattspur and open it again. It then replaces the library with the backup.": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Beende Wattspur und öffne es wieder. Dann ersetzt es die Mediathek durch das Backup."
+          }
+        }
+      }
+    },
+    "Ready to restore": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Bereit zum Wiederherstellen"
+          }
+        }
+      }
+    },
     "Reference ride": {
       "localizations": {
         "de": {
           "stringUnit": {
             "state": "translated",
             "value": "Bezugsfahrt"
+          }
+        }
+      }
+    },
+    "Save as Route…": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Als Strecke speichern …"
+          }
+        }
+      }
+    },
+    "Save Route": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Strecke speichern"
+          }
+        }
+      }
+    },
+    "Saved Routes": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Gespeicherte Strecken"
+          }
+        }
+      }
+    },
+    "Show Route": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Strecke zeigen"
           }
         }
       }
@@ -317,6 +527,16 @@
           "stringUnit": {
             "state": "translated",
             "value": "%@ ähnlich"
+          }
+        }
+      }
+    },
+    "Similar Rides (%lld)": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ähnliche Fahrten (%lld)"
           }
         }
       }
@@ -391,12 +611,72 @@
         }
       }
     },
+    "The backup is from %@ (Wattspur %@).": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Das Backup ist vom %1$@ (Wattspur %2$@)."
+          }
+        }
+      }
+    },
+    "The library file could not be read: %@": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Die Mediathek-Datei konnte nicht gelesen werden: %@"
+          }
+        }
+      }
+    },
     "The share of a route that lies at most 50 m from the other. “Show Similar Rides” starts here; the list has its own slider.": {
       "localizations": {
         "de": {
           "stringUnit": {
             "state": "translated",
             "value": "Der Anteil einer Strecke, der höchstens 50 m von der anderen entfernt liegt. „Ähnliche Fahrten zeigen“ beginnt mit diesem Wert; die Liste hat einen eigenen Regler."
+          }
+        }
+      }
+    },
+    "There is no library to back up yet.": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Es gibt noch keine Mediathek zum Sichern."
+          }
+        }
+      }
+    },
+    "This backup was made by a newer version of Wattspur. Update Wattspur before you restore it.": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Dieses Backup stammt von einer neueren Version von Wattspur. Aktualisiere Wattspur, bevor du es wiederherstellst."
+          }
+        }
+      }
+    },
+    "This backup was made by a newer version of Wattspur. Update Wattspur to restore it.": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Dieses Backup stammt von einer neueren Version von Wattspur. Aktualisiere Wattspur, um es wiederherzustellen."
+          }
+        }
+      }
+    },
+    "This folder is not a Wattspur backup.": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Dieser Ordner ist kein Wattspur-Backup."
           }
         }
       }
@@ -1091,6 +1371,16 @@
         }
       }
     },
+    "%lld rides are on this route": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%lld Fahrten liegen auf dieser Strecke"
+          }
+        }
+      }
+    },
     "%lld rides from the analysis": {
       "localizations": {
         "de": {
@@ -1463,6 +1753,16 @@
           "stringUnit": {
             "state": "translated",
             "value": "0"
+          }
+        }
+      }
+    },
+    "1 ride is on this route": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "1 Fahrt liegt auf dieser Strecke"
           }
         }
       }
@@ -2727,6 +3027,16 @@
         }
       }
     },
+    "Dissolve Route": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Strecke auflösen"
+          }
+        }
+      }
+    },
     "Distance": {
       "localizations": {
         "de": {
@@ -3457,6 +3767,16 @@
         }
       }
     },
+    "How to Export from the Flow App": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "So exportierst du aus der Flow-App"
+          }
+        }
+      }
+    },
     "Hybrid": {
       "localizations": {
         "de": {
@@ -3647,6 +3967,16 @@
         }
       }
     },
+    "Importing Rides": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Fahrten importieren"
+          }
+        }
+      }
+    },
     "In the menu that opens next.": {
       "localizations": {
         "de": {
@@ -3743,6 +4073,46 @@
           "stringUnit": {
             "state": "translated",
             "value": "Es verschwindet aus dem Import-Menü. Die Fahrten bleiben zugeordnet, das Bike bleibt in den Filtern. Du kannst es jederzeit wiederherstellen."
+          }
+        }
+      }
+    },
+    "It holds %lld rides.": {
+      "localizations": {
+        "de": {
+          "variations": {
+            "plural": {
+              "one": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "Es enthält %lld Fahrt."
+                }
+              },
+              "other": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "Es enthält %lld Fahrten."
+                }
+              }
+            }
+          }
+        },
+        "en": {
+          "variations": {
+            "plural": {
+              "one": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "It holds %lld ride."
+                }
+              },
+              "other": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "It holds %lld rides."
+                }
+              }
+            }
           }
         }
       }
@@ -3863,6 +4233,26 @@
           "stringUnit": {
             "state": "translated",
             "value": "Mediathek"
+          }
+        }
+      }
+    },
+    "Library Backup": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Mediathek-Backup"
+          }
+        }
+      }
+    },
+    "Library Backup…": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Mediathek-Backup …"
           }
         }
       }
@@ -5097,6 +5487,16 @@
         }
       }
     },
+    "Preparing the restore …": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Wiederherstellung wird vorbereitet …"
+          }
+        }
+      }
+    },
     "Previous period": {
       "localizations": {
         "de": {
@@ -5113,6 +5513,16 @@
           "stringUnit": {
             "state": "translated",
             "value": "Vorheriges Jahr"
+          }
+        }
+      }
+    },
+    "Probably the same route: %lld rides": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Wohl dieselbe Strecke: %lld Fahrten"
           }
         }
       }
@@ -5227,6 +5637,16 @@
         }
       }
     },
+    "Release Notes": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Versionshinweise"
+          }
+        }
+      }
+    },
     "Remove": {
       "localizations": {
         "de": {
@@ -5297,6 +5717,26 @@
         }
       }
     },
+    "Rename Route": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Strecke umbenennen"
+          }
+        }
+      }
+    },
+    "Rename Route…": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Strecke umbenennen …"
+          }
+        }
+      }
+    },
     "Rename…": {
       "localizations": {
         "de": {
@@ -5323,6 +5763,26 @@
           "stringUnit": {
             "state": "translated",
             "value": "Wiederherstellen"
+          }
+        }
+      }
+    },
+    "Restore this backup?": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Dieses Backup wiederherstellen?"
+          }
+        }
+      }
+    },
+    "Restore…": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Wiederherstellen …"
           }
         }
       }
@@ -6689,12 +7149,32 @@
         }
       }
     },
+    "Wattspur Handbook": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Wattspur-Handbuch"
+          }
+        }
+      }
+    },
     "Wattspur is up to date": {
       "localizations": {
         "de": {
           "stringUnit": {
             "state": "translated",
             "value": "Wattspur ist aktuell"
+          }
+        }
+      }
+    },
+    "Wattspur quits and replaces the library with the backup the next time you open it. Rides and changes since the backup are not in it. The current library is kept in a folder beside it.": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Wattspur beendet sich und ersetzt die Mediathek beim nächsten Öffnen durch das Backup. Fahrten und Änderungen seit dem Backup sind darin nicht enthalten. Die aktuelle Mediathek bleibt in einem Ordner daneben erhalten."
           }
         }
       }
@@ -7479,6 +7959,36 @@
           "stringUnit": {
             "state": "translated",
             "value": "Pp."
+          }
+        }
+      }
+    },
+    "Route: %@": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Strecke: %@"
+          }
+        }
+      }
+    },
+    "Route: %@ (%@)": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Strecke: %1$@ (%2$@)"
+          }
+        }
+      }
+    },
+    "Routes": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Strecken"
           }
         }
       }

@@ -23,7 +23,7 @@ Status: ☐ offen · ◐ in Arbeit · ☑ erledigt
 | **v1.6.1** | Sicherheits-Fix für beschädigte FIT-Dateien und Aufräumen der Architektur (zwei Module, Dienste, geteilte Bibliothek); keine neuen Funktionen | Freunde |
 | **v1.6.2** | Update-Hinweis: Banner, wenn auf GitHub eine neuere Version liegt (B-172); Auto-Update bleibt offen (B-173) | Freunde |
 | **v1.7.0** | Ähnliche Strecken (suchen, filtern, vergleichen, Verlauf) und weitere Rekorde; dazu B-161 und B-174 | Freunde |
-| **v1.7.1** | Strecken-Gruppen (erkennen, benennen, Neuzuordnung beim Import) | Freunde |
+| **v1.7.1** | Strecken-Gruppen (erkennen, benennen, Neuzuordnung beim Import), Mediathek-Backup (P-22) und Hilfe-Menü (B-084) | Freunde |
 | **v1.8** | Ein Bereich „Fahrten“ mit Karte als Standard (B-125), Kalendertag als Filter (B-130) | Freunde |
 | **v1.9** | Bosch-Daten über die offizielle Data-Act-API (optional, eigenes Bosch-Konto): Bike, Akku und Wartung, Zusatzfelder je Fahrt und Import von Fahrten ohne Datei (Altbestand). **Motordaten je Fahrt gibt die API nicht her (Spezifikation 25.10.2026), Entscheidung Nils: Option B;** steht unter dem Vorbehalt des Spikes V-12 | Freunde mit Smart-System-Bike in der EU |
 | v1.x | Analysen, Komfort, Karten | alle |
@@ -295,8 +295,10 @@ Auslöser: Der Sicherheitscheck von 1.6.0 fand fünf Abstürze durch präpariert
 | 5 | B-118 und B-119 Liste mit Chip, Regler, Gegenrichtung, Vergleich (Mockup B-117 abgenommen) |
 | 6 | B-120 Verlauf |
 | 7 | Release 1.7.0 (Tag `v1.7.0`, 26.10.2026) |
-| 8 | B-121 Gruppen mit `RouteGroup` (Migration 2) |
-| 9 | Release 1.7.1 |
+| 7a | P-22 Backup und Wiederherstellung (Zusatz) |
+| 7b | B-084 Hilfe-Menü (Zusatz) |
+| 8a–8c | B-121 Gruppen mit `RouteGroup` (Migration 2): Grundlage, Oberfläche, Detail und Hinweis |
+| 9 | Release 1.7.1 (Tag `v1.7.1`) |
 
 Hinweis zu B-116: Einen `RouteIndex` gab es bisher nicht; er stand nur im Plan von 1.4 und entsteht jetzt.
 
@@ -321,6 +323,7 @@ Zuerst Artboard für B-125 auf dem Design-Canvas und Abstimmung mit Nils, dann B
 | B-125 | Ein Bereich „Fahrten“ mit Karte als Standard (Wunsch von Nils nach dem Test von v1.4, REQUIREMENTS.md 10.13): links die Liste, rechts die Karte aller Fahrten der Liste (Heatmap, Kacheln, PDF) statt der leeren Ansicht. Eine markierte Fahrt öffnet rechts ihr Tour-Detail mit „‹ Karte“ (Esc) zurück, 2–4 markierte den Vergleich wie heute. Suche und Zeitraum der Liste bestimmen die Fahrten der Karte; ein Schalter „Nur Kartenausschnitt“ beschränkt die Liste zusätzlich auf den sichtbaren Ausschnitt. „Karte“ und ⌘5 entfallen in der Seitenleiste. Zuerst Artboard und Abstimmung; | L | ☐ |
 | B-130 | Kalendertag mit Fahrten in den Highlights anklicken: „Fahrten“ zeigt nur die Fahrten dieses Tages, mit Filter-Chip „15. Okt. ✕“ in der Liste und „‹ Zurück zu Highlights“ (⌘[, siehe B-128); bei genau einer Fahrt rechts gleich ihr Tour-Detail, bei mehreren rechts die Karte dieser Fahrten (mit B-125) bzw. bis dahin die Mehrfachauswahl. ✕ am Chip zeigt wieder alle Fahrten. Eine Serie in „Rekorde“ filtert entsprechend auf ihren Zeitraum, Chip „3.–9. Okt. ✕“ (Feedback 1.4.1, Entscheidung Nils 24.10.2026) | S | ☐ |
 | B-176 | Analyse nach Strecke filtern: „Ähnlich wie …“ als Filter direkt in der Analyse (Wunsch von Nils am 26.10.2026, nach dem Test des Verlaufs). In 1.7 geht es über den Knopf „Analyze These Rides“ im Verlauf und über die markierten Treffer. Mit B-125 prüfen, ob Filter und Chip in „Fahrten“ und „Analyse“ gemeinsam gebaut werden; die Suche läuft über `RouteSimilarityStore` (B-118) | M | ☐ |
+| B-177 | **Austauschformate dokumentieren** (Wunsch von Nils 26.10.2026, „im nächsten Release“): neue Seite `docs/reference/data-exchange.md` (Englisch, verlinkt aus den FAQ DE+EN) mit dem **GPX-Export** (GPX 1.1, ein Segment je Teil einer zusammengefügten Fahrt, Erweiterungen für Leistung und Trittfrequenz, Bike-Name) und dem **Backup-Ordner** (`manifest.json` mit `format`, `default.store` als SQLite/SwiftData, `.default_SUPPORT/_EXTERNAL_DATA` mit `samplesData`, den Originaldateien aus `SourceFile` und Fotos; Tabellen und Spalten aus einem echten Store ausgelesen, Datumsformat, UUIDs, Beispiel-SQL). Ehrlich dazu: Das Schema ist SwiftData-intern und kein Austauschformat; stabil sind Manifest, Originaldateien und GPX. Dazu ein Python-Beispielskript (nur Standardbibliothek), ein Kit-Test, der Tabellen und Spalten der Doku gegen ein erzeugtes Backup prüft, und ein Hinweis auf B-178 | S | ☐ |
 
 ## v1.9 – Bosch-Daten (Plan 25.10.2026)
 
@@ -376,6 +379,7 @@ Release 1.9.0 (Version, Changelog, Handbuch EN/DE mit Kapitel „Bosch-Daten abr
 | B-082 | Erklärung der Kennzahlen und Formeln im Handbuch (DOC-03); erledigt mit B-080 | S | ☑ |
 | B-083 | FAQ und Fehlerbehebung (DOC-05); erledigt mit B-080 | S | ☑ |
 | B-084 | Hilfe-Menü mit Link zum Handbuch und Hinweise an leeren Ansichten (DOC-06) **Stand 26.10.2026 (1.7.1):** umgesetzt. Menü Hilfe: Handbuch (⌘?), Fahrten importieren, Fragen und Fehlerbehebung, Versionshinweise; Sprache der App (de/en); Link „Export aus der Flow-App“ in der leeren Fahrtenliste. Die Seiten liegen online im Repository, nichts wird mitgeliefert | S | ☑ |
+| B-179 | **Handbuch-Bilder aktualisieren** (Bug von Nils 26.10.2026, nicht dringend): `docs/user-guide/images/{de,en}/` (`main`, `import`, `settings`, `setup`) stammen vom 20.10.2026 und zeigen die Oberfläche vor Profil, Bikes, GPX, Ähnlichen Strecken und gespeicherten Strecken. Neu aufnehmen mit der Demo-Bibliothek (hell, DE+EN), dazu Bilder für Chip, Verlauf und Strecken | S | ☐ |
 | B-085 | Profil-Daten exportieren und löschen (ACC-05) | M | ☐ |
 
 ## v1.x – Komfort & Karten
@@ -407,7 +411,8 @@ Release 1.9.0 (Version, Changelog, Handbuch EN/DE mit Kapitel „Bosch-Daten abr
 | B-074 | Mehrere Bikes: Verwaltung, manuelle Zuordnung der Fahrten, Filter (PROF-03; Seriennummer taugt nicht, siehe SPIKE-FIT-PARSER.md) → v1.5 (Datenmodell B-074, dazu B-133 bis B-138) | M | → |
 | B-075 | Apple Health anbinden (PROF-04); Apple-Watch-Puls siehe P-27 | L | ☐ |
 | B-076 | Weitere Importer: Strava, generische FIT (PROF-04) | L | ☐ |
-| B-077 | Export als CSV bzw. Originaldatei (IMP-08) | S | ☐ |
+| B-077 | Export als CSV bzw. Originaldatei (IMP-08); mit B-178 zusammen zu denken | S | ☐ |
+| B-178 | **Stabiles Austauschformat** (Wunsch von Nils 26.10.2026, separater Request): vollständiger Export der Mediathek als JSON (versioniert mit `schemaVersion`, feste Feldnamen, SI-Einheiten, ISO-8601-Daten; Fahrten mit Kennzahlen, Bikes, Rider, Ziele, gespeicherte Strecken; Zeitreihe und Route je Fahrt optional oder als Dateien daneben) und die Fahrtenliste mit Kennzahlen als CSV; dokumentiert in `docs/reference/data-exchange.md` (B-177). Das Backup bleibt ein Sicherungsformat ohne Stabilitätsversprechen. Ein Import aus dem Format ist ein späterer, eigener Schritt. **Version offen** | M | ☐ |
 | B-078 | Kachel-Cache (MAP-03). Die Karte aller Routen (AGG-05) ist jetzt B-104 ff. | M | ☐ |
 | B-079 | ~~Gleiche Strecke wiedererkennen (TREND-04)~~ → v1.7 (B-116 ff.), Streudiagramme (TREND-05), Notizen und Tags (TOUR-10) | L | ☐ |
 | B-086 | Mehrere lokale Profile mit Profilwechsel (ACC-02, zusammen mit B-073) | M | ☐ |

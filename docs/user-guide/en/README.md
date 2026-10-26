@@ -12,7 +12,7 @@ Wattspur is a free Mac app for the rides you record with a Bosch eBike and the e
 1. [Install Wattspur](01-installation.md): download, open the first time, requirements
 2. [First launch](02-first-launch.md): the setup assistant and the sample ride
 3. [Importing rides](03-importing.md): export from the Flow app, watched folder, drag and drop, import log
-4. [Views](04-views.md): ride list, similar rides and history, ride detail, analysis, highlights, map, trash, settings, keyboard
+4. [Views](04-views.md): ride list, similar rides and history, saved routes, ride detail, analysis, highlights, map, trash, settings, keyboard
 5. [Metrics](05-metrics.md): where every value comes from and how estimates are calculated
 6. [FAQ and troubleshooting](06-faq.md)
 7. [Profile and bikes](07-profile-and-bikes.md): body data, several bikes, assigning rides, filters
