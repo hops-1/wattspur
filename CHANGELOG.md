@@ -7,6 +7,9 @@ Every DMG handed out to testers corresponds to one entry below.
 
 ## [Unreleased]
 
+### Fixed
+- **Trash:** **Empty Trash…** now sits in the header of the trash instead of the title bar, where it reached into the sidebar. **Restore** is a small button with a symbol (also in the context menu), so the name and the figures of a ride no longer wrap onto several lines (B-161).
+
 ## [1.6.2] – 2026-10-25
 
 Wattspur tells you when a new version is out.
