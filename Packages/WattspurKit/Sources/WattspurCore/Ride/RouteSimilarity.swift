@@ -189,8 +189,14 @@ public enum RouteSimilarity {
     /// way (decided with Nils 26.10.2026, Requirements 10.19).
     public static let endTolerance = 200.0
     /// The default and the range of the threshold (ROUTE-02).
-    public static let defaultThreshold = 0.95
+    public static let defaultThreshold = 0.90
     public static let thresholdRange = 0.80...0.99
+
+    /// A stored or typed threshold, brought into `thresholdRange` (a damaged setting becomes the default).
+    public static func clampedThreshold(_ value: Double) -> Double {
+        guard value.isFinite else { return defaultThreshold }
+        return min(max(value, thresholdRange.lowerBound), thresholdRange.upperBound)
+    }
 
     public enum Direction: Sendable, Equatable {
         /// Start with start, end with end.

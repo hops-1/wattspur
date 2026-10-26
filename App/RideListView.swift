@@ -9,6 +9,8 @@ struct RideListView: View {
     @Binding var selection: Set<UUID>
     /// Set by "Import Rides…" on the empty map; opens the import dialog here.
     @Binding var importRequested: Bool
+    /// "Similar to: …" (B-118); the main list only. Held by `ContentView`, so it stays when a ride is opened.
+    @Binding var similarFilter: SimilarRidesFilter?
     /// Opens the comparison for 2–4 selected rides (CMP-01).
     var onCompare: () -> Void = {}
     /// Opens the year in review from the year tile (LIST-04).
@@ -21,6 +23,7 @@ struct RideListView: View {
     @Environment(ImportLog.self) private var importLog
     @Environment(FolderWatcher.self) private var watcher
     @Environment(MergeSuggestionCenter.self) private var suggestions
+    @Environment(RouteSimilarityStore.self) private var similarity
     @Environment(\.openWindow) private var openWindow
     /// The window's undo manager: ⌘Z undoes renaming, trashing, merging and splitting.
     @Environment(\.undoManager) private var undoManager
@@ -50,20 +53,43 @@ struct RideListView: View {
     @AppStorage(SettingsKey.rideSortOrder) private var sortOrder: RideSortOrder = .date
     @AppStorage(SettingsKey.ridePeriod) private var period: RidePeriod = .all
     @AppStorage(SettingsKey.multiSelectTipDone) private var multiSelectTipDone = false
+    /// Where the slider of a new "Similar to" filter starts (SET, ROUTE-02).
+    @AppStorage(SettingsKey.similarRoutesThreshold) private var similarDefault = RouteSimilarity.defaultThreshold
     /// Rides waiting for "Move to trash?" when several are selected.
     @State private var trashCandidates: Set<UUID>?
     /// Rides waiting in the "Merge rides" sheet (B-095).
     @State private var mergeCandidates: MergeCandidates?
 
-    /// Search, period filter and sort order applied (LIST-05).
+    /// Search, period filter and sort order applied (LIST-05). With "Similar to" only the rides on that
+    /// route, the ride asked about first.
     private var filteredRides: [Ride] {
-        rides
+        let base = rides
             .filter { scope?.rideIDs.contains($0.id) ?? true }
             .filter { $0.isOnBike(bikeFilter) && $0.isFromSource(sourceFilter) }
             .filter { searchText.isEmpty || $0.name.localizedStandardContains(searchText) }
             // Beside the map or the analysis, their own period decides.
             .filter { scope != nil || period.contains($0.startDate) }
-            .sorted { sortOrder.areInIncreasingOrder($0.sortKey, $1.sortKey) }
+        guard let filter = activeSimilarFilter else {
+            return base.sorted { sortOrder.areInIncreasingOrder($0.sortKey, $1.sortKey) }
+        }
+        let hits = similarHits ?? [:]
+        var matches = base.filter { $0.id != filter.referenceID && hits[$0.id] != nil }
+        switch filter.sort {
+        case .similarity:
+            matches.sort { (hits[$0.id]?.score ?? 0, $0.startDate) > (hits[$1.id]?.score ?? 0, $1.startDate) }
+        case .date:
+            matches.sort { $0.startDate > $1.startDate }
+        }
+        return rides.filter { $0.id == filter.referenceID } + matches
+    }
+
+    /// The filter, in the main list only.
+    private var activeSimilarFilter: SimilarRidesFilter? { scope == nil ? similarFilter : nil }
+
+    /// The rides on the route by id; `nil` while the first search runs.
+    private var similarHits: [UUID: RouteIndex.Hit]? {
+        guard let filter = activeSimilarFilter, let hits = similarity.hits(for: filter) else { return nil }
+        return Dictionary(hits.map { ($0.id, $0) }, uniquingKeysWith: { first, _ in first })
     }
 
     /// The rides of the year card: the bike and the source of the list apply, search and period do not.
@@ -74,7 +100,7 @@ struct RideListView: View {
 
     /// Sorted by date the list is grouped by month; other orders show one flat list.
     private var groups: [(id: String, title: String?, rides: [Ride])] {
-        guard sortOrder == .date else { return [("all", nil, filteredRides)] }
+        guard sortOrder == .date, activeSimilarFilter == nil else { return [("all", nil, filteredRides)] }
         let calendar = Calendar.current
         let byMonth = Dictionary(grouping: filteredRides) {
             calendar.dateInterval(of: .month, for: $0.startDate)?.start ?? $0.startDate
@@ -97,7 +123,7 @@ struct RideListView: View {
                     .background(Color.accentColor.opacity(0.1), in: RoundedRectangle(cornerRadius: 9))
                     .padding(.horizontal, 12)
                     .padding(.top, 8)
-            } else if yearRides.contains(where: \.countsInStatistics) {
+            } else if activeSimilarFilter == nil, yearRides.contains(where: \.countsInStatistics) {
                 YearTileView(rides: yearRides) {
                     highlightsBikeFilter = bikeFilter
                     highlightsSourceFilter = sourceFilter
@@ -146,11 +172,13 @@ struct RideListView: View {
 
     private var list: some View {
         let holders = recordHolders
+        let hits = similarHits
         return List(selection: $selection) {
             ForEach(groups, id: \.id) { group in
                 Section {
                     ForEach(group.rides) { ride in
-                        RideRow(ride: ride, isRecord: holders.contains(ride.id), showsBike: bikes.count >= 2)
+                        RideRow(ride: ride, isRecord: holders.contains(ride.id), showsBike: bikes.count >= 2,
+                                similarity: similarBadge(for: ride, hits: hits))
                             .tag(ride.id)
                     }
                 } header: {
@@ -160,7 +188,9 @@ struct RideListView: View {
         }
         .navigationTitle("Rides")
         .overlay {
-            if let scope, !rides.isEmpty, filteredRides.isEmpty, searchText.isEmpty {
+            if let filter = activeSimilarFilter {
+                similarOverlay(filter)
+            } else if let scope, !rides.isEmpty, filteredRides.isEmpty, searchText.isEmpty {
                 ContentUnavailableView(scope.emptyTitle, systemImage: scope.systemImage)
             } else if !rides.isEmpty && filteredRides.isEmpty {
                 ContentUnavailableView("No Matching Rides", systemImage: "line.3.horizontal.decrease.circle",
@@ -202,6 +232,15 @@ struct RideListView: View {
             if ids.count == 1, let id = ids.first { onOpen?(id) }
         }
         .onDeleteCommand { requestTrash(selection) }
+        .onChange(of: similarFilter, initial: true) { refreshSimilar() }
+        .onChange(of: rides.map(\.overviewRouteVersion)) { refreshSimilar() }
+        .onChange(of: rides.map(\.id)) {
+            // The ride asked about went to the trash or into a merged ride.
+            if scope == nil, let filter = similarFilter, !rides.contains(where: { $0.id == filter.referenceID }) {
+                similarFilter = nil
+            }
+            refreshSimilar()
+        }
         .confirmationDialog(
             Text("Move \(trashCandidates?.count ?? 0) rides to the trash?"),
             isPresented: Binding(get: { trashCandidates != nil }, set: { if !$0 { trashCandidates = nil } }),
@@ -298,6 +337,19 @@ struct RideListView: View {
                 activeFilterChip
                     .padding(.top, 8)
             }
+            if scope == nil, let current = similarFilter {
+                let referenceID = current.referenceID
+                // Not `Binding($similarFilter)`: that unwraps the optional again while the bar fades out
+                // after ✕ set it to nil, and crashes.
+                SimilarRidesBar(filter: Binding(get: { similarFilter ?? current }, set: { similarFilter = $0 }),
+                                referenceName: rides.first { $0.id == referenceID }?.name ?? "",
+                                found: similarHits?.count ?? 0,
+                                shown: filteredRides.count { $0.id != referenceID },
+                                isSearching: similarity.isSearching) {
+                    withAnimation(.snappy) { similarFilter = nil }
+                }
+                .padding(.top, 8)
+            }
         }
         .padding(.horizontal, 16)
         .padding(.vertical, 10)
@@ -356,8 +408,10 @@ struct RideListView: View {
                 Button("Reset", systemImage: "arrow.counterclockwise", action: resetFilters)
                 Divider()
             }
-            Picker("Sort By", selection: $sortOrder) {
-                ForEach(RideSortOrder.allCases) { Text($0.label).tag($0) }
+            if activeSimilarFilter == nil {
+                Picker("Sort By", selection: $sortOrder) {
+                    ForEach(RideSortOrder.allCases) { Text($0.label).tag($0) }
+                }
             }
             if scope == nil {
                 Picker("Period", selection: $period) {
@@ -394,6 +448,12 @@ struct RideListView: View {
                 }
             }
             .disabled(single == nil)
+            if scope == nil {
+                Button("Show Similar Rides", systemImage: "point.3.connected.trianglepath.dotted") {
+                    if let single { showSimilar(to: single) }
+                }
+                .disabled(single.map { !SimilarRidesFilter.canStart(from: $0) } ?? true)
+            }
             Button("Export as GPX…") { if let single { GPXExport.save(single) } }
                 .disabled(single == nil)
             if ids.count > 1 {
@@ -413,6 +473,47 @@ struct RideListView: View {
             }
             Divider()
             Button("Move to Trash", role: .destructive) { requestTrash(ids) }
+        }
+    }
+
+    private func showSimilar(to ride: Ride) {
+        guard SimilarRidesFilter.canStart(from: ride) else { return }
+        withAnimation(.snappy) {
+            similarFilter = SimilarRidesFilter(referenceID: ride.id, threshold: RouteSimilarity.clampedThreshold(similarDefault))
+        }
+        selection = [ride.id]
+    }
+
+    private func refreshSimilar() {
+        // The lists beside the map and the analysis leave the search of the main list alone.
+        guard scope == nil else { return }
+        similarity.refresh(similarFilter, rides: rides)
+    }
+
+    private func similarBadge(for ride: Ride, hits: [UUID: RouteIndex.Hit]?) -> SimilarityBadge? {
+        guard let filter = activeSimilarFilter else { return nil }
+        if ride.id == filter.referenceID { return .reference }
+        return hits?[ride.id].map { .match(score: $0.score, reverse: $0.direction == .reverse) }
+    }
+
+    /// Instead of the list's own empty notes while "Similar to" is on.
+    @ViewBuilder
+    private func similarOverlay(_ filter: SimilarRidesFilter) -> some View {
+        let found = similarHits?.count
+        if similarity.referenceHasRoute(for: filter) == false {
+            ContentUnavailableView("This ride has no route", systemImage: "location.slash",
+                                   description: Text("Only rides with GPS can be compared by route."))
+        } else if found == nil {
+            ProgressView().controlSize(.small)
+        } else if found == 0 {
+            ContentUnavailableView {
+                Label("No Similar Rides", systemImage: "point.3.connected.trianglepath.dotted")
+            } description: {
+                Text("No other ride is \(filter.threshold.formatted(.percent.precision(.fractionLength(0)))) similar. Lower the similarity or include the opposite direction.")
+            }
+        } else if filteredRides.count <= 1 {
+            ContentUnavailableView("No Matching Rides", systemImage: "line.3.horizontal.decrease.circle",
+                                   description: Text("Change the search, the bike or the period."))
         }
     }
 
@@ -481,6 +582,8 @@ struct RideRow: View {
     var isRecord = false
     /// Shows the bike's symbol at the end of the second line (B-136, from two bikes on).
     var showsBike = false
+    /// With "Similar to": the ride asked about, or how similar this one is (B-118).
+    var similarity: SimilarityBadge? = nil
 
     var body: some View {
         HStack(spacing: 12) {
@@ -515,7 +618,11 @@ struct RideRow: View {
                     .font(.subheadline)
                     .monospacedDigit()
                     .foregroundStyle(.secondary)
+                    .lineLimit(1)
+                    .layoutPriority(1)
                 Spacer(minLength: 4)
+                // Under the name, so a long name or the badges of a merged ride keep their room.
+                if let similarity { SimilarityTag(badge: similarity) }
                 if let badge = ride.sourceBadge { SourcePill(badge: badge) }
                 if showsBike, let bike = ride.bike {
                     RideRowBike(bike: bike)

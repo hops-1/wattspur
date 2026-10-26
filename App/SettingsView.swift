@@ -31,6 +31,7 @@ private struct GeneralSettingsView: View {
     @AppStorage(SettingsKey.mapType) private var mapType: RideMapType = .standard
     @AppStorage(SettingsKey.setupCompleted) private var setupCompleted = false
     @AppStorage(SettingsKey.updateCheckEnabled) private var updateCheckEnabled = true
+    @AppStorage(SettingsKey.similarRoutesThreshold) private var similarThreshold = RouteSimilarity.defaultThreshold
     @Query private var riders: [Rider]
     @Query(filter: #Predicate<Ride> { $0.isSample }) private var samples: [Ride]
     @Environment(RideLibrary.self) private var sharedLibrary
@@ -68,6 +69,26 @@ private struct GeneralSettingsView: View {
                     Text("Go through profile, import folder and the export guide again.")
                         .font(.caption)
                         .foregroundStyle(.secondary)
+                }
+            }
+            LabeledContent("Similar rides:") {
+                VStack(alignment: .leading, spacing: 4) {
+                    HStack {
+                        Slider(value: Binding(get: { RouteSimilarity.clampedThreshold(similarThreshold) },
+                                              set: { similarThreshold = RouteSimilarity.clampedThreshold(($0 * 100).rounded() / 100) }),
+                               in: RouteSimilarity.thresholdRange, step: 0.01) {
+                            Text("Similar rides from")
+                        }
+                        .frame(width: 180)
+                        Text(verbatim: RouteSimilarity.clampedThreshold(similarThreshold).formatted(.percent.precision(.fractionLength(0))))
+                            .monospacedDigit()
+                            .frame(minWidth: 38, alignment: .trailing)
+                            .accessibilityHidden(true)
+                    }
+                    Text("The share of a route that lies at most 50 m from the other. “Show Similar Rides” starts here; the list has its own slider.")
+                        .font(.caption)
+                        .foregroundStyle(.secondary)
+                        .fixedSize(horizontal: false, vertical: true)
                 }
             }
             LabeledContent("Updates:") {

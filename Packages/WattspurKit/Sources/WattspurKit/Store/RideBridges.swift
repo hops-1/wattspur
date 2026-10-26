@@ -85,14 +85,35 @@ extension Ride {
 }
 
 extension RouteIndex {
+    /// A ride that takes part in the search, with its route: what the (slow) building of the index
+    /// needs, so it can run away from the main thread.
+    public struct Entry: Sendable {
+        public var id: UUID
+        public var route: OverviewRoute
+
+        public init(id: UUID, route: OverviewRoute) {
+            self.id = id
+            self.route = route
+        }
+    }
+
     /// The routes of all rides that count, without those that have no GPS or whose route is still
     /// being prepared (`Ride.needsOverviewRoute`).
     @MainActor
-    public init(_ rides: [Ride]) {
-        self.init()
-        for ride in rides where ride.countsForSimilarRoutes {
-            if let route = ride.overviewRoute { insert(ride.id, route: route) }
+    public static func entries(_ rides: [Ride]) -> [Entry] {
+        rides.filter(\.countsForSimilarRoutes).compactMap { ride in
+            ride.overviewRoute.map { Entry(id: ride.id, route: $0) }
         }
+    }
+
+    public init(_ entries: [Entry]) {
+        self.init()
+        for entry in entries { insert(entry.id, route: entry.route) }
+    }
+
+    @MainActor
+    public init(_ rides: [Ride]) {
+        self.init(Self.entries(rides))
     }
 }
 

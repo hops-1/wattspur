@@ -169,7 +169,7 @@ Quelle: Wunsch von Nils (22.10.2026): „In der Fahrtenliste gleiche bzw. ähnli
 | ID | Anforderung | Prio |
 |---|---|---|
 | ROUTE-01 | Ähnlichkeit zweier Fahrten: Anteil der Route, der höchstens 50 m von der anderen Route entfernt liegt, **in beide Richtungen** geprüft (der kleinere Wert zählt), damit eine kurze Fahrt nicht als „ähnlich“ zu einer langen gilt, die sie nur enthält. Grundlage sind die vereinfachten Routen aus B-104. Die Richtung zählt: Gleiche Strecke heißt gleiche Fahrtrichtung (Start- und Zielbereich passen zueinander) | S |
-| ROUTE-02 | Schwellwert: Standard ≥ 95 %, per Regler zwischen 80 % und 99 % einstellbar (in der Ansicht und in den Einstellungen als Standard) | S |
+| ROUTE-02 | Schwellwert: Standard ≥ 90 % (am 26.10.2026 von 95 % gesenkt: an echten Pendelstrecken findet 90 % mehr und der Regler steht in der Mitte), per Regler zwischen 80 % und 99 % einstellbar (in der Ansicht und in den Einstellungen als Standard) | S |
 | ROUTE-03 | „Ähnliche Fahrten zeigen“: Rechtsklick auf eine Fahrt (und im Tour-Detail) filtert die Liste auf ähnliche Fahrten, sortiert nach Ähnlichkeit (in % je Zeile). Ein Chip „Ähnlich wie: ‹Name› (n) ✕“ zeigt den Filter wie beim Zeitraum; ✕ hebt ihn auf | S |
 | ROUTE-04 | Schalter „Auch Gegenrichtung“: nimmt Fahrten auf derselben Strecke in umgekehrter Richtung dazu (z. B. Rückweg von der Arbeit), in der Liste mit Richtungs-Symbol gekennzeichnet | S |
 | ROUTE-05 | Aus den Treffern 2–4 Fahrten markieren und im bestehenden Tourenvergleich (CMP) öffnen | S |
@@ -518,7 +518,7 @@ Auf iOS als Tab-Leiste mit Navigation-Stack.
 ### 10.12 Ähnliche Strecken und weitere Rekorde (22.10.2026)
 | Thema | Entscheidung | Auswirkung |
 |---|---|---|
-| Ähnlichkeit | Anteil der Route innerhalb 50 m der anderen, in beide Richtungen; Standard ≥ 95 %, Regler 80–99 % | ROUTE-01, ROUTE-02 |
+| Ähnlichkeit | Anteil der Route innerhalb 50 m der anderen, in beide Richtungen; Standard ≥ 90 %, Regler 80–99 % | ROUTE-01, ROUTE-02 |
 | Richtung | getrennt; Schalter „Auch Gegenrichtung“ | ROUTE-04 |
 | Nutzung | „Ähnliche Fahrten zeigen“ mit Filter-Chip, Vergleich bis 4, Verlauf über alle Treffer, automatische Gruppen | ROUTE-03, ROUTE-05 bis ROUTE-07 |
 | Weitere Rekorde | Max-Leistung, Max-Trittfrequenz, Max-Geschwindigkeit (Bosch-Maximum) und beste 1-Minuten-Leistung | ADV-R3 |
@@ -623,5 +623,6 @@ Entschieden mit Nils am 26.10.2026 auf Grundlage des Plans für 1.7 (ergänzt 10
 | Welche Fahrten zählen | Ohne Beispielfahrt, Papierkorb, Teile zusammengefügter Fahrten und Fahrten ohne GPS; GPX-Fahrten zählen mit; über alle Bikes, der Bike-Filter schränkt zusätzlich ein. Im Verlauf zählen Werte nur von Fahrten, die sie haben („n von m Fahrten“) | ROUTE-03, ROUTE-06 |
 | Gruppen | Die Gruppe speichert Name, Schwelle, Gegenrichtung ja/nein und die **Bezugsroute**; die **Mitgliedschaft wird berechnet**, nicht gespeichert. Hin- und Rückweg sind getrennte Gruppen, der Schalter „Auch Gegenrichtung“ holt die Gegenrichtung dazu. Wattspur schlägt Gruppen ab 3 ähnlichen Fahrten vor und legt nichts automatisch an. Keine neue Rubrik in der Seitenleiste: Gruppen als Menü am Ähnlich-Chip, Name im Tour-Detail | ROUTE-07 |
 | Rekorde | Vier neue Arten (höchste Leistung, höchste Trittfrequenz, höchste Geschwindigkeit, beste 1-Minuten-Leistung), auch als „Neuer Rekord“ beim Import. Die Maximalwerte nimmt Wattspur aus der Datei; Geschwindigkeit zählt auch aus GPX (5-s-Fenster), Leistung, Trittfrequenz und 1-Minuten-Leistung nur, wo die Datei sie enthält. Die 1-Minuten-Leistung wird beim Import berechnet und mit der Fahrt gespeichert, für den Bestand im Hintergrund nachgetragen | ADV-R3, ADV-R2 |
+| Oberfläche der Liste | Der Filter „Ähnlich wie“ lebt in `ContentView` (bleibt beim Öffnen einer Fahrt und beim Wechsel der Rubrik) und gilt nur in der Fahrtenliste, nicht in den Listen neben Karte und Analyse. Der Index aller Routen wird beim ersten Suchen im Hintergrund gebaut. Ein Rücksprung-Knopf ist nicht nötig, weil die Liste neben dem Detail stehen bleibt. Die Regler-Schwelle der Einstellungen gilt als Anfangswert eines neuen Filters | ROUTE-02, ROUTE-03 |
 | Datenschutz | Alles lokal; Routen und Gruppen-Namen kommen weder in den Diagnosebericht noch in PDF- oder GPX-Export. Testdaten nur Beispielfahrt, anonymisierte Varianten oder synthetische Routen (NFR-01, NFR-12) | NFR-01 |
 | Mit in 1.7 | B-161 (Papierkorb-Knopf) und B-174 (Bike-Symbol in der Liste) als eigene PRs vor dem Release; B-175 (gemeinsame Bike-Auswahl, vorher B-159) und B-067 bleiben draußen | Backlog |
