@@ -1,6 +1,6 @@
 # Backlog – Wattspur
 
-Stand: 25.10.2026 (v0.17, Release 1.6.2 mit Update-Hinweis B-172; davor 1.6.1 mit Sicherheits-Fix, Architektur-Aufräumen B-162 bis B-169 und zwei Karten-Verbesserungen B-170, B-171; Plan für 1.7 bis 1.9) · Die IDs in Klammern verweisen auf `REQUIREMENTS.md`.
+Stand: 26.10.2026 (v0.18, Plan für 1.7 in zwei Releases 1.7.0 und 1.7.1; davor v0.17 vom 25.10.2026, Release 1.6.2 mit Update-Hinweis B-172; davor 1.6.1 mit Sicherheits-Fix, Architektur-Aufräumen B-162 bis B-169 und zwei Karten-Verbesserungen B-170, B-171; Plan für 1.7 bis 1.9) · Die IDs in Klammern verweisen auf `REQUIREMENTS.md`.
 Größe: **S** ≈ wenige Stunden, **M** ≈ 1–2 Tage, **L** ≈ mehrere Tage.
 Status: ☐ offen · ◐ in Arbeit · ☑ erledigt
 
@@ -22,7 +22,8 @@ Status: ☐ offen · ◐ in Arbeit · ☑ erledigt
 | **v1.6** | GPX-Import: Fahrten anderer Bikes und Radcomputer, FIT und GPX derselben Tour zusammenführen | Freunde, Tester mit anderen Bikes |
 | **v1.6.1** | Sicherheits-Fix für beschädigte FIT-Dateien und Aufräumen der Architektur (zwei Module, Dienste, geteilte Bibliothek); keine neuen Funktionen | Freunde |
 | **v1.6.2** | Update-Hinweis: Banner, wenn auf GitHub eine neuere Version liegt (B-172); Auto-Update bleibt offen (B-173) | Freunde |
-| **v1.7** | Ähnliche Strecken (suchen, vergleichen, Verlauf, Gruppen) und weitere Rekorde | Freunde |
+| **v1.7.0** | Ähnliche Strecken (suchen, filtern, vergleichen, Verlauf) und weitere Rekorde; dazu B-161 und B-174 | Freunde |
+| **v1.7.1** | Strecken-Gruppen (erkennen, benennen, Neuzuordnung beim Import) | Freunde |
 | **v1.8** | Ein Bereich „Fahrten“ mit Karte als Standard (B-125), Kalendertag als Filter (B-130) | Freunde |
 | **v1.9** | Bosch-Daten über die offizielle Data-Act-API (optional, eigenes Bosch-Konto): Bike, Akku und Wartung, Zusatzfelder je Fahrt und Import von Fahrten ohne Datei (Altbestand). **Motordaten je Fahrt gibt die API nicht her (Spezifikation 25.10.2026), Entscheidung Nils: Option B;** steht unter dem Vorbehalt des Spikes V-12 | Freunde mit Smart-System-Bike in der EU |
 | v1.x | Analysen, Komfort, Karten | alle |
@@ -226,8 +227,8 @@ Getestet von Nils aus Xcode am Stand von `main` (nach PR #68): Update von 1.4.3 
 
 | # | Story | Größe | Status |
 |---|---|---|---|
-| B-158 | Bike-Symbol in der Fahrtenliste in der kleinen Größe schlecht zu erkennen: Größe, Kontrast oder Form prüfen (Bugfix / Optimierung zu B-136; auch in Vergleich und Filter ansehen, VoiceOver bleibt) | S | ☐ |
-| B-159 | Die zuletzt gewählte Bike-Auswahl soll in allen Ansichten gelten (Fahrten, Auswertung, Karte, Highlights) statt je Bereich einzeln. Ändert die Entscheidung „Filter je Bereich“ aus REQUIREMENTS.md 10.16 und B-137; vorher mit Nils klären (ein gemeinsamer Filter, Umschalter „für alle Ansichten“ oder je Bereich lassen; Verhalten der Ziele) | M | ☐ |
+| B-174 | Bike-Symbol in der Fahrtenliste in der kleinen Größe schlecht zu erkennen: Größe, Kontrast oder Form prüfen (Bugfix / Optimierung zu B-136; auch in Vergleich und Filter ansehen, VoiceOver bleibt) | S | ☐ |
+| B-175 | Die zuletzt gewählte Bike-Auswahl soll in allen Ansichten gelten (Fahrten, Auswertung, Karte, Highlights) statt je Bereich einzeln. Ändert die Entscheidung „Filter je Bereich“ aus REQUIREMENTS.md 10.16 und B-137; vorher mit Nils klären (ein gemeinsamer Filter, Umschalter „für alle Ansichten“ oder je Bereich lassen; Verhalten der Ziele) | M | ☐ |
 
 ## v1.6 – GPX-Import (Plan 25.10.2026)
 
@@ -280,7 +281,24 @@ Auslöser: Der Sicherheitscheck von 1.6.0 fand fünf Abstürze durch präpariert
 | B-172 | Update-Hinweis: fragt höchstens einmal am Tag bei GitHub nach der neuesten Version und zeigt ein Banner mit Link zur Release-Seite; „Später“ blendet diese Version aus; Menü „Nach Updates suchen …“; Schalter in Einstellungen › Allgemein (Standard an); Info-Fenster, FAQ und NFR-01 angepasst (Wunsch 25.10.2026) | S | ☑ |
 | B-173 | Auto-Update (Sparkle): lädt die neue Version und ersetzt die App. **Auf einen späteren, unbestimmten Release verschoben:** braucht EdDSA-Schlüssel, einen gehosteten Appcast, XPC-Dienste mit zusätzlichen Sandbox-Rechten, und die App ist ad hoc signiert (die Signatur wechselt mit jedem Build, Bookmarks und Berechtigungen hängen daran); sinnvoll erst mit Developer-Account und Notarisierung (NFR-18) | L | ☐ |
 
-## v1.7 – Ähnliche Strecken und weitere Rekorde (Wunsch 22.10.2026)
+## v1.7 – Ähnliche Strecken und weitere Rekorde (Wunsch 22.10.2026, Plan 26.10.2026)
+
+**Plan mit Nils am 26.10.2026 (REQUIREMENTS.md 10.19):** In zwei Releases geschnitten: **1.7.0** enthält B-116 bis B-120 und B-122, **1.7.1** die Gruppen (B-121, mit `RouteGroup` und eigener Migration). Dazu kommen B-161 und B-174 als eigene kleine PRs vor dem Release 1.7.0. Je Zeile ein PR direkt gegen `main`; der nächste erst nach dem Merge. Check: `scripts/check-architecture.sh`, `swift test --no-parallel`, `scripts/ci-local.sh`.
+
+| PR | Inhalt |
+|---|---|
+| 0 | Doku-Stand (dieser Plan, Umnummerierung, README) |
+| 1 | B-161 Papierkorb-Knopf |
+| 2 | B-174 Bike-Symbol in der Liste |
+| 3 | B-116 Ähnlichkeit und `RouteIndex` im Kit |
+| 4 | B-122 Rekorde und Rekord-Felder (Migration 1) |
+| 5 | B-118 und B-119 Liste mit Chip, Regler, Gegenrichtung, Vergleich (nach Abnahme des Mockups B-117) |
+| 6 | B-120 Verlauf |
+| 7 | Release 1.7.0 |
+| 8 | B-121 Gruppen mit `RouteGroup` (Migration 2) |
+| 9 | Release 1.7.1 |
+
+Hinweis zu B-116: Einen `RouteIndex` gab es bisher nicht; er stand nur im Plan von 1.4 und entsteht jetzt.
 
 Pendelstrecken und Lieblingsrunden wiederfinden und vergleichen. Details: REQUIREMENTS.md Kap. 4.5b (ROUTE) und ADV-R3. Ersetzt die Einträge P-10 (Lieblingsrunden) und den Teil „Gleiche Strecke“ aus B-079. Von v1.5 auf v1.7 verschoben (24./25.10.2026, nach Profil und Bikes und dem GPX-Import). B-125 (jetzt v1.8) kommt erst danach: Der Chip „Ähnlich wie …“ gehört in die heutige Fahrtenliste, nach dem Muster der Rücksprünge aus B-128, und B-125 übernimmt ihn später. Ähnlichkeit gilt über alle Bikes, der Bike-Filter (B-137) schränkt zusätzlich ein.
 

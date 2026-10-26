@@ -612,3 +612,16 @@ Anlass: Wunsch von Nils, Motordaten einer Strecke über das offizielle Bosch-Por
 | Live Data (Bluetooth) | **nicht im Umfang von 1.9:** nur während der Fahrt und nur an ein mitlaufendes Zubehör, ohne Motorleistung, Smartphone laut Bosch nicht im Umfang; als IDEA-32 in den Pool | IDEA-32, Recherche |
 | Fahrt nachfahren | Wunsch von Nils nach den EBikeData-Screenshots: kommt in den Ideen-Pool (IDEA-31, P-31), bewusst **nach 1.9**; keine Aufnahme in den Plan 1.5 bis 1.9 | IDEA-31, P-31 |
 | Voraussetzungen | 1.5 (Bikes für die Zuordnung API-Bike ↔ Wattspur-Bike) und 1.6 (Duplikaterkennung nach Start, Strecke und Route, Quelle und Kennzeichen „geschätzt“ aus dem GPX-Import werden wiederverwendet) | B-141, B-143, B-151 |
+
+### 10.19 Ähnliche Strecken und weitere Rekorde: Umsetzung (26.10.2026, für v1.7)
+Entschieden mit Nils am 26.10.2026 auf Grundlage des Plans für 1.7 (ergänzt 10.12).
+| Thema | Entscheidung | Auswirkung |
+|---|---|---|
+| Schnitt in Releases | **1.7.0:** Ähnlichkeit finden, filtern, vergleichen, Verlauf über die Treffer und die vier neuen Rekorde. **1.7.1:** Strecken-Gruppen (eigene Migration) | B-116 bis B-120, B-122 / B-121 |
+| Berechnung | Anteil der Route innerhalb 50 m der anderen in beide Richtungen, der kleinere Wert zählt; Raster-Index (50-m-Zellen) für die Vorauswahl, Ergebnisse nur im Speicher, keine gespeicherten Paarwerte. Ein `RouteIndex` existierte bisher nicht (er stand nur im Plan von 1.4) und entsteht in B-116 | ROUTE-01, ROUTE-08 |
+| Richtung | Gleiche Richtung heißt: Start- und Zielbereich passen zusammen (Toleranz **200 m**); bei Rundfahrten (Start nahe Ziel) zählt zusätzlich der Umlaufsinn. Nach der ersten Messung an Beispieldaten nachjustieren | ROUTE-01, ROUTE-04 |
+| Welche Fahrten zählen | Ohne Beispielfahrt, Papierkorb, Teile zusammengefügter Fahrten und Fahrten ohne GPS; GPX-Fahrten zählen mit; über alle Bikes, der Bike-Filter schränkt zusätzlich ein. Im Verlauf zählen Werte nur von Fahrten, die sie haben („n von m Fahrten“) | ROUTE-03, ROUTE-06 |
+| Gruppen | Die Gruppe speichert Name, Schwelle, Gegenrichtung ja/nein und die **Bezugsroute**; die **Mitgliedschaft wird berechnet**, nicht gespeichert. Hin- und Rückweg sind getrennte Gruppen, der Schalter „Auch Gegenrichtung“ holt die Gegenrichtung dazu. Wattspur schlägt Gruppen ab 3 ähnlichen Fahrten vor und legt nichts automatisch an. Keine neue Rubrik in der Seitenleiste: Gruppen als Menü am Ähnlich-Chip, Name im Tour-Detail | ROUTE-07 |
+| Rekorde | Vier neue Arten (höchste Leistung, höchste Trittfrequenz, höchste Geschwindigkeit, beste 1-Minuten-Leistung), auch als „Neuer Rekord“ beim Import. Die Maximalwerte nimmt Wattspur aus der Datei; Geschwindigkeit zählt auch aus GPX (5-s-Fenster), Leistung, Trittfrequenz und 1-Minuten-Leistung nur, wo die Datei sie enthält. Die 1-Minuten-Leistung wird beim Import berechnet und mit der Fahrt gespeichert, für den Bestand im Hintergrund nachgetragen | ADV-R3, ADV-R2 |
+| Datenschutz | Alles lokal; Routen und Gruppen-Namen kommen weder in den Diagnosebericht noch in PDF- oder GPX-Export. Testdaten nur Beispielfahrt, anonymisierte Varianten oder synthetische Routen (NFR-01, NFR-12) | NFR-01 |
+| Mit in 1.7 | B-161 (Papierkorb-Knopf) und B-174 (Bike-Symbol in der Liste) als eigene PRs vor dem Release; B-175 (gemeinsame Bike-Auswahl, vorher B-159) und B-067 bleiben draußen | Backlog |
