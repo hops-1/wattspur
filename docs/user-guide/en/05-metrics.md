@@ -22,6 +22,7 @@ Wattspur shows two kinds of values:
 | Work | Your pedalling power added up over the ride: Σ power × 1 s, in kilojoules. If the file contains a total work value, that one is used. Because coasting counts as 0 W here but not in Bosch's average, work is usually lower than avg power × ride time; on a ride with a lot of coasting, much lower |
 | Elevation min–max | Lowest and highest altitude in the recording |
 | Calories ⓘ | As in the Flow app: work (kJ) × 0.97 plus 64 kcal per hour of ride time. The human body turns roughly a quarter of the energy it uses into pedalling work; the time share stands for everything else it burns meanwhile. The Flow app has no body data, so the share is a fixed value there. Six rides with the Flow value are matched within a few kcal. A mode “With profile” using your body data is prepared for a later version |
+| Best 1-minute power | The highest average power you held for 60 seconds in a row. Wattspur slides a window of 60 seconds over the ride; a gap of more than 5 seconds or a second without a power value breaks it. Rides without power (many GPX files) and rides under a minute have no value. For a merged ride the best of its parts counts |
 | CO₂ saved ⓘ | Distance (km) × 0.159 kg: what an average car would have emitted on the same distance |
 
 The calories and CO₂ factors are assumptions checked against a few rides. They may change in later versions; the changelog will say so.
@@ -61,11 +62,20 @@ Sums over several rides use the rides that have a value and say how many that is
 ## Highlights
 | Value | How |
 |---|---|
-| Records | From the Bosch totals of each ride. On a tie the earlier ride keeps the record. Average speed and average power count only for rides of 5 km or more, so a short ride downhill sets no record |
+| Records | From the Bosch totals of each ride. On a tie the earlier ride keeps the record. Average speed and average power count only for rides of 5 km or more, so a short ride downhill sets no record. Top speed, highest power and highest cadence are the maxima stored in the file and have no minimum distance; for GPX files only the speed counts (estimated from the track), power and cadence only where the file has them |
 | Longest streak | Consecutive calendar days with at least one ride, by the local date where the ride started. Two rides on one day count as one day; a day without a ride ends the streak; a single day is no streak |
 | Year | Rides belong to the year and month of their local start date. The change against the year before compares the distance |
 | Goals | The sum of the rides that started in the period. Weeks run from Monday to Sunday. “On track” means the goal is at least as far as the share of the period that has passed |
 | Not counted | The sample ride, rides in the trash, and the parts of a merged ride (the merged ride counts as one ride) |
+
+## Similar rides
+| Value | How |
+|---|---|
+| Similarity | The share of a route that lies at most 50 m from the other route, checked both ways; the smaller share counts. A short ride that lies on a long one is therefore not similar to it. The simplified route is compared, about one point every 10 m |
+| Direction | Start and end of both rides are at most 200 m apart: same direction. Start of one at the end of the other and the other way round: opposite direction. If the rides start or end in different places (a part of a route), they count as neither. For loops that end where they begin, the direction of travel around the loop decides |
+| Threshold | Default 90 %, adjustable from 80 to 99 % |
+| Which rides count | Rides with a route, including GPX files, across all bikes. Not: the sample ride, the trash, the parts of a merged ride (the merged ride counts) |
+| History | Ride time is the time in motion. “Best” is the shortest for ride time, otherwise the highest value; on a tie the earlier ride. “Latest” is the newest ride that has the value. The average is the plain mean of the rides that have the value |
 
 ## Map
 | Value | How |

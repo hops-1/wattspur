@@ -37,6 +37,17 @@ Wattspur shows the start time in the time zone of the start location. It looks t
 ### Why is there no route for the first and last few hundred metres?
 Only for the **sample ride**: its start and finish are removed so that nobody can find the place where the original ride began. Your own rides are shown completely.
 
+### Why is this ride (not) similar?
+Wattspur compares the routes: a ride is similar if at least as much of its route as the slider says (default 90 %) lies within 50 m of the other route, checked both ways. If a ride you expect is missing, try this:
+- **Lower the slider**, for example to 85 %: a detour or an inaccurate GPS track quickly costs a few per cent.
+- Switch on **Both directions** if the ride went the other way round (the way back).
+- Check whether the ride **starts or ends elsewhere** (more than 200 m off): then it is a part of the route and does not count as the same route.
+- The bike, source and period filters and the search of the list hide results; the chip says so (“12 of 15”).
+- A ride without GPS has no route, and neither does one whose route Wattspur is still preparing (that happens in the background shortly after launch).
+- The sample ride, rides in the trash and the parts of a merged ride do not count.
+
+If the list shows a ride you do not expect, go the other way: raise the slider until it disappears.
+
 ### Where are my rides stored? Is anything uploaded?
 Everything stays on your Mac, in `~/Library/Containers/io.github.hops-1.wattspur`. Wattspur has no account and sends no data about you or your rides. It only goes online to load map tiles, to look up time zones with Apple Maps, and to ask GitHub once a day whether a new version is out (see below).
 

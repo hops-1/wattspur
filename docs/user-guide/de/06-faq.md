@@ -37,6 +37,17 @@ Wattspur zeigt die Startzeit in der Zeitzone des Startorts. Die Zeitzone wird ei
 ### Warum fehlt die Route auf den ersten und letzten paar hundert Metern?
 Nur bei der **Beispielfahrt**: Start und Ziel sind entfernt, damit niemand den Ort findet, an dem die echte Fahrt begann. Deine eigenen Fahrten werden vollständig gezeigt.
 
+### Warum ist diese Fahrt (nicht) ähnlich?
+Wattspur vergleicht die Routen: Eine Fahrt ist ähnlich, wenn mindestens so viel ihrer Strecke wie am Regler eingestellt (Standard 90 %) höchstens 50 m neben der anderen Strecke liegt, in beide Richtungen geprüft. Fehlt eine erwartete Fahrt, probiere Folgendes:
+- **Regler senken**, etwa auf 85 %: Ein Umweg oder ein ungenauer GPS-Track kostet schnell ein paar Prozent.
+- **Beide Richtungen** einschalten, wenn die Fahrt andersherum gefahren wurde (Rückweg).
+- Prüfen, ob die Fahrt **an einem anderen Ort beginnt oder endet** (mehr als 200 m daneben): Dann ist sie eine Teilstrecke und zählt nicht als gleiche Strecke.
+- Bike-, Quellen- und Zeitraumfilter und die Suche in der Liste blenden Treffer aus; der Chip nennt es („12 von 15“).
+- Eine Fahrt ohne GPS hat keine Route, ebenso eine, deren Route Wattspur noch vorbereitet (das geschieht kurz nach dem Start im Hintergrund).
+- Die Beispielfahrt, Fahrten im Papierkorb und die Teile einer zusammengefügten Fahrt zählen nicht.
+
+Zeigt die Liste eine Fahrt, die du nicht erwartest, hilft der umgekehrte Weg: Regler erhöhen, bis sie verschwindet.
+
 ### Wo liegen meine Fahrten? Wird etwas hochgeladen?
 Alles bleibt auf deinem Mac, in `~/Library/Containers/io.github.hops-1.wattspur`. Wattspur hat kein Konto und sendet keine Daten über dich oder deine Fahrten. Ins Internet geht die App nur für Kartenkacheln, das Nachschlagen der Zeitzone über Apple Karten und die tägliche Frage bei GitHub, ob es eine neue Version gibt (siehe unten).
 

@@ -7,6 +7,10 @@ Every DMG handed out to testers corresponds to one entry below.
 
 ## [Unreleased]
 
+## [1.7.0] – 2026-10-26
+
+Wattspur finds rides on the same route and shows how you ride them over time, and it keeps more records.
+
 ### Added
 - **Similar rides:** right-click a ride › **Show Similar Rides** (or **Similar Rides** in the ride detail) and the list shows only the rides on the same route, with the share in per cent in every row. A chip above the list names the ride and the number of rides; its slider (80–99 %) says how alike a route has to be, **Both directions** adds the way back (marked ⇄), and the order is most similar or newest first. Select two to four rides in the result and compare them as usual. **Settings › General › Similar rides** sets where the slider starts (90 %). A route counts as the same when at least that share of it lies within 50 m of the other; start and end have to fit within 200 m for the same direction. Sample ride, trash and the parts of merged rides are left out (B-118, B-119).
 - **History of a route:** while **Similar to** is on and no ride is selected, the right side shows how the rides on the route develop: ride time, average speed, power or cadence over time (a dot per ride, the 5-ride average as a line), the best ride marked with a star and the latest with a ring, plus best, latest and average with how the latest differs from the average. Rides without a value (for example no power in a GPX file) are left out of that chart and counted: “9 of 12 rides have this value”. A click on a point opens the ride; **Back to History** (⌘[) returns. **Analyze These Rides** opens the analysis with all rides on the route (B-120).

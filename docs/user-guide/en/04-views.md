@@ -10,12 +10,26 @@ The window has three parts: the sidebar on the left, the ride list in the middle
 - **Search** by name in the field above the list.
 - **Sort and filter** with the button next to the search field: sort by date, distance, ride time, ascent or average power; show this week, this month, this year, the last 30 or 365 days, or all rides. From two bikes on you can also show one bike, and once you have a GPX ride, one source: all sources, Bosch FIT (including attached GPX) or GPX.
 - **Rename** a ride with a right-click › Rename….
+- **Show Similar Rides** (right-click) filters the list to the rides on the same route, see [Similar rides](#similar-rides).
 - **Export as GPX…** (right-click) saves the route of a ride, see [Ride detail](#ride-detail).
 - **Delete** rides with the Delete key or right-click › Move to Trash. This works for all selected rides; for more than one, Wattspur asks first. ⌘Z brings them back.
 - **Merge rides** that belong together, e.g. a ride recorded in two parts because of a coffee break: select them, then right-click › Merge … Rides…, or click **Merge…** next to the selection. Rides that overlap in time cannot be merged. A pause on the same day counts as a pause; across days only the riding times count. The merged ride shows “2 parts” in the list; **Split** above its details brings the original rides back.
 - **Merging suggested:** after an import, a hint above the list says when rides on the same day probably belong together (“2 rides from 15 Oct probably belong together”): **Merge** opens the merge dialog, **Not Now** hides the hint. The import log shows the same line with a button. Wattspur never merges by itself. **Settings › Import › Merging** sets the longest gap between the rides, or switches the hint off.
 - **Several rides:** select them with ⌘-click or ⇧-click. Until you have done this once, a tip below the list reminds you; ✕ hides it. Wattspur shows their total distance and time, and **Analyze Selected Rides** (⇧⌘A) opens the analysis for exactly these rides.
 - **Compare rides:** select 2 to 4 rides and click **Compare** (⇧⌘C) or right-click › Compare … Rides. See [Comparing rides](#comparing-rides) below.
+
+## Similar rides
+A commute or a favourite loop: Wattspur finds the rides that took the same way.
+- **Start:** right-click a ride › **Show Similar Rides**, or the **Similar Rides** button in the ride detail. This works for rides with a route; the sample ride, rides in the trash and the parts of a merged ride do not count.
+- **The list** then shows only the rides on this route, and every row says how similar it is (“97 %”). The ride you asked about stands on top with a target symbol (the reference ride). ⇄ marks a ride in the opposite direction.
+- **The chip** above the list names the reference ride and the number of rides (“12 of 15” when the bike, source or period filter or the search hide some). In it:
+  - **Similarity:** the slider from 80 to 99 %. The higher, the more exactly a ride has to follow the route. Where the slider starts is set under **Settings › General › Similar rides** (default 90 %).
+  - **Both directions** adds rides that took the same route the other way round, for example the way home from work.
+  - **Most similar** or **Newest** first.
+  - ✕ removes the filter. It stays when you open a ride or switch sections.
+- **Compare and analyze:** select 2 to 4 results and click **Compare** ([Comparing rides](#comparing-rides)), or select as many as you like and click **Analyze Selected Rides**.
+- **History:** as long as the filter is on and no ride is selected, the right side shows how the rides on this route develop: ride time, average speed, average power or average cadence over time. Each ride is a dot, the line is the average of the last five rides. The best ride has a ★ (the shortest for ride time, otherwise the highest value), the latest ride a ring. Below are best, latest (with how it differs from the average) and average. If some rides lack the value, for example power in GPX files, “9 of 12 rides” says so. A click on a dot opens the ride, **Back to History** (⌘[) returns, and **Analyze These Rides** opens the analysis with all rides on the route. The history takes all results at the chosen similarity, whatever the other filters of the list say.
+- What Wattspur means by “similar” is explained under [Metrics](05-metrics.md#similar-rides).
 
 ## Comparing rides
 The comparison shows 2 to 4 rides side by side, next to the list. The rides selected in the list **are** the comparison: ⌘-click another ride to add it, ✕ above a column removes it, and ↗ shows only that ride. **Done** (Esc) returns to the selection.
@@ -55,7 +69,7 @@ Choose **Highlights** in the sidebar (⌘4). Three tabs at the top; each has **E
   - **Riding days:** a calendar with one square per day, from Monday to Sunday; the darker, the more kilometres (under 10, 10–25, 25–50, 50 km and more). Point at a day to see its distance; click it to show its rides in the list.
   - **Kilometres per month** as bars; the best month is darker.
   - **Records this year.**
-- **Records:** your best values across all rides: longest ride, longest ride time, most ascent, highest average speed, highest average power and longest streak of riding days. Click a card to show the ride. “New” marks a record set by a ride imported in the last 7 days. See [Metrics](05-metrics.md#highlights).
+- **Records:** your best values across all rides: longest ride, longest ride time, most ascent, highest average speed, highest average power, longest streak of riding days, and top speed, highest power, highest cadence and best 1-minute power. Click a card to show the ride. “New” marks a record set by a ride imported in the last 7 days. See [Metrics](05-metrics.md#highlights).
 - **Goals:** kilometres, rides or ascent per week (Monday to Sunday), month or year. **Add Goal…** sets one; each period and metric has at most one goal. Each card shows how far you are, what is left and whether you are on track (at least as far as the time that has passed), and small bars for the last periods. ✎ changes or deletes a goal.
 - **New record after an import:** when an imported ride beats one of your records, a notice at the top of the window names it and the value it beat; **Show Ride** opens it. This works for every import, also from the watched folder. The import log notes it too.
 - Rides without power or ascent hold no record for them. The year shows “9 of 12 rides” under the ascent when not every ride has it; an ascent goal says so too.
@@ -91,7 +105,7 @@ Rides you delete stay in the trash for 30 days. **Restore** puts a ride back int
 |---|---|
 | ⌘1, ⌘2, ⌘3 | Rides, Analysis, Trash |
 | ⌘4, ⌘5, ⌘6 | Highlights, Map, Profile |
-| ⌘[ | Back to the map, the analysis or Highlights (in the ride detail) |
+| ⌘[ | Back to the map, the analysis, Highlights or the history (in the ride detail) |
 | ⌘← / ⌘→ | Previous / next year in Highlights › Year |
 | ⌘O | Import rides |
 | ⌥⌘L | Import window and log |

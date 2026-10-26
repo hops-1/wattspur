@@ -11,6 +11,426 @@
         }
       }
     },
+    "A history needs at least two rides on this route. Lower the similarity or include both directions.": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Für einen Verlauf braucht es mindestens zwei Fahrten auf dieser Strecke. Senke die Ähnlichkeit oder zeige beide Richtungen."
+          }
+        }
+      }
+    },
+    "Also show rides on this route the other way round": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Zeigt auch Fahrten auf dieser Strecke in Gegenrichtung"
+          }
+        }
+      }
+    },
+    "Analyze These Rides": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Diese Fahrten auswerten"
+          }
+        }
+      }
+    },
+    "Average": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Durchschnitt"
+          }
+        }
+      }
+    },
+    "Back to History": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Zurück zum Verlauf"
+          }
+        }
+      }
+    },
+    "Best": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Bestwert"
+          }
+        }
+      }
+    },
+    "Best 1-minute power": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Beste 1-Minuten-Leistung"
+          }
+        }
+      }
+    },
+    "Best time": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Bestzeit"
+          }
+        }
+      }
+    },
+    "Both directions": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Beide Richtungen"
+          }
+        }
+      }
+    },
+    "Change the search, the bike or the period.": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ändere die Suche, das Bike oder den Zeitraum."
+          }
+        }
+      }
+    },
+    "Click a point to open the ride.": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ein Klick auf einen Punkt öffnet die Fahrt."
+          }
+        }
+      }
+    },
+    "Highest cadence": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Höchste Trittfrequenz"
+          }
+        }
+      }
+    },
+    "Highest power": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Höchste Leistung"
+          }
+        }
+      }
+    },
+    "History": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Verlauf"
+          }
+        }
+      }
+    },
+    "Latest": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Letzte"
+          }
+        }
+      }
+    },
+    "%lld of %lld rides have this value.": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Bei %1$lld von %2$lld Fahrten gibt es diesen Wert."
+          }
+        }
+      }
+    },
+    "min": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "min"
+          }
+        }
+      }
+    },
+    "Most similar": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ähnlichste"
+          }
+        }
+      }
+    },
+    "Newest": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Neueste"
+          }
+        }
+      }
+    },
+    "No History Yet": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Noch kein Verlauf"
+          }
+        }
+      }
+    },
+    "None of these rides has this value.": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Keine dieser Fahrten hat diesen Wert."
+          }
+        }
+      }
+    },
+    "No other ride is %@ similar. Lower the similarity or include the opposite direction.": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Keine andere Fahrt ist zu %@ ähnlich. Senke die Ähnlichkeit oder zeige beide Richtungen."
+          }
+        }
+      }
+    },
+    "No Similar Rides": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Keine ähnlichen Fahrten"
+          }
+        }
+      }
+    },
+    "No Values": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Keine Werte"
+          }
+        }
+      }
+    },
+    "%@ of %@": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%1$@ von %2$@"
+          }
+        }
+      }
+    },
+    "Only rides with GPS can be compared by route.": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Nur Fahrten mit GPS lassen sich nach Strecke vergleichen."
+          }
+        }
+      }
+    },
+    "Open the analysis with the rides on this route": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Öffnet die Auswertung mit den Fahrten auf dieser Strecke"
+          }
+        }
+      }
+    },
+    "Reference ride": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Bezugsfahrt"
+          }
+        }
+      }
+    },
+    "Show Similar Rides": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ähnliche Fahrten zeigen"
+          }
+        }
+      }
+    },
+    "Show the rides on this route in the list": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Zeigt die Fahrten auf dieser Strecke in der Liste"
+          }
+        }
+      }
+    },
+    "%@ similar": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@ ähnlich"
+          }
+        }
+      }
+    },
+    "Similarity": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ähnlichkeit"
+          }
+        }
+      }
+    },
+    "%@ similar, opposite direction": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@ ähnlich, Gegenrichtung"
+          }
+        }
+      }
+    },
+    "Similar Rides": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ähnliche Fahrten"
+          }
+        }
+      }
+    },
+    "Similar rides:": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ähnliche Fahrten:"
+          }
+        }
+      }
+    },
+    "Similar rides from": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ähnliche Fahrten ab"
+          }
+        }
+      }
+    },
+    "Similar to: %@ (%@)": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ähnlich wie: %1$@ (%2$@)"
+          }
+        }
+      }
+    },
+    "Sort": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sortierung"
+          }
+        }
+      }
+    },
+    "The share of a route that lies at most 50 m from the other. “Show Similar Rides” starts here; the list has its own slider.": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Der Anteil einer Strecke, der höchstens 50 m von der anderen entfernt liegt. „Ähnliche Fahrten zeigen“ beginnt mit diesem Wert; die Liste hat einen eigenen Regler."
+          }
+        }
+      }
+    },
+    "This ride has no route": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Diese Fahrt hat keine Route"
+          }
+        }
+      }
+    },
+    "Top speed": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Höchstgeschwindigkeit"
+          }
+        }
+      }
+    },
+    "Top speed, highest power and highest cadence are the maximum stored in the file. The best 1-minute power is the highest average power over 60 seconds without a break; rides without power values, like many GPX files, do not count for the power records.": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Höchstgeschwindigkeit, höchste Leistung und höchste Trittfrequenz sind die Höchstwerte, die in der Datei stehen. Die beste 1-Minuten-Leistung ist die höchste durchschnittliche Leistung über 60 Sekunden ohne Unterbrechung; Fahrten ohne Leistungswerte, wie viele GPX-Dateien, zählen für die Leistungsrekorde nicht."
+          }
+        }
+      }
+    },
     "%@ %@ vs %@": {
       "localizations": {
         "de": {
@@ -94,9 +514,39 @@
     "%@ · %lld rides": {
       "localizations": {
         "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "%1$@ · %2$lld Fahrten"
+          "variations": {
+            "plural": {
+              "one": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "%1$@ · %2$lld Fahrt"
+                }
+              },
+              "other": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "%1$@ · %2$lld Fahrten"
+                }
+              }
+            }
+          }
+        },
+        "en": {
+          "variations": {
+            "plural": {
+              "one": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "%1$@ · %2$lld ride"
+                }
+              },
+              "other": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "%1$@ · %2$lld rides"
+                }
+              }
+            }
           }
         }
       }
@@ -6205,6 +6655,16 @@
           "stringUnit": {
             "state": "translated",
             "value": "Auf GitHub ansehen"
+          }
+        }
+      }
+    },
+    "vs average": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ggü. Durchschnitt"
           }
         }
       }
