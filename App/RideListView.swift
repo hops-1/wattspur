@@ -120,6 +120,65 @@ struct RideListView: View {
     }
 
     var body: some View {
+        listWithRoutes
+            .confirmationDialog(
+                Text("Move \(trashCandidates?.count ?? 0) rides to the trash?"),
+                isPresented: Binding(get: { trashCandidates != nil }, set: { if !$0 { trashCandidates = nil } }),
+                presenting: trashCandidates
+            ) { ids in
+                Button("Move to Trash", role: .destructive) { moveToTrash(ids) }
+                Button("Cancel", role: .cancel) { trashCandidates = nil }
+            } message: { _ in
+                Text("You can restore them from the trash for 30 days.")
+            }
+            .sheet(item: $mergeCandidates) { candidates in
+                MergeRidesSheet(rideIDs: candidates.ids, undoManager: undoManager) {
+                    selection = [$0]
+                    if let suggestion = candidates.suggestion { suggestions.dismiss(suggestion) }
+                }
+            }
+            .importFlow(flow)
+            .alert("Rename Ride", isPresented: Binding(get: { renaming != nil }, set: { if !$0 { renaming = nil } })) {
+                TextField("Name", text: $newName)
+                Button("Rename") {
+                    if let ride = renaming { library.rename(ride, to: newName) }
+                    renaming = nil
+                }
+                Button("Cancel", role: .cancel) { renaming = nil }
+            }
+    }
+
+    /// The list with its search, drop target and reactions to the saved routes. Split from `body`
+    /// so each chain of modifiers stays quick to type-check.
+    private var listWithRoutes: some View {
+        listCore
+            .onChange(of: routeGroupModels.map { "\($0.id)\($0.threshold)\($0.includeReverse)" }) {
+                // The route asked about was dissolved (also with ⌘Z of its creation).
+                if scope == nil, let id = similarFilter?.routeID, !routeGroupModels.contains(where: { $0.id == id }) {
+                    similarFilter = nil
+                }
+                refreshSimilar()
+            }
+            .onChange(of: similarDefault) { refreshSimilar() }
+            .sheet(item: $saveRequest) { request in
+                SaveRouteSheet(request: request) { threshold, reverse in
+                    guard let ride = rides.first(where: { $0.id == request.rideID }), let route = ride.overviewRoute else { return 0 }
+                    return await similarity.countMatches(of: route, threshold: threshold, includeReverse: reverse, rides: rides)
+                } onSave: { name, threshold, reverse in
+                    saveRoute(request, name: name, threshold: threshold, includeReverse: reverse)
+                } onCancel: { saveRequest = nil }
+            }
+            .alert("Rename Route", isPresented: Binding(get: { renamingRoute != nil }, set: { if !$0 { renamingRoute = nil } })) {
+                TextField("Name", text: $newRouteName)
+                Button("Rename") {
+                    if let route = renamingRoute { library.rename(route, to: newRouteName) }
+                    renamingRoute = nil
+                }
+                Button("Cancel", role: .cancel) { renamingRoute = nil }
+            }
+    }
+
+    private var listCore: some View {
         VStack(spacing: 0) {
             header
             if let scope {
@@ -261,55 +320,6 @@ struct RideListView: View {
                 similarFilter = nil
             }
             refreshSimilar()
-        }
-        .onChange(of: routeGroupModels.map { "\($0.id)\($0.threshold)\($0.includeReverse)" }) {
-            // The route asked about was dissolved (also with ⌘Z of its creation).
-            if scope == nil, let id = similarFilter?.routeID, !routeGroupModels.contains(where: { $0.id == id }) {
-                similarFilter = nil
-            }
-            refreshSimilar()
-        }
-        .onChange(of: similarDefault) { refreshSimilar() }
-        .confirmationDialog(
-            Text("Move \(trashCandidates?.count ?? 0) rides to the trash?"),
-            isPresented: Binding(get: { trashCandidates != nil }, set: { if !$0 { trashCandidates = nil } }),
-            presenting: trashCandidates
-        ) { ids in
-            Button("Move to Trash", role: .destructive) { moveToTrash(ids) }
-            Button("Cancel", role: .cancel) { trashCandidates = nil }
-        } message: { _ in
-            Text("You can restore them from the trash for 30 days.")
-        }
-        .sheet(item: $mergeCandidates) { candidates in
-            MergeRidesSheet(rideIDs: candidates.ids, undoManager: undoManager) {
-                selection = [$0]
-                if let suggestion = candidates.suggestion { suggestions.dismiss(suggestion) }
-            }
-        }
-        .importFlow(flow)
-        .sheet(item: $saveRequest) { request in
-            SaveRouteSheet(request: request) { threshold, reverse in
-                guard let ride = rides.first(where: { $0.id == request.rideID }), let route = ride.overviewRoute else { return 0 }
-                return await similarity.countMatches(of: route, threshold: threshold, includeReverse: reverse, rides: rides)
-            } onSave: { name, threshold, reverse in
-                saveRoute(request, name: name, threshold: threshold, includeReverse: reverse)
-            } onCancel: { saveRequest = nil }
-        }
-        .alert("Rename Route", isPresented: Binding(get: { renamingRoute != nil }, set: { if !$0 { renamingRoute = nil } })) {
-            TextField("Name", text: $newRouteName)
-            Button("Rename") {
-                if let route = renamingRoute { library.rename(route, to: newRouteName) }
-                renamingRoute = nil
-            }
-            Button("Cancel", role: .cancel) { renamingRoute = nil }
-        }
-        .alert("Rename Ride", isPresented: Binding(get: { renaming != nil }, set: { if !$0 { renaming = nil } })) {
-            TextField("Name", text: $newName)
-            Button("Rename") {
-                if let ride = renaming { library.rename(ride, to: newName) }
-                renaming = nil
-            }
-            Button("Cancel", role: .cancel) { renaming = nil }
         }
     }
 
