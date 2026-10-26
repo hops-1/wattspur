@@ -125,6 +125,46 @@ final class LibraryBackupCenter {
     }
 }
 
+/// "Backup from 26.10.2026 restored" after the start that swapped the library (P-22).
+@MainActor
+@Observable
+final class LibraryRestoreNotice {
+    struct Notice: Equatable {
+        let id = UUID()
+        let backupDate: Date
+        var text: String {
+            String(localized: "Backup from \(backupDate.formatted(date: .numeric, time: .omitted)) restored successfully.")
+        }
+    }
+
+    private(set) var current: Notice?
+
+    func show(backupDate: Date) { current = Notice(backupDate: backupDate) }
+    func hide() { current = nil }
+}
+
+struct LibraryRestoreNoticeView: View {
+    let notice: LibraryRestoreNotice.Notice
+    let onClose: () -> Void
+
+    var body: some View {
+        HStack(spacing: 12) {
+            Image(systemName: "checkmark.circle.fill").foregroundStyle(.green)
+            Text(verbatim: notice.text).font(.callout)
+            Button(action: onClose) { Image(systemName: "xmark").font(.caption.weight(.bold)) }
+                .buttonStyle(.plain)
+                .foregroundStyle(.secondary)
+                .accessibilityLabel(Text("Close"))
+        }
+        .padding(.horizontal, 16)
+        .padding(.vertical, 10)
+        .background(.regularMaterial, in: Capsule())
+        .overlay(Capsule().strokeBorder(.separator.opacity(0.6)))
+        .shadow(color: .black.opacity(0.15), radius: 10, y: 3)
+        .accessibilityElement(children: .combine)
+    }
+}
+
 struct LibraryBackupView: View {
     @Environment(LibraryBackupCenter.self) private var center
     @Query(filter: Ride.listedPredicate) private var rides: [Ride]

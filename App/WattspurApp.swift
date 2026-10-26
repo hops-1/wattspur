@@ -23,6 +23,8 @@ struct WattspurApp: App {
     @State private var updates = UpdateChecker()
     /// "Library Backup…" (P-22).
     @State private var backup = LibraryBackupCenter()
+    /// The note after a restore, shown by the first window (P-22).
+    @State private var restoreNotice = LibraryRestoreNotice()
     @Environment(\.openWindow) private var openWindow
 
     init() {
@@ -32,7 +34,15 @@ struct WattspurApp: App {
         #else
         let usesDemo = false
         #endif
-        if !usesDemo { _ = try? LibraryBackup.applyPendingRestore(storeURL: LibraryLocation.storeURL) }
+        let notice = LibraryRestoreNotice()
+        if !usesDemo {
+            let storeURL = LibraryLocation.storeURL
+            let manifest = LibraryBackup.pendingManifest(storeURL: storeURL)
+            if let restored = try? LibraryBackup.applyPendingRestore(storeURL: storeURL), restored != nil, let manifest {
+                notice.show(backupDate: manifest.createdAt)
+            }
+        }
+        _restoreNotice = State(initialValue: notice)
         do {
             #if DEBUG
             container = DemoMode.isOn ? try DemoMode.makeContainer() : try ModelContainer(for: Schema(WattspurSchema.models))
@@ -63,6 +73,7 @@ struct WattspurApp: App {
                 .environment(mergeSuggestions)
                 .environment(assignmentNotice)
                 .environment(updates)
+                .environment(restoreNotice)
                 .task { await maintenance.run(library: library) }
         }
         .modelContainer(container)

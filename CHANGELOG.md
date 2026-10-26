@@ -9,7 +9,7 @@ Every DMG handed out to testers corresponds to one entry below.
 
 ### Added
 
-- **Library backup:** **File › Library Backup…** saves the whole library (rides, bikes, goals, notes) as a folder and restores it from one. A backup is made while the app runs; a restore replaces the library the next time you open Wattspur and keeps the old library in a folder beside it (P-22).
+- **Library backup:** **File › Library Backup…** saves the whole library (rides, bikes, goals, notes) as a folder and restores it from one. A backup is made while the app runs; a restore replaces the library the next time you open Wattspur and keeps the old library in a folder beside it. After the restart a note says which backup came back (P-22).
 
 ## [1.7.0] – 2026-10-26
 

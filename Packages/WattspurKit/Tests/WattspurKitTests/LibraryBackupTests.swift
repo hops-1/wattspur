@@ -129,7 +129,13 @@ struct LibraryBackupTests {
         // Staging alone leaves the library as it is.
         #expect(try count(storeURL) == 5)
 
+        // Before the swap the start can read which backup comes back.
+        let staged = try #require(LibraryBackup.pendingManifest(storeURL: storeURL))
+        #expect(staged.rideCount == 3)
+        #expect(staged.build == "300")
+
         let kept = try #require(try LibraryBackup.applyPendingRestore(storeURL: storeURL))
+        #expect(LibraryBackup.pendingManifest(storeURL: storeURL) == nil)
         #expect(!LibraryBackup.hasPendingRestore(storeURL: storeURL))
         #expect(try count(storeURL) == 2)
         #expect(try count(kept.appending(path: "default.store")) == 5)

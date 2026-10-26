@@ -99,6 +99,8 @@ public enum LibraryBackup {
             if fm.fileExists(atPath: source.path) {
                 try fm.copyItem(at: source, to: pending.appending(path: support.lastPathComponent))
             }
+            // Stays in the pending folder, so the start after the restore can say which backup came back.
+            try fm.copyItem(at: backup.appending(path: manifestName), to: pending.appending(path: manifestName))
         } catch {
             try? fm.removeItem(at: pending)
             throw error
@@ -107,6 +109,12 @@ public enum LibraryBackup {
 
     public static func hasPendingRestore(storeURL: URL) -> Bool {
         FileManager.default.fileExists(atPath: pendingFolder(for: storeURL).appending(path: storeURL.lastPathComponent).path)
+    }
+
+    /// The manifest of the staged backup, to read before `applyPendingRestore` (which removes it).
+    public static func pendingManifest(storeURL: URL) -> Manifest? {
+        guard let data = try? Data(contentsOf: pendingFolder(for: storeURL).appending(path: manifestName)) else { return nil }
+        return try? decoder.decode(Manifest.self, from: data)
     }
 
     public static func cancelPendingRestore(storeURL: URL) {
