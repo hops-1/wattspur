@@ -29,6 +29,7 @@ enum SettingsKey {
     static let chartAxis = "chartAxis"
     static let compareShowsDeviation = "compareShowsDeviation"
     static let similarRoutesThreshold = "similarRoutesThreshold"
+    static let dismissedRouteSuggestions = "dismissedRouteSuggestions"
     static let calorieMode = "calorieMode"
     static let mergeSuggestionGapMinutes = "mergeSuggestionGapMinutes"
     static let recordsCheckedUntil = "recordsCheckedUntil"

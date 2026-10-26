@@ -12,12 +12,13 @@ struct RouteHistoryView: View {
     let onAnalyze: ([UUID]) -> Void
 
     @Query(filter: Ride.listedPredicate) private var rides: [Ride]
+    @Query private var routeGroups: [RouteGroup]
     @Environment(RouteSimilarityStore.self) private var similarity
     @State private var metric: RouteHistory.Metric = .duration
 
     var body: some View {
-        if let hits = similarity.hits(for: filter), let reference = rides.first(where: { $0.id == filter.referenceID }) {
-            let ids = Set(hits.map(\.id)).union([reference.id])
+        if let hits = similarity.hits(for: filter), let name = subjectName {
+            let ids = Set(hits.map(\.id)).union(filter.referenceID.map { [$0] } ?? [])
             let history = RouteHistory(rides.filter { ids.contains($0.id) }.map(\.highlightRide))
             if history.rides.count < 2 {
                 ContentUnavailableView {
@@ -26,13 +27,20 @@ struct RouteHistoryView: View {
                     Text("A history needs at least two rides on this route. Lower the similarity or include both directions.")
                 }
             } else {
-                content(history, name: reference.name)
+                content(history, name: name)
             }
         } else if similarity.referenceHasRoute(for: filter) == false {
             ContentUnavailableView("This ride has no route", systemImage: "location.slash")
         } else {
             ProgressView().controlSize(.small).frame(maxWidth: .infinity, maxHeight: .infinity)
         }
+    }
+
+    /// The name of the ride or the saved route the history is about; `nil` if it is gone.
+    private var subjectName: String? {
+        if let id = filter.referenceID { return rides.first { $0.id == id }?.name }
+        if let id = filter.routeID { return routeGroups.first { $0.id == id }?.name }
+        return nil
     }
 
     private func content(_ history: RouteHistory, name: String) -> some View {
