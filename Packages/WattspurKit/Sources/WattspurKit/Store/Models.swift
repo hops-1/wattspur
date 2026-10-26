@@ -401,9 +401,15 @@ public final class RouteGroup {
         referenceRouteData.flatMap { OverviewRoute(data: $0) } ?? OverviewRoute(segments: [])
     }
 
-    /// Newest last, so a name that was typed first stays on top.
+    /// By name, the way Finder sorts (case and accents ignored, numbers by value); equal names by age.
     public static func sorted(_ groups: [RouteGroup]) -> [RouteGroup] {
-        groups.sorted { ($0.createdAt, $0.id.uuidString) < ($1.createdAt, $1.id.uuidString) }
+        groups.sorted {
+            switch $0.name.localizedStandardCompare($1.name) {
+            case .orderedAscending: true
+            case .orderedDescending: false
+            case .orderedSame: ($0.createdAt, $0.id.uuidString) < ($1.createdAt, $1.id.uuidString)
+            }
+        }
     }
 }
 

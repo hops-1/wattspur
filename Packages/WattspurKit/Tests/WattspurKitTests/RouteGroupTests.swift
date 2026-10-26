@@ -75,6 +75,20 @@ struct RouteGroupTests {
         #expect(library.routeGroups().count == 2)
     }
 
+    @Test("Saved routes are listed by name, not by the order they were made in")
+    func sortedByName() throws {
+        let ride = try importRide()
+        for name in ["Zeiss über Rohrbach", "bäckerei", "Route 10", "Route 9", "Arbeit"] {
+            step { _ = library.addRouteGroup(from: ride, name: name) }
+        }
+        #expect(library.routeGroups().map(\.name) == ["Arbeit", "bäckerei", "Route 9", "Route 10", "Zeiss über Rohrbach"])
+
+        // The same name twice: the older route first.
+        step { _ = library.addRouteGroup(from: ride, name: "Arbeit") }
+        let names = library.routeGroups().filter { $0.name == "Arbeit" }
+        #expect(names.count == 2 && names[0].createdAt <= names[1].createdAt)
+    }
+
     @Test("Renaming and changing the threshold can be undone and redone")
     func renameAndUpdate() throws {
         let ride = try importRide()
