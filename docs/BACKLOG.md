@@ -227,7 +227,7 @@ Getestet von Nils aus Xcode am Stand von `main` (nach PR #68): Update von 1.4.3 
 
 | # | Story | Größe | Status |
 |---|---|---|---|
-| B-174 | Bike-Symbol in der Fahrtenliste in der kleinen Größe schlecht zu erkennen: Größe, Kontrast oder Form prüfen (Bugfix / Optimierung zu B-136; auch in Vergleich und Filter ansehen, VoiceOver bleibt) | S | ☐ |
+| B-174 | Bike-Symbol in der Fahrtenliste in der kleinen Größe schlecht zu erkennen: Größe, Kontrast oder Form prüfen (Bugfix / Optimierung zu B-136; auch in Vergleich und Filter ansehen, VoiceOver bleibt) **Umgesetzt (26.10.2026, 1.7.0):** kleine Chips (unter 28 pt: Liste, Menüs, Filter, Vergleich) zeichnen das Symbol größer (80 statt 62 % des Kreises), mit kräftigerem Strich (mind. 1,4 pt) und stärkerer Tönung (22 statt 14 %); in der Listenzeile 22 statt 20 pt | S | ☑ |
 | B-175 | Die zuletzt gewählte Bike-Auswahl soll in allen Ansichten gelten (Fahrten, Auswertung, Karte, Highlights) statt je Bereich einzeln. Ändert die Entscheidung „Filter je Bereich“ aus REQUIREMENTS.md 10.16 und B-137; vorher mit Nils klären (ein gemeinsamer Filter, Umschalter „für alle Ansichten“ oder je Bereich lassen; Verhalten der Ziele) | M | ☐ |
 
 ## v1.6 – GPX-Import (Plan 25.10.2026)

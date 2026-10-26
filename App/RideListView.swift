@@ -531,7 +531,7 @@ private struct RideRowBike: View {
     @Environment(\.backgroundProminence) private var prominence
 
     var body: some View {
-        BikeChip(kind: bike.kind, color: bike.color, size: 20, onAccent: prominence == .increased, accessibilityName: bike.name)
+        BikeChip(kind: bike.kind, color: bike.color, size: 22, onAccent: prominence == .increased, accessibilityName: bike.name)
             .help(Text(verbatim: bike.name))
     }
 }
