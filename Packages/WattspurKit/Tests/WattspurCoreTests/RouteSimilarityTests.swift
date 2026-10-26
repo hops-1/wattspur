@@ -320,6 +320,18 @@ struct RouteIndexTests {
     }
 }
 
+@Suite("Similarity threshold")
+struct SimilarityThresholdTests {
+    @Test("A threshold stays within 80–99 %; a damaged value becomes the default")
+    func clamped() {
+        #expect(RouteSimilarity.clampedThreshold(0.95) == 0.95)
+        #expect(RouteSimilarity.clampedThreshold(0.5) == 0.80)
+        #expect(RouteSimilarity.clampedThreshold(1.2) == 0.99)
+        #expect(RouteSimilarity.clampedThreshold(.nan) == RouteSimilarity.defaultThreshold)
+        #expect(RouteSimilarity.clampedThreshold(.infinity) == RouteSimilarity.defaultThreshold)
+    }
+}
+
 @Suite("Route similarity on recorded tours")
 struct RecordedRouteSimilarityTests {
     private func route(gpx name: String) throws -> OverviewRoute {

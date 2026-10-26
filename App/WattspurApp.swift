@@ -13,6 +13,8 @@ struct WattspurApp: App {
     @State private var maintenance = LibraryMaintenance()
     /// "New paths" of every ride, for the ride detail and the map (B-115).
     @State private var newPaths = NewPathsStore()
+    /// Rides on the route of one ride, for the list "Similar to" (B-118).
+    @State private var routeSimilarity = RouteSimilarityStore()
     /// Rides that probably belong together, found after an import (B-096).
     @State private var mergeSuggestions = MergeSuggestionCenter()
     /// The note "rides assigned to a bike" with Undo (B-135).
@@ -48,6 +50,7 @@ struct WattspurApp: App {
                 .environment(importLog)
                 .environment(watcher)
                 .environment(newPaths)
+                .environment(routeSimilarity)
                 .environment(mergeSuggestions)
                 .environment(assignmentNotice)
                 .environment(updates)

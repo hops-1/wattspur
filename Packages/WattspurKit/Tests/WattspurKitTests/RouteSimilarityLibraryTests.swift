@@ -44,6 +44,25 @@ struct RouteSimilarityLibraryTests {
         #expect(index.similar(to: north.id).isEmpty)
     }
 
+    @Test("The index can be built from entries made on the main thread")
+    func entries() throws {
+        let container = try ModelContainer(for: Schema(WattspurSchema.models),
+                                           configurations: ModelConfiguration(isStoredInMemoryOnly: true))
+        let library = RideLibrary(context: container.mainContext)
+        let data = try Fixture.data("reinheim-rundfahrt")
+        for week in 1...2 {
+            library.importFile(data: try FITAnonymizer(latitudeOffset: 0, longitudeOffset: 0, weeks: week).anonymize(data),
+                               fileName: "W\(week).fit")
+        }
+        let rides = try container.mainContext.fetch(FetchDescriptor<Ride>())
+        let entries = RouteIndex.entries(rides)
+        #expect(entries.count == 2)
+        let index = RouteIndex(entries)
+        #expect(index.count == 2)
+        let first = try #require(entries.first)
+        #expect(index.similar(to: first.id).count == 1)
+    }
+
     @Test("A ride without GPS is left out")
     func noGPS() throws {
         let container = try ModelContainer(for: Schema(WattspurSchema.models),

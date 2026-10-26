@@ -38,6 +38,10 @@ struct ContentView: View {
     /// highlights, came from; the ride detail then offers "Back to Map", "Back to
     /// Analysis" or "Back to Highlights" (⌘[).
     @State private var returnSection: AppSection?
+    /// "Similar to: …" in the ride list; stays while a ride is opened or another section is shown (B-118).
+    @State private var similarFilter: SimilarRidesFilter?
+    /// Where a new "Similar to" filter starts (ROUTE-02).
+    @AppStorage(SettingsKey.similarRoutesThreshold) private var similarThreshold = RouteSimilarity.defaultThreshold
     @AppStorage(SettingsKey.sidebarCompact) private var sidebarCompact = false
     /// The ⌘-click tip goes away for good after the first multiple selection (B-113).
     @AppStorage(SettingsKey.multiSelectTipDone) private var multiSelectTipDone = false
@@ -172,7 +176,7 @@ struct ContentView: View {
                     switch section {
                     case .trash: TrashView()
                     default:
-                        RideListView(selection: $selectedRideIDs, importRequested: $importRequested) { comparing = true } onShowYear: {
+                        RideListView(selection: $selectedRideIDs, importRequested: $importRequested, similarFilter: $similarFilter) { comparing = true } onShowYear: {
                             highlightsTab = .year
                             highlightsYear = nil
                             section = .highlights
@@ -298,7 +302,7 @@ struct ContentView: View {
     /// selection is the same as under Rides (B-123, B-124).
     @ViewBuilder
     private func scopedList(_ scope: RideListScope) -> some View {
-        RideListView(selection: $selectedRideIDs, importRequested: $importRequested, onCompare: {
+        RideListView(selection: $selectedRideIDs, importRequested: $importRequested, similarFilter: .constant(nil), onCompare: {
             comparing = true
             section = .rides
         }, scope: scope) { id in
@@ -328,6 +332,10 @@ struct ContentView: View {
                 RideDetailView(rideID: id) { selectedRideIDs = Set($0) } onShowRecords: {
                     highlightsTab = .records
                     section = .highlights
+                } onShowSimilar: {
+                    withAnimation(.snappy) {
+                        similarFilter = SimilarRidesFilter(referenceID: id, threshold: RouteSimilarity.clampedThreshold(similarThreshold))
+                    }
                 }
             }
         } else if comparing && RideComparison.canCompare(count: selectedRideIDs.count) {

@@ -9,18 +9,22 @@ struct RideDetailView: View {
     var onSplit: ([UUID]) -> Void = { _ in }
     /// Opens Highlights › Records (ADV-R2).
     var onShowRecords: () -> Void = {}
+    /// Lists the rides on this ride's route (B-118).
+    var onShowSimilar: () -> Void = {}
     @Query private var rides: [Ride]
 
-    init(rideID: UUID, onSplit: @escaping ([UUID]) -> Void = { _ in }, onShowRecords: @escaping () -> Void = {}) {
+    init(rideID: UUID, onSplit: @escaping ([UUID]) -> Void = { _ in }, onShowRecords: @escaping () -> Void = {},
+         onShowSimilar: @escaping () -> Void = {}) {
         self.rideID = rideID
         self.onSplit = onSplit
         self.onShowRecords = onShowRecords
+        self.onShowSimilar = onShowSimilar
         _rides = Query(filter: #Predicate<Ride> { $0.id == rideID })
     }
 
     var body: some View {
         if let ride = rides.first {
-            RideDetailContent(ride: ride, onSplit: onSplit, onShowRecords: onShowRecords)
+            RideDetailContent(ride: ride, onSplit: onSplit, onShowRecords: onShowRecords, onShowSimilar: onShowSimilar)
         } else {
             ContentUnavailableView("Select a ride", systemImage: "bicycle")
         }
@@ -31,6 +35,7 @@ private struct RideDetailContent: View {
     let ride: Ride
     let onSplit: ([UUID]) -> Void
     let onShowRecords: () -> Void
+    let onShowSimilar: () -> Void
     /// All rides that count, to find the records this ride holds (ADV-R2).
     @Query(filter: Ride.listedPredicate)
     private var listedRides: [Ride]
@@ -116,6 +121,11 @@ extension RideDetailContent {
                 .buttonStyle(.glass)
                 .disabled(route.isEmpty)
                 .help(Text("Save the track for komoot, a navigation device or another app"))
+                // The rides on the same route (B-118, ROUTE-02).
+                Button("Similar Rides", systemImage: "point.3.connected.trianglepath.dotted", action: onShowSimilar)
+                    .buttonStyle(.glass)
+                    .disabled(!SimilarRidesFilter.canStart(from: ride))
+                    .help(Text("Show the rides on this route in the list"))
             }
             HStack(alignment: .top, spacing: 16) {
                 VStack(alignment: .leading, spacing: 4) {
