@@ -1,6 +1,6 @@
 # Backlog – Wattspur
 
-Stand: 27.10.2026 (v0.19, Plan für 1.8 „Kartenstile“, der Bereich „Fahrten“ B-125 nach 1.9 verschoben; davor v0.18 vom 26.10.2026, Plan für 1.7 in zwei Releases 1.7.0 und 1.7.1; davor v0.17 vom 25.10.2026, Release 1.6.2 mit Update-Hinweis B-172; davor 1.6.1 mit Sicherheits-Fix, Architektur-Aufräumen B-162 bis B-169 und zwei Karten-Verbesserungen B-170, B-171; Plan für 1.7 bis 1.9) · Die IDs in Klammern verweisen auf `REQUIREMENTS.md`.
+Stand: 27.10.2026 (v0.20, Plan für 1.8.1 „Kurvige Straßen“ als Versuch; davor v0.19, Plan für 1.8 „Kartenstile“, der Bereich „Fahrten“ B-125 nach 1.9 verschoben; davor v0.18 vom 26.10.2026, Plan für 1.7 in zwei Releases 1.7.0 und 1.7.1; davor v0.17 vom 25.10.2026, Release 1.6.2 mit Update-Hinweis B-172; davor 1.6.1 mit Sicherheits-Fix, Architektur-Aufräumen B-162 bis B-169 und zwei Karten-Verbesserungen B-170, B-171; Plan für 1.7 bis 1.9) · Die IDs in Klammern verweisen auf `REQUIREMENTS.md`.
 Größe: **S** ≈ wenige Stunden, **M** ≈ 1–2 Tage, **L** ≈ mehrere Tage.
 Status: ☐ offen · ◐ in Arbeit · ☑ erledigt
 
@@ -25,6 +25,7 @@ Status: ☐ offen · ◐ in Arbeit · ☑ erledigt
 | **v1.7.0** | Ähnliche Strecken (suchen, filtern, vergleichen, Verlauf) und weitere Rekorde; dazu B-161 und B-174 | Freunde |
 | **v1.7.1** | Strecken-Gruppen (erkennen, benennen, Neuzuordnung beim Import), Mediathek-Backup (P-22) und Hilfe-Menü (B-084) | Freunde |
 | **v1.8** | Kartenstile: OpenStreetMap, CyclOSM und OpenTopoMap (mit Höhenlinien und Schummerung), Fenster „Karte anpassen“ mit Bildchen (B-061); Kalendertag als Filter (B-130), Austauschformate (B-177) | Freunde |
+| v1.8.1 | Versuch „Kurvige Straßen“: Kurvigkeit eigener Fahrten (Kennzahl, Einfärbung, Rekord), optional Ebene mit kurvigen Straßen aus roadcurvature.com (B-180 bis B-183, V-13) | Freunde, Motorradfahrer |
 | **v1.9** | Bosch-Daten über die offizielle Data-Act-API (optional, eigenes Bosch-Konto): Bike, Akku und Wartung, Zusatzfelder je Fahrt und Import von Fahrten ohne Datei (Altbestand). **Motordaten je Fahrt gibt die API nicht her (Spezifikation 25.10.2026), Entscheidung Nils: Option B;** steht unter dem Vorbehalt des Spikes V-12 | Freunde mit Smart-System-Bike in der EU |
 | v1.10 | Ein Bereich „Fahrten“ mit Karte als Standard (B-125), Analyse nach Strecke (B-176); von 1.8 zurückgestellt am 27.10.2026 | Freunde |
 | v1.x | Analysen, Komfort, Karten | alle |
@@ -337,6 +338,39 @@ Vorbild für das Fenster „Karte anpassen“ ist komoot (Screenshot von Nils, 2
 | B-061 | OSM-Stile Standard, CyclOSM und OpenTopoMap als Kachelquelle (`TileSource`) in Tour-Detail, Karte aller Fahrten, Vergleich und den PDFs; eigener User-Agent, Cache nach HTTP-Headern, kein Vorabladen, Quellenangabe unten rechts und im PDF (MAP-02, NFR-08). Fenster „Karte anpassen“ (Knopf oben rechts auf der Karte): Abschnitt „Kartentyp“ mit sechs gezeichneten Bildchen (Standard, Satellit, Hybrid, OpenStreetMap, CyclOSM, OpenTopoMap), auf der Karte aller Fahrten zusätzlich „Heatmap“ (Linien, Wärmekarte; der Umschalter in der Kopfzeile entfällt); dieselben Bildchen in den Einstellungen. Ohne Netz schon gesehene Kacheln aus dem Cache, das PDF fällt auf Apple Standard zurück (Wunsch von Nils 27.10.2026, aus v1.x vorgezogen) | L | ☐ |
 | B-130 | Kalendertag mit Fahrten in den Highlights anklicken: „Fahrten“ zeigt nur die Fahrten dieses Tages, mit Filter-Chip „15. Okt. ✕“ in der Liste und „‹ Zurück zu Highlights“ (⌘[, siehe B-128); bei genau einer Fahrt rechts gleich ihr Tour-Detail, bei mehreren rechts die Karte dieser Fahrten (mit B-125) bzw. bis dahin die Mehrfachauswahl. ✕ am Chip zeigt wieder alle Fahrten. Eine Serie in „Rekorde“ filtert entsprechend auf ihren Zeitraum, Chip „3.–9. Okt. ✕“ (Feedback 1.4.1, Entscheidung Nils 24.10.2026) | S | ☐ |
 | B-177 | **Austauschformate dokumentieren** (Wunsch von Nils 26.10.2026, „im nächsten Release“): neue Seite `docs/reference/data-exchange.md` (Englisch, verlinkt aus den FAQ DE+EN) mit dem **GPX-Export** (GPX 1.1, ein Segment je Teil einer zusammengefügten Fahrt, Erweiterungen für Leistung und Trittfrequenz, Bike-Name) und dem **Backup-Ordner** (`manifest.json` mit `format`, `default.store` als SQLite/SwiftData, `.default_SUPPORT/_EXTERNAL_DATA` mit `samplesData`, den Originaldateien aus `SourceFile` und Fotos; Tabellen und Spalten aus einem echten Store ausgelesen, Datumsformat, UUIDs, Beispiel-SQL). Ehrlich dazu: Das Schema ist SwiftData-intern und kein Austauschformat; stabil sind Manifest, Originaldateien und GPX. Dazu ein Python-Beispielskript (nur Standardbibliothek), ein Kit-Test, der Tabellen und Spalten der Doku gegen ein erzeugtes Backup prüft, und ein Hinweis auf B-178 | S | ☐ |
+
+## v1.8.1 – Kurvige Straßen (Versuch, Plan 27.10.2026)
+
+Wunsch von Nils am 27.10.2026, angeregt von [roadcurvature.com](https://roadcurvature.com) (Adam Franco): kurvige Strecken erkennen und auf der Karte zeigen, wie es Motorrad-Apps (Kurviger, Calimoto) tun. Wattspur hat schon Motorradfahrten aus dem GPX-Import (BMW Motorrad Connected, V-11); Kurven zählen aber auch auf dem eBike (Pässe, Abfahrten). Als **Versuch** geplant: Teil A kommt ohne fremde Daten aus und lohnt sich allein; Teil B nur, wenn V-13 passt. Baut auf 1.8 auf (Fenster „Karte anpassen“, `MKMapView` überall, B-061c).
+
+**Was es bei roadcurvature gibt (geprüft am 27.10.2026):**
+- Algorithmus (README von `adamfranco/curvature`): je drei aufeinanderfolgende Punkte der Umkreisradius; Abschnitte nach Radius in Klassen (eng unter ca. 30 m, sanft unter ca. 175 m, darüber gerade) mit Gewicht 2 / 1 / 0; Kurvigkeit = Summe aus Länge × Gewicht (300 ≈ 150 m enge oder 300 m sanfte Kurven). Kreisverkehre, Ampeln usw. zählen nicht.
+- Code unter GPL-3.0: **nicht übernehmen**, sondern nach der Beschreibung selbst im Kit schreiben (die App-Lizenz bleibt frei).
+- Fertige Daten als KMZ je Bundesland unter `kml.roadcurvature.com/europe/germany/`, je drei Dateien: `c_1000` (sehr kurvig), `c_300` (mäßig kurvig), `c_1000.curves` (einzelne Kurven). Größen gepackt z. B. Hessen 3,5 / 9,6 / 4,1 MB, Bayern 7,2 / 27,4 / 8,4 MB. **Stand November 2024**, also nicht so frisch wie die Seite behauptet.
+- Daten © OpenStreetMap-Mitwirkende, ODbL: Quellenangabe nötig. Mitliefern in der App würde Share-Alike für die Datenbank auslösen, deshalb lädt der Nutzer die Dateien selbst und importiert sie.
+
+**Reihenfolge und PRs:** je Zeile ein PR direkt gegen `main`; der nächste erst nach dem Merge. Check: `scripts/check-architecture.sh`, `swift test --no-parallel`, `scripts/ci-local.sh`.
+
+| PR | Inhalt |
+|---|---|
+| 0 | Doku-Stand (dieser Plan, REQUIREMENTS 10.21) |
+| 1 | B-180 `CurvatureAnalyzer` im Kit, mit Tests |
+| 2 | B-181 Kurvigkeit im Tour-Detail, Spur nach Kurven einfärben, Rekord |
+| – | **Entscheidung nach V-13:** Teil B bauen oder auf später verschieben |
+| 3 | B-182 Import kurviger Straßen (KMZ/KML) im Kit |
+| 4 | B-183 Ebene „Kurvige Straßen“ im Fenster „Karte anpassen“ |
+| 5 | Release 1.8.1 |
+
+| # | Story | Größe | Status |
+|---|---|---|---|
+| V-13 | **Spike roadcurvature-Daten:** Hessen `c_300` und `c_1000` laden; KML-Aufbau notieren (LineString je Straße, wo Kurvigkeit und Name stehen, Stil/Farbe), Größe entpackt, Zeit zum Einlesen mit `XMLParser` im Streaming (wie B-140), Zahl der Linien und Punkte; Entpacken von KMZ (ZIP) ohne Fremdbibliothek prüfen (`/usr/bin/ditto -x -k` per `Process` oder eigener Leser für „stored/deflate“ mit `Compression`); Darstellung als `MKMultiPolyline` bei Zoom auf ganz Hessen flüssig? Ergebnis als kurze Notiz `docs/SPIKE-KURVEN.md` | S | ☐ |
+| B-180 | `CurvatureAnalyzer` im Kit: Kurvigkeit einer Fahrt nach dem roadcurvature-Verfahren (Umkreisradius aus drei Punkten, Klassen eng/sanft/gerade, Gewicht 2/1/0, Summe Länge × Gewicht), vorher Track vereinfachen bzw. auf feste Abstände (ca. 10 m) bringen, damit GPS-Rauschen keine Kurven erfindet; Stillstand und Pausen auslassen. Ergebnis: Kurvigkeit gesamt, je km, Anteil enger Kurven und Radius je Punkt für die Einfärbung. Tests mit konstruierten Spuren (Gerade = 0, Kreis mit 25 m Radius, Serpentine) und einer echten Motorrad-GPX aus V-11 | M | ☐ |
+| B-181 | Kurvigkeit anzeigen: Kennzahl „Kurvigkeit“ im Tour-Detail (mit Einordnung „gerade / kurvig / sehr kurvig“ und Hilfe-Text); Spur nach Kurvenradius einfärben als erste Stufe von B-063 (eng rot, sanft gelb, gerade grau, Legende nach NFR-16); neuer Rekord „Kurvigste Fahrt“ (je km, ab 10 km) in den Highlights; Spalte in der Fahrtenliste sortierbar. Wird zusammen mit B-063 gebaut, falls das vorher kommt | S–M | ☐ |
+| B-182 | Import „Kurvige Straßen“ im Kit: KMZ/KML von roadcurvature einlesen (Streaming, Grenzen für Größe und Punkte wie B-140), je Straße Linie, Name und Kurvigkeit; Speicher als kompakte Binärdatei je Region im Application-Support-Ordner mit Begrenzungsrahmen je Linie, damit die Karte nur Sichtbares lädt; Region ersetzen und löschen; Fehler für fremde KML-Dateien. Tests an einem kleinen, selbst erzeugten Ausschnitt (keine Fremddaten im Repo) | M | ☐ |
+| B-183 | Ebene „Kurvige Straßen“: im Fenster „Karte anpassen“ neuer Abschnitt „Ebenen“ mit Schalter; Menüpunkt „Kurvige Straßen importieren …“ mit Link zur Download-Seite und kurzer Anleitung; Linien über jedem Kartenstil, Farbe nach Kurvigkeit (≥ 300 orange, ≥ 1000 rot), erst ab Zoom auf Landkreis-Ebene, Name und Kurvigkeit beim Zeigen; Quellenangabe „© OpenStreetMap-Mitwirkende, roadcurvature.com“ unten rechts und im PDF; in Tour-Detail, Karte aller Fahrten und Vergleich | M–L | ☐ |
+
+**Aufwand (Schätzung 27.10.2026):** Teil A (B-180, B-181) etwa 2–3 Tage und ohne Risiko. Teil B (V-13, B-182, B-183) etwa 3–5 Tage; Risiken: Größe der Daten (Bayern `c_300` gepackt 27 MB), Entpacken von KMZ, flüssiges Zeichnen vieler Linien, Daten seit 2024 nicht erneuert. Zusammen etwa 5–8 Tage, also ein kleines Release wie 1.7.1.
+Selbst aus OSM rechnen (Geofabrik-Extrakt, eigener Lauf von `curvature`) ist **nicht** Teil des Plans: Das wäre ein eigener Server-Dienst und kein Versuch mehr.
 
 ## v1.9 – Bosch-Daten (Plan 25.10.2026)
 
