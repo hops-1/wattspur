@@ -75,9 +75,12 @@ private struct ComparisonMapRepresentable: NSViewRepresentable {
         // Rebuilt when rides, their routes or the appearance change.
         let key = routes.map { "\($0.id)|\($0.coordinates.count)" }.joined(separator: ",") + "|\(dark)"
         guard coordinator.key != key else { return }
-        let ridesChanged = coordinator.rideIDs != routes.map(\.id)
+        // The routes are loaded after the map first appears, so fit whenever the rides that
+        // have a route change, not only the rides: else the map stayed on its world overview.
+        let routedIDs = routes.filter { $0.coordinates.count > 1 }.map(\.id)
+        let ridesChanged = coordinator.routedIDs != routedIDs
         coordinator.key = key
-        coordinator.rideIDs = routes.map(\.id)
+        coordinator.routedIDs = routedIDs
         map.removeOverlays(map.drawnOverlays)
         map.removeAnnotations(map.annotations)
         let overlay = ComparisonRoutesOverlay(routes: routes, dark: dark)
@@ -88,7 +91,7 @@ private struct ComparisonMapRepresentable: NSViewRepresentable {
             route.coordinates.first.map { ComparisonStartMarker(coordinate: $0, route: route, dark: dark) }
         })
         // Fit again when rides are added or removed, as before.
-        if ridesChanged {
+        if ridesChanged && !routedIDs.isEmpty {
             Self.fit(map, to: overlay.routesRect)
         }
     }
@@ -108,7 +111,7 @@ private struct ComparisonMapRepresentable: NSViewRepresentable {
     final class Coordinator: NSObject, MKMapViewDelegate {
         var mapType: RideMapType?
         var key: String?
-        var rideIDs: [UUID]?
+        var routedIDs: [UUID]?
 
         func mapView(_ mapView: MKMapView, rendererFor overlay: any MKOverlay) -> MKOverlayRenderer {
             if let tiles = overlay as? MKTileOverlay { return MutedTileRenderer(tileOverlay: tiles) }
