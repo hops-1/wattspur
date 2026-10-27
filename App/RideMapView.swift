@@ -231,7 +231,7 @@ private struct RideMapRepresentable: NSViewRepresentable {
         }
 
         func mapView(_ mapView: MKMapView, rendererFor overlay: any MKOverlay) -> MKOverlayRenderer {
-            if let tiles = overlay as? MKTileOverlay { return MKTileOverlayRenderer(tileOverlay: tiles) }
+            if let tiles = overlay as? MKTileOverlay { return MutedTileRenderer(tileOverlay: tiles) }
             return overlay is RideRouteOverlay ? RideRouteRenderer(overlay: overlay) : MKOverlayRenderer(overlay: overlay)
         }
 

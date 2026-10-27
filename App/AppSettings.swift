@@ -24,6 +24,8 @@ enum SettingsKey {
     static let mapPeriod = "mapPeriod"
     static let mapType = "mapType"
     static let mapMode = "mapMode"
+    /// Lines or heat map can be hidden with a second click in "Customize Map" (B-061).
+    static let mapShowsRides = "mapShowsRides"
     static let bikeFilterMap = "bikeFilter.map"
     static let sourceFilterMap = "sourceFilter.map"
     static let chartAxis = "chartAxis"

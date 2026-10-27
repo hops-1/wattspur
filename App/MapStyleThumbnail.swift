@@ -98,7 +98,8 @@ struct MapStyleThumbnail: View {
         let rect = CGRect(origin: .zero, size: size)
         switch kind {
         case .map(let type):
-            drawMap(type, in: &context, size: size)
+            // The OpenStreetMap styles are drawn paler on the map (MutedTileRenderer), so here too.
+            drawMap(type, in: &context, size: size, muted: type.tileSource != nil)
         case .display(let mode):
             drawMap(.standard, in: &context, size: size, muted: true)
             if mode == .lines {

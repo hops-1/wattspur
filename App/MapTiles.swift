@@ -90,6 +90,28 @@ final class CachingTileOverlay: MKTileOverlay, @unchecked Sendable {
     }
 }
 
+/// Draws the tiles paler and less colourful, so the routes stand out on them like on Apple's
+/// muted map (wish of Nils after testing 1.8, 27.10.2026). Only on screen; the PDF does the same.
+final class MutedTileRenderer: MKTileOverlayRenderer {
+    /// How much colour is taken out, 0 … 1.
+    static let desaturation: CGFloat = 0.45
+    /// How strong the white veil over the tiles is, 0 … 1.
+    static let veil: CGFloat = 0.3
+
+    override func draw(_ mapRect: MKMapRect, zoomScale: MKZoomScale, in context: CGContext) {
+        super.draw(mapRect, zoomScale: zoomScale, in: context)
+        let rect = self.rect(for: mapRect)
+        context.saveGState()
+        context.setBlendMode(.saturation)
+        context.setFillColor(CGColor(gray: 0.5, alpha: Self.desaturation))
+        context.fill(rect)
+        context.setBlendMode(.normal)
+        context.setFillColor(CGColor(gray: 1, alpha: Self.veil))
+        context.fill(rect)
+        context.restoreGState()
+    }
+}
+
 extension MKMapView {
     /// Shows `mapType`: Apple's configuration, and for an OpenStreetMap style its tiles
     /// below the app's own overlays. Points of interest stay off; the filter must sit on

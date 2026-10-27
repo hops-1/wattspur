@@ -7,6 +7,8 @@ struct MapCustomizeButton: View {
     @Binding var mapType: RideMapType
     /// Lines or heat map; only on the map of all rides.
     var mode: Binding<RidesMapStyle.Mode>?
+    /// Whether lines or heat map are shown at all; a second click on the chosen one hides them.
+    var showsRides: Binding<Bool>?
     /// Grey while a ride is highlighted or the map is empty, as the picker was before.
     var modeDisabled = false
     @State private var isPresented = false
@@ -21,7 +23,7 @@ struct MapCustomizeButton: View {
         .accessibilityLabel(Text("Customize Map"))
         .accessibilityValue(Text(mapType.label))
         .popover(isPresented: $isPresented, arrowEdge: .bottom) {
-            MapCustomizePanel(mapType: $mapType, mode: mode, modeDisabled: modeDisabled)
+            MapCustomizePanel(mapType: $mapType, mode: mode, showsRides: showsRides, modeDisabled: modeDisabled)
         }
     }
 }
@@ -30,6 +32,7 @@ struct MapCustomizeButton: View {
 struct MapCustomizePanel: View {
     @Binding var mapType: RideMapType
     var mode: Binding<RidesMapStyle.Mode>?
+    var showsRides: Binding<Bool>?
     var modeDisabled = false
     @Environment(\.openURL) private var openURL
 
@@ -41,13 +44,27 @@ struct MapCustomizePanel: View {
             }
             if let mode {
                 section("Display") {
+                    let shown = showsRides?.wrappedValue ?? true
                     HStack(alignment: .top, spacing: 12) {
                         ForEach(RidesMapStyle.Mode.allCases) { option in
                             MapStyleTile(kind: .display(option), label: option == .lines ? "Lines" : "Heat Map",
-                                         isSelected: mode.wrappedValue == option) { mode.wrappedValue = option }
+                                         isSelected: shown && mode.wrappedValue == option) {
+                                // A second click on the chosen display hides the rides; any click shows them again.
+                                if shown && mode.wrappedValue == option, let showsRides {
+                                    showsRides.wrappedValue = false
+                                } else {
+                                    mode.wrappedValue = option
+                                    showsRides?.wrappedValue = true
+                                }
+                            }
                         }
                     }
                     .disabled(modeDisabled)
+                    if showsRides != nil {
+                        Text(shown ? "Click the chosen display again to hide the rides." : "Rides hidden. Click a display to show them.")
+                            .font(.caption)
+                            .foregroundStyle(.secondary)
+                    }
                 }
             }
             Button {

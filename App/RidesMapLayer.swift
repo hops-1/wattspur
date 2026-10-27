@@ -200,6 +200,8 @@ struct RidesMapRepresentable: NSViewRepresentable {
     /// Changes whenever the drawing changes (rides, selection, appearance); only
     /// then the overlay is replaced, so panning does not redraw every tile.
     let styleKey: String
+    /// Off: the map without the rides' overlay.
+    var showsRides = true
     let mapType: RideMapType
     /// Changes when the shown rides change; the map then fits them again.
     let fitKey: [UUID]
@@ -234,10 +236,13 @@ struct RidesMapRepresentable: NSViewRepresentable {
             context.coordinator.mapType = mapType
             map.show(mapType, muted: true)
         }
-        if context.coordinator.styleKey != styleKey {
-            context.coordinator.styleKey = styleKey
+        let key = "\(styleKey)|\(showsRides)"
+        if context.coordinator.styleKey != key {
+            context.coordinator.styleKey = key
             map.removeOverlays(map.drawnOverlays)
-            map.addOverlay(RidesMapOverlay(style: style), level: .aboveRoads)
+            if showsRides {
+                map.addOverlay(RidesMapOverlay(style: style), level: .aboveRoads)
+            }
         }
         if context.coordinator.fitKey != fitKey || context.coordinator.fitRequest != fitRequest {
             let firstTime = context.coordinator.fitKey == nil
@@ -282,7 +287,7 @@ struct RidesMapRepresentable: NSViewRepresentable {
         }
 
         func mapView(_ mapView: MKMapView, rendererFor overlay: any MKOverlay) -> MKOverlayRenderer {
-            if let tiles = overlay as? MKTileOverlay { return MKTileOverlayRenderer(tileOverlay: tiles) }
+            if let tiles = overlay as? MKTileOverlay { return MutedTileRenderer(tileOverlay: tiles) }
             return overlay is RidesMapOverlay ? RidesMapRenderer(overlay: overlay) : MKOverlayRenderer(overlay: overlay)
         }
 

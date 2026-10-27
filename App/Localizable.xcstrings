@@ -1,772 +1,92 @@
 {
   "sourceLanguage": "en",
   "strings": {
-    "%@ %@": {
+    "… and %lld more": {
       "localizations": {
         "de": {
           "stringUnit": {
             "state": "translated",
-            "value": "%@ %@"
+            "value": "… und %lld weitere"
           }
         }
       }
     },
-    "A backup is a folder with all your rides, bikes, goals and notes. Keep it on another disk or in iCloud Drive. Your settings and the watched folder are not part of it.": {
+    "· %lld rides": {
       "localizations": {
         "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Ein Backup ist ein Ordner mit allen deinen Fahrten, Bikes, Zielen und Notizen. Bewahre es auf einer anderen Platte oder in iCloud Drive auf. Deine Einstellungen und der überwachte Ordner gehören nicht dazu."
-          }
-        }
-      }
-    },
-    "A history needs at least two rides on this route. Lower the similarity or include both directions.": {
-      "localizations": {
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Für einen Verlauf braucht es mindestens zwei Fahrten auf dieser Strecke. Senke die Ähnlichkeit oder zeige beide Richtungen."
-          }
-        }
-      }
-    },
-    "A new ride is on your route “%@”.": {
-      "localizations": {
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Eine neue Fahrt liegt auf deiner Strecke „%@“."
-          }
-        }
-      }
-    },
-    "A saved route has a name. Rides on it, now and in the future, belong to it.": {
-      "localizations": {
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Eine gespeicherte Strecke hat einen Namen. Fahrten auf ihr gehören dazu, jetzt und künftig."
-          }
-        }
-      }
-    },
-    "Also show rides on this route the other way round": {
-      "localizations": {
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Zeigt auch Fahrten auf dieser Strecke in Gegenrichtung"
-          }
-        }
-      }
-    },
-    "Analyze These Rides": {
-      "localizations": {
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Diese Fahrten auswerten"
-          }
-        }
-      }
-    },
-    "Average": {
-      "localizations": {
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Durchschnitt"
-          }
-        }
-      }
-    },
-    "Back to History": {
-      "localizations": {
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Zurück zum Verlauf"
-          }
-        }
-      }
-    },
-    "Back Up Here": {
-      "localizations": {
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Hier sichern"
-          }
-        }
-      }
-    },
-    "Back Up…": {
-      "localizations": {
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Sichern …"
-          }
-        }
-      }
-    },
-    "Backing up the library …": {
-      "localizations": {
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Mediathek wird gesichert …"
-          }
-        }
-      }
-    },
-    "Backup from %@ restored successfully.": {
-      "localizations": {
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Backup vom %@ erfolgreich wiederhergestellt."
-          }
-        }
-      }
-    },
-    "Backup saved": {
-      "localizations": {
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Backup gespeichert"
-          }
-        }
-      }
-    },
-    "Best": {
-      "localizations": {
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Bestwert"
-          }
-        }
-      }
-    },
-    "Best 1-minute power": {
-      "localizations": {
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Beste 1-Minuten-Leistung"
-          }
-        }
-      }
-    },
-    "Best time": {
-      "localizations": {
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Bestzeit"
-          }
-        }
-      }
-    },
-    "Both directions": {
-      "localizations": {
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Beide Richtungen"
-          }
-        }
-      }
-    },
-    "Change the search, the bike or the period.": {
-      "localizations": {
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Ändere die Suche, das Bike oder den Zeitraum."
-          }
-        }
-      }
-    },
-    "Choose the backup folder to restore.": {
-      "localizations": {
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Wähle den Backup-Ordner, der wiederhergestellt werden soll."
-          }
-        }
-      }
-    },
-    "Choose where to save the backup. Wattspur creates a folder there.": {
-      "localizations": {
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Wähle, wo das Backup liegen soll. Wattspur legt dort einen Ordner an."
-          }
-        }
-      }
-    },
-    "Click a point to open the ride.": {
-      "localizations": {
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Ein Klick auf einen Punkt öffnet die Fahrt."
-          }
-        }
-      }
-    },
-    "Highest cadence": {
-      "localizations": {
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Höchste Trittfrequenz"
-          }
-        }
-      }
-    },
-    "Highest power": {
-      "localizations": {
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Höchste Leistung"
-          }
-        }
-      }
-    },
-    "History": {
-      "localizations": {
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Verlauf"
-          }
-        }
-      }
-    },
-    "Latest": {
-      "localizations": {
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Letzte"
-          }
-        }
-      }
-    },
-    "%lld new rides are on your route “%@”.": {
-      "localizations": {
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "%1$lld neue Fahrten liegen auf deiner Strecke „%2$@“."
-          }
-        }
-      }
-    },
-    "%lld of %lld rides have this value.": {
-      "localizations": {
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Bei %1$lld von %2$lld Fahrten gibt es diesen Wert."
-          }
-        }
-      }
-    },
-    "min": {
-      "localizations": {
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "min"
-          }
-        }
-      }
-    },
-    "Most similar": {
-      "localizations": {
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Ähnlichste"
-          }
-        }
-      }
-    },
-    "Newest": {
-      "localizations": {
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Neueste"
-          }
-        }
-      }
-    },
-    "No History Yet": {
-      "localizations": {
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Noch kein Verlauf"
-          }
-        }
-      }
-    },
-    "No ride is %@ similar to this route. Lower the similarity or include both directions.": {
-      "localizations": {
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Keine Fahrt ist zu %@ ähnlich zu dieser Strecke. Senke die Ähnlichkeit oder zeige beide Richtungen."
-          }
-        }
-      }
-    },
-    "No Rides on This Route": {
-      "localizations": {
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Keine Fahrten auf dieser Strecke"
-          }
-        }
-      }
-    },
-    "None of these rides has this value.": {
-      "localizations": {
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Keine dieser Fahrten hat diesen Wert."
-          }
-        }
-      }
-    },
-    "No other ride is %@ similar. Lower the similarity or include the opposite direction.": {
-      "localizations": {
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Keine andere Fahrt ist zu %@ ähnlich. Senke die Ähnlichkeit oder zeige beide Richtungen."
-          }
-        }
-      }
-    },
-    "No Similar Rides": {
-      "localizations": {
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Keine ähnlichen Fahrten"
-          }
-        }
-      }
-    },
-    "No Values": {
-      "localizations": {
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Keine Werte"
-          }
-        }
-      }
-    },
-    "%@ of %@": {
-      "localizations": {
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "%1$@ von %2$@"
-          }
-        }
-      }
-    },
-    "Only rides with GPS can be compared by route.": {
-      "localizations": {
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Nur Fahrten mit GPS lassen sich nach Strecke vergleichen."
-          }
-        }
-      }
-    },
-    "Open the analysis with the rides on this route": {
-      "localizations": {
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Öffnet die Auswertung mit den Fahrten auf dieser Strecke"
-          }
-        }
-      }
-    },
-    "Questions and Troubleshooting": {
-      "localizations": {
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Fragen und Fehlerbehebung"
-          }
-        }
-      }
-    },
-    "Quit Wattspur": {
-      "localizations": {
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Wattspur beenden"
-          }
-        }
-      }
-    },
-    "Quit Wattspur and open it again. It then replaces the library with the backup.": {
-      "localizations": {
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Beende Wattspur und öffne es wieder. Dann ersetzt es die Mediathek durch das Backup."
-          }
-        }
-      }
-    },
-    "Ready to restore": {
-      "localizations": {
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Bereit zum Wiederherstellen"
-          }
-        }
-      }
-    },
-    "Reference ride": {
-      "localizations": {
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Bezugsfahrt"
-          }
-        }
-      }
-    },
-    "Save as Route…": {
-      "localizations": {
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Als Strecke speichern …"
-          }
-        }
-      }
-    },
-    "Save Route": {
-      "localizations": {
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Strecke speichern"
-          }
-        }
-      }
-    },
-    "Saved Routes": {
-      "localizations": {
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Gespeicherte Strecken"
-          }
-        }
-      }
-    },
-    "Show Route": {
-      "localizations": {
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Strecke zeigen"
-          }
-        }
-      }
-    },
-    "Show Similar Rides": {
-      "localizations": {
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Ähnliche Fahrten zeigen"
-          }
-        }
-      }
-    },
-    "Show the rides on this route in the list": {
-      "localizations": {
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Zeigt die Fahrten auf dieser Strecke in der Liste"
-          }
-        }
-      }
-    },
-    "%@ similar": {
-      "localizations": {
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "%@ ähnlich"
-          }
-        }
-      }
-    },
-    "Similar Rides (%lld)": {
-      "localizations": {
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Ähnliche Fahrten (%lld)"
-          }
-        }
-      }
-    },
-    "Similarity": {
-      "localizations": {
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Ähnlichkeit"
-          }
-        }
-      }
-    },
-    "%@ similar, opposite direction": {
-      "localizations": {
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "%@ ähnlich, Gegenrichtung"
-          }
-        }
-      }
-    },
-    "Similar Rides": {
-      "localizations": {
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Ähnliche Fahrten"
-          }
-        }
-      }
-    },
-    "Similar rides:": {
-      "localizations": {
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Ähnliche Fahrten:"
-          }
-        }
-      }
-    },
-    "Similar rides from": {
-      "localizations": {
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Ähnliche Fahrten ab"
-          }
-        }
-      }
-    },
-    "Similar to: %@ (%@)": {
-      "localizations": {
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Ähnlich wie: %1$@ (%2$@)"
-          }
-        }
-      }
-    },
-    "Sort": {
-      "localizations": {
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Sortierung"
-          }
-        }
-      }
-    },
-    "The backup is from %@ (Wattspur %@).": {
-      "localizations": {
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Das Backup ist vom %1$@ (Wattspur %2$@)."
-          }
-        }
-      }
-    },
-    "The library file could not be read: %@": {
-      "localizations": {
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Die Mediathek-Datei konnte nicht gelesen werden: %@"
-          }
-        }
-      }
-    },
-    "The share of a route that lies at most 50 m from the other. “Show Similar Rides” starts here; the list has its own slider.": {
-      "localizations": {
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Der Anteil einer Strecke, der höchstens 50 m von der anderen entfernt liegt. „Ähnliche Fahrten zeigen“ beginnt mit diesem Wert; die Liste hat einen eigenen Regler."
-          }
-        }
-      }
-    },
-    "There is no library to back up yet.": {
-      "localizations": {
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Es gibt noch keine Mediathek zum Sichern."
-          }
-        }
-      }
-    },
-    "This backup was made by a newer version of Wattspur. Update Wattspur before you restore it.": {
-      "localizations": {
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Dieses Backup stammt von einer neueren Version von Wattspur. Aktualisiere Wattspur, bevor du es wiederherstellst."
-          }
-        }
-      }
-    },
-    "This backup was made by a newer version of Wattspur. Update Wattspur to restore it.": {
-      "localizations": {
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Dieses Backup stammt von einer neueren Version von Wattspur. Aktualisiere Wattspur, um es wiederherzustellen."
-          }
-        }
-      }
-    },
-    "This folder is not a Wattspur backup.": {
-      "localizations": {
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Dieser Ordner ist kein Wattspur-Backup."
-          }
-        }
-      }
-    },
-    "This ride has no route": {
-      "localizations": {
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Diese Fahrt hat keine Route"
-          }
-        }
-      }
-    },
-    "Top speed": {
-      "localizations": {
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Höchstgeschwindigkeit"
-          }
-        }
-      }
-    },
-    "Top speed, highest power and highest cadence are the maximum stored in the file. The best 1-minute power is the highest average power over 60 seconds without a break; rides without power values, like many GPX files, do not count for the power records.": {
-      "localizations": {
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Höchstgeschwindigkeit, höchste Leistung und höchste Trittfrequenz sind die Höchstwerte, die in der Datei stehen. Die beste 1-Minuten-Leistung ist die höchste durchschnittliche Leistung über 60 Sekunden ohne Unterbrechung; Fahrten ohne Leistungswerte, wie viele GPX-Dateien, zählen für die Leistungsrekorde nicht."
-          }
-        }
-      }
-    },
-    "%@ %@ vs %@": {
-      "localizations": {
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "%1$@ %2$@ ggü. %3$@"
+          "variations": {
+            "plural": {
+              "one": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "· %lld Fahrt"
+                }
+              },
+              "other": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "· %lld Fahrten"
+                }
+              }
+            }
           }
-        }
-      }
-    },
-    "%@ (next best %@)": {
-      "localizations": {
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "%@ (nächstbester Wert %@)"
+        },
+        "en": {
+          "variations": {
+            "plural": {
+              "one": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "· %lld ride"
+                }
+              },
+              "other": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "· %lld rides"
+                }
+              }
+            }
           }
         }
       }
     },
-    "%@ km · %@ · %lld parts": {
+    "“%@” matches “%@”: start %lld s apart, distance %@ different, same route.": {
       "localizations": {
         "de": {
           "stringUnit": {
             "state": "translated",
-            "value": "%1$@ km · %2$@ · %3$lld Teile"
+            "value": "„%1$@“ passt zu „%2$@“: Start %3$lld s versetzt, Strecke %4$@ Unterschied, gleiche Route."
           }
         }
       }
     },
-    "%@ of the compared rides over the distance": {
+    "“%@” matches “%@”.": {
       "localizations": {
         "de": {
           "stringUnit": {
             "state": "translated",
-            "value": "%@ der verglichenen Fahrten über die Strecke"
+            "value": "„%1$@“ passt zu „%2$@“."
           }
         }
       }
     },
-    "%@ over the distance of the ride": {
+    "“Save to Files”": {
       "localizations": {
         "de": {
           "stringUnit": {
             "state": "translated",
-            "value": "%@ über die Strecke der Fahrt"
+            "value": "„In Dateien sichern“"
           }
         }
       }
     },
-    "%@ to go · %lld days left · %@": {
+    "“With profile” needs weight, height and birth year in your profile. Until then calories are estimated from your pedal power.": {
       "localizations": {
         "de": {
           "stringUnit": {
             "state": "translated",
-            "value": "noch %1$@ · %2$lld Tage übrig · %3$@"
+            "value": "„Mit Profil“ braucht Gewicht, Größe und Geburtsjahr in deinem Profil. Bis dahin werden die Kalorien aus deiner Tretleistung geschätzt."
           }
         }
       }
@@ -831,6 +151,116 @@
         }
       }
     },
+    "%@ (next best %@)": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@ (nächstbester Wert %@)"
+          }
+        }
+      }
+    },
+    "%@ %@": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@ %@"
+          }
+        }
+      }
+    },
+    "%@ %@ vs %@": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%1$@ %2$@ ggü. %3$@"
+          }
+        }
+      }
+    },
+    "%@ km · %@ · %lld parts": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%1$@ km · %2$@ · %3$lld Teile"
+          }
+        }
+      }
+    },
+    "%@ of %@": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%1$@ von %2$@"
+          }
+        }
+      }
+    },
+    "%@ of the compared rides over the distance": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@ der verglichenen Fahrten über die Strecke"
+          }
+        }
+      }
+    },
+    "%@ over the distance of the ride": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@ über die Strecke der Fahrt"
+          }
+        }
+      }
+    },
+    "%@ over the time of the ride": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@ über die Zeit der Fahrt"
+          }
+        }
+      }
+    },
+    "%@ similar": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@ ähnlich"
+          }
+        }
+      }
+    },
+    "%@ similar, opposite direction": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@ ähnlich, Gegenrichtung"
+          }
+        }
+      }
+    },
+    "%@ to go · %lld days left · %@": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "noch %1$@ · %2$lld Tage übrig · %3$@"
+          }
+        }
+      }
+    },
     "%@, %@, %lld rides": {
       "localizations": {
         "de": {
@@ -867,176 +297,6 @@
           "stringUnit": {
             "state": "translated",
             "value": "%@: Datei konnte nicht gelesen werden"
-          }
-        }
-      }
-    },
-    "All sources": {
-      "localizations": {
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Alle Quellen"
-          }
-        }
-      }
-    },
-    "Bosch FIT": {
-      "localizations": {
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Bosch-FIT"
-          }
-        }
-      }
-    },
-    "Bosch FIT (also with an attached GPX)": {
-      "localizations": {
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Bosch-FIT (auch mit angehängter GPX)"
-          }
-        }
-      }
-    },
-    "Calculated from the distance": {
-      "localizations": {
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Aus der Strecke berechnet"
-          }
-        }
-      }
-    },
-    "Change or reset the filters.": {
-      "localizations": {
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Filter ändern oder zurücksetzen."
-          }
-        }
-      }
-    },
-    "Check for new versions": {
-      "localizations": {
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Nach neuen Versionen suchen"
-          }
-        }
-      }
-    },
-    "Check for Updates…": {
-      "localizations": {
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Nach Updates suchen …"
-          }
-        }
-      }
-    },
-    "Choose another source or all sources.": {
-      "localizations": {
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Wähle eine andere Quelle oder alle Quellen."
-          }
-        }
-      }
-    },
-    "Could not check for updates": {
-      "localizations": {
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Updates konnten nicht gesucht werden"
-          }
-        }
-      }
-    },
-    "Elevation is smoothed; ascent and descent count from 3 m.": {
-      "localizations": {
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Höhen werden geglättet; Anstieg und Abstieg zählen ab 3 m."
-          }
-        }
-      }
-    },
-    "Filter by source": {
-      "localizations": {
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Nach Quelle filtern"
-          }
-        }
-      }
-    },
-    "From the distance": {
-      "localizations": {
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Aus der Strecke"
-          }
-        }
-      }
-    },
-    "Gaps of 30 s or more between two points do not count as ride time.": {
-      "localizations": {
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Pausen ab 30 s Lücke zwischen zwei Punkten zählen nicht zur Fahrzeit."
-          }
-        }
-      }
-    },
-    "Goals count all bikes and sources": {
-      "localizations": {
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Ziele zählen alle Bikes und Quellen"
-          }
-        }
-      }
-    },
-    "Goals count all sources": {
-      "localizations": {
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Ziele zählen alle Quellen"
-          }
-        }
-      }
-    },
-    "GPX": {
-      "localizations": {
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "GPX"
-          }
-        }
-      }
-    },
-    "If you have the same ride as a Bosch FIT, import it: Wattspur adds the Bosch values.": {
-      "localizations": {
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Hast du dieselbe Fahrt als Bosch-FIT, importiere sie: Wattspur ergänzt die Bosch-Werte."
           }
         }
       }
@@ -1191,6 +451,16 @@
         }
       }
     },
+    "%lld min": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%lld Min."
+          }
+        }
+      }
+    },
     "%lld min pause": {
       "localizations": {
         "de": {
@@ -1291,12 +561,32 @@
         }
       }
     },
+    "%lld new rides are on your route “%@”.": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%1$lld neue Fahrten liegen auf deiner Strecke „%2$@“."
+          }
+        }
+      }
+    },
     "%lld of %lld rides": {
       "localizations": {
         "de": {
           "stringUnit": {
             "state": "translated",
             "value": "%lld von %lld Fahrten"
+          }
+        }
+      }
+    },
+    "%lld of %lld rides have this value.": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Bei %1$lld von %2$lld Fahrten gibt es diesen Wert."
           }
         }
       }
@@ -1371,12 +661,62 @@
         }
       }
     },
+    "%lld rides · compared with %@": {
+      "localizations": {
+        "de": {
+          "variations": {
+            "plural": {
+              "one": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "%1$lld Fahrt · Vergleich mit %2$@"
+                }
+              },
+              "other": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "%1$lld Fahrten · Vergleich mit %2$@"
+                }
+              }
+            }
+          }
+        },
+        "en": {
+          "variations": {
+            "plural": {
+              "one": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "%1$lld ride · compared with %2$@"
+                }
+              },
+              "other": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "%1$lld rides · compared with %2$@"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "%lld rides are on this route": {
       "localizations": {
         "de": {
           "stringUnit": {
             "state": "translated",
             "value": "%lld Fahrten liegen auf dieser Strecke"
+          }
+        }
+      }
+    },
+    "%lld rides from %@ probably belong together": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%1$lld Fahrten vom %2$@ gehören wohl zusammen"
           }
         }
       }
@@ -1577,46 +917,6 @@
         }
       }
     },
-    "%lld rides · compared with %@": {
-      "localizations": {
-        "de": {
-          "variations": {
-            "plural": {
-              "one": {
-                "stringUnit": {
-                  "state": "translated",
-                  "value": "%1$lld Fahrt · Vergleich mit %2$@"
-                }
-              },
-              "other": {
-                "stringUnit": {
-                  "state": "translated",
-                  "value": "%1$lld Fahrten · Vergleich mit %2$@"
-                }
-              }
-            }
-          }
-        },
-        "en": {
-          "variations": {
-            "plural": {
-              "one": {
-                "stringUnit": {
-                  "state": "translated",
-                  "value": "%1$lld ride · compared with %2$@"
-                }
-              },
-              "other": {
-                "stringUnit": {
-                  "state": "translated",
-                  "value": "%1$lld rides · compared with %2$@"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
     "%lld rides, moving average from %@ to %@ %@": {
       "localizations": {
         "de": {
@@ -1747,6 +1047,56 @@
         }
       }
     },
+    "↑ %@ · ↓ %@ · steepest %@": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "↑ %1$@ · ↓ %2$@ · steilste Stelle %3$@"
+          }
+        }
+      }
+    },
+    "≈ %@ × Mount Everest": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "≈ %@ × Mount Everest"
+          }
+        }
+      }
+    },
+    "⌘-click selects several rides – to analyze, compare or merge them.": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "⌘-Klick markiert mehrere Fahrten – zum Auswerten, Vergleichen oder Zusammenfügen."
+          }
+        }
+      }
+    },
+    "⌘-click selects several rides, so you can analyze, compare or merge them.": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Mit ⌘-Klick markierst du mehrere Fahrten, um sie auszuwerten, zu vergleichen oder zusammenzufügen."
+          }
+        }
+      }
+    },
+    "★ marks the best value of a row, only for figures where more or less is better. The average is per ride over your %lld rides; averages are weighted by ride time as in the analysis. The sample ride does not count, a merged ride counts as one ride. Avg power comes from Bosch and counts only seconds with pedal power; “over ride time” is work ÷ ride time.": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "★ markiert den besten Wert einer Zeile, nur bei Kennzahlen, bei denen mehr oder weniger besser ist. Der Schnitt gilt je Fahrt über deine %lld Fahrten; Ø-Werte sind nach Fahrzeit gewichtet wie in der Auswertung. Die Beispielfahrt zählt nicht, eine zusammengefügte Fahrt zählt als eine Fahrt. Ø Leistung kommt von Bosch und zählt nur Sekunden mit Tretleistung; „über die Fahrzeit“ ist Arbeit ÷ Fahrzeit."
+          }
+        }
+      }
+    },
     "0": {
       "localizations": {
         "de": {
@@ -1787,12 +1137,52 @@
         }
       }
     },
+    "A backup is a folder with all your rides, bikes, goals and notes. Keep it on another disk or in iCloud Drive. Your settings and the watched folder are not part of it.": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ein Backup ist ein Ordner mit allen deinen Fahrten, Bikes, Zielen und Notizen. Bewahre es auf einer anderen Platte oder in iCloud Drive auf. Deine Einstellungen und der überwachte Ordner gehören nicht dazu."
+          }
+        }
+      }
+    },
     "A comparison needs at least 2 rides": {
       "localizations": {
         "de": {
           "stringUnit": {
             "state": "translated",
             "value": "Ein Vergleich braucht mindestens 2 Fahrten"
+          }
+        }
+      }
+    },
+    "A history needs at least two rides on this route. Lower the similarity or include both directions.": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Für einen Verlauf braucht es mindestens zwei Fahrten auf dieser Strecke. Senke die Ähnlichkeit oder zeige beide Richtungen."
+          }
+        }
+      }
+    },
+    "A new ride is on your route “%@”.": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Eine neue Fahrt liegt auf deiner Strecke „%@“."
+          }
+        }
+      }
+    },
+    "A saved route has a name. Rides on it, now and in the future, belong to it.": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Eine gespeicherte Strecke hat einen Namen. Fahrten auf ihr gehören dazu, jetzt und künftig."
           }
         }
       }
@@ -1817,22 +1207,22 @@
         }
       }
     },
-    "Active bike": {
-      "localizations": {
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Aktives Bike"
-          }
-        }
-      }
-    },
     "Active · last checked %@ · %lld rides imported today": {
       "localizations": {
         "de": {
           "stringUnit": {
             "state": "translated",
             "value": "Aktiv · zuletzt geprüft %1$@ · heute %2$lld Fahrten importiert"
+          }
+        }
+      }
+    },
+    "Active bike": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Aktives Bike"
           }
         }
       }
@@ -1877,6 +1267,26 @@
         }
       }
     },
+    "added by hand": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "von Hand hinzugefügt"
+          }
+        }
+      }
+    },
+    "After an import, Wattspur points out rides on the same day that probably belong together: the second starts soon after the first ended and close to where it ended. Nothing is merged without your confirmation.": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Nach einem Import weist Wattspur auf Fahrten desselben Tages hin, die wohl zusammengehören: die zweite beginnt kurz nach dem Ende der ersten und in deren Nähe. Zusammengefügt wird nie ohne deine Bestätigung."
+          }
+        }
+      }
+    },
     "All": {
       "localizations": {
         "de": {
@@ -1907,6 +1317,16 @@
         }
       }
     },
+    "All files were processed.": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Alle Dateien sind verarbeitet."
+          }
+        }
+      }
+    },
     "All Records": {
       "localizations": {
         "de": {
@@ -1927,22 +1347,22 @@
         }
       }
     },
-    "All files were processed.": {
-      "localizations": {
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Alle Dateien sind verarbeitet."
-          }
-        }
-      }
-    },
     "All set": {
       "localizations": {
         "de": {
           "stringUnit": {
             "state": "translated",
             "value": "Alles bereit"
+          }
+        }
+      }
+    },
+    "All sources": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Alle Quellen"
           }
         }
       }
@@ -1977,6 +1397,16 @@
         }
       }
     },
+    "Also show rides on this route the other way round": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Zeigt auch Fahrten auf dieser Strecke in Gegenrichtung"
+          }
+        }
+      }
+    },
     "An anonymized ride to try things out. It does not count in the analysis and can be removed with one click.": {
       "localizations": {
         "de": {
@@ -1997,6 +1427,16 @@
         }
       }
     },
+    "Analyze all rides instead": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Stattdessen alle Fahrten auswerten"
+          }
+        }
+      }
+    },
     "Analyze Selected Rides": {
       "localizations": {
         "de": {
@@ -2007,12 +1447,52 @@
         }
       }
     },
-    "Analyze all rides instead": {
+    "Analyze These Rides": {
       "localizations": {
         "de": {
           "stringUnit": {
             "state": "translated",
-            "value": "Stattdessen alle Fahrten auswerten"
+            "value": "Diese Fahrten auswerten"
+          }
+        }
+      }
+    },
+    "and %lld more": {
+      "localizations": {
+        "de": {
+          "variations": {
+            "plural": {
+              "one": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "und %lld weiterer"
+                }
+              },
+              "other": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "und %lld weitere"
+                }
+              }
+            }
+          }
+        },
+        "en": {
+          "variations": {
+            "plural": {
+              "one": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "and %lld more"
+                }
+              },
+              "other": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "and %lld more"
+                }
+              }
+            }
           }
         }
       }
@@ -2137,6 +1617,16 @@
         }
       }
     },
+    "Average": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Durchschnitt"
+          }
+        }
+      }
+    },
     "Average of each ride, with a moving average over 5 rides": {
       "localizations": {
         "de": {
@@ -2163,6 +1653,26 @@
           "stringUnit": {
             "state": "translated",
             "value": "Ø"
+          }
+        }
+      }
+    },
+    "avg %@": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ø %@"
+          }
+        }
+      }
+    },
+    "avg %@ per ride": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ø %@ je Fahrt"
           }
         }
       }
@@ -2277,6 +1787,16 @@
         }
       }
     },
+    "Back to History": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Zurück zum Verlauf"
+          }
+        }
+      }
+    },
     "Back to Map": {
       "localizations": {
         "de": {
@@ -2287,12 +1807,112 @@
         }
       }
     },
+    "Back Up Here": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Hier sichern"
+          }
+        }
+      }
+    },
+    "Back Up…": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sichern …"
+          }
+        }
+      }
+    },
+    "Backing up the library …": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Mediathek wird gesichert …"
+          }
+        }
+      }
+    },
+    "Backup from %@ restored successfully.": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Backup vom %@ erfolgreich wiederhergestellt."
+          }
+        }
+      }
+    },
+    "Backup saved": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Backup gespeichert"
+          }
+        }
+      }
+    },
     "Battery (Wh)": {
       "localizations": {
         "de": {
           "stringUnit": {
             "state": "translated",
             "value": "Akku (Wh)"
+          }
+        }
+      }
+    },
+    "behind": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "im Rückstand"
+          }
+        }
+      }
+    },
+    "Best": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Bestwert"
+          }
+        }
+      }
+    },
+    "Best 1-minute power": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Beste 1-Minuten-Leistung"
+          }
+        }
+      }
+    },
+    "Best time": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Bestzeit"
+          }
+        }
+      }
+    },
+    "better": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "besser"
           }
         }
       }
@@ -2387,7 +2007,7 @@
         }
       }
     },
-    "Birth year": {
+    "birth year": {
       "localizations": {
         "de": {
           "stringUnit": {
@@ -2397,7 +2017,7 @@
         }
       }
     },
-    "birth year": {
+    "Birth year": {
       "localizations": {
         "de": {
           "stringUnit": {
@@ -2427,6 +2047,26 @@
         }
       }
     },
+    "Bosch FIT": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Bosch-FIT"
+          }
+        }
+      }
+    },
+    "Bosch FIT (also with an attached GPX)": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Bosch-FIT (auch mit angehängter GPX)"
+          }
+        }
+      }
+    },
     "Bosch Performance Line CX": {
       "localizations": {
         "de": {
@@ -2437,92 +2077,12 @@
         }
       }
     },
-    "Calories are an estimate. The factors for calories and CO₂ will be adjustable here in a later version.": {
+    "Both directions": {
       "localizations": {
         "de": {
           "stringUnit": {
             "state": "translated",
-            "value": "Kalorien sind eine Schätzung. Die Faktoren für Kalorien und CO₂ lassen sich in einer späteren Version hier einstellen."
-          }
-        }
-      }
-    },
-    "Change Photo…": {
-      "localizations": {
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Foto ändern …"
-          }
-        }
-      }
-    },
-    "Choose an image file such as JPEG, PNG or HEIC.": {
-      "localizations": {
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Wähle eine Bilddatei, zum Beispiel JPEG, PNG oder HEIC."
-          }
-        }
-      }
-    },
-    "Choose another bike or all bikes.": {
-      "localizations": {
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Wähle ein anderes Bike oder alle Bikes."
-          }
-        }
-      }
-    },
-    "Choose Photo…": {
-      "localizations": {
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Foto wählen …"
-          }
-        }
-      }
-    },
-    "cm": {
-      "localizations": {
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "cm"
-          }
-        }
-      }
-    },
-    "Color": {
-      "localizations": {
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Farbe"
-          }
-        }
-      }
-    },
-    "Coming in a Later Version": {
-      "localizations": {
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Kommt in einer späteren Version"
-          }
-        }
-      }
-    },
-    "CO₂ saved": {
-      "localizations": {
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "CO₂-Einsparung"
+            "value": "Beide Richtungen"
           }
         }
       }
@@ -2533,6 +2093,16 @@
           "stringUnit": {
             "state": "translated",
             "value": "Trittfrequenz"
+          }
+        }
+      }
+    },
+    "Calculated from the distance": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Aus der Strecke berechnet"
           }
         }
       }
@@ -2577,6 +2147,16 @@
         }
       }
     },
+    "Calories are an estimate. The factors for calories and CO₂ will be adjustable here in a later version.": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Kalorien sind eine Schätzung. Die Faktoren für Kalorien und CO₂ lassen sich in einer späteren Version hier einstellen."
+          }
+        }
+      }
+    },
     "Calories per km": {
       "localizations": {
         "de": {
@@ -2597,6 +2177,26 @@
         }
       }
     },
+    "Change or reset the filters.": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Filter ändern oder zurücksetzen."
+          }
+        }
+      }
+    },
+    "Change Photo…": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Foto ändern …"
+          }
+        }
+      }
+    },
     "Change the search or the period.": {
       "localizations": {
         "de": {
@@ -2607,12 +2207,52 @@
         }
       }
     },
+    "Change the search, the bike or the period.": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ändere die Suche, das Bike oder den Zeitraum."
+          }
+        }
+      }
+    },
     "Change…": {
       "localizations": {
         "de": {
           "stringUnit": {
             "state": "translated",
             "value": "Ändern …"
+          }
+        }
+      }
+    },
+    "Chart axis": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Achse der Diagramme"
+          }
+        }
+      }
+    },
+    "Check for new versions": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Nach neuen Versionen suchen"
+          }
+        }
+      }
+    },
+    "Check for Updates…": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Nach Updates suchen …"
           }
         }
       }
@@ -2637,42 +2277,42 @@
         }
       }
     },
-    "Choose Another Folder…": {
-      "localizations": {
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Anderen Ordner wählen …"
-          }
-        }
-      }
-    },
-    "Choose Files…": {
-      "localizations": {
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Dateien auswählen …"
-          }
-        }
-      }
-    },
-    "Choose Folder…": {
-      "localizations": {
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Ordner wählen …"
-          }
-        }
-      }
-    },
     "Choose a folder first.": {
       "localizations": {
         "de": {
           "stringUnit": {
             "state": "translated",
             "value": "Wähle zuerst einen Ordner."
+          }
+        }
+      }
+    },
+    "Choose an image file such as JPEG, PNG or HEIC.": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Wähle eine Bilddatei, zum Beispiel JPEG, PNG oder HEIC."
+          }
+        }
+      }
+    },
+    "Choose another bike or all bikes.": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Wähle ein anderes Bike oder alle Bikes."
+          }
+        }
+      }
+    },
+    "Choose Another Folder…": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Anderen Ordner wählen …"
           }
         }
       }
@@ -2697,6 +2337,16 @@
         }
       }
     },
+    "Choose another source or all sources.": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Wähle eine andere Quelle oder alle Quellen."
+          }
+        }
+      }
+    },
     "Choose another year with the arrows at the top.": {
       "localizations": {
         "de": {
@@ -2707,12 +2357,52 @@
         }
       }
     },
+    "Choose Files…": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Dateien auswählen …"
+          }
+        }
+      }
+    },
+    "Choose Folder…": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ordner wählen …"
+          }
+        }
+      }
+    },
     "Choose iCloud Drive › Wattspur Import": {
       "localizations": {
         "de": {
           "stringUnit": {
             "state": "translated",
             "value": "iCloud Drive › Wattspur Import wählen"
+          }
+        }
+      }
+    },
+    "Choose Photo…": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Foto wählen …"
+          }
+        }
+      }
+    },
+    "Choose the backup folder to restore.": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Wähle den Backup-Ordner, der wiederhergestellt werden soll."
           }
         }
       }
@@ -2737,6 +2427,16 @@
         }
       }
     },
+    "Choose where to save the backup. Wattspur creates a folder there.": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Wähle, wo das Backup liegen soll. Wattspur legt dort einen Ordner an."
+          }
+        }
+      }
+    },
     "Clear search": {
       "localizations": {
         "de": {
@@ -2753,6 +2453,16 @@
           "stringUnit": {
             "state": "translated",
             "value": "Klick auf einen Tag öffnet seine Fahrten"
+          }
+        }
+      }
+    },
+    "Click a point to open the ride.": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ein Klick auf einen Punkt öffnet die Fahrt."
           }
         }
       }
@@ -2777,6 +2487,26 @@
         }
       }
     },
+    "cm": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "cm"
+          }
+        }
+      }
+    },
+    "CO₂ saved": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "CO₂-Einsparung"
+          }
+        }
+      }
+    },
     "Coasting share": {
       "localizations": {
         "de": {
@@ -2793,6 +2523,26 @@
           "stringUnit": {
             "state": "translated",
             "value": "Seitenleiste verkleinern"
+          }
+        }
+      }
+    },
+    "Color": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Farbe"
+          }
+        }
+      }
+    },
+    "Coming in a Later Version": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Kommt in einer späteren Version"
           }
         }
       }
@@ -2887,6 +2637,16 @@
         }
       }
     },
+    "Could not check for updates": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Updates konnten nicht gesucht werden"
+          }
+        }
+      }
+    },
     "Create Diagnostics…": {
       "localizations": {
         "de": {
@@ -2917,6 +2677,26 @@
         }
       }
     },
+    "Customize Map": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Karte anpassen"
+          }
+        }
+      }
+    },
+    "CyclOSM": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "CyclOSM"
+          }
+        }
+      }
+    },
     "Date": {
       "localizations": {
         "de": {
@@ -2937,6 +2717,17 @@
         }
       }
     },
+    "days": {
+      "comment": "Unit after the number of days of a streak",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tage"
+          }
+        }
+      }
+    },
     "Default map type:": {
       "localizations": {
         "de": {
@@ -2947,22 +2738,22 @@
         }
       }
     },
-    "Delete Goal": {
-      "localizations": {
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Ziel löschen"
-          }
-        }
-      }
-    },
     "Delete all rides in the trash for good?": {
       "localizations": {
         "de": {
           "stringUnit": {
             "state": "translated",
             "value": "Alle Fahrten im Papierkorb endgültig löschen?"
+          }
+        }
+      }
+    },
+    "Delete Goal": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ziel löschen"
           }
         }
       }
@@ -3187,6 +2978,16 @@
         }
       }
     },
+    "Elevation is smoothed; ascent and descent count from 3 m.": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Höhen werden geglättet; Anstieg und Abstieg zählen ab 3 m."
+          }
+        }
+      }
+    },
     "Elevation min–max": {
       "localizations": {
         "de": {
@@ -3213,6 +3014,16 @@
           "stringUnit": {
             "state": "translated",
             "value": "Papierkorb leeren …"
+          }
+        }
+      }
+    },
+    "estimate": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Schätzwert"
           }
         }
       }
@@ -3267,22 +3078,22 @@
         }
       }
     },
-    "Export PDF": {
-      "localizations": {
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "PDF exportieren"
-          }
-        }
-      }
-    },
     "Export as GPX…": {
       "localizations": {
         "de": {
           "stringUnit": {
             "state": "translated",
             "value": "Als GPX exportieren …"
+          }
+        }
+      }
+    },
+    "Export PDF": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "PDF exportieren"
           }
         }
       }
@@ -3317,6 +3128,16 @@
         }
       }
     },
+    "Failed": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Fehlerhaft"
+          }
+        }
+      }
+    },
     "Fast riding on paved roads": {
       "localizations": {
         "de": {
@@ -3333,36 +3154,6 @@
           "stringUnit": {
             "state": "translated",
             "value": "Weiblich"
-          }
-        }
-      }
-    },
-    "Filter by bike": {
-      "localizations": {
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Nach Bike filtern"
-          }
-        }
-      }
-    },
-    "FIT contains power, cadence and all totals.": {
-      "localizations": {
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "FIT enthält Leistung, Trittfrequenz und alle Summen."
-          }
-        }
-      }
-    },
-    "Failed": {
-      "localizations": {
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Fehlerhaft"
           }
         }
       }
@@ -3397,12 +3188,42 @@
         }
       }
     },
+    "Filter by bike": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Nach Bike filtern"
+          }
+        }
+      }
+    },
+    "Filter by source": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Nach Quelle filtern"
+          }
+        }
+      }
+    },
     "Finish": {
       "localizations": {
         "de": {
           "stringUnit": {
             "state": "translated",
             "value": "Ziel"
+          }
+        }
+      }
+    },
+    "FIT contains power, cadence and all totals.": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "FIT enthält Leistung, Trittfrequenz und alle Summen."
           }
         }
       }
@@ -3417,12 +3238,36 @@
         }
       }
     },
-    "For a week, month or year · kilometres, rides or ascent": {
+    "folder.failed": {
+      "comment": "Subfolder of the watched folder for files that could not be read",
       "localizations": {
         "de": {
           "stringUnit": {
             "state": "translated",
-            "value": "Für Woche, Monat oder Jahr · Kilometer, Fahrten oder Höhenmeter"
+            "value": "Fehlerhaft"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Failed"
+          }
+        }
+      }
+    },
+    "folder.imported": {
+      "comment": "Subfolder of the watched folder for imported files",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Importiert"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Imported"
           }
         }
       }
@@ -3433,6 +3278,16 @@
           "stringUnit": {
             "state": "translated",
             "value": "Für eine Kalorienschätzung „mit Profil“ in einer späteren Version. Du kannst das überspringen und später im Profil nachtragen; die Daten bleiben auf diesem Mac."
+          }
+        }
+      }
+    },
+    "For a week, month or year · kilometres, rides or ascent": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Für Woche, Monat oder Jahr · Kilometer, Fahrten oder Höhenmeter"
           }
         }
       }
@@ -3477,12 +3332,52 @@
         }
       }
     },
+    "From the distance": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Aus der Strecke"
+          }
+        }
+      }
+    },
+    "from the watched folder": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "aus dem überwachten Ordner"
+          }
+        }
+      }
+    },
     "From your pedal power (default)": {
       "localizations": {
         "de": {
           "stringUnit": {
             "state": "translated",
             "value": "Aus deiner Tretleistung (Standard)"
+          }
+        }
+      }
+    },
+    "Gap up to %lld min": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pause bis %lld Min."
+          }
+        }
+      }
+    },
+    "Gaps of 30 s or more between two points do not count as ride time.": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pausen ab 30 s Lücke zwischen zwei Punkten zählen nicht zur Fahrzeit."
           }
         }
       }
@@ -3577,6 +3472,36 @@
         }
       }
     },
+    "Goals count all bikes and sources": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ziele zählen alle Bikes und Quellen"
+          }
+        }
+      }
+    },
+    "Goals count all sources": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ziele zählen alle Quellen"
+          }
+        }
+      }
+    },
+    "GPX": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "GPX"
+          }
+        }
+      }
+    },
     "GPX attached to “%@”": {
       "localizations": {
         "de": {
@@ -3657,7 +3582,7 @@
         }
       }
     },
-    "Height": {
+    "height": {
       "localizations": {
         "de": {
           "stringUnit": {
@@ -3667,7 +3592,7 @@
         }
       }
     },
-    "height": {
+    "Height": {
       "localizations": {
         "de": {
           "stringUnit": {
@@ -3727,12 +3652,42 @@
         }
       }
     },
+    "Highest cadence": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Höchste Trittfrequenz"
+          }
+        }
+      }
+    },
+    "Highest power": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Höchste Leistung"
+          }
+        }
+      }
+    },
     "Highlights": {
       "localizations": {
         "de": {
           "stringUnit": {
             "state": "translated",
             "value": "Highlights"
+          }
+        }
+      }
+    },
+    "History": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Verlauf"
           }
         }
       }
@@ -3787,6 +3742,26 @@
         }
       }
     },
+    "iCloud Drive › Wattspur Import (recommended)": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "iCloud Drive › Wattspur Import (empfohlen)"
+          }
+        }
+      }
+    },
+    "If you have the same ride as a Bosch FIT, import it: Wattspur adds the Bosch values.": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Hast du dieselbe Fahrt als Bosch-FIT, importiere sie: Wattspur ergänzt die Bosch-Werte."
+          }
+        }
+      }
+    },
     "Import": {
       "localizations": {
         "de": {
@@ -3817,7 +3792,18 @@
         }
       }
     },
+    "Import finished": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Import abgeschlossen"
+          }
+        }
+      }
+    },
     "Import FIT files": {
+      "extractionState": "stale",
       "localizations": {
         "de": {
           "stringUnit": {
@@ -3847,12 +3833,32 @@
         }
       }
     },
+    "Import folder": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Import-Ordner"
+          }
+        }
+      }
+    },
     "Import for": {
       "localizations": {
         "de": {
           "stringUnit": {
             "state": "translated",
             "value": "Import für"
+          }
+        }
+      }
+    },
+    "Import log": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Import-Protokoll"
           }
         }
       }
@@ -3877,52 +3883,22 @@
         }
       }
     },
-    "Import Rides…": {
-      "localizations": {
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Fahrten importieren …"
-          }
-        }
-      }
-    },
-    "Import finished": {
-      "localizations": {
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Import abgeschlossen"
-          }
-        }
-      }
-    },
-    "Import folder": {
-      "localizations": {
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Import-Ordner"
-          }
-        }
-      }
-    },
-    "Import log": {
-      "localizations": {
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Import-Protokoll"
-          }
-        }
-      }
-    },
     "Import rides to see your year, your records and how your goals are going.": {
       "localizations": {
         "de": {
           "stringUnit": {
             "state": "translated",
             "value": "Importiere Fahrten, um dein Jahr, deine Rekorde und den Stand deiner Ziele zu sehen."
+          }
+        }
+      }
+    },
+    "Import Rides…": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Fahrten importieren …"
           }
         }
       }
@@ -3937,22 +3913,22 @@
         }
       }
     },
-    "Imported files move to the subfolder “%@”, files that cannot be read to “%@”. Deleted rides are therefore not imported again.": {
-      "localizations": {
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Importierte Dateien wandern in den Unterordner „%1$@“, nicht lesbare nach „%2$@“. Gelöschte Fahrten werden deshalb nicht erneut importiert."
-          }
-        }
-      }
-    },
     "Imported files move to “%@”, failed ones to “%@”.": {
       "localizations": {
         "de": {
           "stringUnit": {
             "state": "translated",
             "value": "Importierte Dateien wandern nach „%1$@“, fehlerhafte nach „%2$@“."
+          }
+        }
+      }
+    },
+    "Imported files move to the subfolder “%@”, files that cannot be read to “%@”. Deleted rides are therefore not imported again.": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Importierte Dateien wandern in den Unterordner „%1$@“, nicht lesbare nach „%2$@“. Gelöschte Fahrten werden deshalb nicht erneut importiert."
           }
         }
       }
@@ -4217,12 +4193,32 @@
         }
       }
     },
+    "Latest": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Letzte"
+          }
+        }
+      }
+    },
     "Leave in place": {
       "localizations": {
         "de": {
           "stringUnit": {
             "state": "translated",
             "value": "Liegen lassen"
+          }
+        }
+      }
+    },
+    "less": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "weniger"
           }
         }
       }
@@ -4277,7 +4273,7 @@
         }
       }
     },
-    "Load Sample Ride": {
+    "Load a sample ride": {
       "localizations": {
         "de": {
           "stringUnit": {
@@ -4287,7 +4283,7 @@
         }
       }
     },
-    "Load a sample ride": {
+    "Load Sample Ride": {
       "localizations": {
         "de": {
           "stringUnit": {
@@ -4407,6 +4403,46 @@
         }
       }
     },
+    "Map – all rides": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Karte – alle Fahrten"
+          }
+        }
+      }
+    },
+    "Map – selected rides": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Karte – markierte Fahrten"
+          }
+        }
+      }
+    },
+    "Map data and licences": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Kartendaten und Lizenzen"
+          }
+        }
+      }
+    },
+    "Map data and style: open the licence": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Kartendaten und Darstellung: Lizenz öffnen"
+          }
+        }
+      }
+    },
     "Map of all rides": {
       "localizations": {
         "de": {
@@ -4457,22 +4493,12 @@
         }
       }
     },
-    "Map – all rides": {
+    "Map Type": {
       "localizations": {
         "de": {
           "stringUnit": {
             "state": "translated",
-            "value": "Karte – alle Fahrten"
-          }
-        }
-      }
-    },
-    "Map – selected rides": {
-      "localizations": {
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Karte – markierte Fahrten"
+            "value": "Kartentyp"
           }
         }
       }
@@ -4587,16 +4613,6 @@
         }
       }
     },
-    "Merged from %lld rides": {
-      "localizations": {
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Aus %lld Fahrten zusammengefügt"
-          }
-        }
-      }
-    },
     "Merge…": {
       "localizations": {
         "de": {
@@ -4607,12 +4623,42 @@
         }
       }
     },
+    "Merged from %lld rides": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Aus %lld Fahrten zusammengefügt"
+          }
+        }
+      }
+    },
+    "Merging:": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Zusammenfügen:"
+          }
+        }
+      }
+    },
     "Metric": {
       "localizations": {
         "de": {
           "stringUnit": {
             "state": "translated",
             "value": "Kennzahl"
+          }
+        }
+      }
+    },
+    "min": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "min"
           }
         }
       }
@@ -4667,6 +4713,16 @@
         }
       }
     },
+    "more": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "mehr"
+          }
+        }
+      }
+    },
     "Most ascent": {
       "localizations": {
         "de": {
@@ -4683,6 +4739,16 @@
           "stringUnit": {
             "state": "translated",
             "value": "Am meisten am %1$@ mit %2$@"
+          }
+        }
+      }
+    },
+    "Most similar": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ähnlichste"
           }
         }
       }
@@ -4767,6 +4833,16 @@
         }
       }
     },
+    "new": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "neu"
+          }
+        }
+      }
+    },
     "New": {
       "localizations": {
         "de": {
@@ -4777,7 +4853,17 @@
         }
       }
     },
-    "New Bike": {
+    "New – never ridden before": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Neu – vorher nie gefahren"
+          }
+        }
+      }
+    },
+    "New bike": {
       "localizations": {
         "de": {
           "stringUnit": {
@@ -4787,7 +4873,7 @@
         }
       }
     },
-    "New bike": {
+    "New Bike": {
       "localizations": {
         "de": {
           "stringUnit": {
@@ -4887,12 +4973,12 @@
         }
       }
     },
-    "New – never ridden before": {
+    "Newest": {
       "localizations": {
         "de": {
           "stringUnit": {
             "state": "translated",
-            "value": "Neu – vorher nie gefahren"
+            "value": "Neueste"
           }
         }
       }
@@ -4927,6 +5013,16 @@
         }
       }
     },
+    "no comparison": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "kein Vergleichswert"
+          }
+        }
+      }
+    },
     "no elevation in the files": {
       "localizations": {
         "de": {
@@ -4937,12 +5033,52 @@
         }
       }
     },
-    "No GPS Data": {
+    "no extension": {
       "localizations": {
         "de": {
           "stringUnit": {
             "state": "translated",
-            "value": "Keine GPS-Daten"
+            "value": "ohne Endung"
+          }
+        }
+      }
+    },
+    "No folder – drag & drop only": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Kein Ordner – nur Drag & Drop"
+          }
+        }
+      }
+    },
+    "No folder – I’ll drop files on the window myself": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Keinen Ordner – ich ziehe Dateien selbst ins Fenster"
+          }
+        }
+      }
+    },
+    "No folder chosen": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Kein Ordner gewählt"
+          }
+        }
+      }
+    },
+    "No Goals Yet": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Noch keine Ziele"
           }
         }
       }
@@ -4957,12 +5093,22 @@
         }
       }
     },
-    "No Goals Yet": {
+    "No GPS Data": {
       "localizations": {
         "de": {
           "stringUnit": {
             "state": "translated",
-            "value": "Noch keine Ziele"
+            "value": "Keine GPS-Daten"
+          }
+        }
+      }
+    },
+    "No History Yet": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Noch kein Verlauf"
           }
         }
       }
@@ -4987,106 +5133,6 @@
         }
       }
     },
-    "No Rides From This Source": {
-      "localizations": {
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Keine Fahrten aus dieser Quelle"
-          }
-        }
-      }
-    },
-    "No Rides on This Bike": {
-      "localizations": {
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Keine Fahrten mit diesem Bike"
-          }
-        }
-      }
-    },
-    "No Rides Yet": {
-      "localizations": {
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Noch keine Fahrten"
-          }
-        }
-      }
-    },
-    "No Rides in %@": {
-      "localizations": {
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Keine Fahrten in %@"
-          }
-        }
-      }
-    },
-    "No Rides in This Period": {
-      "localizations": {
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Keine Fahrten in diesem Zeitraum"
-          }
-        }
-      }
-    },
-    "No Rides in the Visible Area": {
-      "localizations": {
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Keine Fahrten im Kartenausschnitt"
-          }
-        }
-      }
-    },
-    "No Rides on the Map Yet": {
-      "localizations": {
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Noch keine Fahrten auf der Karte"
-          }
-        }
-      }
-    },
-    "No folder chosen": {
-      "localizations": {
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Kein Ordner gewählt"
-          }
-        }
-      }
-    },
-    "No folder – I’ll drop files on the window myself": {
-      "localizations": {
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Keinen Ordner – ich ziehe Dateien selbst ins Fenster"
-          }
-        }
-      }
-    },
-    "No folder – drag & drop only": {
-      "localizations": {
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Kein Ordner – nur Drag & Drop"
-          }
-        }
-      }
-    },
     "No name yet": {
       "localizations": {
         "de": {
@@ -5107,12 +5153,152 @@
         }
       }
     },
+    "No other ride is %@ similar. Lower the similarity or include the opposite direction.": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Keine andere Fahrt ist zu %@ ähnlich. Senke die Ähnlichkeit oder zeige beide Richtungen."
+          }
+        }
+      }
+    },
+    "No ride is %@ similar to this route. Lower the similarity or include both directions.": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Keine Fahrt ist zu %@ ähnlich zu dieser Strecke. Senke die Ähnlichkeit oder zeige beide Richtungen."
+          }
+        }
+      }
+    },
+    "No Rides From This Source": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Keine Fahrten aus dieser Quelle"
+          }
+        }
+      }
+    },
+    "No Rides in %@": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Keine Fahrten in %@"
+          }
+        }
+      }
+    },
+    "No Rides in the Visible Area": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Keine Fahrten im Kartenausschnitt"
+          }
+        }
+      }
+    },
+    "No Rides in This Period": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Keine Fahrten in diesem Zeitraum"
+          }
+        }
+      }
+    },
+    "No Rides on the Map Yet": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Noch keine Fahrten auf der Karte"
+          }
+        }
+      }
+    },
+    "No Rides on This Bike": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Keine Fahrten mit diesem Bike"
+          }
+        }
+      }
+    },
+    "No Rides on This Route": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Keine Fahrten auf dieser Strecke"
+          }
+        }
+      }
+    },
+    "no rides the year before": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "keine Fahrten im Vorjahr"
+          }
+        }
+      }
+    },
+    "No Rides Yet": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Noch keine Fahrten"
+          }
+        }
+      }
+    },
+    "No Similar Rides": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Keine ähnlichen Fahrten"
+          }
+        }
+      }
+    },
     "No values": {
       "localizations": {
         "de": {
           "stringUnit": {
             "state": "translated",
             "value": "Keine Werte"
+          }
+        }
+      }
+    },
+    "No Values": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Keine Werte"
+          }
+        }
+      }
+    },
+    "None of these rides has this value.": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Keine dieser Fahrten hat diesen Wert."
           }
         }
       }
@@ -5137,42 +5323,22 @@
         }
       }
     },
+    "Not Now": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Nicht jetzt"
+          }
+        }
+      }
+    },
     "Not specified": {
       "localizations": {
         "de": {
           "stringUnit": {
             "state": "translated",
             "value": "Keine Angabe"
-          }
-        }
-      }
-    },
-    "OK": {
-      "localizations": {
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "OK"
-          }
-        }
-      }
-    },
-    "Once a day Wattspur asks GitHub whether a newer version is out and shows a note. Nothing about you or your rides is sent. “Check for Updates…” in the Wattspur menu always works.": {
-      "localizations": {
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Einmal am Tag fragt Wattspur bei GitHub nach, ob es eine neuere Version gibt, und zeigt dann einen Hinweis. Es werden keine Daten über dich oder deine Fahrten gesendet. „Nach Updates suchen …“ im Wattspur-Menü geht immer."
-          }
-        }
-      }
-    },
-    "Only FIT and GPX files are imported. Other types are noted once in the log.": {
-      "localizations": {
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Nur FIT- und GPX-Dateien werden importiert. Andere Typen werden einmal im Protokoll vermerkt."
           }
         }
       }
@@ -5197,6 +5363,26 @@
         }
       }
     },
+    "of %@": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "von %@"
+          }
+        }
+      }
+    },
+    "Off": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Aus"
+          }
+        }
+      }
+    },
     "Off – import by drag & drop or “Import…” only": {
       "localizations": {
         "de": {
@@ -5217,6 +5403,76 @@
         }
       }
     },
+    "OK": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "OK"
+          }
+        }
+      }
+    },
+    "on %lld days": {
+      "localizations": {
+        "de": {
+          "variations": {
+            "plural": {
+              "one": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "an %lld Tag"
+                }
+              },
+              "other": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "an %lld Tagen"
+                }
+              }
+            }
+          }
+        },
+        "en": {
+          "variations": {
+            "plural": {
+              "one": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "on %lld day"
+                }
+              },
+              "other": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "on %lld days"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "on track": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "im Plan"
+          }
+        }
+      }
+    },
+    "Once a day Wattspur asks GitHub whether a newer version is out and shows a note. Nothing about you or your rides is sent. “Check for Updates…” in the Wattspur menu always works.": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Einmal am Tag fragt Wattspur bei GitHub nach, ob es eine neuere Version gibt, und zeigt dann einen Hinweis. Es werden keine Daten über dich oder deine Fahrten gesendet. „Nach Updates suchen …“ im Wattspur-Menü geht immer."
+          }
+        }
+      }
+    },
     "Once per ride on your iPhone – Wattspur takes care of the rest.": {
       "localizations": {
         "de": {
@@ -5227,12 +5483,32 @@
         }
       }
     },
+    "Only FIT and GPX files are imported. Other types are noted once in the log.": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Nur FIT- und GPX-Dateien werden importiert. Andere Typen werden einmal im Protokoll vermerkt."
+          }
+        }
+      }
+    },
     "Only rides in the visible area – follows panning and zooming.": {
       "localizations": {
         "de": {
           "stringUnit": {
             "state": "translated",
             "value": "Nur Fahrten im Kartenausschnitt – folgt dem Schieben und Zoomen."
+          }
+        }
+      }
+    },
+    "Only rides with GPS can be compared by route.": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Nur Fahrten mit GPS lassen sich nach Strecke vergleichen."
           }
         }
       }
@@ -5267,16 +5543,6 @@
         }
       }
     },
-    "Open System Settings…": {
-      "localizations": {
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Systemeinstellungen öffnen …"
-          }
-        }
-      }
-    },
     "Open in Preview": {
       "localizations": {
         "de": {
@@ -5307,6 +5573,26 @@
         }
       }
     },
+    "Open System Settings…": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Systemeinstellungen öffnen …"
+          }
+        }
+      }
+    },
+    "Open the analysis with the rides on this route": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Öffnet die Auswertung mit den Fahrten auf dieser Strecke"
+          }
+        }
+      }
+    },
     "Open the ride in the Flow app": {
       "localizations": {
         "de": {
@@ -5333,6 +5619,26 @@
           "stringUnit": {
             "state": "translated",
             "value": "Diese Fahrt öffnen"
+          }
+        }
+      }
+    },
+    "OpenStreetMap": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "OpenStreetMap"
+          }
+        }
+      }
+    },
+    "OpenTopoMap": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "OpenTopoMap"
           }
         }
       }
@@ -5397,12 +5703,52 @@
         }
       }
     },
+    "per day": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "je Tag"
+          }
+        }
+      }
+    },
+    "per month": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "je Monat"
+          }
+        }
+      }
+    },
     "Per ride": {
       "localizations": {
         "de": {
           "stringUnit": {
             "state": "translated",
             "value": "Je Fahrt"
+          }
+        }
+      }
+    },
+    "per week": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "je Woche"
+          }
+        }
+      }
+    },
+    "per year": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "je Jahr"
           }
         }
       }
@@ -5447,6 +5793,26 @@
         }
       }
     },
+    "Position held at %@": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Position festgehalten bei %@"
+          }
+        }
+      }
+    },
+    "Position released": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Position losgelassen"
+          }
+        }
+      }
+    },
     "Power": {
       "localizations": {
         "de": {
@@ -5463,6 +5829,16 @@
           "stringUnit": {
             "state": "translated",
             "value": "Leistung und Trittfrequenz"
+          }
+        }
+      }
+    },
+    "pp": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pp."
           }
         }
       }
@@ -5557,12 +5933,52 @@
         }
       }
     },
+    "Questions and Troubleshooting": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Fragen und Fehlerbehebung"
+          }
+        }
+      }
+    },
+    "Quit Wattspur": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Wattspur beenden"
+          }
+        }
+      }
+    },
+    "Quit Wattspur and open it again. It then replaces the library with the backup.": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Beende Wattspur und öffne es wieder. Dann ersetzt es die Mediathek durch das Backup."
+          }
+        }
+      }
+    },
     "Reached on %@": {
       "localizations": {
         "de": {
           "stringUnit": {
             "state": "translated",
             "value": "Erreicht am %@"
+          }
+        }
+      }
+    },
+    "Ready to restore": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Bereit zum Wiederherstellen"
           }
         }
       }
@@ -5627,12 +6043,32 @@
         }
       }
     },
+    "Reference ride": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Bezugsfahrt"
+          }
+        }
+      }
+    },
     "Release Notes": {
       "localizations": {
         "de": {
           "stringUnit": {
             "state": "translated",
             "value": "Versionshinweise"
+          }
+        }
+      }
+    },
+    "Release position": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Position loslassen"
           }
         }
       }
@@ -5657,6 +6093,16 @@
         }
       }
     },
+    "Remove from Comparison": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Aus dem Vergleich entfernen"
+          }
+        }
+      }
+    },
     "Remove Photo": {
       "localizations": {
         "de": {
@@ -5673,16 +6119,6 @@
           "stringUnit": {
             "state": "translated",
             "value": "Beispielfahrt entfernen"
-          }
-        }
-      }
-    },
-    "Remove from Comparison": {
-      "localizations": {
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Aus dem Vergleich entfernen"
           }
         }
       }
@@ -5887,6 +6323,46 @@
         }
       }
     },
+    "Route: %@": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Strecke: %@"
+          }
+        }
+      }
+    },
+    "Route: %@ (%@)": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Strecke: %1$@ (%2$@)"
+          }
+        }
+      }
+    },
+    "Routes": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Strecken"
+          }
+        }
+      }
+    },
+    "rpm": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "1/min"
+          }
+        }
+      }
+    },
     "Safe riding on roads and cycle paths": {
       "localizations": {
         "de": {
@@ -5967,6 +6443,26 @@
         }
       }
     },
+    "Save as Route…": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Als Strecke speichern …"
+          }
+        }
+      }
+    },
+    "Save Route": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Strecke speichern"
+          }
+        }
+      }
+    },
     "Save the track for komoot, a navigation device or another app": {
       "localizations": {
         "de": {
@@ -5983,6 +6479,16 @@
           "stringUnit": {
             "state": "translated",
             "value": "Sichern …"
+          }
+        }
+      }
+    },
+    "Saved Routes": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Gespeicherte Strecken"
           }
         }
       }
@@ -6149,72 +6655,22 @@
         }
       }
     },
-    "Show All Rides": {
-      "localizations": {
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Alle Fahrten zeigen"
-          }
-        }
-      }
-    },
-    "Show only the rides from one kind of file": {
-      "localizations": {
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Nur Fahrten aus einer Dateiart zeigen"
-          }
-        }
-      }
-    },
-    "Show only the rides of one bike": {
-      "localizations": {
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Nur die Fahrten eines Bikes zeigen"
-          }
-        }
-      }
-    },
-    "Show Only This Ride": {
-      "localizations": {
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Nur diese Fahrt zeigen"
-          }
-        }
-      }
-    },
-    "Show Ride": {
-      "localizations": {
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Fahrt zeigen"
-          }
-        }
-      }
-    },
-    "Show Setup Assistant…": {
-      "localizations": {
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Einrichtungsassistent zeigen …"
-          }
-        }
-      }
-    },
     "Show all rides": {
       "localizations": {
         "de": {
           "stringUnit": {
             "state": "translated",
             "value": "Alle Fahrten anzeigen"
+          }
+        }
+      }
+    },
+    "Show All Rides": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Alle Fahrten zeigen"
           }
         }
       }
@@ -6269,12 +6725,82 @@
         }
       }
     },
+    "Show only the rides from one kind of file": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Nur Fahrten aus einer Dateiart zeigen"
+          }
+        }
+      }
+    },
+    "Show only the rides of one bike": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Nur die Fahrten eines Bikes zeigen"
+          }
+        }
+      }
+    },
     "Show only the rides selected in the list": {
       "localizations": {
         "de": {
           "stringUnit": {
             "state": "translated",
             "value": "Nur die in der Liste markierten Fahrten zeigen"
+          }
+        }
+      }
+    },
+    "Show Only This Ride": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Nur diese Fahrt zeigen"
+          }
+        }
+      }
+    },
+    "Show Ride": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Fahrt zeigen"
+          }
+        }
+      }
+    },
+    "Show Route": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Strecke zeigen"
+          }
+        }
+      }
+    },
+    "Show Setup Assistant…": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Einrichtungsassistent zeigen …"
+          }
+        }
+      }
+    },
+    "Show Similar Rides": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ähnliche Fahrten zeigen"
           }
         }
       }
@@ -6309,12 +6835,82 @@
         }
       }
     },
+    "Show the rides on this route in the list": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Zeigt die Fahrten auf dieser Strecke in der Liste"
+          }
+        }
+      }
+    },
     "Shows why the totals are estimated": {
       "localizations": {
         "de": {
           "stringUnit": {
             "state": "translated",
             "value": "Zeigt, warum die Summen geschätzt sind"
+          }
+        }
+      }
+    },
+    "Similar Rides": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ähnliche Fahrten"
+          }
+        }
+      }
+    },
+    "Similar Rides (%lld)": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ähnliche Fahrten (%lld)"
+          }
+        }
+      }
+    },
+    "Similar rides from": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ähnliche Fahrten ab"
+          }
+        }
+      }
+    },
+    "Similar rides:": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ähnliche Fahrten:"
+          }
+        }
+      }
+    },
+    "Similar to: %@ (%@)": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ähnlich wie: %1$@ (%2$@)"
+          }
+        }
+      }
+    },
+    "Similarity": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ähnlichkeit"
           }
         }
       }
@@ -6359,12 +6955,12 @@
         }
       }
     },
-    "Sort By": {
+    "Sort": {
       "localizations": {
         "de": {
           "stringUnit": {
             "state": "translated",
-            "value": "Sortieren nach"
+            "value": "Sortierung"
           }
         }
       }
@@ -6375,6 +6971,16 @@
           "stringUnit": {
             "state": "translated",
             "value": "Sortieren und filtern"
+          }
+        }
+      }
+    },
+    "Sort By": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sortieren nach"
           }
         }
       }
@@ -6395,6 +7001,16 @@
           "stringUnit": {
             "state": "translated",
             "value": "Quelle"
+          }
+        }
+      }
+    },
+    "Source noted · Bosch values unchanged": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Quelle vermerkt · Bosch-Werte unverändert"
           }
         }
       }
@@ -6445,16 +7061,6 @@
           "stringUnit": {
             "state": "translated",
             "value": "Quelle: GPX-Datei"
-          }
-        }
-      }
-    },
-    "Source noted · Bosch values unchanged": {
-      "localizations": {
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Quelle vermerkt · Bosch-Werte unverändert"
           }
         }
       }
@@ -6569,6 +7175,16 @@
         }
       }
     },
+    "Suggest merging": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Zusammenfügen vorschlagen"
+          }
+        }
+      }
+    },
     "Tap “Statistics” at the bottom and pick the ride.": {
       "localizations": {
         "de": {
@@ -6585,6 +7201,16 @@
           "stringUnit": {
             "state": "translated",
             "value": "Petrol"
+          }
+        }
+      }
+    },
+    "The backup is from %@ (Wattspur %@).": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Das Backup ist vom %1$@ (Wattspur %2$@)."
           }
         }
       }
@@ -6625,6 +7251,16 @@
           "stringUnit": {
             "state": "translated",
             "value": "Das letzte Bike lässt sich nicht archivieren: Neue Fahrten brauchen ein Bike."
+          }
+        }
+      }
+    },
+    "The library file could not be read: %@": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Die Mediathek-Datei konnte nicht gelesen werden: %@"
           }
         }
       }
@@ -6699,6 +7335,16 @@
         }
       }
     },
+    "the same length before": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "gleich lange Zeit davor"
+          }
+        }
+      }
+    },
     "The sample ride cannot be merged.": {
       "localizations": {
         "de": {
@@ -6715,6 +7361,16 @@
           "stringUnit": {
             "state": "translated",
             "value": "Die markierten Fahrten haben keine Route."
+          }
+        }
+      }
+    },
+    "The share of a route that lies at most 50 m from the other. “Show Similar Rides” starts here; the list has its own slider.": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Der Anteil einer Strecke, der höchstens 50 m von der anderen entfernt liegt. „Ähnliche Fahrten zeigen“ beginnt mit diesem Wert; die Liste hat einen eigenen Regler."
           }
         }
       }
@@ -6739,6 +7395,16 @@
         }
       }
     },
+    "There is no library to back up yet.": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Es gibt noch keine Mediathek zum Sichern."
+          }
+        }
+      }
+    },
     "These files may contain your routes (GPS positions).": {
       "localizations": {
         "de": {
@@ -6755,6 +7421,36 @@
           "stringUnit": {
             "state": "translated",
             "value": "Diese Fahrten überschneiden sich zeitlich und lassen sich nicht zusammenfügen."
+          }
+        }
+      }
+    },
+    "This also deletes the original files and cannot be undone.": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Dabei werden auch die Originaldateien gelöscht. Das lässt sich nicht rückgängig machen."
+          }
+        }
+      }
+    },
+    "This backup was made by a newer version of Wattspur. Update Wattspur before you restore it.": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Dieses Backup stammt von einer neueren Version von Wattspur. Aktualisiere Wattspur, bevor du es wiederherstellst."
+          }
+        }
+      }
+    },
+    "This backup was made by a newer version of Wattspur. Update Wattspur to restore it.": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Dieses Backup stammt von einer neueren Version von Wattspur. Aktualisiere Wattspur, um es wiederherzustellen."
           }
         }
       }
@@ -6789,12 +7485,42 @@
         }
       }
     },
+    "This folder is not a Wattspur backup.": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Dieser Ordner ist kein Wattspur-Backup."
+          }
+        }
+      }
+    },
+    "This is a sample ride": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Das ist eine Beispielfahrt"
+          }
+        }
+      }
+    },
     "This Month": {
       "localizations": {
         "de": {
           "stringUnit": {
             "state": "translated",
             "value": "Dieser Monat"
+          }
+        }
+      }
+    },
+    "This report helps to find import problems. It contains versions, counts and the import log – no positions, ride names or other ride data. Nothing is sent automatically: save it and send it yourself if you like.": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Dieser Bericht hilft, Probleme beim Import zu finden. Er enthält Versionen, Anzahlen und das Import-Protokoll – keine Positionen, Fahrtnamen oder andere Fahrtdaten. Nichts wird automatisch gesendet: Sichere ihn und schicke ihn bei Bedarf selbst weiter."
           }
         }
       }
@@ -6819,6 +7545,26 @@
         }
       }
     },
+    "This ride has no route": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Diese Fahrt hat keine Route"
+          }
+        }
+      }
+    },
+    "This week": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Diese Woche"
+          }
+        }
+      }
+    },
     "This Week": {
       "localizations": {
         "de": {
@@ -6839,42 +7585,12 @@
         }
       }
     },
-    "This also deletes the original files and cannot be undone.": {
+    "Time": {
       "localizations": {
         "de": {
           "stringUnit": {
             "state": "translated",
-            "value": "Dabei werden auch die Originaldateien gelöscht. Das lässt sich nicht rückgängig machen."
-          }
-        }
-      }
-    },
-    "This is a sample ride": {
-      "localizations": {
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Das ist eine Beispielfahrt"
-          }
-        }
-      }
-    },
-    "This report helps to find import problems. It contains versions, counts and the import log – no positions, ride names or other ride data. Nothing is sent automatically: save it and send it yourself if you like.": {
-      "localizations": {
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Dieser Bericht hilft, Probleme beim Import zu finden. Er enthält Versionen, Anzahlen und das Import-Protokoll – keine Positionen, Fahrtnamen oder andere Fahrtdaten. Nichts wird automatisch gesendet: Sichere ihn und schicke ihn bei Bedarf selbst weiter."
-          }
-        }
-      }
-    },
-    "This week": {
-      "localizations": {
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Diese Woche"
+            "value": "Zeit"
           }
         }
       }
@@ -6915,6 +7631,26 @@
           "stringUnit": {
             "state": "translated",
             "value": "Heute, %@"
+          }
+        }
+      }
+    },
+    "Top speed": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Höchstgeschwindigkeit"
+          }
+        }
+      }
+    },
+    "Top speed, highest power and highest cadence are the maximum stored in the file. The best 1-minute power is the highest average power over 60 seconds without a break; rides without power values, like many GPX files, do not count for the power records.": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Höchstgeschwindigkeit, höchste Leistung und höchste Trittfrequenz sind die Höchstwerte, die in der Datei stehen. Die beste 1-Minuten-Leistung ist die höchste durchschnittliche Leistung über 60 Sekunden ohne Unterbrechung; Fahrten ohne Leistungswerte, wie viele GPX-Dateien, zählen für die Leistungsrekorde nicht."
           }
         }
       }
@@ -7049,6 +7785,16 @@
         }
       }
     },
+    "updated": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "aktualisiert"
+          }
+        }
+      }
+    },
     "Updated": {
       "localizations": {
         "de": {
@@ -7109,72 +7855,22 @@
         }
       }
     },
+    "vs %@": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ggü. %@"
+          }
+        }
+      }
+    },
     "vs average": {
       "localizations": {
         "de": {
           "stringUnit": {
             "state": "translated",
             "value": "ggü. Durchschnitt"
-          }
-        }
-      }
-    },
-    "Wattspur %@ is available": {
-      "localizations": {
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Wattspur %@ ist verfügbar"
-          }
-        }
-      }
-    },
-    "Wattspur could not reach GitHub. Check your internet connection and try again.": {
-      "localizations": {
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Wattspur konnte GitHub nicht erreichen. Prüfe deine Internetverbindung und versuche es noch einmal."
-          }
-        }
-      }
-    },
-    "Wattspur Handbook": {
-      "localizations": {
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Wattspur-Handbuch"
-          }
-        }
-      }
-    },
-    "Wattspur is up to date": {
-      "localizations": {
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Wattspur ist aktuell"
-          }
-        }
-      }
-    },
-    "Wattspur quits and replaces the library with the backup the next time you open it. Rides and changes since the backup are not in it. The current library is kept in a folder beside it.": {
-      "localizations": {
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Wattspur beendet sich und ersetzt die Mediathek beim nächsten Öffnen durch das Backup. Fahrten und Änderungen seit dem Backup sind darin nicht enthalten. Die aktuelle Mediathek bleibt in einem Ordner daneben erhalten."
-          }
-        }
-      }
-    },
-    "Why “estimated”?": {
-      "localizations": {
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Warum „geschätzt“?"
           }
         }
       }
@@ -7219,32 +7915,12 @@
         }
       }
     },
-    "Wattspur Goals": {
+    "Wattspur %@ is available": {
       "localizations": {
         "de": {
           "stringUnit": {
             "state": "translated",
-            "value": "Wattspur Ziele"
-          }
-        }
-      }
-    },
-    "Wattspur now analyses several eBikes separately. All your earlier rides belong to “%@” – rename it and add more bikes in Profile.": {
-      "localizations": {
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Wattspur wertet jetzt mehrere eBikes getrennt aus. Alle bisherigen Fahrten gehören zu „%@“ – benenne es um und lege weitere Bikes im Profil an."
-          }
-        }
-      }
-    },
-    "Wattspur Records": {
-      "localizations": {
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Wattspur Rekorde"
+            "value": "Wattspur %@ ist verfügbar"
           }
         }
       }
@@ -7269,6 +7945,16 @@
         }
       }
     },
+    "Wattspur could not reach GitHub. Check your internet connection and try again.": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Wattspur konnte GitHub nicht erreichen. Prüfe deine Internetverbindung und versuche es noch einmal."
+          }
+        }
+      }
+    },
     "Wattspur could not remember this folder.": {
       "localizations": {
         "de": {
@@ -7289,12 +7975,72 @@
         }
       }
     },
+    "Wattspur Goals": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Wattspur Ziele"
+          }
+        }
+      }
+    },
+    "Wattspur Handbook": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Wattspur-Handbuch"
+          }
+        }
+      }
+    },
     "Wattspur is not a product of Robert Bosch GmbH and is not affiliated with it. Bosch and eBike Flow are trademarks of their respective owners.": {
       "localizations": {
         "de": {
           "stringUnit": {
             "state": "translated",
             "value": "Wattspur ist kein Produkt der Robert Bosch GmbH und steht in keiner Verbindung zu ihr. Bosch und eBike Flow sind Marken ihrer jeweiligen Inhaber."
+          }
+        }
+      }
+    },
+    "Wattspur is up to date": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Wattspur ist aktuell"
+          }
+        }
+      }
+    },
+    "Wattspur now analyses several eBikes separately. All your earlier rides belong to “%@” – rename it and add more bikes in Profile.": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Wattspur wertet jetzt mehrere eBikes getrennt aus. Alle bisherigen Fahrten gehören zu „%@“ – benenne es um und lege weitere Bikes im Profil an."
+          }
+        }
+      }
+    },
+    "Wattspur quits and replaces the library with the backup the next time you open it. Rides and changes since the backup are not in it. The current library is kept in a folder beside it.": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Wattspur beendet sich und ersetzt die Mediathek beim nächsten Öffnen durch das Backup. Fahrten und Änderungen seit dem Backup sind darin nicht enthalten. Die aktuelle Mediathek bleibt in einem Ordner daneben erhalten."
+          }
+        }
+      }
+    },
+    "Wattspur Records": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Wattspur Rekorde"
           }
         }
       }
@@ -7309,12 +8055,12 @@
         }
       }
     },
-    "Week %lld (%@)": {
+    "week %lld": {
       "localizations": {
         "de": {
           "stringUnit": {
             "state": "translated",
-            "value": "KW %1$lld (%2$@)"
+            "value": "KW %lld"
           }
         }
       }
@@ -7329,7 +8075,17 @@
         }
       }
     },
-    "Weight": {
+    "Week %lld (%@)": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "KW %1$lld (%2$@)"
+          }
+        }
+      }
+    },
+    "weight": {
       "localizations": {
         "de": {
           "stringUnit": {
@@ -7339,7 +8095,7 @@
         }
       }
     },
-    "weight": {
+    "Weight": {
       "localizations": {
         "de": {
           "stringUnit": {
@@ -7375,6 +8131,16 @@
           "stringUnit": {
             "state": "translated",
             "value": "Wh"
+          }
+        }
+      }
+    },
+    "What the charts show along the bottom": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Was die Diagramme unten als Achse zeigen: Strecke oder Zeit seit dem Start"
           }
         }
       }
@@ -7429,6 +8195,16 @@
         }
       }
     },
+    "Why “estimated”?": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Warum „geschätzt“?"
+          }
+        }
+      }
+    },
     "With motor assistance (Bosch Smart System).": {
       "localizations": {
         "de": {
@@ -7465,6 +8241,16 @@
           "stringUnit": {
             "state": "translated",
             "value": "Arbeit pro km"
+          }
+        }
+      }
+    },
+    "x-axis: distance in km. Each ride has its own colour, dash and shape; shorter rides end earlier.": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "x-Achse: Strecke in km. Jede Fahrt hat eigene Farbe, Strichart und Form; kürzere Fahrten enden früher."
           }
         }
       }
@@ -7619,430 +8405,6 @@
         }
       }
     },
-    "added by hand": {
-      "localizations": {
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "von Hand hinzugefügt"
-          }
-        }
-      }
-    },
-    "and %lld more": {
-      "localizations": {
-        "de": {
-          "variations": {
-            "plural": {
-              "one": {
-                "stringUnit": {
-                  "state": "translated",
-                  "value": "und %lld weiterer"
-                }
-              },
-              "other": {
-                "stringUnit": {
-                  "state": "translated",
-                  "value": "und %lld weitere"
-                }
-              }
-            }
-          }
-        },
-        "en": {
-          "variations": {
-            "plural": {
-              "one": {
-                "stringUnit": {
-                  "state": "translated",
-                  "value": "and %lld more"
-                }
-              },
-              "other": {
-                "stringUnit": {
-                  "state": "translated",
-                  "value": "and %lld more"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "avg %@": {
-      "localizations": {
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Ø %@"
-          }
-        }
-      }
-    },
-    "avg %@ per ride": {
-      "localizations": {
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Ø %@ je Fahrt"
-          }
-        }
-      }
-    },
-    "behind": {
-      "localizations": {
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "im Rückstand"
-          }
-        }
-      }
-    },
-    "better": {
-      "localizations": {
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "besser"
-          }
-        }
-      }
-    },
-    "days": {
-      "localizations": {
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Tage"
-          }
-        }
-      }
-    },
-    "estimate": {
-      "localizations": {
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Schätzwert"
-          }
-        }
-      }
-    },
-    "folder.failed": {
-      "comment": "Subfolder of the watched folder for files that could not be read",
-      "localizations": {
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Fehlerhaft"
-          }
-        },
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Failed"
-          }
-        }
-      }
-    },
-    "folder.imported": {
-      "comment": "Subfolder of the watched folder for imported files",
-      "localizations": {
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Importiert"
-          }
-        },
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Imported"
-          }
-        }
-      }
-    },
-    "from the watched folder": {
-      "localizations": {
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "aus dem überwachten Ordner"
-          }
-        }
-      }
-    },
-    "iCloud Drive › Wattspur Import (recommended)": {
-      "localizations": {
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "iCloud Drive › Wattspur Import (empfohlen)"
-          }
-        }
-      }
-    },
-    "less": {
-      "localizations": {
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "weniger"
-          }
-        }
-      }
-    },
-    "more": {
-      "localizations": {
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "mehr"
-          }
-        }
-      }
-    },
-    "new": {
-      "localizations": {
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "neu"
-          }
-        }
-      }
-    },
-    "no comparison": {
-      "localizations": {
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "kein Vergleichswert"
-          }
-        }
-      }
-    },
-    "no extension": {
-      "localizations": {
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "ohne Endung"
-          }
-        }
-      }
-    },
-    "no rides the year before": {
-      "localizations": {
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "keine Fahrten im Vorjahr"
-          }
-        }
-      }
-    },
-    "of %@": {
-      "localizations": {
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "von %@"
-          }
-        }
-      }
-    },
-    "on %lld days": {
-      "localizations": {
-        "de": {
-          "variations": {
-            "plural": {
-              "one": {
-                "stringUnit": {
-                  "state": "translated",
-                  "value": "an %lld Tag"
-                }
-              },
-              "other": {
-                "stringUnit": {
-                  "state": "translated",
-                  "value": "an %lld Tagen"
-                }
-              }
-            }
-          }
-        },
-        "en": {
-          "variations": {
-            "plural": {
-              "one": {
-                "stringUnit": {
-                  "state": "translated",
-                  "value": "on %lld day"
-                }
-              },
-              "other": {
-                "stringUnit": {
-                  "state": "translated",
-                  "value": "on %lld days"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "on track": {
-      "localizations": {
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "im Plan"
-          }
-        }
-      }
-    },
-    "per day": {
-      "localizations": {
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "je Tag"
-          }
-        }
-      }
-    },
-    "per month": {
-      "localizations": {
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "je Monat"
-          }
-        }
-      }
-    },
-    "per week": {
-      "localizations": {
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "je Woche"
-          }
-        }
-      }
-    },
-    "per year": {
-      "localizations": {
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "je Jahr"
-          }
-        }
-      }
-    },
-    "pp": {
-      "localizations": {
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Pp."
-          }
-        }
-      }
-    },
-    "Route: %@": {
-      "localizations": {
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Strecke: %@"
-          }
-        }
-      }
-    },
-    "Route: %@ (%@)": {
-      "localizations": {
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Strecke: %1$@ (%2$@)"
-          }
-        }
-      }
-    },
-    "Routes": {
-      "localizations": {
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Strecken"
-          }
-        }
-      }
-    },
-    "rpm": {
-      "localizations": {
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "1/min"
-          }
-        }
-      }
-    },
-    "the same length before": {
-      "localizations": {
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "gleich lange Zeit davor"
-          }
-        }
-      }
-    },
-    "updated": {
-      "localizations": {
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "aktualisiert"
-          }
-        }
-      }
-    },
-    "vs %@": {
-      "localizations": {
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "ggü. %@"
-          }
-        }
-      }
-    },
-    "week %lld": {
-      "localizations": {
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "KW %lld"
-          }
-        }
-      }
-    },
-    "x-axis: distance in km. Each ride has its own colour, dash and shape; shorter rides end earlier.": {
-      "localizations": {
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "x-Achse: Strecke in km. Jede Fahrt hat eigene Farbe, Strichart und Form; kürzere Fahrten enden früher."
-          }
-        }
-      }
-    },
     "Your rides stay on this Mac. Wattspur sends no data about you or your rides. The map loads map tiles and place information from Apple, and Wattspur asks GitHub once a day whether a new version is out (switch off in Settings).": {
       "localizations": {
         "de": {
@@ -8053,362 +8415,22 @@
         }
       }
     },
-    "· %lld rides": {
-      "localizations": {
-        "de": {
-          "variations": {
-            "plural": {
-              "one": {
-                "stringUnit": {
-                  "state": "translated",
-                  "value": "· %lld Fahrt"
-                }
-              },
-              "other": {
-                "stringUnit": {
-                  "state": "translated",
-                  "value": "· %lld Fahrten"
-                }
-              }
-            }
-          }
-        },
-        "en": {
-          "variations": {
-            "plural": {
-              "one": {
-                "stringUnit": {
-                  "state": "translated",
-                  "value": "· %lld ride"
-                }
-              },
-              "other": {
-                "stringUnit": {
-                  "state": "translated",
-                  "value": "· %lld rides"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "“%@” matches “%@”.": {
+    "Click the chosen display again to hide the rides.": {
       "localizations": {
         "de": {
           "stringUnit": {
             "state": "translated",
-            "value": "„%1$@“ passt zu „%2$@“."
+            "value": "Erneut auf die gewählte Darstellung klicken blendet die Fahrten aus."
           }
         }
       }
     },
-    "“%@” matches “%@”: start %lld s apart, distance %@ different, same route.": {
+    "Rides hidden. Click a display to show them.": {
       "localizations": {
         "de": {
           "stringUnit": {
             "state": "translated",
-            "value": "„%1$@“ passt zu „%2$@“: Start %3$lld s versetzt, Strecke %4$@ Unterschied, gleiche Route."
-          }
-        }
-      }
-    },
-    "“Save to Files”": {
-      "localizations": {
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "„In Dateien sichern“"
-          }
-        }
-      }
-    },
-    "“With profile” needs weight, height and birth year in your profile. Until then calories are estimated from your pedal power.": {
-      "localizations": {
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "„Mit Profil“ braucht Gewicht, Größe und Geburtsjahr in deinem Profil. Bis dahin werden die Kalorien aus deiner Tretleistung geschätzt."
-          }
-        }
-      }
-    },
-    "… and %lld more": {
-      "localizations": {
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "… und %lld weitere"
-          }
-        }
-      }
-    },
-    "↑ %@ · ↓ %@ · steepest %@": {
-      "localizations": {
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "↑ %1$@ · ↓ %2$@ · steilste Stelle %3$@"
-          }
-        }
-      }
-    },
-    "≈ %@ × Mount Everest": {
-      "localizations": {
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "≈ %@ × Mount Everest"
-          }
-        }
-      }
-    },
-    "⌘-click selects several rides – to analyze, compare or merge them.": {
-      "localizations": {
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "⌘-Klick markiert mehrere Fahrten – zum Auswerten, Vergleichen oder Zusammenfügen."
-          }
-        }
-      }
-    },
-    "⌘-click selects several rides, so you can analyze, compare or merge them.": {
-      "localizations": {
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Mit ⌘-Klick markierst du mehrere Fahrten, um sie auszuwerten, zu vergleichen oder zusammenzufügen."
-          }
-        }
-      }
-    },
-    "★ marks the best value of a row, only for figures where more or less is better. The average is per ride over your %lld rides; averages are weighted by ride time as in the analysis. The sample ride does not count, a merged ride counts as one ride. Avg power comes from Bosch and counts only seconds with pedal power; “over ride time” is work ÷ ride time.": {
-      "localizations": {
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "★ markiert den besten Wert einer Zeile, nur bei Kennzahlen, bei denen mehr oder weniger besser ist. Der Schnitt gilt je Fahrt über deine %lld Fahrten; Ø-Werte sind nach Fahrzeit gewichtet wie in der Auswertung. Die Beispielfahrt zählt nicht, eine zusammengefügte Fahrt zählt als eine Fahrt. Ø Leistung kommt von Bosch und zählt nur Sekunden mit Tretleistung; „über die Fahrzeit“ ist Arbeit ÷ Fahrzeit."
-          }
-        }
-      }
-    },
-    "%lld rides from %@ probably belong together": {
-      "localizations": {
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "%1$lld Fahrten vom %2$@ gehören wohl zusammen"
-          }
-        }
-      }
-    },
-    "Not Now": {
-      "localizations": {
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Nicht jetzt"
-          }
-        }
-      }
-    },
-    "Off": {
-      "localizations": {
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Aus"
-          }
-        }
-      }
-    },
-    "Gap up to %lld min": {
-      "localizations": {
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Pause bis %lld Min."
-          }
-        }
-      }
-    },
-    "Merging:": {
-      "localizations": {
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Zusammenfügen:"
-          }
-        }
-      }
-    },
-    "Suggest merging": {
-      "localizations": {
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Zusammenfügen vorschlagen"
-          }
-        }
-      }
-    },
-    "After an import, Wattspur points out rides on the same day that probably belong together: the second starts soon after the first ended and close to where it ended. Nothing is merged without your confirmation.": {
-      "localizations": {
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Nach einem Import weist Wattspur auf Fahrten desselben Tages hin, die wohl zusammengehören: die zweite beginnt kurz nach dem Ende der ersten und in deren Nähe. Zusammengefügt wird nie ohne deine Bestätigung."
-          }
-        }
-      }
-    },
-    "Time": {
-      "localizations": {
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Zeit"
-          }
-        }
-      }
-    },
-    "Chart axis": {
-      "localizations": {
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Achse der Diagramme"
-          }
-        }
-      }
-    },
-    "What the charts show along the bottom": {
-      "localizations": {
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Was die Diagramme unten als Achse zeigen: Strecke oder Zeit seit dem Start"
-          }
-        }
-      }
-    },
-    "%@ over the time of the ride": {
-      "localizations": {
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "%@ über die Zeit der Fahrt"
-          }
-        }
-      }
-    },
-    "%lld min": {
-      "localizations": {
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "%lld Min."
-          }
-        }
-      }
-    },
-    "Position held at %@": {
-      "localizations": {
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Position festgehalten bei %@"
-          }
-        }
-      }
-    },
-    "Position released": {
-      "localizations": {
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Position losgelassen"
-          }
-        }
-      }
-    },
-    "Release position": {
-      "localizations": {
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Position loslassen"
-          }
-        }
-      }
-    },
-    "Customize Map": {
-      "localizations": {
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Karte anpassen"
-          }
-        }
-      }
-    },
-    "Map Type": {
-      "localizations": {
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Kartentyp"
-          }
-        }
-      }
-    },
-    "Map data and licences": {
-      "localizations": {
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Kartendaten und Lizenzen"
-          }
-        }
-      }
-    },
-    "Map data and style: open the licence": {
-      "localizations": {
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Kartendaten und Darstellung: Lizenz öffnen"
-          }
-        }
-      }
-    },
-    "OpenStreetMap": {
-      "localizations": {
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "OpenStreetMap"
-          }
-        }
-      }
-    },
-    "CyclOSM": {
-      "localizations": {
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "CyclOSM"
-          }
-        }
-      }
-    },
-    "OpenTopoMap": {
-      "localizations": {
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "OpenTopoMap"
+            "value": "Fahrten ausgeblendet. Eine Darstellung anklicken, um sie zu zeigen."
           }
         }
       }
