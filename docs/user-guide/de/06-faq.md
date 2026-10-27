@@ -71,5 +71,8 @@ Bosch-Exporte enthalten keine Bike-Kennung, neue Fahrten gehen deshalb an das **
 
 **Wiederherstellen …** fragt nach einem solchen Ordner und sagt dir, welches Backup es ist. Danach beende Wattspur und öffne es wieder: Wattspur ersetzt die Mediathek durch das Backup und sagt „Backup vom … erfolgreich wiederhergestellt“. Die ersetzte Mediathek bleibt in einem Ordner „Library Before Restore …“ daneben erhalten, es geht also nichts verloren. Auf einem neuen Mac installierst du Wattspur, öffnest es einmal und stellst dort den Ordner wieder her. Ein Backup einer neueren Version von Wattspur kann eine ältere nicht wiederherstellen; aktualisiere vorher.
 
+### Kann ich meine Fahrten mit anderen Programmen lesen?
+Eine einzelne Fahrt: **Als GPX exportieren …** im Tour-Detail schreibt eine GPX-Datei mit Route, Höhe, Zeit, Leistung und Trittfrequenz, die komoot, Strava, Garmin und die meisten Kartenprogramme lesen. Alle Fahrten auf einmal: Ein Backup (siehe oben) enthält eine SQLite-Datenbank und die Originaldateien deiner Fahrten. Wie man sie liest, mit Beispielen in SQL und einem kleinen Python-Skript, steht auf der Seite [Data exchange](../../reference/data-exchange.md) (englisch). Die Datenbank ist Wattspurs interner Speicher und kann sich mit jeder Version ändern; ein festes Austauschformat für alle Fahrten ist geplant.
+
 ### Wie fange ich von vorn an?
 Mach vorher ein Backup, falls du deine Fahrten vielleicht zurückhaben willst (siehe oben). Wattspur beenden und den Ordner `~/Library/Containers/io.github.hops-1.wattspur` löschen. Beim nächsten Start ist Wattspur leer, und der Einrichtungsassistent erscheint wieder. Deine Dateien im Import-Ordner bleiben. Verschiebe sie aus **Importiert** zurück in den Import-Ordner, wenn du sie neu importieren willst.
