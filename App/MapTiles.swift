@@ -131,14 +131,25 @@ extension MKMapView {
         }
         let current = overlays.compactMap { $0 as? CachingTileOverlay }
         guard current.map(\.source) != [mapType.tileSource].compactMap({ $0 }) else { return }
-        removeOverlays(current)
+        // Apple draws its place names above the roads level even when tiles replace its map,
+        // so they showed twice beside the tiles' own names at some zooms. The tiles therefore lie
+        // above the labels, and the app's own overlays move along to stay on top of them.
+        let drawn = drawnOverlays
+        removeOverlays(current + drawn)
         if let source = mapType.tileSource {
-            insertOverlay(CachingTileOverlay(source: source), at: 0, level: .aboveRoads)
+            addOverlay(CachingTileOverlay(source: source), level: .aboveLabels)
         }
+        addOverlays(drawn, level: drawnOverlayLevel)
     }
 
     /// The app's own overlays, without the tiles, to replace them.
     var drawnOverlays: [any MKOverlay] { overlays.filter { !($0 is CachingTileOverlay) } }
+
+    /// Where the app's own overlays go: above the roads on Apple's maps, as before, and above
+    /// the tiles on an OpenStreetMap style.
+    var drawnOverlayLevel: MKOverlayLevel {
+        overlays.contains { $0 is CachingTileOverlay } ? .aboveLabels : .aboveRoads
+    }
 }
 
 /// The credit a tile server asks for, at the bottom right of the map; always visible.

@@ -241,7 +241,7 @@ struct RidesMapRepresentable: NSViewRepresentable {
             context.coordinator.styleKey = key
             map.removeOverlays(map.drawnOverlays)
             if showsRides {
-                map.addOverlay(RidesMapOverlay(style: style), level: .aboveRoads)
+                map.addOverlay(RidesMapOverlay(style: style), level: map.drawnOverlayLevel)
             }
         }
         if context.coordinator.fitKey != fitKey || context.coordinator.fitRequest != fitRequest {

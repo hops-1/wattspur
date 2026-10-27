@@ -165,7 +165,7 @@ private struct RideMapRepresentable: NSViewRepresentable {
             coordinator.drawingKey = drawingKey
             map.removeOverlays(map.drawnOverlays)
             if coordinates.count > 1 {
-                map.addOverlay(RideRouteOverlay(route: coordinates, newStretches: newStretches, ticks: ticks, dark: dark), level: .aboveRoads)
+                map.addOverlay(RideRouteOverlay(route: coordinates, newStretches: newStretches, ticks: ticks, dark: dark), level: map.drawnOverlayLevel)
             }
         }
         // Markers and the visible area follow the route only, not the new stretches.
