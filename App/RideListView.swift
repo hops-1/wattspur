@@ -11,6 +11,8 @@ struct RideListView: View {
     @Binding var importRequested: Bool
     /// "Similar to: …" (B-118); the main list only. Held by `ContentView`, so it stays when a ride is opened.
     @Binding var similarFilter: SimilarRidesFilter?
+    /// The rides of a day or a streak from the highlights (B-130); the main list only.
+    var dayFilter: Binding<RideDayFilter?> = .constant(nil)
     /// Opens the comparison for 2–4 selected rides (CMP-01).
     var onCompare: () -> Void = {}
     /// Opens the year in review from the year tile (LIST-04).
@@ -72,6 +74,14 @@ struct RideListView: View {
     /// Search, period filter and sort order applied (LIST-05). With "Similar to" only the rides on that
     /// route, the ride asked about first.
     private var filteredRides: [Ride] {
+        // The rides of a day from the highlights are shown whatever period, bike or source the
+        // list has, else some of them could be missing (B-130); the search still applies.
+        if let day = activeDayFilter {
+            return rides
+                .filter { day.rideIDs.contains($0.id) }
+                .filter { searchText.isEmpty || $0.name.localizedStandardContains(searchText) }
+                .sorted { sortOrder.areInIncreasingOrder($0.sortKey, $1.sortKey) }
+        }
         let base = rides
             .filter { scope?.rideIDs.contains($0.id) ?? true }
             .filter { $0.isOnBike(bikeFilter) && $0.isFromSource(sourceFilter) }
@@ -94,6 +104,9 @@ struct RideListView: View {
 
     /// The filter, in the main list only.
     private var activeSimilarFilter: SimilarRidesFilter? { scope == nil ? similarFilter : nil }
+
+    /// The day from the highlights, in the main list only.
+    private var activeDayFilter: RideDayFilter? { scope == nil ? dayFilter.wrappedValue : nil }
 
     /// The rides on the route by id; `nil` while the first search runs.
     private var similarHits: [UUID: RouteIndex.Hit]? {
@@ -388,7 +401,10 @@ struct RideListView: View {
                 .background(.quaternary.opacity(0.6), in: Capsule())
                 filterMenu
             }
-            if isFiltered {
+            if let day = activeDayFilter {
+                dayFilterChip(day)
+                    .padding(.top, 8)
+            } else if isFiltered {
                 activeFilterChip
                     .padding(.top, 8)
             }
@@ -445,6 +461,32 @@ struct RideListView: View {
         .padding(.horizontal, 10)
         .padding(.vertical, 5)
         .background(Color.accentColor.opacity(0.12), in: Capsule())
+        .transition(.opacity.combined(with: .move(edge: .top)))
+    }
+
+    /// "15 Oct ✕" for the rides of a day or a streak from the highlights (B-130); ✕ shows all rides.
+    private func dayFilterChip(_ day: RideDayFilter) -> some View {
+        let label = RideDayFilter.label(for: rides.filter { day.rideIDs.contains($0.id) }.map(\.startDate)) ?? ""
+        return HStack(spacing: 6) {
+            Image(systemName: "calendar")
+                .font(.caption.weight(.semibold))
+            Text(verbatim: label)
+                .font(.caption.weight(.medium))
+            Button {
+                withAnimation(.snappy) { dayFilter.wrappedValue = nil }
+            } label: {
+                Image(systemName: "xmark.circle.fill")
+            }
+            .buttonStyle(.plain)
+            .help(Text("Show all rides"))
+            .accessibilityLabel(Text("Show all rides"))
+        }
+        .foregroundStyle(Color.accentColor)
+        .padding(.horizontal, 10)
+        .padding(.vertical, 5)
+        .background(Color.accentColor.opacity(0.12), in: Capsule())
+        .accessibilityElement(children: .contain)
+        .accessibilityLabel(Text("Rides of \(label)"))
         .transition(.opacity.combined(with: .move(edge: .top)))
     }
 
