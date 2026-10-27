@@ -1,6 +1,6 @@
 # Requirements – Wattspur
 
-Stand: 25.10.2026 · Status: Entwurf v0.14 (Plan für 1.5 bis 1.9; siehe Kap. 10.15 bis 10.18)
+Stand: 27.10.2026 · Status: Entwurf v0.15 (Plan für 1.5 bis 1.9; siehe Kap. 10.15 bis 10.20)
 
 ## 1. Ziel & Kontext
 
@@ -195,7 +195,7 @@ Quelle: Wunsch von Nils (22.10.2026): „In der Fahrtenliste gleiche bzw. ähnli
 | ID | Anforderung | Prio |
 |---|---|---|
 | MAP-01 | Apple MapKit mit Standard, Satellit und Hybrid | M |
-| MAP-02 | OSM-Stile Standard, CyclOSM und OpenTopoMap über eine austauschbare Kartenquelle; Nutzungsbedingungen und ggf. kommerziellen Anbieter vorher klären (V-04) | S |
+| MAP-02 | OSM-Stile Standard, CyclOSM und OpenTopoMap über eine austauschbare Kartenquelle; OpenTopoMap bringt Höhenlinien und Schummerung. Nutzungsbedingungen geklärt (V-04, [RECHERCHE-KARTEN.md](RECHERCHE-KARTEN.md)); Auswahl im Fenster „Karte anpassen“ mit Bildchen (Kap. 10.20) | S |
 | MAP-03 | Kacheln für bereits angesehene Touren offline zwischenspeichern | C |
 | MAP-04 | Heatmap über der Karte aller Fahrten, umschaltbar: (a) Linien wie bei komoot – jede Strecke halbtransparent, oft gefahrene Wege werden zu kräftigen Bändern; (b) flächige Wärmekarte (Dichte, blau → rot) für Gebiete, in denen viel gefahren wird. Mit Legende; Farbe nie allein (NFR-16) | S |
 | MAP-05 | Klick auf eine Strecke in der Karte aller Fahrten zeigt ein Popover mit den Fahrten, die dort verlaufen; ein Klick hebt die Fahrt auf der Karte hervor und zeigt ein Infofeld, von dem aus sie sich im Tour-Detail öffnen lässt | S |
@@ -524,7 +524,7 @@ Auf iOS als Tab-Leiste mit Navigation-Stack.
 | Weitere Rekorde | Max-Leistung, Max-Trittfrequenz, Max-Geschwindigkeit (Bosch-Maximum) und beste 1-Minuten-Leistung | ADV-R3 |
 | Release | v1.7 (geändert am 25.10.2026, zuvor v1.5; siehe 10.16 und 10.17) | Backlog |
 
-### 10.13 Fahrten und Karte in einem Bereich (22.10.2026, jetzt v1.8)
+### 10.13 Fahrten und Karte in einem Bereich (22.10.2026, am 27.10.2026 auf nach 1.9 verschoben)
 | Thema | Entscheidung | Auswirkung |
 |---|---|---|
 | Aufbau | ein Bereich „Fahrten“: links die Liste, rechts standardmäßig die Karte aller Fahrten der Liste; eine markierte Fahrt zeigt ihr Tour-Detail mit „‹ Karte“ (Esc) zurück, 2–4 markierte den Vergleich; „Karte“ und ⌘5 entfallen | Kap. 6, AGG-05, B-125 |
@@ -627,3 +627,15 @@ Entschieden mit Nils am 26.10.2026 auf Grundlage des Plans für 1.7 (ergänzt 10
 | Verlauf | Rechts neben der Liste, solange „Ähnlich wie“ aktiv ist und keine Fahrt markiert ist; „‹ Zurück zum Verlauf“ aus einer geöffneten Fahrt. Umfasst die Bezugsfahrt und alle Treffer bei Schwelle und Richtung des Chips, unabhängig von Bike-, Quellen- und Zeitraumfilter der Liste. Bestzeit ist die kürzeste Fahrzeit, bei den anderen Kennzahlen der höchste Wert; „Letzte“ ist die jüngste Fahrt mit diesem Wert. Fahrzeit ist die Zeit in Bewegung | ROUTE-06 |
 | Datenschutz | Alles lokal; Routen und Gruppen-Namen kommen weder in den Diagnosebericht noch in PDF- oder GPX-Export. Testdaten nur Beispielfahrt, anonymisierte Varianten oder synthetische Routen (NFR-01, NFR-12) | NFR-01 |
 | Mit in 1.7 | B-161 (Papierkorb-Knopf) und B-174 (Bike-Symbol in der Liste) als eigene PRs vor dem Release; B-175 (gemeinsame Bike-Auswahl, vorher B-159) und B-067 bleiben draußen | Backlog |
+
+### 10.20 Kartenstile (27.10.2026, für v1.8)
+Entschieden mit Nils am 27.10.2026. Grundlage: [RECHERCHE-KARTEN.md](RECHERCHE-KARTEN.md) (V-04).
+| Thema | Entscheidung | Auswirkung |
+|---|---|---|
+| Inhalt von 1.8 | 1.8 heißt „Kartenstile“: B-061 (aus v1.x vorgezogen), dazu B-130 und B-177; ein Release 1.8.0. Der gemeinsame Bereich „Fahrten“ (B-125) und B-176 gehen zurück ins Backlog, nach 1.8 und 1.9 | Backlog v1.8, v1.10 |
+| Stile | Zu Apple Standard, Satellit und Hybrid kommen OpenStreetMap Standard, CyclOSM und OpenTopoMap. Höhenlinien und Schummerung nur über OpenTopoMap; **kein** eigener Schalter für eine Relief-Ebene über anderen Karten | MAP-02 |
+| Regeln der Anbieter | eigener User-Agent, Quellenangabe unten rechts auf der Karte und im PDF (nicht abschaltbar), Cache nach den HTTP-Headern, kein Vorabladen und keine Offline-Pakete von diesen Servern | NFR-08, MAP-03 |
+| Auswahl | Fenster „Karte anpassen“ nach dem Vorbild komoot: Knopf oben rechts auf der Karte, Abschnitt „Kartentyp“ mit sechs Bildchen; auf der Karte aller Fahrten zusätzlich „Heatmap“ (Linien, Wärmekarte), der Umschalter in der Kopfzeile entfällt. Dieselben Bildchen in den Einstellungen | MAP-01, MAP-02, MAP-04 |
+| Bildchen | gezeichnet (ein festes Motiv je Stil in dessen Farben), nicht aus echten Kartenausschnitten | – |
+| PDF | Bei einem OSM-Stil zeigt das PDF denselben Stil; ohne Kacheln (offline) fällt es auf Apple Standard zurück | IDEA-20, CMP-07 |
+| Vergleichskarte | wird ein `MKMapView` wie Tour-Detail und Karte aller Fahrten, weil SwiftUI-`Map` keine Kachel-Overlays kann | CMP-08 |
