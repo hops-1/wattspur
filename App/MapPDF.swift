@@ -42,42 +42,19 @@ struct MapReport {
         return PDFExport.document([AnyView(page)])
     }
 
-    /// A live MapKit map cannot be drawn into a PDF; this takes a snapshot of the
-    /// same area and draws the routes on top, as the map's renderer does.
+    /// A live MapKit map cannot be drawn into a PDF; this takes the map of the same area
+    /// (Apple's snapshot or the tiles of an OpenStreetMap style, B-061d) and draws the
+    /// routes on top, as the map's renderer does.
     private func snapshot() async -> NSImage? {
-        let options = MKMapSnapshotter.Options()
         // Same shape as the image, so the area is not distorted.
-        let aspect = Self.mapSize.width / Self.mapSize.height
-        var rect = area
-        if rect.width / rect.height > aspect {
-            let height = rect.width / aspect
-            rect = MKMapRect(x: rect.minX, y: rect.midY - height / 2, width: rect.width, height: height)
-        } else {
-            let width = rect.height * aspect
-            rect = MKMapRect(x: rect.midX - width / 2, y: rect.minY, width: width, height: rect.height)
-        }
-        options.mapRect = rect
-        options.size = Self.mapSize
-        options.appearance = NSAppearance(named: .aqua)
-        switch mapType {
-        // The OpenStreetMap styles get their tiles in the PDF with B-061d; until then Apple's standard map.
-        case .standard, .openStreetMap, .cyclOSM, .openTopoMap:
-            let configuration = MKStandardMapConfiguration(emphasisStyle: .muted)
-            configuration.pointOfInterestFilter = .excludingAll
-            options.preferredConfiguration = configuration
-        case .satellite: options.preferredConfiguration = MKImageryMapConfiguration()
-        case .hybrid:
-            let configuration = MKHybridMapConfiguration()
-            configuration.pointOfInterestFilter = .excludingAll
-            options.preferredConfiguration = configuration
-        }
-        guard let snapshot = try? await MKMapSnapshotter(options: options).start() else { return nil }
+        let rect = area.fitted(to: Self.mapSize)
+        guard let backdrop = await MapBackdrop.make(mapType, rect: rect, size: Self.mapSize) else { return nil }
         let image = NSImage(size: Self.mapSize)
         image.lockFocusFlipped(true)
-        snapshot.image.draw(in: CGRect(origin: .zero, size: Self.mapSize))
+        backdrop.image.draw(in: CGRect(origin: .zero, size: Self.mapSize))
         if let context = NSGraphicsContext.current?.cgContext {
             style.draw(in: context, area: rect, scale: 1, mapPointsPerPoint: rect.width / Self.mapSize.width) {
-                snapshot.topDownPoint(for: $0.coordinate, height: Self.mapSize.height)
+                backdrop.point(for: $0.coordinate)
             }
         }
         image.unlockFocus()
