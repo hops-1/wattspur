@@ -1,6 +1,6 @@
 # Architektur
 
-Stand: 1.7.1. Kurz gefasst, wo was liegt und welche Regeln gelten. Die Gründe stehen in der Lern-Notiz [25](learning/25-architektur-aufraeumen.md).
+Stand: 1.8.0. Kurz gefasst, wo was liegt und welche Regeln gelten. Die Gründe stehen in der Lern-Notiz [25](learning/25-architektur-aufraeumen.md).
 
 ## Überblick
 
@@ -34,7 +34,8 @@ Pfeile zeigen die erlaubte Richtung der Abhängigkeit; zurück darf es nie gehen
 | `Import/` | `RideImporter` (Protokoll), FIT- und GPX-Importer, `ImportResult` |
 | `Ride/` | `ParsedRide`, Samples, Zusammenführen, Reihen für Diagramme, GPX-Schreiber, Kalorienmodell, Routen, Routenähnlichkeit (`RouteSimilarity`, `RouteSignature`, `RouteIndex`), gespeicherte Strecken (`RouteGrouping`: Mitgliedschaft und Vorschläge), beste Minute (`PeakPower`) |
 | `Analysis/` | Summen und Trends, Rekorde, Vergleich, Karte (Filter, Dichte), neue Wege, Verlauf einer Strecke (`RouteHistory`) |
-| `Library/` | Reine Typen rund um die Bibliothek: Filter, Quellen, Bike-Statistik, Duplikat-Fakten |
+| `Library/` | Reine Typen rund um die Bibliothek: Filter, Quellen, Bike-Statistik, Duplikat-Fakten, Tagesfilter aus den Highlights (`RideDayFilter`) |
+| `Map/` | Kachelserver (`TileSource`) und Kachel-Rechnung in Web Mercator (`TileMath`, `Tile`, `MercatorRect`) |
 | `Support/` | Diagnosebericht |
 
 ## WattspurKit (Store)
@@ -54,6 +55,8 @@ Pfeile zeigen die erlaubte Richtung der Abhängigkeit; zurück darf es nie gehen
 ## App
 
 Views in `App/`; die großen Bereiche haben eigene Ordner (`Highlights/`, `Analysis/`, `Compare/`). `@Observable`-Hilfsobjekte (`FolderWatcher`, `ImportLog`, `NewPathsStore`, `RouteSimilarityStore` (Suche, gespeicherte Strecken, Vorschläge), `LibraryBackupCenter`, `MergeSuggestionCenter`, `BikeAssignmentNotice`) liegen in der Environment. `DemoMode` und `SampleRide` sind für Screenshots und die Beispielfahrt.
+
+Karten: Alle drei Karten (Tour-Detail, Karte aller Fahrten, Vergleich) sind `MKMapView` mit eigenen Overlays. `MapTiles.swift` bringt die OSM-Kacheln (`TileLoader` mit Cache und User-Agent, `CachingTileOverlay`, `MutedTileRenderer`, `MKMapView.show(_:)`), `MapBackdrop.swift` das Kartenbild der PDFs (Apples Schnappschuss oder zusammengesetzte Kacheln), `MapCustomizePopover.swift` und `MapStyleThumbnail.swift` das Fenster „Karte anpassen“.
 
 ## Tests
 

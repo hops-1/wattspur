@@ -68,7 +68,7 @@ struct MapCustomizePanel: View {
                 }
             }
             Button {
-                openURL(HelpLinks.url(.views))
+                openURL(HelpLinks.mapStyles())
             } label: {
                 Label("Map data and licences", systemImage: "questionmark.circle")
             }

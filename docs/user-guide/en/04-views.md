@@ -42,7 +42,7 @@ A route you ride again and again, for example the way to work, can be saved unde
 
 ## Comparing rides
 The comparison shows 2 to 4 rides side by side, next to the list. The rides selected in the list **are** the comparison: ⌘-click another ride to add it, ✕ above a column removes it, and ↗ shows only that ride. **Done** (Esc) returns to the selection.
-- **Map:** all routes on one map, each in the colour and dash pattern of its column, with its marker at the start. Switch between Standard, Satellite and Hybrid at the top right.
+- **Map:** all routes on one map, each in the colour and dash pattern of its column, with its marker at the start (point at it for the ride's name). **Customize Map** at the top right chooses the [map style](#map-styles).
 - **Charts:** elevation, speed, cadence and power of all rides on top of each other, over the distance. Each ride has its own colour, dash pattern and marker, so the lines can be told apart without colour too. Above each chart are the Bosch averages of each ride; for elevation, the ascent, the descent and the steepest climb instead.
 - **Table:** every value of the ride detail, plus values that make rides of different length comparable: calories, ascent and work per km, the coasting share and the average power over the whole ride time. See [Metrics](05-metrics.md#comparing-rides).
 - **Best value:** ★ and a tinted cell mark the best value of a row, but only where more or less is clearly better: average speed, average power and power over ride time (more is better), and paused time (less is better). All other rows are neutral.
@@ -51,7 +51,7 @@ The comparison shows 2 to 4 rides side by side, next to the list. The rides sele
 - The sample ride can be compared but never counts towards the average. A merged ride is one ride.
 
 ## Ride detail
-- **Map** with the route, the start (green) and the finish (red). Switch between Standard, Satellite and Hybrid at the top right. The default is set in Settings.
+- **Map** with the route, the start (green) and the finish (red). **Customize Map** at the top right chooses the [map style](#map-styles); the default is set in Settings.
 - **Key figures:** ride time, distance, average speed, ascent, average power, average cadence, calories and CO₂ saved. Values with ⓘ are estimates, see [Metrics](05-metrics.md). In a ride from a GPX file a small ≈ marks ride time, distance, average speed and ascent (calculated from the track, see [Importing GPX files](08-importing-gpx.md)), and what the file lacks shows as “–” with “Not in the file”.
 - **New paths:** how much of the ride ran where you had never ridden before, for example “23 % · 4.5 km”. On the map these stretches are wider and orange. See [Metrics](05-metrics.md#map).
 - **Route:** a ride on a saved route names it under the title; a click lists the rides on it, see [Saved routes](#saved-routes).
@@ -76,10 +76,10 @@ Choose **Analysis** in the sidebar (⌘2). The ride list on the left shows only 
 ## Highlights
 Choose **Highlights** in the sidebar (⌘4). Three tabs at the top; each has **Export PDF** at the top left (⇧⌘E), which opens the tab as a PDF in Preview or saves it.
 - **Year:** distance, rides, ride time, ascent and CO₂ saved of a year, with the change against the year before. The arrows at the top (⌘← and ⌘→) switch years. Below:
-  - **Riding days:** a calendar with one square per day, from Monday to Sunday; the darker, the more kilometres (under 10, 10–25, 25–50, 50 km and more). Point at a day to see its distance; click it to show its rides in the list.
+  - **Riding days:** a calendar with one square per day, from Monday to Sunday; the darker, the more kilometres (under 10, 10–25, 25–50, 50 km and more). Point at a day to see its distance. Click it and **Rides** shows only that day's rides, with a chip “15 Oct ✕” above the list: one ride opens right away, several are selected. ✕ on the chip, or **Back to Highlights** (⌘[), shows all rides again. While the chip is there, the list's period, bike and source filters do not hide any of these rides; the search still works.
   - **Kilometres per month** as bars; the best month is darker.
   - **Records this year.**
-- **Records:** your best values across all rides: longest ride, longest ride time, most ascent, highest average speed, highest average power, longest streak of riding days, and top speed, highest power, highest cadence and best 1-minute power. Click a card to show the ride. “New” marks a record set by a ride imported in the last 7 days. See [Metrics](05-metrics.md#highlights).
+- **Records:** your best values across all rides: longest ride, longest ride time, most ascent, highest average speed, highest average power, longest streak of riding days, and top speed, highest power, highest cadence and best 1-minute power. Click a card to show the ride; a streak shows its rides with a chip like “3–9 Oct ✕”, as for a day in the calendar. “New” marks a record set by a ride imported in the last 7 days. See [Metrics](05-metrics.md#highlights).
 - **Goals:** kilometres, rides or ascent per week (Monday to Sunday), month or year. **Add Goal…** sets one; each period and metric has at most one goal. Each card shows how far you are, what is left and whether you are on track (at least as far as the time that has passed), and small bars for the last periods. ✎ changes or deletes a goal.
 - **New record after an import:** when an imported ride beats one of your records, a notice at the top of the window names it and the value it beat; **Show Ride** opens it. This works for every import, also from the watched folder. The import log notes it too.
 - Rides without power or ascent hold no record for them. The year shows “9 of 12 rides” under the ascent when not every ride has it; an ascent goal says so too.
@@ -89,16 +89,31 @@ Choose **Highlights** in the sidebar (⌘4). Three tabs at the top; each has **E
 Choose **Map** in the sidebar (⌘5): all your rides on one map. The ride list on the left shows only the rides in the visible area and follows panning and zooming. A ride selected there is drawn in blue; double-click opens it.
 - **Period** at the top, as in the analysis: week, month, year, a custom range or all rides.
 - **Only selected rides:** shows the rides selected in the list; 1 to 4 of them in the comparison's colours and dashes.
-- **Lines | Heat Map** next to the title:
+- **Customize Map** (the layers button at the top right) chooses the [map style](#map-styles) and how the rides are drawn:
   - **Lines:** each ride is a translucent line; where you ride often, the routes become stronger and wider. The legend shows what 1, 5, 20 and 60 rides look like.
   - **Heat map:** colours small areas by how many different rides pass there, in fixed steps 1, 2–4, 5–9, 10–19 and 20+ from blue to red.
+  - Click the chosen one again to hide the rides and see only the map; a ride selected in the list still shows in blue. Click Lines or Heat Map to show them again. With **Only selected rides** the selected rides always show.
 - **Click a route** to see the rides that pass there, with **Select all in the list**. Click one of them to make it stand out and see its key figures with **Open in Ride Detail**. Esc or a click beside every route closes it; that click also clears the selection in the list, unless **Only selected rides** is on.
 - **Below the map:** rides, distance, ride time, ascent, average speed and new paths of the rides in the visible area. Whole rides count with their totals, even if only part of them is visible. **Show in Analysis** analyses exactly these rides.
-- **Show all rides** (arrows at the top right) fits the map to all rides; the map type is next to it. The map keeps its area when you switch to another section and back.
+- **Show all rides** (arrows at the top right) fits the map to all rides; **Customize Map** is next to it. The map keeps its area when you switch to another section and back.
 - **Export PDF** (⇧⌘E) opens the visible area with the tiles and the legend as a PDF.
 - The line below the title names rides without GPS (for example on a trainer). The sample ride appears only when you select it.
 - With a GPX ride in the library, a **Source** choice next to the bike filter shows only Bosch or only GPX rides.
 - The map shows where you ride, and so where you live. Think before you share a PDF of it.
+
+## Map styles
+**Customize Map** at the top right of every map (ride detail, comparison, map of all rides) shows the map types as small pictures. **Settings › General** sets the one new maps start with.
+- **Apple:** Standard, Satellite and Hybrid, as before.
+- **OpenStreetMap:** the map of the [OpenStreetMap](https://www.openstreetmap.org) project, made by volunteers; paths and tracks are often more complete than on Apple's map.
+- **CyclOSM:** OpenStreetMap drawn for cyclists: cycle paths in blue, cycle lanes, surfaces.
+- **OpenTopoMap:** a topographic map with **contour lines and hill shading**, good for seeing the climbs of a ride.
+
+The OpenStreetMap styles come from servers run by the OpenStreetMap community, free of charge. Wattspur keeps to their rules:
+- The **credit** of the map stays at the bottom right of the map and of the PDF; click it to read the licence.
+- The styles are drawn a little paler, so your routes stand out.
+- They need the **internet**. Areas you have seen are kept for a while, so they also appear offline; Wattspur never downloads areas in advance. Without a connection an unseen area stays empty, and a PDF uses Apple's standard map instead.
+- Very close up, OpenTopoMap shows its closest level enlarged.
+- PDFs of a ride, a comparison and the map use the same style as the screen.
 
 ## Trash
 Rides you delete stay in the trash for 30 days. **Restore** puts a ride back into the list. **Empty Trash…** deletes all rides in the trash for good, including their original files.
