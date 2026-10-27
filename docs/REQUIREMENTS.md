@@ -195,7 +195,7 @@ Quelle: Wunsch von Nils (22.10.2026): „In der Fahrtenliste gleiche bzw. ähnli
 | ID | Anforderung | Prio |
 |---|---|---|
 | MAP-01 | Apple MapKit mit Standard, Satellit und Hybrid | M |
-| MAP-02 | OSM-Stile Standard, CyclOSM und OpenTopoMap über eine austauschbare Kartenquelle; OpenTopoMap bringt Höhenlinien und Schummerung. Nutzungsbedingungen geklärt (V-04, [RECHERCHE-KARTEN.md](RECHERCHE-KARTEN.md)); Auswahl im Fenster „Karte anpassen“ mit Bildchen (Kap. 10.20) | S |
+| MAP-02 | OSM-Stile Standard, CyclOSM und OpenTopoMap über eine austauschbare Kartenquelle; OpenTopoMap bringt Höhenlinien und Schummerung. Nutzungsbedingungen geklärt (V-04, [RECHERCHE-KARTEN.md](RECHERCHE-KARTEN.md)); Auswahl im Fenster „Karte anpassen“ mit Bildchen (Kap. 10.20) **Umgesetzt in 1.8.0.** | S |
 | MAP-03 | Kacheln für bereits angesehene Touren offline zwischenspeichern | C |
 | MAP-04 | Heatmap über der Karte aller Fahrten, umschaltbar: (a) Linien wie bei komoot – jede Strecke halbtransparent, oft gefahrene Wege werden zu kräftigen Bändern; (b) flächige Wärmekarte (Dichte, blau → rot) für Gebiete, in denen viel gefahren wird. Mit Legende; Farbe nie allein (NFR-16) | S |
 | MAP-05 | Klick auf eine Strecke in der Karte aller Fahrten zeigt ein Popover mit den Fahrten, die dort verlaufen; ein Klick hebt die Fahrt auf der Karte hervor und zeigt ein Infofeld, von dem aus sie sich im Tour-Detail öffnen lässt | S |
