@@ -65,6 +65,8 @@ struct DataExchangeDocTests {
         let storeURL = library.appending(path: "default.store")
         do {
             let container = try ModelContainer(for: Schema(WattspurSchema.models), configurations: ModelConfiguration(url: storeURL))
+            // Saved by hand: an autosave timer that fires after the container is released stops the whole test run.
+            container.mainContext.autosaveEnabled = false
             let rides = RideLibrary(context: container.mainContext)
             _ = rides.importFile(data: try Fixture.data("reinheim-rundfahrt"), fileName: "ride.fit", detectDuplicates: false)
             rides.save()
