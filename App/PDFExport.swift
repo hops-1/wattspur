@@ -67,36 +67,23 @@ enum PDFExport {
         }
     }
 
-    /// A live MapKit map cannot be drawn into a PDF, so this takes a snapshot around
-    /// all lines and draws them on top.
+    /// A live MapKit map cannot be drawn into a PDF, so this takes the map around all
+    /// lines (Apple's snapshot or the tiles of an OpenStreetMap style) and draws them on top.
     static func mapImage(_ lines: [MapLine], mapType: RideMapType, size: CGSize) async -> NSImage? {
         let lines = lines.filter { $0.coordinates.count > 1 }
         let all = lines.flatMap(\.coordinates)
         guard let minLat = all.map(\.latitude).min(), let maxLat = all.map(\.latitude).max(),
               let minLon = all.map(\.longitude).min(), let maxLon = all.map(\.longitude).max() else { return nil }
-        let options = MKMapSnapshotter.Options()
-        options.region = MKCoordinateRegion(
-            center: CLLocationCoordinate2D(latitude: (minLat + maxLat) / 2, longitude: (minLon + maxLon) / 2),
-            span: MKCoordinateSpan(latitudeDelta: max(0.005, (maxLat - minLat) * 1.25),
-                                   longitudeDelta: max(0.005, (maxLon - minLon) * 1.25)))
-        options.size = size
-        options.appearance = NSAppearance(named: .aqua)
-        switch mapType {
-        // The OpenStreetMap styles get their tiles in the PDF with B-061d; until then Apple's standard map.
-        case .standard, .openStreetMap, .cyclOSM, .openTopoMap:
-            let configuration = MKStandardMapConfiguration(emphasisStyle: .muted)
-            configuration.pointOfInterestFilter = .excludingAll
-            options.preferredConfiguration = configuration
-        case .satellite: options.preferredConfiguration = MKImageryMapConfiguration()
-        case .hybrid:
-            let configuration = MKHybridMapConfiguration()
-            configuration.pointOfInterestFilter = .excludingAll
-            options.preferredConfiguration = configuration
-        }
-        guard let snapshot = try? await MKMapSnapshotter(options: options).start() else { return nil }
+        // A quarter more than the routes, at least about 500 m.
+        let latitudeSpan = max(0.005, (maxLat - minLat) * 1.25), longitudeSpan = max(0.005, (maxLon - minLon) * 1.25)
+        let centre = CLLocationCoordinate2D(latitude: (minLat + maxLat) / 2, longitude: (minLon + maxLon) / 2)
+        let northWest = MKMapPoint(CLLocationCoordinate2D(latitude: centre.latitude + latitudeSpan / 2, longitude: centre.longitude - longitudeSpan / 2))
+        let southEast = MKMapPoint(CLLocationCoordinate2D(latitude: centre.latitude - latitudeSpan / 2, longitude: centre.longitude + longitudeSpan / 2))
+        let rect = MKMapRect(x: northWest.x, y: northWest.y, width: southEast.x - northWest.x, height: southEast.y - northWest.y)
+        guard let backdrop = await MapBackdrop.make(mapType, rect: rect, size: size) else { return nil }
         let image = NSImage(size: size)
         image.lockFocusFlipped(true)
-        snapshot.image.draw(in: CGRect(origin: .zero, size: size))
+        backdrop.image.draw(in: CGRect(origin: .zero, size: size))
         // Adaptive colours resolve to their light variants, like the rest of the PDF.
         NSAppearance(named: .aqua)?.performAsCurrentDrawingAppearance {
             for line in lines {
@@ -104,7 +91,7 @@ enum PDFExport {
                 path.lineCapStyle = .round
                 path.lineJoinStyle = .round
                 for (i, coordinate) in line.coordinates.enumerated() {
-                    let point = snapshot.topDownPoint(for: coordinate, height: size.height)
+                    let point = backdrop.point(for: coordinate)
                     if i == 0 { path.move(to: point) } else { path.line(to: point) }
                 }
                 path.lineWidth = 7
@@ -115,11 +102,11 @@ enum PDFExport {
                 line.color.setStroke()
                 path.stroke()
                 if line.showsEndpoints, let start = line.coordinates.first, let finish = line.coordinates.last {
-                    dot(at: snapshot.topDownPoint(for: finish, height: size.height), color: .systemRed)
-                    dot(at: snapshot.topDownPoint(for: start, height: size.height), color: .systemGreen)
+                    dot(at: backdrop.point(for: finish), color: .systemRed)
+                    dot(at: backdrop.point(for: start), color: .systemGreen)
                 }
                 for tick in line.joinTicks {
-                    let centre = snapshot.topDownPoint(for: tick.coordinate, height: size.height)
+                    let centre = backdrop.point(for: tick.coordinate)
                     let across = tick.across
                     let tickPath = NSBezierPath()
                     tickPath.move(to: CGPoint(x: centre.x - across.dx * 12, y: centre.y - across.dy * 12))
