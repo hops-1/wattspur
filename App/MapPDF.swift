@@ -60,7 +60,8 @@ struct MapReport {
         options.size = Self.mapSize
         options.appearance = NSAppearance(named: .aqua)
         switch mapType {
-        case .standard:
+        // The OpenStreetMap styles get their tiles in the PDF with B-061d; until then Apple's standard map.
+        case .standard, .openStreetMap, .cyclOSM, .openTopoMap:
             let configuration = MKStandardMapConfiguration(emphasisStyle: .muted)
             configuration.pointOfInterestFilter = .excludingAll
             options.preferredConfiguration = configuration

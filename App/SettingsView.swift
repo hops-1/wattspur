@@ -52,11 +52,9 @@ private struct GeneralSettingsView: View {
                     }
                 }
             }
-            Picker("Default map type:", selection: $mapType) {
-                ForEach(RideMapType.allCases) { Text($0.label).tag($0) }
+            LabeledContent("Default map type:") {
+                MapTypeGrid(mapType: $mapType)
             }
-            .pickerStyle(.segmented)
-            .fixedSize()
             LabeledContent("Profile:") {
                 HStack {
                     Text(verbatim: riders.first?.name.nonEmpty ?? String(localized: "No name yet"))

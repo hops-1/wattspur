@@ -94,15 +94,6 @@ struct AllRidesMapView: View {
                         Text(verbatim: subtitle(overview, interval: interval)).foregroundStyle(.secondary)
                     }
                     Spacer()
-                    Picker("Display", selection: $mode) {
-                        Label("Lines", systemImage: "point.topleft.down.to.point.bottomright.curvepath").tag(RidesMapStyle.Mode.lines)
-                        Label("Heat Map", systemImage: "flame").tag(RidesMapStyle.Mode.heat)
-                    }
-                    .pickerStyle(.segmented)
-                    .labelsHidden()
-                    .fixedSize()
-                    .disabled(!highlighted.isEmpty || overview.rides.isEmpty)
-                    .help(Text("Lines: each ride as a line. Heat map: how many rides pass each area."))
                 }
                 map(overview: overview, style: style, highlighted: highlighted)
                 if !overview.rides.isEmpty {
@@ -250,6 +241,7 @@ struct AllRidesMapView: View {
             }
             .onChange(of: ids) { popover = nil }
             .onExitCommand { popover = nil }
+            .tileAttribution(for: mapType)
             .clipShape(RoundedRectangle(cornerRadius: 14))
             .overlay(alignment: .topTrailing) {
                 HStack(spacing: 8) {
@@ -259,14 +251,9 @@ struct AllRidesMapView: View {
                         .help(Text("Show all rides"))
                         .accessibilityLabel(Text("Show all rides"))
                         .disabled(overview.rides.isEmpty)
-                    Picker("Map type", selection: $mapType) {
-                        ForEach(RideMapType.allCases) { Text($0.label).tag($0) }
-                    }
-                    .pickerStyle(.segmented)
-                    .labelsHidden()
-                    .fixedSize()
-                    .padding(6)
-                    .glassEffect(.regular, in: Capsule())
+                    // Lines or heat map moved here from the header (B-061).
+                    MapCustomizeButton(mapType: $mapType, mode: $mode,
+                                       modeDisabled: !highlighted.isEmpty || overview.rides.isEmpty)
                 }
                 .padding(12)
             }

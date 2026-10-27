@@ -4277,16 +4277,6 @@
         }
       }
     },
-    "Lines: each ride as a line. Heat map: how many rides pass each area.": {
-      "localizations": {
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Linien: jede Fahrt als Linie. Wärmekarte: wie viele Fahrten durch jede Fläche führen."
-          }
-        }
-      }
-    },
     "Load Sample Ride": {
       "localizations": {
         "de": {
@@ -8349,6 +8339,76 @@
           "stringUnit": {
             "state": "translated",
             "value": "Position loslassen"
+          }
+        }
+      }
+    },
+    "Customize Map": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Karte anpassen"
+          }
+        }
+      }
+    },
+    "Map Type": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Kartentyp"
+          }
+        }
+      }
+    },
+    "Map data and licences": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Kartendaten und Lizenzen"
+          }
+        }
+      }
+    },
+    "Map data and style: open the licence": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Kartendaten und Darstellung: Lizenz öffnen"
+          }
+        }
+      }
+    },
+    "OpenStreetMap": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "OpenStreetMap"
+          }
+        }
+      }
+    },
+    "CyclOSM": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "CyclOSM"
+          }
+        }
+      }
+    },
+    "OpenTopoMap": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "OpenTopoMap"
           }
         }
       }
