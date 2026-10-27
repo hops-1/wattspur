@@ -6,6 +6,7 @@ enum HelpLinks {
     enum Page: String {
         case handbook = "README.md"
         case importing = "03-importing.md"
+        case views = "04-views.md"
         case faq = "06-faq.md"
     }
 

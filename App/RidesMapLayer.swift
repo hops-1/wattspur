@@ -41,6 +41,9 @@ struct RidesMapStyle: Sendable {
     /// Magenta, resolved for the light or dark appearance (Requirements 10.11).
     var heatColor: CGColor
     var haloColor: CGColor
+    /// Lines and heat map hidden with a second click in "Customize Map" (B-061): only the
+    /// rides that stand out are drawn, so a ride selected in the list still shows.
+    var onlyHighlights = false
 
     static let thinWidth: CGFloat = 1.6
     static let thinAlpha: CGFloat = 0.32
@@ -78,6 +81,13 @@ struct RidesMapStyle: Sendable {
         }
     }
 
+    /// The same style, drawing only the rides that stand out when `only` is true.
+    func onlyHighlights(_ only: Bool) -> RidesMapStyle {
+        var style = self
+        style.onlyHighlights = only
+        return style
+    }
+
     var boundingRect: MKMapRect { lines.reduce(MKMapRect.null) { $0.union($1.rect) } }
 
     /// Draws everything that touches `area`. `point` converts into the context's
@@ -86,7 +96,7 @@ struct RidesMapStyle: Sendable {
     /// it sets the size of the heat map's cells.
     func draw(in context: CGContext, area: MKMapRect, scale: CGFloat, mapPointsPerPoint: Double,
               point: (MKMapPoint) -> CGPoint) {
-        if mode == .heat {
+        if mode == .heat && !onlyHighlights {
             drawHeat(in: context, area: area, mapPointsPerPoint: mapPointsPerPoint, point: point)
         }
         context.setLineCap(.round)
@@ -108,7 +118,7 @@ struct RidesMapStyle: Sendable {
             }
         }
         let shown = lines.filter { $0.rect.intersects(visible) }
-        if mode == .lines {
+        if mode == .lines && !onlyHighlights {
             for line in shown where line.highlight == nil {
                 stroke(line, width: Self.bandWidth, color: heatColor.copy(alpha: Self.bandAlpha * fade) ?? heatColor)
             }
@@ -230,24 +240,14 @@ struct RidesMapRepresentable: NSViewRepresentable {
     func updateNSView(_ map: MKMapView, context: Context) {
         context.coordinator.onVisibleAreaChange = onVisibleAreaChange
         context.coordinator.onClick = onClick
-        // The filter must sit on the configuration: assigning one overrides the
-        // map view's own pointOfInterestFilter (B-132).
-        switch mapType {
-        case .standard:
-            let configuration = MKStandardMapConfiguration(elevationStyle: .realistic, emphasisStyle: .muted)
-            configuration.pointOfInterestFilter = .excludingAll
-            map.preferredConfiguration = configuration
-        case .satellite:
-            map.preferredConfiguration = MKImageryMapConfiguration(elevationStyle: .realistic)
-        case .hybrid:
-            let configuration = MKHybridMapConfiguration(elevationStyle: .realistic)
-            configuration.pointOfInterestFilter = .excludingAll
-            map.preferredConfiguration = configuration
+        if context.coordinator.mapType != mapType {
+            context.coordinator.mapType = mapType
+            map.show(mapType, muted: true)
         }
         if context.coordinator.styleKey != styleKey {
             context.coordinator.styleKey = styleKey
-            map.removeOverlays(map.overlays)
-            map.addOverlay(RidesMapOverlay(style: style), level: .aboveRoads)
+            map.removeOverlays(map.drawnOverlays)
+            map.addOverlay(RidesMapOverlay(style: style), level: map.drawnOverlayLevel)
         }
         if context.coordinator.fitKey != fitKey || context.coordinator.fitRequest != fitRequest {
             let firstTime = context.coordinator.fitKey == nil
@@ -282,6 +282,7 @@ struct RidesMapRepresentable: NSViewRepresentable {
     final class Coordinator: NSObject, MKMapViewDelegate {
         var onVisibleAreaChange: (MKMapRect) -> Void
         var onClick: (CLLocationCoordinate2D, Double, CGPoint) -> Void = { _, _, _ in }
+        var mapType: RideMapType?
         var styleKey: String?
         var fitKey: [UUID]?
         var fitRequest: Int?
@@ -291,7 +292,8 @@ struct RidesMapRepresentable: NSViewRepresentable {
         }
 
         func mapView(_ mapView: MKMapView, rendererFor overlay: any MKOverlay) -> MKOverlayRenderer {
-            overlay is RidesMapOverlay ? RidesMapRenderer(overlay: overlay) : MKOverlayRenderer(overlay: overlay)
+            if let tiles = overlay as? MKTileOverlay { return MutedTileRenderer(tileOverlay: tiles) }
+            return overlay is RidesMapOverlay ? RidesMapRenderer(overlay: overlay) : MKOverlayRenderer(overlay: overlay)
         }
 
         /// The click radius is 10 pt on screen, so it feels the same at every zoom

@@ -55,8 +55,9 @@ struct ComparisonMap: View {
         .frame(height: 340)
         .clipShape(RoundedRectangle(cornerRadius: 14))
         .overlay(alignment: .topTrailing) {
+            // Only Apple's maps until this map can show tiles (B-061c); an OpenStreetMap style shows the standard map.
             Picker("Map type", selection: $mapType) {
-                ForEach(RideMapType.allCases) { Text($0.label).tag($0) }
+                ForEach(RideMapType.apple) { Text($0.label).tag($0) }
             }
             .pickerStyle(.segmented)
             .labelsHidden()

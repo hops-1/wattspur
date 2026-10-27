@@ -186,15 +186,8 @@ extension RideDetailContent {
                 // drawn in a fixed order (B-127).
                 .id(ride.id)
                 .overlay(alignment: .topTrailing) {
-                    Picker("Map type", selection: $mapType) {
-                        ForEach(RideMapType.allCases) { Text($0.label).tag($0) }
-                    }
-                    .pickerStyle(.segmented)
-                    .labelsHidden()
-                    .fixedSize()
-                    .padding(6)
-                    .glassEffect(.regular, in: Capsule())
-                    .padding(12)
+                    MapCustomizeButton(mapType: $mapType)
+                        .padding(12)
                 }
         }
     }

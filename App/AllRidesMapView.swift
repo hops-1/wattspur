@@ -35,6 +35,8 @@ struct AllRidesMapView: View {
     @AppStorage(SettingsKey.mapType) private var mapType: RideMapType = .standard
     /// Heat lines or heat map (B-107, B-108).
     @AppStorage(SettingsKey.mapMode) private var mode: RidesMapStyle.Mode = .lines
+    /// Off: only the map, without lines or heat map; a second click on the chosen display.
+    @AppStorage(SettingsKey.mapShowsRides) private var showsRides = true
     @State private var offset = 0
     @State private var customStart = Calendar.current.date(byAdding: .day, value: -30, to: .now) ?? .now
     @State private var customEnd = Date.now
@@ -72,8 +74,11 @@ struct AllRidesMapView: View {
         // 1 to 4 selected rides are always shown as lines in the comparison's style.
         let shownMode: RidesMapStyle.Mode = highlighted.isEmpty ? mode : .lines
         let focused = popover?.focus
+        // Hidden lines or heat map: only a ride selected in the list stays, in the accent colour.
+        // 1 to 4 selected rides are what the map shows, so they are never hidden.
         let style = cache.style(overview, highlighted: highlighted, selected: selected, focused: focused, mode: shownMode,
                                 dark: colorScheme == .dark)
+            .onlyHighlights(!showsRides && highlighted.isEmpty)
         let visibleRect = memory.area
         let area = visibleRect.map(GeoBounds.init)
         let inView = area.map { overview.rides(touching: $0) } ?? overview.rides
@@ -94,15 +99,6 @@ struct AllRidesMapView: View {
                         Text(verbatim: subtitle(overview, interval: interval)).foregroundStyle(.secondary)
                     }
                     Spacer()
-                    Picker("Display", selection: $mode) {
-                        Label("Lines", systemImage: "point.topleft.down.to.point.bottomright.curvepath").tag(RidesMapStyle.Mode.lines)
-                        Label("Heat Map", systemImage: "flame").tag(RidesMapStyle.Mode.heat)
-                    }
-                    .pickerStyle(.segmented)
-                    .labelsHidden()
-                    .fixedSize()
-                    .disabled(!highlighted.isEmpty || overview.rides.isEmpty)
-                    .help(Text("Lines: each ride as a line. Heat map: how many rides pass each area."))
                 }
                 map(overview: overview, style: style, highlighted: highlighted)
                 if !overview.rides.isEmpty {
@@ -222,11 +218,14 @@ struct AllRidesMapView: View {
 
     @ViewBuilder
     private func map(overview: MapOverview, style: RidesMapStyle, highlighted: [UUID]) -> some View {
-        let key = "\(colorScheme == .dark)|\(style.mode)|\(highlighted)|\(selectedRideIDs.sorted())|\(popover?.focus?.uuidString ?? "")|\(overview.rides.map(\.id))"
+        let key = "\(style.onlyHighlights)|\(colorScheme == .dark)|\(style.mode)|\(highlighted)|\(selectedRideIDs.sorted())|\(popover?.focus?.uuidString ?? "")|\(overview.rides.map(\.id))"
         let ids = overview.rides.map(\.id)
+        let hidesRides = style.onlyHighlights
         RidesMapRepresentable(style: style, styleKey: key, mapType: mapType, fitKey: ids,
                               onVisibleAreaChange: { memory = MapMemory(area: $0, rideIDs: ids) }, fitRequest: $fitRequest,
                               restoredArea: memory.rideIDs == ids ? memory.area : nil) { coordinate, radius, point in
+            // Nothing to click on while the rides are hidden.
+            guard !hidesRides else { popover = nil; return }
             let hits = RouteHitTest.rides(near: RoutePoint(latitude: coordinate.latitude, longitude: coordinate.longitude),
                                           radius: radius, in: overview.rides)
             popover = hits.isEmpty ? nil : MapPopover(point: point, rides: hits)
@@ -250,6 +249,7 @@ struct AllRidesMapView: View {
             }
             .onChange(of: ids) { popover = nil }
             .onExitCommand { popover = nil }
+            .tileAttribution(for: mapType)
             .clipShape(RoundedRectangle(cornerRadius: 14))
             .overlay(alignment: .topTrailing) {
                 HStack(spacing: 8) {
@@ -259,19 +259,14 @@ struct AllRidesMapView: View {
                         .help(Text("Show all rides"))
                         .accessibilityLabel(Text("Show all rides"))
                         .disabled(overview.rides.isEmpty)
-                    Picker("Map type", selection: $mapType) {
-                        ForEach(RideMapType.allCases) { Text($0.label).tag($0) }
-                    }
-                    .pickerStyle(.segmented)
-                    .labelsHidden()
-                    .fixedSize()
-                    .padding(6)
-                    .glassEffect(.regular, in: Capsule())
+                    // Lines or heat map moved here from the header (B-061).
+                    MapCustomizeButton(mapType: $mapType, mode: $mode, showsRides: $showsRides,
+                                       modeDisabled: !highlighted.isEmpty || overview.rides.isEmpty)
                 }
                 .padding(12)
             }
             .overlay(alignment: .bottomLeading) {
-                if !overview.rides.isEmpty {
+                if !overview.rides.isEmpty && !hidesRides {
                     MapLegend(highlighted: highlighted.compactMap { id in overview.rides.first { $0.id == id } }, mode: style.mode)
                         .padding(.leading, 12)
                         // Above Apple's map attribution, which must stay visible.

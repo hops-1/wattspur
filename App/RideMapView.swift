@@ -2,22 +2,41 @@ import MapKit
 import SwiftUI
 import WattspurKit
 
-/// Map type offered in the ride detail (MAP-01).
+/// Map type of all maps (MAP-01): Apple's three and the OpenStreetMap styles (B-061, MAP-02).
+/// The raw values are stored in the settings; the first three are the ones from before 1.8.
 enum RideMapType: String, CaseIterable, Identifiable {
     case standard, satellite, hybrid
+    case openStreetMap = "osm", cyclOSM = "cyclosm", openTopoMap = "opentopomap"
     var id: Self { self }
+
+    static let apple: [RideMapType] = [.standard, .satellite, .hybrid]
+    static let openStreetMapStyles: [RideMapType] = [.openStreetMap, .cyclOSM, .openTopoMap]
 
     var label: LocalizedStringKey {
         switch self {
         case .standard: "Standard"
         case .satellite: "Satellite"
         case .hybrid: "Hybrid"
+        case .openStreetMap: "OpenStreetMap"
+        case .cyclOSM: "CyclOSM"
+        case .openTopoMap: "OpenTopoMap"
         }
     }
 
+    /// The tile server of an OpenStreetMap style; `nil` for Apple's maps.
+    var tileSource: TileSource? {
+        switch self {
+        case .standard, .satellite, .hybrid: nil
+        case .openStreetMap: .openStreetMap
+        case .cyclOSM: .cyclOSM
+        case .openTopoMap: .openTopoMap
+        }
+    }
+
+    /// For SwiftUI's `Map`, which cannot show tiles: the OpenStreetMap styles fall back to Apple's standard map.
     var style: MapStyle {
         switch self {
-        case .standard: .standard(elevation: .realistic, pointsOfInterest: .excludingAll)
+        case .standard, .openStreetMap, .cyclOSM, .openTopoMap: .standard(elevation: .realistic, pointsOfInterest: .excludingAll)
         case .satellite: .imagery(elevation: .realistic)
         case .hybrid: .hybrid(elevation: .realistic, pointsOfInterest: .excludingAll)
         }
@@ -76,6 +95,7 @@ struct RideMapView: View {
     var body: some View {
         RideMapRepresentable(coordinates: coordinates, newStretches: newStretches, ticks: JoinTick.ticks(of: joins), mapType: mapType,
                              isLoop: isLoop, dark: colorScheme == .dark, cursor: cursor)
+            .tileAttribution(for: mapType)
             .clipShape(RoundedRectangle(cornerRadius: 14))
             .overlay(alignment: .bottomLeading) {
                 if !newStretches.isEmpty {
@@ -135,20 +155,7 @@ private struct RideMapRepresentable: NSViewRepresentable {
         coordinator.cursor = cursor
         if coordinator.mapType != mapType {
             coordinator.mapType = mapType
-            // Without points of interest, as before; the configuration's filter wins
-            // over the map view's.
-            switch mapType {
-            case .standard:
-                let configuration = MKStandardMapConfiguration(elevationStyle: .realistic)
-                configuration.pointOfInterestFilter = .excludingAll
-                map.preferredConfiguration = configuration
-            case .satellite:
-                map.preferredConfiguration = MKImageryMapConfiguration(elevationStyle: .realistic)
-            case .hybrid:
-                let configuration = MKHybridMapConfiguration(elevationStyle: .realistic)
-                configuration.pointOfInterestFilter = .excludingAll
-                map.preferredConfiguration = configuration
-            }
+            map.show(mapType)
         }
         // Rebuilt whenever route, new stretches or appearance change; one overlay, so
         // there is no order between route and new stretches left to MapKit.
@@ -156,9 +163,9 @@ private struct RideMapRepresentable: NSViewRepresentable {
             + "|\(newStretches.map(\.count))|\(ticks.count)|\(ticks.first.map { "\($0.coordinate.latitude)" } ?? "")|\(dark)"
         if coordinator.drawingKey != drawingKey {
             coordinator.drawingKey = drawingKey
-            map.removeOverlays(map.overlays)
+            map.removeOverlays(map.drawnOverlays)
             if coordinates.count > 1 {
-                map.addOverlay(RideRouteOverlay(route: coordinates, newStretches: newStretches, ticks: ticks, dark: dark), level: .aboveRoads)
+                map.addOverlay(RideRouteOverlay(route: coordinates, newStretches: newStretches, ticks: ticks, dark: dark), level: map.drawnOverlayLevel)
             }
         }
         // Markers and the visible area follow the route only, not the new stretches.
@@ -224,7 +231,8 @@ private struct RideMapRepresentable: NSViewRepresentable {
         }
 
         func mapView(_ mapView: MKMapView, rendererFor overlay: any MKOverlay) -> MKOverlayRenderer {
-            overlay is RideRouteOverlay ? RideRouteRenderer(overlay: overlay) : MKOverlayRenderer(overlay: overlay)
+            if let tiles = overlay as? MKTileOverlay { return MutedTileRenderer(tileOverlay: tiles) }
+            return overlay is RideRouteOverlay ? RideRouteRenderer(overlay: overlay) : MKOverlayRenderer(overlay: overlay)
         }
 
         func mapView(_ mapView: MKMapView, viewFor annotation: any MKAnnotation) -> MKAnnotationView? {
