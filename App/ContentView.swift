@@ -40,6 +40,8 @@ struct ContentView: View {
     @State private var returnSection: AppSection?
     /// "Similar to: …" in the ride list; stays while a ride is opened or another section is shown (B-118).
     @State private var similarFilter: SimilarRidesFilter?
+    /// The rides of a calendar day or a streak opened from the highlights (B-130).
+    @State private var dayFilter: RideDayFilter?
     /// Where a new "Similar to" filter starts (ROUTE-02).
     @AppStorage(SettingsKey.similarRoutesThreshold) private var similarThreshold = RouteSimilarity.defaultThreshold
     @AppStorage(SettingsKey.sidebarCompact) private var sidebarCompact = false
@@ -106,6 +108,8 @@ struct ContentView: View {
             .task { startDemoMode() }
             #endif
             .onChange(of: section) { sectionChanged() }
+            // "Similar to" and the day from the highlights would contradict each other (B-130).
+            .onChange(of: similarFilter) { if similarFilter != nil { dayFilter = nil } }
             // A single ride (or none) ends the comparison; more than 4 only pauses it.
             .onChange(of: selectedRideIDs) {
                 if selectedRideIDs.count < 2 { comparing = false } else { multiSelectTipDone = true }
@@ -145,8 +149,11 @@ struct ContentView: View {
                     .frame(maxWidth: .infinity, maxHeight: .infinity)
             } else if section == .highlights {
                 HighlightsView(tab: $highlightsTab, year: $highlightsYear) { ids in
-                    // "Back to Highlights" returns to the same tab and year (B-128).
+                    // "Back to Highlights" returns to the same tab and year (B-128). The list shows
+                    // only these rides, with a chip to show all again (B-130).
                     returnSection = .highlights
+                    similarFilter = nil
+                    dayFilter = RideDayFilter(rideIDs: ids)
                     selectedRideIDs = Set(ids)
                     section = .rides
                 }
@@ -177,7 +184,8 @@ struct ContentView: View {
                     switch section {
                     case .trash: TrashView()
                     default:
-                        RideListView(selection: $selectedRideIDs, importRequested: $importRequested, similarFilter: $similarFilter) { comparing = true } onShowYear: {
+                        RideListView(selection: $selectedRideIDs, importRequested: $importRequested, similarFilter: $similarFilter,
+                                     dayFilter: $dayFilter) { comparing = true } onShowYear: {
                             highlightsTab = .year
                             highlightsYear = nil
                             section = .highlights
@@ -392,6 +400,8 @@ struct ContentView: View {
     private func backBar(to target: AppSection) -> some View {
         HStack {
             Button {
+                // Back in the highlights, the day there is done with.
+                if target == .highlights { dayFilter = nil }
                 section = target
             } label: {
                 switch target {
