@@ -74,8 +74,11 @@ struct AllRidesMapView: View {
         // 1 to 4 selected rides are always shown as lines in the comparison's style.
         let shownMode: RidesMapStyle.Mode = highlighted.isEmpty ? mode : .lines
         let focused = popover?.focus
+        // Hidden lines or heat map: only a ride selected in the list stays, in the accent colour.
+        // 1 to 4 selected rides are what the map shows, so they are never hidden.
         let style = cache.style(overview, highlighted: highlighted, selected: selected, focused: focused, mode: shownMode,
                                 dark: colorScheme == .dark)
+            .onlyHighlights(!showsRides && highlighted.isEmpty)
         let visibleRect = memory.area
         let area = visibleRect.map(GeoBounds.init)
         let inView = area.map { overview.rides(touching: $0) } ?? overview.rides
@@ -215,11 +218,10 @@ struct AllRidesMapView: View {
 
     @ViewBuilder
     private func map(overview: MapOverview, style: RidesMapStyle, highlighted: [UUID]) -> some View {
-        let key = "\(colorScheme == .dark)|\(style.mode)|\(highlighted)|\(selectedRideIDs.sorted())|\(popover?.focus?.uuidString ?? "")|\(overview.rides.map(\.id))"
+        let key = "\(style.onlyHighlights)|\(colorScheme == .dark)|\(style.mode)|\(highlighted)|\(selectedRideIDs.sorted())|\(popover?.focus?.uuidString ?? "")|\(overview.rides.map(\.id))"
         let ids = overview.rides.map(\.id)
-        // 1 to 4 selected rides are what the map shows, so they are never hidden.
-        let hidesRides = !showsRides && highlighted.isEmpty
-        RidesMapRepresentable(style: style, styleKey: key, showsRides: !hidesRides, mapType: mapType, fitKey: ids,
+        let hidesRides = style.onlyHighlights
+        RidesMapRepresentable(style: style, styleKey: key, mapType: mapType, fitKey: ids,
                               onVisibleAreaChange: { memory = MapMemory(area: $0, rideIDs: ids) }, fitRequest: $fitRequest,
                               restoredArea: memory.rideIDs == ids ? memory.area : nil) { coordinate, radius, point in
             // Nothing to click on while the rides are hidden.

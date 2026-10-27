@@ -61,7 +61,7 @@ struct MapCustomizePanel: View {
                     }
                     .disabled(modeDisabled)
                     if showsRides != nil {
-                        Text(shown ? "Click the chosen display again to hide the rides." : "Rides hidden. Click a display to show them.")
+                        Text(shown ? "Click the chosen display again to hide the rides." : "Rides hidden; a ride selected in the list still shows. Click a display to show all.")
                             .font(.caption)
                             .foregroundStyle(.secondary)
                     }

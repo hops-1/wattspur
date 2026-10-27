@@ -41,6 +41,9 @@ struct RidesMapStyle: Sendable {
     /// Magenta, resolved for the light or dark appearance (Requirements 10.11).
     var heatColor: CGColor
     var haloColor: CGColor
+    /// Lines and heat map hidden with a second click in "Customize Map" (B-061): only the
+    /// rides that stand out are drawn, so a ride selected in the list still shows.
+    var onlyHighlights = false
 
     static let thinWidth: CGFloat = 1.6
     static let thinAlpha: CGFloat = 0.32
@@ -78,6 +81,13 @@ struct RidesMapStyle: Sendable {
         }
     }
 
+    /// The same style, drawing only the rides that stand out when `only` is true.
+    func onlyHighlights(_ only: Bool) -> RidesMapStyle {
+        var style = self
+        style.onlyHighlights = only
+        return style
+    }
+
     var boundingRect: MKMapRect { lines.reduce(MKMapRect.null) { $0.union($1.rect) } }
 
     /// Draws everything that touches `area`. `point` converts into the context's
@@ -86,7 +96,7 @@ struct RidesMapStyle: Sendable {
     /// it sets the size of the heat map's cells.
     func draw(in context: CGContext, area: MKMapRect, scale: CGFloat, mapPointsPerPoint: Double,
               point: (MKMapPoint) -> CGPoint) {
-        if mode == .heat {
+        if mode == .heat && !onlyHighlights {
             drawHeat(in: context, area: area, mapPointsPerPoint: mapPointsPerPoint, point: point)
         }
         context.setLineCap(.round)
@@ -108,7 +118,7 @@ struct RidesMapStyle: Sendable {
             }
         }
         let shown = lines.filter { $0.rect.intersects(visible) }
-        if mode == .lines {
+        if mode == .lines && !onlyHighlights {
             for line in shown where line.highlight == nil {
                 stroke(line, width: Self.bandWidth, color: heatColor.copy(alpha: Self.bandAlpha * fade) ?? heatColor)
             }
@@ -200,8 +210,6 @@ struct RidesMapRepresentable: NSViewRepresentable {
     /// Changes whenever the drawing changes (rides, selection, appearance); only
     /// then the overlay is replaced, so panning does not redraw every tile.
     let styleKey: String
-    /// Off: the map without the rides' overlay.
-    var showsRides = true
     let mapType: RideMapType
     /// Changes when the shown rides change; the map then fits them again.
     let fitKey: [UUID]
@@ -236,13 +244,10 @@ struct RidesMapRepresentable: NSViewRepresentable {
             context.coordinator.mapType = mapType
             map.show(mapType, muted: true)
         }
-        let key = "\(styleKey)|\(showsRides)"
-        if context.coordinator.styleKey != key {
-            context.coordinator.styleKey = key
+        if context.coordinator.styleKey != styleKey {
+            context.coordinator.styleKey = styleKey
             map.removeOverlays(map.drawnOverlays)
-            if showsRides {
-                map.addOverlay(RidesMapOverlay(style: style), level: map.drawnOverlayLevel)
-            }
+            map.addOverlay(RidesMapOverlay(style: style), level: map.drawnOverlayLevel)
         }
         if context.coordinator.fitKey != fitKey || context.coordinator.fitRequest != fitRequest {
             let firstTime = context.coordinator.fitKey == nil

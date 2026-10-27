@@ -8425,12 +8425,12 @@
         }
       }
     },
-    "Rides hidden. Click a display to show them.": {
+    "Rides hidden; a ride selected in the list still shows. Click a display to show all.": {
       "localizations": {
         "de": {
           "stringUnit": {
             "state": "translated",
-            "value": "Fahrten ausgeblendet. Eine Darstellung anklicken, um sie zu zeigen."
+            "value": "Fahrten ausgeblendet; eine in der Liste markierte Fahrt bleibt sichtbar. Eine Darstellung anklicken, um alle zu zeigen."
           }
         }
       }
