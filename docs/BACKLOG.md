@@ -456,6 +456,18 @@ Von Nils am 27.10.2026 zurückgestellt, kommt nach 1.8 und 1.9. Zuerst Artboard 
 | B-067 | Fahrerprofil und Kalorienmodus „mit Profil“ (PROF-01, SET-06) → v1.5 (Abschnitt „Profil und mehrere Bikes“) | M | → |
 | B-068 | Faktoren für Kalorien und CO₂ in den Einstellungen (SET-03) | S | ☐ |
 
+## Vorbereitung iOS (Wunsch von Nils 29.10.2026)
+
+Umbauten in der Mac-App, die eine spätere iOS-App (B-070 ff.) einfacher machen, ohne schon ein iOS-Target anzulegen. Stand der Analyse: `WattspurCore` und `WattspurKit` sind frei von AppKit und nennen iOS 26 schon als Plattform; die Mac-Bindung steckt in der App (rund 11.000 Zeilen), vor allem in Karten und PDF-Export. **Version offen;** B-185 und B-189 passen als Aufräumen in eine Mac-Version, B-186 ist ein eigener Umbau ohne gleichzeitige neue Kartenfunktionen.
+
+| # | Story | Größe | Status |
+|---|---|---|---|
+| B-185 | **Logik aus der App ins Paket:** Was in `SimilarRides`, `MergeRides`, `RouteGroups`, `NewPathsStore` und `CalorieSettings` rechnet, filtert oder entscheidet, nach `WattspurCore` bzw. `WattspurKit` verschieben, mit Tests; in der App bleibt nur die Anzeige. Zuerst je Datei auflisten, was Logik ist | M | ☐ |
+| B-186 | **Karten in Kern und Mac-Hülle trennen:** Routenlinie, Einfärbung, Kartenstile, Kachel-Overlay und Cursor plattformneutral (`MKMapView`-Delegate-Logik, Renderer, Stil-Auswahl); nur Einbindung (`NSViewRepresentable`) und Klick-Erkennung (`NSClickGestureRecognizer`) bleiben Mac-spezifisch. Betrifft u. a. `RideMapView`, `RidesMapLayer`, `MapTiles`, `AllRidesMapView`. Größter Hebel für iOS | L | ☐ |
+| B-187 | **Farben ohne AppKit:** Bike-Farben (`BikeAppearance`) und andere `NSColor`-Stellen als Asset-Katalog-Farben oder über eine kleine Hilfe, die auf Mac und iOS gleich funktioniert; das Bike-Symbol in Menüs (`ImageRenderer` → `NSImage`) hinter eine Funktion je Plattform | S | ☐ |
+| B-188 | **Import nach Quelle trennen:** Der Ablauf Datei → prüfen → Bike zuordnen → speichern hängt nicht am beobachteten Ordner (`FolderWatcher`) und nicht an Mac-Dialogen; prüfen, was in `ImportFlow` noch Mac-gebunden ist. Damit kann „Teilen mit Wattspur“ auf iOS (B-071) denselben Weg nehmen | M | ☐ |
+| B-189 | **CloudKit-Tauglichkeit absichern:** Test, der bei jeder Modelländerung die CloudKit-Regeln prüft (alle Attribute optional oder mit Standardwert, keine eindeutigen Constraints, Beziehungen optional mit Inverser); Grundlage für B-072. Sync selbst bleibt aus | S | ☐ |
+
 ## Später – iOS & Ausbau
 
 | # | Story | Größe | Status |
