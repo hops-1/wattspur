@@ -47,6 +47,7 @@ extension BikeKind {
         case .mountain: "Mountain bike"
         case .road: "Road bike"
         case .gravel: "Gravel bike"
+        case .cargo: "Cargo bike"
         }
     }
 
@@ -57,6 +58,7 @@ extension BikeKind {
         case .mountain: String(localized: "Mountain bike")
         case .road: String(localized: "Road bike")
         case .gravel: String(localized: "Gravel bike")
+        case .cargo: String(localized: "Cargo bike")
         }
     }
 
@@ -66,6 +68,7 @@ extension BikeKind {
         case .mountain: "Off-road on rough trails and singletracks"
         case .road: "Fast riding on paved roads"
         case .gravel: "Mixed surfaces and gravel tracks"
+        case .cargo: "For kids, shopping and luggage"
         }
     }
 }
@@ -89,6 +92,20 @@ struct BikeKindShape: Shape {
             path.move(to: p(first.0, first.1))
             for point in points.dropFirst() { path.addLine(to: p(point.0, point.1)) }
         }
+        if kind == .cargo {
+            // A long john: big rear wheel, small front wheel and the box between the
+            // rider and the front wheel, the handlebar steering it from above (B-201).
+            circle(5.5, 16.5, 3)
+            circle(20, 17, 2.5)
+            line((5.5, 16.5), (11, 16.5))
+            line((5.5, 16.5), (8, 11))
+            line((11, 16.5), (18, 16.5), (20, 17))
+            line((11, 10.5), (18, 10.5), (18, 16.5))
+            line((11, 10.5), (11, 16.5))
+            line((8, 11), (8.6, 6.8), (11, 8.6), (11, 10.5))
+            circle(8.8, 4.2, 1.2)
+            return path
+        }
         // Wheels, frame, rider and head.
         circle(6, 15, 3)
         circle(18, 15, 3)
@@ -98,7 +115,7 @@ struct BikeKindShape: Shape {
         line((14, 10), (15.2, 6.5), (17.2, 7))
         circle(14.8, 3.2, 1.2)
         switch kind {
-        case .road:
+        case .road, .cargo:
             break
         case .bike, .mountain, .gravel:
             line((20.5, 2.5), (20.5, 5.5))

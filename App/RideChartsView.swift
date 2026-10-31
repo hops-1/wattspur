@@ -32,7 +32,7 @@ struct RideChartsView: View {
                     title: "Elevation", color: .metricElevation, points: points, axis: axis, joins: joinX, value: \.altitude, fixValue: \.altitude,
                     figures: [("Ascent", "\(ride.totalAscent.map(String.init) ?? "–") m"),
                               ("Descent", "\(ride.totalDescent.map(String.init) ?? "–") m")],
-                    unit: "m", yDomain: niceDomain(points.compactMap(\.altitude), padding: 20)
+                    unit: "m", yDomain: niceDomain(points.compactMap(\.altitude), padding: 20), showsGrade: true
                 )
             } else {
                 NoDataCard(title: "Elevation", message: "This file contains no elevation data.")
@@ -107,6 +107,8 @@ private struct ChartCard: View {
     let figures: [(LocalizedStringKey, String)]
     let unit: String
     let yDomain: ClosedRange<Double>
+    /// The elevation card adds the grade around the spot to its readout (B-200).
+    var showsGrade = false
 
     /// Kilometres or minutes since the start.
     private func x(_ point: ChartPoint) -> Double {
@@ -133,7 +135,10 @@ private struct ChartCard: View {
         let position = axis == .distance ? "\(fix.distanceKm.formatted(.number.precision(.fractionLength(1)))) km"
                                          : Self.clock(fix.time / 60)
         let digits = unit == "km/h" ? 1 : 0
-        let text = fix[keyPath: fixValue].map { "\(position) · \($0.formatted(.number.precision(.fractionLength(digits)))) \(unit)" } ?? position
+        var text = fix[keyPath: fixValue].map { "\(position) · \($0.formatted(.number.precision(.fractionLength(digits)))) \(unit)" } ?? position
+        if showsGrade, fix.altitude != nil, let grade = cursor?.track.gradeText(atDistanceKm: fix.distanceKm) {
+            text += " · \(grade)"
+        }
         return HStack(spacing: 4) {
             if cursor?.isHeld == true { Image(systemName: "pin.fill").imageScale(.small) }
             Text(verbatim: text).monospacedDigit()

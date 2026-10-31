@@ -72,6 +72,15 @@ struct BikeTests {
         #expect(rider.activeBikeID == nil)
     }
 
+    @Test("The cargo bike is stored as \"cargo\" and older raw values stay valid (B-201)")
+    func cargoKind() {
+        let bike = Bike()
+        bike.kind = .cargo
+        #expect(bike.kindRawValue == "cargo")
+        #expect(BikeKind(rawValue: "cargo") == .cargo)
+        #expect(["bike", "mountain", "road", "gravel"].allSatisfy { BikeKind(rawValue: $0) != nil })
+    }
+
     @Test("Unknown raw values fall back to the defaults")
     func rawValueFallback() {
         let bike = Bike()

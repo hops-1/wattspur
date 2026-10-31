@@ -2177,6 +2177,16 @@
         }
       }
     },
+    "Cargo bike": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Lastenrad"
+          }
+        }
+      }
+    },
     "Change or reset the filters.": {
       "localizations": {
         "de": {
@@ -3312,6 +3322,16 @@
         }
       }
     },
+    "For kids, shopping and luggage": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Für Kinder, Einkäufe und Gepäck"
+          }
+        }
+      }
+    },
     "For your local profile. Stays on this Mac and can be changed later.": {
       "localizations": {
         "de": {
@@ -3528,6 +3548,16 @@
           "stringUnit": {
             "state": "translated",
             "value": "GPX-Dateien enthalten keine Angabe zum Bike. Wattspur ordnet die Fahrten dem gewählten Bike zu."
+          }
+        }
+      }
+    },
+    "Grade": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Steigung"
           }
         }
       }
