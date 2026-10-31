@@ -456,6 +456,15 @@ Von Nils am 27.10.2026 zurückgestellt, kommt nach 1.8 und 1.9. Zuerst Artboard 
 | B-067 | Fahrerprofil und Kalorienmodus „mit Profil“ (PROF-01, SET-06) → v1.5 (Abschnitt „Profil und mehrere Bikes“) | M | → |
 | B-068 | Faktoren für Kalorien und CO₂ in den Einstellungen (SET-03) | S | ☐ |
 
+## Kleines Update: Steigung und Lastenrad (Wunsch von Nils 31.10.2026)
+
+Zwei kleine, voneinander unabhängige Wünsche, die zusammen in ein kleineres Update passen. **Version offen.** Die Nummern beginnen bei B-200, weil B-190 ff. für Bugs reserviert sind.
+
+| # | Story | Größe | Status |
+|---|---|---|---|
+| B-200 | **Steigung beim Hovern im Höhenmeter-Diagramm:** Neben Strecke und Höhe („9,2 km · 168 m“) erscheint die Steigung („· ↗ 4 %“). Berechnung über ein **Streckenfenster von ±50 m** um den Cursor, nicht über 3 Punkte: Höhenunterschied ÷ 100 m, Höhen zwischen den Punkten interpoliert. Grund: GPX-Punkte liegen oft nur 3–8 m auseinander und die Höhe rauscht um ~1 m, das ergäbe bei 3 Punkten ±10 % und eine springende Anzeige. Am Fahrtenrand wird das Fenster einseitig gekürzt; unter 30 m Fenster oder ohne Höhendaten keine Steigung. Ganzzahlig: ↗ 4 %, ↘ 3 %, → 0 % bei \|Wert\| < 0,5. Gilt auch auf der Zeit-Achse (Fenster bleibt in Metern). Rechnung als `grade(atDistanceKm:window:)` am `RideTrack` im Paket (passt zu B-185), Anzeige in `ChartCard.readout`, VoiceOver-Text in `RideCursor` ergänzen, „Steigung“ im String Catalog. Tests: Rampe 100 m/+5 m → 5 %, Fahrtenrand, ohne Höhe → nil, verrauschte Punkte stabil | S | ☐ |
+| B-201 | **Bike-Art „Lastenrad“:** `BikeKind.cargo` (Rohwert `"cargo"`, bestehende Daten bleiben gültig) mit eigenem Symbol im Strichstil der anderen (24×24, `BikeKindShape`): **Long John**, Kiste zwischen Lenker und kleinem Vorderrad. Name „Lastenrad“, Kurztext z. B. „Für Kinder, Einkäufe und Gepäck“. **Nur Name und Symbol, keine Auswirkung auf Berechnungen** (Entscheidung von Nils). Übersetzung im String Catalog; prüfen, dass Bike-Editor (`ProfileView`) und Menüs (`BikeMenus`) die neue Art über `CaseIterable` automatisch zeigen. Symbol in Chip, Menüs und Profil hell/dunkel prüfen | S | ☐ |
+
 ## Vorbereitung iOS (Wunsch von Nils 29.10.2026)
 
 Umbauten in der Mac-App, die eine spätere iOS-App (B-070 ff.) einfacher machen, ohne schon ein iOS-Target anzulegen. Stand der Analyse: `WattspurCore` und `WattspurKit` sind frei von AppKit und nennen iOS 26 schon als Plattform; die Mac-Bindung steckt in der App (rund 11.000 Zeilen), vor allem in Karten und PDF-Export. **Version offen;** B-185 und B-189 passen als Aufräumen in eine Mac-Version, B-186 ist ein eigener Umbau ohne gleichzeitige neue Kartenfunktionen.
