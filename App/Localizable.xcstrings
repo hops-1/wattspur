@@ -2507,6 +2507,26 @@
         }
       }
     },
+    "Color the route by curves": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Route nach Kurven einfärben"
+          }
+        }
+      }
+    },
+    "Counts the tight and the gentle curves along the track per kilometre. Straight below 60, curvy from 60, very curvy from 200.": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Zählt die engen und die sanften Kurven entlang der Strecke je Kilometer. Gerade unter 60, kurvig ab 60, sehr kurvig ab 200."
+          }
+        }
+      }
+    },
     "CO₂ saved": {
       "localizations": {
         "de": {
@@ -2673,6 +2693,46 @@
           "stringUnit": {
             "state": "translated",
             "value": "Erstellt mit Wattspur am %@. Kalorien und CO₂ sind Schätzwerte."
+          }
+        }
+      }
+    },
+    "Curves": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Kurven"
+          }
+        }
+      }
+    },
+    "Curviest ride": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Kurvigste Fahrt"
+          }
+        }
+      }
+    },
+    "Curviness": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Kurvigkeit"
+          }
+        }
+      }
+    },
+    "Curvy": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Kurvig"
           }
         }
       }
@@ -3408,6 +3468,16 @@
           "stringUnit": {
             "state": "translated",
             "value": "Allgemein"
+          }
+        }
+      }
+    },
+    "Gentle curve": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sanfte Kurve"
           }
         }
       }
@@ -5443,6 +5513,16 @@
         }
       }
     },
+    "On": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "An"
+          }
+        }
+      }
+    },
     "on %lld days": {
       "localizations": {
         "de": {
@@ -5739,6 +5819,16 @@
           "stringUnit": {
             "state": "translated",
             "value": "je Tag"
+          }
+        }
+      }
+    },
+    "per km": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "pro km"
           }
         }
       }
@@ -7205,6 +7295,26 @@
         }
       }
     },
+    "Straight": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Gerade"
+          }
+        }
+      }
+    },
+    "Straight road": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Gerade"
+          }
+        }
+      }
+    },
     "Suggest merging": {
       "localizations": {
         "de": {
@@ -7615,6 +7725,16 @@
         }
       }
     },
+    "Tight curve": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Enge Kurve"
+          }
+        }
+      }
+    },
     "Time": {
       "localizations": {
         "de": {
@@ -7871,6 +7991,16 @@
           "stringUnit": {
             "state": "translated",
             "value": "Version %@"
+          }
+        }
+      }
+    },
+    "Very curvy": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sehr kurvig"
           }
         }
       }

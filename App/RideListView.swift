@@ -907,6 +907,7 @@ extension RideSortOrder {
         case .duration: "Ride time"
         case .ascent: "Ascent"
         case .averagePower: "Avg power"
+        case .curviness: "Curviness"
         }
     }
 }

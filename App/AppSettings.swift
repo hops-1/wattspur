@@ -29,6 +29,8 @@ enum SettingsKey {
     static let bikeFilterMap = "bikeFilter.map"
     static let sourceFilterMap = "sourceFilter.map"
     static let chartAxis = "chartAxis"
+    /// The route on the ride's map coloured by curve (B-181).
+    static let routeByCurves = "routeByCurves"
     static let compareShowsDeviation = "compareShowsDeviation"
     static let similarRoutesThreshold = "similarRoutesThreshold"
     static let dismissedRouteSuggestions = "dismissedRouteSuggestions"

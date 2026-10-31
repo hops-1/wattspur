@@ -35,6 +35,8 @@ public enum RecordKind: String, CaseIterable, Identifiable, Sendable {
     case longestDistance, longestDuration, mostAscent, highestAverageSpeed, highestAveragePower
     /// The peaks (B-122, ADV-R3): the Bosch maximum of the file, and the best minute.
     case highestSpeed, highestPower, highestCadence, bestPower1Min
+    /// The curviest ride, per kilometre, from `Curviness.minimumDistanceForRecord` on (B-181).
+    case mostCurves
     case longestStreak
 
     public var id: Self { self }
@@ -59,6 +61,8 @@ public enum RecordKind: String, CaseIterable, Identifiable, Sendable {
         case .highestPower: ride.maxPower.flatMap { $0 > 0 ? Double($0) : nil }
         case .highestCadence: ride.maxCadence.flatMap { $0 > 0 ? Double($0) : nil }
         case .bestPower1Min: ride.bestPower1Min.flatMap { $0 > 0 ? Double($0) : nil }
+        case .mostCurves:
+            ride.distance >= Curviness.minimumDistanceForRecord ? ride.curvaturePerKm.flatMap { $0 > 0 ? $0 : nil } : nil
         case .longestStreak: nil
         }
     }

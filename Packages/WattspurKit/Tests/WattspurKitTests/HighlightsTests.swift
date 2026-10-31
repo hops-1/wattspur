@@ -26,11 +26,11 @@ struct HighlightsTests {
 
     func ride(_ start: Date, km: Double, minutes: Double = 60, ascent: Int? = nil, speed: Double? = nil,
               power: Int? = nil, zone: TimeZone = berlin, maxSpeed: Double? = nil, maxPower: Int? = nil,
-              maxCadence: Int? = nil, bestMinute: Int? = nil) -> HighlightRide {
+              maxCadence: Int? = nil, bestMinute: Int? = nil, curves: Double? = nil) -> HighlightRide {
         HighlightRide(figures: RideFigures(startDate: start, distance: km * 1000, timerTime: minutes * 60,
                                            totalAscent: ascent, averageSpeed: speed, averagePower: power,
                                            maxSpeed: maxSpeed, maxPower: maxPower, maxCadence: maxCadence,
-                                           bestPower1Min: bestMinute),
+                                           bestPower1Min: bestMinute, curvaturePerKm: curves),
                       timeZone: zone)
     }
 
@@ -41,7 +41,7 @@ struct HighlightsTests {
         let early = ride(date(2026, 5, 2), km: 101.6, minutes: 336, ascent: 420, speed: 5.0, power: 140,
                          maxSpeed: 12, maxPower: 400, maxCadence: 90, bestMinute: 300)
         let hilly = ride(date(2026, 8, 16), km: 48.2, minutes: 150, ascent: 612, speed: 5.4, power: 150,
-                         maxSpeed: 13, maxPower: 380, maxCadence: 88, bestMinute: 310)
+                         maxSpeed: 13, maxPower: 380, maxCadence: 88, bestMinute: 310, curves: 240)
         let fast = ride(date(2026, 10, 19), km: 19.5, minutes: 43, ascent: 166, speed: 7.58, power: 168,
                         maxSpeed: 15.1, maxPower: 460, maxCadence: 82, bestMinute: 350)
         let sameLength = ride(date(2026, 10, 20), km: 101.6, minutes: 300)
@@ -58,6 +58,8 @@ struct HighlightsTests {
         #expect(byKind[.highestPower]?.value == 460)
         #expect(byKind[.highestCadence]?.rideIDs == [early.id])
         #expect(byKind[.bestPower1Min]?.value == 350)
+        #expect(byKind[.mostCurves]?.rideIDs == [hilly.id])
+        #expect(byKind[.mostCurves]?.value == 240)
         #expect(byKind[.longestStreak]?.value == 2)
     }
 

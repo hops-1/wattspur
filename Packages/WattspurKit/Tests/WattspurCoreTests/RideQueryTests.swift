@@ -46,4 +46,14 @@ struct RideQueryTests {
         #expect(rides.sorted(by: RideSortOrder.ascent.areInIncreasingOrder) == [a, c, b])
         #expect(rides.sorted(by: RideSortOrder.averagePower.areInIncreasingOrder) == [b, a, c])
     }
+
+    @Test("The curviest ride comes first, rides without a value last (B-181)")
+    func sortingByCurviness() {
+        func key(_ day: Int, _ curves: Double?) -> RideSortKey {
+            RideSortKey(startDate: date(2026, 10, day), distance: 20_000, timerTime: 3000, totalAscent: nil,
+                        averagePower: nil, curvaturePerKm: curves)
+        }
+        let a = key(1, 120), b = key(2, 480), c = key(3, nil), d = key(4, 120)
+        #expect([a, b, c, d].sorted(by: RideSortOrder.curviness.areInIncreasingOrder) == [b, d, a, c]) // tie → newest first
+    }
 }

@@ -59,6 +59,9 @@ private struct RideDetailContent: View {
     /// Other rides on this ride's route at that similarity; `nil` until the index is there.
     @State private var similarCount: Int?
     @State private var route: [RoutePoint] = []
+    /// The route in pieces by curve (B-181) and whether the map shows them.
+    @State private var curves: [CurvatureAnalyzer.Piece] = []
+    @AppStorage(SettingsKey.routeByCurves) private var colourByCurves = false
     @State private var points: [ChartPoint] = []
     /// The same series over the time since the start (B-065).
     @State private var timePoints: [ChartPoint] = []
@@ -103,6 +106,7 @@ private struct RideDetailContent: View {
             // Decoding ~3 000 samples is quick, but keep it out of every redraw.
             let samples = ride.samples
             route = RideSeries.route(from: samples)
+            curves = CurvatureAnalyzer.analyze(samples).pieces
             points = RideSeries.chartPoints(from: samples)
             timePoints = RideSeries.chartPoints(from: samples, axis: .time)
             cursor.reset(track: RideTrack(samples: samples))
@@ -180,7 +184,8 @@ extension RideDetailContent {
             RideSourceLine(ride: ride)
             routeLine
 
-            RideMapView(route: route, mapType: mapType, joins: joins, newStretches: newPaths.result(for: ride)?.stretches ?? [])
+            RideMapView(route: route, mapType: mapType, joins: joins, newStretches: newPaths.result(for: ride)?.stretches ?? [],
+                        curves: colourByCurves ? curves : [])
                 .frame(height: mapHeight)
                 // A fresh map for each ride; route and new paths update it in place,
                 // drawn in a fixed order (B-127).
@@ -188,6 +193,21 @@ extension RideDetailContent {
                 .overlay(alignment: .topTrailing) {
                     MapCustomizeButton(mapType: $mapType)
                         .padding(12)
+                }
+                .overlay(alignment: .topLeading) {
+                    if !curves.isEmpty {
+                        Button { colourByCurves.toggle() } label: {
+                            Image(systemName: "road.lanes.curved.right")
+                        }
+                        .buttonStyle(.glass)
+                        .buttonBorderShape(.circle)
+                        .tint(colourByCurves ? Color.accentColor : nil)
+                        .help(Text("Color the route by curves"))
+                        .accessibilityLabel(Text("Color the route by curves"))
+                        .accessibilityValue(Text(colourByCurves ? LocalizedStringKey("On") : LocalizedStringKey("Off")))
+                        .accessibilityAddTraits(.isToggle)
+                        .padding(12)
+                    }
                 }
         }
     }
@@ -356,6 +376,12 @@ struct DetailsGrid: View {
         return "\(Int(lo.rounded()))–\(Int(hi.rounded())) m"
     }
 
+    /// "Very curvy · 320 per km", or a dash for a ride without GPS or under a kilometre.
+    private var curviness: String {
+        guard let perKm = ride.curvaturePerKm else { return "–" }
+        return "\(Curviness(perKm: perKm).title) · \(Int(perKm.rounded())) \(String(localized: "per km"))"
+    }
+
     var body: some View {
         Grid(alignment: .leading, horizontalSpacing: 32, verticalSpacing: 12) {
             GridRow {
@@ -374,6 +400,8 @@ struct DetailsGrid: View {
             GridRow {
                 Detail("Best 1-minute power", ride.bestPower1Min.map { "\($0) W" } ?? "–",
                        isRecord: records.contains(.bestPower1Min))
+                Detail("Curviness", curviness, isRecord: records.contains(.mostCurves),
+                       help: "Counts the tight and the gentle curves along the track per kilometre. Straight below 60, curvy from 60, very curvy from 200.")
             }
         }
     }
@@ -383,11 +411,13 @@ private struct Detail: View {
     let label: LocalizedStringKey
     let value: String
     var isRecord = false
+    var help: LocalizedStringKey = ""
 
-    init(_ label: LocalizedStringKey, _ value: String, isRecord: Bool = false) {
+    init(_ label: LocalizedStringKey, _ value: String, isRecord: Bool = false, help: LocalizedStringKey = "") {
         self.label = label
         self.value = value
         self.isRecord = isRecord
+        self.help = help
     }
 
     var body: some View {
@@ -400,7 +430,19 @@ private struct Detail: View {
             .foregroundStyle(.secondary)
             Text(verbatim: value).font(.body.weight(.medium)).monospacedDigit()
         }
+        .help(help)
         .accessibilityElement(children: .combine)
+    }
+}
+
+extension Curviness {
+    /// "Straight", "Curvy" or "Very curvy".
+    var title: String {
+        switch self {
+        case .straight: String(localized: "Straight road")
+        case .curvy: String(localized: "Curvy")
+        case .veryCurvy: String(localized: "Very curvy")
+        }
     }
 }
 

@@ -15,6 +15,7 @@ enum HighlightsFormat {
         case .highestPower: String(localized: "Highest power")
         case .highestCadence: String(localized: "Highest cadence")
         case .bestPower1Min: String(localized: "Best 1-minute power")
+        case .mostCurves: String(localized: "Curviest ride")
         case .longestStreak: String(localized: "Longest streak")
         }
     }
@@ -31,6 +32,7 @@ enum HighlightsFormat {
         case .highestSpeed: (RideFormat.speedValue(value), "km/h")
         case .highestPower, .bestPower1Min: (Int(value.rounded()).formatted(), "W")
         case .highestCadence: (Int(value.rounded()).formatted(), String(localized: "rpm"))
+        case .mostCurves: (Int(value.rounded()).formatted(), String(localized: "per km"))
         case .longestStreak: (Int(value).formatted(), String(localized: "days", comment: "Unit after the number of days of a streak"))
         }
     }
