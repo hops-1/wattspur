@@ -222,6 +222,9 @@ struct RidesMapRepresentable: NSViewRepresentable {
     /// A click on the map (B-109): the coordinate, 10 pt in metres at the current
     /// zoom, and the point in the view (origin top left).
     var onClick: (CLLocationCoordinate2D, Double, CGPoint) -> Void = { _, _, _ in }
+    /// The imported curvy roads, below the rides; `nil` while the layer is off (B-183).
+    var curvyRoads: CurvyRoadSet?
+    @Environment(\.colorScheme) private var colorScheme
 
     func makeCoordinator() -> Coordinator { Coordinator(onVisibleAreaChange: onVisibleAreaChange) }
 
@@ -244,9 +247,11 @@ struct RidesMapRepresentable: NSViewRepresentable {
             context.coordinator.mapType = mapType
             map.show(mapType, muted: true)
         }
-        if context.coordinator.styleKey != styleKey {
-            context.coordinator.styleKey = styleKey
+        let drawingKey = "\(styleKey)|\(curvyRoads?.id.uuidString ?? "-")|\(colorScheme == .dark)"
+        if context.coordinator.styleKey != drawingKey {
+            context.coordinator.styleKey = drawingKey
             map.removeOverlays(map.drawnOverlays)
+            if let curvyRoads { map.addOverlay(CurvyRoadsOverlay(set: curvyRoads, dark: colorScheme == .dark), level: map.drawnOverlayLevel) }
             map.addOverlay(RidesMapOverlay(style: style), level: map.drawnOverlayLevel)
         }
         if context.coordinator.fitKey != fitKey || context.coordinator.fitRequest != fitRequest {
@@ -293,6 +298,7 @@ struct RidesMapRepresentable: NSViewRepresentable {
 
         func mapView(_ mapView: MKMapView, rendererFor overlay: any MKOverlay) -> MKOverlayRenderer {
             if let tiles = overlay as? MKTileOverlay { return MutedTileRenderer(tileOverlay: tiles) }
+            if overlay is CurvyRoadsOverlay { return CurvyRoadsRenderer(overlay: overlay) }
             return overlay is RidesMapOverlay ? RidesMapRenderer(overlay: overlay) : MKOverlayRenderer(overlay: overlay)
         }
 

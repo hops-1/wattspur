@@ -13,6 +13,8 @@ struct WattspurApp: App {
     @State private var maintenance = LibraryMaintenance()
     /// "New paths" of every ride, for the ride detail and the map (B-115).
     @State private var newPaths = NewPathsStore()
+    /// Imported curvy roads for the layer on the maps (B-182, B-183).
+    @State private var curvyRoads = CurvyRoadsStore()
     /// Rides on the route of one ride, for the list "Similar to" (B-118).
     @State private var routeSimilarity = RouteSimilarityStore()
     /// Rides that probably belong together, found after an import (B-096).
@@ -69,12 +71,14 @@ struct WattspurApp: App {
                 .environment(importLog)
                 .environment(watcher)
                 .environment(newPaths)
+                .environment(curvyRoads)
                 .environment(routeSimilarity)
                 .environment(mergeSuggestions)
                 .environment(assignmentNotice)
                 .environment(updates)
                 .environment(restoreNotice)
                 .task { await maintenance.run(library: library) }
+                .task { await curvyRoads.load() }
         }
         .modelContainer(container)
         .defaultSize(width: 1280, height: 860)
@@ -94,6 +98,7 @@ struct WattspurApp: App {
                 Button("Create Diagnostics…") { openWindow(id: "diagnostics") }
             }
             CommandGroup(after: .importExport) {
+                Button("Import Curvy Roads…") { curvyRoads.chooseFiles() }
                 Button("Library Backup…") { openWindow(id: "backup") }
                 Button("Import Log") { openWindow(id: "importLog") }
                     .keyboardShortcut("l", modifiers: [.command, .option])
@@ -114,6 +119,7 @@ struct WattspurApp: App {
             SettingsView()
                 .environment(library)
                 .environment(watcher)
+                .environment(curvyRoads)
         }
         .modelContainer(container)
 

@@ -1137,6 +1137,16 @@
         }
       }
     },
+    "%@ · Curvature %lld": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%1$@ · Kurvigkeit %2$lld"
+          }
+        }
+      }
+    },
     "A backup is a folder with all your rides, bikes, goals and notes. Keep it on another disk or in iCloud Drive. Your settings and the watched folder are not part of it.": {
       "localizations": {
         "de": {
@@ -2427,6 +2437,16 @@
         }
       }
     },
+    "Choose the KMZ file of your state from roadcurvature.com, the one called “c_300”.": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Wähle die KMZ-Datei deines Bundeslands von roadcurvature.com, die mit „c_300“ im Namen."
+          }
+        }
+      }
+    },
     "Choose where the “Wattspur Import” folder should be. iCloud Drive lets you save exports straight from your iPhone.": {
       "localizations": {
         "de": {
@@ -2737,6 +2757,36 @@
         }
       }
     },
+    "Curvy (300 and more)": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Kurvig (ab 300)"
+          }
+        }
+      }
+    },
+    "Curvy road data: open roadcurvature.com": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Daten kurviger Straßen: roadcurvature.com öffnen"
+          }
+        }
+      }
+    },
+    "Curvy roads": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Kurvige Straßen"
+          }
+        }
+      }
+    },
     "Custom": {
       "localizations": {
         "de": {
@@ -2914,6 +2964,16 @@
           "stringUnit": {
             "state": "translated",
             "value": "Fertig"
+          }
+        }
+      }
+    },
+    "Download Page": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Download-Seite"
           }
         }
       }
@@ -3892,6 +3952,26 @@
         }
       }
     },
+    "Import Curvy Roads": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Kurvige Straßen importieren"
+          }
+        }
+      }
+    },
+    "Import Curvy Roads…": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Kurvige Straßen importieren …"
+          }
+        }
+      }
+    },
     "Import finished": {
       "localizations": {
         "de": {
@@ -4003,6 +4083,16 @@
         }
       }
     },
+    "Import …": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Importieren …"
+          }
+        }
+      }
+    },
     "Imported": {
       "localizations": {
         "de": {
@@ -4049,6 +4139,16 @@
           "stringUnit": {
             "state": "translated",
             "value": "Fahrten importieren"
+          }
+        }
+      }
+    },
+    "Importing “%@” …": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "„%@“ wird importiert …"
           }
         }
       }
@@ -4299,6 +4399,16 @@
           "stringUnit": {
             "state": "translated",
             "value": "Letzte"
+          }
+        }
+      }
+    },
+    "Layers": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ebenen"
           }
         }
       }
@@ -6203,6 +6313,16 @@
         }
       }
     },
+    "Remove %@": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@ entfernen"
+          }
+        }
+      }
+    },
     "Remove %@ from comparison": {
       "localizations": {
         "de": {
@@ -6419,6 +6539,26 @@
           "stringUnit": {
             "state": "translated",
             "value": "Rennrad"
+          }
+        }
+      }
+    },
+    "roads": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Straßen"
+          }
+        }
+      }
+    },
+    "Roads show from the size of a district on.": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Die Straßen erscheinen ab der Größe eines Landkreises."
           }
         }
       }
@@ -6961,6 +7101,16 @@
           "stringUnit": {
             "state": "translated",
             "value": "Zeigt die Fahrten auf dieser Strecke in der Liste"
+          }
+        }
+      }
+    },
+    "Shows the curvy roads of roadcurvature.com on the map. Download the “c_300” file of your state there and import it; Wattspur does not load any data by itself.": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Zeigt die kurvigen Straßen von roadcurvature.com auf der Karte. Lade dort die Datei „c_300“ deines Bundeslands herunter und importiere sie; Wattspur lädt von selbst keine Daten."
           }
         }
       }
@@ -7875,6 +8025,16 @@
         }
       }
     },
+    "Unnamed road": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Straße ohne Namen"
+          }
+        }
+      }
+    },
     "Update": {
       "localizations": {
         "de": {
@@ -8001,6 +8161,16 @@
           "stringUnit": {
             "state": "translated",
             "value": "Sehr kurvig"
+          }
+        }
+      }
+    },
+    "Very curvy (1000 and more)": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sehr kurvig (ab 1000)"
           }
         }
       }
@@ -8591,6 +8761,36 @@
           "stringUnit": {
             "state": "translated",
             "value": "Fahrten ausgeblendet; eine in der Liste markierte Fahrt bleibt sichtbar. Eine Darstellung anklicken, um alle zu zeigen."
+          }
+        }
+      }
+    },
+    "“%@” is damaged or cut off.": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "„%@“ ist beschädigt oder abgeschnitten."
+          }
+        }
+      }
+    },
+    "“%@” is not curvature data from roadcurvature.com.": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "„%@“ enthält keine Kurvigkeitsdaten von roadcurvature.com."
+          }
+        }
+      }
+    },
+    "“%@” is too large.": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "„%@“ ist zu groß."
           }
         }
       }

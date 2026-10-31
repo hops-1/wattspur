@@ -62,6 +62,8 @@ private struct RideDetailContent: View {
     /// The route in pieces by curve (B-181) and whether the map shows them.
     @State private var curves: [CurvatureAnalyzer.Piece] = []
     @AppStorage(SettingsKey.routeByCurves) private var colourByCurves = false
+    @AppStorage(SettingsKey.showsCurvyRoads) private var showsCurvyRoads = false
+    @Environment(CurvyRoadsStore.self) private var curvyRoads
     @State private var points: [ChartPoint] = []
     /// The same series over the time since the start (B-065).
     @State private var timePoints: [ChartPoint] = []
@@ -185,7 +187,7 @@ extension RideDetailContent {
             routeLine
 
             RideMapView(route: route, mapType: mapType, joins: joins, newStretches: newPaths.result(for: ride)?.stretches ?? [],
-                        curves: colourByCurves ? curves : [])
+                        curves: colourByCurves ? curves : [], curvyRoads: curvyRoads.set(enabled: showsCurvyRoads))
                 .frame(height: mapHeight)
                 // A fresh map for each ride; route and new paths update it in place,
                 // drawn in a fixed order (B-127).

@@ -78,6 +78,8 @@ struct RideMapView: View {
     var newStretches: [[RoutePoint]] = []
     /// The route in pieces by curve (B-181); empty draws it in one colour.
     var curves: [CurvatureAnalyzer.Piece] = []
+    /// The imported curvy roads, drawn below the route; `nil` while the layer is off (B-183).
+    var curvyRoads: CurvyRoadSet?
 
     @Environment(\.colorScheme) private var colorScheme
     /// The spot shared with the charts (B-062); not there in the PDF.
@@ -95,12 +97,13 @@ struct RideMapView: View {
     }
 
     var body: some View {
-        RideMapRepresentable(coordinates: coordinates, newStretches: newStretches, curves: curves, ticks: JoinTick.ticks(of: joins),
-                             mapType: mapType, isLoop: isLoop, dark: colorScheme == .dark, cursor: cursor)
-            .tileAttribution(for: mapType)
+        RideMapRepresentable(coordinates: coordinates, newStretches: newStretches, curves: curves, curvyRoads: curvyRoads,
+                             ticks: JoinTick.ticks(of: joins), mapType: mapType, isLoop: isLoop, dark: colorScheme == .dark, cursor: cursor)
+            .mapCredits(for: mapType, curvyRoads: curvyRoads != nil)
             .clipShape(RoundedRectangle(cornerRadius: 14))
             .overlay(alignment: .bottomLeading) {
                 VStack(alignment: .leading, spacing: 8) {
+                    if curvyRoads != nil { CurvyRoadsLegend() }
                     if !curves.isEmpty { CurvesLegend() }
                     if !newStretches.isEmpty { NewPathsLegend() }
                 }
@@ -125,6 +128,7 @@ private struct RideMapRepresentable: NSViewRepresentable {
     let coordinates: [CLLocationCoordinate2D]
     let newStretches: [[RoutePoint]]
     let curves: [CurvatureAnalyzer.Piece]
+    let curvyRoads: CurvyRoadSet?
     let ticks: [JoinTick]
     let mapType: RideMapType
     let isLoop: Bool
@@ -137,12 +141,20 @@ private struct RideMapRepresentable: NSViewRepresentable {
         let map = TrackingMapView()
         map.delegate = context.coordinator
         map.onMove = { [weak map, weak coordinator = context.coordinator] point in
-            guard let map, let cursor = coordinator?.cursor else { return }
+            guard let map, let coordinator else { return }
             let here = map.convert(point, toCoordinateFrom: map)
             // Close enough to the route: 20 points of the screen, in metres.
             let beside = map.convert(CGPoint(x: point.x + 20, y: point.y), toCoordinateFrom: map)
             let metres = CLLocation(latitude: here.latitude, longitude: here.longitude)
                 .distance(from: CLLocation(latitude: beside.latitude, longitude: beside.longitude))
+            // A curvy road under the mouse says its name and curvature in a tooltip (B-183).
+            if let roads = coordinator.curvyRoads, metres / 20 <= CurvyRoads.maximumMetresPerPoint {
+                // Within 10 points of the screen.
+                map.toolTip = roads.nearest(latitude: here.latitude, longitude: here.longitude, within: metres / 2)?.tooltip
+            } else {
+                map.toolTip = nil
+            }
+            guard let cursor = coordinator.cursor else { return }
             cursor.hover(latitude: here.latitude, longitude: here.longitude, within: metres)
         }
         map.onExit = { [weak coordinator = context.coordinator] in coordinator?.cursor?.endHover() }
@@ -159,6 +171,7 @@ private struct RideMapRepresentable: NSViewRepresentable {
     func updateNSView(_ map: MKMapView, context: Context) {
         let coordinator = context.coordinator
         coordinator.cursor = cursor
+        coordinator.curvyRoads = curvyRoads
         if coordinator.mapType != mapType {
             coordinator.mapType = mapType
             map.show(mapType)
@@ -166,10 +179,12 @@ private struct RideMapRepresentable: NSViewRepresentable {
         // Rebuilt whenever route, new stretches or appearance change; one overlay, so
         // there is no order between route and new stretches left to MapKit.
         let drawingKey = "\(coordinates.count)|\(coordinates.first.map { "\($0.latitude),\($0.longitude)" } ?? "")"
-            + "|\(newStretches.map(\.count))|\(curves.count)|\(curves.first?.points.count ?? 0)|\(ticks.count)|\(ticks.first.map { "\($0.coordinate.latitude)" } ?? "")|\(dark)"
+            + "|\(newStretches.map(\.count))|\(curves.count)|\(curves.first?.points.count ?? 0)|\(curvyRoads?.id.uuidString ?? "-")|\(ticks.count)|\(ticks.first.map { "\($0.coordinate.latitude)" } ?? "")|\(dark)"
         if coordinator.drawingKey != drawingKey {
             coordinator.drawingKey = drawingKey
             map.removeOverlays(map.drawnOverlays)
+            // The curvy roads first, so the route lies on top of them.
+            if let curvyRoads { map.addOverlay(CurvyRoadsOverlay(set: curvyRoads, dark: dark), level: map.drawnOverlayLevel) }
             if coordinates.count > 1 {
                 map.addOverlay(RideRouteOverlay(route: coordinates, newStretches: newStretches, curves: curves, ticks: ticks, dark: dark), level: map.drawnOverlayLevel)
             }
@@ -211,6 +226,7 @@ private struct RideMapRepresentable: NSViewRepresentable {
         var drawingKey: String?
         var routeKey: String?
         var cursor: RideCursor?
+        var curvyRoads: CurvyRoadSet?
         private var cursorAnnotation: CursorAnnotation?
 
         /// Moves the dot that shows the spot of the coupling, or takes it off the map.
@@ -238,6 +254,7 @@ private struct RideMapRepresentable: NSViewRepresentable {
 
         func mapView(_ mapView: MKMapView, rendererFor overlay: any MKOverlay) -> MKOverlayRenderer {
             if let tiles = overlay as? MKTileOverlay { return MutedTileRenderer(tileOverlay: tiles) }
+            if overlay is CurvyRoadsOverlay { return CurvyRoadsRenderer(overlay: overlay) }
             return overlay is RideRouteOverlay ? RideRouteRenderer(overlay: overlay) : MKOverlayRenderer(overlay: overlay)
         }
 

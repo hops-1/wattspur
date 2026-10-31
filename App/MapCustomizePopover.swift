@@ -35,6 +35,7 @@ struct MapCustomizePanel: View {
     var showsRides: Binding<Bool>?
     var modeDisabled = false
     @Environment(\.openURL) private var openURL
+    @Environment(CurvyRoadsStore.self) private var curvy: CurvyRoadsStore?
 
     var body: some View {
         VStack(alignment: .leading, spacing: 16) {
@@ -66,6 +67,9 @@ struct MapCustomizePanel: View {
                             .foregroundStyle(.secondary)
                     }
                 }
+            }
+            if curvy != nil {
+                CurvyRoadsSection()
             }
             Button {
                 openURL(HelpLinks.url(.views))
