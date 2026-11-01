@@ -59,6 +59,13 @@ public struct RideSortKey: Sendable, Equatable {
     }
 }
 
+extension RideSortKey {
+    /// The curvature, only for rides long enough to rate; shorter ones count as having none.
+    var ratedCurvature: Double? {
+        distance >= Curviness.minimumDistanceForRecord ? curvaturePerKm : nil
+    }
+}
+
 extension RideSortOrder {
     /// `true` if `a` comes before `b`. All orders are descending (largest/newest first);
     /// missing values go last, ties fall back to the newest ride.
@@ -78,7 +85,7 @@ extension RideSortOrder {
         case .duration: result = compare(a.timerTime, b.timerTime)
         case .ascent: result = compare(a.totalAscent, b.totalAscent)
         case .averagePower: result = compare(a.averagePower, b.averagePower)
-        case .curviness: result = compare(a.curvaturePerKm, b.curvaturePerKm)
+        case .curviness: result = compare(a.ratedCurvature, b.ratedCurvature)
         }
         return result ?? (a.startDate > b.startDate)
     }
