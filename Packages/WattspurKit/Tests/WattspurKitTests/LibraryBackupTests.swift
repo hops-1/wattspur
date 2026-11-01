@@ -22,6 +22,8 @@ struct LibraryBackupTests {
     /// of rides afterwards. The container is released again, so the files are closed.
     private func fill(_ url: URL, importing rides: Int = 0) throws -> Int {
         let container = try ModelContainer(for: Schema(WattspurSchema.models), configurations: ModelConfiguration(url: url))
+        // Saved by hand: an autosave timer that fires after the container is released stops the whole test run.
+        container.mainContext.autosaveEnabled = false
         let library = RideLibrary(context: container.mainContext)
         let data = try Fixture.data("reinheim-rundfahrt")
         for index in 0..<rides {
@@ -34,6 +36,7 @@ struct LibraryBackupTests {
 
     private func count(_ url: URL) throws -> Int {
         let container = try ModelContainer(for: Schema(WattspurSchema.models), configurations: ModelConfiguration(url: url))
+        container.mainContext.autosaveEnabled = false
         return try container.mainContext.fetchCount(FetchDescriptor<Ride>())
     }
 

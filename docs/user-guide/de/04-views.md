@@ -42,7 +42,7 @@ Eine Strecke, die du immer wieder fährst, etwa der Weg zur Arbeit, kannst du un
 
 ## Fahrten vergleichen
 Der Vergleich zeigt 2 bis 4 Fahrten nebeneinander, rechts neben der Liste. Die in der Liste markierten Fahrten **sind** der Vergleich: Mit ⌘-Klick kommt eine weitere hinzu, ✕ über einer Spalte nimmt sie heraus, ↗ zeigt nur diese Fahrt. **Fertig** (Esc) führt zurück zur Auswahl.
-- **Karte:** alle Routen auf einer Karte, jede in Farbe und Strichart ihrer Spalte, mit ihrer Form am Start. Oben rechts umschalten zwischen Standard, Satellit und Hybrid.
+- **Karte:** alle Routen auf einer Karte, jede in Farbe und Strichart ihrer Spalte, mit ihrer Form am Start (mit dem Zeiger darauf steht der Name der Fahrt da). **Karte anpassen** oben rechts wählt den [Kartenstil](#kartenstile).
 - **Diagramme:** Höhe, Geschwindigkeit, Trittfrequenz und Leistung aller Fahrten übereinander, über die Strecke. Jede Fahrt hat eigene Farbe, Strichart und Form; die Linien lassen sich also auch ohne Farbe unterscheiden. Über jedem Diagramm stehen die Bosch-Durchschnitte jeder Fahrt, bei der Höhe stattdessen Anstieg, Abstieg und die steilste Stelle.
 - **Tabelle:** alle Werte aus dem Tour-Detail, dazu Werte, die unterschiedlich lange Fahrten vergleichbar machen: Kalorien, Anstieg und Arbeit pro km, der Rollanteil und die Ø Leistung über die gesamte Fahrzeit. Siehe [Kennzahlen](05-metrics.md#fahrten-vergleichen).
 - **Bester Wert:** ★ und eine getönte Zelle markieren den besten Wert einer Zeile, aber nur, wo mehr oder weniger eindeutig besser ist: Ø Geschwindigkeit, Ø Leistung und Ø Leistung über die Fahrzeit (mehr ist besser) sowie Pausen (weniger ist besser). Alle anderen Zeilen sind neutral.
@@ -51,7 +51,7 @@ Der Vergleich zeigt 2 bis 4 Fahrten nebeneinander, rechts neben der Liste. Die i
 - Die Beispielfahrt lässt sich vergleichen, zählt aber nie zum Schnitt. Eine zusammengefügte Fahrt ist eine Fahrt.
 
 ## Tour-Detail
-- **Karte** mit Route, Start (grün) und Ziel (rot). Oben rechts umschalten zwischen Standard, Satellit und Hybrid. Die Voreinstellung legst du in den Einstellungen fest.
+- **Karte** mit Route, Start (grün) und Ziel (rot). **Karte anpassen** oben rechts wählt den [Kartenstil](#kartenstile); die Voreinstellung legst du in den Einstellungen fest.
 - **Kennzahlen:** Fahrzeit, Strecke, Ø Geschwindigkeit, Anstieg, Ø Leistung, Ø Trittfrequenz, Kalorien und CO₂-Einsparung. Werte mit ⓘ sind Schätzungen, siehe [Kennzahlen](05-metrics.md). Bei einer Fahrt aus einer GPX-Datei kennzeichnet ein kleines ≈ Fahrzeit, Strecke, Ø Geschwindigkeit und Anstieg (aus dem Track berechnet, siehe [GPX-Dateien importieren](08-importing-gpx.md)), und was die Datei nicht enthält, steht als „–“ mit „Nicht in der Datei“.
 - **Neue Wege:** wie viel der Fahrt auf Wegen lag, die du vorher noch nie gefahren bist, etwa „23 % · 4,5 km“. Auf der Karte sind diese Stücke breiter und orange. Siehe [Kennzahlen](05-metrics.md#karte).
 - **Strecke:** Liegt die Fahrt auf einer gespeicherten Strecke, nennt die Zeile unter dem Titel sie; ein Klick listet die Fahrten darauf, siehe [Gespeicherte Strecken](#gespeicherte-strecken).
@@ -76,10 +76,10 @@ In der Seitenleiste **Auswertung** wählen (⌘2). Links steht die Fahrtenliste,
 ## Highlights
 In der Seitenleiste **Highlights** wählen (⌘4). Oben drei Reiter; jeder hat oben links **PDF exportieren** (⇧⌘E), das den Reiter als PDF in Vorschau öffnet oder sichert.
 - **Jahr:** Strecke, Fahrten, Fahrzeit, Anstieg und CO₂-Einsparung eines Jahres, mit der Veränderung zum Vorjahr. Die Pfeile oben (⌘← und ⌘→) wechseln das Jahr. Darunter:
-  - **Fahrtage:** ein Kalender mit einem Kästchen je Tag, von Montag bis Sonntag; je dunkler, desto mehr Kilometer (unter 10, 10–25, 25–50, ab 50 km). Mit dem Zeiger auf einem Tag steht seine Strecke da; ein Klick zeigt seine Fahrten in der Liste.
+  - **Fahrtage:** ein Kalender mit einem Kästchen je Tag, von Montag bis Sonntag; je dunkler, desto mehr Kilometer (unter 10, 10–25, 25–50, ab 50 km). Mit dem Zeiger auf einem Tag steht seine Strecke da. Ein Klick zeigt unter **Fahrten** nur die Fahrten dieses Tages, mit einem Chip „15. Okt. ✕“ über der Liste: Eine Fahrt öffnet sich gleich, mehrere sind markiert. ✕ am Chip oder **Zurück zu Highlights** (⌘[) zeigt wieder alle Fahrten. Solange der Chip da ist, blenden Zeitraum, Bike- und Quellenfilter der Liste keine dieser Fahrten aus; die Suche wirkt weiter.
   - **Kilometer je Monat** als Balken; der beste Monat ist dunkler.
   - **Rekorde dieses Jahres.**
-- **Rekorde:** deine Bestwerte über alle Fahrten: längste Fahrt, längste Fahrzeit, meiste Höhenmeter, höchste Ø Geschwindigkeit, höchste Ø Leistung, längste Serie an Fahrtagen sowie Höchstgeschwindigkeit, höchste Leistung, höchste Trittfrequenz und beste 1-Minuten-Leistung. Ein Klick auf eine Karte zeigt die Fahrt. „Neu“ markiert einen Rekord aus einer Fahrt, die in den letzten 7 Tagen importiert wurde. Siehe [Kennzahlen](05-metrics.md#highlights).
+- **Rekorde:** deine Bestwerte über alle Fahrten: längste Fahrt, längste Fahrzeit, meiste Höhenmeter, höchste Ø Geschwindigkeit, höchste Ø Leistung, längste Serie an Fahrtagen sowie Höchstgeschwindigkeit, höchste Leistung, höchste Trittfrequenz und beste 1-Minuten-Leistung. Ein Klick auf eine Karte zeigt die Fahrt; eine Serie zeigt ihre Fahrten mit einem Chip wie „3.–9. Okt. ✕“, wie ein Tag im Kalender. „Neu“ markiert einen Rekord aus einer Fahrt, die in den letzten 7 Tagen importiert wurde. Siehe [Kennzahlen](05-metrics.md#highlights).
 - **Ziele:** Kilometer, Fahrten oder Höhenmeter je Woche (Montag bis Sonntag), Monat oder Jahr. **Ziel hinzufügen …** legt eins an; je Zeitraum und Kennzahl gibt es höchstens ein Ziel. Jede Karte zeigt den Stand, was noch fehlt und ob du im Plan bist (mindestens so weit wie die verstrichene Zeit), dazu kleine Balken für die letzten Zeiträume. ✎ ändert oder löscht ein Ziel.
 - **Neuer Rekord nach einem Import:** Schlägt eine importierte Fahrt einen deiner Rekorde, nennt ein Hinweis oben im Fenster den Rekord und den bisherigen Wert; **Fahrt zeigen** öffnet sie. Das gilt für jeden Import, auch aus dem überwachten Ordner. Auch das Import-Protokoll vermerkt ihn.
 - Fahrten ohne Leistung oder Anstieg halten dafür keinen Rekord. Das Jahr zeigt „9 von 12 Fahrten“ unter dem Anstieg, wenn nicht jede Fahrt ihn hat; ein Anstiegsziel sagt es auch.
@@ -89,16 +89,31 @@ In der Seitenleiste **Highlights** wählen (⌘4). Oben drei Reiter; jeder hat o
 In der Seitenleiste **Karte** wählen (⌘5): alle deine Fahrten auf einer Karte. Links steht die Fahrtenliste, aber nur mit den Fahrten im sichtbaren Kartenausschnitt; sie folgt dem Schieben und Zoomen. Eine dort markierte Fahrt erscheint blau auf der Karte, ein Doppelklick öffnet sie.
 - **Zeitraum** oben wie in der Auswertung: Woche, Monat, Jahr, ein freier Zeitraum oder alle Fahrten.
 - **Nur markierte Fahrten:** zeigt die in der Liste markierten Fahrten; 1 bis 4 davon in Farbe und Strichart des Vergleichs.
-- **Linien | Wärmekarte** rechts neben dem Titel:
+- **Karte anpassen** (der Knopf mit den Ebenen oben rechts) wählt den [Kartenstil](#kartenstile) und wie die Fahrten gezeichnet werden:
   - **Linien:** Jede Fahrt ist eine halbtransparente Linie. Wo du oft fährst, werden die Wege kräftiger und breiter. Die Legende zeigt, wie 1, 5, 20 und 60 Fahrten aussehen.
   - **Wärmekarte:** färbt kleine Flächen danach, wie viele verschiedene Fahrten dort durchkommen, in festen Stufen 1, 2–4, 5–9, 10–19 und 20+ von Blau nach Rot.
+  - Ein zweiter Klick auf die gewählte Darstellung blendet die Fahrten aus, dann siehst du nur die Karte; eine in der Liste markierte Fahrt erscheint trotzdem blau. Ein Klick auf Linien oder Wärmekarte zeigt sie wieder. Bei **Nur markierte Fahrten** bleiben die markierten Fahrten immer sichtbar.
 - **Klick auf eine Strecke** zeigt die Fahrten, die dort verlaufen, mit **Alle in der Liste markieren**. Ein Klick auf eine davon hebt sie hervor und zeigt ihre Kennzahlen mit **Im Tour-Detail öffnen**. Esc oder ein Klick neben alle Strecken schließt das Fenster; dieser Klick hebt auch die Markierung in der Liste auf, außer bei **Nur markierte Fahrten**.
 - **Unter der Karte** stehen Fahrten, Strecke, Fahrzeit, Anstieg, Ø Geschwindigkeit und neue Wege der Fahrten im Ausschnitt. Es zählen ganze Fahrten mit ihren Summen, auch wenn nur ein Stück im Ausschnitt liegt. **In der Auswertung zeigen** wertet genau diese Fahrten aus.
-- **Alle Fahrten zeigen** (Pfeile oben rechts) passt den Ausschnitt an alle Fahrten an; daneben der Kartentyp. Den Ausschnitt behält die Karte, wenn du in einen anderen Bereich und zurück wechselst.
+- **Alle Fahrten zeigen** (Pfeile oben rechts) passt den Ausschnitt an alle Fahrten an; daneben **Karte anpassen**. Den Ausschnitt behält die Karte, wenn du in einen anderen Bereich und zurück wechselst.
 - **PDF exportieren** (⇧⌘E) öffnet den sichtbaren Ausschnitt mit Kacheln und Legende als PDF.
 - Fahrten ohne GPS (z. B. auf der Rolle) nennt die Zeile unter dem Titel. Die Beispielfahrt erscheint nur, wenn du sie markierst.
 - Gibt es eine GPX-Fahrt in der Bibliothek, zeigt eine Auswahl **Quelle** neben dem Bike-Filter nur Bosch- oder nur GPX-Fahrten.
 - Die Karte zeigt, wo du fährst und damit auch, wo du wohnst. Überlege, bevor du ein PDF davon teilst.
+
+## Kartenstile
+**Karte anpassen** oben rechts auf jeder Karte (Tour-Detail, Vergleich, Karte aller Fahrten) zeigt die Kartentypen als kleine Bilder. Unter **Einstellungen › Allgemein** wählst du den, mit dem neue Karten beginnen.
+- **Apple:** Standard, Satellit und Hybrid wie bisher.
+- **OpenStreetMap:** die Karte des Projekts [OpenStreetMap](https://www.openstreetmap.org), von Freiwilligen erstellt; Wege und Pfade sind oft vollständiger als bei Apple.
+- **CyclOSM:** OpenStreetMap für Radfahrer gezeichnet: Radwege in Blau, Radfahrstreifen, Beläge.
+- **OpenTopoMap:** eine topografische Karte mit **Höhenlinien und Schummerung**, gut, um die Anstiege einer Fahrt zu sehen.
+
+Die OpenStreetMap-Stile kommen kostenlos von Servern der OpenStreetMap-Gemeinschaft. Wattspur hält sich an deren Regeln:
+- Die **Quellenangabe** der Karte steht immer unten rechts auf der Karte und im PDF; ein Klick darauf zeigt die Lizenz.
+- Die Stile sind etwas heller gezeichnet, damit deine Routen sich abheben.
+- Sie brauchen **Internet**. Gesehene Ausschnitte bleiben eine Weile gespeichert und erscheinen auch ohne Netz; Gebiete lädt Wattspur nie im Voraus. Ohne Verbindung bleibt ein neuer Ausschnitt leer, und ein PDF nimmt stattdessen Apples Standardkarte.
+- Ganz nah zeigt OpenTopoMap seine nächste Stufe vergrößert.
+- PDFs von Fahrt, Vergleich und Karte zeigen denselben Stil wie der Bildschirm.
 
 ## Papierkorb
 Gelöschte Fahrten bleiben 30 Tage im Papierkorb. **Wiederherstellen** holt eine Fahrt zurück in die Liste. **Papierkorb leeren …** löscht alle Fahrten darin endgültig, samt Originaldateien.

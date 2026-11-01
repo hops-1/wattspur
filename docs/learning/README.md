@@ -31,6 +31,7 @@ Zu jeder Story steht hier kurz: **was** gebaut wurde, **warum** so und **welche 
 | [25](25-architektur-aufraeumen.md) | Architektur aufräumen: Sicherheits-Fix, zwei Module, Dienste, geteilte Bibliothek, Einstellungen, Start | B-162 … B-169 |
 | [26](26-aehnliche-strecken.md) | Ähnliche Strecken: Rasterindex, Ähnlichkeit in beide Richtungen, Suche im Hintergrund, Verlauf, beste Minute | B-116 … B-120, B-122 |
 | [27](27-gespeicherte-strecken.md) | Gespeicherte Strecken: berechnete Mitgliedschaft, Migration mit neuer Tabelle, Mediathek-Backup, Hilfe-Menü | B-121, P-22, B-084 |
+| [28](28-kartenstile.md) | Kartenstile: Kacheln von OpenStreetMap, Regeln der Server, PDF aus Kacheln, Fenster „Karte anpassen“, Kalendertag als Filter, Doku, die sich selbst prüft | B-061, B-130, B-177 |
 
 **Begriffe, die oft vorkommen**
 - **Swift Package (`WattspurKit`)**: ein eigenständiges Code-Modul ohne Oberfläche. Es lässt sich mit `swift test` allein testen und später unverändert in der iOS-App nutzen.

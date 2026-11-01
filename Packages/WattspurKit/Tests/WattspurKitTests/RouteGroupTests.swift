@@ -191,6 +191,8 @@ struct RouteGroupMigrationTests {
         var rideID: UUID?
         do {
             let old = try ModelContainer(for: Schema(oldModels), configurations: ModelConfiguration(url: url))
+            // Saved by hand: an autosave timer that fires after the container is released stops the whole test run.
+            old.mainContext.autosaveEnabled = false
             let library = RideLibrary(context: old.mainContext)
             let data = try Fixture.data("reinheim-rundfahrt")
             if case .imported(let id) = library.importFile(data: data, fileName: "Reinheim Rundfahrt-5e1f0c2a-7b3d-4c8e-9a61-2f4d8b0c0001.fit").outcome {

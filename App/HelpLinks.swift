@@ -17,6 +17,11 @@ enum HelpLinks {
         Bundle.main.preferredLocalizations.first?.hasPrefix("de") == true ? "de" : "en"
     }
 
+    /// The section "Map styles" of the views page, in the language of the app (B-061).
+    static func mapStyles(language: String = HelpLinks.language) -> URL {
+        URL(string: url(.views, language: language).absoluteString + (language == "de" ? "#kartenstile" : "#map-styles"))!
+    }
+
     static func url(_ page: Page, language: String = HelpLinks.language) -> URL {
         URL(string: "https://github.com/hops-1/wattspur/blob/main/docs/user-guide/\(language)/\(page.rawValue)")!
     }

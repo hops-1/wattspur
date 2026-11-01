@@ -7,6 +7,26 @@ Every DMG handed out to testers corresponds to one entry below.
 
 ## [Unreleased]
 
+## [1.8.0] – 2026-10-28
+
+Wattspur shows your rides on OpenStreetMap too, including a topographic map with contour lines.
+
+### Added
+
+- **Map styles:** besides Apple's Standard, Satellite and Hybrid, every map (ride detail, comparison, map of all rides) can show **OpenStreetMap**, **CyclOSM** (drawn for cyclists) or **OpenTopoMap** (contour lines and hill shading). The styles are drawn a little paler so the routes stand out, and the credit of each map stays at the bottom right. They come from the OpenStreetMap community's servers: areas you have seen are kept for a while and also show offline; Wattspur never downloads areas in advance. **Settings › General** sets the style new maps start with (B-061).
+- **Customize Map:** a button at the top right of each map opens a window with the map types as small pictures, after komoot's. On the map of all rides it also holds **Lines** and **Heat Map**, which used to sit next to the title; a second click on the chosen one hides the rides and leaves only the map, while a ride selected in the list still shows in blue (B-061).
+- **PDFs with map styles:** the PDF of a ride, a comparison and the map shows the same style as the screen, with the credit; without a connection it falls back to Apple's standard map (B-061).
+- **A day from the calendar as a filter:** clicking a day in **Highlights › Riding days**, or a record or streak, now shows only those rides under **Rides**, with a chip such as “15 Oct ✕” or “3–9 Oct ✕”. ✕ or **Back to Highlights** shows all rides again. While the chip is there, the list's period, bike and source do not hide any of these rides (B-130).
+- **Data exchange:** a [reference page](docs/reference/data-exchange.md) describes the GPX export and the backup folder: the manifest, every table and column of the database, how dates, ids and large data are stored, with SQL examples and a small Python script that lists your rides as CSV and writes a ride's time series or original file. The database is Wattspur's internal storage and may change; the manifest, the original files and GPX stay. The FAQ links to it (B-177).
+
+### Changed
+
+- **Comparison map:** the map in the comparison works like the other maps now: it can show all map styles, zooms to the compared routes once they are loaded, and names a ride when you point at its marker.
+
+### Fixed
+
+- Internal: a test of the library could crash the whole test run now and then, because SwiftData's autosave fired after its database was closed.
+
 ## [1.7.1] – 2026-10-26
 
 Wattspur saves the routes you ride again and again, and it can back up your library.
