@@ -1,6 +1,6 @@
 # Architektur
 
-Stand: 1.8.0. Kurz gefasst, wo was liegt und welche Regeln gelten. Die Gründe stehen in der Lern-Notiz [25](learning/25-architektur-aufraeumen.md).
+Stand: 1.8.1. Kurz gefasst, wo was liegt und welche Regeln gelten. Die Gründe stehen in der Lern-Notiz [25](learning/25-architektur-aufraeumen.md).
 
 ## Überblick
 
@@ -25,6 +25,7 @@ Pfeile zeigen die erlaubte Richtung der Abhängigkeit; zurück darf es nie gehen
 5. **Eine Bibliothek für die ganze App.** `WattspurApp` erzeugt sie und gibt sie in die Environment (`@Environment(RideLibrary.self)`). Das Rückgängig-Machen gehört zum Fenster: `library.using(undoManager)`.
 6. **Einstellungsschlüssel stehen in `App/AppSettings.swift` (`SettingsKey`).** Die Werte nie ändern; eine neue Einstellung bekommt eine neue Zeile.
 7. **Das Kit enthält keine Texte für die Oberfläche** (`String(localized:)` nur in der App).
+8. **Abgeleitete Werte einer Fahrt werden gespeichert und tragen eine Version** (beste Minute, Übersichtsroute, Kurvigkeit und stärkste Steigung). Ändert sich die Rechnung, wird die Version erhöht (`TrackFigures.version`), und `LibraryMaintenance` rechnet ältere Fahrten im Hintergrund nach. Eine neue Spalte kommt in `docs/reference/data-exchange.md`, sonst schlägt der Test fehl.
 
 ## WattspurCore
 
@@ -32,10 +33,10 @@ Pfeile zeigen die erlaubte Richtung der Abhängigkeit; zurück darf es nie gehen
 |---|---|
 | `FIT/` | Container-Decoder, Basistypen, Profil, Anonymisierer |
 | `Import/` | `RideImporter` (Protokoll), FIT- und GPX-Importer, `ImportResult` |
-| `Ride/` | `ParsedRide`, Samples, Zusammenführen, Reihen für Diagramme, GPX-Schreiber, Kalorienmodell, Routen, Routenähnlichkeit (`RouteSimilarity`, `RouteSignature`, `RouteIndex`), gespeicherte Strecken (`RouteGrouping`: Mitgliedschaft und Vorschläge), beste Minute (`PeakPower`) |
-| `Analysis/` | Summen und Trends, Rekorde, Vergleich, Karte (Filter, Dichte), neue Wege, Verlauf einer Strecke (`RouteHistory`) |
+| `Ride/` | `ParsedRide`, Samples, Zusammenführen, Reihen für Diagramme, GPX-Schreiber, Kalorienmodell, Routen, Routenähnlichkeit (`RouteSimilarity`, `RouteSignature`, `RouteIndex`), gespeicherte Strecken (`RouteGrouping`: Mitgliedschaft und Vorschläge), beste Minute (`PeakPower`), Steigung an einer Stelle und stärkste Steigung und Gefälle (`RideTrack`) |
+| `Analysis/` | Summen und Trends, Rekorde, Vergleich, Karte (Filter, Dichte), neue Wege, Verlauf einer Strecke (`RouteHistory`), Kurvigkeit einer Fahrt (`CurvatureAnalyzer`, mit den Wörtern `Curviness`) und die zusammen gespeicherten Werte `TrackFigures` |
 | `Library/` | Reine Typen rund um die Bibliothek: Filter, Quellen, Bike-Statistik, Duplikat-Fakten, Tagesfilter aus den Highlights (`RideDayFilter`) |
-| `Map/` | Kachelserver (`TileSource`) und Kachel-Rechnung in Web Mercator (`TileMath`, `Tile`, `MercatorRect`) |
+| `Map/` | Kachelserver (`TileSource`) und Kachel-Rechnung in Web Mercator (`TileMath`, `Tile`, `MercatorRect`); kurvige Straßen von roadcurvature.com: `CurvyRoad`, `CurvyRegion` (eigenes kompaktes Dateiformat), der KMZ/KML-Leser mit eigenem `ZipArchive` |
 | `Support/` | Diagnosebericht |
 
 ## WattspurKit (Store)
@@ -47,7 +48,8 @@ Pfeile zeigen die erlaubte Richtung der Abhängigkeit; zurück darf es nie gehen
 | `Store/Services/` | `ImportService`, `RideService`, `MergeService`, `BikeService`, `ImportLogService`, `GoalService`, `RouteGroupService`, dazu `LibraryService` (gemeinsame Umgebung und Rückgängig) |
 | `Store/LibraryBackup.swift` | Sicherung und Wiederherstellung der Mediathek als Ordner (SQLite-Backup, Austausch beim Start) |
 | `Store/RideBridges.swift` | Modell → Werttypen |
-| `Store/LibraryMaintenance.swift` | Aufräumen nach dem ersten Fenster |
+| `Store/LibraryMaintenance.swift` | Aufräumen nach dem ersten Fenster, auch das Nachrechnen gespeicherter Werte nach Version |
+| `Store/CurvyRoadLibrary.swift` | Die importierten Regionen als Dateien in einem Ordner der App; nicht in der SwiftData-Datei und nicht im Backup |
 | `Import/FolderImport.swift` | Überwachter Ordner |
 
 **Dienste:** zustandslose Structs, die aus einer `LibraryEnvironment` (Kontext, Importer, UndoManager, Standard-Bikename) gebaut werden. Sie nutzen sich nur in eine Richtung: Import → Zusammenführen → Bikes. `RideService`, `ImportLogService`, `GoalService` und `RouteGroupService` stehen für sich.
@@ -56,7 +58,7 @@ Pfeile zeigen die erlaubte Richtung der Abhängigkeit; zurück darf es nie gehen
 
 Views in `App/`; die großen Bereiche haben eigene Ordner (`Highlights/`, `Analysis/`, `Compare/`). `@Observable`-Hilfsobjekte (`FolderWatcher`, `ImportLog`, `NewPathsStore`, `RouteSimilarityStore` (Suche, gespeicherte Strecken, Vorschläge), `LibraryBackupCenter`, `MergeSuggestionCenter`, `BikeAssignmentNotice`) liegen in der Environment. `DemoMode` und `SampleRide` sind für Screenshots und die Beispielfahrt.
 
-Karten: Alle drei Karten (Tour-Detail, Karte aller Fahrten, Vergleich) sind `MKMapView` mit eigenen Overlays. `MapTiles.swift` bringt die OSM-Kacheln (`TileLoader` mit Cache und User-Agent, `CachingTileOverlay`, `MutedTileRenderer`, `MKMapView.show(_:)`), `MapBackdrop.swift` das Kartenbild der PDFs (Apples Schnappschuss oder zusammengesetzte Kacheln), `MapCustomizePopover.swift` und `MapStyleThumbnail.swift` das Fenster „Karte anpassen“.
+Karten: Alle drei Karten (Tour-Detail, Karte aller Fahrten, Vergleich) sind `MKMapView` mit eigenen Overlays. `MapTiles.swift` bringt die OSM-Kacheln (`TileLoader` mit Cache und User-Agent, `CachingTileOverlay`, `MutedTileRenderer`, `MKMapView.show(_:)`), `MapBackdrop.swift` das Kartenbild der PDFs (Apples Schnappschuss oder zusammengesetzte Kacheln), `MapCustomizePopover.swift` und `MapStyleThumbnail.swift` das Fenster „Karte anpassen“. `CurvyRoads.swift` bringt die Ebene „Kurvige Straßen“: `CurvyRoadsStore` (in der Environment) hält die geladenen Regionen, ein `CurvyRoadsOverlay` mit eigenem Renderer zeichnet nur Straßen, die die Kachel schneiden, dazu Legende und der Abschnitt „Ebenen“ im Fenster „Karte anpassen“. Die Einfärbung der Route nach Kurven steckt in `RideMapView`.
 
 ## Tests
 
