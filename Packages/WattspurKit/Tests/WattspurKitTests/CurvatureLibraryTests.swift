@@ -27,10 +27,14 @@ struct CurvatureLibraryTests {
         let ride = try #require(try rides().first)
         let perKm = try #require(ride.curvaturePerKm)
         #expect(perKm > 0)
-        #expect(ride.curvatureVersion == CurvatureAnalyzer.version)
-        #expect(!ride.needsCurvature)
+        #expect(ride.trackFiguresVersion == TrackFigures.version)
+        #expect(!ride.needsTrackFigures)
         #expect(ride.figures.curvaturePerKm == perKm)
         #expect(ride.sortKey.curvaturePerKm == perKm)
+        // A round trip climbs and descends, and its figures reach the records.
+        let climb = try #require(ride.steepestClimb), descent = try #require(ride.steepestDescent)
+        #expect(climb > 0 && climb < 40 && descent > 0 && descent < 40)
+        #expect(ride.figures.steepestClimb == climb && ride.figures.steepestDescent == descent)
     }
 
     @Test("Rides from before this feature get the value in the background, once")
@@ -42,14 +46,18 @@ struct CurvatureLibraryTests {
         }
         let all = try rides()
         let expected = try #require(all[0].curvaturePerKm)
-        for ride in all { ride.curvaturePerKm = nil; ride.curvatureVersion = 0 }
+        let expectedClimb = try #require(all[0].steepestClimb)
+        for ride in all { ride.curvaturePerKm = nil; ride.steepestClimb = nil; ride.steepestDescent = nil; ride.trackFiguresVersion = 0 }
 
         var steps: [Int] = []
-        let count = await library.prepareCurvature(batchSize: 1) { done, _ in steps.append(done) }
+        let count = await library.prepareTrackFigures(batchSize: 1) { done, _ in steps.append(done) }
         #expect(count == 3)
         #expect(steps == [0, 1, 2, 3, 3])
-        for ride in all { #expect(ride.curvaturePerKm == expected && !ride.needsCurvature) }
-        #expect(await library.prepareCurvature() == 0)
+        for ride in all {
+            #expect(ride.curvaturePerKm == expected && ride.steepestClimb == expectedClimb && ride.steepestDescent != nil)
+            #expect(!ride.needsTrackFigures)
+        }
+        #expect(await library.prepareTrackFigures() == 0)
     }
 
     @Test("A merged ride gets its own value")
@@ -60,7 +68,7 @@ struct CurvatureLibraryTests {
                                fileName: "W\(week).fit")
         }
         let merged = try library.merge(try rides(), name: "Zwei")
-        #expect(merged.curvaturePerKm != nil)
-        #expect(!merged.needsCurvature)
+        #expect(merged.curvaturePerKm != nil && merged.steepestClimb != nil)
+        #expect(!merged.needsTrackFigures)
     }
 }

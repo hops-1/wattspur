@@ -111,6 +111,30 @@ struct RideTrackTests {
         #expect(jumps.allSatisfy { $0 < 1.01 })
     }
 
+    @Test("The steepest climb and descent come from the 100 m grade, not from single points")
+    func steepestGrades() throws {
+        // 600 m: flat, then 8 % up for 100 m, flat, then 12 % down for 100 m, flat.
+        let track = ride(length: 600) { metres in
+            200 + 0.08 * min(max(metres - 100, 0), 100) - 0.12 * min(max(metres - 350, 0), 100)
+        }
+        let grades = track.steepestGrades()
+        #expect(abs(try #require(grades.climb) - 8) < 0.001)
+        #expect(abs(try #require(grades.descent) - 12) < 0.001)
+        // A single steep metre does not count: 1 m of height in one step is 1 % over 100 m.
+        let step = ride(length: 600) { $0 < 300 ? 200 : 201 }
+        #expect(abs(try #require(step.steepestGrades().climb) - 1) < 0.01)
+        #expect(step.steepestGrades().descent == nil)
+    }
+
+    @Test("Without altitude, or under 100 m, there are no steepest grades")
+    func noSteepestGrades() {
+        #expect(ride { _ in nil }.steepestGrades() == (nil, nil))
+        #expect(ride(length: 90) { 200 + $0 }.steepestGrades() == (nil, nil))
+        #expect(RideTrack(samples: []).steepestGrades() == (nil, nil))
+        // A ride that only climbs has no descent.
+        #expect(ride { 200 + 0.05 * $0 }.steepestGrades().descent == nil)
+    }
+
     @Test("Samples without distance or position are skipped by those searches")
     func gaps() throws {
         let some = [RideSample(time: 0, latitude: 51.8, longitude: 10.5, distance: 0),

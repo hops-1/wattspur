@@ -24,7 +24,7 @@ extension Ride {
                     workKilojoules: workKilojoules, averageSpeed: averageSpeed,
                     averagePower: averagePower, averageCadence: averageCadence,
                     maxSpeed: maxSpeed, maxPower: maxPower, maxCadence: maxCadence, bestPower1Min: bestPower1Min,
-                    curvaturePerKm: curvaturePerKm)
+                    curvaturePerKm: curvaturePerKm, steepestClimb: steepestClimb, steepestDescent: steepestDescent)
     }
 }
 

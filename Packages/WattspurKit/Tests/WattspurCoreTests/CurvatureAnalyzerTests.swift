@@ -47,7 +47,7 @@ struct CurvatureAnalyzerTests {
         let result = CurvatureAnalyzer.analyze(samples(line(length: 3000)))
         #expect(result.curvature == 0)
         #expect(try #require(result.perKm) == 0)
-        #expect(result.length > 2900)
+        #expect(result.length > 2700)
         #expect(result.pieces.count == 1 && result.pieces[0].kind == .straight)
     }
 
@@ -57,6 +57,20 @@ struct CurvatureAnalyzerTests {
         #expect(result.tightShare < 0.02)
         #expect(try #require(result.perKm) < 40)
         #expect(Curviness(perKm: try #require(result.perKm)) == .straight)
+    }
+
+    @Test("Gaussian GPS noise of 3 m does not make curves either")
+    func strongJitter() throws {
+        var state: UInt64 = 7
+        func uniform() -> Double {
+            state = state &* 6_364_136_223_846_793_005 &+ 1_442_695_040_888_963_407
+            return (Double(state >> 11) + 1) / Double(1 << 53)
+        }
+        func gauss() -> Double { 3 * (-2 * log(uniform())).squareRoot() * cos(2 * .pi * uniform()) }
+        let points = line(length: 5000, step: 6.5).map { ($0.x + gauss(), $0.y + gauss()) }
+        let result = CurvatureAnalyzer.analyze(samples(points))
+        #expect(try #require(result.perKm) < 20)
+        #expect(result.tightLength == 0)
     }
 
     @Test("A circle of 25 m radius is a tight curve all the way")
@@ -84,8 +98,8 @@ struct CurvatureAnalyzerTests {
 
     @Test("A serpentine road is mostly tight curves")
     func serpentine() throws {
-        // Bends of 15 m amplitude over 100 m: the bends have a radius of about 17 m.
-        let points = stride(from: 0.0, through: 2000, by: 5).map { x in (x, 15 * sin(2 * .pi * x / 100)) }
+        // Bends of 40 m amplitude over 120 m: the bends have a radius of about 9 m, more after smoothing.
+        let points = stride(from: 0.0, through: 2000, by: 5).map { x in (x, 40 * sin(2 * .pi * x / 120)) }
         let result = CurvatureAnalyzer.analyze(samples(points))
         #expect(result.tightShare > 0.2)
         #expect(try #require(result.perKm) > 500)
@@ -112,7 +126,7 @@ struct CurvatureAnalyzerTests {
         let second = line(length: 1000).map { ($0.x, $0.y + 500) }
         let result = CurvatureAnalyzer.analyze(samples(first + second))
         #expect(result.curvature == 0)
-        #expect(result.length > 1800 && result.length < 2000)
+        #expect(result.length > 1500 && result.length < 1800)
         #expect(result.pieces.count == 2)
     }
 
@@ -140,10 +154,10 @@ struct CurvatureAnalyzerTests {
     @Test("The words follow the curvature per kilometre")
     func words() {
         #expect(Curviness(perKm: 0) == .straight)
-        #expect(Curviness(perKm: 59.9) == .straight)
-        #expect(Curviness(perKm: 60) == .curvy)
-        #expect(Curviness(perKm: 199.9) == .curvy)
-        #expect(Curviness(perKm: 200) == .veryCurvy)
+        #expect(Curviness(perKm: 149.9) == .straight)
+        #expect(Curviness(perKm: 150) == .curvy)
+        #expect(Curviness(perKm: 299.9) == .curvy)
+        #expect(Curviness(perKm: 300) == .veryCurvy)
     }
 
     @Test("The record counts from 10 km on and only with curves")

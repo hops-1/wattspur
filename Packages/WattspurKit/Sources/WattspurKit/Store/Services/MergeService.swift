@@ -114,7 +114,7 @@ struct MergeService: LibraryService {
         ride.samplesData = try? encoder.encode(result.samples)
         ride.updateOverviewRouteFromParts()
         ride.updatePeakPowerFromParts()
-        ride.setCurvature(CurvatureAnalyzer.analyze(result.samples).perKm)
+        ride.setTrackFigures(TrackFigures(samples: result.samples))
     }
 
     private static func merged(_ parts: [Ride]) throws(RideMerge.MergeError) -> RideMerge.Result {

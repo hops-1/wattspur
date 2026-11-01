@@ -7,7 +7,10 @@ import Foundation
 ///
 /// GPS points jitter by a few metres, and the circle through three jittering points on a
 /// straight road is small, so the track is first brought to even steps of 10 m and smoothed
-/// before the radius is taken over 20 m on either side.
+/// (`Method.standard`) before the radius is taken over 30 m on either side. On the roads of
+/// roadcurvature.com themselves this finds about 45 % of their figure, because their
+/// geometry has no noise to guard against and keeps every bend; the values of rides and of
+/// roads are therefore not on one scale.
 public enum CurvatureAnalyzer {
     /// Raise when the calculation changes; stored values with an older version are
     /// calculated again on the next launch.
@@ -26,8 +29,34 @@ public enum CurvatureAnalyzer {
     /// rode through it (a pause, the seam of a merged ride, lost GPS).
     static let maxJump = 100.0
     static let maxTimeGap = 30.0
-    /// The smoothing weights over five neighbours, summing to 16.
-    private static let weights = [1.0, 4, 6, 4, 1]
+
+    /// How the track is smoothed and over which stretch a radius is taken, both in metres.
+    public struct Method: Sendable, Equatable {
+        /// The width of the Gaussian smoothing, as its standard deviation.
+        public var smoothing: Double
+        /// The distance of the two outer points from the middle one.
+        public var baseline: Double
+
+        public init(smoothing: Double, baseline: Double) {
+            self.smoothing = smoothing
+            self.baseline = baseline
+        }
+
+        /// Wide enough that GPS noise of 3 m makes next to no curves on a straight road (smoothing of 10 m
+        /// with 20 m: 580 per kilometre, 15 and 30: 130, 20 and 30: 18), at the price of blurring the tightest bends.
+        public static let standard = Method(smoothing: 20, baseline: 30)
+
+        /// Weights for the neighbours −h…h, summing to 1.
+        var kernel: [Double] {
+            let sigma = max(smoothing / CurvatureAnalyzer.spacing, 0.01)
+            let half = Int((3 * sigma).rounded(.up))
+            let raw = (-half...half).map { exp(-Double($0 * $0) / (2 * sigma * sigma)) }
+            let sum = raw.reduce(0, +)
+            return raw.map { $0 / sum }
+        }
+
+        var reach: Int { max(1, Int((baseline / CurvatureAnalyzer.spacing).rounded())) }
+    }
 
     /// The kind of a stretch; the weight counts in the curvature.
     public enum Kind: Int, Sendable, Comparable, CaseIterable {
@@ -74,7 +103,7 @@ public enum CurvatureAnalyzer {
     }
 
     /// The curviness of a ride's track.
-    public static func analyze(_ samples: [RideSample]) -> Result {
+    public static func analyze(_ samples: [RideSample], method: Method = .standard) -> Result {
         var result = Result()
         let positioned = samples.compactMap { sample -> (time: Double, latitude: Double, longitude: Double)? in
             guard let latitude = sample.latitude, let longitude = sample.longitude,
@@ -87,7 +116,7 @@ public enum CurvatureAnalyzer {
         var run: [(x: Double, y: Double)] = []
         var lastTime = first.time
         func finishRun() {
-            analyze(run: run, plane: plane, into: &result)
+            analyze(run: run, plane: plane, method: method, into: &result)
             run.removeAll(keepingCapacity: true)
         }
         for sample in positioned {
@@ -109,21 +138,24 @@ public enum CurvatureAnalyzer {
     }
 
     /// One run without breaks: resampled, smoothed, then each point's radius.
-    private static func analyze(run: [(x: Double, y: Double)], plane: Plane, into result: inout Result) {
+    private static func analyze(run: [(x: Double, y: Double)], plane: Plane, method: Method, into result: inout Result) {
         let track = resample(run)
-        let reach = weights.count / 2
-        // The radius needs the smoothed points `reach` steps either side, and those need `reach` more.
-        guard track.count >= 4 * reach + 1 else { return }
+        let kernel = method.kernel
+        let half = kernel.count / 2
+        let reach = method.reach
+        // The radius needs the smoothed points `reach` steps either side, and those need `half` more.
+        let margin = half + reach
+        guard track.count >= 2 * margin + 1 else { return }
         var smooth = track
-        for i in reach..<(track.count - reach) {
+        for i in half..<(track.count - half) {
             var x = 0.0, y = 0.0
-            for (k, weight) in weights.enumerated() {
-                x += weight * track[i + k - reach].x
-                y += weight * track[i + k - reach].y
+            for (k, weight) in kernel.enumerated() {
+                x += weight * track[i + k - half].x
+                y += weight * track[i + k - half].y
             }
-            smooth[i] = (x / 16, y / 16)
+            smooth[i] = (x, y)
         }
-        let evaluated = (2 * reach)...(track.count - 1 - 2 * reach)
+        let evaluated = margin...(track.count - 1 - margin)
         var kinds: [Int: Kind] = [:]
         for i in evaluated {
             let kind = Kind.of(radius: circumradius(smooth[i - reach], smooth[i], smooth[i + reach]))
@@ -211,8 +243,8 @@ public enum Curviness: Sendable, Equatable {
     case straight, curvy, veryCurvy
 
     /// From this curvature per kilometre on a ride counts as curvy, and as very curvy.
-    public static let curvyFrom = 60.0
-    public static let veryCurvyFrom = 200.0
+    public static let curvyFrom = 150.0
+    public static let veryCurvyFrom = 300.0
     /// Only rides of at least this length (metres) can hold the record.
     public static let minimumDistanceForRecord = 10_000.0
 

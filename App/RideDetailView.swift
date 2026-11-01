@@ -378,6 +378,11 @@ struct DetailsGrid: View {
         return "\(Int(lo.rounded()))–\(Int(hi.rounded())) m"
     }
 
+    /// "12.4 %", or a dash without altitude.
+    private func grade(_ value: Double?) -> String {
+        value.map { "\($0.formatted(.number.precision(.fractionLength(1)))) %" } ?? "–"
+    }
+
     /// "Very curvy · 320 per km", or a dash for a ride without GPS or under a kilometre.
     private var curviness: String {
         guard let perKm = ride.curvaturePerKm else { return "–" }
@@ -403,7 +408,13 @@ struct DetailsGrid: View {
                 Detail("Best 1-minute power", ride.bestPower1Min.map { "\($0) W" } ?? "–",
                        isRecord: records.contains(.bestPower1Min))
                 Detail("Curviness", curviness, isRecord: records.contains(.mostCurves),
-                       help: "Counts the tight and the gentle curves along the track per kilometre. Straight below 60, curvy from 60, very curvy from 200.")
+                       help: "Counts the tight and the gentle curves along the track per kilometre. Straight below 150, curvy from 150, very curvy from 300.")
+            }
+            GridRow {
+                Detail("Steepest climb", grade(ride.steepestClimb), isRecord: records.contains(.steepestClimb),
+                       help: "The steepest stretch of 100 m, in percent.")
+                Detail("Steepest descent", grade(ride.steepestDescent), isRecord: records.contains(.steepestDescent),
+                       help: "The steepest stretch of 100 m, in percent.")
             }
         }
     }

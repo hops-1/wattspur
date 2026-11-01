@@ -233,16 +233,16 @@ struct ImportService: LibraryService {
         return outdated.count
     }
 
-    /// Calculates the curviness (B-180) of every ride that has none or one from an older
-    /// `CurvatureAnalyzer.version`, i.e. every ride imported before this feature. Like the best
+    /// Calculates the figures of the track (curviness B-180, steepest climb and descent B-202) of every
+    /// ride that has none or some from an older `TrackFigures.version`, i.e. every ride imported before. Like the best
     /// minute: decoding and calculating run off the main actor in batches, each batch is saved, so
     /// an interrupted run goes on where it stopped. A merged ride is calculated from its own
     /// samples; the analysis ends a run at the seam. Returns the number of rides.
     @discardableResult
-    func prepareCurvature(batchSize: Int = 20,
+    func prepareTrackFigures(batchSize: Int = 20,
                           progress: (_ done: Int, _ total: Int) -> Void = { _, _ in }) async -> Int {
-        let version = CurvatureAnalyzer.version
-        let descriptor = FetchDescriptor<Ride>(predicate: #Predicate { $0.curvatureVersion != version })
+        let version = TrackFigures.version
+        let descriptor = FetchDescriptor<Ride>(predicate: #Predicate { $0.trackFiguresVersion != version })
         let outdated = (try? context.fetch(descriptor)) ?? []
         guard !outdated.isEmpty else { return 0 }
         var done = 0
@@ -251,14 +251,14 @@ struct ImportService: LibraryService {
             let batch = Array(outdated[start..<min(start + max(1, batchSize), outdated.count)])
             let inputs = batch.map(\.samplesData)
             let values = await Task.detached(priority: .utility) {
-                inputs.map { data -> Double? in
-                    guard let data, let samples = try? PropertyListDecoder().decode([RideSample].self, from: data) else { return nil }
-                    return CurvatureAnalyzer.analyze(samples).perKm
+                inputs.map { data -> TrackFigures in
+                    guard let data, let samples = try? PropertyListDecoder().decode([RideSample].self, from: data) else { return TrackFigures() }
+                    return TrackFigures(samples: samples)
                 }
             }.value
             // The ride may have been deleted or updated meanwhile.
-            for (ride, value) in zip(batch, values) where !ride.isDeleted && ride.needsCurvature {
-                ride.setCurvature(value)
+            for (ride, value) in zip(batch, values) where !ride.isDeleted && ride.needsTrackFigures {
+                ride.setTrackFigures(value)
             }
             try? context.save()
             done += batch.count

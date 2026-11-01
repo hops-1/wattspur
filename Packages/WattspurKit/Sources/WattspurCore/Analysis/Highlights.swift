@@ -37,6 +37,8 @@ public enum RecordKind: String, CaseIterable, Identifiable, Sendable {
     case highestSpeed, highestPower, highestCadence, bestPower1Min
     /// The curviest ride, per kilometre, from `Curviness.minimumDistanceForRecord` on (B-181).
     case mostCurves
+    /// The steepest climb and the steepest descent in percent (B-202).
+    case steepestClimb, steepestDescent
     case longestStreak
 
     public var id: Self { self }
@@ -63,6 +65,8 @@ public enum RecordKind: String, CaseIterable, Identifiable, Sendable {
         case .bestPower1Min: ride.bestPower1Min.flatMap { $0 > 0 ? Double($0) : nil }
         case .mostCurves:
             ride.distance >= Curviness.minimumDistanceForRecord ? ride.curvaturePerKm.flatMap { $0 > 0 ? $0 : nil } : nil
+        case .steepestClimb: ride.steepestClimb.flatMap { $0 > 0 ? $0 : nil }
+        case .steepestDescent: ride.steepestDescent.flatMap { $0 > 0 ? $0 : nil }
         case .longestStreak: nil
         }
     }

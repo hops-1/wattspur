@@ -167,8 +167,11 @@ public final class Ride {
     /// How curvy the ride is: curvature per kilometre (B-180, `CurvatureAnalyzer`); `nil` without
     /// GPS or with less than a kilometre of track.
     public var curvaturePerKm: Double?
-    /// `CurvatureAnalyzer.version` the value was calculated with; 0 = not yet calculated.
-    public var curvatureVersion: Int = 0
+    /// The steepest climb and descent in percent, both positive (B-202); `nil` without altitude.
+    public var steepestClimb: Double?
+    public var steepestDescent: Double?
+    /// `TrackFigures.version` the three values were calculated with; 0 = not yet calculated.
+    public var trackFiguresVersion: Int = 0
 
     /// Encoded `[RideSample]` (binary property list).
     @Attribute(.externalStorage) public var samplesData: Data?
@@ -270,7 +273,7 @@ extension Ride {
         setSamples(parsed.samples)
         setOverviewRoute(OverviewRoute(samples: parsed.samples))
         setPeakPower(PeakPower.bestAverage(of: parsed.samples))
-        setCurvature(CurvatureAnalyzer.analyze(parsed.samples).perKm)
+        setTrackFigures(TrackFigures(samples: parsed.samples))
     }
 
     /// Stores the time series.
@@ -303,12 +306,14 @@ extension Ride {
         peakPowerVersion = PeakPower.version
     }
 
-    /// `true` while the curviness is not calculated or from an older version.
-    public var needsCurvature: Bool { curvatureVersion != CurvatureAnalyzer.version }
+    /// `true` while the figures of the track are not calculated or from an older version.
+    public var needsTrackFigures: Bool { trackFiguresVersion != TrackFigures.version }
 
-    func setCurvature(_ value: Double?) {
-        curvaturePerKm = value
-        curvatureVersion = CurvatureAnalyzer.version
+    func setTrackFigures(_ figures: TrackFigures) {
+        curvaturePerKm = figures.curvaturePerKm
+        steepestClimb = figures.steepestClimb
+        steepestDescent = figures.steepestDescent
+        trackFiguresVersion = TrackFigures.version
     }
 
     /// A merged ride's best minute: the best of its parts, none across the seam. Parts without a

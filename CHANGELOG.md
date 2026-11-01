@@ -7,6 +7,16 @@ Every DMG handed out to testers corresponds to one entry below.
 
 ## [Unreleased]
 
+Planned as 1.8.1: grade at the pointer, a cargo bike, curvy roads, and the steepest climb and descent as records.
+
+### Added
+
+- **Grade in the elevation chart:** pointing at the elevation chart now shows the grade next to distance and height, such as “9.2 km · 168 m · ↗ 4 %”. It is taken over 100 m around the pointer, so the jitter of single GPS points does not make it jump; VoiceOver reads it too (B-200).
+- **Cargo bike:** a new bike type with its own symbol, a long john with the box in front. It only changes the name and the symbol, no calculation (B-201).
+- **Curviness of a ride:** the ride details show how curvy the ride was, with a word and a number per kilometre. A button on the map colours the route by curve (tight red, gentle amber, straight grey), **Curviest ride** is a new record, and the ride list can be sorted by it. Older rides are calculated in the background at the first start (B-180, B-181).
+- **Curvy roads on the maps:** **File › Import Curvy Roads…** reads the KMZ file of a state from roadcurvature.com (the “c_300” one). **Customize Map › Layers** then shows its curvy roads below your route on the map of a ride, the comparison and the map of all rides, from the size of a district on, with their name and curvature in a tooltip. Wattspur loads no data by itself; the data is © OpenStreetMap contributors (B-182, B-183).
+- **Steepest climb and descent:** two new records in **Highlights › Records** and two figures in the ride details, from the grade over 100 m (B-202).
+
 ## [1.8.0] – 2026-10-28
 
 Wattspur shows your rides on OpenStreetMap too, including a topographic map with contour lines.

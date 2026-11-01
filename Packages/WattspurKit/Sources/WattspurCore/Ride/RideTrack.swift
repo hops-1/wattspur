@@ -80,6 +80,24 @@ public struct RideTrack: Sendable, Equatable {
         return (to - from) / (end - start) * 100
     }
 
+    /// The steepest climb and the steepest descent of the ride in percent (both positive), from the
+    /// grade over the same stretch of 100 m as `grade(atDistanceKm:window:)`, taken every `step`
+    /// metres. Only stretches with the whole window inside the ride count, so a short window at an
+    /// end does not set a record. `nil` without altitude, for a ride under 100 m, and for a
+    /// direction the ride never goes.
+    public func steepestGrades(step: Double = 10, window: Double = 50) -> (climb: Double?, descent: Double?) {
+        guard let first = withElevation.first, let last = withElevation.last, step > 0 else { return (nil, nil) }
+        let start = fixes[first].distanceKm * 1000 + window, end = fixes[last].distanceKm * 1000 - window
+        guard end >= start else { return (nil, nil) }
+        var climb = 0.0, descent = 0.0
+        for metres in stride(from: start, through: end, by: step) {
+            guard let grade = self.grade(atDistanceKm: metres / 1000, window: window) else { continue }
+            climb = max(climb, grade)
+            descent = max(descent, -grade)
+        }
+        return (climb > 0 ? climb : nil, descent > 0 ? descent : nil)
+    }
+
     /// The altitude at a distance in metres, interpolated between the two samples around it.
     private func altitude(atMetres metres: Double) -> Double? {
         var low = 0, high = withElevation.count - 1

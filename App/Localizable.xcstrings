@@ -1,6 +1,7 @@
 {
   "sourceLanguage" : "en",
   "strings" : {
+    "" : {},
     "… and %lld more" : {
       "localizations" : {
         "de" : {
@@ -47,6 +48,36 @@
                 }
               }
             }
+          }
+        }
+      }
+    },
+    "“%@” is damaged or cut off." : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "„%@“ ist beschädigt oder abgeschnitten."
+          }
+        }
+      }
+    },
+    "“%@” is not curvature data from roadcurvature.com." : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "„%@“ enthält keine Kurvigkeitsdaten von roadcurvature.com."
+          }
+        }
+      }
+    },
+    "“%@” is too large." : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "„%@“ ist zu groß."
           }
         }
       }
@@ -147,6 +178,16 @@
                 }
               }
             }
+          }
+        }
+      }
+    },
+    "%@ · Curvature %lld" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%1$@ · Kurvigkeit %2$lld"
           }
         }
       }
@@ -1133,16 +1174,6 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Mittel über 5 Fahrten"
-          }
-        }
-      }
-    },
-    "%@ · Curvature %lld" : {
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "%1$@ · Kurvigkeit %2$lld"
           }
         }
       }
@@ -2537,22 +2568,12 @@
         }
       }
     },
-    "Color the route by curves" : {
+    "Counts the tight and the gentle curves along the track per kilometre. Straight below 150, curvy from 150, very curvy from 300." : {
       "localizations" : {
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Route nach Kurven einfärben"
-          }
-        }
-      }
-    },
-    "Counts the tight and the gentle curves along the track per kilometre. Straight below 60, curvy from 60, very curvy from 200." : {
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Zählt die engen und die sanften Kurven entlang der Strecke je Kilometer. Gerade unter 60, kurvig ab 60, sehr kurvig ab 200."
+            "value" : "Zählt die engen und die sanften Kurven entlang der Strecke je Kilometer. Gerade unter 150, kurvig ab 150, sehr kurvig ab 300."
           }
         }
       }
@@ -2593,6 +2614,16 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Farbe"
+          }
+        }
+      }
+    },
+    "Color the route by curves" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Route nach Kurven einfärben"
           }
         }
       }
@@ -3942,6 +3973,16 @@
         }
       }
     },
+    "Import …" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Importieren …"
+          }
+        }
+      }
+    },
     "Import %lld rides" : {
       "localizations" : {
         "de" : {
@@ -4093,16 +4134,6 @@
         }
       }
     },
-    "Import …" : {
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Importieren …"
-          }
-        }
-      }
-    },
     "Imported" : {
       "localizations" : {
         "de" : {
@@ -4143,22 +4174,22 @@
         }
       }
     },
-    "Importing Rides" : {
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Fahrten importieren"
-          }
-        }
-      }
-    },
     "Importing “%@” …" : {
       "localizations" : {
         "de" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "„%@“ wird importiert …"
+          }
+        }
+      }
+    },
+    "Importing Rides" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Fahrten importieren"
           }
         }
       }
@@ -6534,6 +6565,16 @@
         }
       }
     },
+    "Rides of %@" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Fahrten vom %@"
+          }
+        }
+      }
+    },
     "Rides per area" : {
       "localizations" : {
         "de" : {
@@ -7456,6 +7497,26 @@
         }
       }
     },
+    "Steepest climb" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Stärkste Steigung"
+          }
+        }
+      }
+    },
+    "Steepest descent" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Stärkstes Gefälle"
+          }
+        }
+      }
+    },
     "Step %lld of %lld" : {
       "localizations" : {
         "de" : {
@@ -7682,6 +7743,16 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Der Anteil einer Strecke, der höchstens 50 m von der anderen entfernt liegt. „Ähnliche Fahrten zeigen“ beginnt mit diesem Wert; die Liste hat einen eigenen Regler."
+          }
+        }
+      }
+    },
+    "The steepest stretch of 100 m, in percent." : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Das steilste Stück von 100 m, in Prozent."
           }
         }
       }
@@ -8762,46 +8833,6 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Deine Fahrten bleiben auf diesem Mac. Wattspur sendet keine Daten über dich oder deine Fahrten. Die Karte lädt Kartenmaterial und Ortsinformationen von Apple, und Wattspur fragt einmal am Tag bei GitHub nach, ob es eine neue Version gibt (in den Einstellungen abschaltbar)."
-          }
-        }
-      }
-    },
-    "Rides of %@" : {
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Fahrten vom %@"
-          }
-        }
-      }
-    },
-    "“%@” is damaged or cut off." : {
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "„%@“ ist beschädigt oder abgeschnitten."
-          }
-        }
-      }
-    },
-    "“%@” is not curvature data from roadcurvature.com." : {
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "„%@“ enthält keine Kurvigkeitsdaten von roadcurvature.com."
-          }
-        }
-      }
-    },
-    "“%@” is too large." : {
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "„%@“ ist zu groß."
           }
         }
       }

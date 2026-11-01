@@ -97,11 +97,11 @@ public final class RideLibrary {
         await imports.preparePeakPower(batchSize: batchSize, progress: progress)
     }
 
-    /// Calculates the curviness of the rides that have none yet (B-180), in batches.
+    /// Calculates the figures of the track (curviness, steepest climb and descent) of the rides that have none yet, in batches.
     @discardableResult
-    public func prepareCurvature(batchSize: Int = 20,
+    public func prepareTrackFigures(batchSize: Int = 20,
                                  progress: (_ done: Int, _ total: Int) -> Void = { _, _ in }) async -> Int {
-        await imports.prepareCurvature(batchSize: batchSize, progress: progress)
+        await imports.prepareTrackFigures(batchSize: batchSize, progress: progress)
     }
 
     /// Imports the anonymized sample ride (V-05) under the given name and marks it
