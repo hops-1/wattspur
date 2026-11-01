@@ -383,10 +383,12 @@ struct DetailsGrid: View {
         value.map { "\($0.formatted(.number.precision(.fractionLength(1)))) %" } ?? "–"
     }
 
-    /// "Very curvy · 320 per km", or a dash for a ride without GPS or under a kilometre.
+    /// "Very curvy · 320 per km"; only the number under 10 km; a dash for a ride without GPS or under a kilometre.
     private var curviness: String {
         guard let perKm = ride.curvaturePerKm else { return "–" }
-        return "\(Curviness(perKm: perKm).title) · \(Int(perKm.rounded())) \(String(localized: "per km"))"
+        let number = "\(Int(perKm.rounded())) \(String(localized: "per km"))"
+        guard let word = Curviness(perKm: perKm, distance: ride.distance) else { return number }
+        return "\(word.title) · \(number)"
     }
 
     var body: some View {

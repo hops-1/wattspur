@@ -247,10 +247,17 @@ public enum Curviness: Sendable, Equatable {
     /// From this curvature per kilometre on a ride counts as curvy, and as very curvy.
     public static let curvyFrom = 190.0
     public static let veryCurvyFrom = 270.0
-    /// Only rides of at least this length (metres) can hold the record.
+    /// Only rides of at least this length (metres) can hold the record and get a word: on a
+    /// short ride a few junctions weigh too much (a 3.9 km path of gentle waves scored 357).
     public static let minimumDistanceForRecord = 10_000.0
 
     public init(perKm: Double) {
         self = perKm >= Self.veryCurvyFrom ? .veryCurvy : perKm >= Self.curvyFrom ? .curvy : .straight
+    }
+
+    /// The word for a ride of `distance` metres; `nil` for a ride too short to rate.
+    public init?(perKm: Double, distance: Double) {
+        guard distance >= Self.minimumDistanceForRecord else { return nil }
+        self.init(perKm: perKm)
     }
 }
