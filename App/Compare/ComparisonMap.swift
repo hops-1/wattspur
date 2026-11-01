@@ -12,6 +12,11 @@ struct ComparisonMap: View {
     let routes: [UUID: [RoutePoint]]
     @Binding var mapType: RideMapType
     @Environment(\.colorScheme) private var colorScheme
+    /// The layer "Curvy roads" (B-183), below the routes.
+    @Environment(CurvyRoadsStore.self) private var curvyStore
+    @AppStorage(SettingsKey.showsCurvyRoads) private var showsCurvyRoads = false
+
+    private var curvyRoads: CurvyRoadSet? { curvyStore.set(enabled: showsCurvyRoads) }
 
     private var hasRoutes: Bool { rides.contains { (routes[$0.id]?.count ?? 0) > 1 } }
 
@@ -21,10 +26,18 @@ struct ComparisonMap: View {
                 ComparedRoute(id: ride.id, name: ride.name, index: index,
                               coordinates: (routes[ride.id] ?? []).map { CLLocationCoordinate2D(latitude: $0.latitude, longitude: $0.longitude) })
             },
-            mapType: mapType, dark: colorScheme == .dark)
+            curvyRoads: curvyRoads, mapType: mapType, dark: colorScheme == .dark)
         .frame(height: 340)
-        .tileAttribution(for: mapType)
+        .mapCredits(for: mapType, curvyRoads: curvyRoads != nil)
         .clipShape(RoundedRectangle(cornerRadius: 14))
+        .overlay(alignment: .bottomLeading) {
+            if curvyRoads != nil {
+                CurvyRoadsLegend()
+                    .padding(.leading, 12)
+                    // Above Apple's map attribution, which must stay visible.
+                    .padding(.bottom, 40)
+            }
+        }
         .overlay(alignment: .topTrailing) {
             MapCustomizeButton(mapType: $mapType)
                 .padding(12)
@@ -49,13 +62,19 @@ private struct ComparedRoute {
 
 private struct ComparisonMapRepresentable: NSViewRepresentable {
     let routes: [ComparedRoute]
+    let curvyRoads: CurvyRoadSet?
     let mapType: RideMapType
     let dark: Bool
 
     func makeCoordinator() -> Coordinator { Coordinator() }
 
     func makeNSView(context: Context) -> MKMapView {
-        let map = MKMapView()
+        let map = TrackingMapView()
+        // A curvy road under the mouse names itself in a tooltip (B-183).
+        map.onMove = { [weak map, weak coordinator = context.coordinator] point in
+            map?.updateCurvyRoadTooltip(at: point, roads: coordinator?.curvyRoads)
+        }
+        map.onExit = { [weak map] in map?.toolTip = nil }
         map.delegate = context.coordinator
         map.isRotateEnabled = false
         map.isPitchEnabled = false
@@ -68,12 +87,13 @@ private struct ComparisonMapRepresentable: NSViewRepresentable {
 
     func updateNSView(_ map: MKMapView, context: Context) {
         let coordinator = context.coordinator
+        coordinator.curvyRoads = curvyRoads
         if coordinator.mapType != mapType {
             coordinator.mapType = mapType
             map.show(mapType)
         }
         // Rebuilt when rides, their routes or the appearance change.
-        let key = routes.map { "\($0.id)|\($0.coordinates.count)" }.joined(separator: ",") + "|\(dark)"
+        let key = routes.map { "\($0.id)|\($0.coordinates.count)" }.joined(separator: ",") + "|\(dark)|\(curvyRoads?.id.uuidString ?? "-")"
         guard coordinator.key != key else { return }
         // The routes are loaded after the map first appears, so fit whenever the rides that
         // have a route change, not only the rides: else the map stayed on its world overview.
@@ -83,6 +103,7 @@ private struct ComparisonMapRepresentable: NSViewRepresentable {
         coordinator.routedIDs = routedIDs
         map.removeOverlays(map.drawnOverlays)
         map.removeAnnotations(map.annotations)
+        if let curvyRoads { map.addOverlay(CurvyRoadsOverlay(set: curvyRoads, dark: dark), level: map.drawnOverlayLevel) }
         let overlay = ComparisonRoutesOverlay(routes: routes, dark: dark)
         if !overlay.lines.isEmpty {
             map.addOverlay(overlay, level: map.drawnOverlayLevel)
@@ -112,9 +133,11 @@ private struct ComparisonMapRepresentable: NSViewRepresentable {
         var mapType: RideMapType?
         var key: String?
         var routedIDs: [UUID]?
+        var curvyRoads: CurvyRoadSet?
 
         func mapView(_ mapView: MKMapView, rendererFor overlay: any MKOverlay) -> MKOverlayRenderer {
             if let tiles = overlay as? MKTileOverlay { return MutedTileRenderer(tileOverlay: tiles) }
+            if overlay is CurvyRoadsOverlay { return CurvyRoadsRenderer(overlay: overlay) }
             return overlay is ComparisonRoutesOverlay ? ComparisonRoutesRenderer(overlay: overlay) : MKOverlayRenderer(overlay: overlay)
         }
 

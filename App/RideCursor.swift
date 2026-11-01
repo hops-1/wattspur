@@ -3,6 +3,16 @@ import Observation
 import SwiftUI
 import WattspurKit
 
+extension RideTrack {
+    /// "↗ 4 %", "↘ 3 %" or "→ 0 %" (below 0.5 %) for the grade around a spot; `nil` where there is none (B-200).
+    func gradeText(atDistanceKm km: Double) -> String? {
+        guard let grade = grade(atDistanceKm: km) else { return nil }
+        let rounded = Int(grade.rounded())
+        if abs(grade) < 0.5 { return "→ 0 %" }
+        return "\(rounded > 0 ? "↗" : "↘") \(abs(rounded)) %"
+    }
+}
+
 /// The spot on the ride that the four charts and the map show together (B-062, TOUR-06):
 /// hovering a chart or the route sets it, a click holds it, another click or Esc lets go.
 @MainActor
@@ -64,6 +74,9 @@ final class RideCursor {
         let minutes = Int((fix.time / 60).rounded())
         var parts: [String] = []
         if let v = fix.altitude { parts.append("\(String(localized: "Elevation")) \(Int(v.rounded())) m") }
+        if fix.altitude != nil, let grade = track.grade(atDistanceKm: fix.distanceKm) {
+            parts.append("\(String(localized: "Grade")) \(Int(grade.rounded())) %")
+        }
         if let v = fix.speedKmh { parts.append("\(String(localized: "Speed")) \(v.formatted(.number.precision(.fractionLength(1)))) km/h") }
         if let v = fix.cadence { parts.append("\(String(localized: "Cadence")) \(Int(v.rounded())) \(String(localized: "rpm"))") }
         if let v = fix.power { parts.append("\(String(localized: "Power")) \(Int(v.rounded())) W") }

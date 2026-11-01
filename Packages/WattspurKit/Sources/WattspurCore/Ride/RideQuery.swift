@@ -33,6 +33,8 @@ public enum RidePeriod: String, CaseIterable, Identifiable, Sendable {
 /// Sort orders for the ride list (LIST-05).
 public enum RideSortOrder: String, CaseIterable, Identifiable, Sendable {
     case date, distance, duration, ascent, averagePower
+    /// The curviest rides first (B-181).
+    case curviness
 
     public var id: Self { self }
 }
@@ -44,13 +46,23 @@ public struct RideSortKey: Sendable, Equatable {
     public var timerTime: TimeInterval
     public var totalAscent: Int?
     public var averagePower: Int?
+    public var curvaturePerKm: Double?
 
-    public init(startDate: Date, distance: Double, timerTime: TimeInterval, totalAscent: Int?, averagePower: Int?) {
+    public init(startDate: Date, distance: Double, timerTime: TimeInterval, totalAscent: Int?, averagePower: Int?,
+                curvaturePerKm: Double? = nil) {
         self.startDate = startDate
         self.distance = distance
         self.timerTime = timerTime
         self.totalAscent = totalAscent
         self.averagePower = averagePower
+        self.curvaturePerKm = curvaturePerKm
+    }
+}
+
+extension RideSortKey {
+    /// The curvature, only for rides long enough to rate; shorter ones count as having none.
+    var ratedCurvature: Double? {
+        distance >= Curviness.minimumDistanceForRecord ? curvaturePerKm : nil
     }
 }
 
@@ -73,6 +85,7 @@ extension RideSortOrder {
         case .duration: result = compare(a.timerTime, b.timerTime)
         case .ascent: result = compare(a.totalAscent, b.totalAscent)
         case .averagePower: result = compare(a.averagePower, b.averagePower)
+        case .curviness: result = compare(a.ratedCurvature, b.ratedCurvature)
         }
         return result ?? (a.startDate > b.startDate)
     }

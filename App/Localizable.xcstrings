@@ -1,6 +1,7 @@
 {
   "sourceLanguage" : "en",
   "strings" : {
+    "" : {},
     "… and %lld more" : {
       "localizations" : {
         "de" : {
@@ -47,6 +48,36 @@
                 }
               }
             }
+          }
+        }
+      }
+    },
+    "“%@” is damaged or cut off." : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "„%@“ ist beschädigt oder abgeschnitten."
+          }
+        }
+      }
+    },
+    "“%@” is not curvature data from roadcurvature.com." : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "„%@“ enthält keine Kurvigkeitsdaten von roadcurvature.com."
+          }
+        }
+      }
+    },
+    "“%@” is too large." : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "„%@“ ist zu groß."
           }
         }
       }
@@ -147,6 +178,16 @@
                 }
               }
             }
+          }
+        }
+      }
+    },
+    "%@ · Curvature %lld" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%1$@ · Kurvigkeit %2$lld"
           }
         }
       }
@@ -2177,6 +2218,16 @@
         }
       }
     },
+    "Cargo bike" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Lastenrad"
+          }
+        }
+      }
+    },
     "Change or reset the filters." : {
       "localizations" : {
         "de" : {
@@ -2417,6 +2468,16 @@
         }
       }
     },
+    "Choose the KMZ file of your state from roadcurvature.com, the one called “c_300”." : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Wähle die KMZ-Datei deines Bundeslands von roadcurvature.com, die mit „c_300“ im Namen."
+          }
+        }
+      }
+    },
     "Choose where the “Wattspur Import” folder should be. iCloud Drive lets you save exports straight from your iPhone." : {
       "localizations" : {
         "de" : {
@@ -2507,6 +2568,16 @@
         }
       }
     },
+    "Counts the tight and the gentle curves along the track per kilometre. Straight below 190, curvy from 190, very curvy from 270." : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Zählt die engen und die sanften Kurven entlang der Strecke je Kilometer. Gerade unter 190, kurvig ab 190, sehr kurvig ab 270."
+          }
+        }
+      }
+    },
     "CO₂ saved" : {
       "localizations" : {
         "de" : {
@@ -2543,6 +2614,16 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Farbe"
+          }
+        }
+      }
+    },
+    "Color the route by curves" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Route nach Kurven einfärben"
           }
         }
       }
@@ -2673,6 +2754,76 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Erstellt mit Wattspur am %@. Kalorien und CO₂ sind Schätzwerte."
+          }
+        }
+      }
+    },
+    "Curves" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Kurven"
+          }
+        }
+      }
+    },
+    "Curviest ride" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Kurvigste Fahrt"
+          }
+        }
+      }
+    },
+    "Curviness" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Kurvigkeit"
+          }
+        }
+      }
+    },
+    "Curvy" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Kurvig"
+          }
+        }
+      }
+    },
+    "Curvy (300 and more)" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Kurvig (ab 300)"
+          }
+        }
+      }
+    },
+    "Curvy road data: open roadcurvature.com" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Daten kurviger Straßen: roadcurvature.com öffnen"
+          }
+        }
+      }
+    },
+    "Curvy roads" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Kurvige Straßen"
           }
         }
       }
@@ -2854,6 +3005,16 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Fertig"
+          }
+        }
+      }
+    },
+    "Download Page" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Download-Seite"
           }
         }
       }
@@ -3322,6 +3483,16 @@
         }
       }
     },
+    "For kids, shopping and luggage" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Für Kinder, Einkäufe und Gepäck"
+          }
+        }
+      }
+    },
     "For your local profile. Stays on this Mac and can be changed later." : {
       "localizations" : {
         "de" : {
@@ -3398,6 +3569,16 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Allgemein"
+          }
+        }
+      }
+    },
+    "Gentle curve" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sanfte Kurve"
           }
         }
       }
@@ -3538,6 +3719,16 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "GPX-Dateien enthalten keine Angabe zum Bike. Wattspur ordnet die Fahrten dem gewählten Bike zu."
+          }
+        }
+      }
+    },
+    "Grade" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Steigung"
           }
         }
       }
@@ -3782,6 +3973,16 @@
         }
       }
     },
+    "Import …" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Importieren …"
+          }
+        }
+      }
+    },
     "Import %lld rides" : {
       "localizations" : {
         "de" : {
@@ -3798,6 +3999,26 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "1 Fahrt importieren"
+          }
+        }
+      }
+    },
+    "Import Curvy Roads" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Kurvige Straßen importieren"
+          }
+        }
+      }
+    },
+    "Import Curvy Roads…" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Kurvige Straßen importieren …"
           }
         }
       }
@@ -3949,6 +4170,16 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Hier erscheinen importierte Dateien."
+          }
+        }
+      }
+    },
+    "Importing “%@” …" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "„%@“ wird importiert …"
           }
         }
       }
@@ -4209,6 +4440,16 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Letzte"
+          }
+        }
+      }
+    },
+    "Layers" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ebenen"
           }
         }
       }
@@ -5424,6 +5665,16 @@
         }
       }
     },
+    "On" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "An"
+          }
+        }
+      }
+    },
     "on %lld days" : {
       "localizations" : {
         "de" : {
@@ -5720,6 +5971,16 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "je Tag"
+          }
+        }
+      }
+    },
+    "per km" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "pro km"
           }
         }
       }
@@ -6094,6 +6355,16 @@
         }
       }
     },
+    "Remove %@" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@ entfernen"
+          }
+        }
+      }
+    },
     "Remove %@ from comparison" : {
       "localizations" : {
         "de" : {
@@ -6294,6 +6565,16 @@
         }
       }
     },
+    "Rides of %@" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Fahrten vom %@"
+          }
+        }
+      }
+    },
     "Rides per area" : {
       "localizations" : {
         "de" : {
@@ -6320,6 +6601,26 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Rennrad"
+          }
+        }
+      }
+    },
+    "roads" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Straßen"
+          }
+        }
+      }
+    },
+    "Roads show from the size of a district on." : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Die Straßen erscheinen ab der Größe eines Landkreises."
           }
         }
       }
@@ -6866,6 +7167,16 @@
         }
       }
     },
+    "Shows the curvy roads of roadcurvature.com on the map. Download the “c_300” file of your state there and import it; Wattspur does not load any data by itself." : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Zeigt die kurvigen Straßen von roadcurvature.com auf der Karte. Lade dort die Datei „c_300“ deines Bundeslands herunter und importiere sie; Wattspur lädt von selbst keine Daten."
+          }
+        }
+      }
+    },
     "Shows why the totals are estimated" : {
       "localizations" : {
         "de" : {
@@ -7186,12 +7497,52 @@
         }
       }
     },
+    "Steepest climb" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Stärkste Steigung"
+          }
+        }
+      }
+    },
+    "Steepest descent" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Stärkstes Gefälle"
+          }
+        }
+      }
+    },
     "Step %lld of %lld" : {
       "localizations" : {
         "de" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "Schritt %1$lld von %2$lld"
+          }
+        }
+      }
+    },
+    "Straight" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Gerade"
+          }
+        }
+      }
+    },
+    "Straight road" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Gerade"
           }
         }
       }
@@ -7392,6 +7743,16 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Der Anteil einer Strecke, der höchstens 50 m von der anderen entfernt liegt. „Ähnliche Fahrten zeigen“ beginnt mit diesem Wert; die Liste hat einen eigenen Regler."
+          }
+        }
+      }
+    },
+    "The steepest stretch of 100 m, in percent." : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Das steilste Stück von 100 m, in Prozent."
           }
         }
       }
@@ -7606,6 +7967,16 @@
         }
       }
     },
+    "Tight curve" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Enge Kurve"
+          }
+        }
+      }
+    },
     "Time" : {
       "localizations" : {
         "de" : {
@@ -7746,6 +8117,16 @@
         }
       }
     },
+    "Unnamed road" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Straße ohne Namen"
+          }
+        }
+      }
+    },
     "Update" : {
       "localizations" : {
         "de" : {
@@ -7862,6 +8243,26 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Version %@"
+          }
+        }
+      }
+    },
+    "Very curvy" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sehr kurvig"
+          }
+        }
+      }
+    },
+    "Very curvy (1000 and more)" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sehr kurvig (ab 1000)"
           }
         }
       }
@@ -8432,16 +8833,6 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Deine Fahrten bleiben auf diesem Mac. Wattspur sendet keine Daten über dich oder deine Fahrten. Die Karte lädt Kartenmaterial und Ortsinformationen von Apple, und Wattspur fragt einmal am Tag bei GitHub nach, ob es eine neue Version gibt (in den Einstellungen abschaltbar)."
-          }
-        }
-      }
-    },
-    "Rides of %@" : {
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Fahrten vom %@"
           }
         }
       }

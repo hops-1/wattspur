@@ -233,6 +233,41 @@ struct ImportService: LibraryService {
         return outdated.count
     }
 
+    /// Calculates the figures of the track (curviness B-180, steepest climb and descent B-202) of every
+    /// ride that has none or some from an older `TrackFigures.version`, i.e. every ride imported before. Like the best
+    /// minute: decoding and calculating run off the main actor in batches, each batch is saved, so
+    /// an interrupted run goes on where it stopped. A merged ride is calculated from its own
+    /// samples; the analysis ends a run at the seam. Returns the number of rides.
+    @discardableResult
+    func prepareTrackFigures(batchSize: Int = 20,
+                          progress: (_ done: Int, _ total: Int) -> Void = { _, _ in }) async -> Int {
+        let version = TrackFigures.version
+        let descriptor = FetchDescriptor<Ride>(predicate: #Predicate { $0.trackFiguresVersion != version })
+        let outdated = (try? context.fetch(descriptor)) ?? []
+        guard !outdated.isEmpty else { return 0 }
+        var done = 0
+        progress(0, outdated.count)
+        for start in stride(from: 0, to: outdated.count, by: max(1, batchSize)) {
+            let batch = Array(outdated[start..<min(start + max(1, batchSize), outdated.count)])
+            let inputs = batch.map(\.samplesData)
+            let values = await Task.detached(priority: .utility) {
+                inputs.map { data -> TrackFigures in
+                    guard let data, let samples = try? PropertyListDecoder().decode([RideSample].self, from: data) else { return TrackFigures() }
+                    return TrackFigures(samples: samples)
+                }
+            }.value
+            // The ride may have been deleted or updated meanwhile.
+            for (ride, value) in zip(batch, values) where !ride.isDeleted && ride.needsTrackFigures {
+                ride.setTrackFigures(value)
+            }
+            try? context.save()
+            done += batch.count
+            progress(done, outdated.count)
+        }
+        progress(outdated.count, outdated.count)
+        return outdated.count
+    }
+
     /// Imports the anonymized sample ride (V-05) under the given name and marks it
     /// as a sample. If one is already there, it is returned (and restored from the trash).
     @discardableResult

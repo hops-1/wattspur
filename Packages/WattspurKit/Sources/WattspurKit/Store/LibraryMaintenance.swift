@@ -27,5 +27,8 @@ public final class LibraryMaintenance {
         await Task.yield()
         // Rides imported before v1.7 get their best minute for the records, in batches (B-122).
         await library.preparePeakPower()
+        await Task.yield()
+        // Rides imported before the curviness (B-180) and the steepest grades (B-202) get them, in batches.
+        await library.prepareTrackFigures()
     }
 }

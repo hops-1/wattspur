@@ -122,6 +122,8 @@ One row per ride, including parts of merged rides and rides in the trash.
 | `ZAVERAGESPEED`, `ZMAXSPEED` | m/s | Average and maximum speed |
 | `ZAVERAGEPOWER`, `ZMAXPOWER` | W | Rider power |
 | `ZBESTPOWER1MIN` | W | Best average power over one minute |
+| `ZCURVATUREPERKM` | number | How curvy the ride is: curvature per kilometre after the method of roadcurvature.com, empty without GPS or under a kilometre of track |
+| `ZSTEEPESTCLIMB`, `ZSTEEPESTDESCENT` | % | Steepest climb and steepest descent over 100 m, both positive; empty without altitude |
 | `ZAVERAGECADENCE`, `ZMAXCADENCE` | 1/min | Cadence |
 | `ZTOTALASCENT`, `ZTOTALDESCENT` | m | Ascent and descent |
 | `ZMINALTITUDE`, `ZMAXALTITUDE` | m | Lowest and highest point |
@@ -129,7 +131,7 @@ One row per ride, including parts of merged rides and rides in the trash.
 | `ZDEVICESERIALNUMBER` | number | Serial number in the file. Bosch writes a new one into every export, so it does not identify the bike |
 | `ZSAMPLESDATA` | *external* | The time series, see [below](#time-series) |
 | `ZOVERVIEWROUTEDATA` | data | Simplified route for the map of all rides; Wattspur's own binary format, internal |
-| `ZPARSERVERSION`, `ZPEAKPOWERVERSION`, `ZOVERVIEWROUTEVERSION` | number | Versions of Wattspur's calculations, internal |
+| `ZPARSERVERSION`, `ZPEAKPOWERVERSION`, `ZOVERVIEWROUTEVERSION`, `ZTRACKFIGURESVERSION` | number | Versions of Wattspur's calculations, internal |
 
 ### `ZSOURCEFILE`
 

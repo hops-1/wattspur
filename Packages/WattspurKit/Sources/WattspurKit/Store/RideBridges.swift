@@ -23,7 +23,8 @@ extension Ride {
         RideFigures(startDate: startDate, distance: distance, timerTime: timerTime, totalAscent: totalAscent,
                     workKilojoules: workKilojoules, averageSpeed: averageSpeed,
                     averagePower: averagePower, averageCadence: averageCadence,
-                    maxSpeed: maxSpeed, maxPower: maxPower, maxCadence: maxCadence, bestPower1Min: bestPower1Min)
+                    maxSpeed: maxSpeed, maxPower: maxPower, maxCadence: maxCadence, bestPower1Min: bestPower1Min,
+                    curvaturePerKm: curvaturePerKm, steepestClimb: steepestClimb, steepestDescent: steepestDescent)
     }
 }
 
@@ -141,7 +142,7 @@ extension Ride {
 extension Ride {
     public var sortKey: RideSortKey {
         RideSortKey(startDate: startDate, distance: distance, timerTime: timerTime,
-                    totalAscent: totalAscent, averagePower: averagePower)
+                    totalAscent: totalAscent, averagePower: averagePower, curvaturePerKm: curvaturePerKm)
     }
 }
 

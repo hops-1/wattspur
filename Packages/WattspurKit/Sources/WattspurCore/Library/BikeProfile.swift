@@ -3,9 +3,10 @@ import Foundation
 // Value types around the profile and the bikes (PROF-01, PROF-03, B-074).
 // Raw values are stored in the model, so they must not change.
 
-/// The kind of bike, as in komoot; it decides the symbol (B-133).
+/// The kind of bike, as in komoot; it decides the symbol (B-133). The cargo bike (B-201)
+/// is only a name and a symbol: it changes no calculation.
 public enum BikeKind: String, CaseIterable, Identifiable, Sendable {
-    case bike, mountain, road, gravel
+    case bike, mountain, road, gravel, cargo
 
     public var id: Self { self }
 }

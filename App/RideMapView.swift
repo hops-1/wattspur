@@ -76,6 +76,10 @@ struct RideMapView: View {
     var joins: [RideMerge.Join] = []
     /// Stretches no earlier ride had passed (B-115), drawn wider in orange on top.
     var newStretches: [[RoutePoint]] = []
+    /// The route in pieces by curve (B-181); empty draws it in one colour.
+    var curves: [CurvatureAnalyzer.Piece] = []
+    /// The imported curvy roads, drawn below the route; `nil` while the layer is off (B-183).
+    var curvyRoads: CurvyRoadSet?
 
     @Environment(\.colorScheme) private var colorScheme
     /// The spot shared with the charts (B-062); not there in the PDF.
@@ -93,14 +97,18 @@ struct RideMapView: View {
     }
 
     var body: some View {
-        RideMapRepresentable(coordinates: coordinates, newStretches: newStretches, ticks: JoinTick.ticks(of: joins), mapType: mapType,
-                             isLoop: isLoop, dark: colorScheme == .dark, cursor: cursor)
-            .tileAttribution(for: mapType)
+        RideMapRepresentable(coordinates: coordinates, newStretches: newStretches, curves: curves, curvyRoads: curvyRoads,
+                             ticks: JoinTick.ticks(of: joins), mapType: mapType, isLoop: isLoop, dark: colorScheme == .dark, cursor: cursor)
+            .mapCredits(for: mapType, curvyRoads: curvyRoads != nil)
             .clipShape(RoundedRectangle(cornerRadius: 14))
             .overlay(alignment: .bottomLeading) {
-                if !newStretches.isEmpty {
-                    NewPathsLegend().padding(.leading, 12).padding(.bottom, 40)
+                VStack(alignment: .leading, spacing: 8) {
+                    if curvyRoads != nil { CurvyRoadsLegend() }
+                    if !curves.isEmpty { CurvesLegend() }
+                    if !newStretches.isEmpty { NewPathsLegend() }
                 }
+                .padding(.leading, 12)
+                .padding(.bottom, 40)
             }
             .overlay {
                 if coordinates.isEmpty {
@@ -119,6 +127,8 @@ struct RideMapView: View {
 private struct RideMapRepresentable: NSViewRepresentable {
     let coordinates: [CLLocationCoordinate2D]
     let newStretches: [[RoutePoint]]
+    let curves: [CurvatureAnalyzer.Piece]
+    let curvyRoads: CurvyRoadSet?
     let ticks: [JoinTick]
     let mapType: RideMapType
     let isLoop: Bool
@@ -131,12 +141,15 @@ private struct RideMapRepresentable: NSViewRepresentable {
         let map = TrackingMapView()
         map.delegate = context.coordinator
         map.onMove = { [weak map, weak coordinator = context.coordinator] point in
-            guard let map, let cursor = coordinator?.cursor else { return }
+            guard let map, let coordinator else { return }
             let here = map.convert(point, toCoordinateFrom: map)
             // Close enough to the route: 20 points of the screen, in metres.
             let beside = map.convert(CGPoint(x: point.x + 20, y: point.y), toCoordinateFrom: map)
             let metres = CLLocation(latitude: here.latitude, longitude: here.longitude)
                 .distance(from: CLLocation(latitude: beside.latitude, longitude: beside.longitude))
+            // A curvy road under the mouse says its name and curvature in a tooltip (B-183).
+            map.updateCurvyRoadTooltip(at: point, roads: coordinator.curvyRoads)
+            guard let cursor = coordinator.cursor else { return }
             cursor.hover(latitude: here.latitude, longitude: here.longitude, within: metres)
         }
         map.onExit = { [weak coordinator = context.coordinator] in coordinator?.cursor?.endHover() }
@@ -153,6 +166,7 @@ private struct RideMapRepresentable: NSViewRepresentable {
     func updateNSView(_ map: MKMapView, context: Context) {
         let coordinator = context.coordinator
         coordinator.cursor = cursor
+        coordinator.curvyRoads = curvyRoads
         if coordinator.mapType != mapType {
             coordinator.mapType = mapType
             map.show(mapType)
@@ -160,12 +174,14 @@ private struct RideMapRepresentable: NSViewRepresentable {
         // Rebuilt whenever route, new stretches or appearance change; one overlay, so
         // there is no order between route and new stretches left to MapKit.
         let drawingKey = "\(coordinates.count)|\(coordinates.first.map { "\($0.latitude),\($0.longitude)" } ?? "")"
-            + "|\(newStretches.map(\.count))|\(ticks.count)|\(ticks.first.map { "\($0.coordinate.latitude)" } ?? "")|\(dark)"
+            + "|\(newStretches.map(\.count))|\(curves.count)|\(curves.first?.points.count ?? 0)|\(curvyRoads?.id.uuidString ?? "-")|\(ticks.count)|\(ticks.first.map { "\($0.coordinate.latitude)" } ?? "")|\(dark)"
         if coordinator.drawingKey != drawingKey {
             coordinator.drawingKey = drawingKey
             map.removeOverlays(map.drawnOverlays)
+            // The curvy roads first, so the route lies on top of them.
+            if let curvyRoads { map.addOverlay(CurvyRoadsOverlay(set: curvyRoads, dark: dark), level: map.drawnOverlayLevel) }
             if coordinates.count > 1 {
-                map.addOverlay(RideRouteOverlay(route: coordinates, newStretches: newStretches, ticks: ticks, dark: dark), level: map.drawnOverlayLevel)
+                map.addOverlay(RideRouteOverlay(route: coordinates, newStretches: newStretches, curves: curves, ticks: ticks, dark: dark), level: map.drawnOverlayLevel)
             }
         }
         // Markers and the visible area follow the route only, not the new stretches.
@@ -205,6 +221,7 @@ private struct RideMapRepresentable: NSViewRepresentable {
         var drawingKey: String?
         var routeKey: String?
         var cursor: RideCursor?
+        var curvyRoads: CurvyRoadSet?
         private var cursorAnnotation: CursorAnnotation?
 
         /// Moves the dot that shows the spot of the coupling, or takes it off the map.
@@ -232,6 +249,7 @@ private struct RideMapRepresentable: NSViewRepresentable {
 
         func mapView(_ mapView: MKMapView, rendererFor overlay: any MKOverlay) -> MKOverlayRenderer {
             if let tiles = overlay as? MKTileOverlay { return MutedTileRenderer(tileOverlay: tiles) }
+            if overlay is CurvyRoadsOverlay { return CurvyRoadsRenderer(overlay: overlay) }
             return overlay is RideRouteOverlay ? RideRouteRenderer(overlay: overlay) : MKOverlayRenderer(overlay: overlay)
         }
 
@@ -255,7 +273,7 @@ private struct RideMapRepresentable: NSViewRepresentable {
 }
 
 /// A map that reports where the mouse moves, to couple it with the charts (B-062).
-private final class TrackingMapView: MKMapView {
+final class TrackingMapView: MKMapView {
     var onMove: ((NSPoint) -> Void)?
     var onExit: (() -> Void)?
 
@@ -346,21 +364,29 @@ private final class RideMarker: NSObject, MKAnnotation {
 private final class RideRouteOverlay: NSObject, MKOverlay {
     let route: [MKMapPoint]
     let stretches: [[MKMapPoint]]
+    /// The route by curve, with the colour of each kind resolved for the appearance (B-181).
+    let pieces: [(color: CGColor, points: [MKMapPoint])]
     let ticks: [(point: MKMapPoint, across: (dx: Double, dy: Double))]
     let routeColor: CGColor
     let newColor: CGColor
     let boundingMapRect: MKMapRect
     var coordinate: CLLocationCoordinate2D { MKMapPoint(x: boundingMapRect.midX, y: boundingMapRect.midY).coordinate }
 
-    init(route: [CLLocationCoordinate2D], newStretches: [[RoutePoint]], ticks: [JoinTick], dark: Bool) {
+    init(route: [CLLocationCoordinate2D], newStretches: [[RoutePoint]], curves: [CurvatureAnalyzer.Piece], ticks: [JoinTick], dark: Bool) {
         self.route = route.map(MKMapPoint.init)
         stretches = newStretches.map { $0.map { MKMapPoint(CLLocationCoordinate2D(latitude: $0.latitude, longitude: $0.longitude)) } }
         self.ticks = ticks.map { (MKMapPoint($0.coordinate), $0.across) }
         var routeColor = CGColor(gray: 0, alpha: 1)
         var newColor = CGColor(gray: 0, alpha: 1)
+        var kindColors: [CurvatureAnalyzer.Kind: CGColor] = [:]
         NSAppearance(named: dark ? .darkAqua : .aqua)?.performAsCurrentDrawingAppearance {
             routeColor = NSColor.controlAccentColor.cgColor
             newColor = NSColor(Color.newPaths).cgColor
+            for kind in CurvatureAnalyzer.Kind.allCases { kindColors[kind] = NSColor(Color.curve(kind)).cgColor }
+        }
+        pieces = curves.map { piece in
+            (kindColors[piece.kind] ?? routeColor,
+             piece.points.map { MKMapPoint(CLLocationCoordinate2D(latitude: $0.latitude, longitude: $0.longitude)) })
         }
         self.routeColor = routeColor
         self.newColor = newColor
@@ -394,7 +420,12 @@ private final class RideRouteRenderer: MKOverlayRenderer {
         // Both lines are equally wide, so neither looks heavier at any zoom; the new stretches
         // stand out by colour and by lying on top.
         stroke(overlay.route, width: 8, color: white)
-        stroke(overlay.route, width: 4.5, color: overlay.routeColor)
+        if overlay.pieces.isEmpty {
+            stroke(overlay.route, width: 4.5, color: overlay.routeColor)
+        } else {
+            // Round caps make the pieces join without a gap.
+            for piece in overlay.pieces { stroke(piece.points, width: 4.5, color: piece.color) }
+        }
         for stretch in overlay.stretches { stroke(stretch, width: 8, color: white) }
         for stretch in overlay.stretches { stroke(stretch, width: 4.5, color: overlay.newColor) }
         // A tick reaches a few points beyond the line on both sides.
@@ -432,6 +463,40 @@ private struct NewPathsLegend: View {
     private func row(_ color: Color, width: CGFloat, text: LocalizedStringKey) -> some View {
         HStack(spacing: 8) {
             Capsule().fill(color).frame(width: 30, height: width).accessibilityHidden(true)
+            Text(text).font(.caption)
+        }
+    }
+}
+
+extension Color {
+    /// The colours of the curve kinds on the ride's map (B-181): red tight, amber gentle, grey straight.
+    static func curve(_ kind: CurvatureAnalyzer.Kind) -> Color {
+        switch kind {
+        case .tight: .adaptive(light: 0xC81D25, dark: 0xFF5A5F)
+        case .gentle: .adaptive(light: 0xE0A100, dark: 0xFFD43B)
+        case .straight: .adaptive(light: 0x7A7F87, dark: 0xA8ADB5)
+        }
+    }
+}
+
+/// "Tight curve", "Gentle curve" and "Straight" for the colours of the route (B-181, NFR-16).
+private struct CurvesLegend: View {
+    var body: some View {
+        VStack(alignment: .leading, spacing: 6) {
+            Text("Curves").font(.caption.weight(.bold))
+            row(.tight, text: "Tight curve")
+            row(.gentle, text: "Gentle curve")
+            row(.straight, text: "Straight")
+        }
+        .padding(.vertical, 8)
+        .padding(.horizontal, 10)
+        .background(.regularMaterial, in: RoundedRectangle(cornerRadius: 10))
+        .accessibilityElement(children: .combine)
+    }
+
+    private func row(_ kind: CurvatureAnalyzer.Kind, text: LocalizedStringKey) -> some View {
+        HStack(spacing: 8) {
+            Capsule().fill(Color.curve(kind)).frame(width: 30, height: 4.5).accessibilityHidden(true)
             Text(text).font(.caption)
         }
     }

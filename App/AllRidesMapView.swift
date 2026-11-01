@@ -47,6 +47,8 @@ struct AllRidesMapView: View {
     /// The rides at a clicked spot (B-109, MAP-05).
     @State private var popover: MapPopover?
     @Environment(NewPathsStore.self) private var newPaths
+    @Environment(CurvyRoadsStore.self) private var curvyRoads
+    @AppStorage(SettingsKey.showsCurvyRoads) private var showsCurvyRoads = false
     @Environment(\.colorScheme) private var colorScheme
 
     private var calendar: Calendar { .current }
@@ -223,7 +225,8 @@ struct AllRidesMapView: View {
         let hidesRides = style.onlyHighlights
         RidesMapRepresentable(style: style, styleKey: key, mapType: mapType, fitKey: ids,
                               onVisibleAreaChange: { memory = MapMemory(area: $0, rideIDs: ids) }, fitRequest: $fitRequest,
-                              restoredArea: memory.rideIDs == ids ? memory.area : nil) { coordinate, radius, point in
+                              restoredArea: memory.rideIDs == ids ? memory.area : nil,
+                              onClick: { coordinate, radius, point in
             // Nothing to click on while the rides are hidden.
             guard !hidesRides else { popover = nil; return }
             let hits = RouteHitTest.rides(near: RoutePoint(latitude: coordinate.latitude, longitude: coordinate.longitude),
@@ -235,7 +238,7 @@ struct AllRidesMapView: View {
             if hits.isEmpty && !showsSelection && !selectedRideIDs.isEmpty {
                 onSelectRides([])
             }
-        }
+        }, curvyRoads: curvyRoads.set(enabled: showsCurvyRoads))
             .frame(minHeight: 320, maxHeight: .infinity)
             .overlay(alignment: .topLeading) {
                 if let popover {
@@ -249,7 +252,7 @@ struct AllRidesMapView: View {
             }
             .onChange(of: ids) { popover = nil }
             .onExitCommand { popover = nil }
-            .tileAttribution(for: mapType)
+            .mapCredits(for: mapType, curvyRoads: curvyRoads.set(enabled: showsCurvyRoads) != nil)
             .clipShape(RoundedRectangle(cornerRadius: 14))
             .overlay(alignment: .topTrailing) {
                 HStack(spacing: 8) {
@@ -266,12 +269,15 @@ struct AllRidesMapView: View {
                 .padding(12)
             }
             .overlay(alignment: .bottomLeading) {
-                if !overview.rides.isEmpty && !hidesRides {
-                    MapLegend(highlighted: highlighted.compactMap { id in overview.rides.first { $0.id == id } }, mode: style.mode)
-                        .padding(.leading, 12)
-                        // Above Apple's map attribution, which must stay visible.
-                        .padding(.bottom, 40)
+                VStack(alignment: .leading, spacing: 8) {
+                    if curvyRoads.set(enabled: showsCurvyRoads) != nil { CurvyRoadsLegend() }
+                    if !overview.rides.isEmpty && !hidesRides {
+                        MapLegend(highlighted: highlighted.compactMap { id in overview.rides.first { $0.id == id } }, mode: style.mode)
+                    }
                 }
+                .padding(.leading, 12)
+                // Above Apple's map attribution, which must stay visible.
+                .padding(.bottom, 40)
             }
             .overlay(alignment: .top) {
                 if overview.preparing > 0 {

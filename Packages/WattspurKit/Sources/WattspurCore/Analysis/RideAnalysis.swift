@@ -23,11 +23,17 @@ public struct RideFigures: Sendable, Equatable {
     public var maxCadence: Int?
     /// The best average power over one minute, in watts (`PeakPower`).
     public var bestPower1Min: Int?
+    /// How curvy the ride is: curvature per kilometre (`CurvatureAnalyzer`).
+    public var curvaturePerKm: Double?
+    /// The steepest climb and descent in percent, both positive (`RideTrack.steepestGrades`).
+    public var steepestClimb: Double?
+    public var steepestDescent: Double?
 
     public init(startDate: Date, distance: Double, timerTime: TimeInterval, totalAscent: Int? = nil,
                 workKilojoules: Double = 0, averageSpeed: Double? = nil, averagePower: Int? = nil,
                 averageCadence: Int? = nil, maxSpeed: Double? = nil, maxPower: Int? = nil,
-                maxCadence: Int? = nil, bestPower1Min: Int? = nil) {
+                maxCadence: Int? = nil, bestPower1Min: Int? = nil, curvaturePerKm: Double? = nil,
+                steepestClimb: Double? = nil, steepestDescent: Double? = nil) {
         self.startDate = startDate
         self.distance = distance
         self.timerTime = timerTime
@@ -40,6 +46,9 @@ public struct RideFigures: Sendable, Equatable {
         self.maxPower = maxPower
         self.maxCadence = maxCadence
         self.bestPower1Min = bestPower1Min
+        self.curvaturePerKm = curvaturePerKm
+        self.steepestClimb = steepestClimb
+        self.steepestDescent = steepestDescent
     }
 }
 
