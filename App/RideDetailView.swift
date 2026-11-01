@@ -408,7 +408,7 @@ struct DetailsGrid: View {
                 Detail("Best 1-minute power", ride.bestPower1Min.map { "\($0) W" } ?? "–",
                        isRecord: records.contains(.bestPower1Min))
                 Detail("Curviness", curviness, isRecord: records.contains(.mostCurves),
-                       help: "Counts the tight and the gentle curves along the track per kilometre. Straight below 150, curvy from 150, very curvy from 300.")
+                       help: "Counts the tight and the gentle curves along the track per kilometre. Straight below 190, curvy from 190, very curvy from 270.")
             }
             GridRow {
                 Detail("Steepest climb", grade(ride.steepestClimb), isRecord: records.contains(.steepestClimb),

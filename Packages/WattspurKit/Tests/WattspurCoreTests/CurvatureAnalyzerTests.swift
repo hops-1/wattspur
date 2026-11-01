@@ -154,10 +154,10 @@ struct CurvatureAnalyzerTests {
     @Test("The words follow the curvature per kilometre")
     func words() {
         #expect(Curviness(perKm: 0) == .straight)
-        #expect(Curviness(perKm: 149.9) == .straight)
-        #expect(Curviness(perKm: 150) == .curvy)
-        #expect(Curviness(perKm: 299.9) == .curvy)
-        #expect(Curviness(perKm: 300) == .veryCurvy)
+        #expect(Curviness(perKm: 189.9) == .straight)
+        #expect(Curviness(perKm: 190) == .curvy)
+        #expect(Curviness(perKm: 269.9) == .curvy)
+        #expect(Curviness(perKm: 270) == .veryCurvy)
     }
 
     @Test("The record counts from 10 km on and only with curves")

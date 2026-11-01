@@ -2568,12 +2568,12 @@
         }
       }
     },
-    "Counts the tight and the gentle curves along the track per kilometre. Straight below 150, curvy from 150, very curvy from 300." : {
+    "Counts the tight and the gentle curves along the track per kilometre. Straight below 190, curvy from 190, very curvy from 270." : {
       "localizations" : {
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Zählt die engen und die sanften Kurven entlang der Strecke je Kilometer. Gerade unter 150, kurvig ab 150, sehr kurvig ab 300."
+            "value" : "Zählt die engen und die sanften Kurven entlang der Strecke je Kilometer. Gerade unter 190, kurvig ab 190, sehr kurvig ab 270."
           }
         }
       }

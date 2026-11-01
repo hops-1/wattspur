@@ -237,14 +237,16 @@ public enum CurvatureAnalyzer {
     }
 }
 
-/// The words for how curvy a ride is, from its curvature per kilometre (B-181). The limits are
-/// first guesses; roadcurvature rates single roads, not whole rides.
+/// The words for how curvy a ride is, from its curvature per kilometre (B-181). Rides do not
+/// share the scale of roadcurvature's roads, so the limits come from a library of 156 rides of
+/// 10 km and more: median 202, 90 % below 251, the highest 373. Straight is the lower third,
+/// very curvy only the top few per cent.
 public enum Curviness: Sendable, Equatable {
     case straight, curvy, veryCurvy
 
     /// From this curvature per kilometre on a ride counts as curvy, and as very curvy.
-    public static let curvyFrom = 150.0
-    public static let veryCurvyFrom = 300.0
+    public static let curvyFrom = 190.0
+    public static let veryCurvyFrom = 270.0
     /// Only rides of at least this length (metres) can hold the record.
     public static let minimumDistanceForRecord = 10_000.0
 
