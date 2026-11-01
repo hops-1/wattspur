@@ -383,13 +383,14 @@ struct DetailsGrid: View {
         value.map { "\($0.formatted(.number.precision(.fractionLength(1)))) %" } ?? "–"
     }
 
-    /// "Very curvy · 320 per km"; only the number under 10 km; a dash for a ride without GPS or under a kilometre.
+    /// "Very curvy · 320 per km", or a dash for a ride without GPS.
     private var curviness: String {
         guard let perKm = ride.curvaturePerKm else { return "–" }
-        let number = "\(Int(perKm.rounded())) \(String(localized: "per km"))"
-        guard let word = Curviness(perKm: perKm, distance: ride.distance) else { return number }
-        return "\(word.title) · \(number)"
+        return "\(Curviness(perKm: perKm).title) · \(Int(perKm.rounded())) \(String(localized: "per km"))"
     }
+
+    /// Short rides are left out: a few junctions weigh too much on them.
+    private var ratesCurviness: Bool { ride.distance >= Curviness.minimumDistanceForRecord }
 
     var body: some View {
         Grid(alignment: .leading, horizontalSpacing: 32, verticalSpacing: 12) {
@@ -409,8 +410,10 @@ struct DetailsGrid: View {
             GridRow {
                 Detail("Best 1-minute power", ride.bestPower1Min.map { "\($0) W" } ?? "–",
                        isRecord: records.contains(.bestPower1Min))
-                Detail("Curviness", curviness, isRecord: records.contains(.mostCurves),
-                       help: "Counts the tight and the gentle curves along the track per kilometre. Straight below 190, curvy from 190, very curvy from 270.")
+                if ratesCurviness {
+                    Detail("Curviness", curviness, isRecord: records.contains(.mostCurves),
+                           help: "Counts the tight and the gentle curves along the track per kilometre. Straight below 190, curvy from 190, very curvy from 270.")
+                }
             }
             GridRow {
                 Detail("Steepest climb", grade(ride.steepestClimb), isRecord: records.contains(.steepestClimb),

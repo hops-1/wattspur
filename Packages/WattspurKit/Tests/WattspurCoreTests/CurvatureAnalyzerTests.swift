@@ -160,13 +160,6 @@ struct CurvatureAnalyzerTests {
         #expect(Curviness(perKm: 270) == .veryCurvy)
     }
 
-    @Test("A ride under 10 km gets no word")
-    func shortRide() {
-        #expect(Curviness(perKm: 357, distance: 3_900) == nil)
-        #expect(Curviness(perKm: 357, distance: 9_999) == nil)
-        #expect(Curviness(perKm: 357, distance: 10_000) == .veryCurvy)
-    }
-
     @Test("The record counts from 10 km on and only with curves")
     func record() {
         func figures(distance: Double, curves: Double?) -> RideFigures {
