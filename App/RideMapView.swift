@@ -148,12 +148,7 @@ private struct RideMapRepresentable: NSViewRepresentable {
             let metres = CLLocation(latitude: here.latitude, longitude: here.longitude)
                 .distance(from: CLLocation(latitude: beside.latitude, longitude: beside.longitude))
             // A curvy road under the mouse says its name and curvature in a tooltip (B-183).
-            if let roads = coordinator.curvyRoads, metres / 20 <= CurvyRoads.maximumMetresPerPoint {
-                // Within 10 points of the screen.
-                map.toolTip = roads.nearest(latitude: here.latitude, longitude: here.longitude, within: metres / 2)?.tooltip
-            } else {
-                map.toolTip = nil
-            }
+            map.updateCurvyRoadTooltip(at: point, roads: coordinator.curvyRoads)
             guard let cursor = coordinator.cursor else { return }
             cursor.hover(latitude: here.latitude, longitude: here.longitude, within: metres)
         }
@@ -278,7 +273,7 @@ private struct RideMapRepresentable: NSViewRepresentable {
 }
 
 /// A map that reports where the mouse moves, to couple it with the charts (B-062).
-private final class TrackingMapView: MKMapView {
+final class TrackingMapView: MKMapView {
     var onMove: ((NSPoint) -> Void)?
     var onExit: (() -> Void)?
 

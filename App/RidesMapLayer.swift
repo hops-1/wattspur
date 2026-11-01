@@ -229,7 +229,11 @@ struct RidesMapRepresentable: NSViewRepresentable {
     func makeCoordinator() -> Coordinator { Coordinator(onVisibleAreaChange: onVisibleAreaChange) }
 
     func makeNSView(context: Context) -> MKMapView {
-        let map = MKMapView()
+        let map = TrackingMapView()
+        map.onMove = { [weak map, weak coordinator = context.coordinator] point in
+            map?.updateCurvyRoadTooltip(at: point, roads: coordinator?.curvyRoads)
+        }
+        map.onExit = { [weak map] in map?.toolTip = nil }
         map.delegate = context.coordinator
         map.showsZoomControls = true
         map.showsCompass = true
@@ -243,6 +247,7 @@ struct RidesMapRepresentable: NSViewRepresentable {
     func updateNSView(_ map: MKMapView, context: Context) {
         context.coordinator.onVisibleAreaChange = onVisibleAreaChange
         context.coordinator.onClick = onClick
+        context.coordinator.curvyRoads = curvyRoads
         if context.coordinator.mapType != mapType {
             context.coordinator.mapType = mapType
             map.show(mapType, muted: true)
@@ -287,6 +292,7 @@ struct RidesMapRepresentable: NSViewRepresentable {
     final class Coordinator: NSObject, MKMapViewDelegate {
         var onVisibleAreaChange: (MKMapRect) -> Void
         var onClick: (CLLocationCoordinate2D, Double, CGPoint) -> Void = { _, _, _ in }
+        var curvyRoads: CurvyRoadSet?
         var mapType: RideMapType?
         var styleKey: String?
         var fitKey: [UUID]?

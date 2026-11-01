@@ -11,6 +11,26 @@ struct ComparisonMap: View {
     let rides: [Ride]
     let routes: [UUID: [RoutePoint]]
     @Binding var mapType: RideMapType
+    /// The layer "Curvy roads" (B-183): the roads in the visible area, below the routes.
+    @Environment(CurvyRoadsStore.self) private var curvyStore
+    @AppStorage(SettingsKey.showsCurvyRoads) private var showsCurvyRoads = false
+    @State private var visibleRegion: MKCoordinateRegion?
+
+    private static let height: CGFloat = 340
+
+    private var curvyRoads: CurvyRoadSet? { curvyStore.set(enabled: showsCurvyRoads) }
+
+    /// The roads that touch the visible area, once it is small enough to show them.
+    private var visibleRoads: [(id: Int, road: CurvyRoad)] {
+        guard let roads = curvyRoads, let region = visibleRegion,
+              region.span.latitudeDelta * 111_320 / Self.height <= CurvyRoads.maximumMetresPerPoint else { return [] }
+        let halfLatitude = region.span.latitudeDelta / 2, halfLongitude = region.span.longitudeDelta / 2
+        return roads.roads.enumerated().compactMap { index, road in
+            road.intersects(minLatitude: region.center.latitude - halfLatitude, maxLatitude: region.center.latitude + halfLatitude,
+                            minLongitude: region.center.longitude - halfLongitude, maxLongitude: region.center.longitude + halfLongitude)
+                ? (index, road) : nil
+        }
+    }
 
     private func coordinates(_ ride: Ride) -> [CLLocationCoordinate2D] {
         (routes[ride.id] ?? []).map { CLLocationCoordinate2D(latitude: $0.latitude, longitude: $0.longitude) }
@@ -20,6 +40,11 @@ struct ComparisonMap: View {
 
     var body: some View {
         Map(initialPosition: .automatic, interactionModes: [.pan, .zoom]) {
+            ForEach(visibleRoads, id: \.id) { entry in
+                MapPolyline(coordinates: entry.road.coordinates2D)
+                    .stroke(Color.curvyRoad(veryCurvy: entry.road.isVeryCurvy),
+                            style: StrokeStyle(lineWidth: entry.road.isVeryCurvy ? 4 : 3, lineCap: .round, lineJoin: .round))
+            }
             ForEach(Array(rides.enumerated()), id: \.element.id) { index, ride in
                 let line = coordinates(ride)
                 if line.count > 1 {
@@ -46,14 +71,25 @@ struct ComparisonMap: View {
         }
         // Fit the map again when rides are added or removed.
         .id(rides.map(\.id))
+        .onMapCameraChange(frequency: .onEnd) { visibleRegion = $0.region }
         .mapStyle(mapType.style)
         .mapControls {
             MapZoomStepper()
             MapCompass()
             MapScaleView()
         }
-        .frame(height: 340)
+        .frame(height: Self.height)
         .clipShape(RoundedRectangle(cornerRadius: 14))
+        // This map shows Apple's maps only, so only the road data needs a credit.
+        .mapCredits(for: .standard, curvyRoads: curvyRoads != nil)
+        .overlay(alignment: .bottomLeading) {
+            if curvyRoads != nil {
+                CurvyRoadsLegend()
+                    .padding(.leading, 12)
+                    // Above Apple's map attribution, which must stay visible.
+                    .padding(.bottom, 40)
+            }
+        }
         .overlay(alignment: .topTrailing) {
             // Only Apple's maps until this map can show tiles (B-061c); an OpenStreetMap style shows the standard map.
             Picker("Map type", selection: $mapType) {

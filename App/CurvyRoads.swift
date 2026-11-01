@@ -31,6 +31,28 @@ final class CurvyRoadSet: @unchecked Sendable {
 }
 
 extension CurvyRoad {
+    var coordinates2D: [CLLocationCoordinate2D] {
+        (0..<pointCount).map { CLLocationCoordinate2D(latitude: Double(coordinates[2 * $0]), longitude: Double(coordinates[2 * $0 + 1])) }
+    }
+}
+
+extension MKMapView {
+    /// Names the curvy road under the mouse in the map's tooltip, if the layer is on and the map is zoomed in far
+    /// enough to show it; `point` is in the view's coordinates.
+    func updateCurvyRoadTooltip(at point: NSPoint, roads: CurvyRoadSet?) {
+        guard let roads else { toolTip = nil; return }
+        let here = convert(point, toCoordinateFrom: self)
+        let beside = convert(CGPoint(x: point.x + 20, y: point.y), toCoordinateFrom: self)
+        // Metres in 20 points of the screen.
+        let metres = CLLocation(latitude: here.latitude, longitude: here.longitude)
+            .distance(from: CLLocation(latitude: beside.latitude, longitude: beside.longitude))
+        guard metres / 20 <= CurvyRoads.maximumMetresPerPoint else { toolTip = nil; return }
+        // Within 10 points of the screen.
+        toolTip = roads.nearest(latitude: here.latitude, longitude: here.longitude, within: metres / 2)?.tooltip
+    }
+}
+
+extension CurvyRoad {
     /// "Nibelungenstraße (B 47) · Curvature 8879" for the tooltip.
     var tooltip: String {
         let title = name.isEmpty ? String(localized: "Unnamed road") : name
