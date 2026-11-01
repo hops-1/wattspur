@@ -74,5 +74,11 @@ Bosch-Exporte enthalten keine Bike-Kennung, neue Fahrten gehen deshalb an das **
 ### Kann ich meine Fahrten mit anderen Programmen lesen?
 Eine einzelne Fahrt: **Als GPX exportieren …** im Tour-Detail schreibt eine GPX-Datei mit Route, Höhe, Zeit, Leistung und Trittfrequenz, die komoot, Strava, Garmin und die meisten Kartenprogramme lesen. Alle Fahrten auf einmal: Ein Backup (siehe oben) enthält eine SQLite-Datenbank und die Originaldateien deiner Fahrten. Wie man sie liest, mit Beispielen in SQL und einem kleinen Python-Skript, steht auf der Seite [Data exchange](../../reference/data-exchange.md) (englisch). Die Datenbank ist Wattspurs interner Speicher und kann sich mit jeder Version ändern; ein festes Austauschformat für alle Fahrten ist geplant.
 
+### Warum ist die Kurvigkeit so hoch, oder fehlt?
+Jede Biegung zählt, auch das Abbiegen an Kreuzungen und ein Weg, der sich schlängelt; gewöhnliche Fahrten kommen deshalb auf 200 je Kilometer und mehr, und die Grenzen für „kurvig“ (190) und „sehr kurvig“ (270) sind darauf eingestellt. Fahrten unter 10 km zeigen keine Kurvigkeit, weil wenige Kreuzungen dort zu viel Gewicht haben. Siehe [Kurvigkeit](05-metrics.md#kurvigkeit).
+
+### Wie bekomme ich die kurvigen Straßen auf die Karte?
+Lade die KMZ-Datei „c_300“ deines Bundeslands von roadcurvature.com herunter und importiere sie mit **Ablage › Kurvige Straßen importieren …**, dann schalte unter **Karte anpassen** die **Ebenen** ein. Siehe [Kurvige Straßen](04-views.md#kurvige-straßen).
+
 ### Wie fange ich von vorn an?
 Mach vorher ein Backup, falls du deine Fahrten vielleicht zurückhaben willst (siehe oben). Wattspur beenden und den Ordner `~/Library/Containers/io.github.hops-1.wattspur` löschen. Beim nächsten Start ist Wattspur leer, und der Einrichtungsassistent erscheint wieder. Deine Dateien im Import-Ordner bleiben. Verschiebe sie aus **Importiert** zurück in den Import-Ordner, wenn du sie neu importieren willst.

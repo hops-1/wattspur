@@ -8,7 +8,7 @@ The window has three parts: the sidebar on the left, the ride list in the middle
 - **Your year** above the list shows the kilometres and rides of the current year with a small bar per month. Click it to open the year in review in [Highlights](#highlights). It follows the bike and source filter of the list.
 - Rides are grouped by month, newest first. Each row shows the route as a small line on the left (green dot = start, one line per part of a merged ride), plus the name, the date, the ride time, the distance and the average speed. ★ marks a ride that holds a record. A small **GPX** marks a ride from a GPX file, **+GPX** a Bosch ride with a GPX attached; a Bosch FIT alone has no symbol.
 - **Search** by name in the field above the list.
-- **Sort and filter** with the button next to the search field: sort by date, distance, ride time, ascent or average power; show this week, this month, this year, the last 30 or 365 days, or all rides. From two bikes on you can also show one bike, and once you have a GPX ride, one source: all sources, Bosch FIT (including attached GPX) or GPX.
+- **Sort and filter** with the button next to the search field: sort by date, distance, ride time, ascent, average power or curviness (rides under 10 km come last); show this week, this month, this year, the last 30 or 365 days, or all rides. From two bikes on you can also show one bike, and once you have a GPX ride, one source: all sources, Bosch FIT (including attached GPX) or GPX.
 - **Rename** a ride with a right-click › Rename….
 - **Show Similar Rides** (right-click) filters the list to the rides on the same route, see [Similar rides](#similar-rides).
 - **Export as GPX…** (right-click) saves the route of a ride, see [Ride detail](#ride-detail).
@@ -56,10 +56,12 @@ The comparison shows 2 to 4 rides side by side, next to the list. The rides sele
 - **New paths:** how much of the ride ran where you had never ridden before, for example “23 % · 4.5 km”. On the map these stretches are wider and orange. See [Metrics](05-metrics.md#map).
 - **Route:** a ride on a saved route names it under the title; a click lists the rides on it, see [Saved routes](#saved-routes).
 - **Back to Map**, **Back to Analysis** or **Back to Highlights** (⌘[) appears at the top when you opened the ride from there; from Highlights also above several selected rides, back to the same tab and year.
-- **Details** (click to fold): total time, paused time, descent, top speed, maximum power and cadence, work and the elevation range.
+- **Details** (click to fold): total time, paused time, descent, top speed, maximum power and cadence, work, the elevation range, **Curviness** (from 10 km), **Steepest climb** and **Steepest descent**.
 - **Charts** of elevation, speed, cadence and power, each with its maximum and average. The switch above them chooses what runs along the bottom: **Distance** or **Time** (ride time since the start, as h:mm). Wattspur remembers the choice. Pauses stay empty on the time axis.
   - **Charts and map linked:** hover a chart and a line with the value at that spot appears in all four charts, and a dot on the map shows where it is. Hover the route on the map and the lines follow. A click holds the spot (pin next to the value); another click or Esc lets go. The PDF does not show it.
+  - **Grade:** the elevation chart also shows the grade at the spot, such as “9.2 km · 168 m · ↗ 4 %”. It is taken over 100 m around the spot (at the start and the end of the ride over what is there), so the jitter of single GPS points does not make it jump. A ride without elevation shows none. VoiceOver reads it too.
   - **Joins:** in a merged ride, a fine line in each chart and a short black tick across the route on the map show where two parts meet (also in the PDF). If the parts do not meet, both ends get a tick; on the time axis a pause is framed by two lines.
+- **Curves on the map:** the button at the top left of the map colours the route by curve: tight curves red, gentle ones amber, straight stretches grey, with a legend. Wattspur remembers the choice; the PDF does not show it. See [Curviness](05-metrics.md#curviness).
 - **Records:** if the ride holds a record, a line above the key figures names it with the next best value, and the key figure gets a ★ Record badge. **All Records** opens Highlights › Records. The badge stays only as long as the ride holds the record.
 - **Export PDF** at the top left (⇧⌘E) opens the ride as a PDF in Preview: map, key figures and details on the first page, the charts on the second. The arrow next to it offers **Save as PDF…**.
 - **Export as GPX…** next to it saves the route as a GPX file (GPX 1.1) for komoot, a navigation device or another app: position, elevation and time of every second, plus power and cadence in the extensions that Garmin and Strava use. A merged ride keeps one segment per part, so no straight line is drawn across the gap. The sample ride exports its moved route.
@@ -79,7 +81,7 @@ Choose **Highlights** in the sidebar (⌘4). Three tabs at the top; each has **E
   - **Riding days:** a calendar with one square per day, from Monday to Sunday; the darker, the more kilometres (under 10, 10–25, 25–50, 50 km and more). Point at a day to see its distance. Click it and **Rides** shows only that day's rides, with a chip “15 Oct ✕” above the list: one ride opens right away, several are selected. ✕ on the chip, or **Back to Highlights** (⌘[), shows all rides again. While the chip is there, the list's period, bike and source filters do not hide any of these rides; the search still works.
   - **Kilometres per month** as bars; the best month is darker.
   - **Records this year.**
-- **Records:** your best values across all rides: longest ride, longest ride time, most ascent, highest average speed, highest average power, longest streak of riding days, and top speed, highest power, highest cadence and best 1-minute power. Click a card to show the ride; a streak shows its rides with a chip like “3–9 Oct ✕”, as for a day in the calendar. “New” marks a record set by a ride imported in the last 7 days. See [Metrics](05-metrics.md#highlights).
+- **Records:** your best values across all rides: longest ride, longest ride time, most ascent, highest average speed, highest average power, longest streak of riding days, and top speed, highest power, highest cadence, best 1-minute power, steepest climb and steepest descent, and for rides of 10 km or more the curviest ride. Click a card to show the ride; a streak shows its rides with a chip like “3–9 Oct ✕”, as for a day in the calendar. “New” marks a record set by a ride imported in the last 7 days. See [Metrics](05-metrics.md#highlights).
 - **Goals:** kilometres, rides or ascent per week (Monday to Sunday), month or year. **Add Goal…** sets one; each period and metric has at most one goal. Each card shows how far you are, what is left and whether you are on track (at least as far as the time that has passed), and small bars for the last periods. ✎ changes or deletes a goal.
 - **New record after an import:** when an imported ride beats one of your records, a notice at the top of the window names it and the value it beat; **Show Ride** opens it. This works for every import, also from the watched folder. The import log notes it too.
 - Rides without power or ascent hold no record for them. The year shows “9 of 12 rides” under the ascent when not every ride has it; an ascent goal says so too.
@@ -114,6 +116,16 @@ The OpenStreetMap styles come from servers run by the OpenStreetMap community, f
 - They need the **internet**. Areas you have seen are kept for a while, so they also appear offline; Wattspur never downloads areas in advance. Without a connection an unseen area stays empty, and a PDF uses Apple's standard map instead.
 - Very close up, OpenTopoMap shows its closest level enlarged.
 - PDFs of a ride, a comparison and the map use the same style as the screen.
+
+## Curvy roads
+Wattspur can draw the curvy roads of roadcurvature.com on the maps. The data is free, but Wattspur loads nothing by itself: you download it once and import it.
+1. Open [roadcurvature.com](https://roadcurvature.com/) and download the KMZ file of your state, the one called **c_300** (for example `hessen.c_300.kmz`).
+2. Choose **File › Import Curvy Roads…** and pick the file. Large files take a moment. Motorways are left out.
+3. Open **Customize Map** (top right of a map) and switch on **Layers › Curvy roads**.
+
+The roads are drawn below your route, **orange** from a curvature of 300 and **red** from 1000, with a legend. They appear once the map shows about the size of a district, so the map is not covered with lines further out. The layer works on the map of a ride, the comparison and the map of all rides, and needs no internet; on the map of a ride and of all rides, pointing at a road shows its name and curvature. The credit “© OpenStreetMap contributors, roadcurvature.com” stays at the bottom right. The PDF does not show the layer.
+
+**Customize Map › Layers** lists the imported regions and removes them. The road data is not part of the library backup; import the files again on a new Mac.
 
 ## Trash
 Rides you delete stay in the trash for 30 days. **Restore** puts a ride back into the list. **Empty Trash…** deletes all rides in the trash for good, including their original files.
