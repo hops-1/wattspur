@@ -7,7 +7,9 @@ Every DMG handed out to testers corresponds to one entry below.
 
 ## [Unreleased]
 
-Planned as 1.8.1: grade at the pointer, a cargo bike, curvy roads, and the steepest climb and descent as records.
+## [1.8.1] – 2026-11-01
+
+Wattspur shows the grade in the elevation chart, rates how curvy your rides are, and can draw the curvy roads of a state on its maps.
 
 ### Added
 
