@@ -9,7 +9,7 @@ Wähle **Profil** unten in der Seitenleiste (⌘6).
 
 ## Bike anlegen und bearbeiten
 **Bike hinzufügen** (oder **Bearbeiten …** an einer Kachel) öffnet den Editor:
-- **Name, Farbe und Art:** Fahrrad, Mountainbike, Rennrad oder Gravelbike, dazu der Schalter **E-Bike**. Die Art bestimmt das Symbol, die Farbe färbt es überall, wo das Bike erscheint.
+- **Name, Farbe und Art:** Fahrrad, Mountainbike, Rennrad, Gravelbike oder Lastenrad, dazu der Schalter **E-Bike**. Die Art bestimmt das Symbol, die Farbe färbt es überall, wo das Bike erscheint.
 - **Foto:** nur hier und in der Kachel im Profil; sonst siehst du das farbige Symbol.
 - **Hersteller, Modell, Antrieb, Akku (Wh), Gewicht, Kaufdatum** und **Kilometer-Startwert** (der Kilometerstand vor deiner ersten Fahrt in Wattspur; er zählt nur in der Kachel). Das Gewicht ist zur Information und fließt in keine Rechnung ein.
 - **Bike archivieren:** Ein Bike, das du nicht mehr fährst, verschwindet aus dem Import-Menü, seine Fahrten bleiben aber zugeordnet, und es bleibt in den Filtern. Unter **Archivierte Bikes** am Ende des Profils steht es mit **Wiederherstellen**. Das letzte Bike lässt sich nicht archivieren, weil neue Fahrten ein Bike brauchen.

@@ -74,5 +74,11 @@ Bosch exports carry no bike identifier, so new rides go to the **active bike** (
 ### Can I read my rides with other programs?
 One ride: **Export as GPX…** in the ride detail writes a GPX file with route, altitude, time, power and cadence that komoot, Strava, Garmin and most map tools read. All rides at once: a backup (see above) contains a SQLite database and the original files of your rides. How to read them, with SQL examples and a small Python script, is on the page [Data exchange](../../reference/data-exchange.md). The database is Wattspur's internal storage and may change with any version; a fixed exchange format for all rides is planned.
 
+### Why is the curviness so high, or missing?
+Every bend counts, also the turns at junctions and a path that wobbles, so ordinary rides score 200 per kilometre and more; the limits for “curvy” (190) and “very curvy” (270) are set against that. Rides under 10 km show no curviness, because a few junctions weigh too much on them. See [Curviness](05-metrics.md#curviness).
+
+### How do I get the curvy roads on the map?
+Download the “c_300” KMZ file of your state from roadcurvature.com and import it with **File › Import Curvy Roads…**, then switch on **Layers** in **Customize Map**. See [Curvy roads](04-views.md#curvy-roads).
+
 ### How do I start from scratch?
 Make a backup first if you might want your rides back (see above). Quit Wattspur and delete the folder `~/Library/Containers/io.github.hops-1.wattspur`. At the next start Wattspur is empty and the setup assistant appears again. Your files in the import folder stay; move them from **Imported** back into the import folder if you want to import them again.
