@@ -1,0 +1,50 @@
+# Spike V-14: iCloud-Ordner und GPS-Aufnahme auf dem iPhone
+
+Stand: 2.11.2026 · Vorarbeit für iOS 0.2 (B-208 bis B-213, Requirements 10.21)
+
+## Frage
+1. Kann die iPhone-App den Ordner `Wattspur Import` in iCloud Drive **ohne iCloud-Berechtigung**
+   (kostenlose Apple-ID, „Personal Team“) wählen, sich merken, lesen und beschreiben?
+   Wie schnell sieht der Mac eine neue Datei?
+2. Nimmt `CLLocationUpdate.liveUpdates(.fitness)` mit `CLBackgroundActivitySession` bei gesperrtem
+   Bildschirm eine ganze Fahrt auf? Punktabstand, Genauigkeit, Lücken, Akku.
+3. Läuft beides mit dem Personal Team?
+
+## Wie geprüft wird
+Die App hat dafür im Tab *Mehr* einen Test-Bereich (fällt mit B-211 wieder weg):
+- **Ordner:** „Ordner wählen …“ (`fileImporter` mit `.folder`), Lesezeichen in `UserDefaults`;
+  „Testdatei schreiben“ legt `iPhone/Test/Write Test.txt` mit Uhrzeit an (über `NSFileCoordinator`),
+  „Testdatei lesen“ liest sie zurück, „Ordner auflisten“ zeigt den Inhalt und wie viele Dateien
+  noch nicht geladen sind (`.…icloud`). Der Mac-Import schaut nur direkt in den Ordner, Unterordner
+  wie `iPhone/` lässt er in Ruhe.
+- **GPS:** „GPS-Test starten“ zeichnet auf, schreibt jeden Punkt sofort in eine CSV und zeigt
+  Dauer, Punkte (davon im Hintergrund), Sekunden je Punkt, Ø Genauigkeit, Lücken über 10 s
+  (außer bei Stillstand), Strecke und Akku vorher/nachher. Danach „CSV im Ordner sichern“
+  (nach `iPhone/Test/`) und „Als GPX an den Mac geben“ (direkt in `Wattspur Import`, mit
+  `creator="Wattspur iOS"`: Der Mac importiert sie wie jede GPX).
+
+Ablauf auf dem iPhone:
+1. App wie in `docs/learning/30-ios-app.md` aufs iPhone bringen.
+2. *Mehr* → „Ordner wählen …“ → iCloud Drive → `Wattspur Import` → „Öffnen“.
+3. „Testdatei schreiben“, Uhrzeit merken, am Mac im Finder schauen, wann `iPhone/Test/Write Test.txt` erscheint.
+4. App ganz schließen (nach oben wischen), neu öffnen, „Testdatei lesen“: klappt es ohne neue Ordnerwahl?
+5. „GPS-Test starten“, Standort „Beim Verwenden der App erlauben“, Bildschirm sperren, ca. 30 Minuten fahren.
+6. „GPS-Test beenden“, Bildschirmfoto der Werte, „CSV im Ordner sichern“, „Als GPX an den Mac geben“.
+7. Am Mac: Erscheint die Fahrt in Wattspur?
+
+## Ergebnis
+*Folgt nach dem Test auf Nils' iPhone.*
+
+| Frage | Ergebnis |
+|---|---|
+| Ordner wählen ohne iCloud-Berechtigung | |
+| Nach Neustart ohne neue Wahl lesbar | |
+| Zeit bis die Testdatei am Mac erscheint | |
+| GPS bei gesperrtem Bildschirm | |
+| Sekunden je Punkt, Ø Genauigkeit | |
+| Lücken über 10 s | |
+| Akku für 30 Minuten | |
+| GPX vom iPhone am Mac importiert | |
+
+## Entscheidung
+*Mit Nils nach dem Test: Austausch über den iCloud-Ordner wie geplant oder ein anderer Weg.*

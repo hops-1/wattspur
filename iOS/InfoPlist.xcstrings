@@ -1,0 +1,16 @@
+{
+  "sourceLanguage": "en",
+  "strings": {
+    "NSLocationWhenInUseUsageDescription": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Wattspur zeichnet deine Fahrt per GPS auf, auch bei gesperrtem Bildschirm."
+          }
+        }
+      }
+    }
+  },
+  "version": "1.0"
+}
