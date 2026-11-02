@@ -1,6 +1,6 @@
 # Backlog – Wattspur
 
-Stand: 2.11.2026 (v0.22, Plan für 1.8.2; davor v0.21 vom 1.11.2026, 1.8.1 umgesetzt: Steigung, Lastenrad, Kurvigkeit und Ebene „Kurvige Straßen“; davor v0.20 vom 28.10.2026, Release 1.8.0 „Kartenstile“ vorbereitet; davor v0.19 vom 27.10.2026, Plan für 1.8 „Kartenstile“, der Bereich „Fahrten“ B-125 nach 1.9 verschoben; davor v0.18 vom 26.10.2026, Plan für 1.7 in zwei Releases 1.7.0 und 1.7.1; davor v0.17 vom 25.10.2026, Release 1.6.2 mit Update-Hinweis B-172; davor 1.6.1 mit Sicherheits-Fix, Architektur-Aufräumen B-162 bis B-169 und zwei Karten-Verbesserungen B-170, B-171; Plan für 1.7 bis 1.9) · Die IDs in Klammern verweisen auf `REQUIREMENTS.md`.
+Stand: 2.11.2026 (v0.23, Plan für die iOS-App 0.1 und 0.2; davor v0.22, Plan für 1.8.2; davor v0.21 vom 1.11.2026, 1.8.1 umgesetzt: Steigung, Lastenrad, Kurvigkeit und Ebene „Kurvige Straßen“; davor v0.20 vom 28.10.2026, Release 1.8.0 „Kartenstile“ vorbereitet; davor v0.19 vom 27.10.2026, Plan für 1.8 „Kartenstile“, der Bereich „Fahrten“ B-125 nach 1.9 verschoben; davor v0.18 vom 26.10.2026, Plan für 1.7 in zwei Releases 1.7.0 und 1.7.1; davor v0.17 vom 25.10.2026, Release 1.6.2 mit Update-Hinweis B-172; davor 1.6.1 mit Sicherheits-Fix, Architektur-Aufräumen B-162 bis B-169 und zwei Karten-Verbesserungen B-170, B-171; Plan für 1.7 bis 1.9) · Die IDs in Klammern verweisen auf `REQUIREMENTS.md`.
 Größe: **S** ≈ wenige Stunden, **M** ≈ 1–2 Tage, **L** ≈ mehrere Tage.
 Status: ☐ offen · ◐ in Arbeit · ☑ erledigt
 
@@ -30,6 +30,9 @@ Status: ☐ offen · ◐ in Arbeit · ☑ erledigt
 | **v1.9** | Bosch-Daten über die offizielle Data-Act-API (optional, eigenes Bosch-Konto): Bike, Akku und Wartung, Zusatzfelder je Fahrt und Import von Fahrten ohne Datei (Altbestand). **Motordaten je Fahrt gibt die API nicht her (Spezifikation 25.10.2026), Entscheidung Nils: Option B;** steht unter dem Vorbehalt des Spikes V-12 | Freunde mit Smart-System-Bike in der EU |
 | v1.10 | Ein Bereich „Fahrten“ mit Karte als Standard (B-125), Analyse nach Strecke (B-176); von 1.8 zurückgestellt am 27.10.2026 | Freunde |
 | v1.x | Analysen, Komfort, Karten | alle |
+| iOS 0.1 | iOS-App „Hello World“: eigenes Target neben der Mac-App, nutzt das Paket, zeigt die Beispielfahrt; läuft im Simulator und auf Nils’ iPhone (B-204 bis B-207) | mich |
+| iOS 0.2 | Fahrten vom Mac ansehen, GPS-Aufnahme mit Karte, Aufnahme als GPX an den Mac und zum Teilen; Austausch über den iCloud-Ordner „Wattspur Import“, ohne CloudKit (V-14, B-178, B-208 bis B-213) | mich |
+| iOS 0.3+ | Plan mit Nils nach 0.2 | – |
 
 **Definition of Done:** Kernlogik mit Unit-Tests (WattspurKit), CI grün (GitHub Actions; ohne verfügbare Runner der Check „local-ci“ aus `scripts/ci-local.sh`), Änderung als Branch mit Code-Review vor dem Merge nach `main`, Texte lokalisierbar (EN/DE), Grundniveau Barrierefreiheit (NFR-16), **Erklärung der Story** (was, warum, welche Swift-Konzepte) im PR bzw. in `docs/learning/`.
 
@@ -485,6 +488,62 @@ Drei kleine, voneinander unabhängige Wünsche, die zusammen in ein kleineres Up
 | B-201 | **Bike-Art „Lastenrad“:** `BikeKind.cargo` (Rohwert `"cargo"`, bestehende Daten bleiben gültig) mit eigenem Symbol im Strichstil der anderen (24×24, `BikeKindShape`): **Long John**, Kiste zwischen Lenker und kleinem Vorderrad. Name „Lastenrad“, Kurztext z. B. „Für Kinder, Einkäufe und Gepäck“. **Nur Name und Symbol, keine Auswirkung auf Berechnungen** (Entscheidung von Nils). Übersetzung im String Catalog; prüfen, dass Bike-Editor (`ProfileView`) und Menüs (`BikeMenus`) die neue Art über `CaseIterable` automatisch zeigen. Symbol in Chip, Menüs und Profil hell/dunkel prüfen **Umgesetzt (31.10.2026, für 1.8.1):** `BikeKind.cargo`, Name „Lastenrad“, Kurztext „Für Kinder, Einkäufe und Gepäck“, Long-John-Symbol in `BikeKindShape` (Strichstil, Kiste zwischen Fahrer und kleinem Vorderrad), String Catalog ergänzt; Bike-Editor (`BikeEditorView` über `BikeKind.allCases`), Chips und Menüs (`BikeMenus` nutzen `BikeChip`) zeigen die Art ohne weitere Änderung; Test für den Rohwert `"cargo"`. in der App am 1.11.2026 von Hand geprüft, ohne Auffälligkeiten | S | ☑ |
 | B-202 | **Stärkste Steigung und stärkstes Gefälle als Rekorde** (Wunsch von Nils 1.11.2026): in Highlights › Rekorde zwei neue Rekorde, in den Details der Fahrt zwei Werte mit „Rekord“-Marke. Gerechnet über dasselbe 100-m-Fenster wie B-200 (`RideTrack.steepestGrades`, alle 10 m, nur Stellen mit ganzem Fenster in der Fahrt), gespeichert an der Fahrt (`steepestClimb`, `steepestDescent`) zusammen mit der Kurvigkeit in `TrackFigures` (`trackFiguresVersion`), ältere Fahrten werden im Hintergrund nachgerechnet. **Umgesetzt (1.11.2026, 1.8.1).** Grenze: Bei GPX-Dateien ohne Barometer rauscht die Höhe, dort kann ein Ausreißer einen unechten Rekord setzen (Idee: Höhe vorher glätten oder Mindeststrecke) | S–M | ☑ |
 
+## iOS 0.1 und 0.2 (Plan 2.11.2026)
+
+Wunsch von Nils am 2.11.2026: eine iOS-App in kleinen Schritten. 0.1 ist nur „läuft“, 0.2 bringt die ersten Funktionen, alles danach wird gemeinsam geplant. Die iOS-App hat **eigene Versionsnummern** (0.x), unabhängig von der Mac-App (1.x).
+
+**Entscheidungen (2.11.2026, REQUIREMENTS 10.21):**
+- **Austausch über den iCloud-Ordner, nicht über CloudKit** (Entscheidung Nils): Der Mac bleibt die Datenbank. Er legt einen Lese-Stand für das iPhone in den Ordner `Wattspur Import`, das iPhone legt seine Aufnahmen als GPX in denselben Ordner, den der Mac schon überwacht (IMP-05, GPX-Import seit 1.6). Kein Zwei-Wege-Sync: Auf dem iPhone wird nichts bearbeitet. Echter Sync bleibt B-072 und braucht den bezahlten Developer-Account.
+- **Ohne bezahlten Developer-Account geplant:** Signieren mit kostenloser Apple-ID („Personal Team“), die App läuft im Simulator und auf Nils’ iPhone, muss dort alle 7 Tage neu aus Xcode installiert werden; kein TestFlight, kein CloudKit. Ob und wann der Account kommt, klärt eine eigene Recherche; ändert sich das, wird nur die Signierung angepasst.
+- **Eigenes Target im selben Repository:** `project.yml` bekommt ein iOS-Target „Wattspur“ mit Quellen in `iOS/`; es nutzt `WattspurCore` und `WattspurKit` (beide nennen iOS 26 schon), aber **keine Datei aus `App/`**. Was beide Apps brauchen, wandert ins Paket (B-185 ff.), nicht per Kopie.
+- **Einfache Karten zuerst:** Die iOS-App zeichnet Spuren mit SwiftUI-`Map` und `MapPolyline` (Apple-Karte, ohne Kartenstile). Die gemeinsame Kartenlogik (B-186) kommt erst, wenn iOS mehr als eine Linie braucht.
+- **Team-ID nicht im Repository:** `DEVELOPMENT_TEAM` steht in einer lokalen, ignorierten Datei `Config/Local.xcconfig` (mit `Config/Local.xcconfig.example` als Vorlage), damit das Repo öffentlich bleiben kann und die Mac-App weiter ad-hoc signiert wird.
+
+**Reihenfolge und PRs:** je Zeile ein PR direkt gegen `main`, der nächste erst nach dem Merge. Check wie bisher: `scripts/check-architecture.sh`, `swift test --no-parallel`, `scripts/ci-local.sh` (baut ab B-206 auch das iOS-Target für den Simulator). Kein iOS-Build in GitHub Actions, die macOS-Minuten reichen dafür nicht.
+
+| PR | Inhalt |
+|---|---|
+| 0 | Doku-Stand (dieser Plan, REQUIREMENTS 10.21) |
+| 1 | B-204 iOS-Target und B-205 Startbildschirm |
+| 2 | B-206 Checks für iOS, B-207 Anleitung „aufs iPhone“ → **iOS 0.1** (Tag `ios-0.1`) |
+| 3 | V-14 Spike iCloud-Ordner und GPS-Aufnahme auf dem iPhone |
+| – | **Entscheidung nach V-14:** Austausch wie geplant oder anders (z. B. Ordner in „Auf meinem iPhone“ und AirDrop) |
+| 4 | B-178 Austauschformat (Mac, Kit) und B-208 Stand fürs iPhone schreiben → kommt in eine Mac-Version |
+| 5 | B-209 Fahrten auf dem iPhone, B-210 Tour-Detail |
+| 6 | B-211 GPS-Aufnahme |
+| 7 | B-212 Aufnahme abgeben und teilen, B-213 Aufnahmen vom iPhone am Mac → **iOS 0.2** (Tag `ios-0.2`) |
+
+### iOS 0.1 – „Hello World“
+
+| # | Story | Größe | Status |
+|---|---|---|---|
+| B-204 | **iOS-Target anlegen:** in `project.yml` ein Target `Wattspur iOS` (Plattform iOS, ab iOS 26, iPhone; iPad später), Produktname „Wattspur“, Bundle-ID `io.github.hops-1.wattspur.ios`, Quellen in `iOS/`, Abhängigkeit `WattspurKit`, eigenes Schema; Icon aus `App/Wattspur.icon` mitbenutzen; Signierung automatisch mit dem Personal Team aus `Config/Local.xcconfig` (ignoriert, Vorlage im Repo); String Catalog mit EN/DE. Die Mac-App baut unverändert | S–M | ☐ |
+| B-205 | **Startbildschirm:** `TabView` mit einem Tab „Fahrten“; darin die anonymisierte Beispielfahrt (V-05, `SampleRide.fit` als Ressource auch im iOS-Target) über `WattspurCore` eingelesen: Datum, Strecke, Dauer, Höhenmeter. Beweist, dass FIT-Leser und Auswertung auf iOS laufen. Darunter Version und Commit wie im Mac-Fenster „Über“. Dunkelmodus und Dynamic Type prüfen | S | ☐ |
+| B-206 | **Checks für iOS:** `scripts/ci-local.sh` baut das iOS-Target für den Simulator (`xcodebuild -destination 'generic/platform=iOS Simulator'`, ohne Signierung); `scripts/check-architecture.sh` prüft, dass `iOS/` kein `AppKit` importiert und nichts aus `App/` nutzt. Einmalig die Kit-Tests im iOS-Simulator laufen lassen und Abweichungen notieren; `docs/ARCHITECTURE.md` um das iOS-Target ergänzen | S | ☐ |
+| B-207 | **Anleitung „Wattspur aufs iPhone“** in `docs/learning/`: Apple-ID in Xcode anmelden, Team in `Config/Local.xcconfig`, iPhone verbinden, Entwicklermodus einschalten, dem Entwickler in den Einstellungen vertrauen, Grenze von 7 Tagen und drei Apps. Erklärung der Story wie in der Definition of Done | S | ☐ |
+
+**Fertig, wenn** die App im Simulator und auf Nils’ iPhone startet und die Beispielfahrt zeigt, und die Mac-App weiter unverändert baut und läuft.
+
+### iOS 0.2 – Fahrten ansehen, aufnehmen, an den Mac geben
+
+Ablauf: Am Mac wie bisher importieren; der Mac schreibt nach jeder Änderung einen Lese-Stand in den iCloud-Ordner. Das iPhone zeigt diesen Stand und nimmt neue Fahrten per GPS auf; jede Aufnahme landet als GPX im selben Ordner, der Mac importiert sie wie jede andere GPX-Datei und schreibt den neuen Stand.
+
+| # | Story | Größe | Status |
+|---|---|---|---|
+| V-14 | **Spike iPhone:** (1) Ordner `Wattspur Import` in iCloud Drive per Ordnerauswahl (`fileImporter` mit `.folder`) wählen, Lesezeichen speichern, nach Neustart wieder öffnen, lesen und schreiben **ohne** iCloud-Berechtigung im Profil; noch nicht geladene Dateien herunterladen (`startDownloadingUbiquitousItem`, `NSFileCoordinator`); wie schnell sieht der Mac eine neue Datei? (2) GPS-Aufnahme mit `CLLocationUpdate.liveUpdates(.fitness)` und `CLBackgroundActivitySession` bei gesperrtem Bildschirm, 30 Minuten Fahrt: Punktabstand, Genauigkeit, Akku. (3) Läuft beides mit dem Personal Team? Ergebnis als `docs/SPIKE-IOS.md` | S | ☐ |
+| B-178 | (vorhanden, aus „Später“ vorgezogen) **Stabiles Austauschformat** als JSON mit `schemaVersion`; für das iPhone reicht zunächst der Teil Fahrten mit Kennzahlen, Bikes und Route je Fahrt (vereinfacht, z. B. ein Punkt je 20 m). Schreiben und Lesen im Kit, damit Mac und iPhone denselben Code nutzen; Tests für beide Richtungen | M | ☐ |
+| B-208 | **Mac: Stand fürs iPhone schreiben:** Einstellung „Fahrten für das iPhone bereitstellen“ (aus als Standard); dann schreibt der Mac nach Import, Löschen, Zusammenfügen und Bike-Wechsel (gebündelt, höchstens einmal je Minute) den Stand nach `Wattspur Import/iPhone/Stand.json` plus Routen; atomar schreiben (erst temporäre Datei, dann umbenennen), damit das iPhone nie einen halben Stand liest. Der Unterordner wird vom Import ignoriert | S–M | ☐ |
+| B-209 | **iPhone: Fahrten:** Beim ersten Start Ordner wählen (Erklärung mit Bild); Tab „Fahrten“ liest den Stand, zeigt die Liste nach Monaten (Datum, Strecke, Dauer, Höhenmeter, Bike-Symbol), Ziehen zum Aktualisieren, Hinweis „Stand vom Mac: heute 14:02“; ohne Ordner oder Stand ein leerer Zustand mit Anleitung. Der Stand wird lokal zwischengespeichert, damit die Liste auch offline erscheint. Nur Lesen | M | ☐ |
+| B-210 | **iPhone: Tour-Detail:** Kennzahlen als Raster, Karte mit der Spur (SwiftUI-`Map`, `MapPolyline`), Höhenprofil mit Swift Charts; die Werte kommen fertig vom Mac, das iPhone rechnet nichts nach. Diagramm-Karussell (TOUR-11) erst später | M | ☐ |
+| B-211 | **iPhone: GPS-Aufnahme:** Tab „Aufnehmen“ mit Start, Pause, Stopp; während der Fahrt Zeit, Strecke, Tempo, Höhe und die Spur auf der Karte; läuft im Hintergrund weiter (Hintergrundmodus „Standort“, Erlaubnis „Beim Verwenden“ mit Hinweis); Punkte mit schlechter Genauigkeit und Sprünge verwerfen, Stillstand als Pause; Punkte laufend in eine Datei schreiben, damit ein Absturz die Fahrt nicht verliert, beim nächsten Start „Aufnahme fortsetzen oder beenden?“. Rechnen (Strecke, Filter) im Kit mit Tests | L | ☐ |
+| B-212 | **iPhone: Aufnahme abgeben und teilen:** Nach Stopp Name und Bike wählen, GPX schreiben mit `GPXWriter` aus dem Kit (`creator="Wattspur iOS"`, Bike-Name als Erweiterung wie beim Export), Datei in `Wattspur Import` legen. Liste „Aufnahmen“ mit Stand „wartet auf den Mac“ bzw. „vom Mac übernommen“ (Datei liegt in `Importiert/` oder die Fahrt ist im Stand). Knopf „Teilen“ (`ShareLink`) für GPX an andere Apps; Aufnahme löschen | M | ☐ |
+| B-213 | **Mac: Aufnahmen vom iPhone:** GPX mit `creator="Wattspur iOS"` erkennen, Bike aus der Datei übernehmen statt nachzufragen (sonst wie bisher `GPXBikeSheet`), Quelle „iPhone“ im Tour-Detail; danach den Stand neu schreiben (B-208), damit die Fahrt auf dem iPhone erscheint | S | ☐ |
+
+**Fertig, wenn** Nils eine echte Fahrt mit dem iPhone aufnimmt, sie am Mac ohne Handgriff als Fahrt erscheint und kurz danach in der Fahrtenliste auf dem iPhone steht; dazu Tests im Kit für Austauschformat und Aufnahme-Filter.
+
+**Aufwand (Schätzung 2.11.2026):** iOS 0.1 etwa 1–2 Tage. iOS 0.2 etwa 8–12 Tage, davon die Aufnahme (B-211) der größte Teil; Risiken: Zugriff auf iCloud Drive ohne Berechtigung (V-14), Akku und Hintergrund bei langen Fahrten, 7-Tage-Grenze der kostenlosen Signierung.
+**Nicht in 0.2:** Bearbeiten auf dem iPhone, Import von FIT-Dateien auf dem iPhone (B-071), Auswertung und Highlights, iPad, Widgets, Bosch-Daten. Kandidaten für 0.3+.
+
 ## Vorbereitung iOS (Wunsch von Nils 29.10.2026)
 
 Umbauten in der Mac-App, die eine spätere iOS-App (B-070 ff.) einfacher machen, ohne schon ein iOS-Target anzulegen. Stand der Analyse: `WattspurCore` und `WattspurKit` sind frei von AppKit und nennen iOS 26 schon als Plattform; die Mac-Bindung steckt in der App (rund 11.000 Zeilen), vor allem in Karten und PDF-Export. **Version offen;** B-185 und B-189 passen als Aufräumen in eine Mac-Version, B-186 ist ein eigener Umbau ohne gleichzeitige neue Kartenfunktionen.
@@ -503,14 +562,14 @@ Umbauten in der Mac-App, die eine spätere iOS-App (B-070 ff.) einfacher machen,
 |---|---|---|---|
 | B-070 | iOS-Target: Tab-Navigation, gleiche Views mit angepasstem Layout | L | ☐ |
 | B-071 | Import auf iOS: Teilen-Menü aus der Flow-App bzw. „Öffnen mit“ | M | ☐ |
-| B-072 | Sync Mac ↔ iOS über iCloud/CloudKit (Entscheidung offen) | L | ☐ |
+| B-072 | Sync Mac ↔ iOS über CloudKit; für iOS 0.2 stattdessen Austausch über den iCloud-Ordner (Entscheidung Nils 2.11.2026, siehe „iOS 0.1 und 0.2“), CloudKit erst mit bezahltem Developer-Account | L | ☐ |
 | B-073 | Mehrere Fahrer: Verwaltung, Zuordnung beim Import, Filter (PROF-02) | M | ☐ |
 | B-110 | → B-137 (v1.5): Karte aller Fahrten nach Bike filtern; nach Fahrer erst mit B-073, sobald es mehrere gibt; aus v1.4 verschoben (22.10.2026), weil es nur einen Fahrer und ein Bike gibt (AGG-05, setzt B-073/B-074 voraus) | S | → |
 | B-074 | Mehrere Bikes: Verwaltung, manuelle Zuordnung der Fahrten, Filter (PROF-03; Seriennummer taugt nicht, siehe SPIKE-FIT-PARSER.md) → v1.5 (Datenmodell B-074, dazu B-133 bis B-138) | M | → |
 | B-075 | Apple Health anbinden (PROF-04); Apple-Watch-Puls siehe P-27 | L | ☐ |
 | B-076 | Weitere Importer: Strava, generische FIT (PROF-04) | L | ☐ |
 | B-077 | Export als CSV bzw. Originaldatei (IMP-08); mit B-178 zusammen zu denken | S | ☐ |
-| B-178 | **Stabiles Austauschformat** (Wunsch von Nils 26.10.2026, separater Request): vollständiger Export der Mediathek als JSON (versioniert mit `schemaVersion`, feste Feldnamen, SI-Einheiten, ISO-8601-Daten; Fahrten mit Kennzahlen, Bikes, Rider, Ziele, gespeicherte Strecken; Zeitreihe und Route je Fahrt optional oder als Dateien daneben) und die Fahrtenliste mit Kennzahlen als CSV; dokumentiert in `docs/reference/data-exchange.md` (B-177). Das Backup bleibt ein Sicherungsformat ohne Stabilitätsversprechen. Ein Import aus dem Format ist ein späterer, eigener Schritt. **Version offen** | M | ☐ |
+| B-178 | **→ iOS 0.2 vorgezogen (2.11.2026).** **Stabiles Austauschformat** (Wunsch von Nils 26.10.2026, separater Request): vollständiger Export der Mediathek als JSON (versioniert mit `schemaVersion`, feste Feldnamen, SI-Einheiten, ISO-8601-Daten; Fahrten mit Kennzahlen, Bikes, Rider, Ziele, gespeicherte Strecken; Zeitreihe und Route je Fahrt optional oder als Dateien daneben) und die Fahrtenliste mit Kennzahlen als CSV; dokumentiert in `docs/reference/data-exchange.md` (B-177). Das Backup bleibt ein Sicherungsformat ohne Stabilitätsversprechen. Ein Import aus dem Format ist ein späterer, eigener Schritt. **Version offen** | M | ☐ |
 | B-078 | Kachel-Cache (MAP-03). Die Karte aller Routen (AGG-05) ist jetzt B-104 ff. | M | ☐ |
 | B-079 | ~~Gleiche Strecke wiedererkennen (TREND-04)~~ → v1.7 (B-116 ff.), Streudiagramme (TREND-05), Notizen und Tags (TOUR-10) | L | ☐ |
 | B-086 | Mehrere lokale Profile mit Profilwechsel (ACC-02, zusammen mit B-073) | M | ☐ |

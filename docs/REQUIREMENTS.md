@@ -379,7 +379,7 @@ Auf iOS als Tab-Leiste mit Navigation-Stack.
 |---|---|---|
 | 1 | Kalorienberechnung | Umschaltbar: Standard aus der Arbeit, optional mit Fahrerprofil (v1.x) |
 | 2 | Mehrere Bikes/Fahrer | v1.0 nur ein Fahrer; im Datenmodell von Anfang an vorgesehen |
-| 3 | Sync Mac ↔ iOS | Später entscheiden; Modell bleibt CloudKit-fähig |
+| 3 | Sync Mac ↔ iOS | Später entscheiden; Modell bleibt CloudKit-fähig. **Für iOS 0.2 entschieden (2.11.2026): Austausch über den iCloud-Ordner, siehe 10.21** |
 | 4 | OSM-Kartenstile | Standard, CyclOSM, OpenTopoMap, nach dem Review auf v1.x verschoben |
 | 5 | Altbestand von 128 Fahrten | Recherche erledigt; inoffizielle API im zweiten Review gestrichen. Einzelexport, optional DSGVO-Auskunft |
 | 6 | Weitere Datenquellen | v1.0 nur Bosch-Exporte; später Apple Health, Strava, generische FIT |
@@ -639,3 +639,13 @@ Entschieden mit Nils am 27.10.2026. Grundlage: [RECHERCHE-KARTEN.md](RECHERCHE-K
 | Bildchen | gezeichnet (ein festes Motiv je Stil in dessen Farben), nicht aus echten Kartenausschnitten | – |
 | PDF | Bei einem OSM-Stil zeigt das PDF denselben Stil; ohne Kacheln (offline) fällt es auf Apple Standard zurück | IDEA-20, CMP-07 |
 | Vergleichskarte | wird ein `MKMapView` wie Tour-Detail und Karte aller Fahrten, weil SwiftUI-`Map` keine Kachel-Overlays kann | CMP-08 |
+
+### 10.21 iOS-App 0.1 und 0.2 (2.11.2026)
+| Thema | Entscheidung | Auswirkung |
+|---|---|---|
+| Versionen | eigene Nummern für iOS (0.1 „Hello World“, 0.2 erste Funktionen), weitere Versionen gemeinsam planen | BACKLOG „iOS 0.1 und 0.2“ |
+| Austausch Mac ↔ iPhone | über den iCloud-Ordner `Wattspur Import`: der Mac schreibt einen Lese-Stand (B-178, B-208), das iPhone legt Aufnahmen als GPX ab; kein CloudKit, kein Bearbeiten auf dem iPhone | B-072 bleibt offen, IMP-05 |
+| Developer-Account | nicht vorausgesetzt; kostenlose Apple-ID, Team-ID nur lokal | NFR-18 |
+| Projekt | iOS-Target im selben Repository und `project.yml`, nutzt nur das Paket, nichts aus `App/` | Kap. 7, B-185 ff. |
+| Karte auf iOS | SwiftUI-`Map` mit `MapPolyline`, ohne Kartenstile, bis B-186 | – |
+| GPS-Aufnahme | Core Location mit Hintergrundmodus, Erlaubnis „Beim Verwenden“, laufend zwischengespeichert; Ergebnis ist eine GPX-Datei | – |
