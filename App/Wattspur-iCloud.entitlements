@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<!-- The same as Wattspur.entitlements, plus iCloud for sync (B-072, B-215). Only with the developer
+	     account: Config/Local.xcconfig sets WATTSPUR_MAC_ENTITLEMENTS to this file (docs/RELEASE.md). -->
+	<key>com.apple.security.app-sandbox</key>
+	<true/>
+	<!-- Import via drag & drop / open panel and the watched folder (NFR-05) -->
+	<key>com.apple.security.files.user-selected.read-write</key>
+	<true/>
+	<key>com.apple.security.files.bookmarks.app-scope</key>
+	<true/>
+	<!-- Map tiles (MapKit), and CloudKit -->
+	<key>com.apple.security.network.client</key>
+	<true/>
+	<!-- The private database of the user's own iCloud account (LibrarySync.containerIdentifier) -->
+	<key>com.apple.developer.icloud-container-identifiers</key>
+	<array>
+		<string>iCloud.io.github.hops-1.wattspur</string>
+	</array>
+	<key>com.apple.developer.icloud-services</key>
+	<array>
+		<string>CloudKit</string>
+	</array>
+	<!-- Silent pushes tell the app that the other device changed something. Xcode sets
+	     "production" when it exports with Developer ID. -->
+	<key>com.apple.developer.aps-environment</key>
+	<string>development</string>
+</dict>
+</plist>

@@ -39,7 +39,7 @@ cd Packages/WattspurKit && swift test
 DMG für Tester (ad-hoc signiert, Anleitung zum ersten Öffnen liegt bei):
 
 ```bash
-scripts/build-dmg.sh       # → dist/Wattspur-<Version>-<Build>.dmg
+scripts/build-dmg.sh       # → dist/Wattspur-<Version>-<Build>.dmg (ad hoc oder Developer ID, siehe docs/RELEASE.md)
 ```
 
 Lokale CI: dieselben Schritte wie der Workflow plus Release-Build, das Ergebnis erscheint als Check „local-ci“ im Pull Request. Der Commit muss gepusht sein.
