@@ -1,0 +1,28 @@
+WATTSPUR – READ ME FIRST
+========================
+
+1. Drag Wattspur onto the Applications folder.
+2. Open Wattspur from the Applications folder.
+   macOS asks once whether you want to open an app downloaded from the internet. Click “Open”.
+
+Wattspur is signed by the developer and notarized by Apple.
+
+Requires macOS 26 or later. Your rides stay on your Mac. If you turn on
+Settings › iCloud › Sync with iCloud, they are also kept in your own iCloud account
+and nowhere else.
+User guide: https://github.com/hops-1/wattspur/tree/main/docs/user-guide
+
+
+WATTSPUR – ZUERST LESEN
+=======================
+
+1. Wattspur auf den Ordner „Programme“ ziehen.
+2. Wattspur aus dem Ordner „Programme“ öffnen.
+   macOS fragt einmal, ob du eine aus dem Internet geladene App öffnen willst. Auf „Öffnen“ klicken.
+
+Wattspur ist vom Entwickler signiert und von Apple notarisiert.
+
+Benötigt macOS 26 oder neuer. Deine Fahrten bleiben auf deinem Mac. Wenn du
+Einstellungen › iCloud › Mit iCloud synchronisieren einschaltest, liegen sie zusätzlich
+in deinem eigenen iCloud-Konto und sonst nirgends.
+Handbuch: https://github.com/hops-1/wattspur/tree/main/docs/user-guide

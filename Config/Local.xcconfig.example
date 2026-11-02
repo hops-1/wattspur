@@ -3,3 +3,13 @@
 // Settings → Apple Accounts, or in Keychain Access in the certificate "Apple Development: …" (OU).
 // See docs/learning for the guide "Wattspur aufs iPhone".
 DEVELOPMENT_TEAM = ABCDE12345
+
+// Mac app with the paid developer account (B-215, docs/RELEASE.md). Without these lines the Mac app
+// stays ad hoc signed, without iCloud, and scripts/build-dmg.sh builds the DMG as before.
+// WATTSPUR_MAC_SIGN_STYLE = Automatic
+// WATTSPUR_MAC_SIGN_IDENTITY = Apple Development
+// WATTSPUR_MAC_ENTITLEMENTS = App/Wattspur-iCloud.entitlements
+// scripts/build-dmg.sh: sign with Developer ID and notarize. The password for notarytool is not here
+// but in the keychain, saved once under this name with "xcrun notarytool store-credentials".
+// WATTSPUR_MAC_DISTRIBUTION = developer-id
+// WATTSPUR_NOTARY_PROFILE = wattspur-notary

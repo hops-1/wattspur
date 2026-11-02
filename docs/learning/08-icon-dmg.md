@@ -26,3 +26,12 @@ Story: B-046 (NFR-09, NFR-18)
 1. `scripts/build-dmg.sh` ausführen und `dist/Wattspur-…dmg` öffnen.
 2. Das Icon in Xcode öffnen: `App/Wattspur.icon` mit Icon Composer, dort Dunkel und Getönt ansehen.
 3. Vorschau ohne Xcode: `ictool App/Wattspur.icon --export-image --output-file icon.png --platform macOS --rendition Dark --width 512 --height 512 --scale 1` (ictool liegt in `Icon Composer.app/Contents/Executables`).
+
+## Nachtrag: Developer ID und Notarisierung (B-215, ab 1.8.3)
+Mit dem bezahlten Developer-Account kann dasselbe Skript die App mit **Developer ID** signieren und von Apple **notarisieren** lassen. Gesteuert wird das in der ignorierten `Config/Local.xcconfig`; ohne die Zeilen bleibt alles ad hoc wie oben.
+- **`Config/Mac.xcconfig`** setzt Signatur und Entitlements der Mac-App, ad hoc als Standard; `Local.xcconfig` kann `WATTSPUR_MAC_SIGN_IDENTITY` und `WATTSPUR_MAC_ENTITLEMENTS` überschreiben. So bleiben Team-ID und Zertifikat aus dem Repository.
+- **Export statt Kopie aus dem Archiv:** `xcodebuild -exportArchive` mit `method = developer-id` signiert neu und bettet das Profil ein, das iCloud braucht.
+- **Notarisierung:** `notarytool submit --wait` schickt eine ZIP der App bzw. das DMG an Apple. Apple prüft auf Schadsoftware und Signaturfehler, das dauert ein paar Minuten. `stapler staple` heftet den Nachweis an die Datei, damit Gatekeeper ihn auch ohne Netz findet.
+- **Das Passwort steht im Schlüsselbund** (`notarytool store-credentials`), die Konfiguration nennt nur den Namen des Eintrags.
+
+Die Schritte stehen in `docs/RELEASE.md`. `scripts/build-dmg.sh --check` sagt, was noch fehlt.

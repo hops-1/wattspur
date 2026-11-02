@@ -47,11 +47,14 @@ STEP="Generate Xcode project"
 echo "== $STEP"
 xcodegen generate
 
+# Always ad hoc, like GitHub: a Config/Local.xcconfig with the developer account (B-215) would need
+# provisioning profiles, and the check is about the code, not about the signature.
 for CONFIG in Debug Release; do
     STEP="$CONFIG build"
     echo "== $STEP"
     xcodebuild -project Wattspur.xcodeproj -scheme Wattspur -configuration "$CONFIG" \
-        -destination 'platform=macOS' -derivedDataPath .build/xcode build -quiet
+        -destination 'platform=macOS' -derivedDataPath .build/xcode build -quiet \
+        CODE_SIGN_STYLE=Manual CODE_SIGN_IDENTITY=- CODE_SIGN_ENTITLEMENTS=App/Wattspur.entitlements
 done
 
 STEP="iOS build"

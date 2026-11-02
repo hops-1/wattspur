@@ -30,6 +30,9 @@ targets:
         buildPhase: resources
     dependencies:
       - package: WattspurKit
+    configFiles:
+      Debug: Config/Mac.xcconfig
+      Release: Config/Mac.xcconfig
     settings:
       base:
         PRODUCT_BUNDLE_IDENTIFIER: io.github.hops-1.wattspur
@@ -39,10 +42,8 @@ targets:
         ASSETCATALOG_COMPILER_APPICON_NAME: Wattspur
         INFOPLIST_KEY_LSApplicationCategoryType: public.app-category.healthcare-fitness
         INFOPLIST_KEY_NSHumanReadableCopyright: "© 2026 Nils Wiese"
-        CODE_SIGN_ENTITLEMENTS: App/Wattspur.entitlements
-        # Ad-hoc signing until a developer account exists (NFR-18)
-        CODE_SIGN_IDENTITY: "-"
-        CODE_SIGN_STYLE: Manual
+        # Signing and entitlements: Config/Mac.xcconfig, ad hoc unless the ignored Config/Local.xcconfig
+        # switches to the developer account (NFR-18, B-215, docs/RELEASE.md).
         ENABLE_HARDENED_RUNTIME: YES
         LOCALIZATION_PREFERS_STRING_CATALOGS: YES
         SWIFT_EMIT_LOC_STRINGS: YES
