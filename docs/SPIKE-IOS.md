@@ -44,7 +44,7 @@ Test auf Nils' iPhone am 2.11.2026 (App mit kostenloser Apple-ID signiert). Ordn
 | Sekunden je Punkt, Ø Genauigkeit | |
 | Lücken über 10 s | |
 | Akku für 30 Minuten | |
-| GPX vom iPhone am Mac importiert | |
+| GPX vom iPhone am Mac importiert | ⏳ Kurztest (38 s, 25 Punkte): GPX liegt auf dem iPhone in `Wattspur Import`, in *Dateien* mit „Warten“, also noch nicht zu iCloud hochgeladen (vermutlich Mobilfunk ohne Erlaubnis für iCloud Drive). Folgerung für B-212: Upload-Stand der Aufnahme anzeigen (`ubiquitousItemIsUploaded`), „wartet auf iCloud“ vor „wartet auf den Mac“ |
 
 ## Entscheidung
 *Mit Nils nach dem Test: Austausch über den iCloud-Ordner wie geplant oder ein anderer Weg.*
