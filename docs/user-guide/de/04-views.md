@@ -20,6 +20,9 @@ Das Fenster hat drei Teile: links die Seitenleiste, in der Mitte die Fahrtenlist
 
 ## Ähnliche Fahrten
 Pendelstrecke oder Lieblingsrunde: Wattspur findet die Fahrten, die denselben Weg genommen haben.
+
+![Ähnliche Fahrten: Chip über der Liste und Verlauf rechts](../images/de/similar.png)
+
 - **Einstieg:** Rechtsklick auf eine Fahrt › **Ähnliche Fahrten zeigen** oder der Knopf **Ähnliche Fahrten** im Tour-Detail. Das geht nur bei Fahrten mit Route; die Beispielfahrt, Fahrten im Papierkorb und die Teile einer zusammengefügten Fahrt zählen nicht.
 - **Die Liste** zeigt dann nur noch die Fahrten auf dieser Strecke, in jeder Zeile steht, wie ähnlich sie ist („97 %“). Die Fahrt, nach der du gefragt hast, steht oben und trägt ein Zielsymbol (Bezugsfahrt). ⇄ kennzeichnet eine Fahrt in Gegenrichtung.
 - **Der Chip** über der Liste nennt die Bezugsfahrt und die Zahl der Treffer („12 von 15“, wenn der Bike-, Quellen- oder Zeitraumfilter oder die Suche welche ausblenden). Darin:
@@ -33,12 +36,17 @@ Pendelstrecke oder Lieblingsrunde: Wattspur findet die Fahrten, die denselben We
 
 ## Gespeicherte Strecken
 Eine Strecke, die du immer wieder fährst, etwa der Weg zur Arbeit, kannst du unter einem Namen speichern. Dann ist sie einen Klick entfernt, und neue Fahrten auf ihr gehören von selbst dazu.
+
+![Hinweis „Wohl dieselbe Strecke“ über der Liste](../images/de/suggestion.png)
+
 - **Vorschlag:** Haben mindestens drei Fahrten dieselbe Strecke in derselben Richtung genommen und gehören noch zu keiner gespeicherten Strecke, steht über der Liste ein Hinweis: „Wohl dieselbe Strecke: 12 Fahrten“ mit dem Namen einer davon. **Als Strecke speichern …** öffnet das Fenster, **Nicht jetzt** blendet den Hinweis für diese Fahrten aus (er kommt erst für neue Fahrten wieder). Der Hinweis erscheint in der normalen Liste, ohne Suche und ohne „Ähnlich wie“. Wattspur speichert nie von allein eine Strecke.
 - **Strecke speichern** fragt nach dem Namen (zunächst der Name der Fahrt), der Ähnlichkeit und ob Fahrten in Gegenrichtung dazugehören, und zählt live mit, wie viele Fahrten auf der Strecke liegen. Du kannst auch am Chip speichern: **⋯ › Als Strecke speichern …**, solange „Ähnlich wie“ an ist.
 - **Benutzen:** Das Filter-Menü neben dem Suchfeld listet die **Gespeicherten Strecken** nach Namen. Eine Strecke ist ein Filter der Liste wie „Ähnlich wie“, mit demselben Chip („Strecke: Pendeln (12)“) und rechts dem Verlauf ihrer Fahrten. Der Regler und **Beide Richtungen** ändern die Strecke selbst und bleiben erhalten; **Ähnlichste** oder **Neueste** ist nur eine Ansicht.
 - **Menü ⋯ am Chip:** **Strecke umbenennen …**, **Strecke auflösen** (die Fahrten bleiben, ⌘Z holt die Strecke zurück) und die Liste der gespeicherten Strecken.
 - **Welche Fahrten dazugehören**, wird aus der Ähnlichkeit zur Strecke berechnet und nie je Fahrt gespeichert. Eine neue Fahrt auf der Strecke gehört von selbst dazu; nach einem Import sagt ein Hinweis es dir („Eine neue Fahrt liegt auf deiner Strecke „Pendeln““, mit **Strecke zeigen**). Löschst du die Fahrt, aus der eine Strecke entstanden ist, bleibt die Strecke.
 - **Im Tour-Detail** nennt die Zeile „Strecke: …“ unter dem Titel die Strecke der Fahrt; ein Klick listet ihre Fahrten. Der Knopf **Ähnliche Fahrten (12)** zeigt, wie viele andere Fahrten bei deiner Standard-Ähnlichkeit auf der Strecke dieser Fahrt liegen.
+
+![Gespeicherte Strecke „Pendeln“ mit Chip und Verlauf](../images/de/route.png)
 
 ## Fahrten vergleichen
 Der Vergleich zeigt 2 bis 4 Fahrten nebeneinander, rechts neben der Liste. Die in der Liste markierten Fahrten **sind** der Vergleich: Mit ⌘-Klick kommt eine weitere hinzu, ✕ über einer Spalte nimmt sie heraus, ↗ zeigt nur diese Fahrt. **Fertig** (Esc) führt zurück zur Auswahl.

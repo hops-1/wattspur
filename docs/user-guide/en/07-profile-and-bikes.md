@@ -2,6 +2,8 @@
 
 Wattspur keeps one **profile** with your body data and as many **bikes** as you have. Every ride belongs to one bike, so you can look at each bike on its own. Everything stays on your Mac.
 
+![Profile with two bikes](../images/en/profile.png)
+
 ## The profile
 Choose **Profile** at the bottom of the sidebar (⌘6).
 - **You:** name, photo (optional), and body data: weight, height, year of birth and sex. All of it is optional and stays on your Mac. It is stored for a calorie estimate “with profile” that comes in a later version; for now it changes no number. Numbers that cannot be right (a weight of 7 kg) are not saved.

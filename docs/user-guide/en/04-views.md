@@ -20,6 +20,9 @@ The window has three parts: the sidebar on the left, the ride list in the middle
 
 ## Similar rides
 A commute or a favourite loop: Wattspur finds the rides that took the same way.
+
+![Similar rides: chip above the list and history on the right](../images/en/similar.png)
+
 - **Start:** right-click a ride › **Show Similar Rides**, or the **Similar Rides** button in the ride detail. This works for rides with a route; the sample ride, rides in the trash and the parts of a merged ride do not count.
 - **The list** then shows only the rides on this route, and every row says how similar it is (“97 %”). The ride you asked about stands on top with a target symbol (the reference ride). ⇄ marks a ride in the opposite direction.
 - **The chip** above the list names the reference ride and the number of rides (“12 of 15” when the bike, source or period filter or the search hide some). In it:
@@ -33,12 +36,17 @@ A commute or a favourite loop: Wattspur finds the rides that took the same way.
 
 ## Saved routes
 A route you ride again and again, for example the way to work, can be saved under a name. Then it is one click away, and new rides on it join without you doing anything.
+
+![The note "Probably the same route" above the list](../images/en/suggestion.png)
+
 - **Suggestion:** when at least three rides took the same route in the same direction and belong to no saved route yet, a hint appears above the list: “Probably the same route: 12 rides” with the name of one of them. **Save as Route…** opens the dialog, **Not Now** hides the hint for these rides (it comes back only for new ones). The hint shows in the plain list, without a search and without “Similar to”. Wattspur never saves a route by itself.
 - **Save Route** asks for the name (the name of the ride as a start), the similarity and whether rides in the other direction belong to it, and counts live how many rides are on the route. You can also save from the chip: **⋯ › Save as Route…** while “Similar to” is on.
 - **Use it:** the filter menu next to the search field lists the **Saved Routes** by name. A route is a filter of the list like “Similar to”, with the same chip (“Route: Commute (12)”) and the history of its rides on the right. The slider and **Both directions** change the route itself and are kept; **Most similar** or **Newest** is only a view.
 - **Chip menu ⋯:** **Rename Route…**, **Dissolve Route** (the rides stay, ⌘Z brings the route back) and the list of saved routes.
 - **Which rides belong to it** is calculated from the similarity to the route, never stored per ride. A new ride on the route joins by itself; after an import a note says so (“A new ride is on your route “Commute””, with **Show Route**). If you delete the ride a route was made from, the route stays.
 - **In the ride detail** the line “Route: …” under the title names the route of the ride; a click lists its rides. The **Similar Rides (12)** button shows how many other rides are on the route of this ride at your default similarity.
+
+![Saved route "Commute" with chip and history](../images/en/route.png)
 
 ## Comparing rides
 The comparison shows 2 to 4 rides side by side, next to the list. The rides selected in the list **are** the comparison: ⌘-click another ride to add it, ✕ above a column removes it, and ↗ shows only that ride. **Done** (Esc) returns to the selection.

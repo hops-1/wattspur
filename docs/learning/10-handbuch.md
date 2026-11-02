@@ -27,6 +27,12 @@ Story: B-080 (DOC-01, DOC-02, DOC-03, DOC-05, NFR-12)
   - MapKit zeichnet nur in sichtbaren Fenstern. Deshalb startet das Skript die App mit `open -a`, und sie holt sich im Demo-Modus selbst nach vorn.
   - Weil die App dabei den Fokus bekommt, solange niemand tippen.
 
+## Neu aufgenommen am 2.11.2026 (B-179)
+- Alle Bilder stammen aus der laufenden Demo-App (hell, DE und EN), 1600 px breit; neu sind `similar` (Chip und Verlauf der ähnlichen Fahrten), `route` (gespeicherte Strecke), `suggestion` (Hinweis „Wohl dieselbe Strecke“) und `profile` (Bikes).
+- Neue Debug-Startargumente: `-WattspurDemoSize 1280x860` (Fenstergröße, ohne Bedienungshilfen-Rechte nicht von außen setzbar), `-WattspurDemoVariety YES` (die Kopien der Beispielfahrt unterscheiden sich in Zeit und Leistung, damit der Verlauf einen Trend zeigt), `-WattspurDemoSimilar YES` und `-WattspurDemoRoute "Name"` (öffnen den Filter bzw. speichern und zeigen die Strecke). Beispiel: `-WattspurDemoRides 8 -WattspurDemoVariety YES -WattspurDemoSimilar YES`.
+- Die Einstellungen öffnen auf dem zuletzt gewählten Reiter: `-com_apple_SwiftUI_Settings_selectedTabIndex 0` wählt „Allgemein“. Mit `-similarRoutesThreshold 0.9` zeigt der Regler den Standard statt des eigenen Werts.
+- Beim Aufnehmen schreibt die Debug-App Fensterrahmen in die echten Einstellungen der App-Kennung; das ist harmlos, ändert aber die Fenstergröße der installierten App.
+
 ## Screenshots neu machen
 ```bash
 xcodegen generate && xcodebuild -scheme Wattspur -configuration Debug -derivedDataPath .build/xcode build

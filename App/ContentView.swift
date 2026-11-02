@@ -297,6 +297,15 @@ struct ContentView: View {
         guard DemoMode.isOn else { return }
         if let id = DemoMode.rideID { selectedRideIDs = [id] }
         NSApplication.shared.activate()
+        if let size = DemoMode.size {
+            // The window comes up with its stored frame; set ours a moment later.
+            Task {
+                try? await Task.sleep(for: .seconds(1))
+                let windows = NSApplication.shared.windows.filter(\.isVisible)
+                windows.max(by: { $0.frame.width < $1.frame.width })?
+                    .setFrame(NSRect(x: 150, y: 150, width: size.width, height: size.height), display: true)
+            }
+        }
         switch DemoMode.section {
         case "analysis"?: section = .analysis
         case "highlights"?: section = .highlights
@@ -310,6 +319,20 @@ struct ContentView: View {
         case "settings"?: openSettings()
         case let id?: openWindow(id: id)
         case nil: break
+        }
+        guard DemoMode.similar || DemoMode.routeName != nil else { return }
+        Task {
+            // The routes are compared by their overview route, which the import prepares in the background.
+            await sharedLibrary.prepareOverviewRoutes()
+            let rides = (try? sharedLibrary.context.fetch(FetchDescriptor<Ride>())) ?? []
+            guard let ride = rides.first(where: { $0.name == "Demo 1" }) else { return }
+            section = .rides
+            selectedRideIDs = []
+            if let name = DemoMode.routeName, let group = sharedLibrary.addRouteGroup(from: ride, name: name) {
+                showRoute(group)
+            } else {
+                similarFilter = SimilarRidesFilter(referenceID: ride.id, threshold: RouteSimilarity.clampedThreshold(similarThreshold))
+            }
         }
     }
     #endif
