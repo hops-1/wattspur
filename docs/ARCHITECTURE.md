@@ -5,9 +5,10 @@ Stand: 1.8.1. Kurz gefasst, wo was liegt und welche Regeln gelten. Die Gründe s
 ## Überblick
 
 ```
-App (SwiftUI)            Views, PDF, Karten, Ordner-Wächter, Einstellungen
-  │
-  ▼
+App (SwiftUI, macOS)     Views, PDF, Karten, Ordner-Wächter, Einstellungen
+  │        iOS (SwiftUI, iPhone)   Übersicht mit Kacheln (iOS 0.x)
+  │          │
+  ▼          ▼
 WattspurKit (Store)      SwiftData-Modelle, RideLibrary und ihre Dienste, Ordner-Import
   │   re-exportiert
   ▼
@@ -23,9 +24,10 @@ Pfeile zeigen die erlaubte Richtung der Abhängigkeit; zurück darf es nie gehen
 3. **Die Brücke vom Modell zu den Werttypen steht an einem Ort:** `Store/RideBridges.swift` (und `Bike+Statistics.swift`). Neue Umrechnungen von `Ride` in einen reinen Typ kommen dorthin, nicht in einen Core-Ordner.
 4. **Views schreiben nur über `RideLibrary`.** `@Query` zum Lesen ist erlaubt, `modelContext.insert/delete/save` in einer View nicht. Ziele, Bikes, Papierkorb, Zusammenführen: immer eine Methode der Bibliothek.
 5. **Eine Bibliothek für die ganze App.** `WattspurApp` erzeugt sie und gibt sie in die Environment (`@Environment(RideLibrary.self)`). Das Rückgängig-Machen gehört zum Fenster: `library.using(undoManager)`.
-6. **Einstellungsschlüssel stehen in `App/AppSettings.swift` (`SettingsKey`).** Die Werte nie ändern; eine neue Einstellung bekommt eine neue Zeile.
-7. **Das Kit enthält keine Texte für die Oberfläche** (`String(localized:)` nur in der App).
-8. **Abgeleitete Werte einer Fahrt werden gespeichert und tragen eine Version** (beste Minute, Übersichtsroute, Kurvigkeit und stärkste Steigung). Ändert sich die Rechnung, wird die Version erhöht (`TrackFigures.version`), und `LibraryMaintenance` rechnet ältere Fahrten im Hintergrund nach. Eine neue Spalte kommt in `docs/reference/data-exchange.md`, sonst schlägt der Test fehl.
+6. **Die iPhone-App (`iOS/`) nimmt nichts aus `App/` außer Ressourcen** (Beispielfahrt, Icon) und importiert kein `AppKit`. Was beide Apps brauchen, wandert ins Paket, nie per Kopie. `scripts/check-architecture.sh` prüft beides (die Quellen des Targets in `project.yml`).
+7. **Einstellungsschlüssel stehen in `App/AppSettings.swift` (`SettingsKey`).** Die Werte nie ändern; eine neue Einstellung bekommt eine neue Zeile.
+8. **Das Kit enthält keine Texte für die Oberfläche** (`String(localized:)` nur in der App).
+9. **Abgeleitete Werte einer Fahrt werden gespeichert und tragen eine Version** (beste Minute, Übersichtsroute, Kurvigkeit und stärkste Steigung). Ändert sich die Rechnung, wird die Version erhöht (`TrackFigures.version`), und `LibraryMaintenance` rechnet ältere Fahrten im Hintergrund nach. Eine neue Spalte kommt in `docs/reference/data-exchange.md`, sonst schlägt der Test fehl.
 
 ## WattspurCore
 
@@ -35,9 +37,9 @@ Pfeile zeigen die erlaubte Richtung der Abhängigkeit; zurück darf es nie gehen
 | `Import/` | `RideImporter` (Protokoll), FIT- und GPX-Importer, `ImportResult` |
 | `Ride/` | `ParsedRide`, Samples, Zusammenführen, Reihen für Diagramme, GPX-Schreiber, Kalorienmodell, Routen, Routenähnlichkeit (`RouteSimilarity`, `RouteSignature`, `RouteIndex`), gespeicherte Strecken (`RouteGrouping`: Mitgliedschaft und Vorschläge), beste Minute (`PeakPower`), Steigung an einer Stelle und stärkste Steigung und Gefälle (`RideTrack`) |
 | `Analysis/` | Summen und Trends, Rekorde, Vergleich, Karte (Filter, Dichte), neue Wege, Verlauf einer Strecke (`RouteHistory`), Kurvigkeit einer Fahrt (`CurvatureAnalyzer`, mit den Wörtern `Curviness`) und die zusammen gespeicherten Werte `TrackFigures` |
-| `Library/` | Reine Typen rund um die Bibliothek: Filter, Quellen, Bike-Statistik, Duplikat-Fakten, Tagesfilter aus den Highlights (`RideDayFilter`) |
+| `Library/` | Reine Typen rund um die Bibliothek: Filter, Quellen, Bike-Statistik, Duplikat-Fakten, Tagesfilter aus den Highlights (`RideDayFilter`), Summen für Woche und Monat der iPhone-Übersicht (`RidePeriodTotals`) |
 | `Map/` | Kachelserver (`TileSource`) und Kachel-Rechnung in Web Mercator (`TileMath`, `Tile`, `MercatorRect`); kurvige Straßen von roadcurvature.com: `CurvyRoad`, `CurvyRegion` (eigenes kompaktes Dateiformat), der KMZ/KML-Leser mit eigenem `ZipArchive` |
-| `Support/` | Diagnosebericht |
+| `Support/` | Diagnosebericht, Versionen (`AppVersion`), Version und Commit der laufenden App (`AppInfo`, für beide Apps) |
 
 ## WattspurKit (Store)
 
@@ -59,6 +61,14 @@ Pfeile zeigen die erlaubte Richtung der Abhängigkeit; zurück darf es nie gehen
 Views in `App/`; die großen Bereiche haben eigene Ordner (`Highlights/`, `Analysis/`, `Compare/`). `@Observable`-Hilfsobjekte (`FolderWatcher`, `ImportLog`, `NewPathsStore`, `RouteSimilarityStore` (Suche, gespeicherte Strecken, Vorschläge), `LibraryBackupCenter`, `MergeSuggestionCenter`, `BikeAssignmentNotice`) liegen in der Environment. `DemoMode` und `SampleRide` sind für Screenshots und die Beispielfahrt.
 
 Karten: Alle drei Karten (Tour-Detail, Karte aller Fahrten, Vergleich) sind `MKMapView` mit eigenen Overlays. `MapTiles.swift` bringt die OSM-Kacheln (`TileLoader` mit Cache und User-Agent, `CachingTileOverlay`, `MutedTileRenderer`, `MKMapView.show(_:)`), `MapBackdrop.swift` das Kartenbild der PDFs (Apples Schnappschuss oder zusammengesetzte Kacheln), `MapCustomizePopover.swift` und `MapStyleThumbnail.swift` das Fenster „Karte anpassen“. `CurvyRoads.swift` bringt die Ebene „Kurvige Straßen“: `CurvyRoadsStore` (in der Environment) hält die geladenen Regionen, ein `CurvyRoadsOverlay` mit eigenem Renderer zeichnet nur Straßen, die die Kachel schneiden, dazu Legende und der Abschnitt „Ebenen“ im Fenster „Karte anpassen“. Die Einfärbung der Route nach Kurven steckt in `RideMapView`.
+
+## iOS
+
+Target `Wattspur iOS` in `project.yml` (iPhone, ab iOS 26, Bundle-ID `io.github.hops-1.wattspur.ios`, eigene Versionsnummern 0.x, eigenes Schema), Quellen in `iOS/`, Texte in `iOS/Localizable.xcstrings`. Stand 0.1: ein `TabView` mit dem Tab *Übersicht*; die Beispielfahrt wird mit `FITRideImporter` direkt gelesen, ohne SwiftData-Bibliothek. Karten sind SwiftUI-`Map` mit `MapPolyline` (`RouteMap`), nicht die `MKMapView`-Karten der Mac-App.
+
+Signierung: `Config/iOS.xcconfig` (automatisch); das Team steht nur in der ignorierten `Config/Local.xcconfig` (Vorlage `Local.xcconfig.example`), Anleitung in der Lern-Notiz [30](learning/30-ios-app.md). Ohne die Datei baut das Projekt für den Simulator. Der Commit für die Versionszeile kommt wie am Mac über das Pre-Build-Script und `Config/Info.plist`.
+
+Gebaut wird das iOS-Target nur lokal: `scripts/ci-local.sh` baut es für `generic/platform=iOS Simulator` ohne Signierung. In GitHub Actions gibt es keinen iOS-Build (die macOS-Minuten reichen nicht); dort generiert `xcodegen` das Target nur mit.
 
 ## Tests
 

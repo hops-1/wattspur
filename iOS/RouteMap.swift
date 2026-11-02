@@ -3,7 +3,7 @@ import SwiftUI
 import WattspurCore
 
 /// The track of a ride on an Apple map. Without `interactive` it is a picture: no panning or
-/// zooming, and taps go through to the tile around it.
+/// zooming, and every tap goes to the tile around it.
 struct RouteMap: View {
     var route: [RoutePoint]
     var interactive = false
@@ -16,6 +16,14 @@ struct RouteMap: View {
         }
         .mapControlVisibility(interactive ? .automatic : .hidden)
         .allowsHitTesting(interactive)
+        // MapKit's "Legal" link still takes taps despite allowsHitTesting(false) and opens
+        // Safari; a clear layer on top catches them, so they reach the tile (the attribution
+        // stays visible, and the detail's map keeps the working link).
+        .overlay {
+            if !interactive {
+                Color.clear.contentShape(.rect)
+            }
+        }
         .accessibilityHidden(!interactive)
     }
 
