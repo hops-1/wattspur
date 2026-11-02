@@ -28,3 +28,6 @@ docs/reference/bosch-flow-screenshots/
 
 # DMG builds (scripts/build-dmg.sh)
 dist/
+
+# Personal signing team for the iPhone app (B-204); template: Config/Local.xcconfig.example
+Config/Local.xcconfig

@@ -1,0 +1,5 @@
+// Copy this file to Config/Local.xcconfig (it is ignored by git) and enter your team.
+// The Team ID of a free Apple ID ("Personal Team") is shown in Xcode under
+// Settings → Apple Accounts, or in Keychain Access in the certificate "Apple Development: …" (OU).
+// See docs/learning for the guide "Wattspur aufs iPhone".
+DEVELOPMENT_TEAM = ABCDE12345
