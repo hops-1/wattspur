@@ -186,8 +186,17 @@ public enum RouteSimilarity {
     /// Measured to points every `RouteSignature.spacing` metres, so up to 5 m stricter in places.
     public static let reach = 50.0
     /// Start and end of two rides have to lie this close for them to run the same (or the other)
-    /// way (decided with Nils 26.10.2026, Requirements 10.19).
+    /// way (decided with Nils 26.10.2026, Requirements 10.19) ...
     public static let endTolerance = 200.0
+    /// ... or this share of the length of the route, if that is more: a long ride may start a
+    /// few hundred metres off (another place to park, a recording started late; B-184).
+    public static let endToleranceShare = 0.02
+
+    /// The distance start and end may lie apart for a route of `length` metres:
+    /// `max(endTolerance, endToleranceShare × length)`, so 200 m up to 10 km.
+    public static func endTolerance(forLength length: Double) -> Double {
+        max(endTolerance, endToleranceShare * length)
+    }
     /// The default and the range of the threshold (ROUTE-02).
     public static let defaultThreshold = 0.90
     public static let thresholdRange = 0.80...0.99
@@ -265,7 +274,8 @@ public enum RouteSimilarity {
         let aStart = map.point(a.start), aEnd = map.point(a.end)
         let bStart = b.start, bEnd = b.end
         func distance(_ p: (x: Double, y: Double), _ q: (x: Double, y: Double)) -> Double { hypot(p.x - q.x, p.y - q.y) }
-        let tolerance = endTolerance
+        // The shorter route sets the length: a short ride is not the same way as a long one.
+        let tolerance = endTolerance(forLength: min(a.length, b.length))
         let same = distance(aStart, bStart) <= tolerance && distance(aEnd, bEnd) <= tolerance
         let reverse = distance(aStart, bEnd) <= tolerance && distance(aEnd, bStart) <= tolerance
         switch (same, reverse) {
