@@ -198,6 +198,16 @@
         }
       }
     },
+    "Delete %lld Rides" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%lld Fahrten löschen"
+          }
+        }
+      }
+    },
     "Delete Recording" : {
       "localizations" : {
         "de" : {
@@ -208,12 +218,42 @@
         }
       }
     },
+    "Delete all rides in the trash for good?" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Alle Fahrten im Papierkorb endgültig löschen?"
+          }
+        }
+      }
+    },
     "Delete this recording?" : {
       "localizations" : {
         "de" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "Diese Aufnahme löschen?"
+          }
+        }
+      }
+    },
+    "Deleted for good in %lld days" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Wird in %lld Tagen endgültig gelöscht"
+          }
+        }
+      }
+    },
+    "Deleted rides stay here for 30 days." : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Gelöschte Fahrten bleiben hier 30 Tage lang."
           }
         }
       }
@@ -288,6 +328,16 @@
         }
       }
     },
+    "Empty" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Leeren"
+          }
+        }
+      }
+    },
     "End Ride" : {
       "localizations" : {
         "de" : {
@@ -358,6 +408,16 @@
         }
       }
     },
+    "Library" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Mediathek"
+          }
+        }
+      }
+    },
     "Location access denied" : {
       "localizations" : {
         "de" : {
@@ -398,6 +458,36 @@
         }
       }
     },
+    "Move this ride to the trash?" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Diese Fahrt in den Papierkorb legen?"
+          }
+        }
+      }
+    },
+    "Move to Trash" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "In den Papierkorb"
+          }
+        }
+      }
+    },
+    "My eBike" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Mein eBike"
+          }
+        }
+      }
+    },
     "Name" : {
       "localizations" : {
         "de" : {
@@ -424,6 +514,16 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Keine Fahrten"
+          }
+        }
+      }
+    },
+    "No Rides Yet" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Noch keine Fahrten"
           }
         }
       }
@@ -548,12 +648,52 @@
         }
       }
     },
+    "Record a ride in the overview." : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Nimm in der Übersicht eine Fahrt auf."
+          }
+        }
+      }
+    },
+    "Record your first ride with “Start Ride”. It is saved on this iPhone." : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Nimm deine erste Fahrt mit „Fahrt starten“ auf. Sie wird auf diesem iPhone gespeichert."
+          }
+        }
+      }
+    },
+    "Record your first ride with “Start Ride”. Rides from your Mac appear here once it syncs with iCloud too." : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Nimm deine erste Fahrt mit „Fahrt starten“ auf. Fahrten von deinem Mac erscheinen hier, sobald er auch mit iCloud synchronisiert."
+          }
+        }
+      }
+    },
     "Recordings" : {
       "localizations" : {
         "de" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "Aufnahmen"
+          }
+        }
+      }
+    },
+    "Restore" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Wiederherstellen"
           }
         }
       }
@@ -768,6 +908,26 @@
         }
       }
     },
+    "The ride is saved on this iPhone and reaches your Mac over iCloud." : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Die Fahrt wird auf diesem iPhone gespeichert und kommt über iCloud auf deinen Mac."
+          }
+        }
+      }
+    },
+    "The ride is saved on this iPhone." : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Die Fahrt wird auf diesem iPhone gespeichert."
+          }
+        }
+      }
+    },
     "The sample ride could not be read." : {
       "extractionState" : "stale",
       "localizations" : {
@@ -815,6 +975,26 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Gesamtzeit"
+          }
+        }
+      }
+    },
+    "Trash" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Papierkorb"
+          }
+        }
+      }
+    },
+    "Trash Is Empty" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Papierkorb ist leer"
           }
         }
       }
@@ -901,6 +1081,36 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Arbeit"
+          }
+        }
+      }
+    },
+    "You can restore it in More › Trash for 30 days." : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Unter Mehr › Papierkorb kannst du sie 30 Tage lang wiederherstellen."
+          }
+        }
+      }
+    },
+    "Your rides are on this iPhone and in your own iCloud account, the same as on your Mac." : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Deine Fahrten liegen auf diesem iPhone und in deinem eigenen iCloud-Konto, genauso wie auf deinem Mac."
+          }
+        }
+      }
+    },
+    "Your rides are on this iPhone. Sync with the Mac comes with iCloud." : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Deine Fahrten liegen auf diesem iPhone. Der Abgleich mit dem Mac kommt mit iCloud."
           }
         }
       }

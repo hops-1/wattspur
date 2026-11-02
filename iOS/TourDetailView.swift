@@ -6,6 +6,8 @@ import WattspurCore
 /// the elevation profile. The values come finished from the Mac; the iPhone calculates nothing.
 struct TourDetailView: View {
     @Environment(PhoneLibrary.self) private var library
+    @Environment(\.dismiss) private var dismiss
+    @State private var confirmingDelete = false
     var ride: RideExchange.Ride
     /// For the sample ride, whose route is not in the folder.
     var route: RideExchange.Route?
@@ -42,6 +44,20 @@ struct TourDetailView: View {
         }
         .navigationTitle(ride.name)
         .navigationBarTitleDisplayMode(.inline)
+        .toolbar {
+            // Only rides of the iPhone's own store, not the sample ride or the Mac's state (B-217).
+            if library.usesDatabase, route == nil {
+                Button("Delete", systemImage: "trash") { confirmingDelete = true }
+            }
+        }
+        .confirmationDialog("Move this ride to the trash?", isPresented: $confirmingDelete, titleVisibility: .visible) {
+            Button("Move to Trash", role: .destructive) {
+                library.moveToTrash(ride)
+                dismiss()
+            }
+        } message: {
+            Text("You can restore it in More › Trash for 30 days.")
+        }
         .task(id: ride.routeFile) {
             if route == nil { loaded = await library.route(for: ride) }
         }

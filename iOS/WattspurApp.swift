@@ -1,4 +1,6 @@
+import SwiftData
 import SwiftUI
+import WattspurKit
 
 /// The iPhone app (iOS 0.x, B-204 ff.), design C: the overview with the totals and the last ride,
 /// the rides from the Mac, “More” with the folder shared with the Mac, and the GPS recording
@@ -17,7 +19,20 @@ struct WattspurApp: App {
     init() {
         let folder = ImportFolder()
         _folder = State(initialValue: folder)
-        _library = State(initialValue: PhoneLibrary(folder: folder))
+        // The iPhone's own store (B-216) only when the build asks for it (`WattspurDatabase` in the
+        // Info.plist, from Config/iOS.xcconfig or Local.xcconfig); else the folder of iOS 0.2.
+        let mode = PhoneDatabase.Mode(infoValue: Bundle.main.object(forInfoDictionaryKey: "WattspurDatabase") as? String)
+        var database: PhoneDatabase?
+        if let configuration = mode.configuration {
+            do {
+                let container = try ModelContainer(for: Schema(WattspurSchema.models), configurations: configuration)
+                database = PhoneDatabase(container: container, defaultBikeName: String(localized: "My eBike"))
+                database?.purgeTrash()
+            } catch {
+                fatalError("Could not open the Wattspur library: \(error)")
+            }
+        }
+        _library = State(initialValue: PhoneLibrary(folder: folder, database: database, mode: mode))
     }
 
     var body: some Scene {
@@ -62,8 +77,9 @@ struct WattspurApp: App {
                         let bikes = (library.state?.bikes ?? []).filter { !$0.isArchived }
                         let id = SaveRecordingSheet.defaultBike(among: bikes, last: recordings.lastBikeID,
                                                                 lastRide: library.state?.lastRide)
-                        try? recordings.save(recording, name: RecordingView.defaultName(for: recording.startDate),
-                                             bike: bikes.first { $0.id == id }, folder: folder)
+                        try? SaveRecordingSheet.store(recording, name: RecordingView.defaultName(for: recording.startDate),
+                                                      bike: bikes.first { $0.id == id }, library: library,
+                                                      recordings: recordings, folder: folder)
                     }
                     _ = recorder.stop()
                 }

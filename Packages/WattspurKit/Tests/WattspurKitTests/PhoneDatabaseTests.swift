@@ -1,0 +1,131 @@
+import Foundation
+import SwiftData
+import Testing
+@testable import WattspurKit
+@testable import WattspurCore
+
+/// The iPhone's own library (B-216, B-217): a recording becomes a ride, the views get it in the
+/// exchange format, and the trash works like on the Mac.
+@MainActor
+@Suite("iPhone database")
+struct PhoneDatabaseTests {
+    let container: ModelContainer
+    let database: PhoneDatabase
+
+    init() throws {
+        container = try ModelContainer(for: Schema(WattspurSchema.models),
+                                       configurations: ModelConfiguration(isStoredInMemoryOnly: true))
+        database = PhoneDatabase(container: container, defaultBikeName: "Mein eBike")
+    }
+
+    private func save(start: TimeInterval = 1_800_000_000, bikeID: UUID? = nil) -> UUID? {
+        var recording = RideRecording(startDate: Date(timeIntervalSince1970: start))
+        for second in 0...120 {
+            recording.add(RideRecording.Fix(date: Date(timeIntervalSince1970: start + Double(second)),
+                                            latitude: 49.8 + Double(second) * 6 / 111_195, longitude: 8.8,
+                                            altitude: 150, horizontalAccuracy: 5, speed: 6))
+        }
+        let gpx = GPXWriter.document(name: "Zur Arbeit", segments: recording.gpxSegments, description: nil,
+                                     creator: GPXWriter.iPhoneCreator, bikeID: bikeID)
+        if case .imported(let id) = database.saveRecording(gpx: gpx, fileName: "Zur Arbeit.gpx").outcome { return id }
+        return nil
+    }
+
+    @Test("The mode comes from the Info.plist; anything unknown keeps the folder of iOS 0.2")
+    func mode() {
+        #expect(PhoneDatabase.Mode(infoValue: nil) == .folder)
+        #expect(PhoneDatabase.Mode(infoValue: "") == .folder)
+        #expect(PhoneDatabase.Mode(infoValue: "$(WATTSPUR_IOS_DATABASE)") == .folder)
+        #expect(PhoneDatabase.Mode(infoValue: "local") == .local)
+        #expect(PhoneDatabase.Mode(infoValue: "iCloud") == .iCloud)
+        #expect(PhoneDatabase.Mode.folder.configuration == nil)
+        #expect(PhoneDatabase.Mode.local.configuration?.cloudKitContainerIdentifier == nil)
+        #expect(PhoneDatabase.Mode.iCloud.configuration?.cloudKitContainerIdentifier == LibrarySync.containerIdentifier)
+    }
+
+    @Test("A new database has the first bike, like the Mac")
+    func firstBike() throws {
+        let snapshot = try database.snapshot(generator: "Wattspur iOS")
+        #expect(snapshot.bikes.map(\.name) == ["Mein eBike"])
+        #expect(snapshot.rides.isEmpty)
+    }
+
+    @Test("A recording becomes a ride with its bike, calculated by the Kit")
+    func recordingBecomesRide() throws {
+        let cargo = database.library.makeBike(name: "Lastenrad", kind: .cargo)
+        let id = try #require(save(bikeID: cargo.id))
+        let snapshot = try database.snapshot(generator: "Wattspur iOS")
+        let ride = try #require(snapshot.rides.first)
+        #expect(ride.id == id)
+        #expect(ride.name == "Zur Arbeit")
+        #expect(ride.bikeID == cargo.id)
+        #expect(ride.source == "gpx")
+        #expect(abs(ride.distance - 720) < 20)
+        #expect(ride.routeFile == id.uuidString)
+        #expect(snapshot.lastRide?.id == id)
+    }
+
+    @Test("The route of a ride comes from the store")
+    func route() throws {
+        let id = try #require(save())
+        let route = try #require(database.route(forRideID: id))
+        #expect(route.rideID == id)
+        #expect(route.pointCount > 2)
+        #expect(database.route(forRideID: UUID()) == nil)
+    }
+
+    @Test("The same recording twice is a duplicate, like on the Mac")
+    func duplicate() throws {
+        _ = try #require(save())
+        let gpxAgain: ImportResult.Outcome? = {
+            var recording = RideRecording(startDate: Date(timeIntervalSince1970: 1_800_000_000))
+            for second in 0...120 {
+                recording.add(RideRecording.Fix(date: Date(timeIntervalSince1970: 1_800_000_000 + Double(second)),
+                                                latitude: 49.8 + Double(second) * 6 / 111_195, longitude: 8.8,
+                                                altitude: 150, horizontalAccuracy: 5, speed: 6))
+            }
+            let gpx = GPXWriter.document(name: "Zur Arbeit", segments: recording.gpxSegments, description: nil,
+                                         creator: GPXWriter.iPhoneCreator, bikeID: nil)
+            return database.saveRecording(gpx: gpx, fileName: "Zur Arbeit.gpx").outcome
+        }()
+        if case .imported = gpxAgain { Issue.record("imported twice") }
+        #expect(try database.snapshot(generator: "Wattspur iOS").rides.count == 1)
+    }
+
+    @Test("Trash, restore and delete for good (B-217)")
+    func trash() throws {
+        let id = try #require(save())
+        let trashedAt = Date(timeIntervalSince1970: 1_800_100_000)
+        database.moveToTrash(rideID: id, at: trashedAt)
+        #expect(try database.snapshot(generator: "").rides.isEmpty)
+        let trashed = try #require(database.trash().first)
+        #expect(trashed.id == id)
+        #expect(trashed.deletedAt == trashedAt)
+        #expect(trashed.daysLeft(now: trashedAt) == 30)
+        #expect(trashed.daysLeft(now: trashedAt.addingTimeInterval(60)) == 30)
+        #expect(trashed.daysLeft(now: trashedAt.addingTimeInterval(86_400)) == 29)
+        #expect(trashed.daysLeft(now: trashedAt.addingTimeInterval(40 * 86_400)) == 0)
+
+        database.restore(rideID: id)
+        #expect(database.trash().isEmpty)
+        #expect(try database.snapshot(generator: "").rides.map(\.id) == [id])
+
+        // Only from the trash.
+        database.deletePermanently(rideID: id)
+        #expect(database.library.ride(withID: id) != nil)
+        database.moveToTrash(rideID: id)
+        database.deletePermanently(rideID: id)
+        #expect(database.library.ride(withID: id) == nil)
+    }
+
+    @Test("After 30 days the trash empties itself")
+    func purge() throws {
+        let old = try #require(save(start: 1_800_000_000))
+        let recent = try #require(save(start: 1_800_500_000))
+        let now = Date(timeIntervalSince1970: 1_810_000_000)
+        database.moveToTrash(rideID: old, at: now.addingTimeInterval(-31 * 86_400))
+        database.moveToTrash(rideID: recent, at: now.addingTimeInterval(-2 * 86_400))
+        database.purgeTrash(now: now)
+        #expect(database.trash().map(\.id) == [recent])
+    }
+}

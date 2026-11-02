@@ -57,7 +57,9 @@ struct OverviewView: View {
                         .font(.footnote)
                         .foregroundStyle(.secondary)
                         .frame(maxWidth: .infinity, alignment: .leading)
-                    if library.status == .noFolder {
+                    if library.usesDatabase {
+                        FirstRidePrompt()
+                    } else if library.status == .noFolder {
                         ChooseFolderPrompt()
                     } else {
                         MacSettingPrompt()

@@ -25,8 +25,11 @@ struct RidesView: View {
 
     private func list(_ state: RideExchange.Library) -> some View {
         List {
-            Section {
-                StateLine()
+            // The line about the Mac's state; the iPhone's own store has none, unless something went wrong.
+            if !library.usesDatabase || library.problem != nil {
+                Section {
+                    StateLine()
+                }
             }
             ForEach(state.months()) { month in
                 Section(RideFormat.month(month.start)) {
@@ -36,6 +39,13 @@ struct RidesView: View {
                         } label: {
                             RideRow(ride: ride, bike: state.bike(withID: ride.bikeID))
                         }
+                        .swipeActions(edge: .trailing) {
+                            // Only the iPhone's own rides can be deleted; those from the Mac's state cannot (B-217).
+                            if library.usesDatabase {
+                                Button("Delete", systemImage: "trash", role: .destructive) { library.moveToTrash(ride) }
+                                    .tint(.red)
+                            }
+                        }
                     }
                 }
             }
@@ -43,8 +53,13 @@ struct RidesView: View {
         .refreshable { await library.refresh() }
         .overlay {
             if state.rides.isEmpty {
-                ContentUnavailableView("No Rides", systemImage: "bicycle",
-                                       description: Text("The Mac has no rides yet."))
+                if library.usesDatabase {
+                    ContentUnavailableView("No Rides", systemImage: "bicycle",
+                                           description: Text("Record a ride in the overview."))
+                } else {
+                    ContentUnavailableView("No Rides", systemImage: "bicycle",
+                                           description: Text("The Mac has no rides yet."))
+                }
             }
         }
     }
@@ -56,7 +71,7 @@ struct StateLine: View {
 
     var body: some View {
         VStack(alignment: .leading, spacing: 4) {
-            if let state = library.state {
+            if let state = library.state, !library.usesDatabase {
                 Label("State from the Mac: \(RideFormat.stateDate(state.generatedAt))", systemImage: "desktopcomputer")
                     .font(.footnote)
                     .foregroundStyle(.secondary)

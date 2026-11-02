@@ -36,6 +36,7 @@ Zu jeder Story steht hier kurz: **was** gebaut wurde, **warum** so und **welche 
 | [30](30-ios-app.md) | iOS-App 0.1: zweites Target, Übersicht mit Kacheln (Liquid Glass, `Map`), Checks für iOS, Anleitung „aufs iPhone“ mit kostenloser Apple-ID | B-204 bis B-207 |
 | [31](31-ios-0-2.md) | iOS-App 0.2: Austausch über den iCloud-Ordner, Stand vom Mac, Fahrtenliste und Höhenprofil, GPS-Aufnahme mit Absturzschutz, Bike in der GPX | V-14, B-178, B-208 bis B-214 |
 | [32](32-testflight.md) | TestFlight: App in App Store Connect, Archiv hochladen, Tester einladen, Datenschutzangaben „Keine Daten erhoben“ (vorbereitet) | B-219 |
+| [33](33-iphone-datenbank.md) | Eigene Datenbank auf dem iPhone hinter einem Schalter, Aufnahme wird Fahrt, Papierkorb (vorbereitet) | B-216, B-217 |
 
 **Begriffe, die oft vorkommen**
 - **Swift Package (`WattspurKit`)**: ein eigenständiges Code-Modul ohne Oberfläche. Es lässt sich mit `swift test` allein testen und später unverändert in der iOS-App nutzen.

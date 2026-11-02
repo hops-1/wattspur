@@ -34,9 +34,16 @@ struct SaveRecordingSheet: View {
                         }
                     }
                 } footer: {
-                    Text(folder.url == nil
-                         ? "No folder is chosen: the ride stays on the iPhone, in the Files app under “On My iPhone › Wattspur”."
-                         : "The ride goes as GPX into the folder “Wattspur Import”. The Mac imports it on the bike chosen here.")
+                    switch library.mode {
+                    case .iCloud:
+                        Text("The ride is saved on this iPhone and reaches your Mac over iCloud.")
+                    case .local:
+                        Text("The ride is saved on this iPhone.")
+                    case .folder:
+                        Text(folder.url == nil
+                             ? "No folder is chosen: the ride stays on the iPhone, in the Files app under “On My iPhone › Wattspur”."
+                             : "The ride goes as GPX into the folder “Wattspur Import”. The Mac imports it on the bike chosen here.")
+                    }
                 }
                 Section {
                     LabeledContent("Distance", value: RideFormat.distance(recording.distance))
@@ -85,12 +92,26 @@ struct SaveRecordingSheet: View {
         return bikes.first?.id
     }
 
+    /// Saves a finished recording: with the iPhone's own store it becomes a ride there (B-216), else it
+    /// goes as GPX into the folder for the Mac (B-212). The GPX is the same either way, with its bike.
+    static func store(_ recording: RideRecording, name: String, bike: RideExchange.Bike?,
+                      library: PhoneLibrary, recordings: PhoneRecordings, folder: ImportFolder) throws {
+        guard library.usesDatabase else {
+            try recordings.save(recording, name: name, bike: bike, folder: folder)
+            return
+        }
+        let note = bike.map { String(localized: "Bike: \($0.name)") }
+        let data = GPXWriter.document(name: name, segments: recording.gpxSegments, description: note,
+                                      creator: GPXWriter.iPhoneCreator, bikeID: bike?.id)
+        try library.saveRecording(gpx: data, fileName: GPXWriter.fileName(name))
+    }
+
     private func save() {
         let title = name.trimmingCharacters(in: .whitespaces)
         let bike = bikes.first { $0.id == bikeID }
         do {
-            try recordings.save(recording, name: title.isEmpty ? RecordingView.defaultName(for: recording.startDate) : title,
-                                bike: bike, folder: folder)
+            try Self.store(recording, name: title.isEmpty ? RecordingView.defaultName(for: recording.startDate) : title,
+                           bike: bike, library: library, recordings: recordings, folder: folder)
             recordings.lastBikeID = bike?.id
             _ = recorder.stop()
             dismiss()

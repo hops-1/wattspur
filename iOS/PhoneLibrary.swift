@@ -1,10 +1,13 @@
 import Foundation
 import Observation
 import WattspurCore
+import WattspurKit
 
-/// The rides from the Mac (B-209): reads the state the Mac writes into `Wattspur Import/iPhone`
-/// (B-208) and keeps a copy in the app, so the list also shows without a connection. The iPhone
-/// only reads; it never changes a ride.
+/// The rides the iPhone shows, from one of two places (`PhoneDatabase.Mode`):
+/// - **Folder** (iOS 0.2, B-209): the state the Mac writes into `Wattspur Import/iPhone` (B-208), with
+///   a copy in the app, so the list also shows without a connection. The iPhone only reads.
+/// - **Database** (B-216): the iPhone's own store. It gives the same `RideExchange` values, so the
+///   views stay the same; recordings become rides and rides can go to the trash (B-217).
 @MainActor @Observable
 final class PhoneLibrary {
     enum Status: Equatable {
@@ -24,17 +27,30 @@ final class PhoneLibrary {
     private var routes: [String: RideExchange.Route] = [:]
 
     private let folder: ImportFolder
+    /// The iPhone's own store; `nil` in folder mode.
+    let database: PhoneDatabase?
+    /// Where the rides come from, set at build time.
+    let mode: PhoneDatabase.Mode
+    /// The trash of the store (B-217), newest first; empty in folder mode.
+    private(set) var trash: [PhoneDatabase.TrashedRide] = []
     private let cacheFolder: URL
     private var cachedStateURL: URL { cacheFolder.appending(path: RideExchange.libraryFileName) }
     private var cachedRoutesFolder: URL { cacheFolder.appending(path: RideExchange.routesFolderName) }
 
-    init(folder: ImportFolder, cacheFolder: URL = .applicationSupportDirectory.appending(path: "Stand vom Mac")) {
+    init(folder: ImportFolder, database: PhoneDatabase? = nil, mode: PhoneDatabase.Mode = .folder,
+         cacheFolder: URL = .applicationSupportDirectory.appending(path: "Stand vom Mac")) {
         self.folder = folder
+        self.database = database
+        self.mode = database == nil ? .folder : mode
         self.cacheFolder = cacheFolder
-        if let data = try? Data(contentsOf: cachedStateURL) {
+        if database != nil {
+            reload()
+        } else if let data = try? Data(contentsOf: cachedStateURL) {
             state = try? RideExchange.library(from: data)
         }
     }
+
+    var usesDatabase: Bool { database != nil }
 
     var status: Status {
         if state != nil { return .loaded }
@@ -43,6 +59,10 @@ final class PhoneLibrary {
 
     /// Reads the state from the folder again (at launch, when the app comes back, on pull to refresh).
     func refresh() async {
+        if database != nil {
+            reload()
+            return
+        }
         guard folder.url != nil, !isLoading else { return }
         isLoading = true
         defer { isLoading = false }
@@ -70,10 +90,15 @@ final class PhoneLibrary {
         await refresh()
     }
 
-    /// The route of a ride: from this session, the copy, or the folder.
+    /// The route of a ride: from the store, or from this session, the copy, or the folder.
     func route(for ride: RideExchange.Ride) async -> RideExchange.Route? {
         guard let file = ride.routeFile else { return nil }
         if let route = routes[file] { return route }
+        if let database {
+            let route = database.route(forRideID: ride.id)
+            routes[file] = route
+            return route
+        }
         let cached = cachedRoutesFolder.appending(path: file)
         if let data = try? Data(contentsOf: cached), let route = try? RideExchange.route(from: data) {
             routes[file] = route
@@ -86,6 +111,49 @@ final class PhoneLibrary {
         try? FileManager.default.createDirectory(at: cachedRoutesFolder, withIntermediateDirectories: true)
         try? data.write(to: cached, options: .atomic)
         return route
+    }
+
+    // MARK: - Database (B-216, B-217)
+
+    /// Reads the rides and the trash from the store again, after every change.
+    private func reload() {
+        guard let database else { return }
+        do {
+            state = try database.snapshot(generator: "Wattspur iOS")
+            problem = nil
+        } catch {
+            problem = error.localizedDescription
+        }
+        trash = database.trash()
+    }
+
+    /// Makes a finished recording a ride (B-216): the GPX goes through the Kit's import, as on the Mac.
+    /// Returns the id of the new ride, or that of the ride it duplicates.
+    @discardableResult
+    func saveRecording(gpx: Data, fileName: String) throws -> UUID {
+        guard let database else { throw CocoaError(.featureUnsupported) }
+        defer { reload() }
+        switch database.saveRecording(gpx: gpx, fileName: fileName).outcome {
+        case .imported(let id), .attached(let id), .duplicate(let id), .fitForGPX(let id): return id
+        case .unsupported: throw CocoaError(.fileReadCorruptFile)
+        case .failed(let error): throw error
+        }
+    }
+
+    func moveToTrash(_ ride: RideExchange.Ride) {
+        database?.moveToTrash(rideID: ride.id)
+        reload()
+    }
+
+    func restore(_ ride: RideExchange.Ride) {
+        database?.restore(rideID: ride.id)
+        reload()
+    }
+
+    func deletePermanently(_ ride: RideExchange.Ride) {
+        database?.deletePermanently(rideID: ride.id)
+        routes[ride.id.uuidString] = nil
+        reload()
     }
 
     /// Stores the state and drops routes it no longer names.

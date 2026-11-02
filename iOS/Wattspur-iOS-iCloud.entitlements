@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<!-- iCloud sync of the iPhone's own store (B-216). Only with the developer account and
+	     WATTSPUR_IOS_DATABASE = icloud in Config/Local.xcconfig (see Config/iOS.xcconfig). -->
+	<key>com.apple.developer.icloud-container-identifiers</key>
+	<array>
+		<string>iCloud.io.github.hops-1.wattspur</string>
+	</array>
+	<key>com.apple.developer.icloud-services</key>
+	<array>
+		<string>CloudKit</string>
+	</array>
+	<!-- Silent pushes when the Mac changed something; Xcode sets "production" for TestFlight. -->
+	<key>aps-environment</key>
+	<string>development</string>
+</dict>
+</plist>
