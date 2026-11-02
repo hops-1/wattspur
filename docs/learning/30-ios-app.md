@@ -55,13 +55,16 @@ Mit einer kostenlosen Apple-ID, ohne bezahlten Developer-Account. Einmal einrich
 - Xcode › Einstellungen › *Apple Accounts* › „+“ › Apple-ID, anmelden.
 - Danach steht dort ein Team „Dein Name (Personal Team)“.
 
-**2. Team-ID herausfinden.**
-- Xcode legt beim ersten Signieren ein Zertifikat „Apple Development: …“ an.
-- Die Team-ID ist das Feld `OU` des Zertifikats:
+**2. Zertifikat anlegen und Team-ID herausfinden.**
+- Die Team-ID steckt im Entwickler-Zertifikat. Das gibt es anfangs noch nicht, also zuerst anlegen, ohne etwas zu bauen:
+  - Xcode › Einstellungen › *Apple Accounts* › die Apple-ID wählen › *Manage Certificates…*
+  - Unten links „+“ › *Apple Development*, dann *Done*.
+  - Im Schlüsselbund liegt jetzt ein Zertifikat „Apple Development: …“.
+- Die Team-ID ist das Feld `OU` des Zertifikats, zehn Zeichen aus Großbuchstaben und Ziffern:
   ```bash
   security find-certificate -c "Apple Development" -p | openssl x509 -noout -subject
   ```
-- Gibt es noch kein Zertifikat, einmal in Xcode beim Target *Wattspur iOS* unter *Signing & Capabilities* das Personal Team wählen und bauen. Die Team-ID steht dann auch unter *Build Settings › Development Team*. `xcodegen generate` überschreibt diese Wahl wieder, deshalb gehört sie in die Datei aus Schritt 3.
+- Ein anderer Weg führt über das Projekt: In Xcode beim Target *Wattspur iOS* unter *Signing & Capabilities* das Personal Team wählen, dann steht die ID unter *Build Settings › Development Team*. `xcodegen generate` überschreibt diese Wahl aber wieder, deshalb gehört sie in die Datei aus Schritt 3.
 
 **3. Team eintragen.**
 ```bash
