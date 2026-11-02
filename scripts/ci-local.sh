@@ -6,7 +6,8 @@
 #
 #   scripts/ci-local.sh          # checks HEAD; it must be committed and pushed
 #
-# Same steps as GitHub, plus a Release build (the DMG is built in Release).
+# Same steps as GitHub, plus a Release build (the DMG is built in Release) and a build of the
+# iPhone app for the simulator, without signing (B-206; not on GitHub, the macOS minutes are short).
 set -euo pipefail
 cd "$(dirname "$0")/.."
 export DEVELOPER_DIR="${DEVELOPER_DIR:-/Applications/Xcode.app/Contents/Developer}"
@@ -53,5 +54,11 @@ for CONFIG in Debug Release; do
         -destination 'platform=macOS' -derivedDataPath .build/xcode build -quiet
 done
 
-status success "Kit tests, Debug and Release build ($TOOLCHAIN)"
+STEP="iOS build"
+echo "== $STEP"
+xcodebuild -project Wattspur.xcodeproj -scheme "Wattspur iOS" -configuration Debug \
+    -destination 'generic/platform=iOS Simulator' -derivedDataPath .build/xcode-ios \
+    CODE_SIGNING_ALLOWED=NO build -quiet
+
+status success "Kit tests, Debug and Release build, iOS build ($TOOLCHAIN)"
 echo "local-ci: passed for ${SHA:0:7}"
