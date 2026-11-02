@@ -6,7 +6,7 @@ Stand: 1.8.1. Kurz gefasst, wo was liegt und welche Regeln gelten. Die Gründe s
 
 ```
 App (SwiftUI, macOS)     Views, PDF, Karten, Ordner-Wächter, Einstellungen
-  │        iOS (SwiftUI, iPhone)   Übersicht mit Kacheln (iOS 0.x)
+  │        iOS (SwiftUI, iPhone)   Übersicht, Fahrten vom Mac (iOS 0.x)
   │          │
   ▼          ▼
 WattspurKit (Store)      SwiftData-Modelle, RideLibrary und ihre Dienste, Ordner-Import
@@ -64,7 +64,7 @@ Karten: Alle drei Karten (Tour-Detail, Karte aller Fahrten, Vergleich) sind `MKM
 
 ## iOS
 
-Target `Wattspur iOS` in `project.yml` (iPhone, ab iOS 26, Bundle-ID `io.github.hops-1.wattspur.ios`, eigene Versionsnummern 0.x, eigenes Schema), Quellen in `iOS/`, Texte in `iOS/Localizable.xcstrings`. Stand 0.1: ein `TabView` mit dem Tab *Übersicht*; die Beispielfahrt wird mit `FITRideImporter` direkt gelesen, ohne SwiftData-Bibliothek. Karten sind SwiftUI-`Map` mit `MapPolyline` (`RouteMap`), nicht die `MKMapView`-Karten der Mac-App.
+Target `Wattspur iOS` in `project.yml` (iPhone, ab iOS 26, Bundle-ID `io.github.hops-1.wattspur.ios`, eigene Versionsnummern 0.x, eigenes Schema), Quellen in `iOS/`, Texte in `iOS/Localizable.xcstrings`. Stand 0.2: `TabView` mit *Übersicht · Fahrten · Mehr*. Das iPhone hat keine SwiftData-Bibliothek: Es liest den Stand, den der Mac in den Import-Ordner schreibt (`RideExchange` im Kern, `PhoneStateWriter` im Kit, Format in [data-exchange](reference/data-exchange.md)), über `ImportFolder` (Lesezeichen auf den gewählten iCloud-Ordner, `NSFileCoordinator`) und `PhoneLibrary` (lokale Kopie für offline). Es rechnet nichts nach und ändert nichts. Ohne Stand zeigt die Übersicht die Beispielfahrt, mit `FITRideImporter` direkt gelesen. Karten sind SwiftUI-`Map` mit `MapPolyline` (`RouteMap`), nicht die `MKMapView`-Karten der Mac-App; das Höhenprofil ist Swift Charts.
 
 Signierung: `Config/iOS.xcconfig` (automatisch); das Team steht nur in der ignorierten `Config/Local.xcconfig` (Vorlage `Local.xcconfig.example`), Anleitung in der Lern-Notiz [30](learning/30-ios-app.md). Ohne die Datei baut das Projekt für den Simulator. Der Commit für die Versionszeile kommt wie am Mac über das Pre-Build-Script und `Config/Info.plist`.
 

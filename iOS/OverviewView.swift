@@ -1,45 +1,75 @@
 import SwiftUI
 import WattspurCore
 
-/// The tab "Overview" of design C (B-205): two tiles with this week's and this month's totals,
-/// the tile "Last Ride" with a small map, and the version at the bottom.
+/// The tab “Overview” of design C (B-214): the totals of this week and this month, the last ride
+/// with a small map, and a way to all rides. The figures come from the Mac; until there is a
+/// state, the sample ride shows what the tiles will look like.
 struct OverviewView: View {
-    @State private var ride = SampleRide.load()
+    @Environment(PhoneLibrary.self) private var library
+    /// Switches to the tab “Rides”.
+    var showAllRides: () -> Void
+    @State private var sample = SampleRide.load()
 
     var body: some View {
         ScrollView {
             VStack(spacing: 16) {
-                if let ride {
-                    // In 0.1 there is only the sample ride, which is old: the totals are counted
-                    // for its week and month, so the tiles show what they will look like.
-                    let totals = RidePeriodTotals(rides: [(start: ride.start, distance: ride.summary.distance)],
-                                                  now: ride.start)
-                    HStack(spacing: 16) {
-                        StatTile(title: "This Week", value: RideFormat.distance(totals.weekDistance),
-                                 systemImage: "calendar")
-                        StatTile(title: "This Month", value: totals.monthRides.formatted(),
-                                 unit: totals.monthRides == 1 ? "ride" : "rides", systemImage: "bicycle")
-                    }
+                if let state = library.state, let last = state.lastRide {
+                    tiles(totals: state.totals())
                     NavigationLink {
-                        RideDetailView(ride: ride)
+                        TourDetailView(ride: last)
                     } label: {
-                        LastRideTile(ride: ride)
+                        LastRideTile(ride: last)
+                    }
+                    .buttonStyle(.plain)
+                    Button(action: showAllRides) {
+                        HStack {
+                            Text("All Rides")
+                            Spacer()
+                            Text("\(state.rides.count)").foregroundStyle(.secondary)
+                            Image(systemName: "chevron.right").foregroundStyle(.tertiary)
+                        }
+                        .padding()
+                        .contentShape(.rect)
+                    }
+                    .buttonStyle(.plain)
+                    .glassEffect(.regular.interactive(), in: .rect(cornerRadius: 24))
+                    StateLine()
+                        .frame(maxWidth: .infinity, alignment: .leading)
+                } else if let sample {
+                    // The sample ride is old: the totals are counted for its week and month, so
+                    // the tiles show what they will look like.
+                    tiles(totals: RidePeriodTotals(rides: [(start: sample.ride.startDate, distance: sample.ride.distance)],
+                                                   now: sample.ride.startDate))
+                    NavigationLink {
+                        TourDetailView(ride: sample.ride, route: sample.route)
+                    } label: {
+                        LastRideTile(ride: sample.ride, route: sample.route)
                     }
                     .buttonStyle(.plain)
                     Text("Sample data: the tiles count the sample ride's week and month.")
                         .font(.footnote)
                         .foregroundStyle(.secondary)
                         .frame(maxWidth: .infinity, alignment: .leading)
-                } else {
-                    ContentUnavailableView("No Rides", systemImage: "bicycle",
-                                           description: Text("The sample ride could not be read."))
+                    if library.status == .noFolder {
+                        ChooseFolderPrompt()
+                    } else {
+                        MacSettingPrompt()
+                    }
                 }
-                VersionFooter()
-                    .padding(.top, 24)
             }
             .padding()
         }
+        .refreshable { await library.refresh() }
         .navigationTitle("Overview")
+    }
+
+    private func tiles(totals: RidePeriodTotals) -> some View {
+        HStack(spacing: 16) {
+            StatTile(title: "This Week", value: RideFormat.distance(totals.weekDistance),
+                     systemImage: "calendar")
+            StatTile(title: "This Month", value: totals.monthRides.formatted(),
+                     unit: totals.monthRides == 1 ? "ride" : "rides", systemImage: "bicycle")
+        }
     }
 }
 
@@ -72,22 +102,23 @@ struct StatTile: View {
     }
 }
 
-/// The tile "Last Ride": map, name, date and the three key figures. Opens the detail on a tap.
+/// The tile “Last Ride”: map, name, date and the three key figures. Opens the detail on a tap.
 struct LastRideTile: View {
-    var ride: RideItem
+    var ride: RideExchange.Ride
+    var route: RideExchange.Route?
 
     var body: some View {
         VStack(alignment: .leading, spacing: 12) {
             Text("Last Ride")
                 .font(.subheadline.weight(.semibold))
                 .foregroundStyle(.secondary)
-            RouteMap(route: ride.route)
+            RideMap(ride: ride, route: route)
                 .frame(height: 160)
                 .clipShape(.rect(cornerRadius: 16))
             HStack {
                 VStack(alignment: .leading, spacing: 2) {
                     Text(ride.name).font(.headline)
-                    Text(RideFormat.date(ride.start))
+                    Text(RideFormat.date(ride.startDate, timeZone: ride.timeZone))
                         .font(.subheadline)
                         .foregroundStyle(.secondary)
                 }
@@ -108,7 +139,7 @@ struct LastRideTile: View {
 
 /// Distance, riding time and climbing side by side; stacked when the text is very large.
 struct FigureRow: View {
-    var ride: RideItem
+    var ride: RideExchange.Ride
 
     var body: some View {
         ViewThatFits(in: .horizontal) {
@@ -118,9 +149,9 @@ struct FigureRow: View {
     }
 
     @ViewBuilder private var figures: some View {
-        Figure(title: "Distance", value: RideFormat.distance(ride.summary.distance), systemImage: "point.topleft.down.to.point.bottomright.curvepath")
-        Figure(title: "Riding Time", value: RideFormat.duration(ride.summary.timerTime), systemImage: "clock")
-        if let ascent = ride.summary.totalAscent {
+        Figure(title: "Distance", value: RideFormat.distance(ride.distance), systemImage: "point.topleft.down.to.point.bottomright.curvepath")
+        Figure(title: "Riding Time", value: RideFormat.duration(ride.timerTime), systemImage: "clock")
+        if let ascent = ride.totalAscent {
             Figure(title: "Ascent", value: RideFormat.ascent(ascent), systemImage: "arrow.up.right")
         }
     }
@@ -145,7 +176,7 @@ struct Figure: View {
     }
 }
 
-/// Version and commit, as in the About window on the Mac (in 0.2 in the tab "More").
+/// Version and commit, as in the About window on the Mac; in the tab “More”.
 struct VersionFooter: View {
     var body: some View {
         Text("Wattspur \(AppInfo.version) (\(AppInfo.build), \(AppInfo.commit))")

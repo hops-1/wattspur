@@ -3,10 +3,12 @@ import SwiftUI
 
 /// Number formats of the iPhone app; units follow the device's region.
 enum RideFormat {
-    /// "21.4 km" (or miles where the region uses them).
+    /// "21.4 km" (or miles where the region uses them), also for short and zero distances: a
+    /// week without rides reads “0.0 km”, not “0.0 m”.
     static func distance(_ metres: Double) -> String {
-        Measurement(value: metres, unit: UnitLength.meters)
-            .formatted(.measurement(width: .abbreviated, usage: .road,
+        let unit: UnitLength = Locale.current.measurementSystem == .metric ? .kilometers : .miles
+        return Measurement(value: metres, unit: UnitLength.meters).converted(to: unit)
+            .formatted(.measurement(width: .abbreviated, usage: .asProvided,
                                     numberFormatStyle: .number.precision(.fractionLength(1))))
     }
 
@@ -22,8 +24,48 @@ enum RideFormat {
                                     numberFormatStyle: .number.precision(.fractionLength(0))))
     }
 
-    static func date(_ date: Date) -> String {
-        date.formatted(date: .long, time: .shortened)
+    /// “2. November 2026 um 14:12”, in the time zone where the ride started (as on the Mac).
+    static func date(_ date: Date, timeZone: String? = nil) -> String {
+        var style = Date.FormatStyle(date: .long, time: .shortened)
+        style.timeZone = timeZone.flatMap(TimeZone.init(identifier:)) ?? .current
+        return date.formatted(style)
+    }
+
+    /// “Mo., 2. Nov., 14:12” for a row of the ride list.
+    static func shortDate(_ date: Date, timeZone: String? = nil) -> String {
+        var style = Date.FormatStyle().weekday(.abbreviated).day().month(.abbreviated).hour().minute()
+        style.timeZone = timeZone.flatMap(TimeZone.init(identifier:)) ?? .current
+        return date.formatted(style)
+    }
+
+    /// “November 2026” above the rides of a month.
+    static func month(_ date: Date) -> String {
+        date.formatted(.dateTime.month(.wide).year())
+    }
+
+    /// “Heute, 14:02” or “31.10.26, 09:15”: when the Mac wrote its state.
+    static func stateDate(_ date: Date) -> String {
+        relativeFormatter.string(from: date)
+    }
+
+    private static let relativeFormatter: DateFormatter = {
+        let formatter = DateFormatter()
+        formatter.dateStyle = .short
+        formatter.timeStyle = .short
+        formatter.doesRelativeDateFormatting = true
+        return formatter
+    }()
+
+    /// “23.5 km/h”.
+    static func speed(_ metresPerSecond: Double) -> String {
+        Measurement(value: metresPerSecond, unit: UnitSpeed.metersPerSecond).converted(to: .kilometersPerHour)
+            .formatted(.measurement(width: .abbreviated, usage: .asProvided,
+                                    numberFormatStyle: .number.precision(.fractionLength(1))))
+    }
+
+    /// “184 m” of altitude.
+    static func altitude(_ metres: Double) -> String {
+        ascent(Int(metres.rounded()))
     }
 }
 

@@ -1,0 +1,37 @@
+import Foundation
+
+/// What the iPhone shows of a state from the Mac (B-209, B-214).
+extension RideExchange.Library {
+    /// The rides of one calendar month, newest first.
+    public struct Month: Sendable, Equatable, Identifiable {
+        /// The first moment of the month.
+        public var start: Date
+        public var rides: [RideExchange.Ride]
+
+        public var id: Date { start }
+    }
+
+    /// The rides by the calendar month of their start, newest month first.
+    public func months(calendar: Calendar = .current) -> [Month] {
+        var months: [Date: [RideExchange.Ride]] = [:]
+        for ride in rides {
+            guard let start = calendar.dateInterval(of: .month, for: ride.startDate)?.start else { continue }
+            months[start, default: []].append(ride)
+        }
+        return months.map { Month(start: $0.key, rides: $0.value.sorted { $0.startDate > $1.startDate }) }
+            .sorted { $0.start > $1.start }
+    }
+
+    /// The ride that started last.
+    public var lastRide: RideExchange.Ride? { rides.max { $0.startDate < $1.startDate } }
+
+    public func bike(withID id: UUID?) -> RideExchange.Bike? {
+        guard let id else { return nil }
+        return bikes.first { $0.id == id }
+    }
+
+    /// The tiles “This Week” and “This Month”.
+    public func totals(now: Date = .now, calendar: Calendar = .current) -> RidePeriodTotals {
+        RidePeriodTotals(rides: rides.map { (start: $0.startDate, distance: $0.distance) }, now: now, calendar: calendar)
+    }
+}
