@@ -5,6 +5,9 @@
 	<!-- Replaced at build time from Config/… prefix header (see project.yml) -->
 	<key>WattspurGitCommit</key>
 	<string>WATTSPUR_GIT_COMMIT</string>
+	<!-- Where the rides come from (B-216): folder, local or icloud, from Config/iOS.xcconfig -->
+	<key>WattspurDatabase</key>
+	<string>$(WATTSPUR_IOS_DATABASE)</string>
 	<!-- Recordings without a chosen folder show in the Files app (B-211) -->
 	<key>UIFileSharingEnabled</key>
 	<true/>
@@ -12,6 +15,8 @@
 	<key>UIBackgroundModes</key>
 	<array>
 		<string>location</string>
+		<!-- CloudKit tells the app about changes from the Mac with a silent push (B-216, mode icloud) -->
+		<string>remote-notification</string>
 	</array>
 </dict>
 </plist>

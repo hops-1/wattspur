@@ -6,4 +6,14 @@ CODE_SIGN_IDENTITY = Apple Development
 // The simulator needs no team: sign to run locally.
 CODE_SIGN_IDENTITY[sdk=iphonesimulator*] = -
 
+// Where the iPhone's rides come from (B-216, `PhoneDatabase.Mode`): "folder" is iOS 0.2 (the Mac's
+// state in the shared iCloud folder). Local.xcconfig can choose "local" (the iPhone's own store, to try
+// it in the simulator) or, with the developer account, "icloud" together with the iCloud entitlements:
+//   WATTSPUR_IOS_DATABASE = icloud
+//   WATTSPUR_IOS_ENTITLEMENTS = iOS/Wattspur-iOS-iCloud.entitlements
+WATTSPUR_IOS_DATABASE = folder
+WATTSPUR_IOS_ENTITLEMENTS =
+
 #include? "Local.xcconfig"
+
+CODE_SIGN_ENTITLEMENTS = $(WATTSPUR_IOS_ENTITLEMENTS)
