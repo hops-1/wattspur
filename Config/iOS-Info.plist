@@ -5,6 +5,9 @@
 	<!-- Replaced at build time from Config/… prefix header (see project.yml) -->
 	<key>WattspurGitCommit</key>
 	<string>WATTSPUR_GIT_COMMIT</string>
+	<!-- Recordings without a chosen folder show in the Files app (B-211) -->
+	<key>UIFileSharingEnabled</key>
+	<true/>
 	<!-- GPS recording keeps running with the screen locked (V-14, B-211) -->
 	<key>UIBackgroundModes</key>
 	<array>
