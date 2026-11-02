@@ -1,6 +1,6 @@
 # Backlog – Wattspur
 
-Stand: 1.11.2026 (v0.21, 1.8.1 umgesetzt: Steigung, Lastenrad, Kurvigkeit und Ebene „Kurvige Straßen“; davor v0.20 vom 28.10.2026, Release 1.8.0 „Kartenstile“ vorbereitet; davor v0.19 vom 27.10.2026, Plan für 1.8 „Kartenstile“, der Bereich „Fahrten“ B-125 nach 1.9 verschoben; davor v0.18 vom 26.10.2026, Plan für 1.7 in zwei Releases 1.7.0 und 1.7.1; davor v0.17 vom 25.10.2026, Release 1.6.2 mit Update-Hinweis B-172; davor 1.6.1 mit Sicherheits-Fix, Architektur-Aufräumen B-162 bis B-169 und zwei Karten-Verbesserungen B-170, B-171; Plan für 1.7 bis 1.9) · Die IDs in Klammern verweisen auf `REQUIREMENTS.md`.
+Stand: 2.11.2026 (v0.22, Plan für 1.8.2; davor v0.21 vom 1.11.2026, 1.8.1 umgesetzt: Steigung, Lastenrad, Kurvigkeit und Ebene „Kurvige Straßen“; davor v0.20 vom 28.10.2026, Release 1.8.0 „Kartenstile“ vorbereitet; davor v0.19 vom 27.10.2026, Plan für 1.8 „Kartenstile“, der Bereich „Fahrten“ B-125 nach 1.9 verschoben; davor v0.18 vom 26.10.2026, Plan für 1.7 in zwei Releases 1.7.0 und 1.7.1; davor v0.17 vom 25.10.2026, Release 1.6.2 mit Update-Hinweis B-172; davor 1.6.1 mit Sicherheits-Fix, Architektur-Aufräumen B-162 bis B-169 und zwei Karten-Verbesserungen B-170, B-171; Plan für 1.7 bis 1.9) · Die IDs in Klammern verweisen auf `REQUIREMENTS.md`.
 Größe: **S** ≈ wenige Stunden, **M** ≈ 1–2 Tage, **L** ≈ mehrere Tage.
 Status: ☐ offen · ◐ in Arbeit · ☑ erledigt
 
@@ -26,6 +26,7 @@ Status: ☐ offen · ◐ in Arbeit · ☑ erledigt
 | **v1.7.1** | Strecken-Gruppen (erkennen, benennen, Neuzuordnung beim Import), Mediathek-Backup (P-22) und Hilfe-Menü (B-084) | Freunde |
 | **v1.8** | Kartenstile: OpenStreetMap, CyclOSM und OpenTopoMap (mit Höhenlinien und Schummerung), Fenster „Karte anpassen“ mit Bildchen (B-061); Kalendertag als Filter (B-130), Austauschformate (B-177) | Freunde |
 | v1.8.1 | **Alles in einem Release (Entscheidung Nils 31.10.2026):** kleines Update mit Steigung im Höhenmeter-Diagramm (B-200) und Bike-Art Lastenrad (B-201), dazu der Versuch „Kurvige Straßen“: Kurvigkeit eigener Fahrten (Kennzahl, Einfärbung, Rekord; B-180, B-181 umgesetzt), Ebene mit kurvigen Straßen aus roadcurvature.com (V-13, B-182, B-183) | Freunde, Motorradfahrer |
+| v1.8.2 | Kleines Folgerelease (Plan 2.11.2026): Fehler bei ähnlichen Pendelfahrten (B-184), Rekorde bei Steigung und Gefälle ohne Barometer glätten (B-203), optional neue Handbuch-Bilder (B-179) | Freunde |
 | **v1.9** | Bosch-Daten über die offizielle Data-Act-API (optional, eigenes Bosch-Konto): Bike, Akku und Wartung, Zusatzfelder je Fahrt und Import von Fahrten ohne Datei (Altbestand). **Motordaten je Fahrt gibt die API nicht her (Spezifikation 25.10.2026), Entscheidung Nils: Option B;** steht unter dem Vorbehalt des Spikes V-12 | Freunde mit Smart-System-Bike in der EU |
 | v1.10 | Ein Bereich „Fahrten“ mit Karte als Standard (B-125), Analyse nach Strecke (B-176); von 1.8 zurückgestellt am 27.10.2026 | Freunde |
 | v1.x | Analysen, Komfort, Karten | alle |
@@ -374,6 +375,22 @@ Wunsch von Nils am 27.10.2026, angeregt von [roadcurvature.com](https://roadcurv
 
 **Aufwand (Schätzung 27.10.2026):** Teil A (B-180, B-181) etwa 2–3 Tage und ohne Risiko. Teil B (V-13, B-182, B-183) etwa 3–5 Tage; Risiken: Größe der Daten (Bayern `c_300` gepackt 27 MB), Entpacken von KMZ, flüssiges Zeichnen vieler Linien, Daten seit 2024 nicht erneuert. Zusammen etwa 5–8 Tage, also ein kleines Release wie 1.7.1.
 Selbst aus OSM rechnen (Geofabrik-Extrakt, eigener Lauf von `curvature`) ist **nicht** Teil des Plans: Das wäre ein eigener Server-Dienst und kein Versuch mehr.
+
+## v1.8.2 – Fehlerbehebungen und Rekorde glätten (Plan 2.11.2026)
+
+Mit Nils am 2.11.2026 festgelegt: ein kleines Folgerelease zu 1.8.1, nur Fehler und Nachbesserungen ohne Architekturänderung. Je Zeile ein PR direkt gegen `main`, zuletzt das Release (Version, Changelog, Handbuch EN/DE, `ARCHITECTURE.md`, DMG, Tag). Check: `scripts/check-architecture.sh`, `swift test --no-parallel`, `scripts/ci-local.sh`.
+
+| # | Story | Größe | Status |
+|---|---|---|---|
+| B-184 | **Bug:** Pendelfahrt fehlt bei den ähnlichen Fahrten (Beschreibung und Lösung `max(200 m, 2 % der Streckenlänge)` siehe Eintrag in v1.7; den Wert von 2 % vorher an der Bibliothek prüfen, Tests in `RouteSimilarity` für kurze und lange Strecken) | S | ☐ |
+| B-203 | **Rekorde bei Steigung und Gefälle glätten** (Nachbesserung zu B-202): Bei GPX-Dateien ohne Barometer rauscht die Höhe, und `RideTrack.steepestGrades()` kann einen unechten Rekord setzen. Vorschlag: Höhe vor der Rechnung mit einem Medianfilter über wenige Punkte glätten und Werte über etwa 30 % nicht zählen; die Anzeige im Diagramm (B-200) bleibt unverändert. Neu-Auswertung der Bestandsfahrten über `trackFiguresVersion`. Tests mit verrauschter Höhe (Ausreißer setzt keinen Rekord), echte Steigung bleibt erhalten | S–M | ☐ |
+| B-179 | Handbuch-Bilder aktualisieren (siehe v1.x – Hilfe & Profil); **optional**, nur wenn Zeit für die Aufnahmen mit der Demo-Bibliothek ist | S | ☐ |
+| – | Release 1.8.2: Version, Changelog, Handbuch EN/DE, `ARCHITECTURE.md`, DMG, Tag | S | ☐ |
+
+**Bewusst nicht in 1.8.2:**
+- Ebene „Kurvige Straßen“ im PDF samt Quellenangabe: kein Fehler, denn das PDF zeigt die Ebene nicht und braucht deshalb keine Quellenangabe. Als Feature (M) denkbar, bisher von niemandem verlangt.
+- Kurven-Färbung und Sortierung unter 10 km: keine Änderung. Die Sortierung stellt Fahrten unter 10 km schon ans Ende (`ratedCurvature`), die Färbung zeigt die Kurven der einen Fahrt, nur die Kennzahl und der Rekord zählen ab 10 km.
+- B-063 (Karte nach weiteren Werten einfärben), B-185 bis B-189 (Vorbereitung iOS), B-125 und B-176 (1.10), 1.9 (Bosch), B-068, P-01 und der Ideen-Pool.
 
 ## v1.9 – Bosch-Daten (Plan 25.10.2026)
 
