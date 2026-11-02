@@ -21,6 +21,18 @@ public struct PhoneStateWriter {
     public let context: ModelContext
     let fileManager: FileManager
 
+    /// Seconds between a change and the write, so a burst of changes is written once.
+    public static let changeDelay: TimeInterval = 5
+    /// Seconds between two writes at least: iCloud uploads every write.
+    public static let minimumInterval: TimeInterval = 60
+
+    /// How long to wait before writing after a change: the delay, or the rest of the minute since
+    /// the last write. `nil` when nothing was written yet.
+    public static func delay(sinceLastWrite: TimeInterval?) -> Duration {
+        guard let sinceLastWrite, sinceLastWrite < minimumInterval else { return .seconds(changeDelay) }
+        return .seconds(max(changeDelay, minimumInterval - sinceLastWrite))
+    }
+
     public init(context: ModelContext, fileManager: FileManager = .default) {
         self.context = context
         self.fileManager = fileManager

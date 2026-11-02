@@ -103,4 +103,14 @@ struct PhoneStateWriterTests {
         let summary = await FolderImport(library: library, folder: folder).run()
         #expect(summary == FolderImport.Summary())
     }
+
+    @Test("Waits a few seconds, or the rest of the minute since the last write")
+    func delay() {
+        // The first write: nothing to wait for but the delay (an infinite wait crashed the app).
+        #expect(PhoneStateWriter.delay(sinceLastWrite: nil) == .seconds(5))
+        #expect(PhoneStateWriter.delay(sinceLastWrite: 20) == .seconds(40))
+        #expect(PhoneStateWriter.delay(sinceLastWrite: 58) == .seconds(5))
+        #expect(PhoneStateWriter.delay(sinceLastWrite: 600) == .seconds(5))
+        #expect(PhoneStateWriter.delay(sinceLastWrite: -10) == .seconds(70))
+    }
 }

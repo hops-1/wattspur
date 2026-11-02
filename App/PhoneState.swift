@@ -21,11 +21,6 @@ final class PhoneState {
     /// Why the last write failed, e.g. no import folder.
     private(set) var problem: String?
 
-    /// Seconds between a change and the write.
-    static let delay: Duration = .seconds(5)
-    /// Seconds between two writes at least.
-    static let minimumInterval: TimeInterval = 60
-
     private let context: ModelContext
     private let watcher: FolderWatcher
     private var pending: Task<Void, Never>?
@@ -46,8 +41,7 @@ final class PhoneState {
     /// Writes soon, or once the minute since the last write is over.
     func scheduleWrite() {
         guard isEnabled, pending == nil else { return }
-        let sinceLast = lastWritten.map { Date.now.timeIntervalSince($0) } ?? .infinity
-        let wait = max(Self.delay, .seconds(Self.minimumInterval - sinceLast))
+        let wait = PhoneStateWriter.delay(sinceLastWrite: lastWritten.map { Date.now.timeIntervalSince($0) })
         pending = Task { [weak self] in
             try? await Task.sleep(for: wait)
             guard !Task.isCancelled else { return }
