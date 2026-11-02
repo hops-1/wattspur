@@ -7,6 +7,10 @@ Every DMG handed out to testers corresponds to one entry below.
 
 ## [Unreleased]
 
+### Fixed
+
+- **Similar rides:** a commute that started a few hundred metres off (another place to park, a recording started late) was missing from the similar rides and from saved routes. Start and end of a ride may now lie 200 m apart, or 2 % of its length if that is more (about 510 m for 25 km); up to 10 km nothing changes (B-184).
+
 ## [1.8.1] – 2026-11-01
 
 Wattspur shows the grade in the elevation chart, rates how curvy your rides are, and can draw the curvy roads of a state on its maps.

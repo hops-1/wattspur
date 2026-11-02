@@ -168,6 +168,55 @@ struct RouteSimilarityTests {
         #expect(try match(base, later).direction == .none)
     }
 
+    @Test("The ends may lie 200 m apart, or 2 % of the length if that is more (B-184)")
+    func endToleranceGrowsWithLength() throws {
+        #expect(RouteSimilarity.endTolerance(forLength: 4_000) == 200)
+        #expect(RouteSimilarity.endTolerance(forLength: 10_000) == 200)
+        #expect(RouteSimilarity.endTolerance(forLength: 25_700) == 514)
+
+        // About 4 km: a start 250 m late is another route, as before.
+        let short = Routes.winding()
+        let line = short.segments[0]
+        let late = OverviewRoute(segments: [Array(line.dropFirst(Int(Double(line.count) * 0.03)))]) // about 230 m
+        let lateLength = try signature(late).length
+        #expect(try signature(short).length < 10_000 && lateLength > 3_000)
+        #expect(try match(short, late).direction == .none)
+    }
+
+    @Test("A long ride that starts a little off still runs the same way; one that starts far off does not")
+    func longRideStartsOff() throws {
+        // About 23 km: the winding route stretched to 6.5 times its size.
+        func long(dropShare: Double = 0) -> OverviewRoute {
+            let line = Routes.winding(points: 1_200).segments[0].map {
+                RoutePoint(latitude: 50 + ($0.latitude - 50) * 6.5, longitude: 9 + ($0.longitude - 9) * 6.5)
+            }
+            return OverviewRoute(segments: [Array(line.dropFirst(Int(Double(line.count) * dropShare)))])
+        }
+        let base = long()
+        let baseLength = try signature(base).length
+        #expect(baseLength > 20_000)
+        // About 280 m: too far for 200 m, within 2 % of the length (about 470 m).
+        let near = try match(base, long(dropShare: 0.006))
+        #expect(near.direction == .same)
+        #expect(near.isSimilar(threshold: 0.9, includeReverse: false))
+        #expect(try match(long(dropShare: 0.006), base).direction == .same) // the same either way round
+        let reverse = try match(base, Routes.reversed(long(dropShare: 0.006)))
+        #expect(reverse.direction == .reverse)
+        // About 2.3 km: far beyond 2 % of the length.
+        #expect(try match(base, long(dropShare: 0.05)).direction == .none)
+    }
+
+    @Test("The shorter route sets the length: a short ride is not the same way as a long one")
+    func shorterRouteSetsTolerance() throws {
+        let short = Routes.winding()
+        let line = short.segments[0]
+        let longer = OverviewRoute(segments: [line + line.map { RoutePoint(latitude: $0.latitude + 0.03, longitude: $0.longitude + 0.02) }])
+        let a = try signature(short), b = try signature(longer)
+        #expect(a.length < 10_000)
+        #expect(RouteSimilarity.direction(a, b) == RouteSimilarity.direction(b, a))
+        #expect(RouteSimilarity.direction(a, b) == .none)
+    }
+
     @Test("Another place far away is not similar")
     func farAway() throws {
         let base = Routes.winding()
@@ -274,6 +323,22 @@ struct RouteIndexTests {
         #expect(Set(both.map(\.id)) == [ids[1], ids[2], ids[3]])
         #expect(both.first { $0.id == ids[3] }?.direction == .reverse)
         #expect(!both.contains { $0.id == ids[0] })
+    }
+
+    @Test("The index, and so the lists and saved routes, takes a long ride that starts a little off (B-184)")
+    func longRideInIndex() {
+        func long(dropShare: Double) -> OverviewRoute {
+            let line = Routes.winding(points: 1_200).segments[0].map {
+                RoutePoint(latitude: 50 + ($0.latitude - 50) * 6.5, longitude: 9 + ($0.longitude - 9) * 6.5)
+            }
+            return OverviewRoute(segments: [Array(line.dropFirst(Int(Double(line.count) * dropShare)))])
+        }
+        var index = RouteIndex()
+        let base = UUID(), near = UUID(), far = UUID()
+        index.insert(base, route: long(dropShare: 0))
+        index.insert(near, route: long(dropShare: 0.006)) // about 280 m late
+        index.insert(far, route: long(dropShare: 0.05))   // about 2.3 km late
+        #expect(index.similar(to: base, threshold: 0.8).map(\.id) == [near])
     }
 
     @Test("Replacing and removing rides keeps the index right")
