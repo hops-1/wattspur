@@ -647,6 +647,6 @@ Entschieden mit Nils am 27.10.2026. Grundlage: [RECHERCHE-KARTEN.md](RECHERCHE-K
 | Austausch Mac ↔ iPhone | über den iCloud-Ordner `Wattspur Import`: der Mac schreibt einen Lese-Stand (B-178, B-208), das iPhone legt Aufnahmen als GPX ab; kein CloudKit, kein Bearbeiten auf dem iPhone | B-072 bleibt offen, IMP-05 |
 | Developer-Account | für 0.1 und 0.2 keiner (Entscheidung Nils: erst einmal nur für mich); kostenlose Apple-ID, Team-ID nur lokal; nach 0.2 neu entscheiden | NFR-18 |
 | Projekt | iOS-Target im selben Repository und `project.yml`, nutzt nur das Paket, nichts aus `App/` | Kap. 7, B-185 ff. |
-| Design | A „Listen-Tabs“: Tabs Fahrten, Aufnehmen, Mehr mit je einem Navigation-Stack; SwiftUI-Standard, Magenta für Spuren, Rot für den Aufnahme-Knopf (gegen „Karte zuerst“ und „Kacheln“) | Kap. 6 |
+| Design | C „Übersicht mit Kacheln“ (moderner und frischer): Tabs Übersicht, Fahrten, Mehr mit je einem Navigation-Stack; Kacheln für Woche, Monat und letzte Fahrt, großer Knopf „Fahrt starten“ öffnet die Aufnahme im Vollbild; Magenta für Spuren, Rot für „Fahrt starten“ (gegen „Listen-Tabs“ und „Karte zuerst“) | Kap. 6, B-214 |
 | Karte auf iOS | SwiftUI-`Map` mit `MapPolyline`, ohne Kartenstile, bis B-186 | – |
 | GPS-Aufnahme | Core Location mit Hintergrundmodus, Erlaubnis „Beim Verwenden“, laufend zwischengespeichert; Ergebnis ist eine GPX-Datei | – |
