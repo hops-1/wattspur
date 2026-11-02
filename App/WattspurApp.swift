@@ -27,6 +27,8 @@ struct WattspurApp: App {
     @State private var updates = UpdateChecker()
     /// "Library Backup…" (P-22).
     @State private var backup = LibraryBackupCenter()
+    /// "Sync with iCloud" (B-072), read once: the library opens with or without sync.
+    @State private var iCloudSync: ICloudSync
     /// The note after a restore, shown by the first window (P-22).
     @State private var restoreNotice = LibraryRestoreNotice()
     @Environment(\.openWindow) private var openWindow
@@ -47,11 +49,13 @@ struct WattspurApp: App {
             }
         }
         _restoreNotice = State(initialValue: notice)
+        let sync = ICloudSync()
+        _iCloudSync = State(initialValue: sync)
         do {
             #if DEBUG
-            container = DemoMode.isOn ? try DemoMode.makeContainer() : try ModelContainer(for: Schema(WattspurSchema.models))
+            container = DemoMode.isOn ? try DemoMode.makeContainer() : try ModelContainer(for: Schema(WattspurSchema.models), configurations: sync.configuration)
             #else
-            container = try ModelContainer(for: Schema(WattspurSchema.models))
+            container = try ModelContainer(for: Schema(WattspurSchema.models), configurations: sync.configuration)
             #endif
         } catch {
             fatalError("Could not open the Wattspur library: \(error)")
@@ -125,6 +129,7 @@ struct WattspurApp: App {
                 .environment(watcher)
                 .environment(phoneState)
                 .environment(curvyRoads)
+                .environment(iCloudSync)
         }
         .modelContainer(container)
 
