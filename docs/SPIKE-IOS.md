@@ -40,6 +40,7 @@ Test auf Nils' iPhone am 2.11.2026 (App mit kostenloser Apple-ID signiert). Ordn
 | Ordner wählen ohne iCloud-Berechtigung | ✅ klappt mit `fileImporter`, ohne iCloud-Berechtigung im Profil |
 | Nach Neustart ohne neue Wahl lesbar | ✅ App ganz geschlossen und neu geöffnet, Testdatei ohne neue Ordnerwahl gelesen („Written on the iPhone at 2.11.2026, 16:14:31“) |
 | Zeit bis die Testdatei am Mac erscheint | ✅ kam am Mac an (`iPhone/Test/Write Test.txt`); Dauer nicht gestoppt |
+| Am Mac als Fahrt | ✅ „GPS-Test 2026-11-02 16-19“ in der Liste, Quelle GPX, Bike „Cube One22“ aus der Einstellung „Import für“ (keine Rückfrage), Fahrzeit 20 s von 31 s, Ø 2,6 km/h. GPS-Höhe springt zwischen 169 und 184 m im Stand: Für Anstieg aus iPhone-Aufnahmen braucht B-211 einen Höhenfilter |
 | GPS bei gesperrtem Bildschirm | |
 | Sekunden je Punkt, Ø Genauigkeit | |
 | Lücken über 10 s | |
