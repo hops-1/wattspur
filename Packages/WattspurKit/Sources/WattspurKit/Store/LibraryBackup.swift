@@ -216,6 +216,9 @@ public enum LibraryBackup {
         }
         guard sqlite3_open_v2(source.path, &from, SQLITE_OPEN_READONLY, nil) == SQLITE_OK else { throw failure(from) }
         guard sqlite3_open_v2(destination.path, &to, SQLITE_OPEN_READWRITE | SQLITE_OPEN_CREATE, nil) == SQLITE_OK else { throw failure(to) }
+        // The app (or a container closing just now) may hold a write lock for a moment: wait for it instead of failing.
+        sqlite3_busy_timeout(from, 5000)
+        sqlite3_busy_timeout(to, 5000)
         guard let backup = sqlite3_backup_init(to, "main", from, "main") else { throw failure(to) }
         let step = sqlite3_backup_step(backup, -1)
         let finish = sqlite3_backup_finish(backup)

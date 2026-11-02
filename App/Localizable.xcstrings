@@ -2,6 +2,206 @@
   "sourceLanguage" : "en",
   "strings" : {
     "" : {},
+    "Back Up and Turn On" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sichern und einschalten"
+          }
+        }
+      }
+    },
+    "Backup:" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sicherung:"
+          }
+        }
+      }
+    },
+    "Before that, Wattspur saves a backup of the library beside it." : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Vorher legt Wattspur eine Sicherung der Mediathek daneben an."
+          }
+        }
+      }
+    },
+    "Off. The library is only on this Mac." : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Aus. Die Mediathek liegt nur auf diesem Mac."
+          }
+        }
+      }
+    },
+    "On. Changes sync in the background." : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "An. Änderungen werden im Hintergrund abgeglichen."
+          }
+        }
+      }
+    },
+    "Saved before the first sync on %@." : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Vor dem ersten Sync angelegt am %@."
+          }
+        }
+      }
+    },
+    "Stop syncing with iCloud?" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sync mit iCloud beenden?"
+          }
+        }
+      }
+    },
+    "Sync starts the next time you open Wattspur." : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Der Sync beginnt, wenn du Wattspur das nächste Mal öffnest."
+          }
+        }
+      }
+    },
+    "Sync stops the next time you open Wattspur." : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Der Sync endet, wenn du Wattspur das nächste Mal öffnest."
+          }
+        }
+      }
+    },
+    "Sync with iCloud" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Mit iCloud synchronisieren"
+          }
+        }
+      }
+    },
+    "Sync your library with iCloud?" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Mediathek mit iCloud synchronisieren?"
+          }
+        }
+      }
+    },
+    "Sync:" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sync:"
+          }
+        }
+      }
+    },
+    "The backup before the first sync failed, so sync stays off: %@" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Die Sicherung vor dem ersten Sync ist fehlgeschlagen, deshalb bleibt der Sync aus: %@"
+          }
+        }
+      }
+    },
+    "This version of Wattspur cannot use iCloud yet. Sync comes with a version signed by the developer." : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Diese Version von Wattspur kann iCloud noch nicht nutzen. Der Sync kommt mit einer vom Entwickler signierten Version."
+          }
+        }
+      }
+    },
+    "Turn Off" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ausschalten"
+          }
+        }
+      }
+    },
+    "Turn On" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Einschalten"
+          }
+        }
+      }
+    },
+    "Wattspur uploads all %lld rides with their time series and routes, your bikes, profile, goals and saved routes into your own iCloud account. Only you can see them there. The first upload can take a while." : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Wattspur lädt alle %lld Fahrten mit Messwerten und Routen, deine Bikes, dein Profil, deine Ziele und gespeicherten Strecken in dein eigenes iCloud-Konto. Dort siehst nur du sie. Das erste Hochladen kann eine Weile dauern."
+          }
+        }
+      }
+    },
+    "Your rides stay on this Mac, and in iCloud and on your other devices as they are. Changes on this Mac are no longer synced. This takes effect the next time you open Wattspur." : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Deine Fahrten bleiben auf diesem Mac und, so wie sie sind, auch in iCloud und auf deinen anderen Geräten. Änderungen auf diesem Mac werden nicht mehr abgeglichen. Das gilt ab dem nächsten Öffnen von Wattspur."
+          }
+        }
+      }
+    },
+    "Your rides, bikes, profile, goals, saved routes and the trash in the private database of your own iCloud account, the same on this Mac and on your iPhone. There is no Wattspur server and no Wattspur account." : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Deine Fahrten, Bikes, dein Profil, Ziele, gespeicherte Strecken und der Papierkorb liegen in der privaten Datenbank deines eigenen iCloud-Kontos, auf diesem Mac und auf deinem iPhone gleich. Es gibt keinen Wattspur-Server und kein Wattspur-Konto."
+          }
+        }
+      }
+    },
+    "iCloud" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "iCloud"
+          }
+        }
+      }
+    },
     "Choose an import folder and switch watching on." : {
       "localizations" : {
         "de" : {

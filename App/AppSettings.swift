@@ -43,6 +43,10 @@ enum SettingsKey {
     static let watchFolderBookmark = "watchFolderBookmark"
     /// Write the state for the iPhone into the import folder (B-208).
     static let phoneStateEnabled = "phoneStateEnabled"
+    /// "Sync with iCloud" (B-072); takes effect at the next start.
+    static let iCloudSyncEnabled = "iCloudSyncEnabled"
+    /// When the backup before the first sync was made (P-22).
+    static let iCloudSyncBackupDate = "iCloudSyncBackupDate"
     // Update notice (B-172); earlier versions did not write these.
     static let updateCheckEnabled = "updateCheckEnabled"
     static let updateCheckedAt = "updateCheckedAt"

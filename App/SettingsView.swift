@@ -13,6 +13,9 @@ struct SettingsView: View {
             Tab("Import", systemImage: "square.and.arrow.down") {
                 ImportSettingsView()
             }
+            Tab("iCloud", systemImage: "icloud") {
+                ICloudSettingsView()
+            }
             Tab("Calculation", systemImage: "function") {
                 if CalorieMode.withProfileAvailable {
                     CalorieSettingsView()
