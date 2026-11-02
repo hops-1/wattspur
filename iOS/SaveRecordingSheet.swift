@@ -42,6 +42,10 @@ struct SaveRecordingSheet: View {
                     LabeledContent("Distance", value: RideFormat.distance(recording.distance))
                     LabeledContent("Riding Time", value: RideFormat.duration(recording.movingTime))
                 }
+                if recording.isTooShort {
+                    Text("The recording has no track yet: GPS needs a few seconds of riding. Keep riding or discard it.")
+                        .foregroundStyle(.orange)
+                }
                 if let problem {
                     Text(problem).foregroundStyle(.red)
                 }
@@ -57,6 +61,7 @@ struct SaveRecordingSheet: View {
                 }
                 ToolbarItem(placement: .confirmationAction) {
                     Button("Save") { save() }
+                        .disabled(recording.isTooShort)
                 }
             }
             .confirmationDialog("Discard this ride?", isPresented: $confirmingDiscard, titleVisibility: .visible) {

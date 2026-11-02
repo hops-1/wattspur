@@ -163,7 +163,13 @@ struct StatusLabel: View {
         case .onlyHere:
             Label("Only on the iPhone", systemImage: "iphone").font(.footnote).foregroundStyle(.secondary)
         case .waitingForiCloud, nil:
-            Label("Waiting for iCloud", systemImage: "icloud.and.arrow.up").font(.footnote).foregroundStyle(.orange)
+            VStack(alignment: .leading, spacing: 2) {
+                Label("Waiting for iCloud", systemImage: "icloud.and.arrow.up").font(.footnote).foregroundStyle(.orange)
+                // Seen on the iPhone (V-14): iOS sometimes uploads only once the Files app shows the folder.
+                Text("If it stays like this, open the folder once in the Files app.")
+                    .font(.caption)
+                    .foregroundStyle(.secondary)
+            }
         case .waitingForMac:
             Label("Waiting for the Mac", systemImage: "desktopcomputer").font(.footnote).foregroundStyle(.secondary)
         case .takenOver:

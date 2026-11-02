@@ -58,7 +58,7 @@ struct WattspurApp: App {
                 // The default answer; it also takes the place of the Cancel button iOS would add.
                 Button("Continue Recording", role: .cancel) { recorder.continueUnfinished() }
                 Button("End and Save") {
-                    if let recording = recorder.unfinished {
+                    if let recording = recorder.unfinished, !recording.isTooShort {
                         let bikes = (library.state?.bikes ?? []).filter { !$0.isArchived }
                         let id = SaveRecordingSheet.defaultBike(among: bikes, last: recordings.lastBikeID,
                                                                 lastRide: library.state?.lastRide)

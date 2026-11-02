@@ -328,6 +328,16 @@
         }
       }
     },
+    "If it stays like this, open the folder once in the Files app." : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Bleibt es dabei, öffne den Ordner einmal in der Dateien-App."
+          }
+        }
+      }
+    },
     "Keep Riding" : {
       "localizations" : {
         "de" : {
@@ -724,6 +734,16 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Der Ordner lässt sich nicht mehr öffnen. Wähle ihn neu."
+          }
+        }
+      }
+    },
+    "The recording has no track yet: GPS needs a few seconds of riding. Keep riding or discard it." : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Die Aufnahme hat noch keine Spur: GPS braucht ein paar Sekunden Fahrt. Fahr weiter oder verwirf sie."
           }
         }
       }
