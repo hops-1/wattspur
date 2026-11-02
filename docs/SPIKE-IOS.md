@@ -33,13 +33,13 @@ Ablauf auf dem iPhone:
 7. Am Mac: Erscheint die Fahrt in Wattspur?
 
 ## Ergebnis
-*Folgt nach dem Test auf Nils' iPhone.*
+Test auf Nils' iPhone am 2.11.2026 (App mit kostenloser Apple-ID signiert). Ordner: erledigt; GPS: folgt.
 
 | Frage | Ergebnis |
 |---|---|
-| Ordner wählen ohne iCloud-Berechtigung | |
-| Nach Neustart ohne neue Wahl lesbar | |
-| Zeit bis die Testdatei am Mac erscheint | |
+| Ordner wählen ohne iCloud-Berechtigung | ✅ klappt mit `fileImporter`, ohne iCloud-Berechtigung im Profil |
+| Nach Neustart ohne neue Wahl lesbar | ✅ App ganz geschlossen und neu geöffnet, Testdatei ohne neue Ordnerwahl gelesen („Written on the iPhone at 2.11.2026, 16:14:31“) |
+| Zeit bis die Testdatei am Mac erscheint | ✅ kam am Mac an (`iPhone/Test/Write Test.txt`); Dauer nicht gestoppt |
 | GPS bei gesperrtem Bildschirm | |
 | Sekunden je Punkt, Ø Genauigkeit | |
 | Lücken über 10 s | |
