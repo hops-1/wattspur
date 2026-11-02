@@ -72,7 +72,7 @@ cp Config/Local.xcconfig.example Config/Local.xcconfig
 - Die Datei gilt je Checkout: Ein neuer Git-Worktree braucht seine eigene Kopie.
 
 **4. iPhone vorbereiten.**
-- iPhone mit dem Kabel an den Mac anschließen, entsperren, „Diesem Computer vertrauen?“ bestätigen.
+- iPhone mit einem Datenkabel direkt an den Mac anschließen, entsperren, „Diesem Computer vertrauen?“ bestätigen. Kennt der Mac das iPhone schon (etwa vom Finder-Backup), kommt der Dialog nicht, das ist in Ordnung.
 - **Entwicklermodus einschalten:** Einstellungen › Datenschutz & Sicherheit › *Entwicklermodus* einschalten. Der Schalter erscheint erst, wenn Xcode das iPhone einmal gesehen hat. Das iPhone startet neu und fragt danach noch einmal nach.
 
 **5. Bauen und installieren.**
@@ -94,4 +94,10 @@ cp Config/Local.xcconfig.example Config/Local.xcconfig
 **Wenn es hakt**
 - *„Signing for "Wattspur iOS" requires a development team“:* `Config/Local.xcconfig` fehlt oder ist leer, oder `xcodegen generate` wurde danach nicht ausgeführt.
 - *„Failed to register bundle identifier“:* Die Bundle-ID ist bei einem anderen Team schon vergeben. Dann in `project.yml` beim Target *Wattspur iOS* eine eigene setzen, z. B. `io.github.<name>.wattspur.ios`, und diese Änderung nicht committen. In `Local.xcconfig` wirkt sie nicht, weil die Einstellung im Target Vorrang vor der xcconfig hat.
-- *Das iPhone erscheint nicht in Xcode:* entsperren, Kabel neu stecken, „Vertrauen“ bestätigen, Entwicklermodus prüfen.
+- *Das iPhone erscheint nicht in Xcode:* Es muss im Finder links unter „Orte“ stehen. Sonst fließen keine Daten:
+  - ein Datenkabel nehmen (manche Kabel laden nur), direkt am Mac statt über Hub oder Ständer;
+  - iPhone entsperren, Kabel neu stecken, „Zubehör erlauben“ oder „Vertrauen“ bestätigen;
+  - dann den Entwicklermodus prüfen: `xcrun devicectl device info details --device <UDID>` zeigt „Developer Mode Status“.
+- *„Developer App Certificate is not trusted“* beim ersten Start: Die App ist schon installiert, es fehlt nur Schritt 6.
+
+**Getestet am 2.11.2026** auf einem iPhone 13 mit iOS 27.2 und kostenloser Apple-ID: Die App startet und zeigt die Übersicht.
