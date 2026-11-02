@@ -11,6 +11,7 @@ struct WattspurApp: App {
     @State private var folder: ImportFolder
     @State private var library: PhoneLibrary
     @State private var recorder = Recorder()
+    @State private var recordings = PhoneRecordings()
     @State private var tab = Tab.overview
 
     init() {
@@ -42,11 +43,14 @@ struct WattspurApp: App {
             .environment(folder)
             .environment(library)
             .environment(recorder)
+            .environment(recordings)
             // The recording covers everything while it runs (B-211).
             .fullScreenCover(isPresented: Binding(get: { recorder.isRecording }, set: { _ in })) {
                 RecordingView()
                     .environment(folder)
+                    .environment(library)
                     .environment(recorder)
+                    .environment(recordings)
             }
             // A recording the app could not finish (crash, killed): go on or end it.
             .alert("Unfinished Ride", isPresented: Binding(get: { recorder.unfinished != nil && !recorder.isRecording },
@@ -54,9 +58,12 @@ struct WattspurApp: App {
                 // The default answer; it also takes the place of the Cancel button iOS would add.
                 Button("Continue Recording", role: .cancel) { recorder.continueUnfinished() }
                 Button("End and Save") {
-                    if let recording = recorder.unfinished {
-                        try? RecordingSaver.save(recording, name: RecordingView.defaultName(for: recording.startDate),
-                                                 folder: folder)
+                    if let recording = recorder.unfinished, !recording.isTooShort {
+                        let bikes = (library.state?.bikes ?? []).filter { !$0.isArchived }
+                        let id = SaveRecordingSheet.defaultBike(among: bikes, last: recordings.lastBikeID,
+                                                                lastRide: library.state?.lastRide)
+                        try? recordings.save(recording, name: RecordingView.defaultName(for: recording.startDate),
+                                             bike: bikes.first { $0.id == id }, folder: folder)
                     }
                     _ = recorder.stop()
                 }
@@ -66,7 +73,12 @@ struct WattspurApp: App {
             }
             // The Mac may have written a new state while the app was in the background.
             .onChange(of: scenePhase, initial: true) { _, phase in
-                if phase == .active { Task { await library.refresh() } }
+                if phase == .active {
+                    Task {
+                        await library.refresh()
+                        await recordings.refreshStatuses(state: library.state, folder: folder)
+                    }
+                }
             }
         }
     }

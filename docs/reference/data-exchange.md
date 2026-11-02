@@ -26,6 +26,8 @@ The state for the iPhone is the first part of the stable exchange format (B-178)
 | `trkpt/extensions/power` | Watts, as Garmin and Strava write it |
 | `trkpt/extensions/gpxtpx:TrackPointExtension/gpxtpx:cad` | Cadence (1/min), Garmin TrackPointExtension v2 (`http://www.garmin.com/xmlschemas/TrackPointExtension/v2`) |
 
+Rides recorded with the Wattspur app on the iPhone (B-212) are GPX files of the same shape, with `gpx/@creator` = `Wattspur iOS` and the bike's ID in `metadata/extensions/wattspur:bike` (namespace `https://github.com/hops-1/wattspur/gpx/1`). The Mac imports such a file on that bike without asking (B-213); other programs ignore the extension.
+
 Notes:
 
 - Only points with a position are written. Speed and distance are not stored per point; every GPX reader computes them from positions and times.

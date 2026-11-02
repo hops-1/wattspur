@@ -73,6 +73,8 @@ public struct GPXTrack: Sendable, Equatable {
     /// In time order.
     public var parts: [Part]
     public var discarded: Discarded
+    /// The bike a recording of the iPhone app was ridden on (`wattspur:bike`, B-213).
+    public var bikeID: UUID? = nil
 
     public var startDate: Date { parts.first?.startDate ?? .distantPast }
     public var pointCount: Int { parts.reduce(0) { $0 + $1.samples.count } }
@@ -274,7 +276,8 @@ public struct GPXRideImporter: RideImporter {
 
         let name = [reader.trackName, reader.metadataName].compactMap { $0 }.first { !$0.isEmpty }
         return GPXTrack(name: name, creator: reader.creator, activityType: reader.trackType,
-                        parts: parts, discarded: discarded)
+                        parts: parts, discarded: discarded,
+                        bikeID: reader.bikeText.flatMap { UUID(uuidString: $0) })
     }
 
     private static func part(from points: [RawPoint]) -> GPXTrack.Part {
@@ -340,7 +343,20 @@ public struct GPXRideImporter: RideImporter {
         )
         return ParsedRide(startDate: track.startDate, summary: summary, samples: samples,
                           deviceSerialNumber: nil, parserVersion: parserVersion, workKilojoules: work,
-                          summaryEstimated: true, suggestedName: track.name)
+                          summaryEstimated: true, suggestedName: track.name, suggestedBikeID: track.bikeID)
+    }
+
+    // MARK: - Header
+
+    /// The `creator` and the Wattspur bike (`wattspur:bike`) from the first bytes of a GPX file,
+    /// without reading the track: enough to tell a recording of the iPhone app (B-213).
+    public static func header(of data: Data) -> (creator: String?, bikeID: UUID?) {
+        let text = String(decoding: data.prefix(4096), as: UTF8.self)
+        let creator = text.firstMatch(of: /<gpx\b[^>]*\bcreator\s*=\s*["']([^"']*)["']/)
+            .map { String($0.1) }
+        let bike = text.firstMatch(of: /<wattspur:bike>\s*([0-9A-Fa-f-]{36})\s*<\/wattspur:bike>/)
+            .flatMap { UUID(uuidString: String($0.1)) }
+        return (creator, bike)
     }
 
     // MARK: - Time stamps
@@ -468,6 +484,7 @@ private final class GPXReader: NSObject, XMLParserDelegate {
     var trackName: String?
     var trackType: String?
     var metadataName: String?
+    var bikeText: String?
 
     private var stack: [String] = []
     private var pointCount = 0
@@ -529,6 +546,8 @@ private final class GPXReader: NSObject, XMLParserDelegate {
                 else if parent == "metadata" { collectingTrackText = \.metadataName }
             } else if name == "type", parent == "trk" {
                 collectingTrackText = \.trackType
+            } else if name == "bike", parent == "extensions", stack.dropLast(2).last == "metadata" {
+                collectingTrackText = \.bikeText
             }
         }
     }
