@@ -44,10 +44,10 @@ Test auf Nils' iPhone am 2.11.2026 (App mit kostenloser Apple-ID signiert). Ordn
 | GPS bei gesperrtem Bildschirm | ✅ lief bei gesperrtem Bildschirm durch, auch rund 25 Minuten Stillstand (geparkt) ohne Abbruch |
 | Sekunden je Punkt, Ø Genauigkeit | ✅ etwa 1 Punkt je Sekunde (451 Punkte in 7:31 min, 1665 in 33:04 min). Die Genauigkeit steht nicht in der GPX; Punkte über 30 m werden schon in der App verworfen |
 | Lücken über 10 s | ✅ keine bei Rad-Tempo. Nur zwei Lücken (23 s und 80 s) auf der Schnellstraße über 100 km/h: Der Sprungfilter (`RideRecording.maxSpeed`) verwirft solche Punkte absichtlich, danach geht die Spur normal weiter |
-| Akku für 30 Minuten | ◐ 54 % → 36 % über den ganzen Abend (rund 40 min Aufnahme plus sonstige Nutzung); ein Wert nur für die Aufnahme fehlt noch, eine längere Radtour wird ihn zeigen |
+| Akku für 30 Minuten | ✅ Laut iOS-Batterieanzeige hat Wattspur am 2.11. **9 %** verbraucht, bei 29 min auf dem Bildschirm und 1 h 4 min im Hintergrund (Aufnahme mit gesperrtem Bildschirm). Das sind grob 6 % je Stunde, eine Stunde Radtour kostet also etwa 5–6 % |
 | GPX vom iPhone am Mac importiert | ✅ Beide Autofahrten wurden am Mac importiert, mit dem Bike aus der Datei („Moped“, `wattspur:bike`) und `creator="Wattspur iOS"`; der Mac schrieb den Stand fürs iPhone 40 s nach der Datei neu. Kurztest (38 s, 25 Punkte, `creator="Wattspur iOS"`). Die Datei wartete erst auf dem iPhone (*Dateien*: „Warten“, nicht hochgeladen, vermutlich Mobilfunk ohne Erlaubnis für iCloud Drive). Im WLAN war sie rund 1:45 min später am Mac, der Mac hat sie sofort importiert und nach `Importiert/` verschoben. Folgerung für B-212: Upload-Stand anzeigen (`ubiquitousItemIsUploaded`), „wartet auf iCloud“ vor „wartet auf den Mac“ |
 
 ## Entscheidung
 2.11.2026: **Austausch über den iCloud-Ordner wie geplant.** Ordnerzugriff, Schreiben, Lesen nach Neustart und der Import am Mac haben auf Nils’ iPhone geklappt; Nils hat mit B-178/B-208 weitermachen lassen. Die lange Fahrt mit gesperrtem Bildschirm (GPS im Hintergrund, Akku) prüft Nils mit der echten Aufnahme (B-211) und trägt sie hier nach.
 
-2.11.2026 abends: Die GPS-Fragen sind mit zwei Autofahrten beantwortet, V-14 ist damit erledigt. Offen bleibt nur ein genauer Akkuwert für eine lange Radtour.
+2.11.2026 abends: Die GPS-Fragen sind mit zwei Autofahrten beantwortet, V-14 ist damit erledigt. Der Akku hält gut: 9 % für rund 1,5 Stunden Nutzung, davon gut eine Stunde Aufnahme im Hintergrund.
