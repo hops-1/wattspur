@@ -1,6 +1,36 @@
 {
   "sourceLanguage": "en",
   "strings": {
+    "%lld (%lld in background)": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%1$lld (%2$lld im Hintergrund)"
+          }
+        }
+      }
+    },
+    "%lld entries, %lld not downloaded:": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%1$lld Einträge, %2$lld nicht geladen:"
+          }
+        }
+      }
+    },
+    "%lld, longest %lld s": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%1$lld, längste %2$lld s"
+          }
+        }
+      }
+    },
     "Ascent": {
       "localizations": {
         "de": {
@@ -27,6 +57,46 @@
           "stringUnit": {
             "state": "translated",
             "value": "Ø Geschwindigkeit"
+          }
+        }
+      }
+    },
+    "Battery": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Akku"
+          }
+        }
+      }
+    },
+    "Choose Another Folder…": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Anderen Ordner wählen …"
+          }
+        }
+      }
+    },
+    "Choose Folder…": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ordner wählen …"
+          }
+        }
+      }
+    },
+    "Choose the folder “Wattspur Import” in iCloud Drive that the Mac watches.": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Wähle den Ordner „Wattspur Import“ in iCloud Drive, den der Mac beobachtet."
           }
         }
       }
@@ -61,12 +131,92 @@
         }
       }
     },
+    "Duration": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Dauer"
+          }
+        }
+      }
+    },
+    "Folder": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ordner"
+          }
+        }
+      }
+    },
+    "Gaps over 10 s": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Lücken über 10 s"
+          }
+        }
+      }
+    },
+    "Hand Over to the Mac as GPX": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Als GPX an den Mac geben"
+          }
+        }
+      }
+    },
     "Last Ride": {
       "localizations": {
         "de": {
           "stringUnit": {
             "state": "translated",
             "value": "Letzte Fahrt"
+          }
+        }
+      }
+    },
+    "List Folder": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ordner auflisten"
+          }
+        }
+      }
+    },
+    "Location access denied": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Zugriff auf den Standort verweigert"
+          }
+        }
+      }
+    },
+    "Mean Accuracy": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ø Genauigkeit"
+          }
+        }
+      }
+    },
+    "More": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Mehr"
           }
         }
       }
@@ -81,12 +231,72 @@
         }
       }
     },
+    "No folder chosen yet.": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Noch kein Ordner gewählt."
+          }
+        }
+      }
+    },
+    "No folder chosen.": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Kein Ordner gewählt."
+          }
+        }
+      }
+    },
+    "No location at the moment": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Gerade kein Standort"
+          }
+        }
+      }
+    },
+    "Only approximate location allowed": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Nur ungefährer Standort erlaubt"
+          }
+        }
+      }
+    },
     "Overview": {
       "localizations": {
         "de": {
           "stringUnit": {
             "state": "translated",
             "value": "Übersicht"
+          }
+        }
+      }
+    },
+    "Points": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Punkte"
+          }
+        }
+      }
+    },
+    "Read Test File": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Testdatei lesen"
           }
         }
       }
@@ -121,12 +331,122 @@
         }
       }
     },
+    "Save CSV in Folder": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "CSV im Ordner sichern"
+          }
+        }
+      }
+    },
+    "Saved in “Wattspur Import”. The Mac imports it.": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "In „Wattspur Import“ gesichert. Der Mac importiert die Datei."
+          }
+        }
+      }
+    },
+    "Saved in “iPhone/Test”.": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "In „iPhone/Test“ gesichert."
+          }
+        }
+      }
+    },
+    "Seconds per Point": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sekunden je Punkt"
+          }
+        }
+      }
+    },
     "Shows the ride": {
       "localizations": {
         "de": {
           "stringUnit": {
             "state": "translated",
             "value": "Zeigt die Fahrt"
+          }
+        }
+      }
+    },
+    "Standing Still": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Stillstand"
+          }
+        }
+      }
+    },
+    "Start GPS Test": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "GPS-Test starten"
+          }
+        }
+      }
+    },
+    "Start, lock the screen and ride for about 30 minutes. Then stop and note the figures.": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Starten, Bildschirm sperren und etwa 30 Minuten fahren. Dann beenden und die Werte notieren."
+          }
+        }
+      }
+    },
+    "Stop GPS Test": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "GPS-Test beenden"
+          }
+        }
+      }
+    },
+    "Test: Folder": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Test: Ordner"
+          }
+        }
+      }
+    },
+    "Test: GPS Recording": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Test: GPS-Aufnahme"
+          }
+        }
+      }
+    },
+    "The folder can no longer be opened. Choose it again.": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Der Ordner lässt sich nicht mehr öffnen. Wähle ihn neu."
           }
         }
       }
@@ -183,6 +503,36 @@
           "stringUnit": {
             "state": "new",
             "value": "Wattspur %1$@ (%2$@, %3$@)"
+          }
+        }
+      }
+    },
+    "Wattspur Import": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Wattspur Import"
+          }
+        }
+      }
+    },
+    "Write Test File": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Testdatei schreiben"
+          }
+        }
+      }
+    },
+    "Writes “iPhone/Test/Write Test.txt” with the time. Look on the Mac when it appears.": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Schreibt „iPhone/Test/Write Test.txt“ mit der Uhrzeit. Schau am Mac, wann sie erscheint."
           }
         }
       }
