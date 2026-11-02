@@ -1,0 +1,9 @@
+// Build settings of the iPhone app (B-204). The signing team is personal and stays out of the
+// repository: copy Local.xcconfig.example to Local.xcconfig and enter your team there.
+// Without that file the project still generates and builds for the simulator.
+CODE_SIGN_STYLE = Automatic
+CODE_SIGN_IDENTITY = Apple Development
+// The simulator needs no team: sign to run locally.
+CODE_SIGN_IDENTITY[sdk=iphonesimulator*] = -
+
+#include? "Local.xcconfig"
