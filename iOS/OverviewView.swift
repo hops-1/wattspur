@@ -5,6 +5,12 @@ import WattspurCore
 /// the tile "Last Ride" with a small map, and the version at the bottom.
 struct OverviewView: View {
     @State private var ride = SampleRide.load()
+    @Environment(\.dynamicTypeSize) private var typeSize
+
+    /// Side by side, or one above the other at the accessibility text sizes.
+    private var tileLayout: AnyLayout {
+        typeSize.isAccessibilitySize ? AnyLayout(VStackLayout(spacing: 16)) : AnyLayout(HStackLayout(alignment: .top, spacing: 16))
+    }
 
     var body: some View {
         ScrollView {
@@ -14,7 +20,7 @@ struct OverviewView: View {
                     // for its week and month, so the tiles show what they will look like.
                     let totals = RidePeriodTotals(rides: [(start: ride.start, distance: ride.summary.distance)],
                                                   now: ride.start)
-                    HStack(spacing: 16) {
+                    tileLayout {
                         StatTile(title: "This Week", value: RideFormat.distance(totals.weekDistance),
                                  systemImage: "calendar")
                         StatTile(title: "This Month", value: totals.monthRides.formatted(),
