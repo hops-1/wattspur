@@ -10,7 +10,10 @@ CODE_SIGN_IDENTITY[sdk=iphonesimulator*] = -
 // state in the shared iCloud folder). Local.xcconfig can choose "local" (the iPhone's own store, to try
 // it in the simulator) or, with the developer account, "icloud" together with the iCloud entitlements:
 //   WATTSPUR_IOS_DATABASE = icloud
-//   CODE_SIGN_ENTITLEMENTS = iOS/Wattspur-iOS-iCloud.entitlements
+//   WATTSPUR_IOS_ENTITLEMENTS = iOS/Wattspur-iOS-iCloud.entitlements
 WATTSPUR_IOS_DATABASE = folder
+WATTSPUR_IOS_ENTITLEMENTS =
 
 #include? "Local.xcconfig"
+
+CODE_SIGN_ENTITLEMENTS = $(WATTSPUR_IOS_ENTITLEMENTS)

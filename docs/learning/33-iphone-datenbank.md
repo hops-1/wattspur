@@ -10,7 +10,7 @@ Stories: B-216, B-217 (iOS 0.3, Plan vom 2.11.2026). Vorbereitet, solange der De
 
 ## Warum so
 - **Hinter einem Schalter, nicht sofort für alle:** Ohne iCloud wäre die neue Datenbank leer. Die Fahrten vom Mac kommen erst mit dem Sync. Bis dahin bleibt Nils' iPhone bei 0.2, und der neue Weg lässt sich trotzdem schon im Simulator ausprobieren.
-- **Der Schalter steckt im Build, nicht in den Einstellungen:** `icloud` geht nur mit dem passenden Entitlement. Eine Einstellung in der App könnte das nicht prüfen, ein Build schon.
+- **Der Schalter steckt im Build, nicht in den Einstellungen:** `icloud` geht nur mit dem passenden Entitlement (`WATTSPUR_IOS_ENTITLEMENTS`). Eine Einstellung in der App könnte das nicht prüfen, ein Build schon.
 - **Dasselbe Format für die Ansichten:** Übersicht, Liste und Tour-Detail zeigen schon `RideExchange`-Werte aus dem Stand vom Mac. `PhoneDatabase.snapshot` liefert genau diese Werte aus SwiftData. So mussten die Ansichten kaum geändert werden.
 - **Die GPX als Zwischenschritt:** Der Import am Mac kann GPX vom iPhone schon (B-213). Aus der Aufnahme direkt eine `Ride` zu bauen wäre ein zweiter Weg mit eigenen Fehlern.
 

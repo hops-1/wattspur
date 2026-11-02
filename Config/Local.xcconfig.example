@@ -13,3 +13,10 @@ DEVELOPMENT_TEAM = ABCDE12345
 // but in the keychain, saved once under this name with "xcrun notarytool store-credentials".
 // WATTSPUR_MAC_DISTRIBUTION = developer-id
 // WATTSPUR_NOTARY_PROFILE = wattspur-notary
+
+// iPhone app (B-216, docs/learning/33-iphone-datenbank.md): where its rides come from. Without the line
+// it is "folder" as in iOS 0.2. "local" tries the iPhone's own store in the simulator; "icloud" needs the
+// developer account and the entitlements.
+// WATTSPUR_IOS_DATABASE = local
+// WATTSPUR_IOS_DATABASE = icloud
+// WATTSPUR_IOS_ENTITLEMENTS = iOS/Wattspur-iOS-iCloud.entitlements
