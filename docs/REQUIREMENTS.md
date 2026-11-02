@@ -645,7 +645,7 @@ Entschieden mit Nils am 27.10.2026. Grundlage: [RECHERCHE-KARTEN.md](RECHERCHE-K
 |---|---|---|
 | Versionen | eigene Nummern für iOS (0.1 „Hello World“, 0.2 erste Funktionen), weitere Versionen gemeinsam planen | BACKLOG „iOS 0.1 und 0.2“ |
 | Austausch Mac ↔ iPhone | über den iCloud-Ordner `Wattspur Import`: der Mac schreibt einen Lese-Stand (B-178, B-208), das iPhone legt Aufnahmen als GPX ab; kein CloudKit, kein Bearbeiten auf dem iPhone | B-072 bleibt offen, IMP-05 |
-| Developer-Account | nicht vorausgesetzt; kostenlose Apple-ID, Team-ID nur lokal | NFR-18 |
+| Developer-Account | für 0.1 und 0.2 keiner (Entscheidung Nils: erst einmal nur für mich); kostenlose Apple-ID, Team-ID nur lokal; nach 0.2 neu entscheiden | NFR-18 |
 | Projekt | iOS-Target im selben Repository und `project.yml`, nutzt nur das Paket, nichts aus `App/` | Kap. 7, B-185 ff. |
 | Karte auf iOS | SwiftUI-`Map` mit `MapPolyline`, ohne Kartenstile, bis B-186 | – |
 | GPS-Aufnahme | Core Location mit Hintergrundmodus, Erlaubnis „Beim Verwenden“, laufend zwischengespeichert; Ergebnis ist eine GPX-Datei | – |

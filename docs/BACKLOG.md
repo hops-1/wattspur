@@ -32,7 +32,7 @@ Status: ☐ offen · ◐ in Arbeit · ☑ erledigt
 | v1.x | Analysen, Komfort, Karten | alle |
 | iOS 0.1 | iOS-App „Hello World“: eigenes Target neben der Mac-App, nutzt das Paket, zeigt die Beispielfahrt; läuft im Simulator und auf Nils’ iPhone (B-204 bis B-207) | mich |
 | iOS 0.2 | Fahrten vom Mac ansehen, GPS-Aufnahme mit Karte, Aufnahme als GPX an den Mac und zum Teilen; Austausch über den iCloud-Ordner „Wattspur Import“, ohne CloudKit (V-14, B-178, B-208 bis B-213) | mich |
-| iOS 0.3+ | Plan mit Nils nach 0.2 | – |
+| iOS 0.3+ | Plan mit Nils nach 0.2, dabei die Frage nach dem Developer-Account | – |
 
 **Definition of Done:** Kernlogik mit Unit-Tests (WattspurKit), CI grün (GitHub Actions; ohne verfügbare Runner der Check „local-ci“ aus `scripts/ci-local.sh`), Änderung als Branch mit Code-Review vor dem Merge nach `main`, Texte lokalisierbar (EN/DE), Grundniveau Barrierefreiheit (NFR-16), **Erklärung der Story** (was, warum, welche Swift-Konzepte) im PR bzw. in `docs/learning/`.
 
@@ -494,7 +494,7 @@ Wunsch von Nils am 2.11.2026: eine iOS-App in kleinen Schritten. 0.1 ist nur „
 
 **Entscheidungen (2.11.2026, REQUIREMENTS 10.21):**
 - **Austausch über den iCloud-Ordner, nicht über CloudKit** (Entscheidung Nils): Der Mac bleibt die Datenbank. Er legt einen Lese-Stand für das iPhone in den Ordner `Wattspur Import`, das iPhone legt seine Aufnahmen als GPX in denselben Ordner, den der Mac schon überwacht (IMP-05, GPX-Import seit 1.6). Kein Zwei-Wege-Sync: Auf dem iPhone wird nichts bearbeitet. Echter Sync bleibt B-072 und braucht den bezahlten Developer-Account.
-- **Ohne bezahlten Developer-Account geplant:** Signieren mit kostenloser Apple-ID („Personal Team“), die App läuft im Simulator und auf Nils’ iPhone, muss dort alle 7 Tage neu aus Xcode installiert werden; kein TestFlight, kein CloudKit. Ob und wann der Account kommt, klärt eine eigene Recherche; ändert sich das, wird nur die Signierung angepasst.
+- **Ohne bezahlten Developer-Account** (Entscheidung Nils 2.11.2026 für 0.1 und 0.2, „erst einmal nur für mich“): Signieren mit kostenloser Apple-ID („Personal Team“), die App läuft im Simulator und auf Nils’ iPhone, muss dort alle 7 Tage neu aus Xcode installiert werden; kein TestFlight, kein CloudKit. Der Account (99 USD im Jahr, als Einzelperson) wird nach 0.2 neu bewertet, sobald Freunde die App bekommen sollen oder CloudKit-Sync kommt; dann wird nur die Signierung angepasst.
 - **Eigenes Target im selben Repository:** `project.yml` bekommt ein iOS-Target „Wattspur“ mit Quellen in `iOS/`; es nutzt `WattspurCore` und `WattspurKit` (beide nennen iOS 26 schon), aber **keine Datei aus `App/`**. Was beide Apps brauchen, wandert ins Paket (B-185 ff.), nicht per Kopie.
 - **Einfache Karten zuerst:** Die iOS-App zeichnet Spuren mit SwiftUI-`Map` und `MapPolyline` (Apple-Karte, ohne Kartenstile). Die gemeinsame Kartenlogik (B-186) kommt erst, wenn iOS mehr als eine Linie braucht.
 - **Team-ID nicht im Repository:** `DEVELOPMENT_TEAM` steht in einer lokalen, ignorierten Datei `Config/Local.xcconfig` (mit `Config/Local.xcconfig.example` als Vorlage), damit das Repo öffentlich bleiben kann und die Mac-App weiter ad-hoc signiert wird.
