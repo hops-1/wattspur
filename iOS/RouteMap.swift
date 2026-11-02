@@ -2,17 +2,19 @@ import MapKit
 import SwiftUI
 import WattspurCore
 
-/// The track of a ride on an Apple map. Without `interactive` it is a picture: no panning or
-/// zooming, and every tap goes to the tile around it.
+/// The track of a ride on an Apple map, one line per recording. Without `interactive` it is a
+/// picture: no panning or zooming, and every tap goes to the tile around it.
 struct RouteMap: View {
-    var route: [RoutePoint]
+    var route: RideExchange.Route
     var interactive = false
 
     var body: some View {
-        Map(initialPosition: .rect(Self.rect(for: coordinates)),
+        Map(initialPosition: .rect(Self.rect(for: segments.flatMap { $0 })),
             interactionModes: interactive ? .all : []) {
-            MapPolyline(coordinates: coordinates)
-                .stroke(Color.track, style: StrokeStyle(lineWidth: 4, lineCap: .round, lineJoin: .round))
+            ForEach(segments.indices, id: \.self) { index in
+                MapPolyline(coordinates: segments[index])
+                    .stroke(Color.track, style: StrokeStyle(lineWidth: 4, lineCap: .round, lineJoin: .round))
+            }
         }
         .mapControlVisibility(interactive ? .automatic : .hidden)
         .allowsHitTesting(interactive)
@@ -27,8 +29,10 @@ struct RouteMap: View {
         .accessibilityHidden(!interactive)
     }
 
-    private var coordinates: [CLLocationCoordinate2D] {
-        route.map { CLLocationCoordinate2D(latitude: $0.latitude, longitude: $0.longitude) }
+    private var segments: [[CLLocationCoordinate2D]] {
+        route.segments.map { segment in
+            zip(segment.latitude, segment.longitude).map { CLLocationCoordinate2D(latitude: $0, longitude: $1) }
+        }
     }
 
     /// The track's bounding box with a margin, so the line does not touch the edges.
@@ -41,5 +45,41 @@ struct RouteMap: View {
         }
         let margin = max(rect.width, rect.height) * 0.15 + 200
         return rect.insetBy(dx: -margin, dy: -margin)
+    }
+}
+
+/// The map of a ride once its route is loaded; a quiet placeholder until then or without GPS.
+struct RideMap: View {
+    @Environment(PhoneLibrary.self) private var library
+    var ride: RideExchange.Ride
+    /// For the sample ride, whose route is not in the folder.
+    var route: RideExchange.Route?
+    var interactive = false
+    @State private var loaded: RideExchange.Route?
+    @State private var finished = false
+
+    var body: some View {
+        Group {
+            if let shown = route ?? loaded, shown.pointCount > 0 {
+                RouteMap(route: shown, interactive: interactive)
+            } else {
+                Rectangle()
+                    .fill(.quaternary)
+                    .overlay {
+                        if finished || ride.routeFile == nil {
+                            Label("No GPS track", systemImage: "location.slash")
+                                .font(.footnote)
+                                .foregroundStyle(.secondary)
+                        } else {
+                            ProgressView()
+                        }
+                    }
+            }
+        }
+        .task(id: ride.routeFile) {
+            guard route == nil else { return }
+            loaded = await library.route(for: ride)
+            finished = true
+        }
     }
 }

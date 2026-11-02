@@ -21,6 +21,16 @@
         }
       }
     },
+    "%lld rpm": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%lld 1/min"
+          }
+        }
+      }
+    },
     "%lld, longest %lld s": {
       "localizations": {
         "de": {
@@ -31,12 +41,42 @@
         }
       }
     },
+    "All Rides": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Alle Fahrten"
+          }
+        }
+      }
+    },
+    "Altitude": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Höhe"
+          }
+        }
+      }
+    },
     "Ascent": {
       "localizations": {
         "de": {
           "stringUnit": {
             "state": "translated",
             "value": "Anstieg"
+          }
+        }
+      }
+    },
+    "Average Cadence": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ø Trittfrequenz"
           }
         }
       }
@@ -71,6 +111,16 @@
         }
       }
     },
+    "Check Again": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Erneut prüfen"
+          }
+        }
+      }
+    },
     "Choose Another Folder…": {
       "localizations": {
         "de": {
@@ -97,6 +147,16 @@
           "stringUnit": {
             "state": "translated",
             "value": "Wähle den Ordner „Wattspur Import“ in iCloud Drive, den der Mac beobachtet."
+          }
+        }
+      }
+    },
+    "Connect to the Mac": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Mit dem Mac verbinden"
           }
         }
       }
@@ -137,6 +197,36 @@
           "stringUnit": {
             "state": "translated",
             "value": "Dauer"
+          }
+        }
+      }
+    },
+    "Elevation Profile": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Höhenprofil"
+          }
+        }
+      }
+    },
+    "Elevation profile from %@ to %@": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Höhenprofil von %1$@ bis %2$@"
+          }
+        }
+      }
+    },
+    "Figures estimated from GPS": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Werte aus GPS geschätzt"
           }
         }
       }
@@ -201,6 +291,26 @@
         }
       }
     },
+    "Max. Power": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Max. Leistung"
+          }
+        }
+      }
+    },
+    "Max. Speed": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Max. Geschwindigkeit"
+          }
+        }
+      }
+    },
     "Mean Accuracy": {
       "localizations": {
         "de": {
@@ -221,12 +331,32 @@
         }
       }
     },
+    "No GPS track": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Keine GPS-Spur"
+          }
+        }
+      }
+    },
     "No Rides": {
       "localizations": {
         "de": {
           "stringUnit": {
             "state": "translated",
             "value": "Keine Fahrten"
+          }
+        }
+      }
+    },
+    "No Rides from the Mac Yet": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Noch keine Fahrten vom Mac"
           }
         }
       }
@@ -261,6 +391,16 @@
         }
       }
     },
+    "On the Mac, open Wattspur › Settings › Import and switch on “Provide rides for the iPhone”. Then pull down here to refresh.": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Öffne am Mac Wattspur › Einstellungen › Import und schalte „Fahrten für das iPhone bereitstellen“ ein. Dann hier nach unten ziehen zum Aktualisieren."
+          }
+        }
+      }
+    },
     "Only approximate location allowed": {
       "localizations": {
         "de": {
@@ -281,6 +421,16 @@
         }
       }
     },
+    "Part": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Teil"
+          }
+        }
+      }
+    },
     "Points": {
       "localizations": {
         "de": {
@@ -297,6 +447,16 @@
           "stringUnit": {
             "state": "translated",
             "value": "Testdatei lesen"
+          }
+        }
+      }
+    },
+    "Rides": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Fahrten"
           }
         }
       }
@@ -411,6 +571,16 @@
         }
       }
     },
+    "State from the Mac: %@": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Stand vom Mac: %@"
+          }
+        }
+      }
+    },
     "Stop GPS Test": {
       "localizations": {
         "de": {
@@ -437,6 +607,26 @@
           "stringUnit": {
             "state": "translated",
             "value": "Test: GPS-Aufnahme"
+          }
+        }
+      }
+    },
+    "The Mac has no rides yet.": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Der Mac hat noch keine Fahrten."
+          }
+        }
+      }
+    },
+    "The Mac wrote a newer format. Update Wattspur on the iPhone.": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Der Mac hat ein neueres Format geschrieben. Aktualisiere Wattspur auf dem iPhone."
           }
         }
       }
@@ -517,6 +707,26 @@
         }
       }
     },
+    "Wattspur on the iPhone shows the rides from your Mac. Choose the folder “Wattspur Import” in iCloud Drive that the Mac watches.": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Wattspur auf dem iPhone zeigt die Fahrten von deinem Mac. Wähle den Ordner „Wattspur Import“ in iCloud Drive, den der Mac beobachtet."
+          }
+        }
+      }
+    },
+    "Work": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Arbeit"
+          }
+        }
+      }
+    },
     "Write Test File": {
       "localizations": {
         "de": {
@@ -533,6 +743,26 @@
           "stringUnit": {
             "state": "translated",
             "value": "Schreibt „iPhone/Test/Write Test.txt“ mit der Uhrzeit. Schau am Mac, wann sie erscheint."
+          }
+        }
+      }
+    },
+    "km": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "km"
+          }
+        }
+      }
+    },
+    "m": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "m"
           }
         }
       }

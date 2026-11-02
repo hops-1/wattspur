@@ -5,7 +5,6 @@ import UniformTypeIdentifiers
 /// holds the tests of the spike V-14, which go away again with the real recording (B-211).
 struct MoreView: View {
     @Environment(ImportFolder.self) private var folder
-    @State private var choosingFolder = false
 
     var body: some View {
         Form {
@@ -16,9 +15,7 @@ struct MoreView: View {
                     Text("No folder chosen yet.")
                         .foregroundStyle(.secondary)
                 }
-                Button(folder.url == nil ? "Choose Folder…" : "Choose Another Folder…") {
-                    choosingFolder = true
-                }
+                ChooseFolderButton(title: folder.url == nil ? "Choose Folder…" : "Choose Another Folder…")
                 if let problem = folder.problem {
                     Text(problem)
                         .font(.footnote)
@@ -38,9 +35,6 @@ struct MoreView: View {
             }
         }
         .navigationTitle("More")
-        .fileImporter(isPresented: $choosingFolder, allowedContentTypes: [.folder]) { result in
-            if case .success(let url) = result { folder.use(url) }
-        }
     }
 }
 

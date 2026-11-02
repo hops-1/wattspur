@@ -9,7 +9,7 @@ import Observation
 /// that is not downloaded yet is fetched first.
 @MainActor @Observable
 final class ImportFolder {
-    enum FolderError: LocalizedError {
+    nonisolated enum FolderError: LocalizedError {
         case noFolder
         case noAccess
 
@@ -97,17 +97,30 @@ final class ImportFolder {
 
     /// Reads a file inside the folder; iCloud downloads it first if it is only a placeholder.
     func read(_ relativePath: String) throws -> Data {
-        try withAccess { folder in
-            let target = folder.appending(path: relativePath)
-            try? FileManager.default.startDownloadingUbiquitousItem(at: target)
-            var coordinatorError: NSError?
-            var result: Result<Data, Error> = .failure(CocoaError(.fileReadUnknown))
-            NSFileCoordinator().coordinate(readingItemAt: target, options: [], error: &coordinatorError) { url in
-                result = Result { try Data(contentsOf: url) }
-            }
-            if let coordinatorError { throw coordinatorError }
-            return try result.get()
+        guard let url else { throw FolderError.noFolder }
+        return try Self.coordinatedRead(relativePath, in: url)
+    }
+
+    /// The same off the main thread: a file iCloud still has to download can take a while.
+    func readInBackground(_ relativePath: String) async throws -> Data {
+        guard let url else { throw FolderError.noFolder }
+        return try await Task.detached(priority: .userInitiated) {
+            try Self.coordinatedRead(relativePath, in: url)
+        }.value
+    }
+
+    nonisolated private static func coordinatedRead(_ relativePath: String, in folder: URL) throws -> Data {
+        guard folder.startAccessingSecurityScopedResource() else { throw FolderError.noAccess }
+        defer { folder.stopAccessingSecurityScopedResource() }
+        let target = folder.appending(path: relativePath)
+        try? FileManager.default.startDownloadingUbiquitousItem(at: target)
+        var coordinatorError: NSError?
+        var result: Result<Data, Error> = .failure(CocoaError(.fileReadUnknown))
+        NSFileCoordinator().coordinate(readingItemAt: target, options: [], error: &coordinatorError) { url in
+            result = Result { try Data(contentsOf: url) }
         }
+        if let coordinatorError { throw coordinatorError }
+        return try result.get()
     }
 
     /// The names directly in the folder or a subfolder, placeholders (“.Ride.fit.icloud”) included.
