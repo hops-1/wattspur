@@ -5,7 +5,7 @@ import Foundation
 /// (B-202, for the records).
 public struct TrackFigures: Sendable, Equatable {
     /// Raise when one of the calculations changes.
-    public static let version = 2
+    public static let version = 3
 
     /// Curvature per kilometre (`CurvatureAnalyzer`); `nil` without GPS or under a kilometre of track.
     public var curvaturePerKm: Double?

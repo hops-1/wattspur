@@ -126,6 +126,38 @@ struct RideTrackTests {
         #expect(step.steepestGrades().descent == nil)
     }
 
+    @Test("A jump in the altitude sets no record, a real hill stays (B-203)")
+    func noisyAltitude() throws {
+        // 1 km at 3 % up (5 m between points); one point 15 m too high and a pair 12 m too low.
+        func noisy(_ metres: Double) -> Double {
+            let index = Int(metres / 5)
+            let spike = index == 80 ? 15.0 : (index == 150 || index == 151) ? -12.0 : 0
+            return 200 + 0.03 * metres + spike
+        }
+        let grades = ride(altitude: noisy).steepestGrades()
+        #expect(abs(try #require(grades.climb) - 3) < 0.5)
+        #expect(grades.descent == nil)
+        // The chart still shows what the points say.
+        #expect(try #require(ride(altitude: noisy).grade(atDistanceKm: 0.385, window: 15)) > 10)
+        // Jitter of ±2 m between neighbouring points around a 6 % hill.
+        let jitter = ride(length: 600) { metres in
+            200 + 0.06 * min(max(metres - 200, 0), 100) + (Int(metres / 5).isMultiple(of: 2) ? 2 : -2)
+        }.steepestGrades()
+        #expect(abs(try #require(jitter.climb) - 6) < 1.5)
+        #expect((jitter.descent ?? 0) < 1.5)
+    }
+
+    @Test("A grade above 30 % is no road and does not count")
+    func implausibleGrade() throws {
+        // 40 % up for 100 m: the windows that take all of it are left out, so the record stays at the
+        // 30 % limit instead of 40 % ...
+        let cliff = ride(length: 600) { 200 + 0.4 * min(max($0 - 200, 0), 100) }
+        #expect(try #require(cliff.steepestGrades().climb) <= RideTrack.maxPlausibleGrade)
+        // ... 25 % is a (very steep) road.
+        let steep = ride(length: 600) { 200 + 0.25 * min(max($0 - 200, 0), 100) }
+        #expect(abs(try #require(steep.steepestGrades().climb) - 25) < 0.01)
+    }
+
     @Test("Without altitude, or under 100 m, there are no steepest grades")
     func noSteepestGrades() {
         #expect(ride { _ in nil }.steepestGrades() == (nil, nil))

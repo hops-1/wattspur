@@ -9,6 +9,7 @@ Every DMG handed out to testers corresponds to one entry below.
 
 ### Fixed
 
+- **Steepest climb and descent:** the records no longer jump on GPX files without a barometer, where the altitude jitters by metres. The altitude is smoothed before the calculation and grades above 30 % do not count; the grade in the chart stays as it was. Rides are calculated again in the background at the first start (B-203).
 - **Similar rides:** a commute that started a few hundred metres off (another place to park, a recording started late) was missing from the similar rides and from saved routes. Start and end of a ride may now lie 200 m apart, or 2 % of its length if that is more (about 510 m for 25 km); up to 10 km nothing changes (B-184).
 
 ## [1.8.1] – 2026-11-01
