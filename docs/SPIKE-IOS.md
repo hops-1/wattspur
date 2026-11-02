@@ -11,7 +11,7 @@ Stand: 2.11.2026 · Vorarbeit für iOS 0.2 (B-208 bis B-213, Requirements 10.21)
 3. Läuft beides mit dem Personal Team?
 
 ## Wie geprüft wird
-Die App hat dafür im Tab *Mehr* einen Test-Bereich (fällt mit B-211 wieder weg):
+Die App hatte dafür im Tab *Mehr* einen Test-Bereich (mit B-211 entfernt; die GPS-Werte zeigt jetzt die echte Aufnahme):
 - **Ordner:** „Ordner wählen …“ (`fileImporter` mit `.folder`), Lesezeichen in `UserDefaults`;
   „Testdatei schreiben“ legt `iPhone/Test/Write Test.txt` mit Uhrzeit an (über `NSFileCoordinator`),
   „Testdatei lesen“ liest sie zurück, „Ordner auflisten“ zeigt den Inhalt und wie viele Dateien

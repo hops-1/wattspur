@@ -6,6 +6,7 @@ import WattspurCore
 /// state, the sample ride shows what the tiles will look like.
 struct OverviewView: View {
     @Environment(PhoneLibrary.self) private var library
+    @Environment(Recorder.self) private var recorder
     /// Switches to the tab “Rides”.
     var showAllRides: () -> Void
     @State private var sample = SampleRide.load()
@@ -21,6 +22,7 @@ struct OverviewView: View {
                         LastRideTile(ride: last)
                     }
                     .buttonStyle(.plain)
+                    StartRideButton { recorder.start() }
                     Button(action: showAllRides) {
                         HStack {
                             Text("All Rides")
@@ -46,6 +48,7 @@ struct OverviewView: View {
                         LastRideTile(ride: sample.ride, route: sample.route)
                     }
                     .buttonStyle(.plain)
+                    StartRideButton { recorder.start() }
                     Text("Sample data: the tiles count the sample ride's week and month.")
                         .font(.footnote)
                         .foregroundStyle(.secondary)
@@ -70,6 +73,22 @@ struct OverviewView: View {
             StatTile(title: "This Month", value: totals.monthRides.formatted(),
                      unit: totals.monthRides == 1 ? "ride" : "rides", systemImage: "bicycle")
         }
+    }
+}
+
+/// The large red button that opens the recording (design C).
+struct StartRideButton: View {
+    var action: () -> Void
+
+    var body: some View {
+        Button(action: action) {
+            Label("Start Ride", systemImage: "record.circle")
+                .font(.title3.weight(.semibold))
+                .frame(maxWidth: .infinity, minHeight: 36)
+        }
+        .buttonStyle(.glassProminent)
+        .tint(.red)
+        .controlSize(.extraLarge)
     }
 }
 
