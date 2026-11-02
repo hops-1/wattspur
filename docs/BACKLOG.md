@@ -1,6 +1,6 @@
 # Backlog – Wattspur
 
-Stand: 2.11.2026 (v0.23, Plan für die iOS-App 0.1 und 0.2; davor v0.22, Plan für 1.8.2; davor v0.21 vom 1.11.2026, 1.8.1 umgesetzt: Steigung, Lastenrad, Kurvigkeit und Ebene „Kurvige Straßen“; davor v0.20 vom 28.10.2026, Release 1.8.0 „Kartenstile“ vorbereitet; davor v0.19 vom 27.10.2026, Plan für 1.8 „Kartenstile“, der Bereich „Fahrten“ B-125 nach 1.9 verschoben; davor v0.18 vom 26.10.2026, Plan für 1.7 in zwei Releases 1.7.0 und 1.7.1; davor v0.17 vom 25.10.2026, Release 1.6.2 mit Update-Hinweis B-172; davor 1.6.1 mit Sicherheits-Fix, Architektur-Aufräumen B-162 bis B-169 und zwei Karten-Verbesserungen B-170, B-171; Plan für 1.7 bis 1.9) · Die IDs in Klammern verweisen auf `REQUIREMENTS.md`.
+Stand: 2.11.2026 (v0.24, Plan für die iOS-App 0.3 bis 0.6 und Mac 1.8.3 mit Sync über CloudKit; davor v0.23, Plan für die iOS-App 0.1 und 0.2; davor v0.22, Plan für 1.8.2; davor v0.21 vom 1.11.2026, 1.8.1 umgesetzt: Steigung, Lastenrad, Kurvigkeit und Ebene „Kurvige Straßen“; davor v0.20 vom 28.10.2026, Release 1.8.0 „Kartenstile“ vorbereitet; davor v0.19 vom 27.10.2026, Plan für 1.8 „Kartenstile“, der Bereich „Fahrten“ B-125 nach 1.9 verschoben; davor v0.18 vom 26.10.2026, Plan für 1.7 in zwei Releases 1.7.0 und 1.7.1; davor v0.17 vom 25.10.2026, Release 1.6.2 mit Update-Hinweis B-172; davor 1.6.1 mit Sicherheits-Fix, Architektur-Aufräumen B-162 bis B-169 und zwei Karten-Verbesserungen B-170, B-171; Plan für 1.7 bis 1.9) · Die IDs in Klammern verweisen auf `REQUIREMENTS.md`.
 Größe: **S** ≈ wenige Stunden, **M** ≈ 1–2 Tage, **L** ≈ mehrere Tage.
 Status: ☐ offen · ◐ in Arbeit · ☑ erledigt
 
@@ -27,12 +27,17 @@ Status: ☐ offen · ◐ in Arbeit · ☑ erledigt
 | **v1.8** | Kartenstile: OpenStreetMap, CyclOSM und OpenTopoMap (mit Höhenlinien und Schummerung), Fenster „Karte anpassen“ mit Bildchen (B-061); Kalendertag als Filter (B-130), Austauschformate (B-177) | Freunde |
 | v1.8.1 | **Alles in einem Release (Entscheidung Nils 31.10.2026):** kleines Update mit Steigung im Höhenmeter-Diagramm (B-200) und Bike-Art Lastenrad (B-201), dazu der Versuch „Kurvige Straßen“: Kurvigkeit eigener Fahrten (Kennzahl, Einfärbung, Rekord; B-180, B-181 umgesetzt), Ebene mit kurvigen Straßen aus roadcurvature.com (V-13, B-182, B-183) | Freunde, Motorradfahrer |
 | v1.8.2 | Kleines Folgerelease (Plan 2.11.2026): Fehler bei ähnlichen Pendelfahrten (B-184), Rekorde bei Steigung und Gefälle ohne Barometer glätten (B-203), ~~optional neue Handbuch-Bilder (B-179)~~ (verschoben: braucht Aufnahmen der laufenden App) | Freunde |
+| v1.8.3 | Sync mit dem iPhone über iCloud (CloudKit), zusammen mit iOS 0.3: Developer-Account, Signierung mit Developer ID und Notarisierung, CloudKit-Tauglichkeit, Sync der Bibliothek, Abschied vom „Stand fürs iPhone“ (B-215, B-189, B-072, B-218, V-15) | Freunde |
 | **v1.9** | Bosch-Daten über die offizielle Data-Act-API (optional, eigenes Bosch-Konto): Bike, Akku und Wartung, Zusatzfelder je Fahrt und Import von Fahrten ohne Datei (Altbestand). **Motordaten je Fahrt gibt die API nicht her (Spezifikation 25.10.2026), Entscheidung Nils: Option B;** steht unter dem Vorbehalt des Spikes V-12 | Freunde mit Smart-System-Bike in der EU |
 | v1.10 | Ein Bereich „Fahrten“ mit Karte als Standard (B-125), Analyse nach Strecke (B-176); von 1.8 zurückgestellt am 27.10.2026 | Freunde |
 | v1.x | Analysen, Komfort, Karten | alle |
 | iOS 0.1 | iOS-App „Hello World“: eigenes Target neben der Mac-App, nutzt das Paket, zeigt die Beispielfahrt; läuft im Simulator und auf Nils’ iPhone (B-204 bis B-207) | mich |
 | iOS 0.2 | Fahrten vom Mac ansehen, GPS-Aufnahme mit Karte, Aufnahme als GPX an den Mac und zum Teilen; Austausch über den iCloud-Ordner „Wattspur Import“, ohne CloudKit (V-14, B-178, B-208 bis B-214; Design C „Übersicht mit Kacheln“) | mich |
-| iOS 0.3+ | Plan mit Nils nach 0.2, dabei die Frage nach dem Developer-Account | – |
+| iOS 0.3 | Eine Datenbank auf iPhone und Mac: Sync über CloudKit, Aufnahme wird direkt zur Fahrt, Löschen auf dem iPhone, Verteilung über TestFlight (B-215 bis B-220, mit Mac 1.8.3) | mich, Freunde über TestFlight |
+| iOS 0.4 | Auswerten und Importieren: Diagramm-Karussell, Diagramm und Karte gekoppelt, Filter in der Liste, FIT aus der Flow-App (B-090, B-221, B-222, B-071) | mich, Freunde |
+| iOS 0.5 | Unterwegs: Live-Aktivität bei der Aufnahme, Widget „Diese Woche“, Kurzbefehle und Siri (B-223 bis B-225) | mich, Freunde |
+| iOS 0.6 | Karten und Highlights: Kartenstile, Karte aller Fahrten mit Heatmap, Highlights (B-186, B-226 bis B-228) | mich, Freunde |
+| iOS später | Bosch-Portal, Apple Watch, Fahrten mit Freunden teilen (B-229 bis B-231) | – |
 
 **Definition of Done:** Kernlogik mit Unit-Tests (WattspurKit), CI grün (GitHub Actions; ohne verfügbare Runner der Check „local-ci“ aus `scripts/ci-local.sh`), Änderung als Branch mit Code-Review vor dem Merge nach `main`, Texte lokalisierbar (EN/DE), Grundniveau Barrierefreiheit (NFR-16), **Erklärung der Story** (was, warum, welche Swift-Konzepte) im PR bzw. in `docs/learning/`.
 
@@ -469,7 +474,7 @@ Von Nils am 27.10.2026 zurückgestellt, kommt nach 1.8 und 1.9. Zuerst Artboard 
 | B-161 | **Bug:** Im Papierkorb sitzt **Papierkorb leeren …** in der Titelleiste ungünstig und überlappt den grauen Bereich der Seitenleiste (Screenshot von Nils, 25.10.2026, 1.6.0). Der Knopf gehört dahin, wo er die Seitenleiste nicht berührt, etwa in die Kopfzeile des Papierkorbs neben „Fahrten werden nach 30 Tagen endgültig gelöscht“. Beim Prüfen auch die Zeilen im Papierkorb ansehen: In der schmalen Listenspalte brechen Name und Datum mehrzeilig um (Beispiel „Garda-see und Dolomi-ten“), weil **Wiederherstellen** daneben Platz nimmt; Name und Zahlen gehören untereinander in eine Zeile je Fahrt, der Knopf rechts oder im Kontextmenü. Für das nächste Release. **Umgesetzt (26.10.2026, 1.7.0):** „Papierkorb leeren …“ steht in der Kopfzeile des Papierkorbs; „Wiederherstellen“ ist ein schmaler Symbol-Knopf (auch im Kontextmenü), Name und Zahlen brechen nicht mehr um | S | ☑ |
 | B-061 | OSM-Stile Standard, CyclOSM und OpenTopoMap → v1.8 (Plan 27.10.2026) | M | → |
 | B-063 | Route auf der Karte einfärben nach Höhe, Geschwindigkeit, Trittfrequenz, Leistung oder Steigung: Menü auf der Karte, Skala Blau → Rot je Fahrt mit Legende, Lücken grau, Wert beim Zeigen, Auswahl merken (TOUR-08) | M | ☐ |
-| B-090 | Diagramme als scrollbares bzw. wischbares Karussell in kompakten Fenstern und auf iOS (TOUR-11); Voraussetzung für B-070 | M | ☐ |
+| B-090 | Diagramme als scrollbares bzw. wischbares Karussell in kompakten Fenstern und auf iOS (TOUR-11); Voraussetzung für B-070. **→ iOS 0.4** (Plan 2.11.2026) | M | → |
 | B-091 | Zoom in Diagramme mit Kennzahlen und Kartenmarkierung für den gewählten Abschnitt (TOUR-12) | M | ☐ |
 | B-092 | Tour-Ansicht anpassen: Abschnitte einklappen, per Drag & Drop umsortieren, ein-/ausblenden, Layout speichern und zurücksetzen (TOUR-13) | M | ☐ |
 | B-095 | Fahrten zusammenfassen: Mehrfachauswahl → „Fahrten zusammenfassen“ ergibt eine Fahrt mit addierten Summen, gewichteten Mitteln und durchgehender Zeitreihe; Originale ausgeblendet, „Zusammenfassung aufheben“ und ⌘Z (LIST-09) | M | ☑ |
@@ -551,9 +556,72 @@ Ablauf: Am Mac wie bisher importieren; der Mac schreibt nach jeder Änderung ein
 **Aufwand (Schätzung 2.11.2026):** iOS 0.1 etwa 1–2 Tage. iOS 0.2 etwa 9–13 Tage, davon die Aufnahme (B-211) der größte Teil; Risiken: Zugriff auf iCloud Drive ohne Berechtigung (V-14), Akku und Hintergrund bei langen Fahrten, 7-Tage-Grenze der kostenlosen Signierung.
 **Nicht in 0.2:** Bearbeiten auf dem iPhone, Import von FIT-Dateien auf dem iPhone (B-071), Auswertung und Highlights, iPad, Widgets, Bosch-Daten. Kandidaten für 0.3+.
 
+## iOS 0.3 bis 0.6 (Plan 2.11.2026)
+
+Ideen von Nils und Claude am 2.11.2026 gesammelt und von Nils geordnet. Leitfaden: erst eine gemeinsame Datenbank, dann Auswertung, dann Komfort für unterwegs, zum Schluss die Karten, weil sie einen Umbau am Mac brauchen.
+
+**Entscheidungen (2.11.2026, REQUIREMENTS 10.22):**
+- **Sync über CloudKit** (Entscheidung Nils, folgt der Empfehlung): Jeder Nutzer synchronisiert seine Fahrten in der privaten Datenbank seines eigenen iCloud-Kontos; kein eigener Server, keine Anmeldung bei Wattspur, keine Kosten je Nutzer. Gilt damit auch für Freunde. Damit endet „Der Mac bleibt die Datenbank“: iPhone und Mac sind gleichberechtigt, Fahrten entstehen und verschwinden auf beiden Seiten.
+- **Bezahlter Developer-Account** (Einzelperson) ab iOS 0.3 und Mac 1.8.3; nötig für CloudKit, TestFlight und Widgets mit App Group. Die Mac-App wird dann mit Developer ID signiert und notarisiert statt ad hoc (NFR-18).
+- **Eigener Webserver zurückgestellt:** nur falls Android, eine Web-Ansicht oder ein gemeinsames Portal einmal wichtig werden (zu B-088).
+- **Gemeinsame Version:** iOS 0.3 und Mac 1.8.3 erscheinen zusammen, weil der Sync beide Seiten braucht.
+
+### iOS 0.3 + Mac 1.8.3 – Eine Datenbank auf iPhone und Mac
+
+| # | Story | Größe | Status |
+|---|---|---|---|
+| B-215 | **Developer-Account und Signierung:** Account als Einzelperson einrichten (Team-ID weiter nur in `Config/Local.xcconfig`); iCloud-Container `iCloud.io.github.hops-1.wattspur` für Mac und iPhone anlegen; Mac-App mit Developer ID signieren und notarisieren, DMG notarisiert, `scripts/` und Release-Anleitung anpassen; Gatekeeper-Hinweis im Handbuch nur noch für alte Versionen | M | ☐ |
+| V-15 | **Spike CloudKit mit echten Daten:** die Bibliothek von Nils (alle Fahrten mit Zeitreihen und Routen) im Development-Container synchronisieren: Dauer beim ersten Hochladen, Größe, Verhalten bei zwei Geräten, doppelte Fahrten, Löschen, iCloud aus oder Speicher voll. Ergebnis entscheidet, ob Zeitreihen als externer Speicher (`@Attribute(.externalStorage)`) oder getrennt synchronisiert werden | M | ☐ |
+| B-189 | (vorhanden, aus „Vorbereitung iOS“) **CloudKit-Tauglichkeit absichern:** Test für die CloudKit-Regeln des Modells; muss vor dem ersten Schema-Deploy nach Production grün sein, danach lässt sich das Modell nur noch erweitern | S | ☐ |
+| B-072 | (vorhanden) **Sync am Mac:** SwiftData mit `cloudKitDatabase: .private(…)`, Einstellung „Mit iCloud synchronisieren“ (aus als Standard); beim ersten Einschalten vorher eine Sicherung (P-22) und Hinweis, dass alle Fahrten hochgeladen werden; Papierkorb, Bikes, Profil und gespeicherte Strecken synchronisieren mit | L | ☐ |
+| B-216 | **iPhone: eigene Datenbank mit Sync:** dasselbe Modell aus dem Kit im selben Container; *Übersicht*, *Fahrten* und Tour-Detail lesen aus SwiftData statt aus `Stand.json`; eine Aufnahme wird nach dem Stopp (Name, Bike) direkt eine Fahrt, die Auswertung rechnet das Kit auf dem iPhone; Duplikaterkennung wie am Mac | L | ☐ |
+| B-217 | **Löschen auf dem iPhone:** Wischen zum Löschen in der Liste und Knopf im Tour-Detail, Papierkorb mit derselben Logik wie am Mac (Wiederherstellen, endgültig nach 30 Tagen); über den Sync auch am Mac | S | ☐ |
+| B-218 | **Abschied vom iCloud-Ordner fürs iPhone:** „Stand fürs iPhone“ (B-208) und die Ordnerwahl auf dem iPhone entfallen, sobald Sync an ist; einmaliger Hinweis für bisherige Nutzer; der Ordner `Wattspur Import` bleibt am Mac für FIT- und GPX-Dateien; Austauschformat (B-178) bleibt als Export | S | ☐ |
+| B-219 | **TestFlight:** Eintrag in App Store Connect, Archiv aus Xcode hochladen, interne Tester (Nils), danach externe Tester (Freunde) mit Beta-Review; Datenschutzangaben (Standort, Fitnessdaten, alles nur im eigenen iCloud); Anleitung in `docs/learning/` | S | ☐ |
+| B-220 | **Sync-Status:** im Tab *Mehr* und in den Mac-Einstellungen „Zuletzt synchronisiert: …“; verständliche Hinweise bei abgemeldetem iCloud, vollem Speicher oder fehlendem Netz; keine Fehlermeldung bei kurzen Verzögerungen | S | ☐ |
+
+**Fertig, wenn** eine Aufnahme auf dem iPhone ohne Handgriff am Mac erscheint, eine am Mac importierte Fahrt auf dem iPhone, Löschen auf einer Seite auch auf der anderen wirkt und die App über TestFlight auf Nils’ iPhone läuft.
+**Risiken:** Größe der Zeitreihen beim ersten Hochladen (V-15); Modell nach dem Production-Deploy nicht mehr umbaubar (B-189); Konflikte bei gleichzeitiger Bearbeitung (SwiftData: letzter gewinnt).
+
+### iOS 0.4 – Auswerten und Importieren
+
+| # | Story | Größe | Status |
+|---|---|---|---|
+| B-090 | (vorhanden) **Diagramm-Karussell** im Tour-Detail: Tempo, Leistung, Trittfrequenz, Puls und Höhe (je nach vorhandenen Daten), Wischen nach links und rechts, Punkte unten; Messwerte für die Anzeige im Kit ausdünnen | M | ☐ |
+| B-221 | **Diagramm und Karte gekoppelt:** Finger aufs Diagramm zeigt den Punkt auf der Karte und die Werte an dieser Stelle, wie `RideCursor` am Mac; Logik der Zuordnung Zeit ↔ Ort ins Kit | M | ☐ |
+| B-222 | **Filter und Suche in der Fahrtenliste:** nach Bike, Zeitraum, Strecke (von–bis) und Name; Filter oben als Leiste, Anzahl der Treffer; Filterlogik im Kit, damit der Mac sie mitnutzen kann | M | ☐ |
+| B-071 | (vorhanden) **FIT aus der Flow-App:** „Öffnen mit“ und Teilen für FIT und GPX, Import auf dem iPhone mit demselben Ablauf wie am Mac (setzt B-188 voraus), Duplikate erkennen, Bike zuordnen; bringt Trittfrequenz, Leistung und Motordaten mit | M | ☐ |
+
+### iOS 0.5 – Unterwegs
+
+| # | Story | Größe | Status |
+|---|---|---|---|
+| B-223 | **Live-Aktivität bei der Aufnahme:** Zeit, Strecke und Tempo auf dem Sperrbildschirm und in der Dynamic Island, Knopf Pause; endet mit dem Stopp | M | ☐ |
+| B-224 | **Widget „Diese Woche“:** km und Fahrten der Woche, letzte Fahrt; klein und mittel; Daten über eine App Group (braucht den Account) (P-06) | M | ☐ |
+| B-225 | **Kurzbefehle und Siri** mit App Intents: „Fahrt starten“, „Fahrt beenden“, „Wie viele Kilometer diese Woche?“, „Letzte Fahrt öffnen“ (P-07) | M | ☐ |
+
+### iOS 0.6 – Karten und Highlights
+
+| # | Story | Größe | Status |
+|---|---|---|---|
+| B-186 | (vorhanden, aus „Vorbereitung iOS“) **Karten in Kern und Mac-Hülle trennen;** Voraussetzung für B-226 und B-227, als eigener Umbau vorher | L | ☐ |
+| B-226 | **Kartenstile auf dem iPhone:** Apple, OpenStreetMap, CyclOSM und OpenTopoMap wie am Mac, mit Quellenangabe und Cache nach V-04; Auswahl im Tour-Detail und in *Mehr* | M | ☐ |
+| B-227 | **Karte aller Fahrten mit Heatmap** auf dem iPhone, Filter nach Bike und Zeitraum | M | ☐ |
+| B-228 | **Highlights auf dem iPhone:** Rekorde, Jahresrückblick und Ziele mit der Logik aus dem Kit; als Kachel in der *Übersicht* und eigene Seite | M | ☐ |
+
+### iOS später
+
+| # | Story | Größe | Status |
+|---|---|---|---|
+| B-229 | **Bosch-Portal auf dem iPhone:** Anmeldung und Abruf wie am Mac, erst nach Mac 1.9; die offizielle API liefert keine Trittfrequenz und Leistung je Fahrt, dafür bleibt B-071 | L | ☐ |
+| B-230 | **Apple Watch:** Aufnahme starten und anzeigen, Puls mitschreiben; mit Apple Health zusammen denken (B-075, P-27) | L | ☐ |
+| B-231 | **Fahrten mit Freunden teilen** über CloudKit-Freigaben (geteilte Datenbank): einzelne Fahrten oder eine Gruppe (zu P-24, P-25) | L | ☐ |
+
+**Bewusst nicht geplant:** eigener Webserver für den Sync (zurückgestellt, siehe oben), iPad-Layout, Bearbeiten von Fahrten auf dem iPhone über Name und Bike hinaus.
+
 ## Vorbereitung iOS (Wunsch von Nils 29.10.2026)
 
-Umbauten in der Mac-App, die eine spätere iOS-App (B-070 ff.) einfacher machen, ohne schon ein iOS-Target anzulegen. Stand der Analyse: `WattspurCore` und `WattspurKit` sind frei von AppKit und nennen iOS 26 schon als Plattform; die Mac-Bindung steckt in der App (rund 11.000 Zeilen), vor allem in Karten und PDF-Export. **Version offen;** B-185 und B-189 passen als Aufräumen in eine Mac-Version, B-186 ist ein eigener Umbau ohne gleichzeitige neue Kartenfunktionen.
+Umbauten in der Mac-App, die eine spätere iOS-App (B-070 ff.) einfacher machen, ohne schon ein iOS-Target anzulegen. Stand der Analyse: `WattspurCore` und `WattspurKit` sind frei von AppKit und nennen iOS 26 schon als Plattform; die Mac-Bindung steckt in der App (rund 11.000 Zeilen), vor allem in Karten und PDF-Export. **Version:** B-189 kommt mit Mac 1.8.3, B-186 als eigener Umbau ohne gleichzeitige neue Kartenfunktionen vor iOS 0.6 (Plan 2.11.2026); B-185, B-187 und B-188 offen, B-188 spätestens vor B-071 (iOS 0.4).
 
 | # | Story | Größe | Status |
 |---|---|---|---|
@@ -568,8 +636,8 @@ Umbauten in der Mac-App, die eine spätere iOS-App (B-070 ff.) einfacher machen,
 | # | Story | Größe | Status |
 |---|---|---|---|
 | B-070 | iOS-Target: Tab-Navigation, gleiche Views mit angepasstem Layout | L | ☐ |
-| B-071 | Import auf iOS: Teilen-Menü aus der Flow-App bzw. „Öffnen mit“ | M | ☐ |
-| B-072 | Sync Mac ↔ iOS über CloudKit; für iOS 0.2 stattdessen Austausch über den iCloud-Ordner (Entscheidung Nils 2.11.2026, siehe „iOS 0.1 und 0.2“), CloudKit erst mit bezahltem Developer-Account | L | ☐ |
+| B-071 | Import auf iOS: Teilen-Menü aus der Flow-App bzw. „Öffnen mit“. **→ iOS 0.4** (Plan 2.11.2026) | M | → |
+| B-072 | Sync Mac ↔ iOS über CloudKit; für iOS 0.2 stattdessen Austausch über den iCloud-Ordner (Entscheidung Nils 2.11.2026, siehe „iOS 0.1 und 0.2“), CloudKit erst mit bezahltem Developer-Account. **→ iOS 0.3 und Mac 1.8.3** (Entscheidung Nils 2.11.2026: Sync über CloudKit) | L | → |
 | B-073 | Mehrere Fahrer: Verwaltung, Zuordnung beim Import, Filter (PROF-02) | M | ☐ |
 | B-110 | → B-137 (v1.5): Karte aller Fahrten nach Bike filtern; nach Fahrer erst mit B-073, sobald es mehrere gibt; aus v1.4 verschoben (22.10.2026), weil es nur einen Fahrer und ein Bike gibt (AGG-05, setzt B-073/B-074 voraus) | S | → |
 | B-074 | Mehrere Bikes: Verwaltung, manuelle Zuordnung der Fahrten, Filter (PROF-03; Seriennummer taugt nicht, siehe SPIKE-FIT-PARSER.md) → v1.5 (Datenmodell B-074, dazu B-133 bis B-138) | M | → |
@@ -597,8 +665,8 @@ Je Idee eine Story; Größe grob geschätzt. Details: REQUIREMENTS.md Kap. 4.12.
 | P-03 | Pendel-Statistik (IDEA-03) | M | ☐ |
 | P-04 | Kostenersparnis ggü. Auto/ÖPNV (IDEA-04) | S | ☐ |
 | P-05 | Tour bearbeiten (IDEA-05) | M | ☐ |
-| P-06 | Widgets (macOS/iOS) (IDEA-06) | M | ☐ |
-| P-07 | Kurzbefehle / App Intents (IDEA-07) | M | ☐ |
+| P-06 | Widgets (macOS/iOS) (IDEA-06); iOS-Widget „Diese Woche“ → B-224 (iOS 0.5) | M | → |
+| P-07 | Kurzbefehle / App Intents (IDEA-07); auf dem iPhone → B-225 (iOS 0.5) | M | → |
 | P-08 | Geschätzter Motoranteil (IDEA-08); **von v1.9 nicht berührt:** die offizielle Bosch-API liefert weder Energieanteil noch Motorleistung (Spezifikation 25.10.2026), die Schätzung aus Fahrphysik bliebe die einzige Quelle | L | ☐ |
 | P-09 | Trittfrequenz-Hinweise (IDEA-09) | S | ☐ |
 | P-10 | Lieblingsrunden (IDEA-10) → jetzt B-121 (v1.7) | L | ☐ |
