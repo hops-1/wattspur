@@ -2,6 +2,8 @@
 
 Wattspur führt ein **Profil** mit deinen Körperdaten und so viele **Bikes**, wie du hast. Jede Fahrt gehört zu einem Bike, so kannst du jedes Bike für sich ansehen. Alles bleibt auf deinem Mac.
 
+![Profil mit zwei Bikes](../images/de/profile.png)
+
 ## Das Profil
 Wähle **Profil** unten in der Seitenleiste (⌘6).
 - **Du:** Name, Foto (freiwillig) und Körperdaten: Gewicht, Größe, Geburtsjahr und Geschlecht. Alles ist freiwillig und bleibt auf deinem Mac. Es wird für eine Kalorienschätzung „mit Profil“ gespeichert, die in einer späteren Version kommt; vorerst ändert es keine Zahl. Zahlen, die nicht stimmen können (ein Gewicht von 7 kg), werden nicht gespeichert.

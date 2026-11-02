@@ -17,6 +17,10 @@ import WattspurKit
 /// `-bikesHintDone YES` hides the note "Set up your bikes" after the update to 1.5 (B-138).
 /// `-WattspurDemoBikes YES` adds two more bikes with the demo rides spread over them (B-134).
 /// `-WattspurDemoGoals YES` adds a weekly, a monthly and a yearly goal (B-053).
+/// `-WattspurDemoVariety YES` makes the copies slightly different in time, speed and power (older = slower), so a history has a trend (B-179).
+/// `-WattspurDemoSize 1100x740` sets the size of the main window in points (B-179).
+/// `-WattspurDemoSimilar YES` opens "Similar rides" for "Demo 1" with no ride selected, i.e. its history (B-179).
+/// `-WattspurDemoRoute "Commute"` saves the route of "Demo 1" under that name and shows it (B-179).
 /// `-WattspurDemoSelect "Demo 8"` selects that ride instead of the sample ride.
 /// `-WattspurDemoImport "/path/a.fit,/path/b.gpx"` imports these files into the demo library, in that
 /// order, like a drop in the list (B-145): to try GPX rides without touching the real library.
@@ -27,6 +31,13 @@ enum DemoMode {
     static var window: String? { UserDefaults.standard.string(forKey: "WattspurDemoWindow") }
     /// "new" or "edit": opens the bike editor in the profile.
     static var editor: String? { UserDefaults.standard.string(forKey: "WattspurDemoEditor") }
+    static var size: CGSize? {
+        guard let text = UserDefaults.standard.string(forKey: "WattspurDemoSize") else { return nil }
+        let parts = text.split(separator: "x").compactMap { Double($0) }
+        return parts.count == 2 ? CGSize(width: parts[0], height: parts[1]) : nil
+    }
+    static var similar: Bool { UserDefaults.standard.bool(forKey: "WattspurDemoSimilar") }
+    static var routeName: String? { UserDefaults.standard.string(forKey: "WattspurDemoRoute") }
     static var section: String? { UserDefaults.standard.string(forKey: "WattspurDemoSection") }
 
     /// The sample ride, selected in the list on launch.
@@ -81,11 +92,24 @@ enum DemoMode {
         guard count > 0, let url = Bundle.main.url(forResource: "SampleRide", withExtension: "fit"),
               let data = try? Data(contentsOf: url) else { return }
         let library = RideLibrary(context: context)
+        let varied = UserDefaults.standard.bool(forKey: "WattspurDemoVariety")
         for week in 1...count {
             guard let copy = try? FITAnonymizer(latitudeOffset: 0, longitudeOffset: 0, trimDistance: 0, weeks: -week)
                 .anonymize(data) else { continue }
             library.importFile(data: copy, fileName: "Demo \(week).fit")
         }
+        guard varied else { return }
+        // The older, the slower, with some wobble, so that the history shows a trend.
+        let wobble = [0.02, -0.03, 0.04, -0.01, 0.03, -0.04, 0.01, -0.02]
+        for ride in (try? context.fetch(FetchDescriptor<Ride>())) ?? [] {
+            guard let week = Int(ride.name.dropFirst(5)), ride.name.hasPrefix("Demo ") else { continue }
+            let factor = 1 + 0.012 * Double(week) + wobble[week % wobble.count]
+            ride.timerTime *= factor
+            ride.averageSpeed = ride.distance / ride.timerTime
+            ride.averagePower = ride.averagePower.map { Int(Double($0) / factor) }
+            ride.averageCadence = ride.averageCadence.map { Int(Double($0) / (1 + (factor - 1) / 2)) }
+        }
+        try? context.save()
     }
 }
 #endif
