@@ -48,4 +48,4 @@ Test auf Nils' iPhone am 2.11.2026 (App mit kostenloser Apple-ID signiert). Ordn
 | GPX vom iPhone am Mac importiert | ✅ Kurztest (38 s, 25 Punkte, `creator="Wattspur iOS"`). Die Datei wartete erst auf dem iPhone (*Dateien*: „Warten“, nicht hochgeladen, vermutlich Mobilfunk ohne Erlaubnis für iCloud Drive). Im WLAN war sie rund 1:45 min später am Mac, der Mac hat sie sofort importiert und nach `Importiert/` verschoben. Folgerung für B-212: Upload-Stand anzeigen (`ubiquitousItemIsUploaded`), „wartet auf iCloud“ vor „wartet auf den Mac“ |
 
 ## Entscheidung
-*Mit Nils nach dem Test: Austausch über den iCloud-Ordner wie geplant oder ein anderer Weg.*
+2.11.2026: **Austausch über den iCloud-Ordner wie geplant.** Ordnerzugriff, Schreiben, Lesen nach Neustart und der Import am Mac haben auf Nils’ iPhone geklappt; Nils hat mit B-178/B-208 weitermachen lassen. Die lange Fahrt mit gesperrtem Bildschirm (GPS im Hintergrund, Akku) prüft Nils mit der echten Aufnahme (B-211) und trägt sie hier nach.

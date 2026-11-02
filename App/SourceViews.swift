@@ -153,10 +153,13 @@ struct RideSourceLine: View {
         .accessibilityElement(children: .combine)
     }
 
-    /// "Source: GPX · komoot-odenwald-tour.gpx" or "Source: Bosch FIT · GPX attached: tour.gpx".
+    /// "Source: GPX · komoot-odenwald-tour.gpx", "Source: iPhone · Ride.gpx" (recorded with the
+    /// Wattspur app, B-213) or "Source: Bosch FIT · GPX attached: tour.gpx".
     private func sourceText(_ badge: RideSourceBadge) -> some View {
         let file = badge == .gpx ? ride.sourceFile?.fileName : ride.attachedSourceName
-        let head = badge == .gpx ? Text("Source: GPX") : Text("Source: Bosch FIT · GPX attached")
+        let head = badge == .gpx
+            ? (ride.isFromiPhone ? Text("Source: iPhone") : Text("Source: GPX"))
+            : Text("Source: Bosch FIT · GPX attached")
         return HStack(spacing: 4) {
             head.fontWeight(.semibold)
             if let file, !file.isEmpty {

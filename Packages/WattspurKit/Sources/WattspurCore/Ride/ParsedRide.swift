@@ -100,10 +100,12 @@ public struct ParsedRide: Sendable {
     public var summaryEstimated: Bool
     /// A name the file suggests (GPX: the track name); `nil` to use the file name.
     public var suggestedName: String?
+    /// The bike the file names (a recording of the iPhone app, B-213); `nil` if it names none.
+    public var suggestedBikeID: UUID?
 
     public init(startDate: Date, summary: RideSummary, samples: [RideSample],
                 deviceSerialNumber: UInt64?, parserVersion: Int, workKilojoules: Double? = nil,
-                summaryEstimated: Bool = false, suggestedName: String? = nil) {
+                summaryEstimated: Bool = false, suggestedName: String? = nil, suggestedBikeID: UUID? = nil) {
         self.startDate = startDate
         self.summary = summary
         self.samples = samples
@@ -112,5 +114,6 @@ public struct ParsedRide: Sendable {
         self.workKilojoules = workKilojoules
         self.summaryEstimated = summaryEstimated
         self.suggestedName = suggestedName
+        self.suggestedBikeID = suggestedBikeID
     }
 }

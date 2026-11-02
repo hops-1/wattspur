@@ -49,7 +49,9 @@ struct ImportService: LibraryService {
         if detectDuplicates, let existing = findDuplicate(sourceIdentifier: names.sourceIdentifier, parsed: parsed) {
             return ImportResult(fileName: fileName, outcome: .duplicate(existingRideID: existing.id))
         }
-        let target = bike ?? bikes.activeBike()
+        // A recording of the iPhone app names its bike (B-213); it wins over the bike asked for.
+        let named = parsed.suggestedBikeID.flatMap { id in bikes.bikes(includingArchived: true).first { $0.id == id } }
+        let target = named ?? bike ?? bikes.activeBike()
         if detectDuplicates, let similar = findSimilarRide(to: parsed, bike: target) {
             switch (RideSource(fileExtension: ext), similar.source) {
             case (.gpx?, .fit?):
