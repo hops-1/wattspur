@@ -41,7 +41,8 @@ scripts/check-architecture.sh
 
 STEP="WattspurKit tests"
 echo "== $STEP"
-(cd Packages/WattspurKit && swift test)
+# One test at a time, as on GitHub: parallel SwiftData containers sometimes trap (signal 5).
+(cd Packages/WattspurKit && swift test --no-parallel)
 
 STEP="Generate Xcode project"
 echo "== $STEP"
