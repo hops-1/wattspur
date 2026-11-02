@@ -7,6 +7,10 @@ Every DMG handed out to testers corresponds to one entry below.
 
 ## [Unreleased]
 
+## [1.8.2] – 2026-11-02
+
+A small follow-up: commutes that start a little off are found again, and the steepest-grade records no longer jump on GPX files without a barometer.
+
 ### Fixed
 
 - **Steepest climb and descent:** the records no longer jump on GPX files without a barometer, where the altitude jitters by metres. The altitude is smoothed before the calculation and grades above 30 % do not count; the grade in the chart stays as it was. Rides are calculated again in the background at the first start (B-203).
