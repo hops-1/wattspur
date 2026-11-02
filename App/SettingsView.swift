@@ -119,11 +119,13 @@ private struct GeneralSettingsView: View {
 
 struct ImportSettingsView: View {
     @Environment(FolderWatcher.self) private var watcher
+    @Environment(PhoneState.self) private var phoneState
     @Environment(\.openWindow) private var openWindow
     @AppStorage(SettingsKey.mergeSuggestionGapMinutes) private var mergeGapMinutes = RideMergeSuggestion.defaultGapMinutes
 
     var body: some View {
         @Bindable var watcher = watcher
+        @Bindable var phoneState = phoneState
         Form {
             LabeledContent("Watch folder:") {
                 VStack(alignment: .leading, spacing: 4) {
@@ -188,6 +190,16 @@ struct ImportSettingsView: View {
                         .fixedSize(horizontal: false, vertical: true)
                 }
             }
+            LabeledContent("iPhone:") {
+                VStack(alignment: .leading, spacing: 4) {
+                    Toggle("Provide rides for the iPhone", isOn: $phoneState.isEnabled)
+                    Text("Wattspur writes your rides into the subfolder “iPhone” of the import folder, at most once a minute. The Wattspur app on the iPhone reads them from there.")
+                        .font(.caption)
+                        .foregroundStyle(.secondary)
+                        .fixedSize(horizontal: false, vertical: true)
+                    PhoneStateStatusText()
+                }
+            }
             HStack {
                 Spacer()
                 Button("Import Log…") { openWindow(id: "importLog") }
@@ -198,6 +210,25 @@ struct ImportSettingsView: View {
         }
         .formStyle(.columns)
         .padding(.vertical, 8)
+    }
+}
+
+/// "Last written today at 14:02 · 84 rides", or what is wrong.
+struct PhoneStateStatusText: View {
+    @Environment(PhoneState.self) private var phoneState
+
+    var body: some View {
+        if !phoneState.isEnabled {
+            EmptyView()
+        } else if let problem = phoneState.problem {
+            Text(problem).font(.caption).foregroundStyle(.red)
+        } else if let written = phoneState.lastWritten {
+            Text("Last written \(written.formatted(date: .omitted, time: .shortened)) · \(phoneState.lastRides) rides")
+                .font(.caption)
+                .foregroundStyle(.secondary)
+        } else {
+            Text("Will be written in a moment.").font(.caption).foregroundStyle(.secondary)
+        }
     }
 }
 

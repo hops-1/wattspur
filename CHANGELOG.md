@@ -7,6 +7,10 @@ Every DMG handed out to testers corresponds to one entry below.
 
 ## [Unreleased]
 
+### Added
+
+- **Rides for the iPhone:** new setting **Import › iPhone: Provide rides for the iPhone** (off by default). Wattspur then writes the rides with their key figures and simplified routes into the subfolder “iPhone” of the import folder, at most once a minute, for the Wattspur app on the iPhone. The format is stable and described in `docs/reference/data-exchange.md` (B-178, B-208).
+
 ## [1.8.2] – 2026-11-02
 
 A small follow-up: commutes that start a little off are found again, and the steepest-grade records no longer jump on GPX files without a barometer.

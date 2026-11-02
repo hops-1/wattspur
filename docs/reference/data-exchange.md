@@ -1,11 +1,12 @@
-# Data exchange: GPX export and backup folder
+# Data exchange: GPX export, iPhone state and backup folder
 
-How to get your rides out of Wattspur and read them with other tools (B-177). There are two ways:
+How to get your rides out of Wattspur and read them with other tools (B-177). There are three ways:
 
 - **GPX export** of a single ride: a standard format that komoot, Strava, Garmin and most map tools read. **Stable.**
+- **State for the iPhone** (B-178, B-208): the rides with their key figures and simplified routes as JSON, written into the import folder for the Wattspur app on the iPhone. **Stable** (`schemaVersion`).
 - **Backup folder** of the whole library (**File › Library Backup…**): everything Wattspur stores. Its manifest and the original files are stable; the database inside is Wattspur's internal storage and **may change with any version**.
 
-A stable export of the whole library as JSON and CSV is planned separately (B-178, version open). Until then, the backup and the example script below are the way to read all rides at once.
+The state for the iPhone is the first part of the stable exchange format (B-178); goals, saved routes, the time series and a CSV are not in it yet. For everything else, the backup and the example script below are the way to read all rides at once.
 
 ## GPX export
 
@@ -30,6 +31,52 @@ Notes:
 - Only points with a position are written. Speed and distance are not stored per point; every GPX reader computes them from positions and times.
 - Cadence is written only where it was measured. In the charts Wattspur holds the last value between two measurements; that held value is not exported.
 - Heart rate and temperature from imported GPX files are not exported yet.
+
+## State for the iPhone
+
+**Settings › Import › iPhone: Provide rides for the iPhone** (off by default). Wattspur then writes, a few seconds after every change to the library and at most once a minute, into the subfolder `iPhone` of the import folder:
+
+```
+Wattspur Import/
+  iPhone/
+    Stand.json                       the rides and bikes
+    Routen/<ride id>-<fingerprint>.json   one simplified route per ride
+```
+
+The folder import only looks at files directly in `Wattspur Import`, so it never touches `iPhone/`. Route files are written first and `Stand.json` last, replaced in one step: a reader never sees a state that names a missing route. A route file's name changes when the route changes (update from a file, merge, split), so a reader can keep routes it has loaded; files no longer named are removed.
+
+All files are JSON (UTF-8). Units are SI: metres, seconds, metres per second, watts, kilojoules. Dates are ISO 8601 in UTC (`2026-11-02T15:19:41Z`). Fields that are `null` or missing are unknown. New fields may be added at any time; a reader must ignore fields it does not know. `schemaVersion` is raised only when a field is removed or changes its meaning; a reader refuses a higher version than it knows.
+
+### `Stand.json`
+
+| Field | Meaning |
+|---|---|
+| `schemaVersion` | `1` |
+| `generatedAt` | When the Mac wrote the state |
+| `generator` | The writing app, e.g. `Wattspur 1.9 (Mac)` |
+| `bikes[]` | `id` (UUID), `name`, `kind` (`bike`, `cargo` …), `color` (`blue` …), `isEbike`, `isArchived` |
+| `rides[]` | The rides of the list, newest first: no trash, no parts of merged rides, no sample ride |
+
+Each ride:
+
+| Field | Meaning |
+|---|---|
+| `id` | UUID, the same as in the backup |
+| `name`, `startDate`, `timeZone` | Name, start, time zone of the start (`Europe/Berlin`) |
+| `bikeID` | The bike's `id` |
+| `source` | `fit` or `gpx` |
+| `estimated` | `true` when the figures are estimated from GPS (GPX without a bike computer) |
+| `timerTime`, `elapsedTime` | Riding time and total time in seconds |
+| `distance` | Metres |
+| `averageSpeed`, `maxSpeed` | Metres per second |
+| `averagePower`, `maxPower`, `averageCadence` | Watts, revolutions per minute |
+| `totalAscent`, `totalDescent`, `minAltitude`, `maxAltitude` | Metres |
+| `work` | Kilojoules, only where the file has power |
+| `routeFile` | Name of the route file in `Routen`; missing for a ride without GPS |
+
+### `Routen/*.json`
+
+One point about every 20 m along the track, the first and last point of each recording kept. `segments` holds one entry per recording, so a merged ride keeps the gap between its parts. Each segment has four arrays of the same length: `latitude` and `longitude` (degrees, 6 decimals), `altitude` (metres, 1 decimal, `null` where unknown) and `distance` (metres from the start of the ride, from the file's own distance where it has one, so a profile ends close to the ride's distance). `rideID` names the ride.
 
 ## Backup folder
 

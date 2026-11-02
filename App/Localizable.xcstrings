@@ -2,6 +2,66 @@
   "sourceLanguage" : "en",
   "strings" : {
     "" : {},
+    "Choose an import folder and switch watching on." : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Wähle einen Import-Ordner und schalte das Beobachten ein."
+          }
+        }
+      }
+    },
+    "iPhone:" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "iPhone:"
+          }
+        }
+      }
+    },
+    "Last written %@ · %lld rides" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Zuletzt geschrieben %1$@ · %2$lld Fahrten"
+          }
+        }
+      }
+    },
+    "Provide rides for the iPhone" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Fahrten für das iPhone bereitstellen"
+          }
+        }
+      }
+    },
+    "Wattspur writes your rides into the subfolder “iPhone” of the import folder, at most once a minute. The Wattspur app on the iPhone reads them from there." : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Wattspur schreibt deine Fahrten in den Unterordner „iPhone“ des Import-Ordners, höchstens einmal pro Minute. Die Wattspur-App auf dem iPhone liest sie dort."
+          }
+        }
+      }
+    },
+    "Will be written in a moment." : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Wird gleich geschrieben."
+          }
+        }
+      }
+    },
     "… and %lld more" : {
       "localizations" : {
         "de" : {
