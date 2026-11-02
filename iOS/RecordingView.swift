@@ -6,11 +6,8 @@ import WattspurCore
 /// time, distance, speed and altitude, Pause and Stop. Opened by “Start Ride” in the overview.
 struct RecordingView: View {
     @Environment(Recorder.self) private var recorder
-    @Environment(ImportFolder.self) private var folder
     @State private var camera: MapCameraPosition = .userLocation(followsHeading: false, fallback: .automatic)
-    @State private var confirmingStop = false
-    @State private var name = ""
-    @State private var saveProblem: String?
+    @State private var ending = false
 
     var body: some View {
         VStack(spacing: 0) {
@@ -28,18 +25,11 @@ struct RecordingView: View {
             }
             .padding()
         }
-        .alert("End Ride?", isPresented: $confirmingStop) {
-            TextField("Name", text: $name)
-            Button("Save") { save() }
-            Button("Discard", role: .destructive) { _ = recorder.stop() }
-            Button("Keep Riding", role: .cancel) {}
-        } message: {
-            Text("The ride goes as GPX into the folder “Wattspur Import”, and the Mac imports it.")
-        }
-        .alert("Could Not Save", isPresented: Binding(get: { saveProblem != nil }, set: { if !$0 { saveProblem = nil } })) {
-            Button("OK") {}
-        } message: {
-            Text(saveProblem ?? "")
+        // Name and bike, then save, discard or keep riding (B-212).
+        .sheet(isPresented: $ending) {
+            if let recording = recorder.recording {
+                SaveRecordingSheet(recording: recording)
+            }
         }
     }
 
@@ -76,8 +66,7 @@ struct RecordingView: View {
                 .tint(.orange)
             }
             Button {
-                name = Self.defaultName(for: recorder.recording?.startDate ?? .now)
-                confirmingStop = true
+                ending = true
             } label: {
                 Label("Stop", systemImage: "stop.fill").frame(maxWidth: .infinity)
             }
@@ -91,18 +80,6 @@ struct RecordingView: View {
     /// “Ride on 2 Nov 2026, 17:05”.
     static func defaultName(for date: Date) -> String {
         String(localized: "Ride on \(date.formatted(date: .abbreviated, time: .shortened))")
-    }
-
-    private func save() {
-        guard let recording = recorder.recording else { return }
-        let title = name.trimmingCharacters(in: .whitespaces).isEmpty ? Self.defaultName(for: recording.startDate) : name
-        do {
-            try RecordingSaver.save(recording, name: title, folder: folder)
-            _ = recorder.stop()
-        } catch {
-            // The recording and its log stay, so nothing is lost; the rider can try again.
-            saveProblem = error.localizedDescription
-        }
     }
 }
 
@@ -152,33 +129,5 @@ struct RecordingFigures: View {
         .padding(12)
         .glassEffect(.regular, in: .rect(cornerRadius: 16))
         .accessibilityElement(children: .combine)
-    }
-}
-
-/// Writes a finished recording as GPX (`GPXWriter`, creator “Wattspur iOS”) into the folder the
-/// Mac watches; without a folder into the app's documents, where the Files app shows it.
-enum RecordingSaver {
-    @MainActor
-    static func save(_ recording: RideRecording, name: String, folder: ImportFolder) throws {
-        let data = GPXWriter.document(name: name, segments: recording.gpxSegments, creator: "Wattspur iOS")
-        let fileName = GPXWriter.fileName(name)
-        if folder.url != nil {
-            let taken = Set((try? folder.contents()) ?? [])
-            try folder.write(data, to: uniqueName(fileName, taken: taken))
-        } else {
-            let directory = URL.documentsDirectory.appending(path: "Aufnahmen")
-            try FileManager.default.createDirectory(at: directory, withIntermediateDirectories: true)
-            let taken = Set((try? FileManager.default.contentsOfDirectory(atPath: directory.path)) ?? [])
-            try data.write(to: directory.appending(path: uniqueName(fileName, taken: taken)), options: .atomic)
-        }
-    }
-
-    /// “Ride.gpx”, else “Ride 2.gpx” …
-    static func uniqueName(_ name: String, taken: Set<String>) -> String {
-        guard taken.contains(name) else { return name }
-        let base = (name as NSString).deletingPathExtension
-        var counter = 2
-        while taken.contains("\(base) \(counter).gpx") { counter += 1 }
-        return "\(base) \(counter).gpx"
     }
 }

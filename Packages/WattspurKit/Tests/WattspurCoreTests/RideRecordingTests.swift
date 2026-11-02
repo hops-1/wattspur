@@ -70,6 +70,17 @@ struct RideRecordingTests {
         #expect(gpx[0].samples[0].altitude == 100)
     }
 
+    @Test("A recording without two positions a second apart is too short for a GPX track")
+    func tooShort() {
+        var recording = RideRecording(startDate: Self.start)
+        #expect(recording.isTooShort)
+        recording.add(Self.fix(0, north: 0))
+        recording.add(Self.fix(0.4, north: 0.5))
+        #expect(recording.isTooShort)
+        recording.add(Self.fix(1, north: 1))
+        #expect(!recording.isTooShort)
+    }
+
     @Test("The map route keeps a point every 10 m and the last one")
     func route() {
         var recording = RideRecording(startDate: Self.start)

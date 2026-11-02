@@ -21,13 +21,20 @@ public enum GPXWriter {
     }
 
     public static let trackPointExtensionNamespace = "http://www.garmin.com/xmlschemas/TrackPointExtension/v2"
+    /// Wattspur's own extension: the bike a recording of the iPhone app was ridden on (B-212), so
+    /// the Mac assigns the ride without asking (B-213). Other programs ignore it.
+    public static let wattspurNamespace = "https://github.com/hops-1/wattspur/gpx/1"
+    /// The `creator` of recordings made with the iPhone app (B-212).
+    public static let iPhoneCreator = "Wattspur iOS"
 
-    public static func document(name: String, segments: [Segment], description: String? = nil, creator: String = "Wattspur") -> Data {
+    public static func document(name: String, segments: [Segment], description: String? = nil,
+                                creator: String = "Wattspur", bikeID: UUID? = nil) -> Data {
         let note = description.flatMap { $0.isEmpty ? nil : escape($0) }
+        let wattspur = bikeID == nil ? "" : "xmlns:wattspur=\"\(wattspurNamespace)\" "
         var xml = """
         <?xml version="1.0" encoding="UTF-8"?>
         <gpx version="1.1" creator="\(escape(creator))" xmlns="http://www.topografix.com/GPX/1/1" \
-        xmlns:gpxtpx="\(trackPointExtensionNamespace)" \
+        xmlns:gpxtpx="\(trackPointExtensionNamespace)" \(wattspur)\
         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" \
         xsi:schemaLocation="http://www.topografix.com/GPX/1/1 http://www.topografix.com/GPX/1/1/gpx.xsd">
           <metadata>
@@ -37,6 +44,9 @@ public enum GPXWriter {
         if let note { xml += "    <desc>\(note)</desc>\n" }
         if let start = segments.map(\.startDate).min() {
             xml += "    <time>\(timestamp(start))</time>\n"
+        }
+        if let bikeID {
+            xml += "    <extensions><wattspur:bike>\(bikeID.uuidString)</wattspur:bike></extensions>\n"
         }
         xml += """
           </metadata>

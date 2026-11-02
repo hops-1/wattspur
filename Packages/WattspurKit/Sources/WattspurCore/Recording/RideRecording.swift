@@ -125,6 +125,15 @@ public struct RideRecording: Codable, Sendable, Equatable {
 
     public var pointCount: Int { segments.reduce(0) { $0 + $1.count } }
 
+    /// `true` while no stretch has two positions at least a second apart: GPX counts whole seconds,
+    /// so such a recording is no track, and the Mac would put it into “Failed”.
+    public var isTooShort: Bool {
+        !segments.contains { points in
+            guard let first = points.first, let last = points.last else { return false }
+            return last.fix.date.timeIntervalSince(first.fix.date) >= 1
+        }
+    }
+
     // MARK: - Output
 
     /// The recording as samples for the GPX writer: one segment per stretch, times from its start.

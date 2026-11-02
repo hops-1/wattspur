@@ -8,7 +8,8 @@ import WattspurKit
 @MainActor
 @Observable
 final class ImportFlow {
-    /// GPX files carry no bike, so they are asked for it from two bikes on.
+    /// GPX files carry no bike, so they are asked for it from two bikes on; recordings of the
+    /// iPhone app name theirs (B-213).
     struct BikeQuestion: Identifiable {
         let id = UUID()
         let urls: [URL]
@@ -68,11 +69,24 @@ final class ImportFlow {
     /// two or more bikes.
     func start(_ urls: [URL], library: RideLibrary, importLog: ImportLog) {
         guard !urls.isEmpty else { return }
-        if urls.contains(where: Self.isGPX), library.bikes(includingArchived: false).count >= 2 {
+        let asking = urls.filter(Self.isGPX).contains { !Self.namesKnownBike($0, library: library) }
+        if asking, library.bikes(includingArchived: false).count >= 2 {
             bikeQuestion = BikeQuestion(urls: urls)
         } else {
             run(urls, gpxBike: nil, library: library, importLog: importLog)
         }
+    }
+
+    /// `true` for a recording of the iPhone app that names a bike of the library (B-213): it needs
+    /// no question. Reads only the first bytes of the file.
+    private static func namesKnownBike(_ url: URL, library: RideLibrary) -> Bool {
+        let accessing = url.startAccessingSecurityScopedResource()
+        defer { if accessing { url.stopAccessingSecurityScopedResource() } }
+        guard let handle = try? FileHandle(forReadingFrom: url) else { return false }
+        defer { try? handle.close() }
+        guard let head = try? handle.read(upToCount: 4096),
+              let bikeID = GPXRideImporter.header(of: head).bikeID else { return false }
+        return library.bikes(includingArchived: true).contains { $0.id == bikeID }
     }
 
     func confirm(_ question: BikeQuestion, bike: Bike, library: RideLibrary, importLog: ImportLog) {
