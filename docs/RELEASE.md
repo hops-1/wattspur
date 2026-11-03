@@ -63,6 +63,32 @@ Lehnt Apple die Notarisierung ab, druckt das Skript das Protokoll von Apple (`no
 
 Ergebnis: `dist/Wattspur-<Version>-<Build>.dmg` und die Prüfsumme `.sha256`.
 
+## 3a. Hardened Runtime und Entitlements (NFR-18)
+
+Apple notarisiert nur Code mit Hardened Runtime, Developer-ID-Signatur und sicherem Zeitstempel. Geprüft für Wattspur:
+
+- `ENABLE_HARDENED_RUNTIME: YES` steht in `project.yml`; das Skript bricht nach dem Export ab, wenn `codesign` das Flag `runtime` oder den Zeitstempel nicht zeigt.
+- `App/Wattspur.entitlements` und `App/Wattspur-iCloud.entitlements` enthalten nur App Sandbox, Dateizugriff (vom Benutzer gewählt, Bookmarks) und Netzwerk-Client. Keine Hardened-Runtime-Ausnahmen nötig (kein JIT, keine unsignierten Speicherseiten, keine `DYLD_*`-Variablen, keine Bibliotheksvalidierung-Ausnahme), weil die App keinen fremden Code lädt.
+- Die iCloud-Variante ergänzt iCloud/CloudKit und `aps-environment`; der Export mit Developer ID setzt `aps-environment` auf `production` (siehe `ExportOptions.plist` im Skript). iCloud braucht ein Provisioning-Profil, das Xcode über `-allowProvisioningUpdates` holt.
+- Die Sandbox ist mit Notarisierung verträglich und bleibt an.
+- Falls später Sparkle (B-173) oder ein Framework von Dritten dazukommt: alle eingebetteten Binaries müssen ebenfalls mit Developer ID und Runtime signiert sein, sonst lehnt Apple ab.
+
+Nicht auf diesem Mac geprüft (kein Zertifikat): die tatsächliche Signatur und die Antwort von Apple. Das zeigt erst der erste echte Lauf.
+
+## 3b. Release-Workflow in CI
+
+`.github/workflows/release.yml` läuft **nur von Hand** (`workflow_dispatch`), nie bei Push oder PR, damit keine macOS-Minuten ohne Absicht verbraucht werden. Die Secrets legst du selbst unter Settings › Secrets and variables › Actions an; im Repository steht nichts davon:
+
+| Secret | Inhalt |
+|---|---|
+| `DEVELOPER_ID_CERT_P12` | Developer-ID-Zertifikat samt privatem Schlüssel als .p12, base64-kodiert |
+| `DEVELOPER_ID_CERT_PASSWORD` | Passwort der .p12 |
+| `APPLE_TEAM_ID` | Team-ID |
+| `APPLE_ID` | Apple-ID für `notarytool` |
+| `APPLE_APP_SPECIFIC_PASSWORD` | App-spezifisches Passwort |
+
+Der Workflow legt einen temporären Schlüsselbund an, speichert das notarytool-Profil und ruft `scripts/build-dmg.sh` auf. Er ist ungetestet, bis die Secrets existieren. iCloud braucht ein Provisioning-Profil mit Xcode-Konto; in CI ist deshalb vorerst der lokale Weg der verlässliche.
+
 ## 4. Vor dem ersten Sync-Release: Schema nach Production
 
 Nur einmal, vor 1.8.3, und danach bei jeder Modelländerung:
