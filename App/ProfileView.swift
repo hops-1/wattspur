@@ -312,6 +312,7 @@ private struct BikeTile: View {
     let isActive: Bool
     let onActivate: () -> Void
     let onEdit: () -> Void
+    @State private var wheelHint: Double?
 
     var body: some View {
         let stats = bike.statistics
@@ -346,6 +347,9 @@ private struct BikeTile: View {
                     figure("Last ride", stats.lastRide.map { $0.formatted(date: .abbreviated, time: .omitted) } ?? "–")
                 }
                 .padding(.top, 2)
+                if let wheelHint {
+                    WheelHint(deviation: wheelHint)
+                }
                 HStack {
                     Button("Edit…", action: onEdit).controlSize(.small)
                     Spacer()
@@ -372,6 +376,8 @@ private struct BikeTile: View {
             Button("Edit…", action: onEdit)
             if !isActive { Button("Make active bike", action: onActivate) }
         }
+        // Reads the time series of up to 20 rides, so only when the rides change.
+        .task(id: bike.rides?.count) { wheelHint = bike.wheelCheckHint() }
     }
 
     @ViewBuilder
@@ -408,6 +414,30 @@ private struct BikeTile: View {
         }
         .frame(maxWidth: .infinity, alignment: .leading)
         .accessibilityElement(children: .combine)
+    }
+}
+
+/// The wheel sensor measures noticeably more or less than GPS (B-237): only a hint, the
+/// values of the rides stay as Bosch delivered them.
+private struct WheelHint: View {
+    let deviation: Double
+
+    var body: some View {
+        let percent = abs(deviation).formatted(.percent.precision(.fractionLength(1)))
+        Label {
+            Group {
+                if deviation > 0 {
+                    Text("The wheel sensor measures \(percent) more than GPS. Check the wheel circumference in the Flow app.")
+                } else {
+                    Text("The wheel sensor measures \(percent) less than GPS. Check the wheel circumference in the Flow app.")
+                }
+            }
+            .fixedSize(horizontal: false, vertical: true)
+        } icon: {
+            Image(systemName: "exclamationmark.triangle.fill").foregroundStyle(.orange)
+        }
+        .font(.caption)
+        .help(Text("Compared over the newest Bosch rides of this bike, only where GPS was good. Distance and speed of the rides are not changed."))
     }
 }
 

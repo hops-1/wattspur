@@ -216,7 +216,7 @@ Quelle: Wunsch von Nils (22.10.2026): „In der Fahrtenliste gleiche bzw. ähnli
 |---|---|---|
 | PROF-01 | Fahrerprofil im Bereich „Profil“ (Name, Avatar, Gewicht, Größe, Geburtsjahr, Geschlecht) für die Kalorienberechnung mit Profil; alle Körperdaten optional | M |
 | PROF-02 | Mehrere Fahrer mit getrennten Statistiken; Fahrer beim Import zuordnen | C |
-| PROF-03 | Mehrere Bikes je Profil (v1.5): Name, Farbe, Art (Fahrrad, Mountainbike, Rennrad, Gravelbike), E-Bike, Foto, Hersteller, Modell, Antrieb, Akku, Gewicht (Info), Kaufdatum, km-Startwert; ein aktives Bike für neue Importe, nachträgliches Zuweisen einzeln und per Mehrfachauswahl; Filter nach Bike je Bereich; Archivieren statt Löschen. Eine automatische Zuordnung über die Seriennummer ist mit Bosch-Exporten nicht möglich: `file_id.serial_number` ändert sich bei jedem Export, eine andere Bike-Kennung gibt es nicht (siehe SPIKE-FIT-PARSER.md) | C |
+| PROF-03 | Mehrere Bikes je Profil (v1.5): Name, Farbe, Art (Fahrrad, Mountainbike, Rennrad, Gravelbike), E-Bike, Foto, Hersteller, Modell, Antrieb, Akku, Gewicht (Info), Kaufdatum, km-Startwert; ein aktives Bike für neue Importe, nachträgliches Zuweisen einzeln und per Mehrfachauswahl; Filter nach Bike je Bereich; Archivieren statt Löschen; Hinweis in der Kachel, wenn der Radsensor in den Bosch-Fahrten um mindestens 2 % von der GPS-Strecke abweicht (B-237, nur Hinweis, keine Korrektur). Eine automatische Zuordnung über die Seriennummer ist mit Bosch-Exporten nicht möglich: `file_id.serial_number` ändert sich bei jedem Export, eine andere Bike-Kennung gibt es nicht (siehe SPIKE-FIT-PARSER.md) | C |
 | PROF-04 | Weitere Importquellen: Apple Health (zuerst), Strava, generische FIT-Dateien | C |
 
 ### 4.10 Benutzerkonto (ACC)
