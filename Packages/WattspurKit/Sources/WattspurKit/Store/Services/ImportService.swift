@@ -2,9 +2,9 @@ import Foundation
 import SwiftData
 
 /// Importing files, finding the same ride in another file, and keeping rides up to date
-/// (B-010, B-104, B-143, IMP-02, IMP-04, NFR-17, ONB-02). Start within ±60 s, GPS path within ±10 %,
-/// and the same simplified route (B-104): the Bosch distance comes from the wheel sensor and lies
-/// about 5 % above the GPS path.
+/// (B-010, B-104, B-143, B-232, IMP-02, IMP-04, NFR-17, ONB-02). Start within ±60 s or times that
+/// overlap for the most part, GPS path within ±10 %, and the same simplified route (B-104): the Bosch
+/// distance comes from the wheel sensor and lies about 5 % above the GPS path.
 struct ImportService: LibraryService {
     let env: LibraryEnvironment
     var importers: [any RideImporter] { env.importers }
@@ -313,6 +313,12 @@ struct ImportService: LibraryService {
     }
     /// How far the start times of two files of one ride may be apart, in seconds.
     static let similarStartTolerance: TimeInterval = 60
+    /// Two files of one ride whose starts lie further apart still match if they overlap for at least
+    /// this share of the shorter one (B-232): Bosch Flow and the iPhone are started and stopped by
+    /// hand, on 3.11.2026 98 s apart at the start and 200 s at the end.
+    static let similarOverlapShare = 0.8
+    /// How far back a ride may have started to overlap a new one, in seconds; longer rides are rare.
+    static let similarLookBack: TimeInterval = 12 * 3600
     /// How far the GPS paths may be apart, as a share of the longer one.
     static let similarDistanceTolerance = 0.10
 
@@ -321,14 +327,20 @@ struct ImportService: LibraryService {
     /// their files are different rides. Rides in the trash, the sample ride and rides that are
     /// part of a merged ride do not match. The closest start wins.
     func findSimilarRide(to parsed: ParsedRide, bike: Bike?) -> Ride? {
-        let from = parsed.startDate.addingTimeInterval(-Self.similarStartTolerance)
-        let to = parsed.startDate.addingTimeInterval(Self.similarStartTolerance)
+        let newEnd = parsed.startDate.addingTimeInterval(parsed.summary.elapsedTime)
+        let from = parsed.startDate.addingTimeInterval(-Self.similarLookBack)
+        let to = max(parsed.startDate.addingTimeInterval(Self.similarStartTolerance), newEnd)
         let descriptor = FetchDescriptor<Ride>(predicate: #Predicate {
             $0.startDate >= from && $0.startDate <= to && !$0.isSample && $0.deletedAt == nil
         })
         let candidates = ((try? context.fetch(descriptor)) ?? [])
             .filter { $0.mergedInto == nil && !$0.isMerged }
             .filter { bike == nil || $0.bike == nil || $0.bike?.id == bike?.id }
+            .filter {
+                abs($0.startDate.timeIntervalSince(parsed.startDate)) <= Self.similarStartTolerance
+                    || Self.overlapShare(start: $0.startDate, duration: $0.elapsedTime,
+                                         start: parsed.startDate, duration: parsed.summary.elapsedTime) >= Self.similarOverlapShare
+            }
             .sorted { abs($0.startDate.timeIntervalSince(parsed.startDate)) < abs($1.startDate.timeIntervalSince(parsed.startDate)) }
         guard !candidates.isEmpty else { return nil }
 
@@ -343,6 +355,14 @@ struct ImportService: LibraryService {
             if RouteMatch.matches(route, newRoute) { return ride }
         }
         return nil
+    }
+
+    /// The share of the shorter of two time spans that both cover; 0 if one has no length.
+    static func overlapShare(start a: Date, duration da: TimeInterval, start b: Date, duration db: TimeInterval) -> Double {
+        let shorter = min(da, db)
+        guard shorter > 0 else { return 0 }
+        let overlap = min(a.addingTimeInterval(da), b.addingTimeInterval(db)).timeIntervalSince(max(a, b))
+        return max(0, overlap) / shorter
     }
 
     /// Adds the extra source of a GPX file to a Bosch ride: its heart rate and temperature go into the

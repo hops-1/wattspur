@@ -47,6 +47,24 @@ private enum Edit {
         }
         return result
     }
+    /// Standing points before the first and after the last point, every 2 s: a recording started
+    /// earlier and stopped later than the Bosch one (B-232).
+    struct Missing: Error {}
+
+    static func padded(_ gpx: String, before: TimeInterval, after: TimeInterval) throws -> String {
+        let points = gpx.matches(of: /<trkpt[^>]*>.*?<\/trkpt>/)
+        guard let first = points.first.map({ String(gpx[$0.range]) }),
+              let last = points.last.map({ String(gpx[$0.range]) }) else { throw Missing() }
+        func copies(of point: String, offsets: [TimeInterval]) throws -> String {
+            guard let time = point.firstMatch(of: /<time>(.*?)<\/time>/),
+                  let date = GPXRideImporter.parseTime(String(time.1)) else { throw Missing() }
+            return offsets.map { point.replacingOccurrences(of: String(time.0), with: "<time>\(GPXWriter.timestamp(date.addingTimeInterval($0)))</time>") }.joined()
+        }
+        let early = try copies(of: first, offsets: stride(from: -before, to: 0, by: 2).map { $0 })
+        let late = try copies(of: last, offsets: stride(from: 2, through: after, by: 2).map { $0 })
+        let head = points.first!.range.lowerBound, tail = points.last!.range.upperBound
+        return gpx[..<head] + early + gpx[head..<tail] + late + gpx[tail...]
+    }
 }
 
 private let tour1UUID = "5e1f0c2a-7b3d-4c8e-9a61-2f4d8b0c3e57"
@@ -191,6 +209,45 @@ struct GPXDuplicateTests {
         #expect(ride.sourceFile?.fileName == "komoot.gpx")
         #expect(ride.sourceFormat == "gpx")
         #expect(ride.attachedSourceFormat == nil)
+    }
+
+    // MARK: - Started and stopped at other times (B-232)
+
+    @Test("A recording started 98 s earlier and stopped 200 s later is still the same ride (B-232)")
+    func startedEarlier() throws {
+        try importFIT()
+        let padded = try Edit.padded(try Edit.text("pair-tour1-bosch-flow"), before: 98, after: 200)
+        let result = importGPX(padded, as: "iphone.gpx")
+        guard case .attached = result.outcome else {
+            Issue.record("Expected attached, got \(result.outcome)")
+            return
+        }
+        #expect(try rides().count == 1)
+    }
+
+    @Test("The Bosch FIT after such a recording is offered as an update, not a new ride (B-232)")
+    func fitAfterEarlierRecording() throws {
+        let padded = try Edit.padded(try Edit.text("pair-tour1-bosch-flow"), before: 98, after: 200)
+        guard case .imported(let gpxID) = importGPX(padded, as: "iphone.gpx").outcome else {
+            Issue.record("Expected import")
+            return
+        }
+        let result = try importFIT()
+        guard case .fitForGPX(let id) = result.outcome else {
+            Issue.record("Expected fitForGPX, got \(result.outcome)")
+            return
+        }
+        #expect(id == gpxID)
+        #expect(try rides().count == 1)
+    }
+
+    @Test("Overlap is measured on the shorter ride")
+    func overlapShare() {
+        let start = Date(timeIntervalSince1970: 1_800_000_000)
+        #expect(ImportService.overlapShare(start: start, duration: 3934, start: start.addingTimeInterval(-98), duration: 4232) == 1)
+        #expect(ImportService.overlapShare(start: start, duration: 3600, start: start.addingTimeInterval(1800), duration: 3600) == 0.5)
+        #expect(ImportService.overlapShare(start: start, duration: 600, start: start.addingTimeInterval(900), duration: 600) == 0)
+        #expect(ImportService.overlapShare(start: start, duration: 0, start: start, duration: 600) == 0)
     }
 
     // MARK: - What is not the same ride
