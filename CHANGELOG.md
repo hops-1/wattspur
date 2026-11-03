@@ -13,6 +13,10 @@ Every DMG handed out to testers corresponds to one entry below.
 - **iCloud settings (in preparation):** a new tab **Settings › iCloud** with the switch **Sync with iCloud**, off by default. Turning it on the first time saves a backup of the library beside it first. Sync itself needs a version signed by the developer and comes with Wattspur 1.8.3; until then the switch has no effect and the tab says so (B-072).
 - **Rides recorded with the iPhone:** a GPX from the Wattspur app on the iPhone goes to the bike chosen there, without the question “Which bike?”, and the ride detail shows “Source: iPhone” (B-213).
 
+### Fixed
+
+- **iPhone recordings:** the GPX of a recording now keeps the time of each point to the millisecond. Before, two points within one second got the same time; one was dropped on import, and the speed chart showed single spikes of up to twice the real speed (B-233).
+
 ## [1.8.2] – 2026-11-02
 
 A small follow-up: commutes that start a little off are found again, and the steepest-grade records no longer jump on GPX files without a barometer.
