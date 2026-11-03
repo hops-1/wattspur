@@ -47,12 +47,12 @@ check_developer_id() {
     if [ -z "$TEAM" ]; then
         echo "  missing: DEVELOPMENT_TEAM in Config/Local.xcconfig" >&2; missing=1
     elif [ -z "$(developer_id_identity)" ]; then
-        echo "  missing: certificate “Developer ID Application: … ($TEAM)” in the keychain (Xcode › Settings › Accounts › Manage Certificates)" >&2; missing=1
+        echo "  missing: certificate “Developer ID Application: … (${TEAM})” in the keychain (Xcode › Settings › Accounts › Manage Certificates)" >&2; missing=1
     fi
     if [ -z "$NOTARY_PROFILE" ]; then
         echo "  missing: WATTSPUR_NOTARY_PROFILE in Config/Local.xcconfig" >&2; missing=1
     elif ! xcrun notarytool history --keychain-profile "$NOTARY_PROFILE" >/dev/null 2>&1; then
-        echo "  missing: keychain profile “$NOTARY_PROFILE” for notarytool (xcrun notarytool store-credentials $NOTARY_PROFILE …)" >&2; missing=1
+        echo "  missing: keychain profile “${NOTARY_PROFILE}” for notarytool (xcrun notarytool store-credentials ${NOTARY_PROFILE} …)" >&2; missing=1
     fi
     if [ "$ENTITLEMENTS" != "App/Wattspur-iCloud.entitlements" ]; then
         echo "  note: WATTSPUR_MAC_ENTITLEMENTS is not App/Wattspur-iCloud.entitlements, so the app has no iCloud sync" >&2
@@ -63,7 +63,7 @@ check_developer_id() {
 if [ "$MODE" = adhoc ]; then
     echo "==> Signing: ad hoc, not notarized (no WATTSPUR_MAC_DISTRIBUTION in Config/Local.xcconfig)"
 else
-    echo "==> Signing: Developer ID for team $TEAM, notarized with profile “$NOTARY_PROFILE”"
+    echo "==> Signing: Developer ID for team $TEAM, notarized with profile “${NOTARY_PROFILE}”"
     if ! check_developer_id; then
         echo "error: the Developer ID way is not ready (see above). Remove WATTSPUR_MAC_DISTRIBUTION for an ad-hoc DMG." >&2
         exit 1
