@@ -69,9 +69,17 @@ public enum GPXWriter {
         return Data(xml.utf8)
     }
 
-    /// "2026-10-18T12:12:13Z"
+    /// "2026-10-18T12:12:13Z", or "2026-10-18T12:12:13.250Z" for a time between whole seconds
+    /// (B-233): the iPhone's fixes do not fall on whole seconds, and two of them in one second
+    /// would otherwise get the same time and one would be lost on import.
     static func timestamp(_ date: Date) -> String {
-        date.formatted(Date.ISO8601FormatStyle(timeZone: TimeZone(identifier: "UTC")!))
+        let milliseconds = Int64((date.timeIntervalSince1970 * 1000).rounded())
+        let (seconds, fraction) = milliseconds.quotientAndRemainder(dividingBy: 1000)
+        let whole = fraction < 0 ? seconds - 1 : seconds
+        let text = Date(timeIntervalSince1970: TimeInterval(whole))
+            .formatted(Date.ISO8601FormatStyle(timeZone: TimeZone(identifier: "UTC")!))
+        guard fraction != 0 else { return text }
+        return text.dropLast() + String(format: ".%03dZ", fraction < 0 ? fraction + 1000 : fraction)
     }
 
     private static func trackPoint(_ s: RideSample, start: Date) -> String {

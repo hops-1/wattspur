@@ -17,6 +17,11 @@ Every DMG handed out to testers corresponds to one entry below.
 
 - **Ascent of GPX rides:** a climb now counts from 2 m instead of 3 m. On three tours compared with the Bosch FIT, Wattspur counted 7 to 18 % too little before and 2 to 10 % now (on 3.11.2026: 421 m instead of 400 m, Bosch 431 m). GPX rides already in the library are calculated again at the next start (B-234).
 
+### Fixed
+
+- **iPhone recordings:** the GPX of a recording now keeps the time of each point to the millisecond. Before, two points within one second got the same time; one was dropped on import, and the speed chart showed single spikes of up to twice the real speed (B-233).
+- **The same ride as Bosch FIT and iPhone GPX:** a recording started earlier or stopped later than the one in the Flow app was imported as a second ride, and the tour counted twice. Wattspur now also recognises the same ride when the times overlap for at least 80 % of the shorter one; as before, a GPX is attached to the Bosch ride, and a Bosch FIT for a GPX ride offers to take the Bosch values (B-232).
+
 ## [1.8.2] – 2026-11-02
 
 A small follow-up: commutes that start a little off are found again, and the steepest-grade records no longer jump on GPX files without a barometer.
