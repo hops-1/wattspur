@@ -141,6 +141,14 @@ fi
 echo "==> Checking the signature"
 codesign --verify --deep --strict "$APP"
 codesign --display --verbose=2 "$APP" 2>&1 | grep -E '^(Identifier|Authority|Signature|Runtime|TeamIdentifier)' || true
+if [ "$MODE" = developer-id ]; then
+    # Apple rejects notarization without Hardened Runtime and a secure timestamp; better to fail here.
+    SIGNINFO="$(codesign --display --verbose=4 "$APP" 2>&1)"
+    echo "$SIGNINFO" | grep -q 'flags=.*runtime' || { echo "error: Hardened Runtime is off in the signed app." >&2; exit 1; }
+    echo "$SIGNINFO" | grep -q '^Timestamp=' || { echo "error: the signature has no secure timestamp." >&2; exit 1; }
+    echo "==> Entitlements of the signed app"
+    codesign --display --entitlements - --xml "$APP" 2>/dev/null | plutil -p - || true
+fi
 
 # Sends a file to Apple's notary service, waits for the answer and staples the ticket to `staple`.
 notarize() {
