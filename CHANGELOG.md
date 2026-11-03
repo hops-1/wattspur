@@ -15,6 +15,7 @@ Every DMG handed out to testers corresponds to one entry below.
 
 ### Fixed
 
+- **iPhone recordings:** the GPX of a recording now keeps the time of each point to the millisecond. Before, two points within one second got the same time; one was dropped on import, and the speed chart showed single spikes of up to twice the real speed (B-233).
 - **The same ride as Bosch FIT and iPhone GPX:** a recording started earlier or stopped later than the one in the Flow app was imported as a second ride, and the tour counted twice. Wattspur now also recognises the same ride when the times overlap for at least 80 % of the shorter one; as before, a GPX is attached to the Bosch ride, and a Bosch FIT for a GPX ride offers to take the Bosch values (B-232).
 
 ## [1.8.2] – 2026-11-02
