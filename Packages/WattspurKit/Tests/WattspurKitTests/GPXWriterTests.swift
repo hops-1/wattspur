@@ -153,4 +153,32 @@ struct GPXWriterTests {
         #expect(ok)
         #expect(gpx.segments.count == 2)
     }
+
+    @Test("Times between whole seconds keep their milliseconds (B-233)")
+    func milliseconds() {
+        let start = Date(timeIntervalSince1970: 1_792_325_533) // 2026-10-18T12:12:13Z
+        #expect(GPXWriter.timestamp(start) == "2026-10-18T12:12:13Z")
+        #expect(GPXWriter.timestamp(start.addingTimeInterval(0.25)) == "2026-10-18T12:12:13.250Z")
+        #expect(GPXWriter.timestamp(start.addingTimeInterval(0.9996)) == "2026-10-18T12:12:14Z")
+        #expect(GPXWriter.timestamp(start.addingTimeInterval(1e-7)) == "2026-10-18T12:12:13Z")
+        #expect(GPXWriter.timestamp(Date(timeIntervalSince1970: -0.25)) == "1969-12-31T23:59:59.750Z")
+    }
+
+    @Test("Two fixes within one second both survive the import (B-233)")
+    func fixesInOneSecond() throws {
+        let start = Date(timeIntervalSince1970: 1_792_325_533)
+        var recording = RideRecording(startDate: start)
+        for (index, offset) in [0.0, 0.4, 0.9, 1.3, 2.0, 2.6].enumerated() {
+            recording.add(RideRecording.Fix(date: start.addingTimeInterval(offset),
+                                            latitude: 49.8 + Double(index) * 5 / 111_195, longitude: 8.8,
+                                            altitude: 150, horizontalAccuracy: 5, speed: 7))
+        }
+        let gpx = GPXWriter.document(name: "Kurz", segments: recording.gpxSegments, description: nil,
+                                     creator: GPXWriter.iPhoneCreator, bikeID: nil)
+        let track = try GPXRideImporter().parseTrack(gpx)
+        #expect(track.discarded.duplicateTime == 0)
+        let times = track.parts.flatMap(\.samples).map(\.time)
+        #expect(times.count == recording.gpxSegments.flatMap(\.samples).count)
+        #expect(times.contains { abs($0 - 0.4) < 0.002 })
+    }
 }
