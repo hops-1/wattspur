@@ -1,7 +1,8 @@
 import Foundation
 
 /// The numbers behind the totals of a GPX ride (B-142). The start values were confirmed on
-/// 25.10.2026; the height threshold is meant to become a setting later (SET-04: 1 / 3 / 5 m).
+/// 25.10.2026; the height threshold went from 3 to 2 m on 3.11.2026 (B-234) and is meant to become
+/// a setting later (SET-04: 1 / 3 / 5 m).
 public struct GPXSummaryParameters: Sendable, Equatable {
     /// Below this speed in m/s over the window the rider stands still: the time does not count as ride time.
     public var standstillSpeed = 0.8
@@ -11,7 +12,9 @@ public struct GPXSummaryParameters: Sendable, Equatable {
     /// Heights are smoothed with the median of this many points (odd) before they are counted.
     public var altitudeMedianPoints = 5
     /// A change of height counts as ascent or descent once it exceeds the last counted height by this many metres.
-    public var ascentThreshold = 3.0
+    /// 2 m since 3.11.2026 (B-234): against the Bosch FIT of three tours, 3 m counted 7 to 18 % too
+    /// little, 2 m 2 to 10 %. 1 m came closest (0 to +4 %), but counts the noise of an iPhone's heights.
+    public var ascentThreshold = 2.0
     /// The maximum speed is taken over a stretch of at least this many seconds, not from single points.
     public var maxSpeedWindow: TimeInterval = 5
 

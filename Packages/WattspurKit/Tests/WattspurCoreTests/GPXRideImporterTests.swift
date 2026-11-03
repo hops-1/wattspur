@@ -368,7 +368,7 @@ struct GPXRideImporterTests {
         #expect(abs(ride.summary.distance - 324.5) < 1)
         #expect(ride.summary.averagePower != nil)
         #expect(ride.summary.maxPower != nil)
-        #expect(ride.summary.totalAscent == 0)   // flat track
+        #expect(ride.summary.totalAscent == 2)   // rises evenly by about 3 m; 0 at the 3 m threshold before B-234
         #expect(ride.summary.maxSpeed != nil)
         let work = try #require(ride.workKilojoules)
         #expect(work > 7 && work < 9)

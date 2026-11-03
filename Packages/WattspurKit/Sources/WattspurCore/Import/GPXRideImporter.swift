@@ -122,7 +122,8 @@ public struct GPXTrack: Sendable, Equatable {
 /// The totals are computed from the track (`GPXTrack.totals`) and marked as estimated.
 public struct GPXRideImporter: RideImporter {
     /// Bump whenever parsing changes so stored rides are re-parsed (NFR-17).
-    public static let parserVersion = 1
+    /// 2 (3.11.2026): ascent from 2 m instead of 3 m (B-234).
+    public static let parserVersion = 2
     /// A gap this long (or a new segment) starts a new part: no ride time, no distance (confirmed 25.10.2026).
     public static let pauseGap: TimeInterval = 30
     /// A point further from the last kept one than this speed allows is a GPS jump (unless the ride was

@@ -30,7 +30,7 @@ struct GPXSummaryTests {
         #expect(GPXRideImporter.pauseGap == 30)
         #expect(p.standstillSpeed == 0.8)
         #expect(p.altitudeMedianPoints == 5)
-        #expect(p.ascentThreshold == 3)
+        #expect(p.ascentThreshold == 2)  // 3 until 3.11.2026 (B-234)
     }
 
     @Test("Standing still does not count as ride time, riding does")
@@ -68,9 +68,9 @@ struct GPXSummaryTests {
         #expect(abs(t.movingTime - 2719) / 2719 < 0.01)
         #expect(abs(t.distance - 17_271) < 5)
         #expect(t.maxSpeed.map { abs($0 - 15.142) / 15.142 < 0.1 } == true) // FIT max 54.5 km/h
-        // 3 m threshold (standard) against the 1 m of the FIT: fewer metres on barometric heights.
-        #expect(t.ascent == 147)
-        #expect(t.descent == 149)
+        // 2 m threshold (standard) against the 1 m of the FIT: fewer metres on barometric heights.
+        #expect(t.ascent == 150)                                  // 147 at 3 m
+        #expect(t.descent == 154)
         var fine = GPXSummaryParameters()
         fine.ascentThreshold = 1
         let f = track.totals(fine)
@@ -78,7 +78,7 @@ struct GPXSummaryTests {
         #expect(abs((f.descent ?? 0) - 169) <= 1)                 // FIT descent 169
         var coarse = GPXSummaryParameters()
         coarse.ascentThreshold = 5
-        #expect((track.totals(coarse).ascent ?? 0) < 147)
+        #expect((track.totals(coarse).ascent ?? 0) < 150)
     }
 
     @Test("komoot, same tour: heights from a model give less ascent, ride time is the same")
@@ -87,7 +87,7 @@ struct GPXSummaryTests {
         let komoot = try GPXRideImporter().parseTrack(GPXFixture.data("pair-tour1-komoot")).totals()
         #expect(abs(komoot.movingTime - bosch.movingTime) < 20)
         #expect(abs(komoot.distance - bosch.distance) < 20)
-        #expect(komoot.ascent.map { $0 >= 100 && $0 <= 125 } == true)   // 114 at 3 m, against 147 from Bosch
+        #expect(komoot.ascent.map { $0 >= 100 && $0 <= 125 } == true)   // about 118 at 2 m, against 150 from the Bosch GPX
     }
 
     @Test("Heights: one spike is smoothed away; noise on flat ground adds nothing at 3 m")
@@ -157,8 +157,8 @@ struct GPXSummaryTests {
         #expect(abs(s.distance - 17_271) < 5)
         #expect(abs((s.averageSpeed ?? 0) - s.distance / s.timerTime) < 1e-9)
         #expect(s.maxSpeed != nil)
-        #expect(s.totalAscent == 147)
-        #expect(s.totalDescent == 149)
+        #expect(s.totalAscent == 150)
+        #expect(s.totalDescent == 154)
         #expect(s.averagePower == nil)
 
         var fine = GPXSummaryParameters()

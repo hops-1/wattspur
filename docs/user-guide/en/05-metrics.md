@@ -37,7 +37,7 @@ A GPX file has positions, altitude and time, but no totals. Wattspur calculates 
 | Ride time ≈ | The time in motion: gaps of 30 s or more are pauses, speed below 0.8 m/s (over ±5 s) is standing still |
 | Distance ≈ | Along the track while moving; GPS wobble at a standstill counts nothing |
 | Avg speed ≈, Top speed ≈ | Distance ÷ ride time; the fastest stretch of at least 5 s |
-| Ascent ≈, Descent ≈ | From the altitude smoothed with a median over 5 points; a climb counts from 3 m |
+| Ascent ≈, Descent ≈ | From the altitude smoothed with a median over 5 points; a climb counts from 2 m |
 | Power, cadence | Only if the file has them; otherwise a dash. Work is the sum of the power; without power there is no work |
 | Calories | Need power (work); without it a dash |
 | CO₂ saved ⓘ | From the distance, as for every ride |
