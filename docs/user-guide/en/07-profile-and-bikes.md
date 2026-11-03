@@ -8,6 +8,7 @@ Wattspur keeps one **profile** with your body data and as many **bikes** as you 
 Choose **Profile** at the bottom of the sidebar (⌘6).
 - **You:** name, photo (optional), and body data: weight, height, year of birth and sex. All of it is optional and stays on your Mac. It is stored for a calorie estimate “with profile” that comes in a later version; for now it changes no number. Numbers that cannot be right (a weight of 7 kg) are not saved.
 - **Bikes:** one tile per bike with its photo (or its coloured symbol), name, type, drive unit and battery, the distance (including the starting mileage you entered), the number of rides and the last ride.
+- **Hint on the wheel circumference:** Bosch measures distance and speed at the wheel. If the wheel circumference in the Flow app is wrong, both are too high or too low. So Wattspur compares, over the newest 20 Bosch rides of a bike, the distance of the wheel sensor with the distance from GPS, only where GPS was good (no gaps, not standing). From a difference of 2 % over at least three rides and 20 km, the tile shows a hint such as “The wheel sensor measures 3.7 % more than GPS”. Then check the wheel circumference in the Flow app. Wattspur does not change the values of your rides. GPS is not exact either, which is why the hint only appears from 2 %.
 
 ## Adding and editing a bike
 **Add Bike** (or **Edit…** on a tile) opens the editor:

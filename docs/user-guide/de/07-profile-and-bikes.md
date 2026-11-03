@@ -8,6 +8,7 @@ Wattspur führt ein **Profil** mit deinen Körperdaten und so viele **Bikes**, w
 Wähle **Profil** unten in der Seitenleiste (⌘6).
 - **Du:** Name, Foto (freiwillig) und Körperdaten: Gewicht, Größe, Geburtsjahr und Geschlecht. Alles ist freiwillig und bleibt auf deinem Mac. Es wird für eine Kalorienschätzung „mit Profil“ gespeichert, die in einer späteren Version kommt; vorerst ändert es keine Zahl. Zahlen, die nicht stimmen können (ein Gewicht von 7 kg), werden nicht gespeichert.
 - **Bikes:** eine Kachel je Bike mit Foto (oder farbigem Symbol), Name, Art, Antrieb und Akku, der Strecke (mit dem eingetragenen Startwert), der Zahl der Fahrten und der letzten Fahrt.
+- **Hinweis auf den Radumfang:** Bosch misst Strecke und Tempo am Rad. Ist der Radumfang in der Flow-App falsch eingestellt, sind beide zu hoch oder zu niedrig. Wattspur vergleicht deshalb in den neuesten 20 Bosch-Fahrten eines Bikes die Strecke vom Radsensor mit der Strecke aus dem GPS, nur dort, wo das GPS gut war (ohne Lücken, nicht im Stand). Ab 2 % Unterschied über mindestens drei Fahrten und 20 km zeigt die Kachel einen Hinweis, zum Beispiel „Der Radsensor misst 3,7 % mehr als GPS“. Prüfe dann den Radumfang in der Flow-App. Wattspur ändert die Werte deiner Fahrten nicht. GPS ist auch nicht genau, darum erscheint der Hinweis erst ab 2 %.
 
 ## Bike anlegen und bearbeiten
 **Bike hinzufügen** (oder **Bearbeiten …** an einer Kachel) öffnet den Editor:

@@ -9106,6 +9106,36 @@
           }
         }
       }
+    },
+    "The wheel sensor measures %@ more than GPS. Check the wheel circumference in the Flow app." : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Der Radsensor misst %@ mehr als GPS. Prüfe den Radumfang in der Flow-App."
+          }
+        }
+      }
+    },
+    "The wheel sensor measures %@ less than GPS. Check the wheel circumference in the Flow app." : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Der Radsensor misst %@ weniger als GPS. Prüfe den Radumfang in der Flow-App."
+          }
+        }
+      }
+    },
+    "Compared over the newest Bosch rides of this bike, only where GPS was good. Distance and speed of the rides are not changed." : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Verglichen über die neuesten Bosch-Fahrten dieses Bikes, nur wo das GPS gut war. Strecke und Tempo der Fahrten bleiben unverändert."
+          }
+        }
+      }
     }
   },
   "version" : "1.0"
