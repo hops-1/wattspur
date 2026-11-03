@@ -25,7 +25,7 @@ Weil die Datei keine Summen hat, rechnet Wattspur sie aus den Punkten aus. Die F
 | Strecke | Entlang des Tracks in Bewegung; das kleine Zittern eines GPS im Stand zählt nichts |
 | Ø Geschw. | Strecke ÷ Fahrzeit |
 | Max. Geschw. | Das schnellste Stück von mindestens 5 Sekunden, ein einzelner falscher Punkt setzt sie also nicht |
-| Anstieg, Abstieg | Aus der Höhe nach dem Glätten (Median über 5 Punkte); ein Anstieg zählt ab 3 m |
+| Anstieg, Abstieg | Aus der Höhe nach dem Glätten (Median über 5 Punkte); ein Anstieg zählt ab 2 m |
 
 Auffällige Punkte werden weggelassen, zum Beispiel ein Sprung von mehr als 150 km/h, der auch das Dreifache der Geschwindigkeit davor ist. Eine Motorradfahrt mit 160 km/h bleibt vollständig.
 

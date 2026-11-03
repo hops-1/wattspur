@@ -13,6 +13,10 @@ Every DMG handed out to testers corresponds to one entry below.
 - **iCloud settings (in preparation):** a new tab **Settings › iCloud** with the switch **Sync with iCloud**, off by default. Turning it on the first time saves a backup of the library beside it first. Sync itself needs a version signed by the developer and comes with Wattspur 1.8.3; until then the switch has no effect and the tab says so (B-072).
 - **Rides recorded with the iPhone:** a GPX from the Wattspur app on the iPhone goes to the bike chosen there, without the question “Which bike?”, and the ride detail shows “Source: iPhone” (B-213).
 
+### Changed
+
+- **Ascent of GPX rides:** a climb now counts from 2 m instead of 3 m. On three tours compared with the Bosch FIT, Wattspur counted 7 to 18 % too little before and 2 to 10 % now (on 3.11.2026: 421 m instead of 400 m, Bosch 431 m). GPX rides already in the library are calculated again at the next start (B-234).
+
 ### Fixed
 
 - **iPhone recordings:** the GPX of a recording now keeps the time of each point to the millisecond. Before, two points within one second got the same time; one was dropped on import, and the speed chart showed single spikes of up to twice the real speed (B-233).

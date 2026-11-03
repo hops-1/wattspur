@@ -25,7 +25,7 @@ Because the file has no totals, Wattspur works them out from the points. The rid
 | Distance | Along the track while moving; the small wobble of a GPS at a standstill adds nothing |
 | Avg speed | Distance ÷ ride time |
 | Top speed | The fastest stretch of at least 5 seconds, so a single odd point does not set it |
-| Ascent, Descent | From the altitude after smoothing (median over 5 points); a climb counts from 3 m |
+| Ascent, Descent | From the altitude after smoothing (median over 5 points); a climb counts from 2 m |
 
 Odd points are left out, for example a jump of more than 150 km/h that is also three times the speed before it. A ride on a motorcycle at 160 km/h stays complete.
 

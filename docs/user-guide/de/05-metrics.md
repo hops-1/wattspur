@@ -37,7 +37,7 @@ Eine GPX-Datei hat Positionen, Höhe und Zeit, aber keine Summen. Wattspur berec
 | Fahrzeit ≈ | Die Zeit in Bewegung: Lücken ab 30 s sind Pausen, eine Geschwindigkeit unter 0,8 m/s (über ±5 s) ist Stillstand |
 | Strecke ≈ | Entlang des Tracks in Bewegung; GPS-Zittern im Stand zählt nichts |
 | Ø Geschw. ≈, Max. Geschw. ≈ | Strecke ÷ Fahrzeit; das schnellste Stück von mindestens 5 s |
-| Anstieg ≈, Abstieg ≈ | Aus der Höhe, geglättet mit einem Median über 5 Punkte; ein Anstieg zählt ab 3 m |
+| Anstieg ≈, Abstieg ≈ | Aus der Höhe, geglättet mit einem Median über 5 Punkte; ein Anstieg zählt ab 2 m |
 | Leistung, Trittfrequenz | Nur, wenn die Datei sie hat, sonst ein Strich. Die Arbeit ist die Summe der Leistung; ohne Leistung gibt es keine Arbeit |
 | Kalorien | Brauchen Leistung (Arbeit); ohne sie ein Strich |
 | CO₂-Einsparung ⓘ | Aus der Strecke, wie bei jeder Fahrt |

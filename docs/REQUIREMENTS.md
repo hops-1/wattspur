@@ -578,7 +578,7 @@ Anlass: Die Zielgruppe wächst, wenn auch Fahrten anderer Bikes und Radcomputer,
 |---|---|---|
 | Quellen | GPX 1.0/1.1 mit Position, Höhe, Zeit; Erweiterungen Leistung, Trittfrequenz, Puls, Temperatur; Export → Import verlustfrei; keine Routen und Wegpunkte | 3.2, IMP-04, B-140 |
 | Mehrere Tracks | eine Fahrt je Datei mit Lücken, an verschiedenen Tagen getrennt | B-140 |
-| Summen | aus dem Track berechnet und als „geschätzt“ gekennzeichnet; Startwerte (Nils, 25.10.2026): Pause ab 30 s Lücke, Stillstand unter 0,8 m/s, Höhe Median über 5 Punkte, Schwelle 3 m für Anstieg/Abstieg; Bosch-FIT bleibt Wahrheitsquelle (3.3) | 3.2, B-142 |
+| Summen | aus dem Track berechnet und als „geschätzt“ gekennzeichnet; Startwerte (Nils, 25.10.2026): Pause ab 30 s Lücke, Stillstand unter 0,8 m/s, Höhe Median über 5 Punkte, Schwelle 2 m für Anstieg/Abstieg (bis 3.11.2026: 3 m, B-234); Bosch-FIT bleibt Wahrheitsquelle (3.3) | 3.2, B-142 |
 | Abtastrate | Originalpunkte behalten, Geschwindigkeit aus Abstand/Zeit, Leistung und Trittfrequenz leer | B-141, B-142 |
 | Puls, Temperatur | nur speichern, Anzeige später | IDEA-27, B-141 |
 | Duplikate | Erkennung Start ±60 s oder Überlappung der Zeiten ≥ 80 % der kürzeren Fahrt (B-232, 3.11.2026: Flow und iPhone werden von Hand gestartet, 98 s Abstand), Strecke ±10 % (geändert am 25.10.2026 von ±5 %: die Bosch-FIT-Strecke liegt ca. 4,9 % über dem GPS-Pfad), bestätigt über die vereinfachte Route (B-104), Treffer nur im selben Bike (Gruppenfahrt, Vorschlag aus V-11); FIT da → GPX anhängen ohne Rückfrage; GPX da → bei der FIT nachfragen, im Ordner aktualisieren; GPX + GPX wie IMP-02 | IMP-02, IMP-04, B-143 |
