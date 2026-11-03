@@ -13,6 +13,10 @@ Every DMG handed out to testers corresponds to one entry below.
 - **iCloud settings (in preparation):** a new tab **Settings › iCloud** with the switch **Sync with iCloud**, off by default. Turning it on the first time saves a backup of the library beside it first. Sync itself needs a version signed by the developer and comes with Wattspur 1.8.3; until then the switch has no effect and the tab says so (B-072).
 - **Rides recorded with the iPhone:** a GPX from the Wattspur app on the iPhone goes to the bike chosen there, without the question “Which bike?”, and the ride detail shows “Source: iPhone” (B-213).
 
+### Fixed
+
+- **The same ride as Bosch FIT and iPhone GPX:** a recording started earlier or stopped later than the one in the Flow app was imported as a second ride, and the tour counted twice. Wattspur now also recognises the same ride when the times overlap for at least 80 % of the shorter one; as before, a GPX is attached to the Bosch ride, and a Bosch FIT for a GPX ride offers to take the Bosch values (B-232).
+
 ## [1.8.2] – 2026-11-02
 
 A small follow-up: commutes that start a little off are found again, and the steepest-grade records no longer jump on GPX files without a barometer.

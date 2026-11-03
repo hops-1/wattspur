@@ -29,7 +29,7 @@ Eine GPX-Datei hat keine Summen. Wattspur berechnet Fahrzeit, Strecke, Geschwind
 Die Datei hat keine Leistung. Ohne sie gibt es keine Arbeit und keine Kalorien. Wattspur zeigt einen Strich statt 0 und zählt die Fahrt nicht in Summen, die Leistung brauchen. Die **CO₂-Einsparung** kommt aus der Strecke und ist immer da.
 
 ### Ich habe eine GPX-Datei importiert, und eine Bosch-Fahrt erschien doppelt oder gar nicht
-Wattspur vergleicht Start (±60 s), Strecke (±10 %) und Route, nur auf demselben Bike. Liegt dieselbe Fahrt auf zwei Bikes, zählt sie als zwei Fahrten; weise das richtige Bike mit **Rechtsklick › Bike zuweisen** zu. Eine GPX für eine Bosch-Fahrt wird angehängt, es entsteht also keine zweite Fahrt; achte auf das Symbol **+GPX**.
+Wattspur vergleicht Start (±60 s, oder die Zeiten überschneiden sich zu mindestens 80 %), Strecke (±10 %) und Route, nur auf demselben Bike. Liegt dieselbe Fahrt auf zwei Bikes, zählt sie als zwei Fahrten; weise das richtige Bike mit **Rechtsklick › Bike zuweisen** zu. Eine GPX für eine Bosch-Fahrt wird angehängt, es entsteht also keine zweite Fahrt; achte auf das Symbol **+GPX**.
 
 ### Datum oder Uhrzeit einer Fahrt stimmen nicht
 Wattspur zeigt die Startzeit in der Zeitzone des Startorts. Die Zeitzone wird einmal über Apple Karten nachgeschlagen. Ohne Internet gilt die Zeitzone deines Macs, bis die Abfrage klappt.
