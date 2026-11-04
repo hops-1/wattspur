@@ -12,7 +12,8 @@ Choose **Profile** at the bottom of the sidebar (⌘6).
 
 ## Adding and editing a bike
 **Add Bike** (or **Edit…** on a tile) opens the editor:
-- **Name, colour and type:** bicycle, mountain bike, road bike, gravel bike or cargo bike, and a switch **E-bike**. The type decides the symbol, the colour tints it everywhere the bike appears.
+- **Name, colour and type:** bicycle, mountain bike, road bike, gravel bike, cargo bike or motorcycle, and a switch **E-bike**. The type decides the symbol, the colour tints it everywhere the bike appears.
+- **Motorcycle:** rides on a motorcycle show in the list, on the map and on the bike's tile, but count in no totals, analysis, highlights, records, goals or comparison averages, and save no CO₂. With the bike filter set to the motorcycle, the analysis and the highlights show its own figures, still without CO₂. For recording on the iPhone see [iPhone and iCloud](09-iphone-and-icloud.md#motorcycle).
 - **Photo:** shown only here and on the tile in the profile; everywhere else you see the coloured symbol.
 - **Manufacturer, model, drive unit, battery (Wh), weight, purchase date** and **starting mileage** (the odometer before your first ride in Wattspur; it counts on the tile only). The weight is for information and is not used in any calculation.
 - **Archive bike:** a bike you no longer ride disappears from the Import menu, but its rides stay assigned and it stays in the filters. **Archived bikes** at the bottom of the profile lists it with **Restore**. The last bike cannot be archived, because new rides need a bike.
