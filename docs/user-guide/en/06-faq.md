@@ -55,7 +55,13 @@ A route keeps the similarity and the direction you set. Open it from the filter 
 Because at least three rides took the same route in the same direction and are in no saved route yet. Nothing is saved until you click **Save as Route…**. **Not Now** hides the suggestion for these rides; it returns only when a new ride would stand for the route. The suggestion uses the similarity from **Settings › General › Similar rides**.
 
 ### Where are my rides stored? Is anything uploaded?
-Everything stays on your Mac, in `~/Library/Containers/io.github.hops-1.wattspur`. Wattspur has no account and sends no data about you or your rides. It only goes online to load map tiles, to look up time zones with Apple Maps, and to ask GitHub once a day whether a new version is out (see below).
+Everything stays on your Mac, in `~/Library/Containers/io.github.hops-1.wattspur`. Wattspur has no account and sends no data about you or your rides. It only goes online to load map tiles, to look up time zones with Apple Maps, and to ask GitHub once a day whether a new version is out (see below). If you turn on **Sync with iCloud**, the rides are also in the private database of your own iCloud account. Only you have access to it, not even the developer of Wattspur.
+
+### Rides from the Mac are missing on the iPhone
+- Is **Settings › iCloud › Sync with iCloud** on on the Mac, and did you open Wattspur again after turning it on?
+- Are the Mac and the iPhone signed in to iCloud with the same Apple Account?
+- What does **Last synced** say, on the Mac in Settings and on the iPhone under **More**? A hint there tells you what is missing.
+- The first upload of a large library takes a few minutes. More in [iPhone and iCloud](09-iphone-and-icloud.md).
 
 ### How do I find out about a new version?
 Wattspur asks GitHub once a day whether a newer version has been released. If so, a banner at the top of the window says so; **View on GitHub** opens the release page, where you download the DMG and replace the app in Applications. **Later** hides that version until a newer one comes out. **Wattspur › Check for Updates…** asks right away. Only the public release list is read, nothing about you is sent. To switch it off: **Settings › General › Check for new versions**. Wattspur does not install updates by itself.

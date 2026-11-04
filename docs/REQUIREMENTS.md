@@ -1,6 +1,6 @@
 # Requirements – Wattspur
 
-Stand: 2.11.2026 · Status: Entwurf v0.16 (Plan für iOS 0.3 bis 0.6 und Mac 1.8.4 mit Sync über CloudKit, Kap. 10.22; davor Plan für 1.5 bis 1.9, Kap. 10.15 bis 10.20)
+Stand: 5.11.2026 · Status: Entwurf v0.17 (iOS 0.3 und Mac 1.8.4 umgesetzt: Sync über CloudKit, iCloud oder Ordner, Motorrad, Kap. 10.22; davor Plan für 1.5 bis 1.9, Kap. 10.15 bis 10.20)
 
 ## 1. Ziel & Kontext
 
@@ -662,3 +662,9 @@ Ideen von Nils und Claude gesammelt, von Nils geordnet; Stories im BACKLOG „iO
 | Versionen | iOS 0.3 und Mac 1.8.4 gemeinsam (Mac 1.8.3 vorher: Developer ID und Notarisierung); danach iOS 0.4 Auswerten und Importieren, 0.5 Unterwegs, 0.6 Karten und Highlights | BACKLOG Releaseplan |
 | Eigener Webserver | zurückgestellt; nur bei Bedarf für Android, Web oder ein gemeinsames Portal | B-088 |
 | Teilen mit Freunden | später über CloudKit-Freigaben, nicht über einen Server | B-231, IDEA-24, IDEA-25 |
+| Zeitreihen im Sync (V-15, 4.11.2026) | bleiben externer Speicher (`@Attribute(.externalStorage)`), CloudKit überträgt sie als `CKAsset`; 84 Fahrten in ca. 80 s, Änderungen in 30 s bis 1 min ([SPIKE-CLOUDKIT.md](SPIKE-CLOUDKIT.md)); Vorbehalt Größe in iCloud | V-15 |
+| Doppel nach dem ersten Sync (4.11.2026) | CloudKit kennt keine eindeutigen Schlüssel; beide Geräte führen Fahrer, Bikes, Ziele und dieselbe Datei zusammen, beim Start und nach Änderungen aus iCloud (3 s Ruhe, kein laufender Import); es bleibt der älteste Eintrag (`createdAt`, dann `id`), damit beide Geräte dieselben behalten | B-216 |
+| Sync-Status (4.11.2026) | „Zuletzt synchronisiert“ am Mac (Einstellungen › iCloud) und am iPhone (Mehr); kein iCloud und voller Speicher sofort, fehlendes Netz und andere Fehler erst nach 2 min; Warnung, solange Änderungen auf den Upload warten | B-220 |
+| iCloud oder Ordner (Entscheidung Nils 4.11.2026) | wer iCloud nicht will oder keinen Platz hat, behält den Ordner-Weg von iOS 0.2 (10.21), auch bei Dropbox oder OneDrive, und „GPX teilen“ per AirDrop; Schalter am iPhone unter Mehr, bisherige Ordner-Nutzer behalten den Ordner und bekommen einmal das Angebot; am Mac ist „Fahrten für das iPhone bereitstellen“ bei Sync ausgeblendet, solange es aus ist | B-218, B-238 |
+| Motorrad (Wunsch eines Freundes, 4.11.2026) | Fahrzeug „Motorrad“ für die Aufnahme (Sprung-Filter 300 statt 100 km/h); Radart „Motorrad“, deren Fahrten in Liste, Karte und Kachel bleiben, aber nicht in Summen, Highlights, Rekorden, Zielen, Vergleichs-Durchschnitt und CO₂ zählen; mit Bike-Filter auf das Motorrad zählen sie dort, CO₂ nie | B-239 |
+| Schema nach Production (5.11.2026) | erst vervollständigen: ein Debug-Build mit `-WattspurInitCloudKitSchema YES` legt alle Typen mit allen Feldern in Development an (die erste Deploy-Liste hatte kein `CD_Goal`), danach Deploy durch Nils; Production kann später nur ergänzen | B-219 |

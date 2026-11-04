@@ -7,6 +7,29 @@ Every DMG handed out to testers corresponds to one entry below.
 
 ## [Unreleased]
 
+## [1.8.4] – 2026-11-05
+
+Wattspur syncs your library with the Wattspur app on the iPhone over iCloud: one library on both, in your own iCloud account. Together with it comes the iPhone app 0.3.0 for testers on TestFlight.
+
+### Added
+
+- **Sync with iCloud:** **Settings › iCloud › Sync with iCloud** now works. Rides with their time series, routes and original files, bikes, profile, goals, saved routes and the trash go into the private database of your own iCloud account, the same on the Mac and the iPhone. A change reaches the other device after 30 s to 1 min. The first time, Wattspur saves a backup of the library beside it; sync starts at the next start of Wattspur. There is no Wattspur server and no Wattspur account (B-072, B-216, V-15).
+- **Sync status:** the tab **Settings › iCloud** says when the library last synced, and gives a hint when the Mac is not signed in to iCloud, when iCloud is off for Wattspur, when the iCloud storage is full, or when there has been no connection for two minutes. Short delays get no message (B-220).
+- **Motorcycle:** a new bike type. Its rides stay in the list, on the map and on the bike's tile, but count in no totals, highlights, records, comparison averages or goals, and save no CO₂. With the bike filter set to the motorcycle, the analysis and the highlights show its own figures, still without CO₂ (B-239).
+
+### Changed
+
+- **The same rider and bike twice:** a new iPhone makes its own rider and its own “My eBike”. After the first sync, Wattspur merges them with those of the Mac, at every start and after each change from iCloud; the oldest stays, so both devices keep the same ones. The same holds for goals and for the same export imported on both devices (B-216).
+- **Rides for the iPhone:** with sync on, the iPhone has the library itself, so **Settings › Import › Provide rides for the iPhone** is hidden while it is off. It stays for an iPhone without iCloud (B-218).
+- **Profile:** with sync on, the profile says that profile and rides stay on your devices and in your own iCloud, no longer “on this Mac”.
+
+### iPhone app 0.3.0 (TestFlight)
+
+- **One library with the Mac** over iCloud: rides recorded on the iPhone reach the Mac by themselves, rides from the Mac show on the iPhone, and deleting works on both sides. **More › Sync with iCloud** turns it off; without iCloud the iPhone works as in 0.2, through a folder the Mac watches (also in Dropbox or OneDrive) (B-216, B-218).
+- **Sync status** in **More**: when it last synced, and hints for no iCloud, full storage and no connection; a warning while changes still wait for the upload (B-220).
+- **Share GPX:** a ride can be shared as GPX from its detail (top right) or the list (touch and hold), e.g. by AirDrop to the Mac; the bike goes with it (B-238).
+- **Motorcycle:** **More › Recording › Vehicle** keeps speeds up to 300 km/h instead of 100 km/h, so a motorcycle ride has no gaps (B-239).
+
 ## [1.8.3] – 2026-11-04
 
 The first version signed with Developer ID and notarized by Apple: macOS opens it without the “could not be verified” question. It also brings the hint on the wheel circumference, the setting for the iPhone app, and better ride matching and ascent.
@@ -305,7 +328,8 @@ Foundation: import, ride list and ride detail.
 - English and German localization via a string catalog (B-008).
 - CI with GitHub Actions: WattspurKit tests and app build (B-009).
 
-[Unreleased]: https://github.com/hops-1/wattspur/compare/v1.8.3...HEAD
+[Unreleased]: https://github.com/hops-1/wattspur/compare/v1.8.4...HEAD
+[1.8.4]: https://github.com/hops-1/wattspur/compare/v1.8.3...v1.8.4
 [1.4.3]: https://github.com/hops-1/wattspur/compare/v1.4.2...v1.4.3
 [1.4.2]: https://github.com/hops-1/wattspur/compare/v1.4.1...v1.4.2
 [1.4.1]: https://github.com/hops-1/wattspur/compare/v1.4...v1.4.1

@@ -55,7 +55,13 @@ Eine Strecke behält die Ähnlichkeit und die Richtung, die du eingestellt hast.
 Weil mindestens drei Fahrten dieselbe Strecke in derselben Richtung genommen haben und in keiner gespeicherten Strecke liegen. Gespeichert wird nichts, bis du **Als Strecke speichern …** klickst. **Nicht jetzt** blendet den Vorschlag für diese Fahrten aus; er kommt erst wieder, wenn eine neue Fahrt für die Strecke stünde. Der Vorschlag nutzt die Ähnlichkeit aus **Einstellungen › Allgemein › Ähnliche Fahrten**.
 
 ### Wo liegen meine Fahrten? Wird etwas hochgeladen?
-Alles bleibt auf deinem Mac, in `~/Library/Containers/io.github.hops-1.wattspur`. Wattspur hat kein Konto und sendet keine Daten über dich oder deine Fahrten. Ins Internet geht die App nur für Kartenkacheln, das Nachschlagen der Zeitzone über Apple Karten und die tägliche Frage bei GitHub, ob es eine neue Version gibt (siehe unten).
+Alles bleibt auf deinem Mac, in `~/Library/Containers/io.github.hops-1.wattspur`. Wattspur hat kein Konto und sendet keine Daten über dich oder deine Fahrten. Ins Internet geht die App nur für Kartenkacheln, das Nachschlagen der Zeitzone über Apple Karten und die tägliche Frage bei GitHub, ob es eine neue Version gibt (siehe unten). Schaltest du **Mit iCloud synchronisieren** ein, liegen die Fahrten zusätzlich in der privaten Datenbank deines eigenen iCloud-Kontos. Nur du hast darauf Zugriff, auch der Entwickler von Wattspur nicht.
+
+### Am iPhone fehlen Fahrten vom Mac
+- Ist am Mac **Einstellungen › iCloud › Mit iCloud synchronisieren** an, und hast du Wattspur danach einmal neu gestartet?
+- Sind Mac und iPhone mit demselben Apple Account bei iCloud angemeldet?
+- Was steht unter **Zuletzt synchronisiert**, am Mac in den Einstellungen und am iPhone unter **Mehr**? Ein Hinweis dort sagt, was fehlt.
+- Das erste Hochladen einer großen Mediathek dauert ein paar Minuten. Mehr in [iPhone und iCloud](09-iphone-and-icloud.md).
 
 ### Woher weiß ich, dass es eine neue Version gibt?
 Wattspur fragt einmal am Tag bei GitHub nach, ob eine neuere Version erschienen ist. Wenn ja, steht oben im Fenster ein Hinweis; **Auf GitHub ansehen** öffnet die Release-Seite, dort lädst du das DMG und ersetzt die App im Ordner „Programme“. **Später** blendet diese Version aus, bis eine neuere erscheint. **Wattspur › Nach Updates suchen …** fragt sofort nach. Gelesen wird nur die öffentliche Liste der Releases, über dich wird nichts gesendet. Abschalten: **Einstellungen › Allgemein › Nach neuen Versionen suchen**. Wattspur installiert Updates nicht selbst.

@@ -2,7 +2,7 @@
 
 Wattspur is a free Mac app for the rides you record with a Bosch eBike and the eBike Flow app. It reads the FIT files you export from the Flow app, and GPX files from other bikes, apps and bike computers, and shows each ride with a map, key figures and charts. It also adds everything up over weeks, months and years.
 
-- **Local:** your rides stay on your Mac. There is no account, no subscription and no upload.
+- **Local:** your rides stay on your Mac. There is no account, no subscription and no upload to a server. If you like, the Mac and the iPhone share the rides over your own iCloud ([iPhone and iCloud](09-iphone-and-icloud.md)).
 - **Exact:** the totals (time, distance, speed, power, cadence, ascent) are the values Bosch stores in the file, the same ones the Flow app shows. Totals that Wattspur calculates from a GPX file are marked ≈ (estimated).
 - **English and German:** Wattspur follows the language of your Mac.
 
@@ -17,6 +17,7 @@ Wattspur is a free Mac app for the rides you record with a Bosch eBike and the e
 6. [FAQ and troubleshooting](06-faq.md)
 7. [Profile and bikes](07-profile-and-bikes.md): body data, several bikes, assigning rides, filters
 8. [Importing GPX files](08-importing-gpx.md): rides from other bikes and apps, estimated totals, the same ride as FIT and GPX, filter by source
+9. [iPhone and iCloud](09-iphone-and-icloud.md): Wattspur on the iPhone, turning sync on, sync status, without iCloud, sharing GPX, motorcycle
 
 ## Requirements
 - A Mac with **macOS 26** or later.
