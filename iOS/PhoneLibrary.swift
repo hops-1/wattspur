@@ -46,7 +46,10 @@ final class PhoneLibrary {
         self.cacheFolder = cacheFolder
         if database != nil {
             reload()
-            if self.mode == .iCloud { watchICloud() }
+            if self.mode == .iCloud {
+                watchICloud()
+                startSyncMerge()
+            }
         } else if let data = try? Data(contentsOf: cachedStateURL) {
             state = try? RideExchange.library(from: data)
         }
@@ -144,6 +147,17 @@ final class PhoneLibrary {
                 }
             }
         }
+    }
+
+    /// Merges the rider and "My eBike" this iPhone made with those from the Mac (B-216).
+    private var syncMerge: SyncMergeWatcher?
+
+    private func startSyncMerge() {
+        guard let database else { return }
+        let watcher = SyncMergeWatcher(library: database.library)
+        watcher.onMerge = { [weak self] _ in self?.reload() }
+        watcher.start()
+        syncMerge = watcher
     }
 
     private func scheduleReload() {
