@@ -26,6 +26,8 @@ Stand: 4.11.2026. Getestet von Nils und Claude mit einer **Kopie** der echten Bi
 | Löschen am Mac / am iPhone | die andere Seite zieht nach |
 | Aufnahme im Flugmodus | bleibt auf dem iPhone, erscheint ca. 1 min nach dem Einschalten des Netzes am Mac |
 | iCloud für Wattspur aus | lokale Kopie auf dem iPhone weg, neue Aufnahme bleibt; nach dem Einschalten ca. 1 min bis alles zurück, Mac ca. 30 s später |
+| Development zurückgesetzt (22:07) | Mac meldet „Zone Not Found“, setzt den Sync-Stand zurück (`ZoneDeleted`), behält seine Daten und lädt neu hoch; iPhone-App vorher gelöscht und frisch installiert (sonst hätte auch das iPhone alles erneut hochgeladen) |
+| Frisches iPhone | ganze Bibliothek nach ca. **10 s** da, 85 Fahrten wie am Mac (zwei Fahrten vom 4.11. inzwischen zusammengefügt) |
 | Größe in iCloud | **691 MB** für „Wattspur“ (iPhone, Einstellungen › iCloud, 4.11.2026, 21:50), bei 86 Fahrten rund 8 MB je Fahrt. Der Ordner `Wattspur Import` in iCloud Drive hat nur 16 MB, der Rest ist CloudKit. Die Bibliothek auf dem Mac ist dagegen nur **117 MB** groß (`default.store` 24,3 MB, `-wal` 3,9 MB, `.default_SUPPORT` mit Zeitreihen, Dateien und Fotos 89,2 MB). In iCloud liegt also rund das **Sechsfache**, Ursache noch offen (Reste früherer Tests in Development? alte Fassungen geänderter Dateien?) |
 
 ## Entscheidung: externer Speicher
