@@ -26,7 +26,7 @@ Stand: 4.11.2026. Getestet von Nils und Claude mit einer **Kopie** der echten Bi
 | Löschen am Mac / am iPhone | die andere Seite zieht nach |
 | Aufnahme im Flugmodus | bleibt auf dem iPhone, erscheint ca. 1 min nach dem Einschalten des Netzes am Mac |
 | iCloud für Wattspur aus | lokale Kopie auf dem iPhone weg, neue Aufnahme bleibt; nach dem Einschalten ca. 1 min bis alles zurück, Mac ca. 30 s später |
-| Größe in iCloud | nicht gemessen; ablesbar unter Einstellungen › Name › iCloud › Speicher verwalten › Wattspur |
+| Größe in iCloud | **691 MB** für „Wattspur“ (iPhone, Einstellungen › iCloud, 4.11.2026, 21:50), bei 86 Fahrten rund 8 MB je Fahrt. Die Zahl enthält auch den Ordner in iCloud Drive (`Wattspur Import`, „Stand fürs iPhone“); wie viel davon auf CloudKit fällt, ist noch offen |
 
 ## Entscheidung: externer Speicher
 
@@ -35,6 +35,7 @@ Die Frage aus V-15 war, ob die Zeitreihen über `@Attribute(.externalStorage)` l
 - Das Hochladen der ganzen Bibliothek dauert gut eine Minute, das ist nur einmal pro Gerät nötig.
 - Eine einzelne Fahrt mit Zeitreihe braucht Sekunden, sichtbar wird sie nach 30 s bis 1 min. Die Wartezeit liegt bei CloudKit, nicht an der Größe.
 - Ein eigener Weg (z. B. Dateien in iCloud Drive) brächte einen zweiten Sync mit eigenen Fehlerfällen.
+- **Vorbehalt Größe:** Mit rund 8 MB je Fahrt wären 600 Fahrten mehr als die 5 GB, die iCloud kostenlos bietet. Bevor das Schema nach Production geht, wird geklärt, wie sich die 691 MB aufteilen (iCloud Drive gegen CloudKit, Zeitreihen gegen Originaldateien und Fotos). Ist CloudKit der große Teil, werden die Zeitreihen gepackt oder die Originaldateien nicht mehr mitsynchronisiert. Der externe Speicher bleibt in beiden Fällen.
 
 ## Was daraus folgt
 
