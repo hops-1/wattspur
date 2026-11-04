@@ -71,6 +71,27 @@ public enum LibraryBackup {
         return folder
     }
 
+    /// Copies the library at `storeURL` (file and blob folder) to `destination`, a store URL in another
+    /// folder that must not hold a library yet. For the test library of a debug build (V-15).
+    public static func copyLibrary(from storeURL: URL, to destination: URL) throws {
+        let fm = FileManager.default
+        guard fm.fileExists(atPath: storeURL.path) else { throw Failure.noLibrary }
+        let folder = destination.deletingLastPathComponent()
+        try fm.createDirectory(at: folder, withIntermediateDirectories: true)
+        do {
+            try copyDatabase(from: storeURL, to: destination)
+            let support = supportFolder(for: storeURL)
+            if fm.fileExists(atPath: support.path) {
+                try fm.copyItem(at: support, to: supportFolder(for: destination))
+            }
+        } catch {
+            for name in libraryFileNames(for: destination) {
+                try? fm.removeItem(at: folder.appending(path: name))
+            }
+            throw error
+        }
+    }
+
     /// Reads the manifest of a backup folder and checks that the library file is there and opens.
     public static func inspect(_ backup: URL, storeName: String) throws -> Manifest {
         let fm = FileManager.default

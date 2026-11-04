@@ -21,8 +21,11 @@ public enum LibrarySync {
     /// The configuration the library opens with. Without sync it says `.none` explicitly: the default
     /// `.automatic` starts syncing on its own as soon as the app carries the iCloud entitlement.
     /// Both cases name the same file, `default.store`, so turning sync on or off keeps the library.
-    public static func configuration(requested: Bool, available: Bool) -> ModelConfiguration {
-        ModelConfiguration(cloudKitDatabase: isActive(requested: requested, available: available) ? .private(containerIdentifier) : .none)
+    /// `url` names another file, e.g. the test library of a debug build (V-15); `nil` is the usual one.
+    public static func configuration(requested: Bool, available: Bool, url: URL? = nil) -> ModelConfiguration {
+        let database: ModelConfiguration.CloudKitDatabase = isActive(requested: requested, available: available) ? .private(containerIdentifier) : .none
+        guard let url else { return ModelConfiguration(cloudKitDatabase: database) }
+        return ModelConfiguration(url: url, cloudKitDatabase: database)
     }
 
     /// Backs up the library before it syncs for the first time (P-22), into `backupFolderName` beside it.

@@ -40,7 +40,12 @@ final class ICloudSync {
 
     /// The configuration the library opens with at this start.
     var configuration: ModelConfiguration {
-        LibrarySync.configuration(requested: isRequested, available: isAvailable)
+        #if DEBUG
+        if SpikeLibrary.isOn {
+            return LibrarySync.configuration(requested: isRequested, available: isAvailable, url: SpikeLibrary.storeURL)
+        }
+        #endif
+        return LibrarySync.configuration(requested: isRequested, available: isAvailable)
     }
 
     /// The setting differs from what the library opened with.
