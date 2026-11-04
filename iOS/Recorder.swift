@@ -18,6 +18,12 @@ final class Recorder {
 
     var isRecording: Bool { recording != nil }
 
+    /// What is recorded, chosen in “More”; a motorcycle keeps speeds above 100 km/h.
+    static let vehicleKey = "recordingVehicle"
+    static var vehicle: RecordingVehicle {
+        UserDefaults.standard.string(forKey: vehicleKey).flatMap(RecordingVehicle.init(rawValue:)) ?? .eBike
+    }
+
     private var updates: Task<Void, Never>?
     private var backgroundSession: CLBackgroundActivitySession?
     private var serviceSession: CLServiceSession?
@@ -36,10 +42,12 @@ final class Recorder {
     func start(at date: Date = .now) {
         guard recording == nil else { return }
         unfinished = nil
-        recording = RideRecording(startDate: date)
+        let vehicle = Self.vehicle
+        recording = RideRecording(startDate: date, vehicle: vehicle)
         FileManager.default.createFile(atPath: logURL.path, contents: nil)
         log = try? FileHandle(forWritingTo: logURL)
         write(.start(date))
+        write(.vehicle(vehicle))
         startUpdates()
     }
 
