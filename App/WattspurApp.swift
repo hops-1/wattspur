@@ -37,6 +37,7 @@ struct WattspurApp: App {
         // A restore from a backup is swapped in here, before the library opens (P-22). If it fails, the library stays as it was.
         #if DEBUG
         let usesDemo = DemoMode.isOn
+        if SpikeLibrary.isOn && !usesDemo { SpikeLibrary.prepare() }
         #else
         let usesDemo = false
         #endif
@@ -49,7 +50,11 @@ struct WattspurApp: App {
             }
         }
         _restoreNotice = State(initialValue: notice)
+        #if DEBUG
+        let sync = SpikeLibrary.isOn ? ICloudSync(defaults: SpikeLibrary.defaults) : ICloudSync()
+        #else
         let sync = ICloudSync()
+        #endif
         _iCloudSync = State(initialValue: sync)
         do {
             #if DEBUG

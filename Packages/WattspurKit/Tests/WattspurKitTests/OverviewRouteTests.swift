@@ -130,7 +130,9 @@ struct OverviewRouteTests {
             for data in encoded { points += OverviewRoute(data: data)?.pointCount ?? 0 }
         }
         #expect(points == 400_000)
-        let limit: Duration = .seconds(1)
+        // GitHub's shared runners sometimes need just over 1 s (PR #74), so the limit leaves room
+        // and still catches a real slowdown.
+        let limit: Duration = .seconds(2)
         #expect(elapsed < limit, "Decoding 1 000 routes took \(elapsed)")
     }
 }

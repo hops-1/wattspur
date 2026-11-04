@@ -6,7 +6,12 @@ import WattspurKit
 
 /// Where the library file lives. The same place the container opens (the default store).
 enum LibraryLocation {
-    static var storeURL: URL { ModelConfiguration().url }
+    static var storeURL: URL {
+        #if DEBUG
+        if SpikeLibrary.isOn { return SpikeLibrary.storeURL }
+        #endif
+        return ModelConfiguration().url
+    }
 }
 
 /// "Library Backup…" (P-22): saves the whole library as a folder and brings it back.

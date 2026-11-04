@@ -1,3 +1,4 @@
+import CoreData
 import Foundation
 import Observation
 import WattspurCore
@@ -45,6 +46,7 @@ final class PhoneLibrary {
         self.cacheFolder = cacheFolder
         if database != nil {
             reload()
+            if self.mode == .iCloud { watchICloud() }
         } else if let data = try? Data(contentsOf: cachedStateURL) {
             state = try? RideExchange.library(from: data)
         }
@@ -125,6 +127,32 @@ final class PhoneLibrary {
             problem = error.localizedDescription
         }
         trash = database.trash()
+    }
+
+    /// The pending reload after changes from iCloud.
+    private var pendingReload: Task<Void, Never>?
+
+    /// Reloads when iCloud brought changes from the Mac (B-216). CloudKit imports in batches, and the
+    /// links between rides (merged parts) can come a moment after the rides, so the list waits until
+    /// the changes have been quiet for a second instead of drawing every half state.
+    private func watchICloud() {
+        let names: [Notification.Name] = [.NSPersistentStoreRemoteChange, NSPersistentCloudKitContainer.eventChangedNotification]
+        for name in names {
+            Task { [weak self] in
+                for await _ in NotificationCenter.default.notifications(named: name).map({ _ in () }) {
+                    self?.scheduleReload()
+                }
+            }
+        }
+    }
+
+    private func scheduleReload() {
+        pendingReload?.cancel()
+        pendingReload = Task { [weak self] in
+            try? await Task.sleep(for: .seconds(1))
+            guard !Task.isCancelled else { return }
+            self?.reload()
+        }
     }
 
     /// Makes a finished recording a ride (B-216): the GPX goes through the Kit's import, as on the Mac.
