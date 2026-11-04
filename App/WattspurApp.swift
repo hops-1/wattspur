@@ -144,6 +144,7 @@ struct WattspurApp: App {
                 .environment(phoneState)
                 .environment(curvyRoads)
                 .environment(iCloudSync)
+                .environment(\.librarySyncs, iCloudSync.isActive)
         }
         .modelContainer(container)
 

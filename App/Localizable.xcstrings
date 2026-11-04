@@ -9246,6 +9246,16 @@
           }
         }
       }
+    },
+    "This Mac syncs with iCloud, so Wattspur on the iPhone has the rides itself once it syncs too. Provide the rides in the folder only for an iPhone without iCloud." : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Dieser Mac synchronisiert mit iCloud, Wattspur auf dem iPhone hat die Fahrten darum selbst, sobald es auch synchronisiert. Stelle die Fahrten nur für ein iPhone ohne iCloud im Ordner bereit."
+          }
+        }
+      }
     }
   },
   "version" : "1.0"

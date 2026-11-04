@@ -3,14 +3,20 @@ import UniformTypeIdentifiers
 
 /// Shown while no folder is chosen (B-209): what the folder is for and a button to choose it.
 struct ChooseFolderPrompt: View {
+    @Environment(PhoneSync.self) private var sync
+    @Environment(\.switchSync) private var switchSync
+
     var body: some View {
         ContentUnavailableView {
             Label("Connect to the Mac", systemImage: "folder.badge.plus")
         } description: {
-            Text("Wattspur on the iPhone shows the rides from your Mac. Choose the folder “Wattspur Import” in iCloud Drive that the Mac watches.")
+            Text("Wattspur on the iPhone shows the rides from your Mac. Choose the folder the Mac watches, e.g. “Wattspur Import” in iCloud Drive.")
         } actions: {
             ChooseFolderButton()
                 .buttonStyle(.borderedProminent)
+            if sync.canChoose {
+                Button("Sync with iCloud Instead") { switchSync(true) }
+            }
         }
     }
 }

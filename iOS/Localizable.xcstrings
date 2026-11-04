@@ -1254,6 +1254,136 @@
           }
         }
       }
+    },
+    "Sync with iCloud" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Mit iCloud synchronisieren"
+          }
+        }
+      }
+    },
+    "One library on this iPhone and your Mac, in your own iCloud account." : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Eine Mediathek auf diesem iPhone und deinem Mac, in deinem eigenen iCloud-Konto."
+          }
+        }
+      }
+    },
+    "Without iCloud, rides reach the Mac through a folder it watches, or with “Share GPX”, e.g. by AirDrop." : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ohne iCloud kommen Fahrten über einen Ordner, den der Mac beobachtet, an den Mac – oder mit „GPX teilen“, z. B. per AirDrop."
+          }
+        }
+      }
+    },
+    "Stop syncing with iCloud?" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sync mit iCloud beenden?"
+          }
+        }
+      }
+    },
+    "Turn Off" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ausschalten"
+          }
+        }
+      }
+    },
+    "The rides stay in iCloud and on your Mac. This iPhone then shows the rides the Mac provides in the folder, and new rides go there as GPX." : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Die Fahrten bleiben in iCloud und auf deinem Mac. Dieses iPhone zeigt dann die Fahrten, die der Mac im Ordner bereitstellt, und neue Fahrten gehen als GPX dorthin."
+          }
+        }
+      }
+    },
+    "Choose the folder the Mac watches: “Wattspur Import” in iCloud Drive, or a folder in another service such as Dropbox or OneDrive. Without a folder, send recordings to the Mac with “Share GPX”, e.g. by AirDrop." : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Wähle den Ordner, den der Mac beobachtet: „Wattspur Import“ in iCloud Drive oder einen Ordner bei einem anderen Dienst wie Dropbox oder OneDrive. Ohne Ordner schickst du Aufnahmen mit „GPX teilen“ an den Mac, z. B. per AirDrop."
+          }
+        }
+      }
+    },
+    "Wattspur on the iPhone shows the rides from your Mac. Choose the folder the Mac watches, e.g. “Wattspur Import” in iCloud Drive." : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Wattspur auf dem iPhone zeigt die Fahrten von deinem Mac. Wähle den Ordner, den der Mac beobachtet, z. B. „Wattspur Import“ in iCloud Drive."
+          }
+        }
+      }
+    },
+    "Sync with iCloud Instead" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Stattdessen mit iCloud synchronisieren"
+          }
+        }
+      }
+    },
+    "Sync with iCloud?" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Mit iCloud synchronisieren?"
+          }
+        }
+      }
+    },
+    "Use iCloud" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "iCloud nutzen"
+          }
+        }
+      }
+    },
+    "Keep the Folder" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ordner behalten"
+          }
+        }
+      }
+    },
+    "Wattspur on the iPhone can now share one library with the Mac over iCloud: rides recorded here reach the Mac, and you can delete rides here. The Mac must sync with iCloud too (Wattspur › Settings › iCloud). You can switch at any time under More." : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Wattspur auf dem iPhone kann jetzt über iCloud eine Mediathek mit dem Mac teilen: Aufnahmen kommen von selbst auf den Mac, und du kannst Fahrten hier löschen. Der Mac muss dafür auch mit iCloud synchronisieren (Wattspur › Einstellungen › iCloud). Umschalten kannst du jederzeit unter „Mehr“."
+          }
+        }
+      }
     }
   },
   "version" : "1.1"
