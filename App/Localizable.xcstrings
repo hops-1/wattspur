@@ -9136,6 +9136,116 @@
           }
         }
       }
+    },
+    "Some changes from this Mac are not in iCloud yet." : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Einige Änderungen von diesem Mac sind noch nicht in iCloud."
+          }
+        }
+      }
+    },
+    "Syncing …" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Wird synchronisiert …"
+          }
+        }
+      }
+    },
+    "On. Last synced %@." : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "An. Zuletzt synchronisiert %@."
+          }
+        }
+      }
+    },
+    "On. Not synced yet." : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "An. Noch nicht synchronisiert."
+          }
+        }
+      }
+    },
+    "This Mac is not signed in to iCloud, or iCloud is off for Wattspur. Changes stay on this Mac until iCloud is on again." : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Dieser Mac ist nicht bei iCloud angemeldet, oder iCloud ist für Wattspur aus. Änderungen bleiben auf diesem Mac, bis iCloud wieder an ist."
+          }
+        }
+      }
+    },
+    "iCloud is restricted on this Mac. Changes stay on this Mac." : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "iCloud ist auf diesem Mac eingeschränkt. Änderungen bleiben auf diesem Mac."
+          }
+        }
+      }
+    },
+    "Your iCloud storage is full. Changes stay on this Mac until there is room again." : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Dein iCloud-Speicher ist voll. Änderungen bleiben auf diesem Mac, bis wieder Platz ist."
+          }
+        }
+      }
+    },
+    "No connection to iCloud. Wattspur syncs as soon as there is one again." : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Keine Verbindung zu iCloud. Wattspur synchronisiert, sobald sie wieder da ist."
+          }
+        }
+      }
+    },
+    "Sync is not working at the moment: %@" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Der Sync klappt gerade nicht: %@"
+          }
+        }
+      }
+    },
+    "No online account: profile and rides stay on your devices and in your own iCloud." : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Kein Online-Konto: Profil und Fahrten bleiben auf deinen Geräten und in deinem eigenen iCloud."
+          }
+        }
+      }
+    },
+    "All fields are optional and stay on your devices and in your own iCloud. Wattspur will use them for a “with profile” calorie estimate in a later version." : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Alle Angaben sind freiwillig und bleiben auf deinen Geräten und in deinem eigenen iCloud. Wattspur nutzt sie in einer späteren Version für eine Kalorienschätzung „mit Profil“."
+          }
+        }
+      }
     }
   },
   "version" : "1.0"

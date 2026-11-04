@@ -98,6 +98,7 @@ struct WattspurApp: App {
                 .environment(assignmentNotice)
                 .environment(updates)
                 .environment(restoreNotice)
+                .environment(\.librarySyncs, iCloudSync.isActive)
                 .task { await maintenance.run(library: library) }
                 .task { await curvyRoads.load() }
         }

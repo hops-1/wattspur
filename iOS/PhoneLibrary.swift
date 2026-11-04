@@ -32,6 +32,8 @@ final class PhoneLibrary {
     let database: PhoneDatabase?
     /// Where the rides come from, set at build time.
     let mode: PhoneDatabase.Mode
+    /// Last sync and problems in iCloud mode (B-220); `nil` otherwise.
+    private(set) var syncMonitor: SyncMonitor?
     /// The trash of the store (B-217), newest first; empty in folder mode.
     private(set) var trash: [PhoneDatabase.TrashedRide] = []
     private let cacheFolder: URL
@@ -49,6 +51,8 @@ final class PhoneLibrary {
             if self.mode == .iCloud {
                 watchICloud()
                 startSyncMerge()
+                syncMonitor = SyncMonitor.forLibrary()
+                syncMonitor?.start()
             }
         } else if let data = try? Data(contentsOf: cachedStateURL) {
             state = try? RideExchange.library(from: data)
@@ -65,6 +69,7 @@ final class PhoneLibrary {
     /// Reads the state from the folder again (at launch, when the app comes back, on pull to refresh).
     func refresh() async {
         if database != nil {
+            syncMonitor?.refreshAccount()
             reload()
             return
         }

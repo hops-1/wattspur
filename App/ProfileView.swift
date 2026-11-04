@@ -12,6 +12,7 @@ struct ProfileView: View {
     @State private var editor: BikeEditorTarget?
 
     @Environment(RideLibrary.self) private var library
+    @Environment(\.librarySyncs) private var librarySyncs
     private var openBikes: [Bike] { Bike.sorted(bikes.filter { !$0.isArchived }) }
     private var archivedBikes: [Bike] { Bike.sorted(bikes.filter(\.isArchived)) }
 
@@ -21,7 +22,13 @@ struct ProfileView: View {
                 HStack(alignment: .firstTextBaseline) {
                     Text("Profile").font(.largeTitle.bold())
                     Spacer()
-                    Label("No online account: profile and rides stay on this Mac.", systemImage: "lock")
+                    Group {
+                        if librarySyncs {
+                            Label("No online account: profile and rides stay on your devices and in your own iCloud.", systemImage: "lock")
+                        } else {
+                            Label("No online account: profile and rides stay on this Mac.", systemImage: "lock")
+                        }
+                    }
                         .font(.caption)
                         .foregroundStyle(.secondary)
                 }
@@ -147,6 +154,7 @@ extension RiderSex {
 /// only used for the calorie estimate "with profile" (B-067).
 private struct RiderCard: View {
     @Bindable var rider: Rider
+    @Environment(\.librarySyncs) private var librarySyncs
     @State private var choosingPhoto = false
     @State private var photoFailed = false
 
@@ -202,7 +210,13 @@ private struct RiderCard: View {
                     }
                     Spacer(minLength: 0)
                 }
-                Text("All fields are optional and stay on this Mac. Wattspur will use them for a “with profile” calorie estimate in a later version.")
+                Group {
+                    if librarySyncs {
+                        Text("All fields are optional and stay on your devices and in your own iCloud. Wattspur will use them for a “with profile” calorie estimate in a later version.")
+                    } else {
+                        Text("All fields are optional and stay on this Mac. Wattspur will use them for a “with profile” calorie estimate in a later version.")
+                    }
+                }
                     .font(.caption)
                     .foregroundStyle(.secondary)
                     .fixedSize(horizontal: false, vertical: true)
