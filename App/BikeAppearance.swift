@@ -48,6 +48,7 @@ extension BikeKind {
         case .road: "Road bike"
         case .gravel: "Gravel bike"
         case .cargo: "Cargo bike"
+        case .motorcycle: "Motorcycle"
         }
     }
 
@@ -59,6 +60,7 @@ extension BikeKind {
         case .road: String(localized: "Road bike")
         case .gravel: String(localized: "Gravel bike")
         case .cargo: String(localized: "Cargo bike")
+        case .motorcycle: String(localized: "Motorcycle")
         }
     }
 
@@ -69,6 +71,7 @@ extension BikeKind {
         case .road: "Fast riding on paved roads"
         case .gravel: "Mixed surfaces and gravel tracks"
         case .cargo: "For kids, shopping and luggage"
+        case .motorcycle: "Tracked with the iPhone; not in the totals and the CO₂ saved"
         }
     }
 }
@@ -91,6 +94,17 @@ struct BikeKindShape: Shape {
             guard let first = points.first else { return }
             path.move(to: p(first.0, first.1))
             for point in points.dropFirst() { path.addLine(to: p(point.0, point.1)) }
+        }
+        if kind == .motorcycle {
+            // Two big wheels, the tank between rider and fork, the rider leaning forward.
+            circle(5.5, 16, 3.5)
+            circle(18.5, 16, 3.5)
+            line((5.5, 16), (9.5, 12.5), (15, 12.5), (18.5, 16))
+            line((9.5, 12.5), (11.5, 9.5), (15.5, 10), (15, 12.5))
+            line((18.5, 16), (16.5, 8.5), (18.5, 7.5))
+            line((9.5, 12.5), (10.5, 8), (15, 9))
+            circle(11.6, 5.2, 1.3)
+            return path
         }
         if kind == .cargo {
             // A long john: big rear wheel, small front wheel and the box between the
@@ -115,7 +129,7 @@ struct BikeKindShape: Shape {
         line((14, 10), (15.2, 6.5), (17.2, 7))
         circle(14.8, 3.2, 1.2)
         switch kind {
-        case .road, .cargo:
+        case .road, .cargo, .motorcycle:
             break
         case .bike, .mountain, .gravel:
             line((20.5, 2.5), (20.5, 5.5))

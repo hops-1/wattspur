@@ -39,7 +39,7 @@ struct CompareRidesView: View {
     var body: some View {
         let compared = compared
         // The sample ride can be compared, but it never counts towards the average (CMP-04).
-        let baseline = rides.filter(\.countsInStatistics)
+        let baseline = rides.filter(\.countsInTotals)
         let comparison = RideComparison(rides: compared.map(\.comparisonFigures),
                                         baseline: baseline.map(\.comparisonFigures), calories: calories)
         ScrollView {
@@ -106,7 +106,7 @@ struct CompareRidesView: View {
         exporting = true
         defer { exporting = false }
         let compared = compared
-        let baseline = rides.filter(\.countsInStatistics)
+        let baseline = rides.filter(\.countsInTotals)
         let report = ComparisonReport(
             rides: compared,
             comparison: RideComparison(rides: compared.map(\.comparisonFigures), baseline: baseline.map(\.comparisonFigures), calories: calories),

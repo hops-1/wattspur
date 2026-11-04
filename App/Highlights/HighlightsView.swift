@@ -39,15 +39,16 @@ struct HighlightsView: View {
     @State private var exporting = false
     @State private var goalEditor: GoalEditor.Target?
 
-    /// Only rides that count (Requirements 10.10), of every bike.
-    private var allRides: [Ride] { listedRides.filter(\.countsInStatistics) }
+    /// Only rides that count (Requirements 10.10), of every bike; motorcycle rides only when the
+    /// filter shows that bike.
+    private var allRides: [Ride] { listedRides.filter(\.countsInTotals) }
     private var bikeFilter: BikeFilter { bikeFilterChoice.resolved(knownBikeIDs: Set(bikes.map(\.id))) }
     private var hasGPXRides: Bool { allRides.contains { $0.source == .gpx } }
     private var sourceFilter: SourceFilter { sourceFilterChoice.resolved(hasGPXRides: hasGPXRides) }
     /// The rides of the chosen bike and source: for the year and the records.
     private var rides: [Ride] {
         bikeFilter.isActive || sourceFilter.isActive
-            ? allRides.filter { $0.isOnBike(bikeFilter) && $0.isFromSource(sourceFilter) } : allRides
+            ? listedRides.filter { $0.countsInTotals(bikeFilter: bikeFilter) && $0.isFromSource(sourceFilter) } : allRides
     }
     /// The rides of every bike as plain values, for the goals.
     private var allRideData: HighlightsData { HighlightsData(rides: allRides, calendar: calendar) }

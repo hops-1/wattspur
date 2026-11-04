@@ -78,7 +78,7 @@ struct ImportLogService: LibraryService {
         let importedIDs = Set(entries.compactMap(\.rideID))
         guard !importedIDs.isEmpty else { return [] }
 
-        let counting = ((try? context.fetch(FetchDescriptor<Ride>())) ?? []).filter(\.countsInStatistics)
+        let counting = ((try? context.fetch(FetchDescriptor<Ride>())) ?? []).filter(\.countsInTotals)
         let (fresh, existing) = counting.reduce(into: ([HighlightRide](), [HighlightRide]())) { result, ride in
             if importedIDs.contains(ride.id) { result.0.append(ride.highlightRide) } else { result.1.append(ride.highlightRide) }
         }

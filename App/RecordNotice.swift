@@ -104,7 +104,7 @@ struct YearTileView: View {
 
     var body: some View {
         let year = calendar.component(.year, from: .now)
-        let review = YearReview(rides.filter(\.countsInStatistics).map(\.highlightRide), year: year, calendar: calendar)
+        let review = YearReview(rides.filter(\.countsInTotals).map(\.highlightRide), year: year, calendar: calendar)
         let month = calendar.component(.month, from: .now) - 1
         let maxKm = max(1, review.months.map(\.distance).max() ?? 1)
         let km = Int((review.aggregate.distance / 1000).rounded()).formatted()
