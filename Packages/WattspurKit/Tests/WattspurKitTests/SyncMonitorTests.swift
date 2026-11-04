@@ -54,6 +54,20 @@ struct SyncMonitorTests {
         #expect(monitor.problem(now: start.addingTimeInterval(400)) == nil)
     }
 
+    @Test("Flight mode: no spinner for the open export, the hint after two minutes, gone with the network")
+    func flightMode() {
+        let monitor = monitor()
+        monitor.handle(event(.export, at: 0, ended: false))
+        #expect(monitor.isSyncing)
+        monitor.setOnline(false, at: start)
+        #expect(!monitor.isSyncing)
+        #expect(monitor.problem(now: start.addingTimeInterval(60)) == nil)
+        #expect(monitor.problem(now: start.addingTimeInterval(120)) == .offline)
+        monitor.setOnline(true)
+        #expect(monitor.problem(now: start.addingTimeInterval(300)) == nil)
+        #expect(monitor.isSyncing)
+    }
+
     @Test("A full iCloud and a missing account show at once")
     func immediate() {
         let monitor = monitor()

@@ -1,6 +1,7 @@
 import CloudKit
 import CoreData
 import Foundation
+import Network
 import Observation
 import SwiftData
 
@@ -60,8 +61,9 @@ public final class SyncMonitor {
 
     /// The last import or export that worked, also from an earlier start.
     public private(set) var lastSync: Date?
-    /// An import or export is running.
-    public var isSyncing: Bool { !running.isEmpty }
+    /// An import or export is running. Without a network the mirror keeps an export open until the
+    /// connection is back (V-15, flight mode), so it does not count then.
+    public var isSyncing: Bool { !running.isEmpty && offlineSince == nil }
     /// Something was saved on this device after the last export started, so it is not in iCloud yet.
     public var hasPendingChanges: Bool {
         guard let lastLocalSave else { return false }
@@ -73,6 +75,9 @@ public final class SyncMonitor {
     private var failure: (kind: Failure, since: Date)?
     private var lastLocalSave: Date?
     private var lastExportStart: Date?
+    /// Since when the device has no network; `nil` while it has one.
+    private var offlineSince: Date?
+    private var pathMonitor: NWPathMonitor?
     private let patience: TimeInterval
     private let defaults: UserDefaults
     private let accountStatus: (@Sendable () async -> SyncAccount)?
@@ -105,6 +110,7 @@ public final class SyncMonitor {
         case .restricted: return .restricted
         default: break
         }
+        if let offlineSince, now.timeIntervalSince(offlineSince) >= patience { return .offline }
         guard let failure else { return nil }
         switch failure.kind {
         case .notAuthenticated: return .noAccount
@@ -129,6 +135,13 @@ public final class SyncMonitor {
                 }
             for await event in events { self?.handle(event) }
         })
+        let pathMonitor = NWPathMonitor()
+        pathMonitor.pathUpdateHandler = { [weak self] path in
+            let online = path.status == .satisfied
+            Task { @MainActor in self?.setOnline(online) }
+        }
+        pathMonitor.start(queue: .global(qos: .utility))
+        self.pathMonitor = pathMonitor
         watching.append(Task { [weak self] in
             for await _ in NotificationCenter.default.notifications(named: .CKAccountChanged).map({ _ in () }) {
                 self?.refreshAccount()
@@ -144,6 +157,8 @@ public final class SyncMonitor {
     public func stop() {
         watching.forEach { $0.cancel() }
         watching = []
+        pathMonitor?.cancel()
+        pathMonitor = nil
     }
 
     /// Asks for the account again, e.g. when the app comes back to the front.
@@ -181,6 +196,10 @@ public final class SyncMonitor {
 
     func noteLocalSave(at date: Date = .now) {
         lastLocalSave = date
+    }
+
+    func setOnline(_ online: Bool, at date: Date = .now) {
+        if online { offlineSince = nil } else if offlineSince == nil { offlineSince = date }
     }
 
     func setAccount(_ account: SyncAccount) {
