@@ -1,13 +1,15 @@
 # Install Wattspur
 
-Wattspur comes as a disk image (`Wattspur-<version>-<build>.dmg`); get the latest version from [Releases](https://github.com/hops-1/wattspur/releases/latest). It is a free hobby project and is not notarized by Apple, so macOS asks once before the first start.
+Wattspur comes as a disk image (`Wattspur-<version>-<build>.dmg`); get the latest version from [Releases](https://github.com/hops-1/wattspur/releases/latest). From version 1.8.3 it is signed with Developer ID and notarized by Apple, so it opens without a question. Older versions are not notarized; macOS asks once before their first start (see below).
 
 ## Install
 1. Open the DMG with a double-click.
 2. Drag **Wattspur** onto the **Applications** folder in the same window.
 3. Eject the disk image (in the Finder sidebar, or drag it to the Trash).
 
-## Open it the first time
+## Open it the first time (versions up to 1.8.2)
+Wattspur 1.8.3 and newer open directly: double-click, done. The steps below are only for older versions.
+
 1. Open Wattspur from the Applications folder.
    macOS says that “Wattspur” could not be verified. Click **Done**, not “Move to Trash”.
 2. Open **System Settings › Privacy & Security** and scroll down to **Security**.

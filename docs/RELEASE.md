@@ -91,7 +91,7 @@ Der Workflow legt einen temporären Schlüsselbund an, speichert das notarytool-
 
 ## 4. Vor dem ersten Sync-Release: Schema nach Production
 
-Nur einmal, vor 1.8.3, und danach bei jeder Modelländerung:
+Nur einmal, vor 1.8.4 (Sync), und danach bei jeder Modelländerung:
 
 1. `CloudKitSchemaTests` muss grün sein (B-189).
 2. Die App mit Development-Signatur einmal mit eingeschaltetem Sync starten: SwiftData legt das Schema im Development-Container an.

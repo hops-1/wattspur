@@ -7,15 +7,20 @@ Every DMG handed out to testers corresponds to one entry below.
 
 ## [Unreleased]
 
+## [1.8.3] – 2026-11-04
+
+The first version signed with Developer ID and notarized by Apple: macOS opens it without the “could not be verified” question. It also brings the hint on the wheel circumference, the setting for the iPhone app, and better ride matching and ascent.
+
 ### Added
 
 - **Hint on the wheel circumference:** the tile of a bike in Profile shows a hint when the wheel sensor of its Bosch rides measures at least 2 % more or less than GPS, e.g. “The wheel sensor measures 3.7 % more than GPS. Check the wheel circumference in the Flow app.” Wattspur compares only sections with good GPS, over the newest 20 Bosch rides, and does not change any value (B-237).
 - **Rides for the iPhone:** new setting **Import › iPhone: Provide rides for the iPhone** (off by default). Wattspur then writes the rides with their key figures and simplified routes into the subfolder “iPhone” of the import folder, at most once a minute, for the Wattspur app on the iPhone. The format is stable and described in `docs/reference/data-exchange.md` (B-178, B-208).
-- **iCloud settings (in preparation):** a new tab **Settings › iCloud** with the switch **Sync with iCloud**, off by default. Turning it on the first time saves a backup of the library beside it first. Sync itself needs a version signed by the developer and comes with Wattspur 1.8.3; until then the switch has no effect and the tab says so (B-072).
+- **iCloud settings (in preparation):** a new tab **Settings › iCloud** with the switch **Sync with iCloud**, off by default. Turning it on the first time saves a backup of the library beside it first. Sync itself is not finished yet and comes with Wattspur 1.8.4; until then the switch has no effect and the tab says so (B-072).
 - **Rides recorded with the iPhone:** a GPX from the Wattspur app on the iPhone goes to the bike chosen there, without the question “Which bike?”, and the ride detail shows “Source: iPhone” (B-213).
 
 ### Changed
 
+- **Signed and notarized:** the app is signed with Developer ID and Apple notarized the DMG, so Gatekeeper no longer asks before the first start. The Hardened Runtime is on, the sandbox stays on (B-215, NFR-18).
 - **Ascent of GPX rides:** a climb now counts from 2 m instead of 3 m. On three tours compared with the Bosch FIT, Wattspur counted 7 to 18 % too little before and 2 to 10 % now (on 3.11.2026: 421 m instead of 400 m, Bosch 431 m). GPX rides already in the library are calculated again at the next start (B-234).
 
 ### Fixed
@@ -300,7 +305,7 @@ Foundation: import, ride list and ride detail.
 - English and German localization via a string catalog (B-008).
 - CI with GitHub Actions: WattspurKit tests and app build (B-009).
 
-[Unreleased]: https://github.com/hops-1/wattspur/compare/v1.4.3...HEAD
+[Unreleased]: https://github.com/hops-1/wattspur/compare/v1.8.3...HEAD
 [1.4.3]: https://github.com/hops-1/wattspur/compare/v1.4.2...v1.4.3
 [1.4.2]: https://github.com/hops-1/wattspur/compare/v1.4.1...v1.4.2
 [1.4.1]: https://github.com/hops-1/wattspur/compare/v1.4...v1.4.1
