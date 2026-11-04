@@ -213,6 +213,11 @@ public final class RideLibrary {
     public func prepareBikes() -> Bool { bikes.prepareBikes() }
     @discardableResult
     public func mergeBikes() -> Int { bikes.mergeBikes() }
+
+    /// Merges the riders, bikes, goals and rides that two devices made on their own before they
+    /// synced (B-216). Safe to call at every start and after each change from iCloud.
+    @discardableResult
+    public func mergeSyncDuplicates() -> SyncMergeReport { SyncMergeService(env).mergeDuplicates() }
     static func preferredBike(in bikes: [Bike]) -> Bike? { BikeService.preferredBike(in: bikes) }
 
     // MARK: - Import log and records (IMP-06, ADV-R2)
