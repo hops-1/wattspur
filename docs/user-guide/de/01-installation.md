@@ -1,13 +1,15 @@
 # Wattspur installieren
 
-Wattspur kommt als Disk-Image (`Wattspur-<Version>-<Build>.dmg`), die neueste Version unter [Releases](https://github.com/hops-1/wattspur/releases/latest). Es ist ein kostenloses Hobbyprojekt und nicht von Apple notarisiert, deshalb fragt macOS vor dem ersten Start einmal nach.
+Wattspur kommt als Disk-Image (`Wattspur-<Version>-<Build>.dmg`), die neueste Version unter [Releases](https://github.com/hops-1/wattspur/releases/latest). Ab Version 1.8.3 ist es mit Developer ID signiert und von Apple notarisiert, es öffnet also ohne Rückfrage. Ältere Versionen sind nicht notarisiert; macOS fragt vor ihrem ersten Start einmal nach (siehe unten).
 
 ## Installieren
 1. Das DMG mit einem Doppelklick öffnen.
 2. **Wattspur** im selben Fenster auf den Ordner **Programme** ziehen.
 3. Das Disk-Image auswerfen (in der Finder-Seitenleiste oder in den Papierkorb ziehen).
 
-## Das erste Öffnen
+## Das erste Öffnen (Versionen bis 1.8.2)
+Wattspur 1.8.3 und neuer öffnen direkt: Doppelklick, fertig. Die Schritte unten gelten nur für ältere Versionen.
+
 1. Wattspur aus dem Ordner „Programme“ öffnen.
    macOS meldet, dass „Wattspur“ nicht überprüft werden konnte. Auf **Fertig** klicken, nicht auf „In den Papierkorb legen“.
 2. **Systemeinstellungen › Datenschutz & Sicherheit** öffnen und nach unten zu **Sicherheit** scrollen.

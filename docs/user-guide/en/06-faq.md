@@ -1,7 +1,7 @@
 # FAQ and troubleshooting
 
 ### macOS says Wattspur cannot be opened or could not be verified
-That is expected for a free app without Apple notarization. Allow it once in **System Settings › Privacy & Security › Open Anyway**, step by step in [Install Wattspur](01-installation.md#open-it-the-first-time).
+Wattspur 1.8.3 and newer are notarized by Apple and should not show this. Older versions are not notarized, which is expected for a free app. Allow it once in **System Settings › Privacy & Security › Open Anyway**, step by step in [Install Wattspur](01-installation.md#open-it-the-first-time-versions-up-to-182).
 
 ### A ride from my iPhone does not show up
 - Is Wattspur open? The folder is watched only while the app runs; otherwise the ride is imported at the next start.

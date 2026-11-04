@@ -1,7 +1,7 @@
 # Fragen und Fehlerbehebung
 
 ### macOS sagt, Wattspur könne nicht geöffnet oder überprüft werden
-Das ist bei einer kostenlosen App ohne Notarisierung durch Apple normal. Erlaube sie einmal unter **Systemeinstellungen › Datenschutz & Sicherheit › Dennoch öffnen**, Schritt für Schritt unter [Wattspur installieren](01-installation.md#das-erste-öffnen).
+Wattspur 1.8.3 und neuer sind von Apple notarisiert und sollten das nicht zeigen. Ältere Versionen sind nicht notarisiert, das ist bei einer kostenlosen App normal. Erlaube sie einmal unter **Systemeinstellungen › Datenschutz & Sicherheit › Dennoch öffnen**, Schritt für Schritt unter [Wattspur installieren](01-installation.md#das-erste-öffnen-versionen-bis-182).
 
 ### Eine Fahrt vom iPhone taucht nicht auf
 - Ist Wattspur geöffnet? Der Ordner wird nur beobachtet, solange die App läuft. Sonst kommt die Fahrt beim nächsten Start.
