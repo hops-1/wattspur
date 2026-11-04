@@ -27,13 +27,14 @@ Status: ☐ offen · ◐ in Arbeit · ☑ erledigt
 | **v1.8** | Kartenstile: OpenStreetMap, CyclOSM und OpenTopoMap (mit Höhenlinien und Schummerung), Fenster „Karte anpassen“ mit Bildchen (B-061); Kalendertag als Filter (B-130), Austauschformate (B-177) | Freunde |
 | v1.8.1 | **Alles in einem Release (Entscheidung Nils 31.10.2026):** kleines Update mit Steigung im Höhenmeter-Diagramm (B-200) und Bike-Art Lastenrad (B-201), dazu der Versuch „Kurvige Straßen“: Kurvigkeit eigener Fahrten (Kennzahl, Einfärbung, Rekord; B-180, B-181 umgesetzt), Ebene mit kurvigen Straßen aus roadcurvature.com (V-13, B-182, B-183) | Freunde, Motorradfahrer |
 | v1.8.2 | Kleines Folgerelease (Plan 2.11.2026): Fehler bei ähnlichen Pendelfahrten (B-184), Rekorde bei Steigung und Gefälle ohne Barometer glätten (B-203), ~~optional neue Handbuch-Bilder (B-179)~~ (verschoben: braucht Aufnahmen der laufenden App) | Freunde |
-| v1.8.3 | Sync mit dem iPhone über iCloud (CloudKit), zusammen mit iOS 0.3: Developer-Account, Signierung mit Developer ID und Notarisierung, CloudKit-Tauglichkeit, Sync der Bibliothek, Abschied vom „Stand fürs iPhone“ (B-215, B-189, B-072, B-218, V-15); aus dem Fahrtvergleich vom 3.11.2026: doppelte Fahrt aus FIT und GPX erkennen, Höhenmeter ab 2 m (B-232, B-234) | Freunde |
+| v1.8.3 | Erste notarisierte Version (Entscheidung Nils 4.11.2026): Developer-Account, Signierung mit Developer ID und Notarisierung (B-215); aus dem Fahrtvergleich vom 3.11.2026: doppelte Fahrt aus FIT und GPX erkennen, Höhenmeter ab 2 m, Hinweis auf den Radumfang (B-232, B-234, B-237) | Freunde |
+| v1.8.4 | Sync mit dem iPhone über iCloud (CloudKit), zusammen mit iOS 0.3 (Entscheidung Nils 4.11.2026): CloudKit-Tauglichkeit, Sync der Bibliothek, Abschied vom „Stand fürs iPhone“ (B-189, B-072, B-218, V-15) | Freunde |
 | **v1.9** | Bosch-Daten über die offizielle Data-Act-API (optional, eigenes Bosch-Konto): Bike, Akku und Wartung, Zusatzfelder je Fahrt und Import von Fahrten ohne Datei (Altbestand). **Motordaten je Fahrt gibt die API nicht her (Spezifikation 25.10.2026), Entscheidung Nils: Option B;** steht unter dem Vorbehalt des Spikes V-12 | Freunde mit Smart-System-Bike in der EU |
 | v1.10 | Ein Bereich „Fahrten“ mit Karte als Standard (B-125), Analyse nach Strecke (B-176); von 1.8 zurückgestellt am 27.10.2026 | Freunde |
 | v1.x | Analysen, Komfort, Karten | alle |
 | iOS 0.1 | iOS-App „Hello World“: eigenes Target neben der Mac-App, nutzt das Paket, zeigt die Beispielfahrt; läuft im Simulator und auf Nils’ iPhone (B-204 bis B-207) | mich |
 | iOS 0.2 | Fahrten vom Mac ansehen, GPS-Aufnahme mit Karte, Aufnahme als GPX an den Mac und zum Teilen; Austausch über den iCloud-Ordner „Wattspur Import“, ohne CloudKit (V-14, B-178, B-208 bis B-214; Design C „Übersicht mit Kacheln“) | mich |
-| iOS 0.3 | Eine Datenbank auf iPhone und Mac: Sync über CloudKit, Aufnahme wird direkt zur Fahrt, Löschen auf dem iPhone, Verteilung über TestFlight (B-215 bis B-220, mit Mac 1.8.3); aus dem Fahrtvergleich: doppelte Fahrt, GPX-Zeit mit Millisekunden, Höhenmeter (B-232 bis B-234) | mich, Freunde über TestFlight |
+| iOS 0.3 | Eine Datenbank auf iPhone und Mac: Sync über CloudKit, Aufnahme wird direkt zur Fahrt, Löschen auf dem iPhone, Verteilung über TestFlight (B-215 bis B-220, mit Mac 1.8.4); aus dem Fahrtvergleich: doppelte Fahrt, GPX-Zeit mit Millisekunden, Höhenmeter (B-232 bis B-234) | mich, Freunde über TestFlight |
 | iOS 0.4 | Auswerten und Importieren: Diagramm-Karussell, Diagramm und Karte gekoppelt, Filter in der Liste, FIT aus der Flow-App (B-090, B-221, B-222, B-071) | mich, Freunde |
 | iOS 0.5 | Unterwegs: Live-Aktivität bei der Aufnahme, Widget „Diese Woche“, Kurzbefehle und Siri, Höhe vom Barometer (B-223 bis B-225, B-235) | mich, Freunde |
 | iOS 0.6 | Karten und Highlights: Kartenstile, Karte aller Fahrten mit Heatmap, Highlights (B-186, B-226 bis B-228) | mich, Freunde |
@@ -565,9 +566,9 @@ Ideen von Nils und Claude am 2.11.2026 gesammelt und von Nils geordnet. Leitfade
 - **Sync über CloudKit** (Entscheidung Nils, folgt der Empfehlung): Jeder Nutzer synchronisiert seine Fahrten in der privaten Datenbank seines eigenen iCloud-Kontos; kein eigener Server, keine Anmeldung bei Wattspur, keine Kosten je Nutzer. Gilt damit auch für Freunde. Damit endet „Der Mac bleibt die Datenbank“: iPhone und Mac sind gleichberechtigt, Fahrten entstehen und verschwinden auf beiden Seiten.
 - **Bezahlter Developer-Account** (Einzelperson) ab iOS 0.3 und Mac 1.8.3; nötig für CloudKit, TestFlight und Widgets mit App Group. Die Mac-App wird dann mit Developer ID signiert und notarisiert statt ad hoc (NFR-18).
 - **Eigener Webserver zurückgestellt:** nur falls Android, eine Web-Ansicht oder ein gemeinsames Portal einmal wichtig werden (zu B-088).
-- **Gemeinsame Version:** iOS 0.3 und Mac 1.8.3 erscheinen zusammen, weil der Sync beide Seiten braucht.
+- **Gemeinsame Version:** iOS 0.3 und Mac 1.8.4 erscheinen zusammen, weil der Sync beide Seiten braucht.
 
-### iOS 0.3 + Mac 1.8.3 – Eine Datenbank auf iPhone und Mac
+### iOS 0.3 + Mac 1.8.4 – Eine Datenbank auf iPhone und Mac
 
 | # | Story | Größe | Status |
 |---|---|---|---|

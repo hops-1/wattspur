@@ -15,7 +15,7 @@ The first version signed with Developer ID and notarized by Apple: macOS opens i
 
 - **Hint on the wheel circumference:** the tile of a bike in Profile shows a hint when the wheel sensor of its Bosch rides measures at least 2 % more or less than GPS, e.g. “The wheel sensor measures 3.7 % more than GPS. Check the wheel circumference in the Flow app.” Wattspur compares only sections with good GPS, over the newest 20 Bosch rides, and does not change any value (B-237).
 - **Rides for the iPhone:** new setting **Import › iPhone: Provide rides for the iPhone** (off by default). Wattspur then writes the rides with their key figures and simplified routes into the subfolder “iPhone” of the import folder, at most once a minute, for the Wattspur app on the iPhone. The format is stable and described in `docs/reference/data-exchange.md` (B-178, B-208).
-- **iCloud settings (in preparation):** a new tab **Settings › iCloud** with the switch **Sync with iCloud**, off by default. Turning it on the first time saves a backup of the library beside it first. Sync itself is not finished yet and comes with a later version; until then the switch has no effect and the tab says so (B-072).
+- **iCloud settings (in preparation):** a new tab **Settings › iCloud** with the switch **Sync with iCloud**, off by default. Turning it on the first time saves a backup of the library beside it first. Sync itself is not finished yet and comes with Wattspur 1.8.4; until then the switch has no effect and the tab says so (B-072).
 - **Rides recorded with the iPhone:** a GPX from the Wattspur app on the iPhone goes to the bike chosen there, without the question “Which bike?”, and the ride detail shows “Source: iPhone” (B-213).
 
 ### Changed

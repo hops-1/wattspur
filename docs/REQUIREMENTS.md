@@ -1,6 +1,6 @@
 # Requirements – Wattspur
 
-Stand: 2.11.2026 · Status: Entwurf v0.16 (Plan für iOS 0.3 bis 0.6 und Mac 1.8.3 mit Sync über CloudKit, Kap. 10.22; davor Plan für 1.5 bis 1.9, Kap. 10.15 bis 10.20)
+Stand: 2.11.2026 · Status: Entwurf v0.16 (Plan für iOS 0.3 bis 0.6 und Mac 1.8.4 mit Sync über CloudKit, Kap. 10.22; davor Plan für 1.5 bis 1.9, Kap. 10.15 bis 10.20)
 
 ## 1. Ziel & Kontext
 
@@ -659,6 +659,6 @@ Ideen von Nils und Claude gesammelt, von Nils geordnet; Stories im BACKLOG „iO
 |---|---|---|
 | Sync Mac ↔ iPhone | über CloudKit (private Datenbank im iCloud-Konto jedes Nutzers), auch für Freunde; ersetzt den Lese-Stand im iCloud-Ordner aus 10.21; iPhone und Mac sind gleichberechtigt, Fahrten entstehen und werden gelöscht auf beiden Seiten | B-072, B-189, B-216 bis B-218; 10.21 „Austausch“ überholt |
 | Developer-Account | ab iOS 0.3 und Mac 1.8.3 bezahlt (Einzelperson): CloudKit, TestFlight, Widgets mit App Group, Developer ID und Notarisierung | NFR-18, B-215, B-219 |
-| Versionen | iOS 0.3 und Mac 1.8.3 gemeinsam; danach iOS 0.4 Auswerten und Importieren, 0.5 Unterwegs, 0.6 Karten und Highlights | BACKLOG Releaseplan |
+| Versionen | iOS 0.3 und Mac 1.8.4 gemeinsam (Mac 1.8.3 vorher: Developer ID und Notarisierung); danach iOS 0.4 Auswerten und Importieren, 0.5 Unterwegs, 0.6 Karten und Highlights | BACKLOG Releaseplan |
 | Eigener Webserver | zurückgestellt; nur bei Bedarf für Android, Web oder ein gemeinsames Portal | B-088 |
 | Teilen mit Freunden | später über CloudKit-Freigaben, nicht über einen Server | B-231, IDEA-24, IDEA-25 |
