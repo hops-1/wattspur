@@ -31,6 +31,8 @@ struct WattspurApp: App {
     @State private var iCloudSync: ICloudSync
     /// The note after a restore, shown by the first window (P-22).
     @State private var restoreNotice = LibraryRestoreNotice()
+    /// Merges what the iPhone and the Mac made twice, while the library syncs (B-216); `nil` without sync.
+    @State private var syncMerge: SyncMergeWatcher?
     @Environment(\.openWindow) private var openWindow
 
     init() {
@@ -75,6 +77,12 @@ struct WattspurApp: App {
         library.mergeBikes()
         // One bike named "Mein eBike" for the rider, active, all rides on it (B-074).
         library.prepareBikes()
+        // With iCloud, each device makes its own rider and "My eBike"; after the sync they become one (B-216).
+        if sync.isActive && !usesDemo {
+            let syncMerge = SyncMergeWatcher(library: library)
+            syncMerge.start()
+            _syncMerge = State(initialValue: syncMerge)
+        }
     }
 
     var body: some Scene {
