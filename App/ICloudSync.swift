@@ -28,6 +28,8 @@ final class ICloudSync {
     private(set) var backupDate: Date?
 
     private let defaults: UserDefaults
+    /// Last sync and problems while the library syncs (B-220); `nil` without sync.
+    let monitor: SyncMonitor?
 
     init(defaults: UserDefaults = .standard) {
         self.defaults = defaults
@@ -36,6 +38,8 @@ final class ICloudSync {
         isRequested = requested
         isActive = LibrarySync.isActive(requested: requested, available: available)
         backupDate = defaults.object(forKey: SettingsKey.iCloudSyncBackupDate) as? Date
+        monitor = isActive ? SyncMonitor.forLibrary(defaults: defaults) : nil
+        monitor?.start()
     }
 
     /// The configuration the library opens with at this start.
@@ -200,11 +204,65 @@ struct ICloudSettingsView: View {
                     .font(.caption)
                     .foregroundStyle(.orange)
                     .fixedSize(horizontal: false, vertical: true)
-            } else if sync.isActive {
-                Text("On. Changes sync in the background.").font(.caption).foregroundStyle(.secondary)
+            } else if sync.isActive, let monitor = sync.monitor {
+                SyncStatusLine(monitor: monitor)
             } else {
                 Text("Off. The library is only on this Mac.").font(.caption).foregroundStyle(.secondary)
             }
         }
     }
+}
+
+/// "Last synced …" and what keeps the sync from working (B-220). Short delays get no message.
+struct SyncStatusLine: View {
+    let monitor: SyncMonitor
+
+    var body: some View {
+        // The problem depends on how long a failure has lasted, so the line looks again now and then.
+        TimelineView(.periodic(from: .now, by: 15)) { context in
+            VStack(alignment: .leading, spacing: 4) {
+                if let problem = monitor.problem(now: context.date) {
+                    Label(text(for: problem), systemImage: "exclamationmark.triangle.fill")
+                        .foregroundStyle(.orange)
+                        .fixedSize(horizontal: false, vertical: true)
+                    if monitor.hasPendingChanges {
+                        Text("Some changes from this Mac are not in iCloud yet.")
+                            .foregroundStyle(.secondary)
+                    }
+                }
+                HStack(spacing: 6) {
+                    if monitor.isSyncing {
+                        ProgressView().controlSize(.mini)
+                        Text("Syncing …")
+                    } else if let lastSync = monitor.lastSync {
+                        Text("On. Last synced \(lastSync, format: .relative(presentation: .named)).")
+                    } else {
+                        Text("On. Not synced yet.")
+                    }
+                }
+                .foregroundStyle(.secondary)
+            }
+            .font(.caption)
+        }
+    }
+
+    private func text(for problem: SyncProblem) -> String {
+        switch problem {
+        case .noAccount:
+            String(localized: "This Mac is not signed in to iCloud, or iCloud is off for Wattspur. Changes stay on this Mac until iCloud is on again.")
+        case .restricted:
+            String(localized: "iCloud is restricted on this Mac. Changes stay on this Mac.")
+        case .quotaExceeded:
+            String(localized: "Your iCloud storage is full. Changes stay on this Mac until there is room again.")
+        case .offline:
+            String(localized: "No connection to iCloud. Wattspur syncs as soon as there is one again.")
+        case .other(let reason):
+            String(localized: "Sync is not working at the moment: \(reason)")
+        }
+    }
+}
+
+extension EnvironmentValues {
+    /// The library syncs with iCloud at this start (B-072), for texts that say where the data is.
+    @Entry var librarySyncs = false
 }

@@ -1154,6 +1154,106 @@
           }
         }
       }
+    },
+    "Some changes from this iPhone are not in iCloud yet. Keep iCloud on for Wattspur until they are, or they may be lost." : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Einige Änderungen von diesem iPhone sind noch nicht in iCloud. Lass iCloud für Wattspur an, bis sie oben sind, sonst können sie verloren gehen."
+          }
+        }
+      }
+    },
+    "Syncing …" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Wird synchronisiert …"
+          }
+        }
+      }
+    },
+    "Last synced" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Zuletzt synchronisiert"
+          }
+        }
+      }
+    },
+    "Not yet" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Noch nicht"
+          }
+        }
+      }
+    },
+    "iCloud" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "iCloud"
+          }
+        }
+      }
+    },
+    "This iPhone is not signed in to iCloud, or iCloud is off for Wattspur. New rides stay only on this iPhone." : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Dieses iPhone ist nicht bei iCloud angemeldet, oder iCloud ist für Wattspur aus. Neue Fahrten bleiben nur auf diesem iPhone."
+          }
+        }
+      }
+    },
+    "iCloud is restricted on this iPhone. New rides stay only on this iPhone." : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "iCloud ist auf diesem iPhone eingeschränkt. Neue Fahrten bleiben nur auf diesem iPhone."
+          }
+        }
+      }
+    },
+    "Your iCloud storage is full. New rides stay on this iPhone until there is room again." : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Dein iCloud-Speicher ist voll. Neue Fahrten bleiben auf diesem iPhone, bis wieder Platz ist."
+          }
+        }
+      }
+    },
+    "No connection to iCloud. Wattspur syncs as soon as there is one again." : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Keine Verbindung zu iCloud. Wattspur synchronisiert, sobald sie wieder da ist."
+          }
+        }
+      }
+    },
+    "Sync is not working at the moment: %@" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Der Sync klappt gerade nicht: %@"
+          }
+        }
+      }
     }
   },
   "version" : "1.1"
