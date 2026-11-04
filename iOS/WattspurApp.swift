@@ -12,6 +12,7 @@ struct WattspurApp: App {
     @Environment(\.scenePhase) private var scenePhase
     @State private var folder: ImportFolder
     @State private var library: PhoneLibrary
+    @State private var sync: PhoneSync
     @State private var recorder = Recorder()
     @State private var recordings = PhoneRecordings()
     @State private var tab = Tab.overview
@@ -19,20 +20,21 @@ struct WattspurApp: App {
     init() {
         let folder = ImportFolder()
         _folder = State(initialValue: folder)
-        // The iPhone's own store (B-216) only when the build asks for it (`WattspurDatabase` in the
-        // Info.plist, from Config/iOS.xcconfig or Local.xcconfig); else the folder of iOS 0.2.
-        let mode = PhoneDatabase.Mode(infoValue: Bundle.main.object(forInfoDictionaryKey: "WattspurDatabase") as? String)
-        var database: PhoneDatabase?
-        if let configuration = mode.configuration {
-            do {
-                let container = try ModelContainer(for: Schema(WattspurSchema.models), configurations: configuration)
-                database = PhoneDatabase(container: container, defaultBikeName: String(localized: "My eBike"))
-                database?.purgeTrash()
-            } catch {
-                fatalError("Could not open the Wattspur library: \(error)")
-            }
-        }
-        _library = State(initialValue: PhoneLibrary(folder: folder, database: database, mode: mode))
+        // iCloud only when the build allows it (`WattspurDatabase` in the Info.plist, from
+        // Config/iOS.xcconfig or Local.xcconfig) and the user wants it; else the folder of iOS 0.2 (B-218).
+        let buildMode = PhoneDatabase.Mode(infoValue: Bundle.main.object(forInfoDictionaryKey: "WattspurDatabase") as? String)
+        let sync = PhoneSync(buildMode: buildMode, hadFolder: folder.url != nil, hadStore: PhoneSync.storeExists)
+        _sync = State(initialValue: sync)
+        _library = State(initialValue: sync.makeLibrary(folder: folder))
+    }
+
+    /// Switches between iCloud and the folder at once (B-218).
+    private func switchSync(to on: Bool) {
+        sync.set(on)
+        guard sync.mode != library.mode else { return }
+        library.close()
+        library = sync.makeLibrary(folder: folder)
+        Task { await library.refresh() }
     }
 
     var body: some Scene {
@@ -56,6 +58,8 @@ struct WattspurApp: App {
             }
             .tint(.track)
             .environment(folder)
+            .environment(sync)
+            .environment(\.switchSync, SwitchSyncAction(switchSync))
             .environment(library)
             .environment(recorder)
             .environment(recordings)
@@ -66,6 +70,14 @@ struct WattspurApp: App {
                     .environment(library)
                     .environment(recorder)
                     .environment(recordings)
+            }
+            // Users of the folder way hear once that iCloud is possible now (B-218).
+            .alert("Sync with iCloud?", isPresented: Binding(get: { sync.offerPending && !recorder.isRecording },
+                                                             set: { if !$0 { sync.offerDone() } })) {
+                Button("Use iCloud") { switchSync(to: true) }
+                Button("Keep the Folder", role: .cancel) { sync.offerDone() }
+            } message: {
+                Text("Wattspur on the iPhone can now share one library with the Mac over iCloud: rides recorded here reach the Mac, and you can delete rides here. The Mac must sync with iCloud too (Wattspur › Settings › iCloud). You can switch at any time under More.")
             }
             // A recording the app could not finish (crash, killed): go on or end it.
             .alert("Unfinished Ride", isPresented: Binding(get: { recorder.unfinished != nil && !recorder.isRecording },
@@ -98,4 +110,15 @@ struct WattspurApp: App {
             }
         }
     }
+}
+
+/// Switches between iCloud and the folder (B-218), for the switch in “More”.
+struct SwitchSyncAction {
+    private let action: (Bool) -> Void
+    init(_ action: @escaping (Bool) -> Void) { self.action = action }
+    func callAsFunction(_ on: Bool) { action(on) }
+}
+
+extension EnvironmentValues {
+    @Entry var switchSync = SwitchSyncAction { _ in }
 }

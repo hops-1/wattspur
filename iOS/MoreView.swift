@@ -6,9 +6,30 @@ import WattspurKit
 struct MoreView: View {
     @Environment(ImportFolder.self) private var folder
     @Environment(PhoneLibrary.self) private var library
+    @Environment(PhoneSync.self) private var sync
+    @Environment(\.switchSync) private var switchSync
+    @State private var confirmingOff = false
 
     var body: some View {
         Form {
+            if sync.canChoose {
+                Section {
+                    Toggle("Sync with iCloud", isOn: Binding(
+                        get: { sync.isOn },
+                        set: { if $0 { switchSync(true) } else { confirmingOff = true } }))
+                } footer: {
+                    if sync.isOn {
+                        Text("One library on this iPhone and your Mac, in your own iCloud account.")
+                    } else {
+                        Text("Without iCloud, rides reach the Mac through a folder it watches, or with “Share GPX”, e.g. by AirDrop.")
+                    }
+                }
+                .confirmationDialog("Stop syncing with iCloud?", isPresented: $confirmingOff, titleVisibility: .visible) {
+                    Button("Turn Off") { switchSync(false) }
+                } message: {
+                    Text("The rides stay in iCloud and on your Mac. This iPhone then shows the rides the Mac provides in the folder, and new rides go there as GPX.")
+                }
+            }
             if library.usesDatabase {
                 Section {
                     NavigationLink {
@@ -60,7 +81,7 @@ struct MoreView: View {
         } header: {
             Text("Wattspur Import")
         } footer: {
-            Text("Choose the folder “Wattspur Import” in iCloud Drive that the Mac watches.")
+            Text("Choose the folder the Mac watches: “Wattspur Import” in iCloud Drive, or a folder in another service such as Dropbox or OneDrive. Without a folder, send recordings to the Mac with “Share GPX”, e.g. by AirDrop.")
         }
     }
 }

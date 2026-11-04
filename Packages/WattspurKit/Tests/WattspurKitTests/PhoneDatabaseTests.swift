@@ -129,3 +129,24 @@ struct PhoneDatabaseTests {
         #expect(database.trash().map(\.id) == [recent])
     }
 }
+
+/// iCloud or the folder on the iPhone (B-218).
+@Suite("iPhone: iCloud or folder")
+struct PhoneSyncChoiceTests {
+    @Test("Only a build with iCloud offers the choice; without iCloud it is the folder")
+    func effective() {
+        #expect(PhoneDatabase.Mode.iCloud.effective(syncOn: true) == .iCloud)
+        #expect(PhoneDatabase.Mode.iCloud.effective(syncOn: false) == .folder)
+        #expect(PhoneDatabase.Mode.folder.effective(syncOn: true) == .folder)
+        #expect(PhoneDatabase.Mode.local.effective(syncOn: false) == .local)
+    }
+
+    @Test("New users start with iCloud, users of the folder way keep it")
+    func firstStart() {
+        #expect(PhoneDatabase.Mode.syncOnAtFirstStart(hadFolder: false, hadStore: false))
+        #expect(!PhoneDatabase.Mode.syncOnAtFirstStart(hadFolder: true, hadStore: false))
+        // Had both, e.g. a test build with the store after iOS 0.2: the store wins.
+        #expect(PhoneDatabase.Mode.syncOnAtFirstStart(hadFolder: true, hadStore: true))
+        #expect(PhoneDatabase.Mode.syncOnAtFirstStart(hadFolder: false, hadStore: true))
+    }
+}

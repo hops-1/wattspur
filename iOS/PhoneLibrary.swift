@@ -146,12 +146,23 @@ final class PhoneLibrary {
     private func watchICloud() {
         let names: [Notification.Name] = [.NSPersistentStoreRemoteChange, NSPersistentCloudKitContainer.eventChangedNotification]
         for name in names {
-            Task { [weak self] in
+            iCloudWatching.append(Task { [weak self] in
                 for await _ in NotificationCenter.default.notifications(named: name).map({ _ in () }) {
                     self?.scheduleReload()
                 }
-            }
+            })
         }
+    }
+
+    private var iCloudWatching: [Task<Void, Never>] = []
+
+    /// Stops watching iCloud when the app switches to the other way (B-218).
+    func close() {
+        iCloudWatching.forEach { $0.cancel() }
+        iCloudWatching = []
+        pendingReload?.cancel()
+        syncMerge?.stop()
+        syncMonitor?.stop()
     }
 
     /// Merges the rider and "My eBike" this iPhone made with those from the Mac (B-216).

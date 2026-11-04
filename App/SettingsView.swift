@@ -123,6 +123,7 @@ private struct GeneralSettingsView: View {
 struct ImportSettingsView: View {
     @Environment(FolderWatcher.self) private var watcher
     @Environment(PhoneState.self) private var phoneState
+    @Environment(\.librarySyncs) private var librarySyncs
     @Environment(\.openWindow) private var openWindow
     @AppStorage(SettingsKey.mergeSuggestionGapMinutes) private var mergeGapMinutes = RideMergeSuggestion.defaultGapMinutes
 
@@ -195,11 +196,20 @@ struct ImportSettingsView: View {
             }
             LabeledContent("iPhone:") {
                 VStack(alignment: .leading, spacing: 4) {
-                    Toggle("Provide rides for the iPhone", isOn: $phoneState.isEnabled)
-                    Text("Wattspur writes your rides into the subfolder “iPhone” of the import folder, at most once a minute. The Wattspur app on the iPhone reads them from there.")
-                        .font(.caption)
-                        .foregroundStyle(.secondary)
-                        .fixedSize(horizontal: false, vertical: true)
+                    // With iCloud the iPhone has the library itself (B-218); the folder is only for an iPhone without sync.
+                    if !librarySyncs || phoneState.isEnabled {
+                        Toggle("Provide rides for the iPhone", isOn: $phoneState.isEnabled)
+                    }
+                    Group {
+                        if librarySyncs {
+                            Text("This Mac syncs with iCloud, so Wattspur on the iPhone has the rides itself once it syncs too. Provide the rides in the folder only for an iPhone without iCloud.")
+                        } else {
+                            Text("Wattspur writes your rides into the subfolder “iPhone” of the import folder, at most once a minute. The Wattspur app on the iPhone reads them from there.")
+                        }
+                    }
+                    .font(.caption)
+                    .foregroundStyle(.secondary)
+                    .fixedSize(horizontal: false, vertical: true)
                     PhoneStateStatusText()
                 }
             }
