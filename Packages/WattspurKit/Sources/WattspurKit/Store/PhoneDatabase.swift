@@ -87,6 +87,17 @@ public final class PhoneDatabase {
                                     rides: rides.map { $0.exchangeRide(routeFile: $0.mayHaveRoute ? $0.id.uuidString : nil) })
     }
 
+    /// A ride as GPX for “Share”, e.g. by AirDrop to the Mac or to komoot: the full time series like
+    /// “Export as GPX…” on the Mac (B-112), the bike as note and as Wattspur extension, so the Mac
+    /// assigns it. `note` words the bike name (“Bike: …”). `nil` without GPS.
+    public func gpx(forRideID id: UUID, note: (String) -> String) -> (fileName: String, data: Data)? {
+        guard let ride = library.ride(withID: id), route(forRideID: id) != nil else { return nil }
+        let bikeName = ride.bike?.name.trimmingCharacters(in: .whitespacesAndNewlines) ?? ""
+        let data = GPXWriter.document(name: ride.name, segments: ride.gpxSegments,
+                                      description: bikeName.isEmpty ? nil : note(bikeName), bikeID: ride.bike?.id)
+        return (GPXWriter.fileName(ride.name), data)
+    }
+
     /// The route of a ride, thinned like in the Mac's state; `nil` without GPS.
     public func route(forRideID id: UUID) -> RideExchange.Route? {
         guard let ride = library.ride(withID: id) else { return nil }

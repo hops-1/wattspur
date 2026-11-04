@@ -65,6 +65,19 @@ struct PhoneDatabaseTests {
         #expect(snapshot.lastRide?.id == id)
     }
 
+    @Test("A ride is shared as GPX with its time series and bike, and the Mac reads it back")
+    func shareGPX() throws {
+        let cargo = database.library.makeBike(name: "Lastenrad", kind: .cargo)
+        let id = try #require(save(bikeID: cargo.id))
+        let file = try #require(database.gpx(forRideID: id) { "Bike: \($0)" })
+        #expect(file.fileName.hasSuffix(".gpx"))
+        let text = try #require(String(data: file.data, encoding: .utf8))
+        #expect(text.contains("Bike: Lastenrad"))
+        #expect(text.contains(cargo.id.uuidString))
+        #expect(text.components(separatedBy: "<trkpt").count > 20)
+        #expect(database.gpx(forRideID: UUID()) { $0 } == nil)
+    }
+
     @Test("The route of a ride comes from the store")
     func route() throws {
         let id = try #require(save())

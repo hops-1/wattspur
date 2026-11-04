@@ -39,6 +39,16 @@ struct RidesView: View {
                         } label: {
                             RideRow(ride: ride, bike: state.bike(withID: ride.bikeID))
                         }
+                        .contextMenu {
+                            if library.canShare(ride) {
+                                ShareLink(item: library.sharedGPX(for: ride), preview: SharePreview(ride.name)) {
+                                    Label("Share GPX", systemImage: "square.and.arrow.up")
+                                }
+                            }
+                            if library.usesDatabase {
+                                Button("Move to Trash", systemImage: "trash", role: .destructive) { library.moveToTrash(ride) }
+                            }
+                        }
                         .swipeActions(edge: .trailing) {
                             // Only the iPhone's own rides can be deleted; those from the Mac's state cannot (B-217).
                             if library.usesDatabase {

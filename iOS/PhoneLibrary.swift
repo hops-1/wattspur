@@ -1,4 +1,6 @@
 import CoreData
+import CoreTransferable
+import UniformTypeIdentifiers
 import Foundation
 import Observation
 import WattspurCore
@@ -198,6 +200,21 @@ final class PhoneLibrary {
         }
     }
 
+    /// Whether a ride can be shared as GPX: one of the iPhone's own store with GPS.
+    func canShare(_ ride: RideExchange.Ride) -> Bool {
+        database != nil && ride.routeFile != nil
+    }
+
+    /// The ride as GPX for the share sheet, built only when the user shares.
+    func sharedGPX(for ride: RideExchange.Ride) -> SharedGPX {
+        SharedGPX(fileName: GPXWriter.fileName(ride.name)) { [weak self] in
+            guard let file = self?.database?.gpx(forRideID: ride.id, note: { String(localized: "Bike: \($0)") }) else {
+                throw CocoaError(.fileNoSuchFile)
+            }
+            return file.data
+        }
+    }
+
     func moveToTrash(_ ride: RideExchange.Ride) {
         database?.moveToTrash(rideID: ride.id)
         reload()
@@ -224,5 +241,21 @@ final class PhoneLibrary {
             try? fileManager.removeItem(at: cachedRoutesFolder.appending(path: file))
         }
         routes = routes.filter { named.contains($0.key) }
+    }
+}
+
+/// A ride as GPX in the share sheet (AirDrop to the Mac, komoot, Files). The file is written when
+/// the user picks where it goes, not when the button is drawn.
+struct SharedGPX: Transferable {
+    static let contentType = UTType(filenameExtension: "gpx") ?? .xml
+
+    let fileName: String
+    let make: @MainActor () throws -> Data
+
+    static var transferRepresentation: some TransferRepresentation {
+        DataRepresentation(exportedContentType: contentType) { item in
+            try await MainActor.run { try item.make() }
+        }
+        .suggestedFileName { $0.fileName }
     }
 }

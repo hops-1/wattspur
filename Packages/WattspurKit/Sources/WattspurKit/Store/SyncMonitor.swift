@@ -183,7 +183,8 @@ public final class SyncMonitor {
         running.remove(event.id)
         if event.succeeded {
             failure = nil
-            if event.kind != .setup {
+            // Offline the mirror may end events as done that reached nothing (V-15, flight mode).
+            if event.kind != .setup, offlineSince == nil {
                 lastSync = max(lastSync ?? end, end)
                 defaults.set(lastSync, forKey: Self.lastSyncKey)
             }
