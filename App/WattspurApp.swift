@@ -38,6 +38,18 @@ struct WattspurApp: App {
     init() {
         // A restore from a backup is swapped in here, before the library opens (P-22). If it fails, the library stays as it was.
         #if DEBUG
+        // `-WattspurInitCloudKitSchema YES`: complete the schema in Development before the deploy, then quit (B-219).
+        if UserDefaults.standard.bool(forKey: "WattspurInitCloudKitSchema") {
+            let folder = FileManager.default.temporaryDirectory.appending(path: "WattspurSchema")
+            do {
+                try LibrarySync.initializeCloudKitSchema(scratchFolder: folder)
+                print("Wattspur: CloudKit schema initialized in Development")
+                exit(0)
+            } catch {
+                print("Wattspur: CloudKit schema failed: \(error)")
+                exit(1)
+            }
+        }
         let usesDemo = DemoMode.isOn
         if SpikeLibrary.isOn && !usesDemo { SpikeLibrary.prepare() }
         #else
