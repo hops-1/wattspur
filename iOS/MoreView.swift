@@ -91,33 +91,35 @@ private struct SyncSection: View {
     let monitor: SyncMonitor
 
     var body: some View {
-        // The problem depends on how long a failure has lasted, so the section looks again now and then.
-        TimelineView(.periodic(from: .now, by: 15)) { context in
-            Section {
-                if let problem = monitor.problem(now: context.date) {
-                    Label(text(for: problem), systemImage: "exclamationmark.triangle.fill")
-                        .foregroundStyle(.orange)
-                    if monitor.hasPendingChanges {
-                        Text("Some changes from this iPhone are not in iCloud yet. Keep iCloud on for Wattspur until they are, or they may be lost.")
-                            .font(.footnote)
-                            .foregroundStyle(.secondary)
-                    }
-                }
-                LabeledContent("Last synced") {
-                    if monitor.isSyncing {
-                        HStack(spacing: 6) {
-                            ProgressView()
-                            Text("Syncing …")
+        Section {
+            // The problem depends on how long a failure has lasted, so the rows look again now and then.
+            TimelineView(.periodic(from: .now, by: 15)) { context in
+                VStack(alignment: .leading, spacing: 8) {
+                    if let problem = monitor.problem(now: context.date) {
+                        Label(text(for: problem), systemImage: "exclamationmark.triangle.fill")
+                            .foregroundStyle(.orange)
+                        if monitor.hasPendingChanges {
+                            Text("Some changes from this iPhone are not in iCloud yet. Keep iCloud on for Wattspur until they are, or they may be lost.")
+                                .font(.footnote)
+                                .foregroundStyle(.secondary)
                         }
-                    } else if let lastSync = monitor.lastSync {
-                        Text(lastSync, format: .relative(presentation: .named))
-                    } else {
-                        Text("Not yet")
+                    }
+                    LabeledContent("Last synced") {
+                        if monitor.isSyncing {
+                            HStack(spacing: 6) {
+                                ProgressView()
+                                Text("Syncing …")
+                            }
+                        } else if let lastSync = monitor.lastSync {
+                            Text(lastSync, format: .relative(presentation: .named))
+                        } else {
+                            Text("Not yet")
+                        }
                     }
                 }
-            } header: {
-                Text("iCloud")
             }
+        } header: {
+            Text("iCloud")
         }
     }
 

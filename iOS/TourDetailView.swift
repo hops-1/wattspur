@@ -46,6 +46,11 @@ struct TourDetailView: View {
         .navigationBarTitleDisplayMode(.inline)
         .toolbar {
             // Only rides of the iPhone's own store, not the sample ride or the Mac's state (B-217).
+            if library.canShare(ride), route == nil {
+                ShareLink(item: library.sharedGPX(for: ride), preview: SharePreview(ride.name)) {
+                    Label("Share GPX", systemImage: "square.and.arrow.up")
+                }
+            }
             if library.usesDatabase, route == nil {
                 Button("Delete", systemImage: "trash") { confirmingDelete = true }
             }

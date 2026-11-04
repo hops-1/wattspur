@@ -63,6 +63,8 @@ struct SyncMonitorTests {
         #expect(!monitor.isSyncing)
         #expect(monitor.problem(now: start.addingTimeInterval(60)) == nil)
         #expect(monitor.problem(now: start.addingTimeInterval(120)) == .offline)
+        monitor.handle(event(.import, at: 150))
+        #expect(monitor.lastSync == nil)
         monitor.setOnline(true)
         #expect(monitor.problem(now: start.addingTimeInterval(300)) == nil)
         #expect(monitor.isSyncing)
