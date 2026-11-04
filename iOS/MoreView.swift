@@ -1,4 +1,5 @@
 import SwiftUI
+import WattspurCore
 import WattspurKit
 
 /// The tab “More” (design C): the folder shared with the Mac, or with the iPhone's own store the
@@ -9,6 +10,7 @@ struct MoreView: View {
     @Environment(PhoneSync.self) private var sync
     @Environment(\.switchSync) private var switchSync
     @State private var confirmingOff = false
+    @AppStorage(Recorder.vehicleKey) private var vehicle = RecordingVehicle.eBike
 
     var body: some View {
         Form {
@@ -55,6 +57,17 @@ struct MoreView: View {
                 }
             } else {
                 folderSection
+            }
+
+            Section {
+                Picker("Vehicle", selection: $vehicle) {
+                    Text("E-Bike").tag(RecordingVehicle.eBike)
+                    Text("Motorcycle").tag(RecordingVehicle.motorcycle)
+                }
+            } header: {
+                Text("Recording")
+            } footer: {
+                Text("GPS jumps look like impossible speeds and are left out. For an e-bike that is above 100 km/h, for a motorcycle above 300 km/h.")
             }
 
             Section {

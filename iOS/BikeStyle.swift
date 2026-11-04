@@ -7,7 +7,7 @@ struct BikeBadge: View {
     var bike: RideExchange.Bike
 
     var body: some View {
-        Image(systemName: "bicycle")
+        Image(systemName: BikeKind(rawValue: bike.kind) == .motorcycle ? "motorcycle" : "bicycle")
             .font(.footnote.weight(.semibold))
             .foregroundStyle(color)
             .accessibilityLabel(bike.name)

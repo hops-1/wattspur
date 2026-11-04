@@ -77,8 +77,9 @@ struct OverviewView: View {
 
     /// The Mac's rides plus the recordings it does not have yet (B-214).
     private func totals(_ state: RideExchange.Library) -> RidePeriodTotals {
-        let rides = state.rides.map { (start: $0.startDate, distance: $0.distance) }
-            + recordings.waiting.map { (start: $0.startDate, distance: $0.distance) }
+        // Motorcycle rides stay out of the totals, like on the Mac.
+        let rides = state.countedRides.map { (start: $0.startDate, distance: $0.distance) }
+            + recordings.waiting.filter { !state.isMotorized(bikeID: $0.bikeID) }.map { (start: $0.startDate, distance: $0.distance) }
         return RidePeriodTotals(rides: rides)
     }
 

@@ -28,12 +28,15 @@ public struct RideFigures: Sendable, Equatable {
     /// The steepest climb and descent in percent, both positive (`RideTrack.steepestGrades`).
     public var steepestClimb: Double?
     public var steepestDescent: Double?
+    /// Ridden with an engine (`BikeKind.isMotorized`): it saves no CO₂ against a car.
+    public var isMotorized = false
 
     public init(startDate: Date, distance: Double, timerTime: TimeInterval, totalAscent: Int? = nil,
                 workKilojoules: Double = 0, averageSpeed: Double? = nil, averagePower: Int? = nil,
                 averageCadence: Int? = nil, maxSpeed: Double? = nil, maxPower: Int? = nil,
                 maxCadence: Int? = nil, bestPower1Min: Int? = nil, curvaturePerKm: Double? = nil,
-                steepestClimb: Double? = nil, steepestDescent: Double? = nil) {
+                steepestClimb: Double? = nil, steepestDescent: Double? = nil, isMotorized: Bool = false) {
+        self.isMotorized = isMotorized
         self.startDate = startDate
         self.distance = distance
         self.timerTime = timerTime
@@ -122,7 +125,8 @@ public struct RideAggregate: Sendable, Equatable {
         powerCoverage = ValueCoverage(have: rides.count { $0.hasPowerData }, total: rides.count)
         cadenceCoverage = ValueCoverage(have: rides.count { $0.averageCadence != nil }, total: rides.count)
         ascentCoverage = ValueCoverage(have: rides.count { $0.totalAscent != nil }, total: rides.count)
-        co2SavedKilograms = distance / 1000 * co2PerKilometre
+        // A motorcycle saves nothing against a car.
+        co2SavedKilograms = rides.filter { !$0.isMotorized }.reduce(0) { $0 + $1.distance } / 1000 * co2PerKilometre
         averageSpeed = Self.weightedAverage(rides) { $0.averageSpeed }
         averagePower = Self.weightedAverage(rides) { $0.averagePower.map(Double.init) }
         averageCadence = Self.weightedAverage(rides) { $0.averageCadence.map(Double.init) }

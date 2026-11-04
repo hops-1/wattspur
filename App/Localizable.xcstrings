@@ -9256,6 +9256,36 @@
           }
         }
       }
+    },
+    "Motorcycle" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Motorrad"
+          }
+        }
+      }
+    },
+    "Tracked with the iPhone; not in the totals and the CO₂ saved" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Mit dem iPhone aufgezeichnet; zählt nicht zu Summen und CO₂-Einsparung"
+          }
+        }
+      }
+    },
+    "Not for a motorcycle" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Nicht beim Motorrad"
+          }
+        }
+      }
     }
   },
   "version" : "1.0"

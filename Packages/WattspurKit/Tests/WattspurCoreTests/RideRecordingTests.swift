@@ -37,6 +37,36 @@ struct RideRecordingTests {
         #expect(recording.pointCount == 2)
     }
 
+    @Test("On a motorcycle 130 km/h is kept, for an e-bike it is a jump; 500 m in a second is a jump for both")
+    func motorcycle() {
+        // 36 m a second is about 130 km/h.
+        var bike = RideRecording(startDate: Self.start)
+        var motorcycle = RideRecording(startDate: Self.start, vehicle: .motorcycle)
+        for second in 0...10 {
+            bike.add(Self.fix(Double(second), north: Double(second) * 36))
+            motorcycle.add(Self.fix(Double(second), north: Double(second) * 36))
+        }
+        #expect(bike.pointCount == 1)
+        #expect(motorcycle.pointCount == 11)
+        #expect(abs(motorcycle.distance - 360) < 1)
+        let jumpKept = motorcycle.add(Self.fix(11, north: 360 + 500))
+        #expect(!jumpKept)
+    }
+
+    @Test("The log keeps the vehicle; an old log without it is an e-bike")
+    func logKeepsVehicle() throws {
+        var log = RecordingLog.line(.start(Self.start))
+        log.append(RecordingLog.line(.vehicle(.motorcycle)))
+        #expect(RecordingLog.replay(log)?.vehicle == .motorcycle)
+        #expect(RecordingLog.replay(RecordingLog.line(.start(Self.start)))?.vehicle == .eBike)
+        // A recording encoded before the vehicle existed decodes as an e-bike.
+        var json = try #require(String(data: JSONEncoder().encode(RideRecording(startDate: Self.start)), encoding: .utf8))
+        json = json.replacingOccurrences(of: #""storedVehicle":"ebike","#, with: "")
+            .replacingOccurrences(of: #","storedVehicle":"ebike""#, with: "")
+        #expect(!json.contains("storedVehicle"))
+        #expect(try JSONDecoder().decode(RideRecording.self, from: Data(json.utf8)).vehicle == .eBike)
+    }
+
     @Test("Standing still: GPS wandering adds no distance and no moving time")
     func standing() {
         var recording = RideRecording(startDate: Self.start)

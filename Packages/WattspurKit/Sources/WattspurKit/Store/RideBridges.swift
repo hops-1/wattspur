@@ -24,7 +24,8 @@ extension Ride {
                     workKilojoules: workKilojoules, averageSpeed: averageSpeed,
                     averagePower: averagePower, averageCadence: averageCadence,
                     maxSpeed: maxSpeed, maxPower: maxPower, maxCadence: maxCadence, bestPower1Min: bestPower1Min,
-                    curvaturePerKm: curvaturePerKm, steepestClimb: steepestClimb, steepestDescent: steepestDescent)
+                    curvaturePerKm: curvaturePerKm, steepestClimb: steepestClimb, steepestDescent: steepestDescent,
+                    isMotorized: isMotorized)
     }
 }
 
@@ -45,7 +46,8 @@ extension Ride {
             minAltitude: minAltitude, maxAltitude: maxAltitude,
             averagePower: averagePower, maxPower: maxPower,
             averageCadence: averageCadence, maxCadence: maxCadence,
-            workKilojoules: workKilojoules, pedallingTime: pedalling, startDate: startDate
+            workKilojoules: workKilojoules, pedallingTime: pedalling, startDate: startDate,
+            isMotorized: isMotorized
         )
     }
 
@@ -53,6 +55,20 @@ extension Ride {
     /// not a part of a merged ride (the merged ride counts instead).
     public var countsInStatistics: Bool {
         deletedAt == nil && !isSample && mergedInto == nil
+    }
+
+    /// On a motorcycle (`BikeKind.isMotorized`).
+    public var isMotorized: Bool { bike?.kind.isMotorized == true }
+
+    /// Counts towards totals, records and the CO₂ saved: like `countsInStatistics`, but without
+    /// motorcycle rides. The map and the list still show them.
+    public var countsInTotals: Bool { countsInStatistics && !isMotorized }
+
+    /// The same where the user can filter by bike: a motorcycle ride counts once the filter shows
+    /// only that bike, so its own figures are there too.
+    public func countsInTotals(bikeFilter: BikeFilter) -> Bool {
+        guard countsInStatistics, isOnBike(bikeFilter) else { return false }
+        return !isMotorized || bikeFilter.bikeID != nil
     }
 }
 

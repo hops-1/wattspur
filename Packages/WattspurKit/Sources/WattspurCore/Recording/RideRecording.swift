@@ -6,7 +6,8 @@ import Foundation
 ///
 /// The rules (V-14, spike notes in docs/SPIKE-IOS.md):
 /// - A position less accurate than `maxAccuracy` is dropped (tunnels, start of the recording).
-/// - A position that would mean more than `maxSpeed` since the last one is a jump and is dropped.
+/// - A position that would mean more than the vehicle's top speed since the last one is a jump and
+///   is dropped: `maxSpeed` for an e-bike, more for a motorcycle (`RecordingVehicle`).
 /// - Distance only grows once the position is `minStep` away from where it last grew, so the GPS
 ///   wandering around a standing bike adds nothing.
 /// - Moving time counts the time between two such steps when it was faster than `minMovingSpeed`
@@ -51,6 +52,13 @@ public struct RideRecording: Codable, Sendable, Equatable {
     public static let maxGap: TimeInterval = 30
 
     public var startDate: Date
+    /// Stored as optional, so recordings from before the choice still decode.
+    private var storedVehicle: RecordingVehicle?
+    /// What is recorded; it sets the speed above which a step counts as a GPS jump.
+    public var vehicle: RecordingVehicle {
+        get { storedVehicle ?? .eBike }
+        set { storedVehicle = newValue }
+    }
     /// One segment per stretch between start or resume and pause or stop.
     public private(set) var segments: [[Point]] = [[]]
     public private(set) var isPaused = false
@@ -61,8 +69,9 @@ public struct RideRecording: Codable, Sendable, Equatable {
     /// Where the distance last grew.
     private var anchor: Fix?
 
-    public init(startDate: Date) {
+    public init(startDate: Date, vehicle: RecordingVehicle = .eBike) {
         self.startDate = startDate
+        self.storedVehicle = vehicle
     }
 
     /// Adds a position; returns `false` if it was dropped (or the recording is paused).
@@ -78,7 +87,7 @@ public struct RideRecording: Codable, Sendable, Equatable {
         let seconds = fix.date.timeIntervalSince(last.fix.date)
         guard seconds > 0 else { return false }
         let step = GPXGeo.distance(last.fix.latitude, last.fix.longitude, fix.latitude, fix.longitude)
-        guard step / seconds <= Self.maxSpeed else { return false }
+        guard step / seconds <= vehicle.maxSpeed else { return false }
 
         if let anchor {
             let fromAnchor = GPXGeo.distance(anchor.latitude, anchor.longitude, fix.latitude, fix.longitude)
@@ -165,9 +174,28 @@ public struct RideRecording: Codable, Sendable, Equatable {
 
 /// The recording as it happens, one JSON line per event, so a crash or a killed app loses at most
 /// the line being written (B-211). Replaying the lines gives the recording back.
+/// What the iPhone records. GPS jumps look like impossible speeds; what is impossible depends on
+/// the vehicle. Faster than 300 km/h is a jump on a motorcycle too.
+public enum RecordingVehicle: String, Codable, CaseIterable, Identifiable, Sendable {
+    case eBike = "ebike"
+    case motorcycle
+
+    public var id: Self { self }
+
+    /// Metres per second.
+    public var maxSpeed: Double {
+        switch self {
+        case .eBike: RideRecording.maxSpeed
+        case .motorcycle: 300 / 3.6
+        }
+    }
+}
+
 public enum RecordingLog {
     public enum Event: Codable, Sendable, Equatable {
         case start(Date)
+        /// Written right after the start; logs from before it mean an e-bike.
+        case vehicle(RecordingVehicle)
         case fix(RideRecording.Fix)
         case pause
         case resume
@@ -191,6 +219,7 @@ public enum RecordingLog {
             guard let event = try? decoder.decode(Event.self, from: Data(line)) else { continue }
             switch event {
             case .start(let date): recording = RideRecording(startDate: date)
+            case .vehicle(let vehicle): recording?.vehicle = vehicle
             case .fix(let fix): recording?.add(fix)
             case .pause: recording?.pause()
             case .resume: recording?.resume()

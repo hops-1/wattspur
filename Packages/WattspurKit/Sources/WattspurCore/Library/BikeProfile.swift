@@ -7,8 +7,15 @@ import Foundation
 /// is only a name and a symbol: it changes no calculation.
 public enum BikeKind: String, CaseIterable, Identifiable, Sendable {
     case bike, mountain, road, gravel, cargo
+    /// Tracked with the iPhone, e.g. by a friend on a motorcycle. Its rides stay out of the totals,
+    /// records and the CO₂ saved, unless the filter shows only this bike. Older versions read it as
+    /// a bicycle.
+    case motorcycle
 
     public var id: Self { self }
+
+    /// Ridden with an engine: no own effort, nothing saved against a car.
+    public var isMotorized: Bool { self == .motorcycle }
 }
 
 /// The colour of a bike's symbol. The shade for light and dark mode is the app's business.

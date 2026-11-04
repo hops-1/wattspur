@@ -23,7 +23,8 @@ struct AnalysisView: View {
         guard selection == nil else { return allRides }
         let filter = bikeFilterChoice.resolved(knownBikeIDs: Set(bikes.map(\.id)))
         let source = sourceFilterChoice.resolved(hasGPXRides: hasGPXRides)
-        return filter.isActive || source.isActive ? allRides.filter { $0.isOnBike(filter) && $0.isFromSource(source) } : allRides
+        // Motorcycle rides count only when the filter shows that bike (CO₂, totals).
+        return allRides.filter { (!$0.isMotorized || filter.bikeID != nil) && $0.isOnBike(filter) && $0.isFromSource(source) }
     }
 
     private var hasGPXRides: Bool { allRides.contains { $0.source == .gpx } }

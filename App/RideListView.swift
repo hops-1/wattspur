@@ -204,7 +204,7 @@ struct RideListView: View {
                     .background(Color.accentColor.opacity(0.1), in: RoundedRectangle(cornerRadius: 9))
                     .padding(.horizontal, 12)
                     .padding(.top, 8)
-            } else if activeSimilarFilter == nil, yearRides.contains(where: \.countsInStatistics) {
+            } else if activeSimilarFilter == nil, yearRides.contains(where: \.countsInTotals) {
                 YearTileView(rides: yearRides) {
                     highlightsBikeFilter = bikeFilter
                     highlightsSourceFilter = sourceFilter
@@ -257,7 +257,7 @@ struct RideListView: View {
 
     /// Rides that hold a record now get a star (ADV-R2).
     private var recordHolders: Set<UUID> {
-        let records = RideRecords.records(rides.filter(\.countsInStatistics).map(\.highlightRide), calendar: GoalPeriod.calendar())
+        let records = RideRecords.records(rides.filter(\.countsInTotals).map(\.highlightRide), calendar: GoalPeriod.calendar())
         return Set(records.filter(\.kind.isRideRecord).flatMap(\.rideIDs))
     }
 

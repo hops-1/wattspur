@@ -262,9 +262,9 @@ extension RideDetailContent {
 
     /// The records this ride holds now, each with the best value of all other rides.
     private var heldRecords: [RecordBanner.Held] {
-        guard ride.countsInStatistics else { return [] }
+        guard ride.countsInTotals else { return [] }
         let calendar = GoalPeriod.calendar()
-        let all = listedRides.filter(\.countsInStatistics).map(\.highlightRide)
+        let all = listedRides.filter(\.countsInTotals).map(\.highlightRide)
         let kinds = RideRecords.kinds(heldBy: ride.id, in: RideRecords.records(all, calendar: calendar))
         guard !kinds.isEmpty else { return [] }
         let others = RideRecords.records(all.filter { $0.id != ride.id }, calendar: calendar)
@@ -359,9 +359,14 @@ struct KeyFiguresGrid: View {
                 Figure("Calories", value: kilocalories.map { $0.formatted(.number.precision(.fractionLength(0))) } ?? "–", unit: "kcal",
                        estimated: kilocalories != nil, note: calories.note,
                        caption: kilocalories == nil && ride.source == .gpx ? String(localized: "Needs power data") : nil)
-                Figure("CO₂ saved", value: co2.formatted(.number.precision(.fractionLength(1))), unit: "kg", estimated: true,
-                       note: String(localized: "Calculated from the distance"),
-                       caption: ride.source == .gpx ? String(localized: "From the distance") : nil)
+                if ride.isMotorized {
+                    // A motorcycle saves nothing against a car.
+                    Figure("CO₂ saved", value: "–", unit: "kg", caption: String(localized: "Not for a motorcycle"))
+                } else {
+                    Figure("CO₂ saved", value: co2.formatted(.number.precision(.fractionLength(1))), unit: "kg", estimated: true,
+                           note: String(localized: "Calculated from the distance"),
+                           caption: ride.source == .gpx ? String(localized: "From the distance") : nil)
+                }
             }
         }
     }
