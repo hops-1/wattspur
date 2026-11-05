@@ -18,6 +18,9 @@ Stand: 2. November 2026 · Gilt für Wattspur für Mac und iPhone.
 **Standort**
 Das iPhone fragt nach dem Standort nur für die GPS-Aufnahme, und nur „beim Verwenden der App“. Aufgezeichnet wird nur zwischen „Fahrt starten“ und „Stopp“.
 
+**Bewegung und Fitness (Barometer)**
+Für die Höhe der Aufnahme fragt das iPhone einmal nach „Bewegung & Fitness“: Wattspur liest dann während der Aufnahme den Luftdruck-Sensor. Der Wert wird nur zur Höhe der Fahrt verrechnet und bleibt wie alle Fahrtdaten bei dir. Ohne die Erlaubnis nimmt Wattspur die Höhe aus dem GPS.
+
 **Verbindungen ins Internet**
 - Karten: Wattspur lädt Kartenkacheln von Apple (MapKit) und, am Mac je nach gewähltem Kartenstil, von OpenStreetMap, CyclOSM oder OpenTopoMap. Dabei gehen der Kartenausschnitt und deine IP-Adresse an den jeweiligen Server, keine Fahrten.
 - Updates (Mac): Einmal am Tag fragt Wattspur bei GitHub, ob es eine neue Version gibt, wenn du das nicht ausgeschaltet hast. Dabei wird nichts über dich oder deine Fahrten gesendet.
@@ -47,6 +50,9 @@ Nils Wiese, über die Issues auf GitHub: https://github.com/hops-1/wattspur/issu
 
 **Location**
 The iPhone asks for your location only for GPS recording, and only "while using the app". It records only between "Start Ride" and "Stop".
+
+**Motion & Fitness (barometer)**
+For the height of a recording the iPhone asks once for "Motion & Fitness": Wattspur then reads the air pressure sensor while recording. The value only goes into the height of the ride and stays with you like all ride data. Without the permission Wattspur takes the height from GPS.
 
 **Connections to the internet**
 - Maps: Wattspur loads map tiles from Apple (MapKit) and, on the Mac depending on the map style, from OpenStreetMap, CyclOSM or OpenTopoMap. The server receives the map area and your IP address, no rides.
