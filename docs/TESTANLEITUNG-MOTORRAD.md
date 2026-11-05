@@ -6,7 +6,7 @@ Wichtig: Fahr wie immer. Kein Risiko für den Test. Wattspur ist keine Sicherhei
 
 ## Vorher (einmal, ca. 5 Minuten)
 1. Die App **TestFlight** aus dem App Store laden.
-2. Den Link zu Wattspur öffnen, den du von Nils bekommst. In TestFlight **Wattspur** installieren. Es muss die Version **0.5.1 (6)** sein.
+2. Den Link zu Wattspur öffnen, den du von Nils bekommst. In TestFlight **Wattspur** installieren. Es muss die Version **0.5.1 (7)** sein.
 3. Wattspur öffnen. Das iPhone fragt beim ersten Start einer Fahrt nach dem **Standort** und nach **Bewegung & Fitness**. Beim Standort „Beim Verwenden der App erlauben“ tippen, bei Bewegung & Fitness „Erlauben“. Am besten machst du einmal zu Hause eine kurze Probe-Aufnahme, dann sind die Fragen erledigt.
 4. Unten **Mehr** antippen:
    - Bei **Fahrzeug** „Motorrad“ wählen.
