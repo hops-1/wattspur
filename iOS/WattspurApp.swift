@@ -16,6 +16,8 @@ struct WattspurApp: App {
     @State private var recorder = Recorder()
     @State private var recordings = PhoneRecordings()
     @State private var tab = Tab.overview
+    /// FIT and GPX files opened with Wattspur (B-071).
+    @State private var phoneImport = PhoneImport()
 
     init() {
         let folder = ImportFolder()
@@ -61,6 +63,12 @@ struct WattspurApp: App {
                 }
             }
             .tint(.track)
+            // A FIT from the Flow app or a GPX from the Files app, shared to or opened with Wattspur.
+            .onOpenURL { url in
+                phoneImport.open(url, library: library, folder: folder)
+                tab = .rides
+            }
+            .phoneImport(phoneImport)
             .environment(folder)
             .environment(sync)
             .environment(\.switchSync, SwitchSyncAction(switchSync))
