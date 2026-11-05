@@ -1,0 +1,96 @@
+{
+  "sourceLanguage" : "en",
+  "strings" : {
+    "End the ride in ${applicationName}" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Beende die Fahrt in ${applicationName}"
+          }
+        }
+      }
+    },
+    "How far did I ride this week in ${applicationName}" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Wie viele Kilometer diese Woche in ${applicationName}"
+          }
+        }
+      }
+    },
+    "My week in ${applicationName}" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Meine Woche in ${applicationName}"
+          }
+        }
+      }
+    },
+    "Open my last ride in ${applicationName}" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Öffne meine letzte Fahrt in ${applicationName}"
+          }
+        }
+      }
+    },
+    "Record a ride with ${applicationName}" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Nimm eine Fahrt mit ${applicationName} auf"
+          }
+        }
+      }
+    },
+    "Show my last ride in ${applicationName}" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Letzte Fahrt in ${applicationName} öffnen"
+          }
+        }
+      }
+    },
+    "Start ${applicationName}" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Fahrt starten mit ${applicationName}"
+          }
+        }
+      }
+    },
+    "Start a ride with ${applicationName}" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Starte eine Fahrt mit ${applicationName}"
+          }
+        }
+      }
+    },
+    "Stop ${applicationName}" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Fahrt beenden mit ${applicationName}"
+          }
+        }
+      }
+    }
+  },
+  "version" : "1.0"
+}

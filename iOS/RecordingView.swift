@@ -23,6 +23,13 @@ struct RecordingView: View {
                     .interactiveDismissDisabled()
             }
         }
+        // “End ride” from Siri or a shortcut (B-225) does what Stop does: name the ride, then save.
+        .onChange(of: recorder.endRequested, initial: true) { _, requested in
+            if requested {
+                ending = true
+                recorder.endRequested = false
+            }
+        }
     }
 
     private var portrait: some View {
