@@ -1,6 +1,6 @@
 # Requirements – Wattspur
 
-Stand: 5.11.2026 · Status: Entwurf v0.18 (Plan für iOS 0.4, Kap. 10.22; davor v0.17: iOS 0.3 und Mac 1.8.4 umgesetzt: Sync über CloudKit, iCloud oder Ordner, Motorrad, Kap. 10.22; davor Plan für 1.5 bis 1.9, Kap. 10.15 bis 10.20)
+Stand: 5.11.2026 · Status: Entwurf v0.19 (Plan für iOS 0.5 und Mac 1.8.5, Kap. 10.22; davor v0.18: Plan für iOS 0.4, Kap. 10.22; davor v0.17: iOS 0.3 und Mac 1.8.4 umgesetzt: Sync über CloudKit, iCloud oder Ordner, Motorrad, Kap. 10.22; davor Plan für 1.5 bis 1.9, Kap. 10.15 bis 10.20)
 
 ## 1. Ziel & Kontext
 
@@ -659,7 +659,7 @@ Ideen von Nils und Claude gesammelt, von Nils geordnet; Stories im BACKLOG „iO
 |---|---|---|
 | Sync Mac ↔ iPhone | über CloudKit (private Datenbank im iCloud-Konto jedes Nutzers), auch für Freunde; ersetzt den Lese-Stand im iCloud-Ordner aus 10.21; iPhone und Mac sind gleichberechtigt, Fahrten entstehen und werden gelöscht auf beiden Seiten | B-072, B-189, B-216 bis B-218; 10.21 „Austausch“ überholt |
 | Developer-Account | ab iOS 0.3 und Mac 1.8.3 bezahlt (Einzelperson): CloudKit, TestFlight, Widgets mit App Group, Developer ID und Notarisierung | NFR-18, B-215, B-219 |
-| Versionen | iOS 0.3 und Mac 1.8.4 gemeinsam (Mac 1.8.3 vorher: Developer ID und Notarisierung); danach iOS 0.4 Auswerten und Importieren, 0.5 Unterwegs, 0.6 Karten und Highlights. **Plan 0.4 (Entscheidung Nils 5.11.2026):** Fahrt bearbeiten, Messwerte im Tour-Detail, Karussell und Kopplung (nur mit iCloud), FIT aus der Flow-App, Höhe vom Barometer (aus 0.5 vorgezogen); Filter und Suche nach 0.5; die genauere Strecke der Aufnahme (B-242) ist nach einer Messung am 5.11.2026 nicht nötig; kein Umbau des Schemas | BACKLOG Releaseplan, B-240 bis B-242 |
+| Versionen | iOS 0.3 und Mac 1.8.4 gemeinsam (Mac 1.8.3 vorher: Developer ID und Notarisierung); danach iOS 0.4 Auswerten und Importieren, 0.5 Unterwegs, 0.6 Karten und Highlights. **Plan 0.4 (Entscheidung Nils 5.11.2026):** Fahrt bearbeiten, Messwerte im Tour-Detail, Karussell und Kopplung (nur mit iCloud), FIT aus der Flow-App, Höhe vom Barometer (aus 0.5 vorgezogen); Filter und Suche nach 0.5; die genauere Strecke der Aufnahme (B-242) ist nach einer Messung am 5.11.2026 nicht nötig; kein Umbau des Schemas. **Plan 0.5 (Entscheidung Nils 5.11.2026):** zusammen mit Mac 1.8.5 (gemeinsamer Import B-188, Filter und Suche B-244); Reihenfolge Querformat, Filter und Suche, Live-Aktivität, Widget, Kurzbefehle; kein iPad-Layout, kein Schalter für quer, Widget nur auf dem Home-Bildschirm, keine Werte vom Bike live | BACKLOG Releaseplan, B-240 bis B-244 |
 | Eigener Webserver | zurückgestellt; nur bei Bedarf für Android, Web oder ein gemeinsames Portal | B-088 |
 | Teilen mit Freunden | später über CloudKit-Freigaben, nicht über einen Server | B-231, IDEA-24, IDEA-25 |
 | Zeitreihen im Sync (V-15, 4.11.2026) | bleiben externer Speicher (`@Attribute(.externalStorage)`), CloudKit speichert sie im Eintrag, große als `CKAsset`; 84 Fahrten in ca. 80 s, Änderungen in 30 s bis 1 min; gemessen rund 0,4 MB je Fahrt in iCloud (5.11.2026, [SPIKE-CLOUDKIT.md](SPIKE-CLOUDKIT.md)) | V-15 |

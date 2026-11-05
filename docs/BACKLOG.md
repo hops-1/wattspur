@@ -1,6 +1,6 @@
 # Backlog – Wattspur
 
-Stand: 5.11.2026 (v0.27, Querformat auf dem iPhone mit Nils abgestimmt: B-243 als erste Story in iOS 0.5, Mockup „Wattspur quer“; davor v0.26, Plan für iOS 0.4 mit Nils abgestimmt: Bearbeiten, Messwerte, Karussell, Kopplung, FIT-Import, Barometer; Filter nach 0.5; B-240 bis B-242 neu; davor v0.25 vom 3.11.2026, Fahrtvergleich vom 3.11.2026 mit Bosch Flow, Wattspur iOS und Apple Watch: B-232 bis B-237 eingeordnet; davor v0.24 vom 2.11.2026, Plan für die iOS-App 0.3 bis 0.6 und Mac 1.8.3 mit Sync über CloudKit; davor v0.23, Plan für die iOS-App 0.1 und 0.2; davor v0.22, Plan für 1.8.2; davor v0.21 vom 1.11.2026, 1.8.1 umgesetzt: Steigung, Lastenrad, Kurvigkeit und Ebene „Kurvige Straßen“; davor v0.20 vom 28.10.2026, Release 1.8.0 „Kartenstile“ vorbereitet; davor v0.19 vom 27.10.2026, Plan für 1.8 „Kartenstile“, der Bereich „Fahrten“ B-125 nach 1.9 verschoben; davor v0.18 vom 26.10.2026, Plan für 1.7 in zwei Releases 1.7.0 und 1.7.1; davor v0.17 vom 25.10.2026, Release 1.6.2 mit Update-Hinweis B-172; davor 1.6.1 mit Sicherheits-Fix, Architektur-Aufräumen B-162 bis B-169 und zwei Karten-Verbesserungen B-170, B-171; Plan für 1.7 bis 1.9) · Die IDs in Klammern verweisen auf `REQUIREMENTS.md`.
+Stand: 5.11.2026 (v0.28, Plan für iOS 0.5 „Unterwegs“ und Mac 1.8.5 mit Nils abgestimmt: Querformat, Filter und Suche, Live-Aktivität, Widget, Kurzbefehle; Mac 1.8.5 bringt den neuen Import und Filter und Suche; davor v0.27, Querformat auf dem iPhone mit Nils abgestimmt: B-243 als erste Story in iOS 0.5, Mockup „Wattspur quer“; davor v0.26, Plan für iOS 0.4 mit Nils abgestimmt: Bearbeiten, Messwerte, Karussell, Kopplung, FIT-Import, Barometer; Filter nach 0.5; B-240 bis B-242 neu; davor v0.25 vom 3.11.2026, Fahrtvergleich vom 3.11.2026 mit Bosch Flow, Wattspur iOS und Apple Watch: B-232 bis B-237 eingeordnet; davor v0.24 vom 2.11.2026, Plan für die iOS-App 0.3 bis 0.6 und Mac 1.8.3 mit Sync über CloudKit; davor v0.23, Plan für die iOS-App 0.1 und 0.2; davor v0.22, Plan für 1.8.2; davor v0.21 vom 1.11.2026, 1.8.1 umgesetzt: Steigung, Lastenrad, Kurvigkeit und Ebene „Kurvige Straßen“; davor v0.20 vom 28.10.2026, Release 1.8.0 „Kartenstile“ vorbereitet; davor v0.19 vom 27.10.2026, Plan für 1.8 „Kartenstile“, der Bereich „Fahrten“ B-125 nach 1.9 verschoben; davor v0.18 vom 26.10.2026, Plan für 1.7 in zwei Releases 1.7.0 und 1.7.1; davor v0.17 vom 25.10.2026, Release 1.6.2 mit Update-Hinweis B-172; davor 1.6.1 mit Sicherheits-Fix, Architektur-Aufräumen B-162 bis B-169 und zwei Karten-Verbesserungen B-170, B-171; Plan für 1.7 bis 1.9) · Die IDs in Klammern verweisen auf `REQUIREMENTS.md`.
 Größe: **S** ≈ wenige Stunden, **M** ≈ 1–2 Tage, **L** ≈ mehrere Tage.
 Status: ☐ offen · ◐ in Arbeit · ☑ erledigt · ✗ nicht nötig
 
@@ -29,6 +29,7 @@ Status: ☐ offen · ◐ in Arbeit · ☑ erledigt · ✗ nicht nötig
 | v1.8.2 | Kleines Folgerelease (Plan 2.11.2026): Fehler bei ähnlichen Pendelfahrten (B-184), Rekorde bei Steigung und Gefälle ohne Barometer glätten (B-203), ~~optional neue Handbuch-Bilder (B-179)~~ (verschoben: braucht Aufnahmen der laufenden App) | Freunde |
 | v1.8.3 | Erste notarisierte Version (Entscheidung Nils 4.11.2026): Developer-Account, Signierung mit Developer ID und Notarisierung (B-215); aus dem Fahrtvergleich vom 3.11.2026: doppelte Fahrt aus FIT und GPX erkennen, Höhenmeter ab 2 m, Hinweis auf den Radumfang (B-232, B-234, B-237) | Freunde |
 | v1.8.4 | Sync mit dem iPhone über iCloud (CloudKit), zusammen mit iOS 0.3 (Entscheidung Nils 4.11.2026): CloudKit-Tauglichkeit, Sync der Bibliothek, Abschied vom „Stand fürs iPhone“ (B-189, B-072, B-218, V-15) | Freunde |
+| v1.8.5 | Zusammen mit iOS 0.5 (Entscheidung Nils 5.11.2026): der gemeinsame Import (B-188), damit der Mac die FIT- und GPX-Dateien importiert, die das iPhone in den Ordner legt (B-071); Filter und Suche in der Fahrtenliste mit der Logik aus dem Kit (B-222, B-244) | Freunde |
 | **v1.9** | Bosch-Daten über die offizielle Data-Act-API (optional, eigenes Bosch-Konto): Bike, Akku und Wartung, Zusatzfelder je Fahrt und Import von Fahrten ohne Datei (Altbestand). **Motordaten je Fahrt gibt die API nicht her (Spezifikation 25.10.2026), Entscheidung Nils: Option B;** steht unter dem Vorbehalt des Spikes V-12 | Freunde mit Smart-System-Bike in der EU |
 | v1.10 | Ein Bereich „Fahrten“ mit Karte als Standard (B-125), Analyse nach Strecke (B-176); von 1.8 zurückgestellt am 27.10.2026 | Freunde |
 | v1.x | Analysen, Komfort, Karten | alle |
@@ -36,7 +37,7 @@ Status: ☐ offen · ◐ in Arbeit · ☑ erledigt · ✗ nicht nötig
 | iOS 0.2 | Fahrten vom Mac ansehen, GPS-Aufnahme mit Karte, Aufnahme als GPX an den Mac und zum Teilen; Austausch über den iCloud-Ordner „Wattspur Import“, ohne CloudKit (V-14, B-178, B-208 bis B-214; Design C „Übersicht mit Kacheln“) | mich |
 | iOS 0.3 | Eine Datenbank auf iPhone und Mac: Sync über CloudKit, Aufnahme wird direkt zur Fahrt, Löschen auf dem iPhone, Verteilung über TestFlight (B-215 bis B-220, mit Mac 1.8.4); aus dem Fahrtvergleich: doppelte Fahrt, GPX-Zeit mit Millisekunden, Höhenmeter (B-232 bis B-234) | mich, Freunde über TestFlight |
 | iOS 0.4 | Auswerten und Importieren (**Plan 5.11.2026, abgestimmt mit Nils**): Fahrt bearbeiten, Messwerte im Tour-Detail, Diagramm-Karussell, Diagramm und Karte gekoppelt, FIT aus der Flow-App, Höhe vom Barometer; externe TestFlight-Gruppe für Freunde (B-240, B-241, B-090, B-221, B-188, B-071, B-235, Rest von B-219; B-242 nicht nötig) | mich, Freunde über TestFlight |
-| iOS 0.5 | Unterwegs: Querformat für die Halterung am Lenker, Live-Aktivität bei der Aufnahme, Widget „Diese Woche“, Kurzbefehle und Siri, Filter und Suche in der Fahrtenliste (B-243, B-223 bis B-225, B-222); die Höhe vom Barometer (B-235) ist nach 0.4 vorgezogen | mich, Freunde |
+| iOS 0.5 | Unterwegs (**Plan 5.11.2026, abgestimmt mit Nils**, mit Mac 1.8.5): Querformat für die Halterung am Lenker, Filter und Suche in der Fahrtenliste, Live-Aktivität bei der Aufnahme, Widget „Diese Woche“, Kurzbefehle und Siri (B-243, B-222, B-223 bis B-225); die Höhe vom Barometer (B-235) ist nach 0.4 vorgezogen | mich, Freunde über TestFlight |
 | iOS 0.6 | Karten und Highlights: Kartenstile, Karte aller Fahrten mit Heatmap, Highlights (B-186, B-226 bis B-228) | mich, Freunde |
 | iOS später | Bosch-Portal, Apple Watch, Fahrten mit Freunden teilen, Kalorien aus dem Puls (B-229 bis B-231, B-236) | – |
 
@@ -630,16 +631,41 @@ Vorschlag von Claude nach dem Lesen von Code und Doku, von Nils am 5.11.2026 ent
 **Aufwand (Schätzung 5.11.2026):** etwa 9–12 Tage. Risiken: Barometer in der Hosentasche, Größe der Zeitreihe beim Öffnen auf älteren iPhones, Beta-App-Prüfung für die externe Gruppe.
 **Nicht in 0.4:** Filter und Suche (→ 0.5), Messwerte im Ordner-Weg, Bearbeiten über Name und Bike hinaus.
 
-### iOS 0.5 – Unterwegs
+### iOS 0.5 + Mac 1.8.5 – Unterwegs (Plan 0.5, abgestimmt mit Nils 5.11.2026)
 
-| # | Story | Größe | Status |
-|---|---|---|---|
-| B-243 | **Querformat** (neu 5.11.2026, Wunsch Nils): Die meisten Halterungen für das Bosch-Smart-System halten das Handy nur quer. Heute läuft die App nur hochkant. Abgestimmt mit Nils am 5.11.2026, Mockup „Wattspur quer“ auf dem Design-Canvas. **Aufnahme:** Karte über den ganzen Bildschirm, links eine hochkant stehende Glas-Leiste (Variante B2) mit Tempo groß und Ø darunter, Strecke, Zeit, Höhe und Anstieg in 2 × 2, unten Pause und Stopp; Standort und Kompass rechts oben. Nur Werte vom iPhone, Leistung und Akku von Bosch erst mit der FIT. **Tab-Leiste** quer immer links unten, in allen Bereichen und auch im Tour-Detail, damit sie beim Umschalten nicht springt. **Übersicht:** „Fahrt starten“ unten links, die Kachel „Letzte Fahrt“ größer, rechts Woche, Monat, Jahr und alle Fahrten. **Fahrten:** links die Liste, rechts das Detail der gewählten Fahrt. **Tour-Detail:** links die Karte, rechts Kennzahlen und Diagramm-Karussell. **Mehr:** zwei Spalten. **Fahrt speichern:** Fenster rechts neben der Leiste der Aufnahme. Kein eigener Schalter in der App: Wer nicht drehen will, nutzt die Ausrichtungssperre von iOS. Hochkant bleibt, wie es ist. Hell und dunkel | M | ☐ |
-| B-223 | **Live-Aktivität bei der Aufnahme:** Zeit, Strecke und Tempo auf dem Sperrbildschirm und in der Dynamic Island, Knopf Pause; endet mit dem Stopp | M | ☐ |
-| B-224 | **Widget „Diese Woche“:** km und Fahrten der Woche, letzte Fahrt; klein und mittel; Daten über eine App Group (braucht den Account; neue Capability, kein neues Feld im Schema) (P-06) | M | ☐ |
-| B-225 | **Kurzbefehle und Siri** mit App Intents: „Fahrt starten“, „Fahrt beenden“, „Wie viele Kilometer diese Woche?“, „Letzte Fahrt öffnen“ (P-07) | M | ☐ |
-| B-222 | (aus 0.4 verschoben, Entscheidung Nils 5.11.2026) **Filter und Suche in der Fahrtenliste:** nach Bike, Zeitraum, Strecke (von–bis) und Name; Filter oben als Leiste, Anzahl der Treffer; Filterlogik im Kit, damit der Mac sie mitnutzen kann | M | ☐ |
-| B-235 | → iOS 0.4 (vorgezogen 5.11.2026) | M | → |
+Vorschlag von Claude, von Nils am 5.11.2026 entschieden. Ziel: Die App taugt am Lenker (quer, Live-Aktivität, Siri) und auf dem Home-Bildschirm (Widget); dazu findet man Fahrten in einer langen Liste wieder. Nils sagte „0.5 + 1.8.4“; 1.8.4 ist schon erschienen (5.11.2026), darum heißt die Mac-Version **1.8.5**.
+
+**Entscheidungen (5.11.2026):**
+- **Mac 1.8.5 mit iOS 0.5:** Der Mac bekommt den gemeinsamen Import (B-188, in 0.4 schon im Kit) und importiert damit die FIT- und GPX-Dateien, die das iPhone ohne iCloud in den Ordner `Wattspur Import` legt (B-071); in 0.4 ließ sich das am Mac nicht prüfen, weil 1.8.4 ihn noch nicht enthält. Dazu Filter und Suche auch am Mac (B-244), mit derselben Logik aus dem Kit.
+- **Reihenfolge:** Querformat zuerst, dann Filter und Suche (früh, weil der Mac sie mitnutzt), danach Live-Aktivität, Widget und Kurzbefehle.
+- **Nicht in 0.5:** kein iPad-Layout (quer nur fürs iPhone); kein eigener Schalter für quer (die Ausrichtungssperre von iOS reicht); Widget nur auf dem Home-Bildschirm (klein, mittel), nicht auf dem Sperrbildschirm; keine Werte vom Bike live (Leistung, Akku) in Aufnahme und Live-Aktivität, nur Werte vom iPhone.
+- **Schema:** kein neues Feld. Das Widget braucht eine App Group (neue Capability), die Daten gehen als kleine Datei hinein.
+
+**Reihenfolge und PRs:** je Zeile ein PR direkt gegen `main`, der nächste erst nach dem Merge und dem OK von Nils. Check: `scripts/ci-local.sh` (baut auch das iOS-Target), `swift test --no-parallel`; Querformat im Simulator quer geprüft.
+
+| PR | Inhalt |
+|---|---|
+| 1 | B-243 Querformat |
+| 2 | B-222 Filter und Suche auf dem iPhone, Logik im Kit |
+| 3 | B-244 Filter und Suche am Mac |
+| 4 | B-223 Live-Aktivität |
+| 5 | B-224 Widget „Diese Woche“ (App Group) |
+| 6 | B-225 Kurzbefehle und Siri |
+| 7 | Release **iOS 0.5.0** und **Mac 1.8.5**: Versionen, Changelog, Handbuch EN/DE, Upload zu TestFlight, DMG notarisiert; am Mac prüfen, dass eine FIT aus der Flow-App über den Ordner ankommt |
+
+| # | Story | Größe | Hängt ab von | Status |
+|---|---|---|---|---|
+| B-243 | **Querformat** (neu 5.11.2026, Wunsch Nils): Die meisten Halterungen für das Bosch-Smart-System halten das Handy nur quer. Heute läuft die App nur hochkant. Abgestimmt mit Nils am 5.11.2026, Mockup „Wattspur quer“ auf dem Design-Canvas. **Aufnahme:** Karte über den ganzen Bildschirm, links eine hochkant stehende Glas-Leiste (Variante B2) mit Tempo groß und Ø darunter, Strecke, Zeit, Höhe und Anstieg in 2 × 2, unten Pause und Stopp; Standort und Kompass rechts oben. Nur Werte vom iPhone, Leistung und Akku von Bosch erst mit der FIT. **Tab-Leiste** quer immer links unten, in allen Bereichen und auch im Tour-Detail, damit sie beim Umschalten nicht springt. **Übersicht:** „Fahrt starten“ unten links, die Kachel „Letzte Fahrt“ größer, rechts Woche, Monat, Jahr und alle Fahrten. **Fahrten:** links die Liste, rechts das Detail der gewählten Fahrt. **Tour-Detail:** links die Karte, rechts Kennzahlen und Diagramm-Karussell. **Mehr:** zwei Spalten. **Fahrt speichern:** Fenster rechts neben der Leiste der Aufnahme. Kein eigener Schalter in der App: Wer nicht drehen will, nutzt die Ausrichtungssperre von iOS. Hochkant bleibt, wie es ist. Hell und dunkel | M | – | ☐ |
+| B-222 | (aus 0.4 verschoben, Entscheidung Nils 5.11.2026) **Filter und Suche in der Fahrtenliste:** nach Bike, Zeitraum, Strecke (von–bis) und Name; Filter oben als Leiste, Anzahl der Treffer; Filterlogik im Kit (`RideFilter`) mit Tests, damit der Mac sie mitnutzt (B-244) | M | – | ☐ |
+| B-244 | **Filter und Suche am Mac** (neu 5.11.2026, Teil von Mac 1.8.5): die Liste der Fahrten am Mac nutzt dieselbe Filterlogik aus dem Kit wie das iPhone (B-222): Suchfeld für den Namen, Bike, Zeitraum, Strecke von–bis, Anzahl der Treffer; bestehende Filter am Mac (Bike-Filter, Kalendertag B-130) laufen darüber | S–M | B-222 | ☐ |
+| B-223 | **Live-Aktivität bei der Aufnahme:** Zeit, Strecke und Tempo auf dem Sperrbildschirm und in der Dynamic Island, Knopf Pause; endet mit dem Stopp; nur Werte vom iPhone | M | – | ☐ |
+| B-224 | **Widget „Diese Woche“:** km und Fahrten der Woche, letzte Fahrt; klein und mittel, nur Home-Bildschirm; Daten über eine App Group (braucht den Account; neue Capability, kein neues Feld im Schema) (P-06) | M | – | ☐ |
+| B-225 | **Kurzbefehle und Siri** mit App Intents: „Fahrt starten“, „Fahrt beenden“, „Wie viele Kilometer diese Woche?“, „Letzte Fahrt öffnen“ (P-07) | M | – | ☐ |
+| B-188 | (aus 0.4, schon umgesetzt) **Gemeinsamer Import am Mac ausliefern:** kommt mit Mac 1.8.5; prüfen, dass eine FIT oder GPX vom iPhone aus dem Ordner `Wattspur Import` als Fahrt erscheint (B-071) | S | – | ◐ |
+| B-235 | → iOS 0.4 (vorgezogen 5.11.2026) | M | – | → |
+
+**Fertig, wenn** die App quer in der Halterung läuft (Aufnahme, Übersicht, Fahrten, Detail, Mehr), Filter und Suche auf iPhone und Mac dieselben Treffer liefern, die Aufnahme auf dem Sperrbildschirm und in der Dynamic Island steht, das Widget die Woche zeigt und Siri eine Fahrt startet und beendet; 0.5.0 über TestFlight, 1.8.5 als notarisiertes DMG.
+**Aufwand (Schätzung 5.11.2026):** etwa 8–11 Tage. Risiken: Live-Aktivität und Widget sind neue Erweiterungen (eigene Targets in `project.yml`, App Group im Developer-Account), Siri-Sätze auf Deutsch, Platz für die Glas-Leiste auf kleinen iPhones.
 
 ### iOS 0.6 – Karten und Highlights
 
