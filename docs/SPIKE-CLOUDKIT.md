@@ -49,7 +49,7 @@ Die Frage aus V-15 war, ob die Zeitreihen über `@Attribute(.externalStorage)` l
 ## Nebenbefunde
 
 - **1.8.3:** Die notarisierte Version trägt das iCloud-Entitlement, der Schalter „Mit iCloud synchronisieren“ ist darum bedienbar. Gegen Production gibt es noch kein Schema, Uploads scheitern, die Daten bleiben lokal. Entscheidung Nils: bleibt so bis 1.8.4.
-- **Strecke beim Aufnehmen auf dem iPhone:** Fahrt am 4.11.2026, 19:01 (Roßdorf–Reinheim): Die GPS-Spuren von Wattspur und Flow-App sind gleich lang (10,75 km). Wattspur zeigt aber 10,86 km, also 1 % mehr. `RideRecording` zählt Schritte ab 5 m und damit auch GPS-Zittern. Das ist kein Sync-Thema, lässt sich aber verbessern.
+- **Strecke beim Aufnehmen auf dem iPhone:** Fahrt am 4.11.2026, 19:01 (Roßdorf–Reinheim): Die GPS-Spuren von Wattspur und Flow-App sind gleich lang (10,75 km). Wattspur zeigt aber 10,86 km, also 1 % mehr. `RideRecording` zählt Schritte ab 5 m und damit auch GPS-Zittern. Das ist kein Sync-Thema. **Nachgemessen 5.11.2026 (B-242):** An der Fahrt vom 3.11. morgens ist die iPhone-Spur in derselben Zeit nicht länger als die von Bosch; das Plus kommt vom früheren Start und späteren Stopp der Aufnahme, nicht vom Zittern. Keine Änderung nötig.
 - **Radumfang in der Flow-App:** Mit 2260 mm zählt das Rad 0,8 % weniger als die GPS-Spur. Etwa 2280 mm passen zu beiden Fahrten vom 4.11.2026.
 
 ## Testaufbau
