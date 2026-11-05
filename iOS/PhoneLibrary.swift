@@ -215,6 +215,12 @@ final class PhoneLibrary {
         }
     }
 
+    /// Renames a ride and changes its bike (B-240); over iCloud the Mac gets both.
+    func edit(_ ride: RideExchange.Ride, name: String, bikeID: UUID?) {
+        guard database?.edit(rideID: ride.id, name: name, bikeID: bikeID) == true else { return }
+        reload()
+    }
+
     func moveToTrash(_ ride: RideExchange.Ride) {
         database?.moveToTrash(rideID: ride.id)
         reload()

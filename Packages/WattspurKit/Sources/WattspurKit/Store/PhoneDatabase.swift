@@ -114,6 +114,23 @@ public final class PhoneDatabase {
         library.importFile(data: gpx, fileName: fileName, bike: library.activeBike())
     }
 
+    // MARK: - Editing (B-240)
+
+    /// Renames a ride and moves it to another bike, as on the Mac; over iCloud the Mac gets both.
+    /// A blank name keeps the old one, an unknown bike keeps the old bike, and a merged ride takes
+    /// its parts to the new bike. Returns whether anything changed.
+    @discardableResult
+    public func edit(rideID: UUID, name: String, bikeID: UUID?) -> Bool {
+        guard let ride = library.ride(withID: rideID), !ride.isSample else { return false }
+        let oldName = ride.name
+        library.rename(ride, to: name)
+        var changed = ride.name != oldName
+        if let bikeID, let bike = library.bikes().first(where: { $0.id == bikeID }) {
+            changed = library.assign([ride], to: bike) > 0 || changed
+        }
+        return changed
+    }
+
     // MARK: - Trash (B-217)
 
     public func moveToTrash(rideID: UUID, at date: Date = .now) {
