@@ -106,7 +106,12 @@ Danach lässt sich das Modell nur noch **erweitern** (neue Felder und Typen), ni
    ```bash
    gh release create v1.8.3 dist/Wattspur-1.8.3-*.dmg dist/Wattspur-1.8.3-*.dmg.sha256 --title "Wattspur 1.8.3" --notes-file <Abschnitt>
    ```
-3. Ab der ersten notarisierten Version: Im Handbuch (`docs/user-guide/*/01-installation.md`) und in der README gilt der Gatekeeper-Schritt nur noch für Versionen bis 1.8.2.
+3. **iPhone-App:** Jede Version, die zu TestFlight geht, bekommt ein eigenes Release ohne Datei, nur mit ihrem Abschnitt „iPhone app x.y.z“ aus dem Changelog. Es ist als Vorabversion markiert und nie „Latest“, damit die Update-Prüfung des Mac (`releases/latest`) weiter die Mac-Version findet:
+   ```bash
+   git tag ios-0.5.0 && git push origin ios-0.5.0
+   gh release create ios-0.5.0 --title "Wattspur iOS 0.5.0" --notes-file <Abschnitt> --prerelease --latest=false
+   ```
+4. Ab der ersten notarisierten Version: Im Handbuch (`docs/user-guide/*/01-installation.md`) und in der README gilt der Gatekeeper-Schritt nur noch für Versionen bis 1.8.2.
 
 ## Siehe auch
 
