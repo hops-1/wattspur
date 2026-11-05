@@ -12,6 +12,11 @@
 	<array>
 		<string>CloudKit</string>
 	</array>
+	<!-- The widget "This Week" reads the week the app writes here (B-224, iOSShared/WidgetShare.swift). -->
+	<key>com.apple.security.application-groups</key>
+	<array>
+		<string>group.io.github.hops-1.wattspur</string>
+	</array>
 	<!-- Silent pushes when the Mac changed something; Xcode sets "production" for TestFlight. -->
 	<key>aps-environment</key>
 	<string>development</string>
