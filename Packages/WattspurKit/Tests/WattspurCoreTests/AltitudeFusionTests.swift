@@ -34,11 +34,14 @@ struct AltitudeFusionTests {
             let gps = height + Self.noise(second)
             let value = fusion.altitude(gps: gps, verticalAccuracy: 5, barometer: height - 150,
                                         at: Self.start.addingTimeInterval(Double(second)))
-            fused.append(value ?? .nan)
+            // No height until the level is found, so no jump at the start.
+            if second < AltitudeFusion.anchorCount - 1 { #expect(value == nil) }
+            guard let value else { continue }
+            fused.append(value)
             gpsOnly.append(gps)
             truth.append(height)
         }
-        let worst = zip(fused, truth).dropFirst(10).map { abs($0 - $1) }.max() ?? .infinity
+        let worst = zip(fused, truth).map { abs($0 - $1) }.max() ?? .infinity
         #expect(worst < 2)
         #expect(abs(Self.ascent(fused) - 50) < 3)
         // The GPS alone counts its noise as climbing.
@@ -65,14 +68,32 @@ struct AltitudeFusionTests {
         #expect(fusion.altitude(gps: nil, verticalAccuracy: -1, barometer: nil, at: Self.start) == nil)
     }
 
-    @Test("Inaccurate GPS heights do not set the level; until a good one comes the GPS height stays")
+    @Test("Inaccurate GPS heights do not set the level; until it is found there is no height")
     func inaccurateGPS() {
         var fusion = AltitudeFusion()
-        #expect(fusion.altitude(gps: 300, verticalAccuracy: 40, barometer: 0, at: Self.start) == 300)
+        #expect(fusion.altitude(gps: 300, verticalAccuracy: 40, barometer: 0, at: Self.start) == nil)
+        #expect(fusion.altitude(gps: 180, verticalAccuracy: 5, barometer: 1, at: Self.start.addingTimeInterval(1)) == nil)
         #expect(fusion.offset == nil)
-        #expect(fusion.altitude(gps: 180, verticalAccuracy: 5, barometer: 1, at: Self.start.addingTimeInterval(1)) == 180)
+        // With fewer than five good heights the level is set after the timeout.
+        let later = Self.start.addingTimeInterval(1 + AltitudeFusion.anchorTimeout)
+        #expect(fusion.altitude(gps: nil, verticalAccuracy: -1, barometer: 3, at: later) == 182)
         #expect(fusion.offset == 179)
-        // Without GPS height for a moment the barometer carries on at the level found.
-        #expect(fusion.altitude(gps: nil, verticalAccuracy: -1, barometer: 3, at: Self.start.addingTimeInterval(2)) == 182)
+    }
+
+    @Test("At a standstill the first seconds give no climb (iPhone test 5.11.2026)")
+    func standstill() {
+        // GPS heights of 51 s in the office, one per second; the barometer stays at the start.
+        let gps = [176.7, 176.7, 176.7, 180.6, 180.6, 181.8, 182.1, 182.1, 182.1, 182.2, 182.4, 182.4]
+            + Array(repeating: 182.5, count: 26)
+        var fusion = AltitudeFusion()
+        let heights = gps.indices.compactMap { second in
+            fusion.altitude(gps: gps[second], verticalAccuracy: 8, barometer: 0.1 * sin(Double(second)),
+                            at: Self.start.addingTimeInterval(Double(second)))
+        }
+        #expect(heights.count == gps.count - (AltitudeFusion.anchorCount - 1))
+        #expect((heights.max() ?? 0) - (heights.min() ?? 0) < 1)
+        #expect(Self.ascent(heights) == 0)
+        // Before, the first height was 176.7 m and the start counted almost 4 m of climb.
+        #expect(Self.ascent(gps) > 3)
     }
 }

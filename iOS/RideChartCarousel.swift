@@ -53,6 +53,8 @@ private struct ChartPage: View {
     var body: some View {
         let values = points.compactMap { point in point[keyPath: measure.value].map { (km: point.distanceKm, y: $0) } }
         let domain = yDomain(values.map(\.y))
+        // From the start to the end of the ride; left alone, Charts rounds up (30.7 km → 40 km).
+        let lastKm = max(points.map(\.distanceKm).max() ?? 0, 0.1)
         VStack(alignment: .leading, spacing: 8) {
             HStack(alignment: .lastTextBaseline) {
                 Label(title, systemImage: symbol)
@@ -94,6 +96,7 @@ private struct ChartPage: View {
             .onChange(of: selectedKm) {
                 spot = selectedKm.flatMap { track.fix(atDistanceKm: $0) }
             }
+            .chartXScale(domain: 0...lastKm)
             .chartYScale(domain: domain)
             .chartPlotStyle { $0.clipped() }
             .chartXAxisLabel("km")
