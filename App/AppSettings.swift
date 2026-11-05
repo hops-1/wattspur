@@ -33,6 +33,8 @@ enum SettingsKey {
     static let chartAxis = "chartAxis"
     /// The route on the ride's map coloured by curve (B-181).
     static let routeByCurves = "routeByCurves"
+    /// The ride's map coloured by lean angle, for rides with lean angles (B-247).
+    static let routeByLean = "routeByLean"
     /// The layer "Curvy roads" on the maps (B-183).
     static let showsCurvyRoads = "showsCurvyRoads"
     static let compareShowsDeviation = "compareShowsDeviation"

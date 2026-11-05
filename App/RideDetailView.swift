@@ -62,6 +62,11 @@ private struct RideDetailContent: View {
     /// The route in pieces by curve (B-181) and whether the map shows them.
     @State private var curves: [CurvatureAnalyzer.Piece] = []
     @AppStorage(SettingsKey.routeByCurves) private var colourByCurves = false
+    /// Lean, acceleration and sprint, and the route by lean angle (B-247); only rides recorded with
+    /// the iPhone app from 0.5.1 on have them.
+    @State private var motion: RideMotion?
+    @State private var leanStretches: [RideMotion.LeanStretch] = []
+    @AppStorage(SettingsKey.routeByLean) private var colourByLean = true
     @AppStorage(SettingsKey.showsCurvyRoads) private var showsCurvyRoads = false
     @Environment(CurvyRoadsStore.self) private var curvyRoads
     @State private var points: [ChartPoint] = []
@@ -109,6 +114,8 @@ private struct RideDetailContent: View {
             let samples = ride.samples
             route = RideSeries.route(from: samples)
             curves = CurvatureAnalyzer.analyze(samples).pieces
+            motion = RideMotion(samples: samples, motorized: ride.isMotorized)
+            leanStretches = RideMotion.leanStretches(samples)
             points = RideSeries.chartPoints(from: samples)
             timePoints = RideSeries.chartPoints(from: samples, axis: .time)
             cursor.reset(track: RideTrack(samples: samples))
@@ -186,8 +193,11 @@ extension RideDetailContent {
             RideSourceLine(ride: ride)
             routeLine
 
-            RideMapView(route: route, mapType: mapType, joins: joins, newStretches: newPaths.result(for: ride)?.stretches ?? [],
-                        curves: colourByCurves ? curves : [], curvyRoads: curvyRoads.set(enabled: showsCurvyRoads))
+            // The route by lean angle hides the new stretches, which would cover it (B-247).
+            RideMapView(route: route, mapType: mapType, joins: joins,
+                        newStretches: showsLean ? [] : newPaths.result(for: ride)?.stretches ?? [],
+                        curves: colourByCurves ? curves : [], leanStretches: colourByLean ? leanStretches : [],
+                        curvyRoads: curvyRoads.set(enabled: showsCurvyRoads))
                 .frame(height: mapHeight)
                 // A fresh map for each ride; route and new paths update it in place,
                 // drawn in a fixed order (B-127).
@@ -197,19 +207,41 @@ extension RideDetailContent {
                         .padding(12)
                 }
                 .overlay(alignment: .topLeading) {
-                    if !curves.isEmpty {
-                        Button { colourByCurves.toggle() } label: {
-                            Image(systemName: "road.lanes.curved.right")
+                    HStack(spacing: 8) {
+                        if !curves.isEmpty {
+                            Button {
+                                colourByCurves.toggle()
+                                if colourByCurves { colourByLean = false }
+                            } label: {
+                                Image(systemName: "road.lanes.curved.right")
+                            }
+                            .buttonStyle(.glass)
+                            .buttonBorderShape(.circle)
+                            .tint(colourByCurves ? Color.accentColor : nil)
+                            .help(Text("Color the route by curves"))
+                            .accessibilityLabel(Text("Color the route by curves"))
+                            .accessibilityValue(Text(colourByCurves ? LocalizedStringKey("On") : LocalizedStringKey("Off")))
+                            .accessibilityAddTraits(.isToggle)
                         }
-                        .buttonStyle(.glass)
-                        .buttonBorderShape(.circle)
-                        .tint(colourByCurves ? Color.accentColor : nil)
-                        .help(Text("Color the route by curves"))
-                        .accessibilityLabel(Text("Color the route by curves"))
-                        .accessibilityValue(Text(colourByCurves ? LocalizedStringKey("On") : LocalizedStringKey("Off")))
-                        .accessibilityAddTraits(.isToggle)
-                        .padding(12)
+                        // One colouring at a time: curves or lean angle (B-247).
+                        if !leanStretches.isEmpty {
+                            let on = showsLean
+                            Button {
+                                colourByLean = !on
+                                if colourByLean { colourByCurves = false }
+                            } label: {
+                                Image(systemName: "angle")
+                            }
+                            .buttonStyle(.glass)
+                            .buttonBorderShape(.circle)
+                            .tint(on ? Color.accentColor : nil)
+                            .help(Text("Color the route by lean angle"))
+                            .accessibilityLabel(Text("Color the route by lean angle"))
+                            .accessibilityValue(Text(on ? LocalizedStringKey("On") : LocalizedStringKey("Off")))
+                            .accessibilityAddTraits(.isToggle)
+                        }
                     }
+                    .padding(12)
                 }
         }
     }
@@ -234,7 +266,7 @@ extension RideDetailContent {
                 RecordBanner(records: held, onShowRecords: onShowRecords)
             }
             let fresh = newPaths.result(for: ride)
-            KeyFiguresGrid(ride: ride, records: Set(held.map(\.kind)), calories: calories)
+            KeyFiguresGrid(ride: ride, records: Set(held.map(\.kind)), calories: calories, motion: motion)
             if let fresh, !ride.isSample {
                 NewPathsFigure(share: fresh.share, distance: fresh.share * ride.distance)
                     .frame(maxWidth: 420, alignment: .leading)
@@ -270,6 +302,9 @@ extension RideDetailContent {
         let others = RideRecords.records(all.filter { $0.id != ride.id }, calendar: calendar)
         return kinds.map { kind in RecordBanner.Held(kind: kind, nextBest: others.first { $0.kind == kind }?.value) }
     }
+
+    /// Whether the map shows the route by lean angle (B-247).
+    private var showsLean: Bool { colourByLean && !colourByCurves && !leanStretches.isEmpty }
 
     private var chartPoints: [ChartPoint] { chartAxis == .time ? timePoints : points }
 
@@ -324,6 +359,8 @@ struct KeyFiguresGrid: View {
     /// Records the ride holds; their figures get a badge (ADV-R2).
     var records: Set<RecordKind> = []
     var calories: CalorieModel = .fromWork
+    /// Lean, acceleration and sprint from the motion sensors of the iPhone (B-247): a third row.
+    var motion: RideMotion?
 
     /// `nil` without power: the calories come from the work (B-145).
     private var kilocalories: Double? {
@@ -335,6 +372,9 @@ struct KeyFiguresGrid: View {
     private var notInFile: String? { ride.source == .gpx ? String(localized: "Not in the file") : nil }
 
     private var co2: Double { ride.distance / 1000 * 0.159 }
+
+    private static func g(_ value: Double) -> String { value.formatted(.number.precision(.fractionLength(2))) }
+    private static func sprintSeconds(_ value: Double) -> String { value.formatted(.number.precision(.fractionLength(1))) }
 
     /// Ride time, distance, speed and ascent were computed from the GPS points (B-142).
     private var totalsEstimated: Bool { ride.summaryEstimatedFromGPS }
@@ -366,6 +406,19 @@ struct KeyFiguresGrid: View {
                     Figure("CO₂ saved", value: co2.formatted(.number.precision(.fractionLength(1))), unit: "kg", estimated: true,
                            note: String(localized: "Calculated from the distance"),
                            caption: ride.source == .gpx ? String(localized: "From the distance") : nil)
+                }
+            }
+            if let motion {
+                GridRow {
+                    Figure("Max. Lean Left", value: RideFormat.lean(motion.maxLeanLeft))
+                    Figure("Max. Lean Right", value: RideFormat.lean(motion.maxLeanRight))
+                    Figure("Max. Acceleration", value: motion.strongestAcceleration.map(Self.g) ?? "–", unit: "g")
+                    Figure("Max. Braking", value: motion.strongestBraking.map(Self.g) ?? "–", unit: "g")
+                }
+                if let sprint = motion.sprint {
+                    GridRow {
+                        Figure("0–\(Int(sprint.targetKmh)) km/h", value: Self.sprintSeconds(sprint.seconds), unit: "s")
+                    }
                 }
             }
         }
