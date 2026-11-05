@@ -62,6 +62,17 @@ struct RideChartsView: View {
             } else {
                 NoDataCard(title: "Power", message: "This file contains no power data.")
             }
+            // Only rides recorded with the iPhone app from 0.5.1 on have a lean angle (B-247).
+            if !points.isEmpty, points.contains(where: { $0.lean != nil }) {
+                let leans = points.compactMap(\.lean)
+                let reach = max(15, (leans.map(abs).max() ?? 0) * 1.1)
+                ChartCard(
+                    title: "Lean Angle", color: .metricLean, points: points, axis: axis, joins: joinX, value: \.lean, fixValue: \.lean,
+                    figures: [("Left", RideFormat.lean(max(leans.max() ?? 0, 0))),
+                              ("Right", RideFormat.lean(max(-(leans.min() ?? 0), 0)))],
+                    unit: "°", yDomain: -reach...reach, isLean: true
+                )
+            }
         }
     }
 
@@ -109,6 +120,8 @@ private struct ChartCard: View {
     let yDomain: ClosedRange<Double>
     /// The elevation card adds the grade around the spot to its readout (B-200).
     var showsGrade = false
+    /// Lean angles around 0: left up, right down; the area starts at 0 and the readout says the side (B-247).
+    var isLean = false
 
     /// Kilometres or minutes since the start.
     private func x(_ point: ChartPoint) -> Double {
@@ -136,6 +149,10 @@ private struct ChartCard: View {
                                          : Self.clock(fix.time / 60)
         let digits = unit == "km/h" ? 1 : 0
         var text = fix[keyPath: fixValue].map { "\(position) · \($0.formatted(.number.precision(.fractionLength(digits)))) \(unit)" } ?? position
+        if isLean, let lean = fix.lean {
+            let side = lean > 0.5 ? String(localized: "left") : lean < -0.5 ? String(localized: "right") : ""
+            text = "\(position) · \(RideFormat.lean(lean)) \(side)".trimmingCharacters(in: .whitespaces)
+        }
         if showsGrade, fix.altitude != nil, let grade = cursor?.track.gradeText(atDistanceKm: fix.distanceKm) {
             text += " · \(grade)"
         }
@@ -175,7 +192,7 @@ private struct ChartCard: View {
                         // never reaches below the plot when the axis does not start at 0.
                         AreaMark(
                             x: .value("Distance", x(point)),
-                            yStart: .value(unit, yDomain.lowerBound),
+                            yStart: .value(unit, isLean ? 0 : yDomain.lowerBound),
                             yEnd: .value(unit, y),
                             series: .value("Segment", point.segment)
                         )
@@ -247,7 +264,9 @@ private struct ChartCard: View {
                 AxisMarks(position: .leading, values: .automatic(desiredCount: 3)) { mark in
                     AxisGridLine(stroke: StrokeStyle(lineWidth: 0.5, dash: [3, 3]))
                     AxisValueLabel {
-                        if let v = mark.as(Double.self) { Text(verbatim: "\(v.formatted(.number.precision(.fractionLength(0)))) \(unit)") }
+                        if let v = mark.as(Double.self) {
+                            Text(verbatim: "\((isLean ? abs(v) : v).formatted(.number.precision(.fractionLength(0)))) \(unit)")
+                        }
                     }
                 }
             }
@@ -268,6 +287,7 @@ extension Color {
     static let metricSpeed = Color.adaptive(light: 0x0A6ED1, dark: 0x4DA3FF)
     static let metricCadence = Color.adaptive(light: 0x7A4FC9, dark: 0xA98BEF)
     static let metricPower = Color.adaptive(light: 0xC2410C, dark: 0xFF8A4C)
+    static let metricLean = Color.adaptive(light: 0x4C51BF, dark: 0x8C93FF)
     /// Bars that are not picked: at least 3:1 against the window background (NFR-16).
     static let chartInactive = Color.adaptive(light: 0x86868B, dark: 0x7C7C80)
 

@@ -44,4 +44,9 @@ enum RideFormat {
     static func longDate(_ date: Date, timeZone: TimeZone = .current) -> String {
         date.formatted(Date.FormatStyle(date: .complete, time: .shortened, timeZone: timeZone))
     }
+
+    /// "38°" of lean, without a sign (B-247).
+    static func lean(_ degrees: Double) -> String {
+        "\(abs(degrees).formatted(.number.precision(.fractionLength(0))))°"
+    }
 }

@@ -2,6 +2,16 @@
   "sourceLanguage" : "en",
   "strings" : {
     "" : {},
+    "0–%lld km/h" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "0–%lld km/h"
+          }
+        }
+      }
+    },
     "10–25 km" : {
       "localizations" : {
         "de" : {
@@ -72,6 +82,86 @@
         }
       }
     },
+    "Color the route by lean angle" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Spur nach Schräglage einfärben"
+          }
+        }
+      }
+    },
+    "Lean Angle" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Schräglage"
+          }
+        }
+      }
+    },
+    "Left" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Links"
+          }
+        }
+      }
+    },
+    "left" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "links"
+          }
+        }
+      }
+    },
+    "Max. Acceleration" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Max. Beschleunigung"
+          }
+        }
+      }
+    },
+    "Max. Braking" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Max. Bremsung"
+          }
+        }
+      }
+    },
+    "Max. Lean Left" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Max. Schräglage links"
+          }
+        }
+      }
+    },
+    "Max. Lean Right" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Max. Schräglage rechts"
+          }
+        }
+      }
+    },
     "Off. The library is only on this Mac." : {
       "localizations" : {
         "de" : {
@@ -98,6 +188,26 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Über 50 km"
+          }
+        }
+      }
+    },
+    "Right" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Rechts"
+          }
+        }
+      }
+    },
+    "right" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "rechts"
           }
         }
       }
@@ -188,6 +298,16 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Diese Version von Wattspur kann iCloud noch nicht nutzen. Der Sync kommt mit einer vom Entwickler signierten Version."
+          }
+        }
+      }
+    },
+    "Track coloured by lean angle, from green upright to purple at 40° and more" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Spur nach Schräglage eingefärbt, von Grün aufrecht bis Lila ab 40°"
           }
         }
       }

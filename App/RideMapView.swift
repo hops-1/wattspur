@@ -78,6 +78,8 @@ struct RideMapView: View {
     var newStretches: [[RoutePoint]] = []
     /// The route in pieces by curve (B-181); empty draws it in one colour.
     var curves: [CurvatureAnalyzer.Piece] = []
+    /// The route by lean angle (B-247); used only while `curves` is empty.
+    var leanStretches: [RideMotion.LeanStretch] = []
     /// The imported curvy roads, drawn below the route; `nil` while the layer is off (B-183).
     var curvyRoads: CurvyRoadSet?
 
@@ -97,14 +99,15 @@ struct RideMapView: View {
     }
 
     var body: some View {
-        RideMapRepresentable(coordinates: coordinates, newStretches: newStretches, curves: curves, curvyRoads: curvyRoads,
+        RideMapRepresentable(coordinates: coordinates, newStretches: newStretches, curves: curves,
+                             leanStretches: curves.isEmpty ? leanStretches : [], curvyRoads: curvyRoads,
                              ticks: JoinTick.ticks(of: joins), mapType: mapType, isLoop: isLoop, dark: colorScheme == .dark, cursor: cursor)
             .mapCredits(for: mapType, curvyRoads: curvyRoads != nil)
             .clipShape(RoundedRectangle(cornerRadius: 14))
             .overlay(alignment: .bottomLeading) {
                 VStack(alignment: .leading, spacing: 8) {
                     if curvyRoads != nil { CurvyRoadsLegend() }
-                    if !curves.isEmpty { CurvesLegend() }
+                    if !curves.isEmpty { CurvesLegend() } else if !leanStretches.isEmpty { LeanLegend() }
                     if !newStretches.isEmpty { NewPathsLegend() }
                 }
                 .padding(.leading, 12)
@@ -128,6 +131,7 @@ private struct RideMapRepresentable: NSViewRepresentable {
     let coordinates: [CLLocationCoordinate2D]
     let newStretches: [[RoutePoint]]
     let curves: [CurvatureAnalyzer.Piece]
+    let leanStretches: [RideMotion.LeanStretch]
     let curvyRoads: CurvyRoadSet?
     let ticks: [JoinTick]
     let mapType: RideMapType
@@ -174,14 +178,15 @@ private struct RideMapRepresentable: NSViewRepresentable {
         // Rebuilt whenever route, new stretches or appearance change; one overlay, so
         // there is no order between route and new stretches left to MapKit.
         let drawingKey = "\(coordinates.count)|\(coordinates.first.map { "\($0.latitude),\($0.longitude)" } ?? "")"
-            + "|\(newStretches.map(\.count))|\(curves.count)|\(curves.first?.points.count ?? 0)|\(curvyRoads?.id.uuidString ?? "-")|\(ticks.count)|\(ticks.first.map { "\($0.coordinate.latitude)" } ?? "")|\(dark)"
+            + "|\(newStretches.map(\.count))|\(curves.count)|\(curves.first?.points.count ?? 0)|\(leanStretches.count)|\(leanStretches.first?.latitude.count ?? 0)|\(curvyRoads?.id.uuidString ?? "-")|\(ticks.count)|\(ticks.first.map { "\($0.coordinate.latitude)" } ?? "")|\(dark)"
         if coordinator.drawingKey != drawingKey {
             coordinator.drawingKey = drawingKey
             map.removeOverlays(map.drawnOverlays)
             // The curvy roads first, so the route lies on top of them.
             if let curvyRoads { map.addOverlay(CurvyRoadsOverlay(set: curvyRoads, dark: dark), level: map.drawnOverlayLevel) }
             if coordinates.count > 1 {
-                map.addOverlay(RideRouteOverlay(route: coordinates, newStretches: newStretches, curves: curves, ticks: ticks, dark: dark), level: map.drawnOverlayLevel)
+                map.addOverlay(RideRouteOverlay(route: coordinates, newStretches: newStretches, curves: curves,
+                                                 leanStretches: leanStretches, ticks: ticks, dark: dark), level: map.drawnOverlayLevel)
             }
         }
         // Markers and the visible area follow the route only, not the new stretches.
@@ -364,7 +369,7 @@ private final class RideMarker: NSObject, MKAnnotation {
 private final class RideRouteOverlay: NSObject, MKOverlay {
     let route: [MKMapPoint]
     let stretches: [[MKMapPoint]]
-    /// The route by curve, with the colour of each kind resolved for the appearance (B-181).
+    /// The route by curve (B-181) or by lean angle (B-247), with the colours resolved for the appearance.
     let pieces: [(color: CGColor, points: [MKMapPoint])]
     let ticks: [(point: MKMapPoint, across: (dx: Double, dy: Double))]
     let routeColor: CGColor
@@ -372,21 +377,27 @@ private final class RideRouteOverlay: NSObject, MKOverlay {
     let boundingMapRect: MKMapRect
     var coordinate: CLLocationCoordinate2D { MKMapPoint(x: boundingMapRect.midX, y: boundingMapRect.midY).coordinate }
 
-    init(route: [CLLocationCoordinate2D], newStretches: [[RoutePoint]], curves: [CurvatureAnalyzer.Piece], ticks: [JoinTick], dark: Bool) {
+    init(route: [CLLocationCoordinate2D], newStretches: [[RoutePoint]], curves: [CurvatureAnalyzer.Piece],
+         leanStretches: [RideMotion.LeanStretch] = [], ticks: [JoinTick], dark: Bool) {
         self.route = route.map(MKMapPoint.init)
         stretches = newStretches.map { $0.map { MKMapPoint(CLLocationCoordinate2D(latitude: $0.latitude, longitude: $0.longitude)) } }
         self.ticks = ticks.map { (MKMapPoint($0.coordinate), $0.across) }
         var routeColor = CGColor(gray: 0, alpha: 1)
         var newColor = CGColor(gray: 0, alpha: 1)
         var kindColors: [CurvatureAnalyzer.Kind: CGColor] = [:]
+        var bandColors: [RideMotion.LeanBand: CGColor] = [:]
         NSAppearance(named: dark ? .darkAqua : .aqua)?.performAsCurrentDrawingAppearance {
             routeColor = NSColor.controlAccentColor.cgColor
             newColor = NSColor(Color.newPaths).cgColor
             for kind in CurvatureAnalyzer.Kind.allCases { kindColors[kind] = NSColor(Color.curve(kind)).cgColor }
+            for band in RideMotion.LeanBand.allCases { bandColors[band] = NSColor(Color.lean(band)).cgColor }
         }
         pieces = curves.map { piece in
             (kindColors[piece.kind] ?? routeColor,
              piece.points.map { MKMapPoint(CLLocationCoordinate2D(latitude: $0.latitude, longitude: $0.longitude)) })
+        } + leanStretches.map { stretch in
+            (bandColors[stretch.band] ?? routeColor,
+             zip(stretch.latitude, stretch.longitude).map { MKMapPoint(CLLocationCoordinate2D(latitude: $0, longitude: $1)) })
         }
         self.routeColor = routeColor
         self.newColor = newColor
@@ -499,5 +510,41 @@ private struct CurvesLegend: View {
             Capsule().fill(Color.curve(kind)).frame(width: 30, height: 4.5).accessibilityHidden(true)
             Text(text).font(.caption)
         }
+    }
+}
+
+extension Color {
+    /// The route by lean angle (B-247), as on the iPhone (B-246): from green upright through yellow and
+    /// orange to red and purple.
+    static func lean(_ band: RideMotion.LeanBand) -> Color {
+        switch band {
+        case .upright: .adaptive(light: 0x2E9E44, dark: 0x5BD075)
+        case .slight: .adaptive(light: 0xE0A100, dark: 0xFFD43B)
+        case .medium: .adaptive(light: 0xE8590C, dark: 0xFF922B)
+        case .strong: .adaptive(light: 0xC81D25, dark: 0xFF5A5F)
+        case .extreme: .adaptive(light: 0x8E3FC9, dark: 0xC08BFF)
+        }
+    }
+}
+
+/// What the colours of the route by lean angle mean (B-247).
+private struct LeanLegend: View {
+    var body: some View {
+        VStack(alignment: .leading, spacing: 6) {
+            Text("Lean Angle").font(.caption.weight(.bold))
+            ForEach(RideMotion.LeanBand.allCases.reversed(), id: \.self) { band in
+                HStack(spacing: 8) {
+                    Capsule().fill(Color.lean(band)).frame(width: 30, height: 4.5).accessibilityHidden(true)
+                    Text(verbatim: band == .extreme ? "40° +" : "\(Int(band.lowerBound))–\(Int(band.lowerBound) + 10)°")
+                        .font(.caption)
+                        .monospacedDigit()
+                }
+            }
+        }
+        .padding(.vertical, 8)
+        .padding(.horizontal, 10)
+        .background(.regularMaterial, in: RoundedRectangle(cornerRadius: 10))
+        .accessibilityElement(children: .ignore)
+        .accessibilityLabel(Text("Track coloured by lean angle, from green upright to purple at 40° and more"))
     }
 }
