@@ -72,6 +72,8 @@ targets:
     platform: iOS
     sources:
       - path: iOS
+      # Shared with the widget extension: the Live Activity's data and its Pause button (B-223).
+      - path: iOSShared
       - path: App/SampleRide.fit
         type: file
         buildPhase: resources
@@ -80,12 +82,16 @@ targets:
         buildPhase: resources
     dependencies:
       - package: WattspurKit
+      # Embedded in the app: Live Activity of a recording (B-223), later the widget (B-224).
+      - target: Wattspur Widgets
     configFiles:
       Debug: Config/iOS.xcconfig
       Release: Config/iOS.xcconfig
     settings:
       base:
         PRODUCT_BUNDLE_IDENTIFIER: io.github.hops-1.wattspur.ios
+        # Live Activity while recording (B-223).
+        INFOPLIST_KEY_NSSupportsLiveActivities: YES
         PRODUCT_NAME: Wattspur
         MARKETING_VERSION: "0.4.0"
         # Higher than the last TestFlight upload (0.4.0 build 3)
@@ -119,6 +125,33 @@ targets:
         INFOPLIST_PREFIX_HEADER: $(DERIVED_FILE_DIR)/WattspurGitInfo.h
     preBuildScripts:
       - *gitCommitScript
+  # Widget extension of the iPhone app (B-223, B-224). Its version must match the app's: change
+  # MARKETING_VERSION and CURRENT_PROJECT_VERSION in both targets for every upload.
+  Wattspur Widgets:
+    type: app-extension
+    platform: iOS
+    sources:
+      - path: iOSWidgets
+      - path: iOSShared
+    configFiles:
+      Debug: Config/iOS.xcconfig
+      Release: Config/iOS.xcconfig
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: io.github.hops-1.wattspur.ios.widgets
+        PRODUCT_NAME: WattspurWidgets
+        MARKETING_VERSION: "0.4.0"
+        CURRENT_PROJECT_VERSION: "4"
+        TARGETED_DEVICE_FAMILY: "1"
+        GENERATE_INFOPLIST_FILE: YES
+        INFOPLIST_FILE: Config/iOS-Widgets-Info.plist
+        INFOPLIST_KEY_CFBundleDisplayName: Wattspur
+        INFOPLIST_KEY_NSHumanReadableCopyright: "© 2026 Nils Wiese"
+        LOCALIZATION_PREFERS_STRING_CATALOGS: YES
+        SWIFT_EMIT_LOC_STRINGS: YES
+        SKIP_INSTALL: YES
+        # No iCloud for the extension (Config/iOS.xcconfig sets the app's entitlements).
+        CODE_SIGN_ENTITLEMENTS: ""
 schemes:
   Wattspur iOS:
     build:

@@ -23,7 +23,7 @@ Voraussetzung: Der Developer-Account ist aktiv, und Xcode kennt ihn (Xcode › S
 4. **TestFlight › Testinformationen:** Beschreibung der Beta, E-Mail für Feedback, Hinweise zum Testen (Texte unten).
 
 ## Jede Version: Archiv hochladen
-1. `MARKETING_VERSION` des Targets *Wattspur iOS* in `project.yml` setzen (zum Beispiel `0.3.0`). Die Build-Nummer (`CURRENT_PROJECT_VERSION`) muss je Upload steigen; App Store Connect lehnt eine schon benutzte Nummer ab.
+1. `MARKETING_VERSION` des Targets *Wattspur iOS* in `project.yml` setzen (zum Beispiel `0.3.0`). Die Build-Nummer (`CURRENT_PROJECT_VERSION`) muss je Upload steigen; App Store Connect lehnt eine schon benutzte Nummer ab. **Ab iOS 0.5 (B-223):** Das Target *Wattspur Widgets* (Erweiterung für Live-Aktivität und Widget) braucht dieselbe Version und Build-Nummer wie die App, also beide Targets ändern. Beim ersten Upload legt die automatische Signierung die neue Bundle-ID `io.github.hops-1.wattspur.ios.widgets` im Developer-Account an.
 2. `xcodegen generate`, dann in Xcode das Schema **Wattspur iOS** und als Ziel **Any iOS Device (arm64)** wählen.
 3. **Product › Archive.** Danach öffnet sich der Organizer.
 4. **Distribute App › TestFlight & App Store › Distribute.** Xcode signiert mit dem Distribution-Zertifikat (legt es beim ersten Mal selbst an) und lädt hoch.

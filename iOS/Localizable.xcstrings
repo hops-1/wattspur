@@ -417,6 +417,16 @@
         }
       }
     },
+    "Pause or Resume Ride" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Fahrt pausieren oder fortsetzen"
+          }
+        }
+      }
+    },
     "Period" : {
       "localizations" : {
         "de" : {
