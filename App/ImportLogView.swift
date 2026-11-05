@@ -200,7 +200,7 @@ struct ImportLogView: View {
     private func importFiles(_ urls: [URL]) {
         let library = sharedLibrary.using(undoManager)
         flow.onImported = { ids in suggestions.suggest(involving: ids, library: library) }
-        flow.start(urls, library: library, importLog: importLog)
+        flow.start(urls, library: library, record: importLog.record)
     }
 }
 
