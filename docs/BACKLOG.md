@@ -651,7 +651,7 @@ Vorschlag von Claude, von Nils am 5.11.2026 entschieden. Ziel: Die App taugt am 
 | 4 | B-223 Live-Aktivität |
 | 5 | B-224 Widget „Diese Woche“ (App Group) |
 | 6 | B-225 Kurzbefehle und Siri |
-| 7 | Release **iOS 0.5.0** und **Mac 1.8.5**: Versionen, Changelog, Handbuch EN/DE, Upload zu TestFlight, DMG notarisiert; am Mac prüfen, dass eine FIT aus der Flow-App über den Ordner ankommt |
+| 7 | Release **iOS 0.5.0** und **Mac 1.8.5**: Versionen, Changelog, Handbuch EN/DE, Upload zu TestFlight, DMG notarisiert; am Mac prüfen, dass eine FIT aus der Flow-App über den Ordner ankommt **Vorbereitet (5.11.2026):** Mac 1.8.5, iOS 0.5.0 Build 5 in App und Erweiterung, Changelog `[1.8.5]` mit iPhone 0.5.0, Handbuch Kapitel 9 (quer, Fahrten finden, Sperrbildschirm, Widget, Siri) und Kapitel 4 (Filter Strecke); offen: DMG bauen und notarisieren, Upload zu TestFlight (beim ersten Upload legt die Signierung die Bundle-ID der Erweiterung und die App Group an), Tests auf dem iPhone: Halterung, Live-Aktivität, Widget, Siri per Sprache |
 
 | # | Story | Größe | Hängt ab von | Status |
 |---|---|---|---|---|

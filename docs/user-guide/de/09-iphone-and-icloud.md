@@ -71,6 +71,43 @@ Beim ersten Aufnehmen fragt das iPhone einmal nach **Bewegung & Fitness**. Erlau
 ## Eine Fahrt als GPX teilen
 In der Detailansicht einer Fahrt oben rechts, oder in der Liste mit langem Druck auf die Fahrt: **GPX teilen**. Die Datei enthält die ganze Spur mit Zeit und Höhe, dazu das Bike. Du kannst sie per AirDrop an den Mac schicken, in die Dateien-App legen oder in komoot öffnen. Fahrten ohne GPS lassen sich nicht teilen.
 
+## In der Halterung am Lenker (quer)
+Die meisten Halterungen am Lenker halten das iPhone quer. Wattspur läuft auch quer:
+- **Beim Aufnehmen** füllt die Karte den Bildschirm. Links zeigt eine Leiste das Tempo groß, darunter Ø, Strecke, Zeit, Höhe und Anstieg, unten Pause und Stopp.
+- **Die Tab-Leiste** sitzt links unten, in allen Bereichen.
+- **Übersicht:** links die letzte Fahrt, rechts Woche, Monat, Jahr und alle Fahrten.
+- **Fahrten:** links die Liste, rechts die gewählte Fahrt.
+
+Soll sich der Bildschirm nicht drehen, schalte im Kontrollzentrum die Ausrichtungssperre ein.
+
+## Fahrten finden
+Über der Liste der Fahrten:
+- **Suchen** nach einem Namen, zum Beispiel „Michelstadt“. Groß und klein ist egal.
+- **Zeitraum:** diese Woche, dieser Monat, dieses Jahr, die letzten 30 oder 365 Tage oder alle Fahrten.
+- **Strecke:** unter 10 km, 10–25 km, 25–50 km oder über 50 km.
+- **Bike:** erst ab zwei Bikes.
+
+Darunter steht, wie viele Fahrten passen, zum Beispiel „2 von 40 Fahrten“. ✕ setzt alles zurück. Ein Tipp auf **Diese Woche**, **Dieser Monat** oder **Dieses Jahr** in der Übersicht öffnet die Fahrten dieses Zeitraums. Der Mac nutzt dieselben Regeln, beide finden also dieselben Fahrten.
+
+## Die Aufnahme auf dem Sperrbildschirm
+Während du aufnimmst, zeigt der **Sperrbildschirm** Zeit, Strecke und Tempo. Mit dem Knopf dort hältst du die Fahrt an und setzt sie fort. Auf iPhones mit **Dynamic Island** steht die Strecke neben der Kamera; halte den Finger darauf für mehr. Zum Beenden öffne Wattspur: Dort gibst du der Fahrt einen Namen und speicherst sie.
+
+## Widget „Diese Woche“
+1. Halte den Finger auf eine freie Stelle des Home-Bildschirms.
+2. Tippe auf **Bearbeiten › Widget hinzufügen** und wähle **Wattspur**.
+3. Wähle die kleine oder die mittlere Größe.
+
+Das Widget zeigt die Kilometer und Fahrten dieser Woche, mit einem Balken je Tag. Die mittlere Größe zeigt dazu deine letzte Fahrt. Die Zahlen sind dieselben wie in der Übersicht. Am Montag beginnt das Widget von selbst bei null.
+
+## Kurzbefehle und Siri
+Sag zum Beispiel:
+- „Starte eine Fahrt mit Wattspur“
+- „Fahrt beenden mit Wattspur“: Wattspur öffnet **Fahrt speichern**, wie bei Stopp.
+- „Wie viele Kilometer diese Woche in Wattspur“
+- „Öffne meine letzte Fahrt in Wattspur“
+
+Du findest die vier auch als Aktionen in der App **Kurzbefehle**, zum Beispiel für eine Automation, wenn sich das iPhone mit der Halterung verbindet.
+
 ## Motorrad
 Beim Aufnehmen lässt Wattspur Punkte weg, die eine unmögliche Geschwindigkeit ergeben würden. So fallen GPS-Sprünge heraus. Beim E-Bike liegt die Grenze bei 100 km/h. Wer mit dem Motorrad aufnimmt, stellt **Mehr › Aufnahme › Fahrzeug › Motorrad** ein. Dann gilt eine Grenze von 300 km/h.
 

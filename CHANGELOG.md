@@ -7,6 +7,27 @@ Every DMG handed out to testers corresponds to one entry below.
 
 ## [Unreleased]
 
+## [1.8.5] – 2026-11-05
+
+The ride list on the Mac gets a distance filter that works the same as on the iPhone. Together with it comes the iPhone app 0.5.0 for riding: landscape for the handlebar mount, search and filters, the recording on the Lock Screen, a widget and Siri.
+
+### Added
+
+- **Distance filter:** the filter menu of the ride list has **Distance** with the same steps as the iPhone: under 10 km, 10–25 km, 25–50 km and over 50 km. The chip above the list names it, for example “10–25 km”, and ✕ resets it with the other filters. Search, bike, period and distance now follow the same rule on the Mac and the iPhone, so both find the same rides (B-244, B-222).
+
+### Changed
+
+- **Import shared with the iPhone:** the steps of a manual import (the question about the bike, the comparison with a ride that is already there, the summary) now come from the same code on the Mac and the iPhone. Nothing changes in how it looks on the Mac (B-188).
+
+### iPhone app 0.5.0 (TestFlight, 2026-11-05)
+
+- **Landscape:** most handlebar mounts hold the iPhone sideways. Wattspur now works in landscape too. While recording, the map fills the screen, with a glass bar on the left: speed large, average, distance, time, height and ascent, Pause and Stop. The tab bar sits at the bottom left. The overview shows the last ride and the week, month, year and all rides side by side. Rides shows the list on the left and the chosen ride on the right. More has two columns. Whoever does not want landscape turns on the orientation lock of iOS (B-243).
+- **Search and filters:** above the ride list there is a search field for the name and menus for **Period**, **Distance** and, from two bikes on, **Bike**, with the number of hits (“2 of 40 rides”) and ✕ to reset. A tap on **This Week**, **This Month** or **This Year** in the overview opens the rides of that period (B-222).
+- **On the Lock Screen:** while recording, the Lock Screen and the Dynamic Island show the time, distance and speed, with a button for Pause and Resume. Stop stays in the app, where you name the ride (B-223).
+- **Widget “This Week”:** for the Home Screen, small or medium. It shows the kilometres and rides of the week, one bar per day and, in the medium size, the last ride. It has the same numbers as the overview and starts at zero on Monday by itself (B-224).
+- **Shortcuts and Siri:** “Start a ride with Wattspur”, “End the ride in Wattspur”, “How far did I ride this week in Wattspur” and “Open my last ride in Wattspur”, in German too. They also work as actions in the Shortcuts app. Ending a ride opens **Save Ride**, as Stop does (B-225).
+- **More room:** Overview, Rides and More no longer have a title at the top; the tab bar says where you are.
+
 ### iPhone app 0.4.0 (TestFlight, 2026-11-05)
 
 The iPhone gets the ride detail of the Mac: charts to swipe, linked to the map, editing, and rides from the Flow app. The Mac app has no visible change; its import now shares its steps with the iPhone (B-188) and comes with the next Mac version.
