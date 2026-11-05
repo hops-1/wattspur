@@ -1,6 +1,6 @@
 # Backlog – Wattspur
 
-Stand: 5.11.2026 (v0.28, Plan für iOS 0.5 „Unterwegs“ und Mac 1.8.5 mit Nils abgestimmt: Querformat, Filter und Suche, Live-Aktivität, Widget, Kurzbefehle; Mac 1.8.5 bringt den neuen Import und Filter und Suche; davor v0.27, Querformat auf dem iPhone mit Nils abgestimmt: B-243 als erste Story in iOS 0.5, Mockup „Wattspur quer“; davor v0.26, Plan für iOS 0.4 mit Nils abgestimmt: Bearbeiten, Messwerte, Karussell, Kopplung, FIT-Import, Barometer; Filter nach 0.5; B-240 bis B-242 neu; davor v0.25 vom 3.11.2026, Fahrtvergleich vom 3.11.2026 mit Bosch Flow, Wattspur iOS und Apple Watch: B-232 bis B-237 eingeordnet; davor v0.24 vom 2.11.2026, Plan für die iOS-App 0.3 bis 0.6 und Mac 1.8.3 mit Sync über CloudKit; davor v0.23, Plan für die iOS-App 0.1 und 0.2; davor v0.22, Plan für 1.8.2; davor v0.21 vom 1.11.2026, 1.8.1 umgesetzt: Steigung, Lastenrad, Kurvigkeit und Ebene „Kurvige Straßen“; davor v0.20 vom 28.10.2026, Release 1.8.0 „Kartenstile“ vorbereitet; davor v0.19 vom 27.10.2026, Plan für 1.8 „Kartenstile“, der Bereich „Fahrten“ B-125 nach 1.9 verschoben; davor v0.18 vom 26.10.2026, Plan für 1.7 in zwei Releases 1.7.0 und 1.7.1; davor v0.17 vom 25.10.2026, Release 1.6.2 mit Update-Hinweis B-172; davor 1.6.1 mit Sicherheits-Fix, Architektur-Aufräumen B-162 bis B-169 und zwei Karten-Verbesserungen B-170, B-171; Plan für 1.7 bis 1.9) · Die IDs in Klammern verweisen auf `REQUIREMENTS.md`.
+Stand: 5.11.2026 (v0.29, iOS 0.5.1 und Mac 1.8.6 „Beschleunigung und Schräglage“ eingeschoben: V-16, B-245 bis B-247; davor v0.28, Plan für iOS 0.5 „Unterwegs“ und Mac 1.8.5 mit Nils abgestimmt: Querformat, Filter und Suche, Live-Aktivität, Widget, Kurzbefehle; Mac 1.8.5 bringt den neuen Import und Filter und Suche; davor v0.27, Querformat auf dem iPhone mit Nils abgestimmt: B-243 als erste Story in iOS 0.5, Mockup „Wattspur quer“; davor v0.26, Plan für iOS 0.4 mit Nils abgestimmt: Bearbeiten, Messwerte, Karussell, Kopplung, FIT-Import, Barometer; Filter nach 0.5; B-240 bis B-242 neu; davor v0.25 vom 3.11.2026, Fahrtvergleich vom 3.11.2026 mit Bosch Flow, Wattspur iOS und Apple Watch: B-232 bis B-237 eingeordnet; davor v0.24 vom 2.11.2026, Plan für die iOS-App 0.3 bis 0.6 und Mac 1.8.3 mit Sync über CloudKit; davor v0.23, Plan für die iOS-App 0.1 und 0.2; davor v0.22, Plan für 1.8.2; davor v0.21 vom 1.11.2026, 1.8.1 umgesetzt: Steigung, Lastenrad, Kurvigkeit und Ebene „Kurvige Straßen“; davor v0.20 vom 28.10.2026, Release 1.8.0 „Kartenstile“ vorbereitet; davor v0.19 vom 27.10.2026, Plan für 1.8 „Kartenstile“, der Bereich „Fahrten“ B-125 nach 1.9 verschoben; davor v0.18 vom 26.10.2026, Plan für 1.7 in zwei Releases 1.7.0 und 1.7.1; davor v0.17 vom 25.10.2026, Release 1.6.2 mit Update-Hinweis B-172; davor 1.6.1 mit Sicherheits-Fix, Architektur-Aufräumen B-162 bis B-169 und zwei Karten-Verbesserungen B-170, B-171; Plan für 1.7 bis 1.9) · Die IDs in Klammern verweisen auf `REQUIREMENTS.md`.
 Größe: **S** ≈ wenige Stunden, **M** ≈ 1–2 Tage, **L** ≈ mehrere Tage.
 Status: ☐ offen · ◐ in Arbeit · ☑ erledigt · ✗ nicht nötig
 
@@ -30,6 +30,7 @@ Status: ☐ offen · ◐ in Arbeit · ☑ erledigt · ✗ nicht nötig
 | v1.8.3 | Erste notarisierte Version (Entscheidung Nils 4.11.2026): Developer-Account, Signierung mit Developer ID und Notarisierung (B-215); aus dem Fahrtvergleich vom 3.11.2026: doppelte Fahrt aus FIT und GPX erkennen, Höhenmeter ab 2 m, Hinweis auf den Radumfang (B-232, B-234, B-237) | Freunde |
 | v1.8.4 | Sync mit dem iPhone über iCloud (CloudKit), zusammen mit iOS 0.3 (Entscheidung Nils 4.11.2026): CloudKit-Tauglichkeit, Sync der Bibliothek, Abschied vom „Stand fürs iPhone“ (B-189, B-072, B-218, V-15) | Freunde |
 | v1.8.5 | Zusammen mit iOS 0.5 (Entscheidung Nils 5.11.2026): der gemeinsame Import (B-188), damit der Mac die FIT- und GPX-Dateien importiert, die das iPhone in den Ordner legt (B-071); Filter und Suche in der Fahrtenliste mit der Logik aus dem Kit (B-222, B-244) | Freunde |
+| v1.8.6 | Zusammen mit iOS 0.5.1 (Wunsch Nils 5.11.2026): Beschleunigung und Schräglage aus Aufnahmen vom iPhone im Tour-Detail (B-247) | Freunde |
 | **v1.9** | Bosch-Daten über die offizielle Data-Act-API (optional, eigenes Bosch-Konto): Bike, Akku und Wartung, Zusatzfelder je Fahrt und Import von Fahrten ohne Datei (Altbestand). **Motordaten je Fahrt gibt die API nicht her (Spezifikation 25.10.2026), Entscheidung Nils: Option B;** steht unter dem Vorbehalt des Spikes V-12 | Freunde mit Smart-System-Bike in der EU |
 | v1.10 | Ein Bereich „Fahrten“ mit Karte als Standard (B-125), Analyse nach Strecke (B-176); von 1.8 zurückgestellt am 27.10.2026 | Freunde |
 | v1.x | Analysen, Komfort, Karten | alle |
@@ -38,6 +39,7 @@ Status: ☐ offen · ◐ in Arbeit · ☑ erledigt · ✗ nicht nötig
 | iOS 0.3 | Eine Datenbank auf iPhone und Mac: Sync über CloudKit, Aufnahme wird direkt zur Fahrt, Löschen auf dem iPhone, Verteilung über TestFlight (B-215 bis B-220, mit Mac 1.8.4); aus dem Fahrtvergleich: doppelte Fahrt, GPX-Zeit mit Millisekunden, Höhenmeter (B-232 bis B-234) | mich, Freunde über TestFlight |
 | iOS 0.4 | Auswerten und Importieren (**Plan 5.11.2026, abgestimmt mit Nils**): Fahrt bearbeiten, Messwerte im Tour-Detail, Diagramm-Karussell, Diagramm und Karte gekoppelt, FIT aus der Flow-App, Höhe vom Barometer; externe TestFlight-Gruppe für Freunde (B-240, B-241, B-090, B-221, B-188, B-071, B-235, Rest von B-219; B-242 nicht nötig) | mich, Freunde über TestFlight |
 | iOS 0.5 | Unterwegs (**Plan 5.11.2026, abgestimmt mit Nils**, mit Mac 1.8.5): Querformat für die Halterung am Lenker, Filter und Suche in der Fahrtenliste, Live-Aktivität bei der Aufnahme, Widget „Diese Woche“, Kurzbefehle und Siri (B-243, B-222, B-223 bis B-225); die Höhe vom Barometer (B-235) ist nach 0.4 vorgezogen | mich, Freunde über TestFlight |
+| iOS 0.5.1 | Beschleunigung und Schräglage (Wunsch Nils 5.11.2026, mit Mac 1.8.6): Bewegungssensoren bei der Aufnahme mitlesen, bei Motorrad und E-Bike; Schräglage, Beschleunigen, Bremsen und 0 auf 100 im Tour-Detail, im Karussell und auf der Karte (V-16, B-245 bis B-247) | mich, Freunde |
 | iOS 0.6 | Karten und Highlights: Kartenstile, Karte aller Fahrten mit Heatmap, Highlights (B-186, B-226 bis B-228) | mich, Freunde |
 | iOS später | Bosch-Portal, Apple Watch, Fahrten mit Freunden teilen, Kalorien aus dem Puls (B-229 bis B-231, B-236) | – |
 
@@ -667,9 +669,22 @@ Vorschlag von Claude, von Nils am 5.11.2026 entschieden. Ziel: Die App taugt am 
 **Fertig, wenn** die App quer in der Halterung läuft (Aufnahme, Übersicht, Fahrten, Detail, Mehr), Filter und Suche auf iPhone und Mac dieselben Treffer liefern, die Aufnahme auf dem Sperrbildschirm und in der Dynamic Island steht, das Widget die Woche zeigt und Siri eine Fahrt startet und beendet; 0.5.0 über TestFlight, 1.8.5 als notarisiertes DMG.
 **Aufwand (Schätzung 5.11.2026):** etwa 8–11 Tage. Risiken: Live-Aktivität und Widget sind neue Erweiterungen (eigene Targets in `project.yml`, App Group im Developer-Account), Siri-Sätze auf Deutsch, Platz für die Glas-Leiste auf kleinen iPhones.
 
+### iOS 0.5.1 + Mac 1.8.6 – Beschleunigung und Schräglage (Idee Nils 5.11.2026, eingeschoben vor 0.6)
+
+Für Motorradfahrer sind Beschleunigung, Bremsen und Schräglage interessant. Das iPhone misst das mit Beschleunigungssensor und Kreisel (Core Motion) während der Aufnahme mit, auch bei gesperrtem Bildschirm. Die Schräglage lässt sich nicht aus der Neigung des Handys ablesen (in der Kurve zeigt die scheinbare Schwerkraft zum Fahrzeug hin); sie wird aus Tempo und Drehrate um die Senkrechte gerechnet: tan(Schräglage) = v · ω / g. Das geht in der Halterung und in der Tasche. **Entscheidung Nils (5.11.2026):** aufnehmen bei Motorrad und E-Bike, beim Rad als Versuch. Eingeschoben als iOS 0.5.1 mit Mac 1.8.6, vor 0.6 (Wunsch Nils 5.11.2026). Reihenfolge: V-16, B-245, B-246, B-247, dann das Release. Für V-16 braucht es eine echte Testfahrt auf dem iPhone.
+
+| # | Story | Größe | Hängt ab von | Status |
+|---|---|---|---|---|
+| V-16 | **Spike Bewegungssensoren:** Eine Testfahrt mit Motorrad und eine mit E-Bike schreiben die rohen Werte (`CMDeviceMotion`, 50–100 Hz) neben die GPS-Punkte in eine Datei. Prüfen: Schräglage aus v · ω gegen BMW Motorrad Connected (zeigt die Schräglage, Fahrt eines Testers); Glättung gegen das Rütteln des Motors; Unterschied Halterung und Tasche; Akku; läuft es im Hintergrund durch. Ergebnis als `docs/SPIKE-BEWEGUNG.md`; keine persönlichen Fahrten ins Repository | S–M | – | ☐ |
+| B-245 | **Aufnahme der Bewegung:** Der `Recorder` liest Core Motion mit und fasst die Werte je GPS-Punkt zusammen: Schräglage (größter Wert links und rechts der Sekunde), Beschleunigung längs (positiv Beschleunigen, negativ Bremsen) und quer in g. Gespeichert in der GPX als Zusatzfeld (`extensions`) und im Aufnahme-Protokoll, damit es einen Absturz übersteht; in `RideSample` als optionale Felder. Keine Änderung am CloudKit-Schema; ältere Versionen übergehen die Felder. Für Motorrad und E-Bike; ohne Zugriff auf die Bewegung läuft die Aufnahme wie heute | M | V-16 | ☐ |
+| B-246 | **Auswertung auf dem iPhone:** im Tour-Detail größte Schräglage links und rechts, stärkste Beschleunigung und Bremsung in g, beste Zeit von 0 auf 100 km/h (beim Rad 0 auf 25); im Karussell eine Seite „Schräglage“; auf der Karte die Spur nach Schräglage eingefärbt. Nur bei Fahrten mit diesen Werten; die Berechnung im Kit mit Tests | M | B-245 | ☐ |
+| B-247 | **Auswertung am Mac:** dieselben Kennzahlen, das Diagramm und die Einfärbung der Karte im Tour-Detail, mit der Logik aus dem Kit (B-246); der Import liest die Zusatzfelder der GPX | S–M | B-246 | ☐ |
+
+**Hinweis:** nur Auswertung nach der Fahrt, keine Warnung und keine Sicherheitsfunktion.
+
 ### iOS 0.6 – Karten und Highlights
 
-Reihenfolge nach 0.5 bestätigt (Nils 5.11.2026).
+Reihenfolge nach 0.5 bestätigt (Nils 5.11.2026); 0.5.1 kommt davor.
 
 | # | Story | Größe | Status |
 |---|---|---|---|
@@ -686,6 +701,7 @@ Reihenfolge nach 0.5 bestätigt (Nils 5.11.2026).
 | B-230 | **Apple Watch:** Aufnahme starten und anzeigen, Puls mitschreiben; mit Apple Health zusammen denken (B-075, P-27) | L | ☐ |
 | B-231 | **Fahrten mit Freunden teilen** über CloudKit-Freigaben (geteilte Datenbank): einzelne Fahrten oder eine Gruppe (zu P-24, P-25) | L | ☐ |
 | B-236 | **Kalorien aus dem Puls** (Fahrtvergleich 3.11.2026): Fahrten ohne Leistungsdaten (GPX vom iPhone) zeigen heute „–“. Zusammen mit B-230 und Apple Health den Puls übernehmen und die Kalorien daraus schätzen; neben dem Wert aus der Arbeit anzeigen, nicht ersetzen. Zum Vergleich am 3.11.2026: Bosch 516 kcal aus der Arbeit, Watch 884 kcal aktiv bei Ø 134 Puls. **Entscheidung Nils (3.11.2026):** erst mit der Apple Watch, bis dahin bleibt „–“ | M | ☐ |
+
 
 **Bewusst nicht geplant:** eigener Webserver für den Sync (zurückgestellt, siehe oben), iPad-Layout, Bearbeiten von Fahrten auf dem iPhone über Name und Bike hinaus.
 
