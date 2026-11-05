@@ -16,7 +16,7 @@ Kann Wattspur aus den Sensoren des iPhones die Schräglage, das Beschleunigen un
 - Etwa 20 MB pro Stunde. Die Datei wird nicht synchronisiert und gehört nicht zur Fahrt.
 
 ## Testfahrten
-1. **Motorrad (Tester):** Fahrzeug „Motorrad“, Schalter an, iPhone fest in der Halterung, BMW Motorrad Connected läuft mit. 30–60 Minuten mit Kurven links und rechts, einmal zügig aus dem Stand beschleunigen, einmal kräftig bremsen. Wenn möglich ein Stück mit dem iPhone in der Jackentasche (Uhrzeit merken). Danach: Bildschirmfoto der BMW-Auswertung (größte Schräglage links und rechts).
+1. **Motorrad (Tester, Anleitung in [TESTANLEITUNG-MOTORRAD.md](TESTANLEITUNG-MOTORRAD.md)):** Fahrzeug „Motorrad“, Schalter an, iPhone fest in der Halterung, BMW Motorrad Connected läuft mit. 30–60 Minuten mit Kurven links und rechts, einmal zügig aus dem Stand beschleunigen, einmal kräftig bremsen. Wenn möglich ein Stück mit dem iPhone in der Jackentasche (Uhrzeit merken). Danach: Bildschirmfoto der BMW-Auswertung (größte Schräglage links und rechts).
 2. **E-Bike (Nils):** Fahrzeug „E-Bike“, iPhone am Lenker, gern ein Stück Kopfsteinpflaster oder Schotter.
 3. Die Dateien per AirDrop an den Mac, in einen Ordner **außerhalb** des Projekts. Persönliche Fahrten kommen nie ins Repository.
 
