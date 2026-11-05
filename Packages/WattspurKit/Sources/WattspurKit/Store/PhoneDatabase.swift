@@ -119,6 +119,15 @@ public final class PhoneDatabase {
         RideTrack(samples: library.ride(withID: id)?.samples ?? [])
     }
 
+    /// Lean, acceleration and the sprint of a ride, and its track by lean angle (B-246); `nil` for a
+    /// ride without lean angles. A motorcycle sprints to 100 km/h, any other bike to 25.
+    public func motion(forRideID id: UUID) -> (figures: RideMotion, stretches: [RideMotion.LeanStretch])? {
+        guard let ride = library.ride(withID: id) else { return nil }
+        let samples = ride.samples
+        guard let figures = RideMotion(samples: samples, motorized: ride.bike?.kind.isMotorized == true) else { return nil }
+        return (figures, RideMotion.leanStretches(samples))
+    }
+
     // MARK: - Recording
 
     /// Turns a finished recording into a ride: the GPX the iPhone writes anyway (with its bike), through

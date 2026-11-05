@@ -222,6 +222,12 @@ final class PhoneLibrary {
         database?.chartPoints(forRideID: ride.id, axis: axis) ?? []
     }
 
+    /// Lean, acceleration and sprint and the track by lean angle (B-246); `nil` in folder mode, for
+    /// the sample ride and for rides without motion values.
+    func motion(for ride: RideExchange.Ride) -> (figures: RideMotion, stretches: [RideMotion.LeanStretch])? {
+        database?.motion(forRideID: ride.id)
+    }
+
     /// The time series of a ride, to show the spot under the finger on the chart on the map (B-221).
     /// Empty in folder mode and for the sample ride.
     func track(for ride: RideExchange.Ride) -> RideTrack {

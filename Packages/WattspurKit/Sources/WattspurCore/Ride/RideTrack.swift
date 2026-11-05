@@ -17,6 +17,8 @@ public struct RideTrack: Sendable, Equatable {
         public var power: Double?
         /// Beats per minute (iPhone carousel, B-221).
         public var heartRate: Double? = nil
+        /// Degrees, positive left (B-246).
+        public var lean: Double? = nil
     }
 
     /// Samples further than this from the asked time are no answer: a pause or a gap in between.
@@ -47,7 +49,7 @@ public struct RideTrack: Sendable, Equatable {
                              latitude: sample.latitude, longitude: sample.longitude,
                              altitude: sample.altitude, speedKmh: sample.speed.map { $0 * 3.6 },
                              cadence: sample.cadence.map(Double.init), power: sample.power.map(Double.init),
-                             heartRate: sample.heartRate.map(Double.init)))
+                             heartRate: sample.heartRate.map(Double.init), lean: sample.lean))
             if sample.distance != nil { withDistance.append(fixes.count - 1) }
             if sample.distance != nil, let altitude = sample.altitude {
                 elevation.append(ElevationPoint(metres: lastDistance, altitude: altitude))

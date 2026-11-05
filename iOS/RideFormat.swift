@@ -1,5 +1,6 @@
 import Foundation
 import SwiftUI
+import WattspurCore
 
 /// Number formats of the iPhone app; units follow the device's region.
 enum RideFormat {
@@ -72,6 +73,21 @@ enum RideFormat {
     static func altitude(_ metres: Double) -> String {
         ascent(Int(metres.rounded()))
     }
+
+    /// “38°” of lean, without a sign (B-246).
+    static func lean(_ degrees: Double) -> String {
+        "\(abs(degrees).formatted(.number.precision(.fractionLength(0))))°"
+    }
+
+    /// “0.62 g” of acceleration or braking, without a sign (B-246).
+    static func gForce(_ g: Double) -> String {
+        "\(abs(g).formatted(.number.precision(.fractionLength(2)))) g"
+    }
+
+    /// “3.5 s” for a sprint (B-246).
+    static func seconds(_ seconds: Double) -> String {
+        "\(seconds.formatted(.number.precision(.fractionLength(1)))) s"
+    }
 }
 
 extension Color {
@@ -81,4 +97,15 @@ extension Color {
             ? UIColor(red: 0xFF / 255, green: 0x4F / 255, blue: 0xAE / 255, alpha: 1)
             : UIColor(red: 0xC2 / 255, green: 0x18 / 255, blue: 0x7A / 255, alpha: 1)
     })
+
+    /// The track by lean angle (B-246): from green upright through yellow and orange to red and purple.
+    static func lean(_ band: RideMotion.LeanBand) -> Color {
+        switch band {
+        case .upright: .green
+        case .slight: .yellow
+        case .medium: .orange
+        case .strong: .red
+        case .extreme: .purple
+        }
+    }
 }

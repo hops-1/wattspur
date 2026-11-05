@@ -81,7 +81,8 @@ private struct ChartPage: View {
                 }
             }
             Chart(values, id: \.km) { value in
-                AreaMark(x: .value("Distance", value.km), yStart: .value(unit, domain.lowerBound), yEnd: .value(unit, value.y))
+                AreaMark(x: .value("Distance", value.km),
+                         yStart: .value(unit, measure == .lean ? 0 : domain.lowerBound), yEnd: .value(unit, value.y))
                     .foregroundStyle(color.opacity(0.15))
                     .interpolationMethod(.monotone)
                 LineMark(x: .value("Distance", value.km), y: .value(unit, value.y))
@@ -115,6 +116,7 @@ private struct ChartPage: View {
         case .cadence: "Cadence"
         case .heartRate: "Heart Rate"
         case .altitude: "Elevation"
+        case .lean: "Lean Angle"
         }
     }
 
@@ -125,6 +127,7 @@ private struct ChartPage: View {
         case .cadence: "arrow.trianglehead.2.clockwise"
         case .heartRate: "heart"
         case .altitude: "mountain.2"
+        case .lean: "angle"
         }
     }
 
@@ -135,6 +138,7 @@ private struct ChartPage: View {
         case .cadence: .purple
         case .heartRate: .red
         case .altitude: .track
+        case .lean: .indigo
         }
     }
 
@@ -145,6 +149,7 @@ private struct ChartPage: View {
         case .cadence: String(localized: "rpm")
         case .heartRate: String(localized: "bpm")
         case .altitude: "m"
+        case .lean: "°"
         }
     }
 
@@ -168,6 +173,11 @@ private struct ChartPage: View {
         case .altitude:
             return [Figure(title: "Ascent", value: ride.totalAscent.map(RideFormat.ascent) ?? "–"),
                     Figure(title: "Descent", value: ride.totalDescent.map(RideFormat.ascent) ?? "–")]
+        case .lean:
+            // Positive is left; the chart keeps the strongest lean of each slice.
+            let leans = points.compactMap(\.lean)
+            return [Figure(title: "Left", value: RideFormat.lean(max(leans.max() ?? 0, 0))),
+                    Figure(title: "Right", value: RideFormat.lean(max(-(leans.min() ?? 0), 0)))]
         }
     }
 
@@ -175,6 +185,10 @@ private struct ChartPage: View {
     private func readout(_ fix: RideTrack.Fix) -> String {
         let position = "\(fix.distanceKm.formatted(.number.precision(.fractionLength(1)))) km"
         guard let value = fix[keyPath: measure.fixValue] else { return position }
+        if measure == .lean {
+            let side = value > 0 ? String(localized: "left") : value < 0 ? String(localized: "right") : ""
+            return "\(position) · \(RideFormat.lean(value)) \(side)".trimmingCharacters(in: .whitespaces)
+        }
         let digits = measure == .speed ? 1 : 0
         return "\(position) · \(value.formatted(.number.precision(.fractionLength(digits)))) \(unit)"
     }
@@ -194,6 +208,10 @@ private struct ChartPage: View {
             return 0...max(10, (ride.maxPower.map(Double.init) ?? high) * 1.05)
         case .cadence, .heartRate:
             return 0...max(10, high * 1.05)
+        case .lean:
+            // Around 0, the same both ways: left above, right below.
+            let reach = max(15, abs(low), abs(high)) * 1.05
+            return -reach...reach
         }
     }
 

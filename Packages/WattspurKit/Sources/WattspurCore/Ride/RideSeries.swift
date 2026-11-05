@@ -24,6 +24,9 @@ public struct ChartPoint: Sendable, Equatable, Identifiable {
     public var power: Double?
     /// Beats per minute, where the file has a heart rate (iPhone carousel, B-090, B-241).
     public var heartRate: Double?
+    /// Degrees, positive left (B-246): the strongest lean in the slice, not the mean, so a left and
+    /// a right turn in one slice do not cancel out.
+    public var lean: Double?
 }
 
 /// A route point for the map.
@@ -52,6 +55,10 @@ public enum RideSeries {
             var cadence = 0.0, cadenceCount = 0
             var power = 0.0, powerCount = 0
             var heartRate = 0.0, heartRateCount = 0
+            var lean: Double?
+            mutating func addLean(_ value: Double?) {
+                if let value, abs(value) > abs(lean ?? 0) || lean == nil { lean = value }
+            }
         }
         var acc = [Accumulator](repeating: Accumulator(), count: bins)
         for sample in withDistance {
@@ -61,6 +68,7 @@ public enum RideSeries {
             if let v = sample.cadence { acc[index].cadence += Double(v); acc[index].cadenceCount += 1 }
             if let v = sample.power { acc[index].power += Double(v); acc[index].powerCount += 1 }
             if let v = sample.heartRate { acc[index].heartRate += Double(v); acc[index].heartRateCount += 1 }
+            acc[index].addLean(sample.lean)
         }
 
         var points: [ChartPoint] = []
@@ -75,6 +83,7 @@ public enum RideSeries {
             if a.cadenceCount > 0 { point.cadence = a.cadence / Double(a.cadenceCount) }
             if a.powerCount > 0 { point.power = a.power / Double(a.powerCount) }
             if a.heartRateCount > 0 { point.heartRate = a.heartRate / Double(a.heartRateCount) }
+            if let lean = a.lean { point.lean = lean }
             points.append(point)
             last = point
         }
@@ -111,6 +120,10 @@ public enum RideSeries {
             var power = 0.0, powerCount = 0
             var heartRate = 0.0, heartRateCount = 0
             var distance = 0.0, distanceCount = 0
+            var lean: Double?
+            mutating func addLean(_ value: Double?) {
+                if let value, abs(value) > abs(lean ?? 0) || lean == nil { lean = value }
+            }
         }
         var acc = [Accumulator](repeating: Accumulator(), count: bins)
         for sample in sorted {
@@ -121,6 +134,7 @@ public enum RideSeries {
             if let v = sample.cadence { acc[index].cadence += Double(v); acc[index].cadenceCount += 1 }
             if let v = sample.power { acc[index].power += Double(v); acc[index].powerCount += 1 }
             if let v = sample.heartRate { acc[index].heartRate += Double(v); acc[index].heartRateCount += 1 }
+            acc[index].addLean(sample.lean)
             if let v = sample.distance { acc[index].distance += v; acc[index].distanceCount += 1 }
         }
 
@@ -153,6 +167,7 @@ public enum RideSeries {
             if a.cadenceCount > 0 { point.cadence = a.cadence / Double(a.cadenceCount) }
             if a.powerCount > 0 { point.power = a.power / Double(a.powerCount) }
             if a.heartRateCount > 0 { point.heartRate = a.heartRate / Double(a.heartRateCount) }
+            if let lean = a.lean { point.lean = lean }
             if a.distanceCount > 0 { point.distanceKm = a.distance / Double(a.distanceCount) / 1000 }
             points.append(point)
             last = point
@@ -195,6 +210,8 @@ public enum RideSeries {
 /// One page of the chart carousel on the iPhone (B-090, TOUR-11): a measurement over the ride.
 public enum ChartMeasure: String, CaseIterable, Sendable, Identifiable {
     case speed, power, cadence, heartRate, altitude
+    /// Recordings of the iPhone app from 0.5.1 on (B-246).
+    case lean
 
     public var id: Self { self }
 
@@ -206,6 +223,7 @@ public enum ChartMeasure: String, CaseIterable, Sendable, Identifiable {
         case .cadence: \.cadence
         case .heartRate: \.heartRate
         case .altitude: \.altitude
+        case .lean: \.lean
         }
     }
 
@@ -217,6 +235,7 @@ public enum ChartMeasure: String, CaseIterable, Sendable, Identifiable {
         case .cadence: \.cadence
         case .heartRate: \.heartRate
         case .altitude: \.altitude
+        case .lean: \.lean
         }
     }
 
