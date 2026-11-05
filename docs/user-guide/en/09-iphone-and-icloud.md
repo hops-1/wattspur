@@ -71,6 +71,43 @@ The first time you record, the iPhone asks once for **Motion & Fitness**. If you
 ## Sharing a ride as GPX
 At the top right of a ride's detail, or by touching and holding a ride in the list: **Share GPX**. The file holds the whole track with time and altitude, and the bike. You can AirDrop it to the Mac, save it in the Files app or open it in komoot. Rides without GPS cannot be shared.
 
+## In the handlebar mount (landscape)
+Most handlebar mounts hold the iPhone sideways. Wattspur works in landscape too:
+- **While recording** the map fills the screen. On the left a bar shows the speed large, with the average, distance, time, height and ascent below it, and Pause and Stop at the bottom.
+- **The tab bar** sits at the bottom left, in every section.
+- **Overview:** the last ride on the left, the week, month, year and all rides on the right.
+- **Rides:** the list on the left, the chosen ride on the right.
+
+If you do not want the screen to turn, switch on the orientation lock in the Control Center.
+
+## Finding rides
+Above the ride list:
+- **Search** for a name, for example “Michelstadt”. Upper and lower case do not matter.
+- **Period:** this week, this month, this year, the last 30 or 365 days, or all rides.
+- **Distance:** under 10 km, 10–25 km, 25–50 km or over 50 km.
+- **Bike:** only from two bikes on.
+
+Below it you see how many rides match, for example “2 of 40 rides”. ✕ resets everything. A tap on **This Week**, **This Month** or **This Year** in the overview opens the rides of that period. The Mac uses the same rules, so both find the same rides.
+
+## The recording on the Lock Screen
+While you record, the **Lock Screen** shows the time, distance and speed. The button there pauses the ride and resumes it. On iPhones with the **Dynamic Island** the distance shows next to the camera; touch and hold it for more. To stop, open Wattspur: you name the ride and save it there.
+
+## Widget “This Week”
+1. Touch and hold an empty spot on the Home Screen.
+2. Tap **Edit › Add Widget** and choose **Wattspur**.
+3. Choose the small or the medium size.
+
+The widget shows the kilometres and rides of this week, with one bar per day. The medium size also shows your last ride. The numbers are the same as in the overview. On Monday the widget starts at zero by itself.
+
+## Shortcuts and Siri
+Say for example:
+- “Start a ride with Wattspur”
+- “End the ride in Wattspur”: Wattspur opens **Save Ride**, as Stop does.
+- “How far did I ride this week in Wattspur”
+- “Open my last ride in Wattspur”
+
+On an iPhone set to German, the German sentences apply, for example „Starte eine Fahrt mit Wattspur“. You also find these four as actions in the **Shortcuts** app, for example for an automation when you connect to the bike's holder.
+
 ## Motorcycle
 While recording, Wattspur leaves out points that would mean an impossible speed. That removes GPS jumps. For an e-bike the limit is 100 km/h. If you record on a motorcycle, choose **More › Recording › Vehicle › Motorcycle**. The limit is then 300 km/h.
 
