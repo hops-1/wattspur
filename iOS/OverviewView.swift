@@ -12,8 +12,20 @@ struct OverviewView: View {
     /// Switches to the tab “Rides”.
     var showAllRides: () -> Void
     @State private var sample = SampleRide.load()
+    @Environment(\.isLandscape) private var isLandscape
 
     var body: some View {
+        Group {
+            if isLandscape { landscape } else { portrait }
+        }
+        .refreshable {
+            await library.refresh()
+            await recordings.refreshStatuses(state: library.state, folder: folder)
+        }
+        .navigationTitle("Overview")
+    }
+
+    private var portrait: some View {
         ScrollView {
             VStack(spacing: 16) {
                 if let state = library.state, let last = state.lastRide {
@@ -68,11 +80,66 @@ struct OverviewView: View {
             }
             .padding()
         }
-        .refreshable {
-            await library.refresh()
-            await recordings.refreshStatuses(state: library.state, folder: folder)
+    }
+
+    /// Landscape (B-243): the last ride larger on the left, the week, month, year and all rides
+    /// on the right, “Start Ride” at the bottom right, clear of the tab bar at the bottom left.
+    private var landscape: some View {
+        ScrollView {
+            HStack(alignment: .top, spacing: 16) {
+                VStack(spacing: 16) {
+                    if let state = library.state, let last = state.lastRide {
+                        NavigationLink {
+                            TourDetailView(ride: last)
+                        } label: {
+                            LastRideTile(ride: last, mapHeight: 100)
+                        }
+                        .buttonStyle(.plain)
+                    } else if let sample {
+                        NavigationLink {
+                            TourDetailView(ride: sample.ride, route: sample.route)
+                        } label: {
+                            LastRideTile(ride: sample.ride, route: sample.route, mapHeight: 100)
+                        }
+                        .buttonStyle(.plain)
+                    }
+                    RecordingsSection()
+                }
+                .frame(width: 340)
+                VStack(spacing: 16) {
+                    if let state = library.state, state.lastRide != nil {
+                        landscapeTiles(totals: totals(state), allRides: state.rides.count + recordings.waiting.count)
+                        StateLine()
+                            .frame(maxWidth: .infinity, alignment: .leading)
+                    } else if let sample {
+                        landscapeTiles(totals: RidePeriodTotals(rides: [(start: sample.ride.startDate, distance: sample.ride.distance)],
+                                                                now: sample.ride.startDate),
+                                       allRides: 1)
+                        Text("Sample data: the tiles count the sample ride's week and month.")
+                            .font(.footnote)
+                            .foregroundStyle(.secondary)
+                            .frame(maxWidth: .infinity, alignment: .leading)
+                        if library.usesDatabase {
+                            FirstRidePrompt()
+                        } else if library.status == .noFolder {
+                            ChooseFolderPrompt()
+                        } else {
+                            MacSettingPrompt()
+                        }
+                    }
+                }
+            }
+            .padding(.horizontal)
+            .padding(.bottom)
         }
-        .navigationTitle("Overview")
+        // Room for “Start Ride” and the tab bar below the last tiles.
+        .contentMargins(.bottom, LandscapeTabBar.height + 12, for: .scrollContent)
+        .overlay(alignment: .bottomTrailing) {
+            StartRideButton { recorder.start() }
+                .frame(width: 230)
+                .padding(.trailing, 4)
+                .padding(.bottom, 4)
+        }
     }
 
     /// The Mac's rides plus the recordings it does not have yet (B-214).
@@ -81,6 +148,32 @@ struct OverviewView: View {
         let rides = state.countedRides.map { (start: $0.startDate, distance: $0.distance) }
             + recordings.waiting.filter { !state.isMotorized(bikeID: $0.bikeID) }.map { (start: $0.startDate, distance: $0.distance) }
         return RidePeriodTotals(rides: rides)
+    }
+
+    private func landscapeTiles(totals: RidePeriodTotals, allRides: Int) -> some View {
+        Grid(horizontalSpacing: 12, verticalSpacing: 12) {
+            GridRow {
+                StatTile(title: "This Week", value: RideFormat.distance(totals.weekDistance),
+                         caption: Self.rides(totals.weekRides), systemImage: "calendar")
+                StatTile(title: "This Month", value: RideFormat.distance(totals.monthDistance),
+                         caption: Self.rides(totals.monthRides), systemImage: "calendar")
+            }
+            GridRow {
+                StatTile(title: "This Year", value: RideFormat.distance(totals.yearDistance),
+                         caption: Self.rides(totals.yearRides), systemImage: "calendar")
+                Button(action: showAllRides) {
+                    StatTile(title: "All Rides", value: allRides.formatted(), systemImage: "bicycle")
+                        .contentShape(.rect(cornerRadius: 24))
+                }
+                .buttonStyle(.plain)
+                .accessibilityHint("Shows all rides")
+            }
+        }
+    }
+
+    /// “3 rides”.
+    private static func rides(_ count: Int) -> String {
+        "\(count.formatted()) \(count == 1 ? String(localized: "ride") : String(localized: "rides"))"
     }
 
     private func tiles(totals: RidePeriodTotals) -> some View {
@@ -204,6 +297,8 @@ struct StatTile: View {
     var title: LocalizedStringKey
     var value: String
     var unit: LocalizedStringKey?
+    /// A line below the value that is not a unit, such as “3 rides”.
+    var caption: String?
     var systemImage: String
 
     var body: some View {
@@ -220,6 +315,12 @@ struct StatTile: View {
                     .font(.footnote)
                     .foregroundStyle(.secondary)
             }
+            if let caption {
+                Text(caption)
+                    .font(.footnote)
+                    .foregroundStyle(.secondary)
+                    .monospacedDigit()
+            }
         }
         .frame(maxWidth: .infinity, minHeight: 90, alignment: .topLeading)
         .padding()
@@ -232,6 +333,7 @@ struct StatTile: View {
 struct LastRideTile: View {
     var ride: RideExchange.Ride
     var route: RideExchange.Route?
+    var mapHeight: CGFloat = 160
 
     var body: some View {
         VStack(alignment: .leading, spacing: 12) {
@@ -239,7 +341,7 @@ struct LastRideTile: View {
                 .font(.subheadline.weight(.semibold))
                 .foregroundStyle(.secondary)
             RideMap(ride: ride, route: route)
-                .frame(height: 160)
+                .frame(height: mapHeight)
                 .clipShape(.rect(cornerRadius: 16))
             HStack {
                 VStack(alignment: .leading, spacing: 2) {

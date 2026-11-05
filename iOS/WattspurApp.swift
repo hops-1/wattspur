@@ -49,18 +49,25 @@ struct WattspurApp: App {
                 SwiftUI.Tab("Overview", systemImage: "square.grid.2x2", value: Tab.overview) {
                     NavigationStack {
                         OverviewView { tab = .rides }
+                            .hidesTabBarInLandscape()
                     }
                 }
                 SwiftUI.Tab("Rides", systemImage: "list.bullet", value: Tab.rides) {
                     NavigationStack {
                         RidesView()
+                            .hidesTabBarInLandscape()
                     }
                 }
                 SwiftUI.Tab("More", systemImage: "ellipsis", value: Tab.more) {
                     NavigationStack {
                         MoreView()
+                            .hidesTabBarInLandscape()
                     }
                 }
+            }
+            // In landscape the tab bar sits at the bottom left, in every tab (B-243).
+            .overlay(alignment: .bottomLeading) {
+                LandscapeTabBar(tab: $tab)
             }
             .tint(.track)
             // A FIT from the Flow app or a GPX from the Files app, shared to or opened with Wattspur.

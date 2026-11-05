@@ -297,6 +297,26 @@
         }
       }
     },
+    "Shows all rides" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Zeigt alle Fahrten"
+          }
+        }
+      }
+    },
+    "This Year" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Dieses Jahr"
+          }
+        }
+      }
+    },
     "bpm" : {
       "localizations" : {
         "de" : {

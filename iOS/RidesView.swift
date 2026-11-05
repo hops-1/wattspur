@@ -5,6 +5,9 @@ import WattspurCore
 /// state again; the copy in the app shows them without a connection too.
 struct RidesView: View {
     @Environment(PhoneLibrary.self) private var library
+    @Environment(\.isLandscape) private var isLandscape
+    /// The ride shown beside the list in landscape (B-243); the newest until one is tapped.
+    @State private var selection: UUID?
 
     var body: some View {
         Group {
@@ -16,11 +19,89 @@ struct RidesView: View {
                     .refreshable { await library.refresh() }
             case .loaded:
                 if let state = library.state {
-                    list(state)
+                    if isLandscape {
+                        split(state)
+                    } else {
+                        list(state)
+                    }
                 }
             }
         }
         .navigationTitle("Rides")
+    }
+
+    /// Landscape (B-243): the list on the left, the detail of the chosen ride on the right.
+    private func split(_ state: RideExchange.Library) -> some View {
+        let chosen = state.rides.first { $0.id == selection } ?? state.lastRide
+        return HStack(spacing: 0) {
+            List {
+                if !library.usesDatabase || library.problem != nil {
+                    Section {
+                        StateLine()
+                    }
+                }
+                ForEach(state.months()) { month in
+                    Section(RideFormat.month(month.start)) {
+                        ForEach(month.rides) { ride in
+                            Button {
+                                selection = ride.id
+                            } label: {
+                                RideRow(ride: ride, bike: state.bike(withID: ride.bikeID))
+                                    .contentShape(.rect)
+                            }
+                            .buttonStyle(.plain)
+                            .listRowBackground(ride.id == chosen?.id ? Color.track.opacity(0.14) : nil)
+                            .accessibilityAddTraits(ride.id == chosen?.id ? .isSelected : [])
+                            .contextMenu { actions(for: ride) }
+                            .swipeActions(edge: .trailing) { deleteAction(for: ride) }
+                        }
+                    }
+                }
+            }
+            .listStyle(.insetGrouped)
+            .refreshable { await library.refresh() }
+            .tabBarRoomInLandscape()
+            .frame(width: 320)
+            .overlay {
+                if state.rides.isEmpty { noRides }
+            }
+            Divider()
+            if let chosen {
+                TourDetailView(ride: chosen, embedded: true)
+                    .id(chosen.id)
+            } else {
+                Color.clear
+            }
+        }
+    }
+
+    @ViewBuilder private func actions(for ride: RideExchange.Ride) -> some View {
+        if library.canShare(ride) {
+            ShareLink(item: library.sharedGPX(for: ride), preview: SharePreview(ride.name)) {
+                Label("Share GPX", systemImage: "square.and.arrow.up")
+            }
+        }
+        if library.usesDatabase {
+            Button("Move to Trash", systemImage: "trash", role: .destructive) { library.moveToTrash(ride) }
+        }
+    }
+
+    /// Only the iPhone's own rides can be deleted; those from the Mac's state cannot (B-217).
+    @ViewBuilder private func deleteAction(for ride: RideExchange.Ride) -> some View {
+        if library.usesDatabase {
+            Button("Delete", systemImage: "trash", role: .destructive) { library.moveToTrash(ride) }
+                .tint(.red)
+        }
+    }
+
+    @ViewBuilder private var noRides: some View {
+        if library.usesDatabase {
+            ContentUnavailableView("No Rides", systemImage: "bicycle",
+                                   description: Text("Record a ride in the overview."))
+        } else {
+            ContentUnavailableView("No Rides", systemImage: "bicycle",
+                                   description: Text("The Mac has no rides yet."))
+        }
     }
 
     private func list(_ state: RideExchange.Library) -> some View {
@@ -39,38 +120,15 @@ struct RidesView: View {
                         } label: {
                             RideRow(ride: ride, bike: state.bike(withID: ride.bikeID))
                         }
-                        .contextMenu {
-                            if library.canShare(ride) {
-                                ShareLink(item: library.sharedGPX(for: ride), preview: SharePreview(ride.name)) {
-                                    Label("Share GPX", systemImage: "square.and.arrow.up")
-                                }
-                            }
-                            if library.usesDatabase {
-                                Button("Move to Trash", systemImage: "trash", role: .destructive) { library.moveToTrash(ride) }
-                            }
-                        }
-                        .swipeActions(edge: .trailing) {
-                            // Only the iPhone's own rides can be deleted; those from the Mac's state cannot (B-217).
-                            if library.usesDatabase {
-                                Button("Delete", systemImage: "trash", role: .destructive) { library.moveToTrash(ride) }
-                                    .tint(.red)
-                            }
-                        }
+                        .contextMenu { actions(for: ride) }
+                        .swipeActions(edge: .trailing) { deleteAction(for: ride) }
                     }
                 }
             }
         }
         .refreshable { await library.refresh() }
         .overlay {
-            if state.rides.isEmpty {
-                if library.usesDatabase {
-                    ContentUnavailableView("No Rides", systemImage: "bicycle",
-                                           description: Text("Record a ride in the overview."))
-                } else {
-                    ContentUnavailableView("No Rides", systemImage: "bicycle",
-                                           description: Text("The Mac has no rides yet."))
-                }
-            }
+            if state.rides.isEmpty { noRides }
         }
     }
 }

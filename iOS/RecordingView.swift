@@ -8,21 +8,28 @@ struct RecordingView: View {
     @Environment(Recorder.self) private var recorder
     @State private var camera: MapCameraPosition = .userLocation(followsHeading: false, fallback: .automatic)
     @State private var ending = false
+    @Environment(\.isLandscape) private var isLandscape
 
     var body: some View {
+        Group {
+            if isLandscape { landscape } else { portrait }
+        }
+        // Name and bike, then save, discard or keep riding (B-212). In landscape a window beside
+        // the bar instead (B-243). Only its buttons close it: iOS also closes the sheet when the
+        // iPhone turns, and the window has to stay open then.
+        .sheet(isPresented: Binding(get: { ending && !isLandscape }, set: { _ in })) {
+            if let recording = recorder.recording {
+                SaveRecordingSheet(recording: recording) { ending = false }
+                    .interactiveDismissDisabled()
+            }
+        }
+    }
+
+    private var portrait: some View {
         VStack(spacing: 0) {
             map
             VStack(spacing: 16) {
-                if let status = recorder.status {
-                    Label(status, systemImage: "location.slash")
-                        .font(.footnote)
-                        .foregroundStyle(.orange)
-                } else if recorder.recording?.isWaitingForGPS == true {
-                    // The first position has to be accurate (RideRecording.startAccuracy).
-                    Label("GPS is getting more accurate …", systemImage: "location.magnifyingglass")
-                        .font(.footnote)
-                        .foregroundStyle(.secondary)
-                }
+                gpsStatus
                 if let recording = recorder.recording {
                     RecordingFigures(recording: recording)
                 }
@@ -30,11 +37,55 @@ struct RecordingView: View {
             }
             .padding()
         }
-        // Name and bike, then save, discard or keep riding (B-212).
-        .sheet(isPresented: $ending) {
-            if let recording = recorder.recording {
-                SaveRecordingSheet(recording: recording)
+    }
+
+    /// Landscape for the handlebar mount (B-243, variant B2): the map over the whole screen, on the
+    /// left an upright glass bar with the speed large, the average below it, distance, time,
+    /// altitude and ascent in two by two, Pause and Stop at the bottom. Only values from the iPhone.
+    private var landscape: some View {
+        map
+            .ignoresSafeArea()
+            .overlay(alignment: .leading) {
+                VStack(alignment: .leading, spacing: 10) {
+                    gpsStatus
+                    if let recording = recorder.recording {
+                        LandscapeRecordingFigures(recording: recording)
+                    }
+                    Spacer(minLength: 0)
+                    buttons
+                }
+                .padding(14)
+                .frame(width: 250)
+                .frame(maxHeight: .infinity)
+                .glassEffect(.regular, in: .rect(cornerRadius: 30))
+                .padding(.vertical, 8)
             }
+            .overlay(alignment: .trailing) {
+                if ending, let recording = recorder.recording {
+                    SaveRecordingSheet(recording: recording) { ending = false }
+                        .frame(width: 440)
+                        .clipShape(.rect(cornerRadius: 30))
+                        .shadow(radius: 20)
+                        .padding(.vertical, 8)
+                        // Inside the safe area, so clear of the map's buttons at the top right.
+                        .padding(.trailing, 8)
+                        .transition(.move(edge: .trailing))
+                }
+            }
+            .animation(.snappy, value: ending)
+    }
+
+    /// Why there is no position, or that the GPS is still settling.
+    @ViewBuilder private var gpsStatus: some View {
+        if let status = recorder.status {
+            Label(status, systemImage: "location.slash")
+                .font(.footnote)
+                .foregroundStyle(.orange)
+        } else if recorder.recording?.isWaitingForGPS == true {
+            // The first position has to be accurate (RideRecording.startAccuracy).
+            Label("GPS is getting more accurate …", systemImage: "location.magnifyingglass")
+                .font(.footnote)
+                .foregroundStyle(.secondary)
         }
     }
 
@@ -58,7 +109,7 @@ struct RecordingView: View {
     }
 
     private var buttons: some View {
-        HStack(spacing: 16) {
+        HStack(spacing: isLandscape ? 10 : 16) {
             if recorder.recording?.isPaused == true {
                 Button { recorder.resume() } label: {
                     Label("Resume", systemImage: "play.fill").frame(maxWidth: .infinity)
@@ -78,13 +129,87 @@ struct RecordingView: View {
             .tint(.red)
         }
         .buttonStyle(.glassProminent)
-        .controlSize(.large)
-        .font(.headline)
+        // The bar in landscape is narrow: smaller buttons, so “Pause” and “Stop” stay on one line.
+        .controlSize(isLandscape ? .regular : .large)
+        .font(isLandscape ? .subheadline.weight(.semibold) : .headline)
+        .lineLimit(1)
+        .minimumScaleFactor(0.8)
     }
 
     /// “Ride on 2 Nov 2026, 17:05”.
     static func defaultName(for date: Date) -> String {
         String(localized: "Ride on \(date.formatted(date: .abbreviated, time: .shortened))")
+    }
+}
+
+/// The figures of the landscape bar (B-243): the speed large with the average below, then
+/// distance, time, altitude and ascent.
+struct LandscapeRecordingFigures: View {
+    var recording: RideRecording
+
+    var body: some View {
+        VStack(alignment: .leading, spacing: 10) {
+            VStack(alignment: .leading, spacing: 0) {
+                HStack {
+                    Text("Speed")
+                        .font(.footnote)
+                        .foregroundStyle(.secondary)
+                    Spacer()
+                    if recording.isPaused {
+                        Text("Paused")
+                            .font(.caption.weight(.semibold))
+                            .padding(.horizontal, 8)
+                            .padding(.vertical, 2)
+                            .background(.orange, in: .capsule)
+                            .foregroundStyle(.white)
+                    }
+                }
+                HStack(alignment: .firstTextBaseline, spacing: 5) {
+                    Text(RideFormat.speedNumber(recording.currentSpeed))
+                        .font(.system(size: 60, weight: .bold))
+                        .monospacedDigit()
+                        .minimumScaleFactor(0.6)
+                        .lineLimit(1)
+                    Text(verbatim: "km/h")
+                        .font(.headline)
+                        .foregroundStyle(.secondary)
+                }
+                Text(verbatim: "Ø \(RideFormat.speed(recording.averageSpeed))")
+                    .font(.footnote)
+                    .monospacedDigit()
+                    .foregroundStyle(.secondary)
+            }
+            .accessibilityElement(children: .combine)
+            Divider()
+            Grid(alignment: .leading, horizontalSpacing: 10, verticalSpacing: 8) {
+                GridRow {
+                    figure("Distance", RideFormat.distance(recording.distance))
+                    TimelineView(.periodic(from: .now, by: 1)) { context in
+                        figure("Time", Duration.seconds(context.date.timeIntervalSince(recording.startDate))
+                            .formatted(.time(pattern: .hourMinuteSecond)))
+                    }
+                }
+                GridRow {
+                    figure("Altitude", recording.lastPoint?.fix.altitude.map(RideFormat.altitude) ?? "–")
+                    figure("Ascent", recording.ascent.map(RideFormat.ascent) ?? "–")
+                }
+            }
+        }
+    }
+
+    private func figure(_ title: LocalizedStringKey, _ value: String) -> some View {
+        VStack(alignment: .leading, spacing: 0) {
+            Text(title)
+                .font(.caption)
+                .foregroundStyle(.secondary)
+            Text(value)
+                .font(.title3.weight(.bold))
+                .monospacedDigit()
+                .minimumScaleFactor(0.6)
+                .lineLimit(1)
+        }
+        .frame(maxWidth: .infinity, alignment: .leading)
+        .accessibilityElement(children: .combine)
     }
 }
 
