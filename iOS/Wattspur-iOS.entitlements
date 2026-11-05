@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<!-- The widget "This Week" reads the week the app writes here (B-224, iOSShared/WidgetShare.swift). -->
+	<key>com.apple.security.application-groups</key>
+	<array>
+		<string>group.io.github.hops-1.wattspur</string>
+	</array>
+</dict>
+</plist>

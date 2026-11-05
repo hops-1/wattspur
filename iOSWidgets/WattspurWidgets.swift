@@ -3,11 +3,12 @@ import AppIntents
 import SwiftUI
 import WidgetKit
 
-/// The widget extension of the iPhone app: for now the Live Activity of a recording (B-223);
-/// the widget “This Week” (B-224) joins it here.
+/// The widget extension of the iPhone app: the Live Activity of a recording (B-223) and the widget
+/// “This Week” on the Home Screen (B-224).
 @main
 struct WattspurWidgets: WidgetBundle {
     var body: some Widget {
+        WeekWidget()
         RecordingLiveActivity()
     }
 }

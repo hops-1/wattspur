@@ -1,12 +1,92 @@
 {
   "sourceLanguage" : "en",
   "strings" : {
+    "%lld rides" : {
+      "localizations" : {
+        "de" : {
+          "variations" : {
+            "plural" : {
+              "one" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "%lld Fahrt"
+                }
+              },
+              "other" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "%lld Fahrten"
+                }
+              }
+            }
+          }
+        },
+        "en" : {
+          "variations" : {
+            "plural" : {
+              "one" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "%lld ride"
+                }
+              },
+              "other" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "%lld rides"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "Distance" : {
       "localizations" : {
         "de" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "Strecke"
+          }
+        }
+      }
+    },
+    "Distance and rides of this week, and your last ride." : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Strecke und Fahrten dieser Woche und deine letzte Fahrt."
+          }
+        }
+      }
+    },
+    "Evening Ride" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Abendrunde"
+          }
+        }
+      }
+    },
+    "Last Ride" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Letzte Fahrt"
+          }
+        }
+      }
+    },
+    "Open Wattspur to show your rides here." : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Öffne Wattspur, damit deine Fahrten hier erscheinen."
           }
         }
       }
@@ -47,6 +127,16 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Tempo"
+          }
+        }
+      }
+    },
+    "This Week" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Diese Woche"
           }
         }
       }

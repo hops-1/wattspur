@@ -11,8 +11,9 @@ CODE_SIGN_IDENTITY[sdk=iphonesimulator*] = -
 // it in the simulator) or, with the developer account, "icloud" together with the iCloud entitlements:
 //   WATTSPUR_IOS_DATABASE = icloud
 //   WATTSPUR_IOS_ENTITLEMENTS = iOS/Wattspur-iOS-iCloud.entitlements
+// Both files hold the App Group the widget reads (B-224); it needs the paid developer account.
 WATTSPUR_IOS_DATABASE = folder
-WATTSPUR_IOS_ENTITLEMENTS =
+WATTSPUR_IOS_ENTITLEMENTS = iOS/Wattspur-iOS.entitlements
 
 #include? "Local.xcconfig"
 

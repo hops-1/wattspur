@@ -1,6 +1,7 @@
 import SwiftData
 import SwiftUI
 import WattspurKit
+import WidgetKit
 
 /// The iPhone app (iOS 0.x, B-204 ff.), design C: the overview with the totals and the last ride,
 /// the rides from the Mac, “More” with the folder shared with the Mac, and the GPS recording
@@ -43,6 +44,21 @@ struct WattspurApp: App {
         library.close()
         library = sync.makeLibrary(folder: folder)
         Task { await library.refresh() }
+    }
+
+    /// The week for the widget: the same rides as the tiles of the overview (the Mac's rides without
+    /// motorcycles, plus the recordings the Mac does not have yet), and the newest ride of all.
+    private var weekSnapshot: WeekSnapshot {
+        let state = library.state
+        let waiting = recordings.waiting
+        let rides = (state?.countedRides ?? []).map { (start: $0.startDate, distance: $0.distance) }
+            + waiting.filter { state?.isMotorized(bikeID: $0.bikeID) != true }.map { (start: $0.startDate, distance: $0.distance) }
+        var last = state?.lastRide.map { WeekSnapshot.LastRide(name: $0.name, start: $0.startDate,
+                                                                 distance: $0.distance, timeZone: $0.timeZone) }
+        if let recording = waiting.first, recording.startDate > last?.start ?? .distantPast {
+            last = WeekSnapshot.LastRide(name: recording.name, start: recording.startDate, distance: recording.distance)
+        }
+        return WeekSnapshot(rides: rides, lastRide: last)
     }
 
     var body: some Scene {
@@ -125,6 +141,12 @@ struct WattspurApp: App {
                 Button("Discard", role: .destructive) { _ = recorder.stop() }
             } message: {
                 Text("Wattspur was closed while recording. Continue the ride, or end it and save what was recorded?")
+            }
+            // The widget “This Week” shows the same week as the overview (B-224).
+            .onChange(of: weekSnapshot, initial: true) { _, snapshot in
+                if WidgetShare.save(snapshot) {
+                    WidgetCenter.shared.reloadTimelines(ofKind: WidgetShare.weekWidgetKind)
+                }
             }
             // The Mac may have written a new state while the app was in the background.
             .onChange(of: scenePhase, initial: true) { _, phase in

@@ -82,7 +82,7 @@ targets:
         buildPhase: resources
     dependencies:
       - package: WattspurKit
-      # Embedded in the app: Live Activity of a recording (B-223), later the widget (B-224).
+      # Embedded in the app: Live Activity of a recording (B-223) and the widget “This Week” (B-224).
       - target: Wattspur Widgets
     configFiles:
       Debug: Config/iOS.xcconfig
@@ -133,6 +133,10 @@ targets:
     sources:
       - path: iOSWidgets
       - path: iOSShared
+    dependencies:
+      # The week math of the widget (B-224, `WeekSnapshot`); no SwiftData in the extension.
+      - package: WattspurKit
+        product: WattspurCore
     configFiles:
       Debug: Config/iOS.xcconfig
       Release: Config/iOS.xcconfig
@@ -150,8 +154,8 @@ targets:
         LOCALIZATION_PREFERS_STRING_CATALOGS: YES
         SWIFT_EMIT_LOC_STRINGS: YES
         SKIP_INSTALL: YES
-        # No iCloud for the extension (Config/iOS.xcconfig sets the app's entitlements).
-        CODE_SIGN_ENTITLEMENTS: ""
+        # Only the App Group shared with the app (B-224), no iCloud.
+        CODE_SIGN_ENTITLEMENTS: iOSWidgets/WattspurWidgets.entitlements
 schemes:
   Wattspur iOS:
     build:
