@@ -17,6 +17,7 @@ The iPhone gets the ride detail of the Mac: charts to swipe, linked to the map, 
 - **Chart and map together:** touch and hold a chart, then move the finger: a line marks the spot, the chart shows the distance and the value there, and the map shows the spot as a dot. The charts now sit right below the map, so both fit on the screen (B-221).
 - **Rides from the Flow app:** share a FIT from the Flow app (or open a FIT or GPX in the Files app) with Wattspur. With iCloud it becomes a ride on the iPhone, with power and cadence, and reaches the Mac; Wattspur asks the same questions as the Mac about the bike, a ride that is already there, or the Bosch file of a ride you recorded. Without iCloud the file goes into the folder “Wattspur Import” for the Mac (B-071, B-188).
 - **Height from the barometer:** a recording now takes the height from the iPhone's air pressure sensor, at the level of the GPS height. It jitters much less than GPS alone, so the ascent comes closer to Bosch. The iPhone asks once for Motion & Fitness; without it the GPS height is used as before (B-235).
+- **Build 3 (fixes from the first test):** the charts end at the end of the ride instead of a rounded distance (30.7 km no longer runs to 40 km). A recording has no height in its first seconds until the GPS level is found, so the start no longer jumps by a few metres and counts as climb (B-090, B-235).
 
 ## [1.8.4] – 2026-11-05
 

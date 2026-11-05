@@ -612,7 +612,7 @@ Vorschlag von Claude nach dem Lesen von Code und Doku, von Nils am 5.11.2026 ent
 | 6 | B-188 Import nach Quelle trennen (Mac) |
 | 7 | B-071 FIT aus der Flow-App |
 | 8 | B-235 Höhe vom Barometer |
-| 9 | Release **iOS 0.4.0**: `MARKETING_VERSION` 0.4.0, `CURRENT_PROJECT_VERSION` höher als beim letzten Upload, Changelog, Handbuch EN/DE, Upload zu TestFlight. **Vorbereitet (5.11.2026):** Version 0.4.0 (Build 2), Changelog, Handbuch Kapitel 9 (Fahrt ansehen, bearbeiten, Flow-App, Höhe); offen: Upload und Test durch Nils (interne Gruppe), Import am Mac prüfen, danach externe Gruppe |
+| 9 | Release **iOS 0.4.0**: `MARKETING_VERSION` 0.4.0, `CURRENT_PROJECT_VERSION` höher als beim letzten Upload, Changelog, Handbuch EN/DE, Upload zu TestFlight. **Vorbereitet (5.11.2026):** Version 0.4.0 (Build 2), Changelog, Handbuch Kapitel 9 (Fahrt ansehen, bearbeiten, Flow-App, Höhe); Build 2 hochgeladen und von Nils getestet (Karussell, Kopplung, Bearbeiten mit Sync gehen). **Build 3 (5.11.2026):** Achse der Diagramme endet am Ende der Fahrt (vorher auf 40 km gerundet); die Höhe beginnt erst, wenn der Startwert aus dem GPS fertig ist (im Stand sprang sie in den ersten 10 s um etwa 5 m). Offen: Testfahrt mit Barometer und FIT aus der Flow-App, Import am Mac mit der nächsten Mac-Version, danach externe Gruppe |
 
 | # | Story | Größe | Hängt ab von | Status |
 |---|---|---|---|---|
