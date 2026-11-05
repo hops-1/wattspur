@@ -147,6 +147,46 @@
         }
       }
     },
+    "%lld rides" : {
+      "localizations" : {
+        "de" : {
+          "variations" : {
+            "plural" : {
+              "one" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "%lld Fahrt"
+                }
+              },
+              "other" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "%lld Fahrten"
+                }
+              }
+            }
+          }
+        },
+        "en" : {
+          "variations" : {
+            "plural" : {
+              "one" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "%lld ride"
+                }
+              },
+              "other" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "%lld rides"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "%lld rides imported" : {
       "localizations" : {
         "de" : {
@@ -213,6 +253,16 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "25–50 km"
+          }
+        }
+      }
+    },
+    "A ride is already being recorded." : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Es wird schon eine Fahrt aufgenommen."
           }
         }
       }
@@ -377,6 +427,26 @@
         }
       }
     },
+    "Distance This Week" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Strecke dieser Woche"
+          }
+        }
+      }
+    },
+    "Ends the recording and opens Save Ride." : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Beendet die Aufnahme und öffnet „Fahrt speichern“."
+          }
+        }
+      }
+    },
     "Last 30 Days" : {
       "localizations" : {
         "de" : {
@@ -397,12 +467,42 @@
         }
       }
     },
+    "Name the ride and save it." : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Gib der Fahrt einen Namen und speichere sie."
+          }
+        }
+      }
+    },
     "No Matches" : {
       "localizations" : {
         "de" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "Keine Treffer"
+          }
+        }
+      }
+    },
+    "No ride is being recorded." : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Gerade wird keine Fahrt aufgenommen."
+          }
+        }
+      }
+    },
+    "Open Last Ride" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Letzte Fahrt öffnen"
           }
         }
       }
@@ -447,6 +547,16 @@
         }
       }
     },
+    "Ride started. Have a good ride!" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Fahrt gestartet. Gute Fahrt!"
+          }
+        }
+      }
+    },
     "Search rides" : {
       "localizations" : {
         "de" : {
@@ -487,6 +597,36 @@
         }
       }
     },
+    "Shows your newest ride." : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Zeigt deine neueste Fahrt."
+          }
+        }
+      }
+    },
+    "Starts recording a ride with GPS." : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Startet die Aufnahme einer Fahrt mit GPS."
+          }
+        }
+      }
+    },
+    "Tells how far you rode this week." : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sagt, wie weit du diese Woche gefahren bist."
+          }
+        }
+      }
+    },
     "This Year" : {
       "localizations" : {
         "de" : {
@@ -497,12 +637,32 @@
         }
       }
     },
+    "This week: %@, %@." : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Diese Woche: %1$@, %2$@."
+          }
+        }
+      }
+    },
     "Under 10 km" : {
       "localizations" : {
         "de" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "Unter 10 km"
+          }
+        }
+      }
+    },
+    "Wattspur has an unfinished ride. Continue it or end it first." : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Wattspur hat eine nicht beendete Fahrt. Setze sie zuerst fort oder beende sie."
           }
         }
       }
