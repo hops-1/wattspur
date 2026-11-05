@@ -7,7 +7,10 @@ Every DMG handed out to testers corresponds to one entry below.
 
 ## [Unreleased]
 
-### iPhone app 0.4.0 (in progress)
+### iPhone app 0.4.0 (TestFlight, 2026-11-05)
+
+The iPhone gets the ride detail of the Mac: charts to swipe, linked to the map, editing, and rides from the Flow app. The Mac app has no visible change; its import now shares its steps with the iPhone (B-188) and comes with the next Mac version.
+
 
 - **Edit a ride:** the pencil at the top right of a ride's detail changes its name and its bike. With iCloud, the Mac gets the change too (B-240).
 - **Charts to swipe:** with iCloud, the detail of a ride shows speed, power, cadence, heart rate and elevation, one chart per page with dots below, each with its maximum and average. Only what the ride has gets a page. Without iCloud the elevation profile stays (B-090, B-241).
