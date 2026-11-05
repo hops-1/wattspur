@@ -467,6 +467,16 @@
         }
       }
     },
+    "Shows the rides of this period" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Zeigt die Fahrten dieses Zeitraums"
+          }
+        }
+      }
+    },
     "This Year" : {
       "localizations" : {
         "de" : {

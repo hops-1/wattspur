@@ -8,8 +8,8 @@ struct RidesView: View {
     @Environment(\.isLandscape) private var isLandscape
     /// The ride shown beside the list in landscape (B-243); the newest until one is tapped.
     @State private var selection: UUID?
-    /// Search and filters (B-222); kept while the iPhone turns.
-    @State private var filter = RideFilter()
+    /// Search and filters (B-222), kept by the app: the period tiles of the overview set them.
+    @Binding var filter: RideFilter
 
     var body: some View {
         Group {
