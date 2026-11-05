@@ -27,15 +27,19 @@ public struct RideRecording: Codable, Sendable, Equatable {
         public var horizontalAccuracy: Double
         /// Metres per second as measured by the device; `nil` if unknown.
         public var speed: Double?
+        /// Lean angle, acceleration and roughness since the position before (B-245); `nil` without
+        /// motion sensors and in logs from before 0.5.1.
+        public var motion: MotionValues?
 
         public init(date: Date, latitude: Double, longitude: Double, altitude: Double? = nil,
-                    horizontalAccuracy: Double, speed: Double? = nil) {
+                    horizontalAccuracy: Double, speed: Double? = nil, motion: MotionValues? = nil) {
             self.date = date
             self.latitude = latitude
             self.longitude = longitude
             self.altitude = altitude
             self.horizontalAccuracy = horizontalAccuracy
             self.speed = speed
+            self.motion = motion
         }
     }
 
@@ -189,7 +193,10 @@ public struct RideRecording: Codable, Sendable, Equatable {
                 RideSample(time: point.fix.date.timeIntervalSince(start),
                            latitude: point.fix.latitude, longitude: point.fix.longitude,
                            altitude: point.fix.altitude, distance: point.distance, speed: point.fix.speed,
-                           horizontalAccuracy: point.fix.horizontalAccuracy)
+                           horizontalAccuracy: point.fix.horizontalAccuracy,
+                           lean: point.fix.motion?.lean,
+                           acceleration: point.fix.motion?.acceleration,
+                           roughness: point.fix.motion?.roughness)
             })
         }
     }

@@ -31,7 +31,9 @@ public enum GPXWriter {
     public static func document(name: String, segments: [Segment], description: String? = nil,
                                 creator: String = "Wattspur", bikeID: UUID? = nil) -> Data {
         let note = description.flatMap { $0.isEmpty ? nil : escape($0) }
-        let ownExtension = bikeID != nil || segments.contains { $0.samples.contains { $0.horizontalAccuracy != nil } }
+        let ownExtension = bikeID != nil || segments.contains { $0.samples.contains {
+            $0.horizontalAccuracy != nil || $0.lean != nil || $0.acceleration != nil || $0.roughness != nil
+        } }
         let wattspur = ownExtension ? "xmlns:wattspur=\"\(wattspurNamespace)\" " : ""
         var xml = """
         <?xml version="1.0" encoding="UTF-8"?>
@@ -92,13 +94,20 @@ public enum GPXWriter {
         // Only measured cadence: the held value is for charts, not for data.
         let cadence = s.cadenceMeasured ? s.cadence : nil
         let accuracy = s.horizontalAccuracy.flatMap { $0 >= 0 && $0.isFinite ? $0 : nil }
-        if s.power != nil || cadence != nil || accuracy != nil {
+        let lean = s.lean.flatMap { $0.isFinite ? $0 : nil }
+        let acceleration = s.acceleration.flatMap { $0.isFinite ? $0 : nil }
+        let roughness = s.roughness.flatMap { $0.isFinite ? $0 : nil }
+        if s.power != nil || cadence != nil || accuracy != nil || lean != nil || acceleration != nil || roughness != nil {
             point += "<extensions>"
             if let power = s.power { point += "<power>\(power)</power>" }
             if let cadence {
                 point += "<gpxtpx:TrackPointExtension><gpxtpx:cad>\(cadence)</gpxtpx:cad></gpxtpx:TrackPointExtension>"
             }
             if let accuracy { point += "<wattspur:accuracy>\(String(format: "%.1f", accuracy))</wattspur:accuracy>" }
+            // B-245: degrees, positive left; g along the way; g of shaking.
+            if let lean { point += "<wattspur:lean>\(String(format: "%.1f", lean))</wattspur:lean>" }
+            if let acceleration { point += "<wattspur:accel>\(String(format: "%.3f", acceleration))</wattspur:accel>" }
+            if let roughness { point += "<wattspur:rough>\(String(format: "%.3f", roughness))</wattspur:rough>" }
             point += "</extensions>"
         }
         return point + "</trkpt>\n"

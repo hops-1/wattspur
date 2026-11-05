@@ -29,6 +29,32 @@ struct iPhoneRecordingImportTests {
                                   description: "Bike: Lastenrad", creator: GPXWriter.iPhoneCreator, bikeID: bikeID)
     }
 
+    @Test("Lean angle, acceleration and roughness go through the GPX into the stored ride (B-245)")
+    func motionValues() throws {
+        var recording = RideRecording(startDate: Date(timeIntervalSince1970: 1_800_000_000))
+        for second in 0...60 {
+            let motion = MotionValues(lean: second == 30 ? -38.4 : 1.5, acceleration: second == 40 ? -0.62 : 0.01,
+                                      roughness: 0.05)
+            recording.add(RideRecording.Fix(date: Date(timeIntervalSince1970: 1_800_000_000 + Double(second)),
+                                            latitude: 49.8 + Double(second) * 12 / 111_195, longitude: 8.8,
+                                            altitude: 150, horizontalAccuracy: 5, speed: 12, motion: motion))
+        }
+        let gpx = GPXWriter.document(name: "Kurven", segments: recording.gpxSegments,
+                                     creator: GPXWriter.iPhoneCreator)
+        let text = try #require(String(data: gpx, encoding: .utf8))
+        #expect(text.contains("<wattspur:lean>-38.4</wattspur:lean>"))
+        #expect(text.contains("<wattspur:accel>-0.620</wattspur:accel>"))
+        let result = library.importFile(data: gpx, fileName: "Kurven.gpx")
+        guard case .imported(let id) = result.outcome, let ride = library.ride(withID: id) else {
+            Issue.record("not imported: \(result.outcome)")
+            return
+        }
+        let samples = ride.samples
+        #expect(samples.compactMap(\.lean).min() == -38.4)
+        #expect(samples.compactMap(\.acceleration).min() == -0.62)
+        #expect(samples.allSatisfy { $0.roughness == 0.05 })
+    }
+
     @Test("The header names creator and bike")
     func header() {
         let id = UUID()

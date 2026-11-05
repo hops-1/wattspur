@@ -39,8 +39,11 @@ final class Recorder {
     private var fusion = AltitudeFusion()
     /// A barometer reading older than this is not used; the GPS height stands in.
     private static let barometerMaxAge: TimeInterval = 5
-    /// The raw motion of spike V-16, only while the test switch in “More” is on.
-    private var rawMotion: MotionRawRecorder?
+    /// Lean angle, acceleration and roughness (B-245), and the raw motion of spike V-16 while the
+    /// test switch in “More” is on.
+    private var motion: MotionRecorder?
+    /// The motion values of GPS points the recording dropped, for the next point it keeps.
+    private var droppedMotion: MotionValues?
     /// The Live Activity on the Lock Screen and in the Dynamic Island (B-223).
     private let activity = RecordingActivityController()
 
@@ -93,7 +96,7 @@ final class Recorder {
         guard recording?.isPaused == false else { return }
         recording?.pause()
         write(.pause)
-        rawMotion?.record(event: "pause")
+        motion?.record(event: "pause")
         if let recording { activity.update(recording, force: true) }
     }
 
@@ -101,7 +104,7 @@ final class Recorder {
         guard recording?.isPaused == true else { return }
         recording?.resume()
         write(.resume)
-        rawMotion?.record(event: "resume")
+        motion?.record(event: "resume")
         if let recording { activity.update(recording, force: true) }
     }
 
@@ -127,10 +130,10 @@ final class Recorder {
         serviceSession = CLServiceSession(authorization: .whenInUse)
         backgroundSession = CLBackgroundActivitySession()
         startBarometer()
-        if MotionRawRecorder.isEnabled, let recording {
-            let raw = MotionRawRecorder()
-            raw.start(at: .now, vehicle: recording.vehicle)
-            rawMotion = raw
+        if let recording {
+            let motion = MotionRecorder()
+            motion.start(at: .now, vehicle: recording.vehicle, rawLog: MotionRecorder.writesRawLog)
+            self.motion = motion
         }
         updates = Task { [weak self] in
             do {
@@ -147,8 +150,8 @@ final class Recorder {
     private func stopUpdates() {
         altimeter.stopRelativeAltitudeUpdates()
         barometer = nil
-        rawMotion?.stop()
-        rawMotion = nil
+        motion?.stop()
+        motion = nil
         updates?.cancel()
         updates = nil
         backgroundSession?.invalidate()
@@ -167,21 +170,34 @@ final class Recorder {
         } else {
             status = nil
         }
-        if let location = update.location { rawMotion?.record(location) }
+        if let location = update.location {
+            motion?.record(location)
+            // While paused the motion is not part of the ride: the interval starts afresh.
+            if recording?.isPaused == true {
+                _ = motion?.values(at: location)
+                droppedMotion = nil
+            }
+        }
         guard let location = update.location, recording?.isPaused == false else { return }
         let fresh = barometer.flatMap { abs($0.date.timeIntervalSince(location.timestamp)) <= Self.barometerMaxAge ? $0.metres : nil }
         let altitude = fusion.altitude(gps: location.verticalAccuracy > 0 ? location.altitude : nil,
                                        verticalAccuracy: location.verticalAccuracy, barometer: fresh,
                                        at: location.timestamp)
-        let fix = RideRecording.Fix(date: location.timestamp,
+        var fix = RideRecording.Fix(date: location.timestamp,
                                     latitude: location.coordinate.latitude,
                                     longitude: location.coordinate.longitude,
                                     altitude: altitude,
                                     horizontalAccuracy: location.horizontalAccuracy,
                                     speed: location.speed >= 0 ? location.speed : nil)
+        // The motion since the point before; a dropped point hands its values on to the next one.
+        let values = motion?.values(at: location)
+        fix.motion = droppedMotion.map { $0.merged(with: values) } ?? values
         if recording?.add(fix) == true {
+            droppedMotion = nil
             write(.fix(fix))
             if let recording { activity.update(recording) }
+        } else {
+            droppedMotion = fix.motion
         }
     }
 

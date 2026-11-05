@@ -1,85 +1,105 @@
 import CoreLocation
 import CoreMotion
 import Foundation
+import Synchronization
 import UIKit
 import WattspurCore
 
-/// Spike V-16: writes the raw device motion (50 Hz) and every GPS update into a CSV file while the
-/// test switch in “More” is on (`MotionRawLog`). The file lands in the documents folder
-/// “Bewegung”, which the Files app shows under “On My iPhone › Wattspur”; it is not part of the
-/// ride and is never synced.
+/// Reads the motion sensors while recording (B-245): device motion at 50 Hz goes into a
+/// `MotionFusion`, and each GPS point takes the lean angle, acceleration and roughness since the
+/// point before (`values(at:)`). Device motion needs no permission and keeps coming while the
+/// location updates keep the app running in the background. Without motion sensors the recording
+/// goes on as before, without these values.
 ///
-/// Device motion needs no permission and keeps coming while the location updates keep the app
-/// running in the background. All file work happens on one serial queue; rows are collected and
-/// written about once a second.
-final class MotionRawRecorder: @unchecked Sendable {
+/// With the test switch in “More” on (spike V-16) it also writes every reading and every GPS update
+/// into a CSV file (`MotionRawLog`) in the documents folder “Bewegung”, which the Files app shows
+/// under “On My iPhone › Wattspur”; the file is not part of the ride and is never synced.
+///
+/// The readings arrive on one serial queue, which also does the file work; rows are collected and
+/// written about once a second. The fusion sits behind a lock, as the GPS points come on the main actor.
+final class MotionRecorder: @unchecked Sendable {
     /// The test switch in “More”.
-    static let enabledKey = "recordRawMotion"
-    static var isEnabled: Bool { UserDefaults.standard.bool(forKey: enabledKey) }
+    static let rawLogKey = "recordRawMotion"
+    static var writesRawLog: Bool { UserDefaults.standard.bool(forKey: rawLogKey) }
 
     private let manager = CMMotionManager()
     private let queue: OperationQueue = {
         let queue = OperationQueue()
-        queue.name = "Wattspur raw motion"
+        queue.name = "Wattspur motion"
         queue.maxConcurrentOperationCount = 1
         queue.qualityOfService = .utility
         return queue
     }()
+    private let fusion = Mutex(MotionFusion())
     // Touched only on `queue`.
     private var file: FileHandle?
     private var buffer = ""
     private var lastFlush = Date.distantPast
-    /// Reads the battery level once a minute; `UIDevice` is only used on the main actor.
+    /// Set on the main actor at the start: the raw log is written.
+    @MainActor private var writesRaw = false
+    /// Reads the battery level once a minute for the raw log; `UIDevice` is only used on the main actor.
     private var batteryTask: Task<Void, Never>?
     /// Seconds between the device's uptime clock (motion timestamps) and the wall clock.
     private let bootDate = Date.now.addingTimeInterval(-ProcessInfo.processInfo.systemUptime)
 
-    /// Opens a new file named after `date` and starts the motion updates; does nothing if the
-    /// device has no motion sensors or the file cannot be made.
-    @MainActor func start(at date: Date, vehicle: RecordingVehicle) {
+    /// Starts the motion updates; with `rawLog` also a new raw file named after `date`. Does nothing
+    /// if the device has no motion sensors.
+    @MainActor func start(at date: Date, vehicle: RecordingVehicle, rawLog: Bool) {
         guard manager.isDeviceMotionAvailable else { return }
-        let folder = URL.documentsDirectory.appending(path: MotionRawLog.folderName)
-        let url = folder.appending(path: MotionRawLog.fileName(for: date))
-        do {
-            try FileManager.default.createDirectory(at: folder, withIntermediateDirectories: true)
-            FileManager.default.createFile(atPath: url.path, contents: nil)
-            let handle = try FileHandle(forWritingTo: url)
+        if rawLog, let handle = Self.makeFile(for: date) {
+            writesRaw = true
             open(handle, at: date, vehicle: vehicle)
-        } catch {
-            return
-        }
-        startMotion()
-        UIDevice.current.isBatteryMonitoringEnabled = true
-        batteryTask = Task { @MainActor [weak self] in
-            while !Task.isCancelled {
-                let level = Double(UIDevice.current.batteryLevel)
-                if level >= 0 { self?.enqueue(MotionRawLog.battery(level, at: .now)) }
-                try? await Task.sleep(for: .seconds(60))
+            UIDevice.current.isBatteryMonitoringEnabled = true
+            batteryTask = Task { @MainActor [weak self] in
+                while !Task.isCancelled {
+                    let level = Double(UIDevice.current.batteryLevel)
+                    if level >= 0 { self?.enqueue(MotionRawLog.battery(level, at: .now)) }
+                    try? await Task.sleep(for: .seconds(60))
+                }
             }
         }
+        startMotion()
     }
 
-    /// Every location update, also while paused or when the recording drops it.
-    func record(_ location: CLLocation) {
-        let row = MotionRawLog.line(MotionRawLog.Location(
+    /// The values since the GPS point before; `nil` without readings in between. Called for each
+    /// kept GPS point.
+    func values(at location: CLLocation) -> MotionValues? {
+        fusion.withLock { $0.close(at: location.timestamp, speed: location.speed) }
+    }
+
+    /// Every location update for the raw log, also while paused or when the recording drops it.
+    @MainActor func record(_ location: CLLocation) {
+        guard writesRaw else { return }
+        enqueue(MotionRawLog.line(MotionRawLog.Location(
             date: location.timestamp,
             latitude: location.coordinate.latitude, longitude: location.coordinate.longitude,
             altitude: location.altitude,
             horizontalAccuracy: location.horizontalAccuracy, verticalAccuracy: location.verticalAccuracy,
-            speed: location.speed, course: location.course))
-        enqueue(row)
+            speed: location.speed, course: location.course)))
     }
 
-    func record(event name: String, at date: Date = .now) {
+    @MainActor func record(event name: String, at date: Date = .now) {
+        guard writesRaw else { return }
         enqueue(MotionRawLog.event(name, at: date))
     }
 
     @MainActor func stop() {
-        batteryTask?.cancel()
-        batteryTask = nil
-        UIDevice.current.isBatteryMonitoringEnabled = false
+        writesRaw = false
+        if batteryTask != nil {
+            batteryTask?.cancel()
+            batteryTask = nil
+            UIDevice.current.isBatteryMonitoringEnabled = false
+        }
         manager.stopDeviceMotionUpdates()
         close(MotionRawLog.event("stop", at: .now))
+    }
+
+    private static func makeFile(for date: Date) -> FileHandle? {
+        let folder = URL.documentsDirectory.appending(path: MotionRawLog.folderName)
+        let url = folder.appending(path: MotionRawLog.fileName(for: date))
+        try? FileManager.default.createDirectory(at: folder, withIntermediateDirectories: true)
+        FileManager.default.createFile(atPath: url.path, contents: nil)
+        return try? FileHandle(forWritingTo: url)
     }
 
     // MARK: - Handing work to the queue
@@ -101,7 +121,9 @@ final class MotionRawRecorder: @unchecked Sendable {
         manager.deviceMotionUpdateInterval = 1 / MotionRawLog.rate
         manager.startDeviceMotionUpdates(using: .xArbitraryCorrectedZVertical, to: queue) { @Sendable [weak self] motion, _ in
             guard let self, let motion else { return }
-            self.append(MotionRawLog.line(Self.reading(motion, bootDate: self.bootDate)))
+            let reading = Self.reading(motion, bootDate: self.bootDate)
+            self.fusion.withLock { $0.add(reading) }
+            if self.file != nil { self.append(MotionRawLog.line(reading)) }
         }
     }
 
