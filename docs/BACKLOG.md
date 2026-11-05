@@ -1,6 +1,6 @@
 # Backlog – Wattspur
 
-Stand: 3.11.2026 (v0.25, Fahrtvergleich vom 3.11.2026 mit Bosch Flow, Wattspur iOS und Apple Watch: B-232 bis B-237 eingeordnet; davor v0.24 vom 2.11.2026, Plan für die iOS-App 0.3 bis 0.6 und Mac 1.8.3 mit Sync über CloudKit; davor v0.23, Plan für die iOS-App 0.1 und 0.2; davor v0.22, Plan für 1.8.2; davor v0.21 vom 1.11.2026, 1.8.1 umgesetzt: Steigung, Lastenrad, Kurvigkeit und Ebene „Kurvige Straßen“; davor v0.20 vom 28.10.2026, Release 1.8.0 „Kartenstile“ vorbereitet; davor v0.19 vom 27.10.2026, Plan für 1.8 „Kartenstile“, der Bereich „Fahrten“ B-125 nach 1.9 verschoben; davor v0.18 vom 26.10.2026, Plan für 1.7 in zwei Releases 1.7.0 und 1.7.1; davor v0.17 vom 25.10.2026, Release 1.6.2 mit Update-Hinweis B-172; davor 1.6.1 mit Sicherheits-Fix, Architektur-Aufräumen B-162 bis B-169 und zwei Karten-Verbesserungen B-170, B-171; Plan für 1.7 bis 1.9) · Die IDs in Klammern verweisen auf `REQUIREMENTS.md`.
+Stand: 5.11.2026 (v0.26, Plan für iOS 0.4 mit Nils abgestimmt: Bearbeiten, Messwerte, Karussell, Kopplung, FIT-Import, Barometer; Filter nach 0.5; B-240 bis B-242 neu; davor v0.25 vom 3.11.2026, Fahrtvergleich vom 3.11.2026 mit Bosch Flow, Wattspur iOS und Apple Watch: B-232 bis B-237 eingeordnet; davor v0.24 vom 2.11.2026, Plan für die iOS-App 0.3 bis 0.6 und Mac 1.8.3 mit Sync über CloudKit; davor v0.23, Plan für die iOS-App 0.1 und 0.2; davor v0.22, Plan für 1.8.2; davor v0.21 vom 1.11.2026, 1.8.1 umgesetzt: Steigung, Lastenrad, Kurvigkeit und Ebene „Kurvige Straßen“; davor v0.20 vom 28.10.2026, Release 1.8.0 „Kartenstile“ vorbereitet; davor v0.19 vom 27.10.2026, Plan für 1.8 „Kartenstile“, der Bereich „Fahrten“ B-125 nach 1.9 verschoben; davor v0.18 vom 26.10.2026, Plan für 1.7 in zwei Releases 1.7.0 und 1.7.1; davor v0.17 vom 25.10.2026, Release 1.6.2 mit Update-Hinweis B-172; davor 1.6.1 mit Sicherheits-Fix, Architektur-Aufräumen B-162 bis B-169 und zwei Karten-Verbesserungen B-170, B-171; Plan für 1.7 bis 1.9) · Die IDs in Klammern verweisen auf `REQUIREMENTS.md`.
 Größe: **S** ≈ wenige Stunden, **M** ≈ 1–2 Tage, **L** ≈ mehrere Tage.
 Status: ☐ offen · ◐ in Arbeit · ☑ erledigt
 
@@ -35,8 +35,8 @@ Status: ☐ offen · ◐ in Arbeit · ☑ erledigt
 | iOS 0.1 | iOS-App „Hello World“: eigenes Target neben der Mac-App, nutzt das Paket, zeigt die Beispielfahrt; läuft im Simulator und auf Nils’ iPhone (B-204 bis B-207) | mich |
 | iOS 0.2 | Fahrten vom Mac ansehen, GPS-Aufnahme mit Karte, Aufnahme als GPX an den Mac und zum Teilen; Austausch über den iCloud-Ordner „Wattspur Import“, ohne CloudKit (V-14, B-178, B-208 bis B-214; Design C „Übersicht mit Kacheln“) | mich |
 | iOS 0.3 | Eine Datenbank auf iPhone und Mac: Sync über CloudKit, Aufnahme wird direkt zur Fahrt, Löschen auf dem iPhone, Verteilung über TestFlight (B-215 bis B-220, mit Mac 1.8.4); aus dem Fahrtvergleich: doppelte Fahrt, GPX-Zeit mit Millisekunden, Höhenmeter (B-232 bis B-234) | mich, Freunde über TestFlight |
-| iOS 0.4 | Auswerten und Importieren: Diagramm-Karussell, Diagramm und Karte gekoppelt, Filter in der Liste, FIT aus der Flow-App (B-090, B-221, B-222, B-071) | mich, Freunde |
-| iOS 0.5 | Unterwegs: Live-Aktivität bei der Aufnahme, Widget „Diese Woche“, Kurzbefehle und Siri, Höhe vom Barometer (B-223 bis B-225, B-235) | mich, Freunde |
+| iOS 0.4 | Auswerten und Importieren (**Plan 5.11.2026, abgestimmt mit Nils**): Fahrt bearbeiten, Messwerte im Tour-Detail, Diagramm-Karussell, Diagramm und Karte gekoppelt, FIT aus der Flow-App, Höhe vom Barometer, Strecke der Aufnahme genauer; externe TestFlight-Gruppe für Freunde (B-240, B-241, B-090, B-221, B-188, B-071, B-235, B-242, Rest von B-219) | mich, Freunde über TestFlight |
+| iOS 0.5 | Unterwegs: Live-Aktivität bei der Aufnahme, Widget „Diese Woche“, Kurzbefehle und Siri, Filter und Suche in der Fahrtenliste (B-223 bis B-225, B-222); die Höhe vom Barometer (B-235) ist nach 0.4 vorgezogen | mich, Freunde |
 | iOS 0.6 | Karten und Highlights: Kartenstile, Karte aller Fahrten mit Heatmap, Highlights (B-186, B-226 bis B-228) | mich, Freunde |
 | iOS später | Bosch-Portal, Apple Watch, Fahrten mit Freunden teilen, Kalorien aus dem Puls (B-229 bis B-231, B-236) | – |
 
@@ -576,8 +576,8 @@ Ideen von Nils und Claude am 2.11.2026 gesammelt und von Nils geordnet. Leitfade
 | V-15 | **Spike CloudKit mit echten Daten:** die Bibliothek von Nils (alle Fahrten mit Zeitreihen und Routen) im Development-Container synchronisieren: Dauer beim ersten Hochladen, Größe, Verhalten bei zwei Geräten, doppelte Fahrten, Löschen, iCloud aus oder Speicher voll. Ergebnis entscheidet, ob Zeitreihen als externer Speicher (`@Attribute(.externalStorage)`) oder getrennt synchronisiert werden **Erledigt (4.11.2026, mit einer Kopie der Bibliothek von Nils in Development):** Ergebnis in [SPIKE-CLOUDKIT.md](SPIKE-CLOUDKIT.md): Zeitreihen bleiben externer Speicher; 84 Fahrten in ca. 80 s hochgeladen; Änderungen in 30 s bis 1 min auf dem anderen Gerät; Löschen und Aufnahme ohne Netz gehen; iCloud aus löscht die lokale Kopie auf dem iPhone, nach dem Einschalten kommt alles zurück; Hinweise dazu in B-220, Zusammenführen der Doppel in B-216 | M | ☑ |
 | B-189 | (vorhanden, aus „Vorbereitung iOS“) **CloudKit-Tauglichkeit absichern:** Test für die CloudKit-Regeln des Modells; muss vor dem ersten Schema-Deploy nach Production grün sein, danach lässt sich das Modell nur noch erweitern. Erledigt: `CloudKitSchemaTests` prüft das Core-Data-Modell, das SwiftData baut; das Modell hielt die Regeln schon, keine Änderung und keine Migration nötig | S | ☑ |
 | B-072 | (vorhanden) **Sync am Mac:** SwiftData mit `cloudKitDatabase: .private(…)`, Einstellung „Mit iCloud synchronisieren“ (aus als Standard); beim ersten Einschalten vorher eine Sicherung (P-22) und Hinweis, dass alle Fahrten hochgeladen werden; Papierkorb, Bikes, Profil und gespeicherte Strecken synchronisieren mit. **Vorbereitet (2.11.2026):** Tab *iCloud* in den Einstellungen, Sicherung vor dem ersten Einschalten, `LibrarySync` öffnet die Mediathek ausdrücklich ohne CloudKit, solange die App das iCloud-Entitlement nicht trägt (ad hoc signiert); offen: echter Sync mit Developer-ID-Build und V-15 | L | ◐ |
-| B-216 | **iPhone: eigene Datenbank mit Sync:** dasselbe Modell aus dem Kit im selben Container; *Übersicht*, *Fahrten* und Tour-Detail lesen aus SwiftData statt aus `Stand.json`; eine Aufnahme wird nach dem Stopp (Name, Bike) direkt eine Fahrt, die Auswertung rechnet das Kit auf dem iPhone; Duplikaterkennung wie am Mac. **Vorbereitet (2.11.2026, hinter dem Schalter `WATTSPUR_IOS_DATABASE`):** `PhoneDatabase` im Kit, Aufnahme wird Fahrt, im Simulator mit `local` ausprobiert; Standard bleibt der Ordner von 0.2; offen: `icloud` mit Account, Zusammenführen doppelter Rider und Bikes nach dem ersten Sync, Umstieg der Aufnahmen aus 0.2 | L | ◐ |
-| B-217 | **Löschen auf dem iPhone:** Wischen zum Löschen in der Liste und Knopf im Tour-Detail, Papierkorb mit derselben Logik wie am Mac (Wiederherstellen, endgültig nach 30 Tagen); über den Sync auch am Mac. **Vorbereitet (2.11.2026):** Wischen, Knopf im Tour-Detail, *Mehr › Papierkorb*, im Simulator ausprobiert; offen: Wirkung am Mac über den Sync | S | ◐ |
+| B-216 | **iPhone: eigene Datenbank mit Sync:** dasselbe Modell aus dem Kit im selben Container; *Übersicht*, *Fahrten* und Tour-Detail lesen aus SwiftData statt aus `Stand.json`; eine Aufnahme wird nach dem Stopp (Name, Bike) direkt eine Fahrt, die Auswertung rechnet das Kit auf dem iPhone; Duplikaterkennung wie am Mac. **Vorbereitet (2.11.2026, hinter dem Schalter `WATTSPUR_IOS_DATABASE`):** `PhoneDatabase` im Kit, Aufnahme wird Fahrt, im Simulator mit `local` ausprobiert; Standard bleibt der Ordner von 0.2; offen: `icloud` mit Account, Zusammenführen doppelter Rider und Bikes nach dem ersten Sync, Umstieg der Aufnahmen aus 0.2. **Erledigt (5.11.2026, mit iOS 0.3 und Mac 1.8.4):** iPhone liest aus der eigenen Datenbank im iCloud-Container, Aufnahme wird Fahrt, Doppel werden auf beiden Geräten zusammengeführt (PR #75) | L | ☑ |
+| B-217 | **Löschen auf dem iPhone:** Wischen zum Löschen in der Liste und Knopf im Tour-Detail, Papierkorb mit derselben Logik wie am Mac (Wiederherstellen, endgültig nach 30 Tagen); über den Sync auch am Mac. **Vorbereitet (2.11.2026):** Wischen, Knopf im Tour-Detail, *Mehr › Papierkorb*, im Simulator ausprobiert; offen: Wirkung am Mac über den Sync. **Erledigt (5.11.2026):** Löschen wirkt über den Sync in beide Richtungen (V-15, iOS 0.3) | S | ☑ |
 | B-218 | **Abschied vom iCloud-Ordner fürs iPhone:** „Stand fürs iPhone“ (B-208) und die Ordnerwahl auf dem iPhone entfallen, sobald Sync an ist; einmaliger Hinweis für bisherige Nutzer; der Ordner `Wattspur Import` bleibt am Mac für FIT- und GPX-Dateien; Austauschformat (B-178) bleibt als Export. **Erweitert (Entscheidung Nils 4.11.2026):** Wer iCloud nicht will oder keinen Platz hat, behält den Weg über den Ordner. **Erledigt (4.11.2026):** Schalter „Mit iCloud synchronisieren“ in *Mehr* wählt sofort zwischen iCloud und Ordner (iOS 0.2); Ordner auch bei Dropbox oder OneDrive; Aufnahmen per „GPX teilen“ (AirDrop) an den Mac; bisherige Ordner-Nutzer behalten den Ordner und bekommen einmal das Angebot; Mac blendet „Fahrten fürs iPhone bereitstellen“ bei Sync aus, solange es aus ist; von Nils geprüft | M | ☑ |
 | B-219 | **TestFlight:** Eintrag in App Store Connect, Archiv aus Xcode hochladen, interne Tester (Nils), danach externe Tester (Freunde) mit Beta-Review; Datenschutzangaben (Standort, Fitnessdaten, alles nur im eigenen iCloud); Anleitung in `docs/learning/`. **Vorbereitet (2.11.2026):** Anleitung `docs/learning/32-testflight.md` mit allen Texten für App Store Connect, Datenschutzerklärung `docs/PRIVACY.md`, `ITSAppUsesNonExemptEncryption = NO`; offen: App anlegen, Upload, Tester. **Stand 5.11.2026:** Schema in Production (vorher vervollständigt, PR #80), App „Wattspur“ in App Store Connect angelegt, Build 0.3.0 (1) hochgeladen, Nils interner Tester, echte Bibliothek über Mac 1.8.4 in Production; offen: externe Gruppe für Freunde mit Beta-Prüfung | S | ◐ |
 | B-220 | **Sync-Status:** im Tab *Mehr* und in den Mac-Einstellungen „Zuletzt synchronisiert: …“; verständliche Hinweise bei abgemeldetem iCloud, vollem Speicher oder fehlendem Netz; keine Fehlermeldung bei kurzen Verzögerungen **Erledigt (4.11.2026):** Mac-Einstellungen › iCloud und Tab *Mehr* zeigen „Zuletzt synchronisiert“; kein iCloud und voller Speicher sofort, fehlendes Netz und andere Fehler erst nach 2 min; Warnung, solange Änderungen auf den Upload warten; Profil-Satz auf dem Mac passt zum Sync; von Nils auf Mac und iPhone geprüft | S | ☑ |
@@ -590,25 +590,59 @@ Ideen von Nils und Claude am 2.11.2026 gesammelt und von Nils geordnet. Leitfade
 **Fertig, wenn** eine Aufnahme auf dem iPhone ohne Handgriff am Mac erscheint, eine am Mac importierte Fahrt auf dem iPhone, Löschen auf einer Seite auch auf der anderen wirkt und die App über TestFlight auf Nils’ iPhone läuft.
 **Risiken:** Größe der Zeitreihen beim ersten Hochladen (V-15); Modell nach dem Production-Deploy nicht mehr umbaubar (B-189); Konflikte bei gleichzeitiger Bearbeitung (SwiftData: letzter gewinnt).
 
-### iOS 0.4 – Auswerten und Importieren
+### iOS 0.4 – Auswerten und Importieren (Plan 0.4, abgestimmt mit Nils 5.11.2026)
 
-| # | Story | Größe | Status |
-|---|---|---|---|
-| B-090 | (vorhanden) **Diagramm-Karussell** im Tour-Detail: Tempo, Leistung, Trittfrequenz, Puls und Höhe (je nach vorhandenen Daten), Wischen nach links und rechts, Punkte unten; Messwerte für die Anzeige im Kit ausdünnen | M | ☐ |
-| B-221 | **Diagramm und Karte gekoppelt:** Finger aufs Diagramm zeigt den Punkt auf der Karte und die Werte an dieser Stelle, wie `RideCursor` am Mac; Logik der Zuordnung Zeit ↔ Ort ins Kit | M | ☐ |
-| B-222 | **Filter und Suche in der Fahrtenliste:** nach Bike, Zeitraum, Strecke (von–bis) und Name; Filter oben als Leiste, Anzahl der Treffer; Filterlogik im Kit, damit der Mac sie mitnutzen kann | M | ☐ |
-| B-071 | (vorhanden) **FIT aus der Flow-App:** „Öffnen mit“ und Teilen für FIT und GPX, Import auf dem iPhone mit demselben Ablauf wie am Mac (setzt B-188 voraus), Duplikate erkennen, Bike zuordnen; bringt Trittfrequenz, Leistung und Motordaten mit | M | ☐ |
+Vorschlag von Claude nach dem Lesen von Code und Doku, von Nils am 5.11.2026 entschieden: der Plan vom 2.11.2026 **ohne Filter und Suche** (B-222 geht nach 0.5), dafür **mit der Höhe vom Barometer** (B-235 aus 0.5 vorgezogen) und drei neuen kleinen Stories. Ziel: ein TestFlight-Build, der sich auch für Freunde ohne Mac lohnt (Bosch-Fahrten aus der Flow-App aufs iPhone) und die Fahrt auf dem iPhone so zeigt wie am Mac.
+
+**Entscheidungen (5.11.2026):**
+- **Karussell und Kopplung nur mit iCloud** (Entscheidung Nils): Nur die Datenbank auf dem iPhone hat die ganze Zeitreihe. Im Ordner-Weg ohne iCloud bleibt das Höhenprofil aus dem Stand vom Mac; der Mac schreibt keine Messwerte in den Ordner.
+- **Kein Umbau des Schemas in 0.4:** Alle Stories nutzen vorhandene Felder (Name, Bike, Zeitreihe, Originaldatei). Production lässt sich nur noch erweitern (B-189), darum bleibt das Schema diesmal unberührt.
+- **FIT-Import ohne iCloud:** Ohne iCloud legt das iPhone eine geteilte FIT- oder GPX-Datei in den Ordner `Wattspur Import`, der Mac importiert sie wie bisher.
+- **Reihenfolge danach bestätigt:** 0.5 Unterwegs, 0.6 Karten und Highlights (die Karten brauchen vorher den Umbau B-186 am Mac).
+
+**Reihenfolge und PRs:** je Zeile ein PR direkt gegen `main`, der nächste erst nach dem Merge. Check: `scripts/ci-local.sh` (baut auch das iOS-Target), `swift test --no-parallel`.
+
+| PR | Inhalt |
+|---|---|
+| 1 | B-240 Fahrt bearbeiten |
+| 2 | B-242 Strecke der Aufnahme |
+| 3 | B-241 Messwerte im Tour-Detail |
+| 4 | B-090 Diagramm-Karussell |
+| 5 | B-221 Diagramm und Karte gekoppelt |
+| 6 | B-188 Import nach Quelle trennen (Mac) |
+| 7 | B-071 FIT aus der Flow-App |
+| 8 | B-235 Höhe vom Barometer |
+| 9 | Release **iOS 0.4.0**: `MARKETING_VERSION` 0.4.0, `CURRENT_PROJECT_VERSION` höher als beim letzten Upload, Changelog, Handbuch EN/DE, Upload zu TestFlight |
+
+| # | Story | Größe | Hängt ab von | Status |
+|---|---|---|---|---|
+| B-219 | (Rest aus 0.3) **Externe TestFlight-Gruppe „Freunde“** mit Beta-App-Prüfung, Einladung per Link; Anleitung `docs/learning/32-testflight.md`. Der nächste Upload braucht `CURRENT_PROJECT_VERSION` 2. Macht Nils in App Store Connect | S | – | ◐ |
+| B-240 | **Fahrt bearbeiten auf dem iPhone** (neu 5.11.2026): Name und Bike einer Fahrt im Tour-Detail ändern (Menü oben rechts), über den Sync auch am Mac; nur mit iCloud, nicht für die Beispielfahrt. Seit 0.3 sind iPhone und Mac gleichberechtigt, bisher ging das nur am Mac | S | – | ☐ |
+| B-242 | **Strecke der Aufnahme genauer** (neu 5.11.2026, Nebenbefund aus V-15): Eine Aufnahme zeigt etwa 1 % mehr Strecke als ihre eigene GPS-Spur (10,86 statt 10,75 km am 4.11.2026), weil `RideRecording` jeden Schritt ab 5 m zählt, auch GPS-Zittern. Zittern im Stand und bei langsamer Fahrt herausfiltern; Rechnung im Kit mit Tests | S | – | ☐ |
+| B-241 | **Messwerte im Tour-Detail** (neu 5.11.2026): Das Detail auf dem iPhone kennt heute nur Ort, Höhe und Strecke (`RideExchange.Route`). Mit iCloud liest es die Zeitreihe der Fahrt (`samplesData`) aus der Datenbank: Tempo, Leistung, Trittfrequenz, Puls, Höhe über Strecke und Zeit, für die Anzeige im Kit ausgedünnt; Grundlage für B-090 und B-221 | S–M | – | ☐ |
+| B-090 | (vorhanden) **Diagramm-Karussell** im Tour-Detail: Tempo, Leistung, Trittfrequenz, Puls und Höhe (je nach vorhandenen Daten), Wischen nach links und rechts, Punkte unten, Max und Ø je Seite (TOUR-11); ohne iCloud bleibt das Höhenprofil | M | B-241 | ☐ |
+| B-221 | **Diagramm und Karte gekoppelt:** Finger aufs Diagramm zeigt den Punkt auf der Karte und die Werte an dieser Stelle, wie `RideCursor` am Mac; Logik der Zuordnung Zeit ↔ Ort ins Kit | M | B-090 | ☐ |
+| B-188 | (vorhanden, aus „Vorbereitung iOS“) **Import nach Quelle trennen** am Mac, damit das iPhone denselben Ablauf nutzt | M | – | ☐ |
+| B-071 | (vorhanden) **FIT aus der Flow-App:** „Öffnen mit“ und Teilen für FIT und GPX; mit iCloud Import auf dem iPhone mit demselben Ablauf wie am Mac (Duplikate und ähnliche Fahrten wie B-232, Bike zuordnen); ohne iCloud wandert die Datei in den Ordner für den Mac. Bringt Trittfrequenz, Leistung und Motordaten mit; macht die App für Freunde ohne Mac nützlich | M | B-188 | ☐ |
+| B-235 | (aus 0.5 vorgezogen, Entscheidung Nils 5.11.2026) **Höhe vom Barometer bei der Aufnahme:** mit `CMAltimeter` die relative Höhe mitschreiben und mit der GPS-Höhe als Ausgangswert verbinden; Anstieg und Abstieg daraus rechnen. Die Höhe geht wie bisher in die Fahrt und die GPX, **kein neues Feld im Schema**. Prüfen: Akku, Hosentasche gegenüber Lenker, Vergleich mit Bosch an zwei Touren | M | – | ☐ |
+
+**Fertig, wenn** Nils und mindestens ein Freund 0.4 über TestFlight haben, eine FIT aus der Flow-App auf dem iPhone als Fahrt mit Leistung und Trittfrequenz erscheint (und am Mac), das Karussell mit Kopplung an die Karte läuft und eine Aufnahme mit Barometer-Höhe näher an Bosch liegt als vorher; dazu Tests im Kit für Ausdünnen, Zuordnung Zeit ↔ Ort und Streckenfilter.
+**Aufwand (Schätzung 5.11.2026):** etwa 9–12 Tage. Risiken: Barometer in der Hosentasche, Größe der Zeitreihe beim Öffnen auf älteren iPhones, Beta-App-Prüfung für die externe Gruppe.
+**Nicht in 0.4:** Filter und Suche (→ 0.5), Messwerte im Ordner-Weg, Bearbeiten über Name und Bike hinaus.
 
 ### iOS 0.5 – Unterwegs
 
 | # | Story | Größe | Status |
 |---|---|---|---|
 | B-223 | **Live-Aktivität bei der Aufnahme:** Zeit, Strecke und Tempo auf dem Sperrbildschirm und in der Dynamic Island, Knopf Pause; endet mit dem Stopp | M | ☐ |
-| B-224 | **Widget „Diese Woche“:** km und Fahrten der Woche, letzte Fahrt; klein und mittel; Daten über eine App Group (braucht den Account) (P-06) | M | ☐ |
+| B-224 | **Widget „Diese Woche“:** km und Fahrten der Woche, letzte Fahrt; klein und mittel; Daten über eine App Group (braucht den Account; neue Capability, kein neues Feld im Schema) (P-06) | M | ☐ |
 | B-225 | **Kurzbefehle und Siri** mit App Intents: „Fahrt starten“, „Fahrt beenden“, „Wie viele Kilometer diese Woche?“, „Letzte Fahrt öffnen“ (P-07) | M | ☐ |
-| B-235 | **Höhe vom Barometer bei der Aufnahme** (Fahrtvergleich 3.11.2026, Teil 2 von B-234): Das iPhone schreibt heute die Höhe aus der Ortung; sie springt mehr als die von Bosch (Schritte von Sekunde zu Sekunde etwa 50 % größer) und liegt im Mittel 5 m tiefer. Mit `CMAltimeter` die relative Höhe vom Barometer mitschreiben und mit der GPS-Höhe als Ausgangswert verbinden; Anstieg und Abstieg daraus rechnen. Prüfen: Akku und Verhalten in der Hosentasche gegenüber dem Lenker | M | ☐ |
+| B-222 | (aus 0.4 verschoben, Entscheidung Nils 5.11.2026) **Filter und Suche in der Fahrtenliste:** nach Bike, Zeitraum, Strecke (von–bis) und Name; Filter oben als Leiste, Anzahl der Treffer; Filterlogik im Kit, damit der Mac sie mitnutzen kann | M | ☐ |
+| B-235 | → iOS 0.4 (vorgezogen 5.11.2026) | M | → |
 
 ### iOS 0.6 – Karten und Highlights
+
+Reihenfolge nach 0.5 bestätigt (Nils 5.11.2026).
 
 | # | Story | Größe | Status |
 |---|---|---|---|
