@@ -6,12 +6,14 @@ import WattspurCore
 /// left. The rule itself is `RideFilter` in the Kit, shared with the Mac (B-244).
 struct RideFilterBar: View {
     @Binding var filter: RideFilter
+    /// Tighter in landscape, where the screen is short (B-243).
+    var compact = false
     var bikes: [RideExchange.Bike]
     var shown: Int
     var total: Int
 
     var body: some View {
-        VStack(alignment: .leading, spacing: 8) {
+        VStack(alignment: .leading, spacing: compact ? 6 : 8) {
             searchField
             ScrollView(.horizontal) {
                 HStack(spacing: 8) {
@@ -46,7 +48,7 @@ struct RideFilterBar: View {
             }
         }
         .padding(.horizontal)
-        .padding(.vertical, 8)
+        .padding(.vertical, compact ? 6 : 8)
         // Only behind the bar itself: reaching into the safe area, it would cover the large title.
         .background(.bar, ignoresSafeAreaEdges: [])
     }
@@ -70,7 +72,7 @@ struct RideFilterBar: View {
             }
         }
         .padding(.horizontal, 10)
-        .frame(height: 36)
+        .frame(height: compact ? 32 : 36)
         .background(Color.secondary.opacity(0.12), in: .capsule)
     }
 

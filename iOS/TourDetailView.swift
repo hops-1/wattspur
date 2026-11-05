@@ -54,19 +54,12 @@ struct TourDetailView: View {
                 portrait
             }
         }
-        .modifier(DetailTitle(title: embedded ? nil : ride.name))
+        // In landscape the name is a heading beside the map; the slim bar keeps only Back and the buttons.
+        .modifier(DetailTitle(title: embedded || isLandscape ? nil : ride.name))
         .hidesTabBarInLandscape()
         .toolbar {
-            // Only rides of the iPhone's own store, not the sample ride or the Mac's state (B-217).
-            if library.canShare(ride), route == nil {
-                ShareLink(item: library.sharedGPX(for: ride), preview: SharePreview(ride.name)) {
-                    Label("Share GPX", systemImage: "square.and.arrow.up")
-                }
-            }
-            if library.usesDatabase, route == nil {
-                Button("Edit", systemImage: "pencil") { editing = true }
-                Button("Delete", systemImage: "trash") { confirmingDelete = true }
-            }
+            // Beside the list in landscape there is no title bar: the buttons sit in the heading.
+            if !embedded { actions }
         }
         .sheet(isPresented: $editing) {
             EditRideSheet(ride: ride)
@@ -117,7 +110,12 @@ struct TourDetailView: View {
                 .containerRelativeFrame(.horizontal) { width, _ in width * 0.45 }
             ScrollView {
                 VStack(alignment: .leading, spacing: 12) {
-                    info
+                    VStack(alignment: .leading, spacing: 2) {
+                        Text(ride.name)
+                            .font(.title3.weight(.bold))
+                            .accessibilityAddTraits(.isHeader)
+                        info
+                    }
                     if hasCarousel {
                         RideChartCarousel(ride: ride, points: chartPoints, track: track, spot: $spot, height: 230)
                     }
@@ -135,11 +133,18 @@ struct TourDetailView: View {
     private var besideList: some View {
         ScrollView {
             VStack(alignment: .leading, spacing: 12) {
-                VStack(alignment: .leading, spacing: 2) {
-                    Text(ride.name)
-                        .font(.title3.weight(.bold))
-                        .accessibilityAddTraits(.isHeader)
-                    info
+                HStack(alignment: .top, spacing: 8) {
+                    VStack(alignment: .leading, spacing: 2) {
+                        Text(ride.name)
+                            .font(.title3.weight(.bold))
+                            .accessibilityAddTraits(.isHeader)
+                        info
+                    }
+                    Spacer(minLength: 0)
+                    actions
+                        .labelStyle(.iconOnly)
+                        .buttonStyle(.glass)
+                        .buttonBorderShape(.circle)
                 }
                 HStack(alignment: .top, spacing: 12) {
                     RideMap(ride: ride, route: route, interactive: true, marker: marker)
@@ -153,6 +158,20 @@ struct TourDetailView: View {
                 elevationProfile
             }
             .padding()
+        }
+    }
+
+    /// Share, edit and delete; only rides of the iPhone's own store, not the sample ride or the
+    /// Mac's state (B-217).
+    @ViewBuilder private var actions: some View {
+        if library.canShare(ride), route == nil {
+            ShareLink(item: library.sharedGPX(for: ride), preview: SharePreview(ride.name)) {
+                Label("Share GPX", systemImage: "square.and.arrow.up")
+            }
+        }
+        if library.usesDatabase, route == nil {
+            Button("Edit", systemImage: "pencil") { editing = true }
+            Button("Delete", systemImage: "trash") { confirmingDelete = true }
         }
     }
 

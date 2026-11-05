@@ -130,7 +130,7 @@ struct OverviewView: View {
                 }
             }
             .padding(.horizontal)
-            .padding(.bottom)
+            .padding(.vertical, 8)
         }
         // Room for “Start Ride” and the tab bar below the last tiles.
         .contentMargins(.bottom, LandscapeTabBar.height + 12, for: .scrollContent)

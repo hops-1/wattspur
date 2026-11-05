@@ -38,7 +38,7 @@ struct RidesView: View {
     }
 
     private func filterBar(_ state: RideExchange.Library, months: [RideExchange.Library.Month]) -> some View {
-        RideFilterBar(filter: $filter, bikes: state.bikes.filter { !$0.isArchived || $0.id == filter.bike.bikeID },
+        RideFilterBar(filter: $filter, compact: isLandscape, bikes: state.bikes.filter { !$0.isArchived || $0.id == filter.bike.bikeID },
                       shown: months.reduce(0) { $0 + $1.rides.count }, total: state.rides.count)
     }
 
@@ -102,6 +102,8 @@ struct RidesView: View {
                 Color.clear
             }
         }
+        // No title bar in landscape (`hidesTitleBarInLandscape`): the search sits at the top, the
+        // detail has its own buttons.
     }
 
     @ViewBuilder private func actions(for ride: RideExchange.Ride) -> some View {
