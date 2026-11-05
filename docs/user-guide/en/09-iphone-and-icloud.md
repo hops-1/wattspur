@@ -68,6 +68,11 @@ While recording, Wattspur measures the height with the iPhone's **barometer**, f
 
 The first time you record, the iPhone asks once for **Motion & Fitness**. If you do not allow it, Wattspur uses the GPS height as before. You can change it in **Settings › Privacy & Security › Motion & Fitness**.
 
+## Lean angle, acceleration and surface
+From 0.5.1 on, the iPhone also reads its motion sensors while recording, with the same permission **Motion & Fitness** as the barometer. The ride detail then has tiles for the strongest lean to the left and right, the strongest acceleration and braking, the best time from a standstill and the share of uneven surface. The carousel has the page **Lean Angle**. The map colours the track by lean angle; the switch at the top of the map changes to **Surface**. How the values come about is under [Metrics](05-metrics.md). The Mac shows the same values in the ride detail.
+
+For tests, **More › Test** has the switch **Record Raw Motion**. When it is on, every recording also puts a file into the Files app (**On My iPhone › Wattspur › Bewegung**), about 20 MB per hour. Normally it stays off.
+
 ## Sharing a ride as GPX
 At the top right of a ride's detail, or by touching and holding a ride in the list: **Share GPX**. The file holds the whole track with time and altitude, and the bike. You can AirDrop it to the Mac, save it in the Files app or open it in komoot. Rides without GPS cannot be shared.
 

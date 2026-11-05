@@ -7,6 +7,26 @@ Every DMG handed out to testers corresponds to one entry below.
 
 ## [Unreleased]
 
+## [1.8.6] – 2026-11-06
+
+Rides recorded with the iPhone app 0.5.1 bring lean angle, acceleration and how rough the road was. The Mac shows them in the ride detail, next to the iPhone. The values are a first version: the limits are checked against real test rides on a motorcycle and an e-bike and may still change.
+
+### Added
+
+- **Lean, acceleration and braking:** for a ride recorded with the iPhone app 0.5.1, the key figures get a third row: **Max. Lean Left**, **Max. Lean Right**, **Max. Acceleration** and **Max. Braking** in g. Below it the best time from a standstill to 100 km/h on a motorcycle, to 25 km/h on any other bike (B-247).
+- **Lean angle chart:** under the other charts, around 0: lean to the left goes up, to the right down. Hover over it and it says, for example, “1.4 km · 27° right”, and the map shows the spot. Each slice of the chart keeps its strongest lean, so a left and a right curve do not cancel out (B-247).
+- **Map by lean angle:** the route is coloured from green (upright) through yellow, orange and red to purple (40° and more), with a legend. A button at the top left of the map turns it on and off; it is on by default. While it is on, the new stretches step back so they do not hide the colours (B-247).
+- **Road surface:** the figure **Uneven Surface** says how much of the distance was uneven or rough. A third button on the map colours the route by surface: grey smooth, yellow uneven, brown rough. Only one colouring at a time: curves, lean angle or surface (B-248).
+
+Rides without these values look as before.
+
+### iPhone app 0.5.1 (TestFlight, 2026-11-06)
+
+- **Motion sensors while recording:** with each GPS point the iPhone now stores the lean angle, the acceleration along the way and how much the road shook. The lean angle comes from the speed and how fast the bike turns, so it does not matter how the iPhone sits in the mount or the pocket. It counts from 10 km/h. Uses the permission Motion & Fitness, which the barometer already asks for. The values go into the GPX of the recording (`wattspur:lean`, `wattspur:accel`, `wattspur:rough`); other programs ignore them (B-245, B-248).
+- **In the ride detail:** tiles for the strongest lean to the left and right, the strongest acceleration and braking, the best time from a standstill (0–100 km/h on a motorcycle, 0–25 km/h on any other bike) and the share of uneven surface. A carousel page **Lean Angle**. The map colours the track by lean angle or, with the switch at the top, by surface; Wattspur remembers the choice (B-246, B-248).
+- **For testing:** **More › Test › Record Raw Motion** also writes the raw motion data and every GPS point into a file in the Files app (“On My iPhone › Wattspur › Bewegung”), about 20 MB per hour. Off by default (V-16).
+- **Build 7:** the app no longer crashes when a recording starts with the raw motion data turned on.
+
 ## [1.8.5] – 2026-11-05
 
 The ride list on the Mac gets a distance filter that works the same as on the iPhone. Together with it comes the iPhone app 0.5.0 for riding: landscape for the handlebar mount, search and filters, the recording on the Lock Screen, a widget and Siri.

@@ -68,6 +68,11 @@ Wattspur misst die Höhe beim Aufnehmen mit dem **Barometer** des iPhones, also 
 
 Beim ersten Aufnehmen fragt das iPhone einmal nach **Bewegung & Fitness**. Erlaubst du das nicht, nimmt Wattspur die GPS-Höhe wie bisher. Ändern kannst du das unter **Einstellungen › Datenschutz & Sicherheit › Bewegung & Fitness**.
 
+## Schräglage, Beschleunigung und Belag
+Ab 0.5.1 liest das iPhone beim Aufnehmen auch seine Bewegungssensoren, mit derselben Freigabe **Bewegung & Fitness** wie das Barometer. Im Tour-Detail stehen dann Kacheln für die größte Schräglage links und rechts, die stärkste Beschleunigung und Bremsung, die beste Zeit aus dem Stand und den Anteil unebenen Belags. Im Karussell gibt es die Seite **Schräglage**. Die Karte färbt die Spur nach Schräglage; mit dem Umschalter oben auf der Karte wechselst du zu **Belag**. Wie die Werte entstehen, steht unter [Kennzahlen](05-metrics.md). Am Mac siehst du dieselben Werte im Tour-Detail.
+
+Für Tests gibt es unter **Mehr › Test** den Schalter **Rohdaten der Bewegung mitschreiben**. Ist er an, legt jede Aufnahme zusätzlich eine Datei in der Dateien-App ab (**Auf meinem iPhone › Wattspur › Bewegung**), etwa 20 MB pro Stunde. Normalerweise bleibt er aus.
+
 ## Eine Fahrt als GPX teilen
 In der Detailansicht einer Fahrt oben rechts, oder in der Liste mit langem Druck auf die Fahrt: **GPX teilen**. Die Datei enthält die ganze Spur mit Zeit und Höhe, dazu das Bike. Du kannst sie per AirDrop an den Mac schicken, in die Dateien-App legen oder in komoot öffnen. Fahrten ohne GPS lassen sich nicht teilen.
 
