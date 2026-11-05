@@ -59,6 +59,7 @@ struct RideListView: View {
     @State private var newName = ""
     @AppStorage(SettingsKey.rideSortOrder) private var sortOrder: RideSortOrder = .date
     @AppStorage(SettingsKey.ridePeriod) private var period: RidePeriod = .all
+    @AppStorage(SettingsKey.rideDistance) private var distance: RideDistanceBand = .all
     @AppStorage(SettingsKey.multiSelectTipDone) private var multiSelectTipDone = false
     /// Where the slider of a new "Similar to" filter starts (SET, ROUTE-02).
     @AppStorage(SettingsKey.similarRoutesThreshold) private var similarDefault = RouteSimilarity.defaultThreshold
@@ -73,21 +74,26 @@ struct RideListView: View {
 
     /// Search, period filter and sort order applied (LIST-05). With "Similar to" only the rides on that
     /// route, the ride asked about first.
+    /// Search, bike, period and distance as one rule, the same as on the iPhone (B-222, B-244).
+    /// Beside the map or the analysis their own period decides, and the distance does not apply.
+    private var listFilter: RideFilter {
+        RideFilter(text: searchText, bike: bikeFilter, period: scope == nil ? period : .all,
+                   distance: scope == nil ? distance : .all)
+    }
+
     private var filteredRides: [Ride] {
         // The rides of a day from the highlights are shown whatever period, bike or source the
         // list has, else some of them could be missing (B-130); the search still applies.
         if let day = activeDayFilter {
             return rides
                 .filter { day.rideIDs.contains($0.id) }
-                .filter { searchText.isEmpty || $0.name.localizedStandardContains(searchText) }
+                .filter { RideFilter(text: searchText).admits(name: $0.name, startDate: $0.startDate, bikeID: nil, distance: $0.distance) }
                 .sorted { sortOrder.areInIncreasingOrder($0.sortKey, $1.sortKey) }
         }
         let base = rides
             .filter { scope?.rideIDs.contains($0.id) ?? true }
-            .filter { $0.isOnBike(bikeFilter) && $0.isFromSource(sourceFilter) }
-            .filter { searchText.isEmpty || $0.name.localizedStandardContains(searchText) }
-            // Beside the map or the analysis, their own period decides.
-            .filter { scope != nil || period.contains($0.startDate) }
+            .filter { $0.isFromSource(sourceFilter) }
+            .filter { listFilter.admits(name: $0.name, startDate: $0.startDate, bikeID: $0.bike?.id, distance: $0.distance) }
         guard let filter = activeSimilarFilter else {
             return base.sorted { sortOrder.areInIncreasingOrder($0.sortKey, $1.sortKey) }
         }
@@ -285,7 +291,7 @@ struct RideListView: View {
                 ContentUnavailableView(scope.emptyTitle, systemImage: scope.systemImage)
             } else if !rides.isEmpty && filteredRides.isEmpty {
                 ContentUnavailableView("No Matching Rides", systemImage: "line.3.horizontal.decrease.circle",
-                                       description: Text("Change the search or the period."))
+                                       description: Text("Change the search or the filters."))
             } else if rides.isEmpty {
                 ContentUnavailableView {
                     Label("No Rides Yet", systemImage: "bicycle")
@@ -432,11 +438,14 @@ struct RideListView: View {
     
     }
     /// `true` when the list differs from the default (all rides, newest first).
-    private var isFiltered: Bool { (scope == nil && period != .all) || sortOrder != .date || bikeFilter.isActive || sourceFilter.isActive }
+    private var isFiltered: Bool {
+        (scope == nil && (period != .all || distance != .all)) || sortOrder != .date || bikeFilter.isActive || sourceFilter.isActive
+    }
 
     private func resetFilters() {
         withAnimation(.snappy) {
             period = .all
+            distance = .all
             sortOrder = .date
             bikeFilterChoice = .all
             sourceFilterChoice = .all
@@ -495,6 +504,7 @@ struct RideListView: View {
         let periodActive = scope == nil && period != .all
         var parts: [Text] = []
         if periodActive { parts.append(Text(period.label)) }
+        if scope == nil, distance != .all { parts.append(Text(distance.label)) }
         if sortOrder != .date { parts.append(periodActive ? Text(sortOrder.label) : Text("Sorted by \(Text(sortOrder.label))")) }
         if let bike = bikes.first(where: { $0.id == bikeFilter.bikeID }) { parts.append(Text(verbatim: bike.name)) }
         if sourceFilter.isActive { parts.append(Text(sourceFilter.title)) }
@@ -517,6 +527,9 @@ struct RideListView: View {
             if scope == nil {
                 Picker("Period", selection: $period) {
                     ForEach(RidePeriod.allCases) { Text($0.label).tag($0) }
+                }
+                Picker("Distance", selection: $distance) {
+                    ForEach(RideDistanceBand.allCases) { Text($0.label).tag($0) }
                 }
                 BikeFilterPicker(filter: $bikeFilterChoice)
                 SourceFilterPicker(filter: $sourceFilterChoice, hasGPXRides: hasGPXRides)
@@ -865,6 +878,19 @@ extension RideSortOrder {
         case .ascent: "Ascent"
         case .averagePower: "Avg power"
         case .curviness: "Curviness"
+        }
+    }
+}
+
+extension RideDistanceBand {
+    /// Always in km, like the bands themselves (the same as on the iPhone).
+    var label: LocalizedStringKey {
+        switch self {
+        case .all: "Any Distance"
+        case .under10: "Under 10 km"
+        case .from10To25: "10–25 km"
+        case .from25To50: "25–50 km"
+        case .over50: "Over 50 km"
         }
     }
 }

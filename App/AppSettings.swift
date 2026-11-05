@@ -13,6 +13,8 @@ enum SettingsKey {
     static let multiSelectTipDone = "multiSelectTipDone"
     static let rideSortOrder = "rideSortOrder"
     static let ridePeriod = "ridePeriod"
+    /// The distance band of the ride list (B-244), shared rule with the iPhone (`RideFilter`).
+    static let rideDistance = "rideDistance"
     static let bikeFilterRides = "bikeFilter.rides"
     static let sourceFilterRides = "sourceFilter.rides"
     static let analysisPeriod = "analysisPeriod"
