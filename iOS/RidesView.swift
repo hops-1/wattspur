@@ -111,7 +111,7 @@ struct RidesView: View {
                 Color.clear
             }
         }
-        // No title bar in landscape (`hidesTitleBarInLandscape`): the search sits at the top, the
+        // No title bar (`hidesTitleBar`): the search sits at the top, the
         // detail has its own buttons.
     }
 

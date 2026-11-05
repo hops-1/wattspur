@@ -83,21 +83,21 @@ struct WattspurApp: App {
                             tab = .rides
                         }
                             .hidesTabBarInLandscape()
-                            .hidesTitleBarInLandscape()
+                            .hidesTitleBar()
                     }
                 }
                 SwiftUI.Tab("Rides", systemImage: "list.bullet", value: Tab.rides) {
                     NavigationStack {
                         RidesView(filter: $rideFilter, openedRideID: $openedRideID)
                             .hidesTabBarInLandscape()
-                            .hidesTitleBarInLandscape()
+                            .hidesTitleBar()
                     }
                 }
                 SwiftUI.Tab("More", systemImage: "ellipsis", value: Tab.more) {
                     NavigationStack {
                         MoreView()
                             .hidesTabBarInLandscape()
-                            .hidesTitleBarInLandscape()
+                            .hidesTitleBar()
                     }
                 }
             }
