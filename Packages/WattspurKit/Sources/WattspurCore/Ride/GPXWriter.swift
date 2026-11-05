@@ -22,7 +22,8 @@ public enum GPXWriter {
 
     public static let trackPointExtensionNamespace = "http://www.garmin.com/xmlschemas/TrackPointExtension/v2"
     /// Wattspur's own extension: the bike a recording of the iPhone app was ridden on (B-212), so
-    /// the Mac assigns the ride without asking (B-213). Other programs ignore it.
+    /// the Mac assigns the ride without asking (B-213), and the GPS accuracy of each of its points
+    /// (`wattspur:accuracy`, metres). Other programs ignore it.
     public static let wattspurNamespace = "https://github.com/hops-1/wattspur/gpx/1"
     /// The `creator` of recordings made with the iPhone app (B-212).
     public static let iPhoneCreator = "Wattspur iOS"
@@ -30,7 +31,8 @@ public enum GPXWriter {
     public static func document(name: String, segments: [Segment], description: String? = nil,
                                 creator: String = "Wattspur", bikeID: UUID? = nil) -> Data {
         let note = description.flatMap { $0.isEmpty ? nil : escape($0) }
-        let wattspur = bikeID == nil ? "" : "xmlns:wattspur=\"\(wattspurNamespace)\" "
+        let ownExtension = bikeID != nil || segments.contains { $0.samples.contains { $0.horizontalAccuracy != nil } }
+        let wattspur = ownExtension ? "xmlns:wattspur=\"\(wattspurNamespace)\" " : ""
         var xml = """
         <?xml version="1.0" encoding="UTF-8"?>
         <gpx version="1.1" creator="\(escape(creator))" xmlns="http://www.topografix.com/GPX/1/1" \
@@ -89,12 +91,14 @@ public enum GPXWriter {
         point += "<time>\(timestamp(start.addingTimeInterval(s.time)))</time>"
         // Only measured cadence: the held value is for charts, not for data.
         let cadence = s.cadenceMeasured ? s.cadence : nil
-        if s.power != nil || cadence != nil {
+        let accuracy = s.horizontalAccuracy.flatMap { $0 >= 0 && $0.isFinite ? $0 : nil }
+        if s.power != nil || cadence != nil || accuracy != nil {
             point += "<extensions>"
             if let power = s.power { point += "<power>\(power)</power>" }
             if let cadence {
                 point += "<gpxtpx:TrackPointExtension><gpxtpx:cad>\(cadence)</gpxtpx:cad></gpxtpx:TrackPointExtension>"
             }
+            if let accuracy { point += "<wattspur:accuracy>\(String(format: "%.1f", accuracy))</wattspur:accuracy>" }
             point += "</extensions>"
         }
         return point + "</trkpt>\n"

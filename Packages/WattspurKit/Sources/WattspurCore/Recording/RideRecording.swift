@@ -6,6 +6,9 @@ import Foundation
 ///
 /// The rules (V-14, spike notes in docs/SPIKE-IOS.md):
 /// - A position less accurate than `maxAccuracy` is dropped (tunnels, start of the recording).
+/// - Until the first position is kept, it has to be as accurate as `startAccuracy`: in the first
+///   seconds the GPS jumps by tens of metres while it settles (54 m at a standstill in a test on
+///   5.11.2026). After `startTimeout` the normal limit is enough, so a recording still begins.
 /// - A position that would mean more than the vehicle's top speed since the last one is a jump and
 ///   is dropped: `maxSpeed` for an e-bike, more for a motorcycle (`RecordingVehicle`).
 /// - Distance only grows once the position is `minStep` away from where it last grew, so the GPS
@@ -44,6 +47,10 @@ public struct RideRecording: Codable, Sendable, Equatable {
     }
 
     public static let maxAccuracy = 30.0
+    /// Metres; the first position of a recording has to be this accurate.
+    public static let startAccuracy = 10.0
+    /// Seconds after the start when the first position only has to meet `maxAccuracy`.
+    public static let startTimeout: TimeInterval = 30
     /// 100 km/h: faster than any e-bike, slower than a GPS jump.
     public static let maxSpeed = 100 / 3.6
     public static let minStep = 5.0
@@ -78,6 +85,10 @@ public struct RideRecording: Codable, Sendable, Equatable {
     @discardableResult
     public mutating func add(_ fix: Fix) -> Bool {
         guard !isPaused, fix.horizontalAccuracy >= 0, fix.horizontalAccuracy <= Self.maxAccuracy else { return false }
+        if isWaitingForGPS, fix.horizontalAccuracy > Self.startAccuracy,
+           fix.date.timeIntervalSince(startDate) < Self.startTimeout {
+            return false
+        }
         let index = segments.count - 1
         guard let last = segments[index].last else {
             segments[index].append(Point(fix: fix, distance: distance))
@@ -134,6 +145,9 @@ public struct RideRecording: Codable, Sendable, Equatable {
 
     public var pointCount: Int { segments.reduce(0) { $0 + $1.count } }
 
+    /// `true` until the first position is kept: the GPS is still settling (shown while recording).
+    public var isWaitingForGPS: Bool { pointCount == 0 }
+
     /// `true` while no stretch has two positions at least a second apart: GPX counts whole seconds,
     /// so such a recording is no track, and the Mac would put it into “Failed”.
     public var isTooShort: Bool {
@@ -152,7 +166,8 @@ public struct RideRecording: Codable, Sendable, Equatable {
             return GPXWriter.Segment(startDate: start, samples: points.map { point in
                 RideSample(time: point.fix.date.timeIntervalSince(start),
                            latitude: point.fix.latitude, longitude: point.fix.longitude,
-                           altitude: point.fix.altitude, distance: point.distance, speed: point.fix.speed)
+                           altitude: point.fix.altitude, distance: point.distance, speed: point.fix.speed,
+                           horizontalAccuracy: point.fix.horizontalAccuracy)
             })
         }
     }

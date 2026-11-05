@@ -64,11 +64,15 @@ public struct RideSample: Sendable, Equatable, Codable {
     public var heartRate: Int?
     /// Degrees Celsius, where a source has them (B-141).
     public var temperature: Double?
+    /// The GPS position's radius of uncertainty in metres, from recordings of the iPhone app, so a
+    /// test ride shows when the GPS was good. Not written into stored data while `nil`, like the
+    /// heart rate.
+    public var horizontalAccuracy: Double?
 
     public init(time: TimeInterval, latitude: Double? = nil, longitude: Double? = nil,
                 altitude: Double? = nil, distance: Double? = nil, speed: Double? = nil,
                 power: Int? = nil, cadence: Int? = nil, cadenceMeasured: Bool = false,
-                heartRate: Int? = nil, temperature: Double? = nil) {
+                heartRate: Int? = nil, temperature: Double? = nil, horizontalAccuracy: Double? = nil) {
         self.time = time
         self.latitude = latitude
         self.longitude = longitude
@@ -80,6 +84,7 @@ public struct RideSample: Sendable, Equatable, Codable {
         self.cadenceMeasured = cadenceMeasured
         self.heartRate = heartRate
         self.temperature = temperature
+        self.horizontalAccuracy = horizontalAccuracy
     }
 }
 

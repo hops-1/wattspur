@@ -20,6 +20,14 @@ public struct AltitudeFusion: Sendable, Equatable {
     public static let anchorTimeout: TimeInterval = 20
     /// Seconds over which the offset follows the GPS height: long against GPS noise, short against weather.
     public static let timeConstant: TimeInterval = 300
+    /// Seconds at the start to wait for the first barometer reading instead of taking the GPS height.
+    public static let barometerWait: TimeInterval = 10
+
+    /// Set when the iPhone has a barometer that may be used: then the first seconds wait for it
+    /// rather than start with a GPS height that the barometer height would jump away from.
+    public var waitsForBarometer = false
+    private var firstDate: Date?
+    private var sawBarometer = false
 
     private var anchor: [Double] = []
     private var anchorStart: Date?
@@ -36,7 +44,15 @@ public struct AltitudeFusion: Sendable, Equatable {
     ///   - verticalAccuracy: its accuracy in metres (negative means invalid).
     ///   - barometer: the barometer's height since its start, `nil` without one or when it is stale.
     public mutating func altitude(gps: Double?, verticalAccuracy: Double, barometer: Double?, at date: Date) -> Double? {
-        guard let barometer else { return gps }
+        if firstDate == nil { firstDate = date }
+        guard let barometer else {
+            if waitsForBarometer, !sawBarometer, let first = firstDate,
+               date.timeIntervalSince(first) < Self.barometerWait {
+                return nil
+            }
+            return gps
+        }
+        sawBarometer = true
         if let gps, verticalAccuracy > 0, verticalAccuracy <= Self.maxVerticalAccuracy {
             let sample = gps - barometer
             if let current = offset {
