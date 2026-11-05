@@ -28,7 +28,7 @@ Stand: 4.11.2026. Getestet von Nils und Claude mit einer **Kopie** der echten Bi
 | iCloud für Wattspur aus | lokale Kopie auf dem iPhone weg, neue Aufnahme bleibt; nach dem Einschalten ca. 1 min bis alles zurück, Mac ca. 30 s später |
 | Development zurückgesetzt (22:07) | Mac meldet „Zone Not Found“, setzt den Sync-Stand zurück (`ZoneDeleted`), behält seine Daten und lädt neu hoch; iPhone-App vorher gelöscht und frisch installiert (sonst hätte auch das iPhone alles erneut hochgeladen) |
 | Frisches iPhone | ganze Bibliothek nach ca. **10 s** da, 85 Fahrten wie am Mac (zwei Fahrten vom 4.11. inzwischen zusammengefügt) |
-| Größe in iCloud | **691 MB** für „Wattspur“ (iPhone, Einstellungen › iCloud, 4.11.2026, 21:50), bei 86 Fahrten rund 8 MB je Fahrt. Der Ordner `Wattspur Import` in iCloud Drive hat nur 16 MB, der Rest ist CloudKit. Die Bibliothek auf dem Mac ist dagegen nur **117 MB** groß (`default.store` 24,3 MB, `-wal` 3,9 MB, `.default_SUPPORT` mit Zeitreihen, Dateien und Fotos 89,2 MB). In iCloud liegt also rund das **Sechsfache**, Ursache noch offen (Reste früherer Tests in Development? alte Fassungen geänderter Dateien?) |
+| Größe in iCloud | Einstellungen › iCloud zeigt für „Wattspur“ **691 MB** (4.11.2026, 21:50, Production noch leer) und **690,7 MB** (5.11.2026, 5:55, Production gefüllt). Gemessen mit `-WattspurMeasureCloudKit YES` (5.11.2026) liegen in iCloud aber nur: **Production ca. 79 MB** (195 Fahrten 53,2 MB, 147 Originaldateien 25,0 MB, Räder 0,2 MB, Rest klein) und **Development ca. 57 MB** (201 Fahrten, 28 Originaldateien). Das sind rund **0,4 MB je Fahrt**, weniger als die 117 MB der Bibliothek auf dem Mac. Die Zahl in den Einstellungen folgt dem Inhalt nicht (über Nacht kamen 79 MB dazu, sie blieb gleich); vermutlich zählt Apple gelöschte Daten (Reset von Development, gelöschte Doppel) noch eine Weile mit. Nachmessen in einigen Tagen |
 
 ## Entscheidung: externer Speicher
 
@@ -37,7 +37,7 @@ Die Frage aus V-15 war, ob die Zeitreihen über `@Attribute(.externalStorage)` l
 - Das Hochladen der ganzen Bibliothek dauert gut eine Minute, das ist nur einmal pro Gerät nötig.
 - Eine einzelne Fahrt mit Zeitreihe braucht Sekunden, sichtbar wird sie nach 30 s bis 1 min. Die Wartezeit liegt bei CloudKit, nicht an der Größe.
 - Ein eigener Weg (z. B. Dateien in iCloud Drive) brächte einen zweiten Sync mit eigenen Fehlerfällen.
-- **Vorbehalt Größe:** Mit rund 8 MB je Fahrt wären 600 Fahrten mehr als die 5 GB, die iCloud kostenlos bietet. Bevor das Schema nach Production geht, wird geklärt, wie sich die 691 MB aufteilen (iCloud Drive gegen CloudKit, Zeitreihen gegen Originaldateien und Fotos). Ist CloudKit der große Teil, werden die Zeitreihen gepackt oder die Originaldateien nicht mehr mitsynchronisiert. Der externe Speicher bleibt in beiden Fällen.
+- **Größe geklärt (5.11.2026):** Gemessen sind rund 0,4 MB je Fahrt in iCloud, die kostenlosen 5 GB reichen also für über 10.000 Fahrten. Der Mirror speichert die meisten Zeitreihen und Originaldateien direkt im Eintrag; nur große Werte (6 Zeitreihen, 1 Datei) gehen als `CKAsset`. Packen der Zeitreihen oder ein Sync ohne Originaldateien ist nicht nötig. Messen: Debug-Build mit `-WattspurMeasureCloudKit YES` starten, er listet je Eintragstyp Anzahl und Bytes und beendet sich; er liest nur. Für Production braucht der Debug-Build `com.apple.developer.icloud-container-environment = Production` in einer Kopie der Entitlements (`CODE_SIGN_ENTITLEMENTS=…`).
 
 ## Was daraus folgt
 

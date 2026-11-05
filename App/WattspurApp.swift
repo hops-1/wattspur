@@ -50,6 +50,27 @@ struct WattspurApp: App {
                 exit(1)
             }
         }
+        // `-WattspurMeasureCloudKit YES`: list what the mirror keeps in iCloud per record type, then quit.
+        if UserDefaults.standard.bool(forKey: "WattspurMeasureCloudKit") {
+            let done = DispatchSemaphore(value: 0)
+            Task.detached {
+                do {
+                    let zones = try await LibrarySync.measureCloudKitUsage { print("Wattspur: \($0)") }
+                    for (zone, types) in zones.sorted(by: { $0.key < $1.key }) {
+                        print("ZONE \(zone)")
+                        for (type, usage) in types.sorted(by: { $0.key < $1.key }) {
+                            let assets = usage.assetBytes.sorted { $0.key < $1.key }.map { "\($0.key)=\($0.value)" }.joined(separator: " ")
+                            print("TYPE \(type) records=\(usage.records) fieldBytes=\(usage.fieldBytes) assets=\(usage.assetCount) assetBytes=\(usage.totalAssetBytes) \(assets)")
+                        }
+                    }
+                    exit(0)
+                } catch {
+                    print("Wattspur: CloudKit measuring failed: \(error)")
+                    exit(1)
+                }
+            }
+            done.wait()
+        }
         let usesDemo = DemoMode.isOn
         if SpikeLibrary.isOn && !usesDemo { SpikeLibrary.prepare() }
         #else
