@@ -191,3 +191,34 @@ public enum RideSeries {
         return (0..<maxPoints).map { all[Int((Double($0) * step).rounded())] }
     }
 }
+
+/// One page of the chart carousel on the iPhone (B-090, TOUR-11): a measurement over the ride.
+public enum ChartMeasure: String, CaseIterable, Sendable, Identifiable {
+    case speed, power, cadence, heartRate, altitude
+
+    public var id: Self { self }
+
+    /// The value of this measurement on a chart point.
+    public var value: KeyPath<ChartPoint, Double?> {
+        switch self {
+        case .speed: \.speedKmh
+        case .power: \.power
+        case .cadence: \.cadence
+        case .heartRate: \.heartRate
+        case .altitude: \.altitude
+        }
+    }
+
+    /// The pages a ride has, in the order of the carousel: only measurements with a value somewhere.
+    public static func available(in points: [ChartPoint]) -> [ChartMeasure] {
+        allCases.filter { measure in points.contains { $0[keyPath: measure.value] != nil } }
+    }
+
+    /// Highest and mean value over the chart points; `nil` without values. The mean is over the
+    /// slices, so over distance it weighs each stretch of road the same.
+    public func range(in points: [ChartPoint]) -> (max: Double, mean: Double)? {
+        let values = points.compactMap { $0[keyPath: value] }
+        guard let top = values.max() else { return nil }
+        return (top, values.reduce(0, +) / Double(values.count))
+    }
+}

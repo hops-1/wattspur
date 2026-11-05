@@ -97,6 +97,16 @@
         }
       }
     },
+    "Avg" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ø"
+          }
+        }
+      }
+    },
     "Bike" : {
       "localizations" : {
         "de" : {
@@ -113,6 +123,26 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Bike: %@"
+          }
+        }
+      }
+    },
+    "bpm" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Schläge/min"
+          }
+        }
+      }
+    },
+    "Cadence" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Trittfrequenz"
           }
         }
       }
@@ -338,6 +368,16 @@
         }
       }
     },
+    "Elevation" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Höhe"
+          }
+        }
+      }
+    },
     "Elevation Profile" : {
       "localizations" : {
         "de" : {
@@ -408,6 +448,16 @@
         }
       }
     },
+    "Heart Rate" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Puls"
+          }
+        }
+      }
+    },
     "If it stays like this, open the folder once in the Files app." : {
       "localizations" : {
         "de" : {
@@ -454,6 +504,16 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Zugriff auf den Standort verweigert"
+          }
+        }
+      }
+    },
+    "Max" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Max."
           }
         }
       }
@@ -678,6 +738,16 @@
         }
       }
     },
+    "Power" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Leistung"
+          }
+        }
+      }
+    },
     "Record a ride in the overview." : {
       "localizations" : {
         "de" : {
@@ -764,6 +834,16 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Fahrzeit"
+          }
+        }
+      }
+    },
+    "rpm" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "1/min"
           }
         }
       }
