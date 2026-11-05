@@ -12,6 +12,7 @@ Every DMG handed out to testers corresponds to one entry below.
 - **Edit a ride:** the pencil at the top right of a ride's detail changes its name and its bike. With iCloud, the Mac gets the change too (B-240).
 - **Charts to swipe:** with iCloud, the detail of a ride shows speed, power, cadence, heart rate and elevation, one chart per page with dots below, each with its maximum and average. Only what the ride has gets a page. Without iCloud the elevation profile stays (B-090, B-241).
 - **Chart and map together:** touch and hold a chart, then move the finger: a line marks the spot, the chart shows the distance and the value there, and the map shows the spot as a dot. The charts now sit right below the map, so both fit on the screen (B-221).
+- **Rides from the Flow app:** share a FIT from the Flow app (or open a FIT or GPX in the Files app) with Wattspur. With iCloud it becomes a ride on the iPhone, with power and cadence, and reaches the Mac; Wattspur asks the same questions as the Mac about the bike, a ride that is already there, or the Bosch file of a ride you recorded. Without iCloud the file goes into the folder “Wattspur Import” for the Mac (B-071, B-188).
 
 ## [1.8.4] – 2026-11-05
 

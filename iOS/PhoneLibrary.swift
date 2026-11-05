@@ -228,6 +228,11 @@ final class PhoneLibrary {
         database?.track(forRideID: ride.id) ?? RideTrack(samples: [])
     }
 
+    /// Reads the store again after a file was imported with “Open with” (B-071).
+    func reloadAfterImport() {
+        reload()
+    }
+
     #if DEBUG
     /// For trying the charts in the simulator: the anonymized sample ride (V-05) as a real ride of the
     /// store, with speed, power, cadence and elevation. Debug builds only, started with
