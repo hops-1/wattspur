@@ -54,6 +54,24 @@
           }
         }
       }
+    },
+    "NSMotionUsageDescription" : {
+      "comment" : "Privacy - Motion Usage Description",
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Wattspur misst die Höhe deiner Fahrt mit dem Barometer, für einen genaueren Anstieg."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Wattspur measures the height of your ride with the barometer, for a more exact ascent."
+          }
+        }
+      }
     }
   },
   "version" : "1.0"

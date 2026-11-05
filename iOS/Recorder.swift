@@ -1,4 +1,5 @@
 import CoreLocation
+import CoreMotion
 import Foundation
 import Observation
 import UIKit
@@ -7,6 +8,7 @@ import WattspurCore
 /// Records a ride with GPS (B-211): `CLLocationUpdate.liveUpdates(.fitness)` with a
 /// `CLBackgroundActivitySession`, so it goes on with the screen locked (spike V-14). Every event
 /// goes into a log file at once; after a crash the app offers to continue or finish the ride.
+/// The height comes from the barometer, lifted to the GPS level (`AltitudeFusion`, B-235).
 @MainActor @Observable
 final class Recorder {
     /// The ride being recorded; `nil` when nothing is recorded.
@@ -29,6 +31,12 @@ final class Recorder {
     private var serviceSession: CLServiceSession?
     private var log: FileHandle?
     private let logURL: URL
+    /// The barometer (B-235); every iPhone with iOS 26 has one, but motion access may be denied.
+    private let altimeter = CMAltimeter()
+    private var barometer: (metres: Double, date: Date)?
+    private var fusion = AltitudeFusion()
+    /// A barometer reading older than this is not used; the GPS height stands in.
+    private static let barometerMaxAge: TimeInterval = 5
 
     /// The log lives in Application Support: the documents are shown in the Files app.
     init(logURL: URL = .applicationSupportDirectory.appending(path: "Aufnahme.jsonl")) {
@@ -99,6 +107,7 @@ final class Recorder {
         // “While Using”, the background session keeps the updates coming when the screen is locked.
         serviceSession = CLServiceSession(authorization: .whenInUse)
         backgroundSession = CLBackgroundActivitySession()
+        startBarometer()
         updates = Task { [weak self] in
             do {
                 for try await update in CLLocationUpdate.liveUpdates(.fitness) {
@@ -112,6 +121,8 @@ final class Recorder {
     }
 
     private func stopUpdates() {
+        altimeter.stopRelativeAltitudeUpdates()
+        barometer = nil
         updates?.cancel()
         updates = nil
         backgroundSession?.invalidate()
@@ -131,14 +142,35 @@ final class Recorder {
             status = nil
         }
         guard let location = update.location, recording?.isPaused == false else { return }
+        let fresh = barometer.flatMap { abs($0.date.timeIntervalSince(location.timestamp)) <= Self.barometerMaxAge ? $0.metres : nil }
+        let altitude = fusion.altitude(gps: location.verticalAccuracy > 0 ? location.altitude : nil,
+                                       verticalAccuracy: location.verticalAccuracy, barometer: fresh,
+                                       at: location.timestamp)
         let fix = RideRecording.Fix(date: location.timestamp,
                                     latitude: location.coordinate.latitude,
                                     longitude: location.coordinate.longitude,
-                                    altitude: location.verticalAccuracy > 0 ? location.altitude : nil,
+                                    altitude: altitude,
                                     horizontalAccuracy: location.horizontalAccuracy,
                                     speed: location.speed >= 0 ? location.speed : nil)
         if recording?.add(fix) == true {
             write(.fix(fix))
+        }
+    }
+
+    // MARK: - Barometer (B-235)
+
+    /// The relative height since this start; a new start (or continuing after a crash) begins at 0,
+    /// and the fusion finds the GPS level again.
+    private func startBarometer() {
+        fusion = AltitudeFusion()
+        barometer = nil
+        guard CMAltimeter.isRelativeAltitudeAvailable() else { return }
+        altimeter.startRelativeAltitudeUpdates(to: .main) { [weak self] data, _ in
+            guard let data else { return }
+            let metres = data.relativeAltitude.doubleValue
+            MainActor.assumeIsolated {
+                self?.barometer = (metres, .now)
+            }
         }
     }
 
