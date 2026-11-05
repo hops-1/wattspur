@@ -105,6 +105,14 @@ public final class PhoneDatabase {
         return route.pointCount > 0 ? route : nil
     }
 
+    /// The measurements of a ride for the charts on the iPhone (B-241): speed, power, cadence, heart
+    /// rate and altitude from the full time series, averaged into `bins` slices of distance or time
+    /// like on the Mac (`RideSeries`). Empty for an unknown ride or one without a time series.
+    public func chartPoints(forRideID id: UUID, axis: ChartAxis = .distance, bins: Int = 300) -> [ChartPoint] {
+        guard let ride = library.ride(withID: id) else { return [] }
+        return RideSeries.chartPoints(from: ride.samples, axis: axis, bins: bins)
+    }
+
     // MARK: - Recording
 
     /// Turns a finished recording into a ride: the GPX the iPhone writes anyway (with its bike), through

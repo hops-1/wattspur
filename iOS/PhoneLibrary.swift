@@ -215,6 +215,13 @@ final class PhoneLibrary {
         }
     }
 
+    /// The measurements of a ride for the charts (B-241), from the iPhone's own store: speed, power,
+    /// cadence, heart rate and altitude, averaged like on the Mac. Empty in folder mode, whose state
+    /// from the Mac has no time series, and for the sample ride.
+    func chartPoints(for ride: RideExchange.Ride, axis: ChartAxis = .distance) -> [ChartPoint] {
+        database?.chartPoints(forRideID: ride.id, axis: axis) ?? []
+    }
+
     /// Renames a ride and changes its bike (B-240); over iCloud the Mac gets both.
     func edit(_ ride: RideExchange.Ride, name: String, bikeID: UUID?) {
         guard database?.edit(rideID: ride.id, name: name, bikeID: bikeID) == true else { return }

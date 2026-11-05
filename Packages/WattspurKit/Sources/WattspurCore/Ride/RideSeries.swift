@@ -22,6 +22,8 @@ public struct ChartPoint: Sendable, Equatable, Identifiable {
     public var speedKmh: Double?
     public var cadence: Double?
     public var power: Double?
+    /// Beats per minute, where the file has a heart rate (iPhone carousel, B-090, B-241).
+    public var heartRate: Double?
 }
 
 /// A route point for the map.
@@ -49,6 +51,7 @@ public enum RideSeries {
             var speed = 0.0, speedCount = 0
             var cadence = 0.0, cadenceCount = 0
             var power = 0.0, powerCount = 0
+            var heartRate = 0.0, heartRateCount = 0
         }
         var acc = [Accumulator](repeating: Accumulator(), count: bins)
         for sample in withDistance {
@@ -57,6 +60,7 @@ public enum RideSeries {
             if let v = sample.speed { acc[index].speed += v * 3.6; acc[index].speedCount += 1 }
             if let v = sample.cadence { acc[index].cadence += Double(v); acc[index].cadenceCount += 1 }
             if let v = sample.power { acc[index].power += Double(v); acc[index].powerCount += 1 }
+            if let v = sample.heartRate { acc[index].heartRate += Double(v); acc[index].heartRateCount += 1 }
         }
 
         var points: [ChartPoint] = []
@@ -70,6 +74,7 @@ public enum RideSeries {
             if a.speedCount > 0 { point.speedKmh = a.speed / Double(a.speedCount) }
             if a.cadenceCount > 0 { point.cadence = a.cadence / Double(a.cadenceCount) }
             if a.powerCount > 0 { point.power = a.power / Double(a.powerCount) }
+            if a.heartRateCount > 0 { point.heartRate = a.heartRate / Double(a.heartRateCount) }
             points.append(point)
             last = point
         }
@@ -104,6 +109,7 @@ public enum RideSeries {
             var speed = 0.0, speedCount = 0
             var cadence = 0.0, cadenceCount = 0
             var power = 0.0, powerCount = 0
+            var heartRate = 0.0, heartRateCount = 0
             var distance = 0.0, distanceCount = 0
         }
         var acc = [Accumulator](repeating: Accumulator(), count: bins)
@@ -114,6 +120,7 @@ public enum RideSeries {
             if let v = sample.speed { acc[index].speed += v * 3.6; acc[index].speedCount += 1 }
             if let v = sample.cadence { acc[index].cadence += Double(v); acc[index].cadenceCount += 1 }
             if let v = sample.power { acc[index].power += Double(v); acc[index].powerCount += 1 }
+            if let v = sample.heartRate { acc[index].heartRate += Double(v); acc[index].heartRateCount += 1 }
             if let v = sample.distance { acc[index].distance += v; acc[index].distanceCount += 1 }
         }
 
@@ -145,6 +152,7 @@ public enum RideSeries {
             if a.speedCount > 0 { point.speedKmh = a.speed / Double(a.speedCount) }
             if a.cadenceCount > 0 { point.cadence = a.cadence / Double(a.cadenceCount) }
             if a.powerCount > 0 { point.power = a.power / Double(a.powerCount) }
+            if a.heartRateCount > 0 { point.heartRate = a.heartRate / Double(a.heartRateCount) }
             if a.distanceCount > 0 { point.distanceKm = a.distance / Double(a.distanceCount) / 1000 }
             points.append(point)
             last = point

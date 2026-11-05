@@ -156,6 +156,20 @@ struct PhoneDatabaseTests {
         #expect(!database.edit(rideID: UUID(), name: "Nichts", bikeID: nil))
     }
 
+    @Test("The detail gets the measurements of a ride from its time series (B-241)")
+    func chartPoints() throws {
+        let id = try #require(save())
+        let byDistance = database.chartPoints(forRideID: id, bins: 20)
+        #expect(byDistance.count == 20)
+        #expect(byDistance.allSatisfy { $0.speedKmh != nil && $0.altitude == 150 })
+        // A GPS recording has no power or cadence.
+        #expect(byDistance.allSatisfy { $0.power == nil && $0.cadence == nil })
+        let byTime = database.chartPoints(forRideID: id, axis: .time, bins: 20)
+        #expect(!byTime.isEmpty)
+        #expect(byTime.map(\.seconds) == byTime.map(\.seconds).sorted())
+        #expect(database.chartPoints(forRideID: UUID()).isEmpty)
+    }
+
     @Test("After 30 days the trash empties itself")
     func purge() throws {
         let old = try #require(save(start: 1_800_000_000))
