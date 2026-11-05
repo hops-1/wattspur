@@ -116,7 +116,7 @@ targets:
         INFOPLIST_KEY_ITSAppUsesNonExemptEncryption: NO
         INFOPLIST_KEY_NSLocationWhenInUseUsageDescription: "Wattspur records your ride with GPS, also while the screen is locked."
         # Height from the barometer while recording (B-235); without it the GPS height is used.
-        INFOPLIST_KEY_NSMotionUsageDescription: "Wattspur measures the height of your ride with the barometer, for a more exact ascent."
+        INFOPLIST_KEY_NSMotionUsageDescription: "Wattspur measures the height of your ride with the barometer, and acceleration and lean angle with the motion sensors."
         # Signing: Config/iOS.xcconfig, the team comes from the ignored Config/Local.xcconfig.
         # The git commit for the overview, the same way as on the Mac.
         ENABLE_USER_SCRIPT_SANDBOXING: NO

@@ -82,13 +82,13 @@
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Wattspur misst die Höhe deiner Fahrt mit dem Barometer, für einen genaueren Anstieg."
+            "value" : "Wattspur misst die Höhe deiner Fahrt mit dem Barometer und Beschleunigung und Schräglage mit den Bewegungssensoren."
           }
         },
         "en" : {
           "stringUnit" : {
             "state" : "new",
-            "value" : "Wattspur measures the height of your ride with the barometer, for a more exact ascent."
+            "value" : "Wattspur measures the height of your ride with the barometer, and acceleration and lean angle with the motion sensors."
           }
         }
       }

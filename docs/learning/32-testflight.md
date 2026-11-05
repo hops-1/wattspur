@@ -60,7 +60,7 @@ Diese Sätze zeigt iOS, wenn Wattspur fragt. Sie stehen in `project.yml` und `iO
 | Berechtigung | Text (EN) | Text (DE) |
 |---|---|---|
 | Standort beim Verwenden | Wattspur records your ride with GPS, also while the screen is locked. | Wattspur zeichnet deine Fahrt per GPS auf, auch bei gesperrtem Bildschirm. |
-| Bewegung & Fitness (ab iOS 0.4, B-235) | Wattspur measures the height of your ride with the barometer, for a more exact ascent. | Wattspur misst die Höhe deiner Fahrt mit dem Barometer, für einen genaueren Anstieg. |
+| Bewegung & Fitness (ab iOS 0.4, B-235; Text ab iOS 0.5.1 erweitert, V-16) | Wattspur measures the height of your ride with the barometer, and acceleration and lean angle with the motion sensors. | Wattspur misst die Höhe deiner Fahrt mit dem Barometer und Beschleunigung und Schräglage mit den Bewegungssensoren. |
 
 Fitnessdaten aus Apple Health liest Wattspur noch nicht (B-075). Kommt das, braucht es `NSHealthShareUsageDescription`, etwa: „Wattspur liest Puls und Fahrten aus Health, um sie neben deinen E-Bike-Fahrten zu zeigen. Die Daten bleiben auf deinem iPhone und in deinem iCloud-Konto.“
 
