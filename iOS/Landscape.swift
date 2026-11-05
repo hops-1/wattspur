@@ -16,6 +16,13 @@ extension View {
         modifier(HidesTabBarInLandscape())
     }
 
+    /// No title bar in landscape on the first screen of a tab (wish of Nils, 5.11.2026): the tab
+    /// bar already says where you are, and the screen is short. Screens one level down keep a slim
+    /// bar for the back button.
+    func hidesTitleBarInLandscape() -> some View {
+        modifier(HidesTitleBarInLandscape())
+    }
+
     /// Room at the bottom of a scroll view in landscape, so its last rows can scroll above the
     /// tab bar at the bottom left.
     func tabBarRoomInLandscape() -> some View {
@@ -28,6 +35,14 @@ private struct HidesTabBarInLandscape: ViewModifier {
 
     func body(content: Content) -> some View {
         content.toolbarVisibility(isLandscape ? .hidden : .automatic, for: .tabBar)
+    }
+}
+
+private struct HidesTitleBarInLandscape: ViewModifier {
+    @Environment(\.isLandscape) private var isLandscape
+
+    func body(content: Content) -> some View {
+        content.toolbarVisibility(isLandscape ? .hidden : .automatic, for: .navigationBar)
     }
 }
 

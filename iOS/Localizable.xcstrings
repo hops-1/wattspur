@@ -137,6 +137,16 @@
         }
       }
     },
+    "%lld of %lld rides" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%1$lld von %2$lld Fahrten"
+          }
+        }
+      }
+    },
     "%lld rides imported" : {
       "localizations" : {
         "de" : {
@@ -187,6 +197,26 @@
         }
       }
     },
+    "10–25 km" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "10–25 km"
+          }
+        }
+      }
+    },
+    "25–50 km" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "25–50 km"
+          }
+        }
+      }
+    },
     "Actions" : {
       "localizations" : {
         "de" : {
@@ -197,12 +227,32 @@
         }
       }
     },
+    "All Bikes" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Alle Bikes"
+          }
+        }
+      }
+    },
     "All Rides" : {
       "localizations" : {
         "de" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "Alle Fahrten"
+          }
+        }
+      }
+    },
+    "All Time" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Alle Zeiten"
           }
         }
       }
@@ -223,6 +273,16 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Höhe"
+          }
+        }
+      }
+    },
+    "Any Distance" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Jede Strecke"
           }
         }
       }
@@ -297,6 +357,106 @@
         }
       }
     },
+    "Change the search or the filters." : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ändere die Suche oder die Filter."
+          }
+        }
+      }
+    },
+    "Clear search" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Suche löschen"
+          }
+        }
+      }
+    },
+    "Last 30 Days" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Letzte 30 Tage"
+          }
+        }
+      }
+    },
+    "Last 365 Days" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Letzte 365 Tage"
+          }
+        }
+      }
+    },
+    "No Matches" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Keine Treffer"
+          }
+        }
+      }
+    },
+    "Over 50 km" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Über 50 km"
+          }
+        }
+      }
+    },
+    "Period" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Zeitraum"
+          }
+        }
+      }
+    },
+    "Reset" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Zurücksetzen"
+          }
+        }
+      }
+    },
+    "Search rides" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Fahrten suchen"
+          }
+        }
+      }
+    },
+    "Show All Rides" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Alle Fahrten zeigen"
+          }
+        }
+      }
+    },
     "Shows all rides" : {
       "localizations" : {
         "de" : {
@@ -307,12 +467,32 @@
         }
       }
     },
+    "Shows the rides of this period" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Zeigt die Fahrten dieses Zeitraums"
+          }
+        }
+      }
+    },
     "This Year" : {
       "localizations" : {
         "de" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "Dieses Jahr"
+          }
+        }
+      }
+    },
+    "Under 10 km" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Unter 10 km"
           }
         }
       }

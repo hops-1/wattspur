@@ -9,8 +9,8 @@ struct OverviewView: View {
     @Environment(Recorder.self) private var recorder
     @Environment(PhoneRecordings.self) private var recordings
     @Environment(ImportFolder.self) private var folder
-    /// Switches to the tab “Rides”.
-    var showAllRides: () -> Void
+    /// Switches to the tab “Rides”, filtered to a period (B-222); `.all` shows every ride.
+    var showRides: (RidePeriod) -> Void
     @State private var sample = SampleRide.load()
     @Environment(\.isLandscape) private var isLandscape
 
@@ -29,7 +29,7 @@ struct OverviewView: View {
         ScrollView {
             VStack(spacing: 16) {
                 if let state = library.state, let last = state.lastRide {
-                    tiles(totals: totals(state))
+                    tiles(totals: totals(state), linked: true)
                     NavigationLink {
                         TourDetailView(ride: last)
                     } label: {
@@ -38,7 +38,7 @@ struct OverviewView: View {
                     .buttonStyle(.plain)
                     StartRideButton { recorder.start() }
                     RecordingsSection()
-                    Button(action: showAllRides) {
+                    Button { showRides(.all) } label: {
                         HStack {
                             Text("All Rides")
                             Spacer()
@@ -56,7 +56,7 @@ struct OverviewView: View {
                     // The sample ride is old: the totals are counted for its week and month, so
                     // the tiles show what they will look like.
                     tiles(totals: RidePeriodTotals(rides: [(start: sample.ride.startDate, distance: sample.ride.distance)],
-                                                   now: sample.ride.startDate))
+                                                   now: sample.ride.startDate), linked: false)
                     NavigationLink {
                         TourDetailView(ride: sample.ride, route: sample.route)
                     } label: {
@@ -108,13 +108,13 @@ struct OverviewView: View {
                 .frame(width: 340)
                 VStack(spacing: 16) {
                     if let state = library.state, state.lastRide != nil {
-                        landscapeTiles(totals: totals(state), allRides: state.rides.count + recordings.waiting.count)
+                        landscapeTiles(totals: totals(state), allRides: state.rides.count + recordings.waiting.count, linked: true)
                         StateLine()
                             .frame(maxWidth: .infinity, alignment: .leading)
                     } else if let sample {
                         landscapeTiles(totals: RidePeriodTotals(rides: [(start: sample.ride.startDate, distance: sample.ride.distance)],
                                                                 now: sample.ride.startDate),
-                                       allRides: 1)
+                                       allRides: 1, linked: false)
                         Text("Sample data: the tiles count the sample ride's week and month.")
                             .font(.footnote)
                             .foregroundStyle(.secondary)
@@ -130,7 +130,7 @@ struct OverviewView: View {
                 }
             }
             .padding(.horizontal)
-            .padding(.bottom)
+            .padding(.vertical, 8)
         }
         // Room for “Start Ride” and the tab bar below the last tiles.
         .contentMargins(.bottom, LandscapeTabBar.height + 12, for: .scrollContent)
@@ -150,24 +150,42 @@ struct OverviewView: View {
         return RidePeriodTotals(rides: rides)
     }
 
-    private func landscapeTiles(totals: RidePeriodTotals, allRides: Int) -> some View {
+    private func landscapeTiles(totals: RidePeriodTotals, allRides: Int, linked: Bool) -> some View {
         Grid(horizontalSpacing: 12, verticalSpacing: 12) {
             GridRow {
-                StatTile(title: "This Week", value: RideFormat.distance(totals.weekDistance),
-                         caption: Self.rides(totals.weekRides), systemImage: "calendar")
-                StatTile(title: "This Month", value: RideFormat.distance(totals.monthDistance),
-                         caption: Self.rides(totals.monthRides), systemImage: "calendar")
+                periodTile(.thisWeek, linked: linked) {
+                    StatTile(title: "This Week", value: RideFormat.distance(totals.weekDistance),
+                             caption: Self.rides(totals.weekRides), systemImage: "calendar")
+                }
+                periodTile(.thisMonth, linked: linked) {
+                    StatTile(title: "This Month", value: RideFormat.distance(totals.monthDistance),
+                             caption: Self.rides(totals.monthRides), systemImage: "calendar")
+                }
             }
             GridRow {
-                StatTile(title: "This Year", value: RideFormat.distance(totals.yearDistance),
-                         caption: Self.rides(totals.yearRides), systemImage: "calendar")
-                Button(action: showAllRides) {
-                    StatTile(title: "All Rides", value: allRides.formatted(), systemImage: "bicycle")
-                        .contentShape(.rect(cornerRadius: 24))
+                periodTile(.thisYear, linked: linked) {
+                    StatTile(title: "This Year", value: RideFormat.distance(totals.yearDistance),
+                             caption: Self.rides(totals.yearRides), systemImage: "calendar")
                 }
-                .buttonStyle(.plain)
-                .accessibilityHint("Shows all rides")
+                periodTile(.all, linked: linked) {
+                    StatTile(title: "All Rides", value: allRides.formatted(), systemImage: "bicycle")
+                }
             }
+        }
+    }
+
+    /// A tile that opens the list filtered to its period (B-222, wish of Nils 5.11.2026). The
+    /// sample ride's tiles count an old week, so they open nothing.
+    @ViewBuilder private func periodTile(_ period: RidePeriod, linked: Bool,
+                                         @ViewBuilder tile: () -> some View) -> some View {
+        if linked {
+            Button { showRides(period) } label: {
+                tile().contentShape(.rect(cornerRadius: 24))
+            }
+            .buttonStyle(.plain)
+            .accessibilityHint(period == .all ? "Shows all rides" : "Shows the rides of this period")
+        } else {
+            tile()
         }
     }
 
@@ -176,12 +194,16 @@ struct OverviewView: View {
         "\(count.formatted()) \(count == 1 ? String(localized: "ride") : String(localized: "rides"))"
     }
 
-    private func tiles(totals: RidePeriodTotals) -> some View {
+    private func tiles(totals: RidePeriodTotals, linked: Bool) -> some View {
         HStack(spacing: 16) {
-            StatTile(title: "This Week", value: RideFormat.distance(totals.weekDistance),
-                     systemImage: "calendar")
-            StatTile(title: "This Month", value: totals.monthRides.formatted(),
-                     unit: totals.monthRides == 1 ? "ride" : "rides", systemImage: "bicycle")
+            periodTile(.thisWeek, linked: linked) {
+                StatTile(title: "This Week", value: RideFormat.distance(totals.weekDistance),
+                         systemImage: "calendar")
+            }
+            periodTile(.thisMonth, linked: linked) {
+                StatTile(title: "This Month", value: totals.monthRides.formatted(),
+                         unit: totals.monthRides == 1 ? "ride" : "rides", systemImage: "bicycle")
+            }
         }
     }
 }

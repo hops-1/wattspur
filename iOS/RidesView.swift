@@ -8,6 +8,8 @@ struct RidesView: View {
     @Environment(\.isLandscape) private var isLandscape
     /// The ride shown beside the list in landscape (B-243); the newest until one is tapped.
     @State private var selection: UUID?
+    /// Search and filters (B-222), kept by the app: the period tiles of the overview set them.
+    @Binding var filter: RideFilter
 
     var body: some View {
         Group {
@@ -30,9 +32,36 @@ struct RidesView: View {
         .navigationTitle("Rides")
     }
 
+    /// The filter as it applies: a bike filter only with two bikes or more (`RideFilter.resolved`).
+    private func effectiveFilter(_ state: RideExchange.Library) -> RideFilter {
+        filter.resolved(knownBikeIDs: Set(state.bikes.map(\.id)))
+    }
+
+    private func filterBar(_ state: RideExchange.Library, months: [RideExchange.Library.Month]) -> some View {
+        RideFilterBar(filter: $filter, compact: isLandscape, bikes: state.bikes.filter { !$0.isArchived || $0.id == filter.bike.bikeID },
+                      shown: months.reduce(0) { $0 + $1.rides.count }, total: state.rides.count)
+    }
+
+    /// No rides at all, or none that pass the search and filters.
+    @ViewBuilder private func emptyState(_ state: RideExchange.Library, months: [RideExchange.Library.Month]) -> some View {
+        if state.rides.isEmpty {
+            noRides
+        } else if months.isEmpty {
+            ContentUnavailableView {
+                Label("No Matches", systemImage: "magnifyingglass")
+            } description: {
+                Text("Change the search or the filters.")
+            } actions: {
+                Button("Show All Rides") { filter = RideFilter() }
+            }
+        }
+    }
+
     /// Landscape (B-243): the list on the left, the detail of the chosen ride on the right.
     private func split(_ state: RideExchange.Library) -> some View {
-        let chosen = state.rides.first { $0.id == selection } ?? state.lastRide
+        let months = state.months(filteredBy: effectiveFilter(state))
+        let shownRides = months.flatMap(\.rides)
+        let chosen = shownRides.first { $0.id == selection } ?? shownRides.first
         return HStack(spacing: 0) {
             List {
                 if !library.usesDatabase || library.problem != nil {
@@ -40,7 +69,7 @@ struct RidesView: View {
                         StateLine()
                     }
                 }
-                ForEach(state.months()) { month in
+                ForEach(months) { month in
                     Section(RideFormat.month(month.start)) {
                         ForEach(month.rides) { ride in
                             Button {
@@ -60,11 +89,11 @@ struct RidesView: View {
             }
             .listStyle(.insetGrouped)
             .refreshable { await library.refresh() }
+            .scrollDismissesKeyboard(.immediately)
             .tabBarRoomInLandscape()
+            .safeAreaInset(edge: .top, spacing: 0) { filterBar(state, months: months) }
             .frame(width: 320)
-            .overlay {
-                if state.rides.isEmpty { noRides }
-            }
+            .overlay { emptyState(state, months: months) }
             Divider()
             if let chosen {
                 TourDetailView(ride: chosen, embedded: true)
@@ -73,6 +102,8 @@ struct RidesView: View {
                 Color.clear
             }
         }
+        // No title bar in landscape (`hidesTitleBarInLandscape`): the search sits at the top, the
+        // detail has its own buttons.
     }
 
     @ViewBuilder private func actions(for ride: RideExchange.Ride) -> some View {
@@ -105,14 +136,15 @@ struct RidesView: View {
     }
 
     private func list(_ state: RideExchange.Library) -> some View {
-        List {
+        let months = state.months(filteredBy: effectiveFilter(state))
+        return List {
             // The line about the Mac's state; the iPhone's own store has none, unless something went wrong.
             if !library.usesDatabase || library.problem != nil {
                 Section {
                     StateLine()
                 }
             }
-            ForEach(state.months()) { month in
+            ForEach(months) { month in
                 Section(RideFormat.month(month.start)) {
                     ForEach(month.rides) { ride in
                         NavigationLink {
@@ -127,9 +159,9 @@ struct RidesView: View {
             }
         }
         .refreshable { await library.refresh() }
-        .overlay {
-            if state.rides.isEmpty { noRides }
-        }
+        .scrollDismissesKeyboard(.immediately)
+        .safeAreaInset(edge: .top, spacing: 0) { filterBar(state, months: months) }
+        .overlay { emptyState(state, months: months) }
     }
 }
 

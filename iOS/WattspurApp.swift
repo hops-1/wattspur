@@ -16,6 +16,8 @@ struct WattspurApp: App {
     @State private var recorder = Recorder()
     @State private var recordings = PhoneRecordings()
     @State private var tab = Tab.overview
+    /// Search and filters of the ride list (B-222); the period tiles of the overview set them.
+    @State private var rideFilter = RideFilter()
     /// FIT and GPX files opened with Wattspur (B-071).
     @State private var phoneImport = PhoneImport()
 
@@ -48,20 +50,26 @@ struct WattspurApp: App {
             TabView(selection: $tab) {
                 SwiftUI.Tab("Overview", systemImage: "square.grid.2x2", value: Tab.overview) {
                     NavigationStack {
-                        OverviewView { tab = .rides }
+                        OverviewView { period in
+                            rideFilter = RideFilter(period: period)
+                            tab = .rides
+                        }
                             .hidesTabBarInLandscape()
+                            .hidesTitleBarInLandscape()
                     }
                 }
                 SwiftUI.Tab("Rides", systemImage: "list.bullet", value: Tab.rides) {
                     NavigationStack {
-                        RidesView()
+                        RidesView(filter: $rideFilter)
                             .hidesTabBarInLandscape()
+                            .hidesTitleBarInLandscape()
                     }
                 }
                 SwiftUI.Tab("More", systemImage: "ellipsis", value: Tab.more) {
                     NavigationStack {
                         MoreView()
                             .hidesTabBarInLandscape()
+                            .hidesTitleBarInLandscape()
                     }
                 }
             }
