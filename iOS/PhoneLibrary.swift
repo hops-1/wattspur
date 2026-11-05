@@ -228,6 +228,18 @@ final class PhoneLibrary {
         database?.track(forRideID: ride.id) ?? RideTrack(samples: [])
     }
 
+    #if DEBUG
+    /// For trying the charts in the simulator: the anonymized sample ride (V-05) as a real ride of the
+    /// store, with speed, power, cadence and elevation. Debug builds only, started with
+    /// `-WattspurDemoRide YES`; the duplicate check keeps it from coming twice.
+    func importSampleRideForTesting() {
+        guard let database, let url = Bundle.main.url(forResource: "SampleRide", withExtension: "fit"),
+              let data = try? Data(contentsOf: url) else { return }
+        database.library.importFile(data: data, fileName: "Testfahrt Beispiel.fit")
+        reload()
+    }
+    #endif
+
     /// Renames a ride and changes its bike (B-240); over iCloud the Mac gets both.
     func edit(_ ride: RideExchange.Ride, name: String, bikeID: UUID?) {
         guard database?.edit(rideID: ride.id, name: name, bikeID: bikeID) == true else { return }
