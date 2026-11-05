@@ -21,6 +21,9 @@ Das iPhone fragt nach dem Standort nur für die GPS-Aufnahme, und nur „beim Ve
 **Bewegung und Fitness (Barometer)**
 Für die Höhe der Aufnahme fragt das iPhone einmal nach „Bewegung & Fitness“: Wattspur liest dann während der Aufnahme den Luftdruck-Sensor. Der Wert wird nur zur Höhe der Fahrt verrechnet und bleibt wie alle Fahrtdaten bei dir. Ohne die Erlaubnis nimmt Wattspur die Höhe aus dem GPS.
 
+**Bewegungssensoren (Test, ab iOS 0.5.1)**
+Mit dem Schalter *Rohdaten der Bewegung mitschreiben* in „Mehr“ (aus als Standard) schreibt die Aufnahme zusätzlich Beschleunigung, Drehung und Lage des iPhones und die GPS-Punkte in eine Datei auf dem iPhone (Dateien-App, „Auf meinem iPhone › Wattspur › Bewegung“). Die Datei wird nicht synchronisiert und verlässt das iPhone nur, wenn du sie selbst teilst.
+
 **Verbindungen ins Internet**
 - Karten: Wattspur lädt Kartenkacheln von Apple (MapKit) und, am Mac je nach gewähltem Kartenstil, von OpenStreetMap, CyclOSM oder OpenTopoMap. Dabei gehen der Kartenausschnitt und deine IP-Adresse an den jeweiligen Server, keine Fahrten.
 - Updates (Mac): Einmal am Tag fragt Wattspur bei GitHub, ob es eine neue Version gibt, wenn du das nicht ausgeschaltet hast. Dabei wird nichts über dich oder deine Fahrten gesendet.
@@ -53,6 +56,9 @@ The iPhone asks for your location only for GPS recording, and only "while using 
 
 **Motion & Fitness (barometer)**
 For the height of a recording the iPhone asks once for "Motion & Fitness": Wattspur then reads the air pressure sensor while recording. The value only goes into the height of the ride and stays with you like all ride data. Without the permission Wattspur takes the height from GPS.
+
+**Motion sensors (test, from iOS 0.5.1)**
+With the switch *Record Raw Motion* in "More" (off by default) a recording also writes the iPhone's acceleration, rotation and attitude and the GPS points into a file on the iPhone (Files app, "On My iPhone › Wattspur › Bewegung"). The file is not synced and leaves the iPhone only if you share it yourself.
 
 **Connections to the internet**
 - Maps: Wattspur loads map tiles from Apple (MapKit) and, on the Mac depending on the map style, from OpenStreetMap, CyclOSM or OpenTopoMap. The server receives the map area and your IP address, no rides.

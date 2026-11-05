@@ -11,6 +11,7 @@ struct MoreView: View {
     @Environment(\.switchSync) private var switchSync
     @State private var confirmingOff = false
     @AppStorage(Recorder.vehicleKey) private var vehicle = RecordingVehicle.eBike
+    @AppStorage(MotionRawRecorder.enabledKey) private var recordsRawMotion = false
     @Environment(\.isLandscape) private var isLandscape
 
     var body: some View {
@@ -92,6 +93,15 @@ struct MoreView: View {
             Text("Recording")
         } footer: {
             Text("GPS jumps look like impossible speeds and are left out. For an e-bike that is above 100 km/h, for a motorcycle above 300 km/h.")
+        }
+
+        // Spike V-16; goes again once acceleration and lean angle are part of the recording.
+        Section {
+            Toggle("Record Raw Motion", isOn: $recordsRawMotion)
+        } header: {
+            Text("Test")
+        } footer: {
+            Text("For a test of acceleration and lean angle: each recording also writes the motion sensors and GPS into a file. You find it in the Files app under “On My iPhone › Wattspur › Bewegung”. About 20 MB per hour.")
         }
 
         Section {
