@@ -89,6 +89,17 @@ Sums over several rides use the rides that have a value and say how many that is
 | Heat map | Number of different rides per area of about 16 pt; each ride counts once per area. Fixed steps 1, 2–4, 5–9, 10–19, 20+ |
 | New paths | Share of the distance in 50 m fields that none of your earlier rides had passed. Deviations up to 10 m (GPS) count as known; a path 50 m away is new. The kilometres are this share of the Bosch distance. Out and back on a new road counts as new both ways |
 
+## Motion: lean angle, acceleration, surface
+Only for rides recorded with the iPhone app 0.5.1 or later. While recording, the iPhone reads its motion sensors 50 times a second and stores three values with each GPS point. The values are a first version; the limits are checked against real test rides.
+
+| Value | How |
+|---|---|
+| Max. Lean Left, Right | From the speed and the turn around the vertical: tan(lean) = speed × turn rate ÷ g. So it does not matter how the iPhone sits in the mount or the pocket. Counts from 10 km/h, at most 70° |
+| Max. Acceleration, Max. Braking | The acceleration along the way in g, from the sensors and the GPS speed; curves do not count |
+| 0–100 km/h, 0–25 km/h | The fastest time from a standstill (below 3 km/h) to 100 km/h on a motorcycle, to 25 km/h on any other bike; at most 30 s, a gap of more than 5 s breaks it |
+| Uneven Surface | Share of the distance on an uneven or rough surface. The roughness is the strength of the vertical shaking without slow movements such as over a crest: smooth below 0.1 g, uneven up to 0.25 g, rough above |
+| Map by lean angle, by surface | The track in pieces: lean in steps of 10° (green upright to purple from 40°), surface in three steps (grey, yellow, brown) |
+
 ## Rounding
 Wattspur shows distance to 0.1 km, speed to 0.1 km/h, and power, cadence and metres as whole numbers. Totals in the analysis are calculated from the exact values and rounded only at the end, so they can differ from a sum of the rounded values by 0.1.
 

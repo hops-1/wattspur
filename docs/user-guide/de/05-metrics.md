@@ -89,6 +89,17 @@ Summen über mehrere Fahrten nehmen die Fahrten, die einen Wert haben, und sagen
 | Wärmekarte | Anzahl verschiedener Fahrten je Fläche von etwa 16 pt; jede Fahrt zählt je Fläche einmal. Feste Stufen 1, 2–4, 5–9, 10–19, 20+ |
 | Neue Wege | Anteil der Strecke in 50-m-Feldern, durch die vorher noch keine deiner Fahrten lief. Abweichungen bis 10 m (GPS) zählen als bekannt; ein Weg 50 m daneben ist neu. Die km sind dieser Anteil der Bosch-Strecke. Hin und zurück auf einer neuen Straße zählt beides als neu |
 
+## Bewegung: Schräglage, Beschleunigung, Belag
+Nur bei Fahrten, die mit der iPhone-App ab 0.5.1 aufgenommen sind. Das iPhone liest dabei 50-mal pro Sekunde seine Bewegungssensoren und speichert je GPS-Punkt drei Werte. Die Werte sind ein erster Stand; die Grenzen werden mit echten Testfahrten geprüft.
+
+| Wert | Wie |
+|---|---|
+| Max. Schräglage links, rechts | Aus Tempo und Drehung um die Senkrechte: tan(Schräglage) = Tempo × Drehrate ÷ g. So spielt es keine Rolle, wie das iPhone in der Halterung oder der Tasche sitzt. Zählt ab 10 km/h, höchstens 70° |
+| Max. Beschleunigung, Max. Bremsung | Die Beschleunigung längs der Fahrt in g, aus den Sensoren und dem GPS-Tempo; Kurven zählen nicht mit |
+| 0–100 km/h, 0–25 km/h | Die schnellste Zeit vom Stillstand (unter 3 km/h) bis 100 km/h beim Motorrad, bis 25 km/h bei jedem anderen Bike; höchstens 30 s, eine Lücke von mehr als 5 s bricht ab |
+| Unebener Belag | Anteil der Strecke auf unebenem oder holprigem Belag. Das Rütteln ist die Stärke der senkrechten Erschütterung ohne langsame Bewegungen wie über eine Kuppe: glatt unter 0,1 g, uneben bis 0,25 g, holprig darüber |
+| Karte nach Schräglage, nach Belag | Die Spur in Stücken: Schräglage in Stufen von 10° (grün aufrecht bis lila ab 40°), Belag in drei Stufen (grau, gelb, braun) |
+
 ## Rundung
 Wattspur zeigt die Strecke auf 0,1 km und das Tempo auf 0,1 km/h genau, Leistung, Trittfrequenz und Höhenmeter als ganze Zahlen. Summen in der Auswertung werden aus den genauen Werten berechnet und erst am Ende gerundet. Sie können deshalb um 0,1 von einer Summe der gerundeten Werte abweichen.
 

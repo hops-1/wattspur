@@ -10,7 +10,7 @@ options:
 settings:
   base:
     SWIFT_VERSION: "6.0"
-    MARKETING_VERSION: "1.8.5"
+    MARKETING_VERSION: "1.8.6"
     CURRENT_PROJECT_VERSION: "1"
     SWIFT_STRICT_CONCURRENCY: complete
 packages:
@@ -94,8 +94,8 @@ targets:
         INFOPLIST_KEY_NSSupportsLiveActivities: YES
         PRODUCT_NAME: Wattspur
         MARKETING_VERSION: "0.5.1"
-        # Higher than the last TestFlight upload (0.5.1 build 6); test build for spike V-16
-        CURRENT_PROJECT_VERSION: "7"
+        # Higher than the last TestFlight upload (0.5.1 build 7)
+        CURRENT_PROJECT_VERSION: "8"
         # iPhone only for now; iPad later
         TARGETED_DEVICE_FAMILY: "1"
         GENERATE_INFOPLIST_FILE: YES
@@ -145,7 +145,7 @@ targets:
         PRODUCT_BUNDLE_IDENTIFIER: io.github.hops-1.wattspur.ios.widgets
         PRODUCT_NAME: WattspurWidgets
         MARKETING_VERSION: "0.5.1"
-        CURRENT_PROJECT_VERSION: "7"
+        CURRENT_PROJECT_VERSION: "8"
         TARGETED_DEVICE_FAMILY: "1"
         GENERATE_INFOPLIST_FILE: YES
         INFOPLIST_FILE: Config/iOS-Widgets-Info.plist
