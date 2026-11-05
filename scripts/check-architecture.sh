@@ -11,8 +11,8 @@ if grep -rnE '^import (SwiftData|SwiftUI|AppKit|UIKit|MapKit|Charts)' "$CORE"; t
     echo "architecture: WattspurCore must not import UI or persistence frameworks (see docs/ARCHITECTURE.md)" >&2
     exit 1
 fi
-IOS="iOS"
-if grep -rnE '^import AppKit' "$IOS"; then
+IOS="iOS iOSShared iOSWidgets"
+if grep -rnE '^import AppKit' $IOS; then
     echo "architecture: the iPhone app must not import AppKit (see docs/ARCHITECTURE.md)" >&2
     exit 1
 fi

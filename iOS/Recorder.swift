@@ -37,6 +37,8 @@ final class Recorder {
     private var fusion = AltitudeFusion()
     /// A barometer reading older than this is not used; the GPS height stands in.
     private static let barometerMaxAge: TimeInterval = 5
+    /// The Live Activity on the Lock Screen and in the Dynamic Island (B-223).
+    private let activity = RecordingActivityController()
 
     /// The log lives in Application Support: the documents are shown in the Files app.
     init(logURL: URL = .applicationSupportDirectory.appending(path: "Aufnahme.jsonl")) {
@@ -44,6 +46,11 @@ final class Recorder {
         try? FileManager.default.createDirectory(at: logURL.deletingLastPathComponent(), withIntermediateDirectories: true)
         if let data = try? Data(contentsOf: logURL), let recording = RecordingLog.replay(data) {
             unfinished = recording
+        }
+        // Pause and Resume from the Live Activity (B-223).
+        RecordingControl.togglePause = { [weak self] in
+            guard let self, let recording = self.recording else { return }
+            if recording.isPaused { self.resume() } else { self.pause() }
         }
     }
 
@@ -57,6 +64,7 @@ final class Recorder {
         write(.start(date))
         write(.vehicle(vehicle))
         startUpdates()
+        if let recording { activity.start(recording) }
     }
 
     /// Continues the recording that was not finished.
@@ -74,24 +82,28 @@ final class Recorder {
         recording?.resume()
         write(.resume)
         startUpdates()
+        if let recording { activity.start(recording) }
     }
 
     func pause() {
         guard recording?.isPaused == false else { return }
         recording?.pause()
         write(.pause)
+        if let recording { activity.update(recording, force: true) }
     }
 
     func resume() {
         guard recording?.isPaused == true else { return }
         recording?.resume()
         write(.resume)
+        if let recording { activity.update(recording, force: true) }
     }
 
     /// Ends the recording and hands it back; the log is removed.
     func stop() -> RideRecording? {
         let finished = recording ?? unfinished
         stopUpdates()
+        activity.end(recording)
         recording = nil
         unfinished = nil
         try? log?.close()
@@ -154,6 +166,7 @@ final class Recorder {
                                     speed: location.speed >= 0 ? location.speed : nil)
         if recording?.add(fix) == true {
             write(.fix(fix))
+            if let recording { activity.update(recording) }
         }
     }
 
