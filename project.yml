@@ -93,9 +93,9 @@ targets:
         # Live Activity while recording (B-223).
         INFOPLIST_KEY_NSSupportsLiveActivities: YES
         PRODUCT_NAME: Wattspur
-        MARKETING_VERSION: "0.5.0"
-        # Higher than the last TestFlight upload (0.4.0 build 4)
-        CURRENT_PROJECT_VERSION: "5"
+        MARKETING_VERSION: "0.5.1"
+        # Higher than the last TestFlight upload (0.5.1 build 6); test build for spike V-16
+        CURRENT_PROJECT_VERSION: "7"
         # iPhone only for now; iPad later
         TARGETED_DEVICE_FAMILY: "1"
         GENERATE_INFOPLIST_FILE: YES
@@ -144,8 +144,8 @@ targets:
       base:
         PRODUCT_BUNDLE_IDENTIFIER: io.github.hops-1.wattspur.ios.widgets
         PRODUCT_NAME: WattspurWidgets
-        MARKETING_VERSION: "0.5.0"
-        CURRENT_PROJECT_VERSION: "5"
+        MARKETING_VERSION: "0.5.1"
+        CURRENT_PROJECT_VERSION: "7"
         TARGETED_DEVICE_FAMILY: "1"
         GENERATE_INFOPLIST_FILE: YES
         INFOPLIST_FILE: Config/iOS-Widgets-Info.plist

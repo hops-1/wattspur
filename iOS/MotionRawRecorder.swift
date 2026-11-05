@@ -44,28 +44,16 @@ final class MotionRawRecorder: @unchecked Sendable {
             try FileManager.default.createDirectory(at: folder, withIntermediateDirectories: true)
             FileManager.default.createFile(atPath: url.path, contents: nil)
             let handle = try FileHandle(forWritingTo: url)
-            queue.addOperation { [self] in
-                file = handle
-                buffer = MotionRawLog.header + "\n"
-                append(MotionRawLog.event("start", at: date))
-                append(MotionRawLog.event(vehicle.rawValue, at: date))
-            }
+            open(handle, at: date, vehicle: vehicle)
         } catch {
             return
         }
-        manager.deviceMotionUpdateInterval = 1 / MotionRawLog.rate
-        manager.startDeviceMotionUpdates(using: .xArbitraryCorrectedZVertical, to: queue) { [weak self] motion, _ in
-            guard let self, let motion else { return }
-            self.append(MotionRawLog.line(Self.reading(motion, bootDate: self.bootDate)))
-        }
+        startMotion()
         UIDevice.current.isBatteryMonitoringEnabled = true
         batteryTask = Task { @MainActor [weak self] in
             while !Task.isCancelled {
                 let level = Double(UIDevice.current.batteryLevel)
-                if level >= 0 {
-                    let row = MotionRawLog.battery(level, at: .now)
-                    self?.queue.addOperation { [weak self] in self?.append(row) }
-                }
+                if level >= 0 { self?.enqueue(MotionRawLog.battery(level, at: .now)) }
                 try? await Task.sleep(for: .seconds(60))
             }
         }
@@ -79,12 +67,11 @@ final class MotionRawRecorder: @unchecked Sendable {
             altitude: location.altitude,
             horizontalAccuracy: location.horizontalAccuracy, verticalAccuracy: location.verticalAccuracy,
             speed: location.speed, course: location.course))
-        queue.addOperation { [self] in append(row) }
+        enqueue(row)
     }
 
     func record(event name: String, at date: Date = .now) {
-        let row = MotionRawLog.event(name, at: date)
-        queue.addOperation { [self] in append(row) }
+        enqueue(MotionRawLog.event(name, at: date))
     }
 
     @MainActor func stop() {
@@ -92,8 +79,38 @@ final class MotionRawRecorder: @unchecked Sendable {
         batteryTask = nil
         UIDevice.current.isBatteryMonitoringEnabled = false
         manager.stopDeviceMotionUpdates()
-        let row = MotionRawLog.event("stop", at: .now)
-        queue.addOperation { [self] in
+        close(MotionRawLog.event("stop", at: .now))
+    }
+
+    // MARK: - Handing work to the queue
+    //
+    // These are not on the main actor on purpose: a closure made inside a `@MainActor` method is
+    // isolated to the main actor too, and Swift stops the app when the queue then runs it on
+    // another thread (crash of the test build 0.5.1 (6) on 5.11.2026, `dispatch_assert_queue`).
+
+    private nonisolated func open(_ handle: FileHandle, at date: Date, vehicle: RecordingVehicle) {
+        queue.addOperation { @Sendable [self] in
+            file = handle
+            buffer = MotionRawLog.header + "\n"
+            append(MotionRawLog.event("start", at: date))
+            append(MotionRawLog.event(vehicle.rawValue, at: date))
+        }
+    }
+
+    private nonisolated func startMotion() {
+        manager.deviceMotionUpdateInterval = 1 / MotionRawLog.rate
+        manager.startDeviceMotionUpdates(using: .xArbitraryCorrectedZVertical, to: queue) { @Sendable [weak self] motion, _ in
+            guard let self, let motion else { return }
+            self.append(MotionRawLog.line(Self.reading(motion, bootDate: self.bootDate)))
+        }
+    }
+
+    private nonisolated func enqueue(_ row: String) {
+        queue.addOperation { @Sendable [self] in append(row) }
+    }
+
+    private nonisolated func close(_ row: String) {
+        queue.addOperation { @Sendable [self] in
             guard file != nil else { return }
             append(row)
             flush()
