@@ -9,6 +9,9 @@ import WattspurCore
 struct RideChartCarousel: View {
     var ride: RideExchange.Ride
     var points: [ChartPoint]
+    /// Where on the ride the finger is (B-221); the detail shows it on the map.
+    var track: RideTrack
+    @Binding var spot: RideTrack.Fix?
     @State private var page: ChartMeasure?
 
     private var measures: [ChartMeasure] { ChartMeasure.available(in: points) }
@@ -16,7 +19,7 @@ struct RideChartCarousel: View {
     var body: some View {
         TabView(selection: $page) {
             ForEach(measures) { measure in
-                ChartPage(measure: measure, ride: ride, points: points)
+                ChartPage(measure: measure, ride: ride, points: points, track: track, spot: $spot)
                     .padding(.horizontal)
                     .padding(.top)
                     .padding(.bottom, 36)
@@ -28,14 +31,19 @@ struct RideChartCarousel: View {
         .frame(height: 290)
         .glassEffect(.regular, in: .rect(cornerRadius: 24))
         .onAppear { if page == nil { page = measures.first } }
+        .onChange(of: page) { spot = nil }
     }
 }
 
-/// One page: the name, two figures and the chart over the distance.
+/// One page: the name, two figures and the chart over the distance. Touch and hold, then move the
+/// finger: a line marks the spot, the figures give way to the values there, and the map shows it.
 private struct ChartPage: View {
     var measure: ChartMeasure
     var ride: RideExchange.Ride
     var points: [ChartPoint]
+    var track: RideTrack
+    @Binding var spot: RideTrack.Fix?
+    @State private var selectedKm: Double?
 
     private struct Figure {
         var title: LocalizedStringResource
@@ -51,13 +59,21 @@ private struct ChartPage: View {
                     .font(.headline)
                     .foregroundStyle(color)
                 Spacer()
-                ForEach(figures.indices, id: \.self) { index in
-                    VStack(alignment: .trailing, spacing: 2) {
-                        Text(figures[index].title).font(.caption).foregroundStyle(.secondary)
-                        Text(verbatim: figures[index].value).font(.subheadline.weight(.semibold)).monospacedDigit()
+                if let spot {
+                    Text(verbatim: readout(spot))
+                        .font(.subheadline.weight(.semibold))
+                        .monospacedDigit()
+                        .foregroundStyle(color)
+                        .accessibilityHidden(true)
+                } else {
+                    ForEach(figures.indices, id: \.self) { index in
+                        VStack(alignment: .trailing, spacing: 2) {
+                            Text(figures[index].title).font(.caption).foregroundStyle(.secondary)
+                            Text(verbatim: figures[index].value).font(.subheadline.weight(.semibold)).monospacedDigit()
+                        }
+                        .padding(.leading, 12)
+                        .accessibilityElement(children: .combine)
                     }
-                    .padding(.leading, 12)
-                    .accessibilityElement(children: .combine)
                 }
             }
             Chart(values, id: \.km) { value in
@@ -68,6 +84,15 @@ private struct ChartPage: View {
                     .foregroundStyle(color)
                     .lineStyle(StrokeStyle(lineWidth: 1.6))
                     .interpolationMethod(.monotone)
+                if let spot {
+                    RuleMark(x: .value("Distance", spot.distanceKm))
+                        .foregroundStyle(color)
+                        .lineStyle(StrokeStyle(lineWidth: 1.5))
+                }
+            }
+            .chartXSelection(value: $selectedKm)
+            .onChange(of: selectedKm) {
+                spot = selectedKm.flatMap { track.fix(atDistanceKm: $0) }
             }
             .chartYScale(domain: domain)
             .chartPlotStyle { $0.clipped() }
@@ -139,6 +164,14 @@ private struct ChartPage: View {
             return [Figure(title: "Ascent", value: ride.totalAscent.map(RideFormat.ascent) ?? "–"),
                     Figure(title: "Descent", value: ride.totalDescent.map(RideFormat.ascent) ?? "–")]
         }
+    }
+
+    /// "12,3 km · 24,1 km/h" for the spot under the finger.
+    private func readout(_ fix: RideTrack.Fix) -> String {
+        let position = "\(fix.distanceKm.formatted(.number.precision(.fractionLength(1)))) km"
+        guard let value = fix[keyPath: measure.fixValue] else { return position }
+        let digits = measure == .speed ? 1 : 0
+        return "\(position) · \(value.formatted(.number.precision(.fractionLength(digits)))) \(unit)"
     }
 
     /// Speed, power, cadence and heart rate from zero; the altitude around its range, so a flat

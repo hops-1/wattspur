@@ -113,6 +113,12 @@ public final class PhoneDatabase {
         return RideSeries.chartPoints(from: ride.samples, axis: axis, bins: bins)
     }
 
+    /// The time series of a ride, to find the spot under the finger on the chart and show it on the
+    /// map (B-221), like `RideCursor` on the Mac. Empty for an unknown ride.
+    public func track(forRideID id: UUID) -> RideTrack {
+        RideTrack(samples: library.ride(withID: id)?.samples ?? [])
+    }
+
     // MARK: - Recording
 
     /// Turns a finished recording into a ride: the GPX the iPhone writes anyway (with its bike), through

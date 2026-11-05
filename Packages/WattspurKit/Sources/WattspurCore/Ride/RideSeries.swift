@@ -209,6 +209,17 @@ public enum ChartMeasure: String, CaseIterable, Sendable, Identifiable {
         }
     }
 
+    /// The same value on a spot of the track, for the readout while the finger is on the chart (B-221).
+    public var fixValue: KeyPath<RideTrack.Fix, Double?> {
+        switch self {
+        case .speed: \.speedKmh
+        case .power: \.power
+        case .cadence: \.cadence
+        case .heartRate: \.heartRate
+        case .altitude: \.altitude
+        }
+    }
+
     /// The pages a ride has, in the order of the carousel: only measurements with a value somewhere.
     public static func available(in points: [ChartPoint]) -> [ChartMeasure] {
         allCases.filter { measure in points.contains { $0[keyPath: measure.value] != nil } }

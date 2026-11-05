@@ -47,6 +47,22 @@ struct RideSeriesTests {
         #expect(ChartMeasure.available(in: []).isEmpty)
     }
 
+    @Test("Each page reads the same value on a spot of the track (B-221)")
+    func fixValues() throws {
+        let track = RideTrack(samples: [
+            RideSample(time: 0, latitude: 49.8, longitude: 8.8, altitude: 150, distance: 0, speed: 5,
+                       power: 180, cadence: 70, heartRate: 125),
+            RideSample(time: 1, latitude: 49.8001, longitude: 8.8, altitude: 151, distance: 11, speed: 6,
+                       power: 190, cadence: 72, heartRate: 126),
+        ])
+        let fix = try #require(track.fix(atDistanceKm: 0))
+        #expect(fix[keyPath: ChartMeasure.speed.fixValue] == 18)
+        #expect(fix[keyPath: ChartMeasure.power.fixValue] == 180)
+        #expect(fix[keyPath: ChartMeasure.cadence.fixValue] == 70)
+        #expect(fix[keyPath: ChartMeasure.heartRate.fixValue] == 125)
+        #expect(fix[keyPath: ChartMeasure.altitude.fixValue] == 150)
+    }
+
     @Test("Highest and mean value of a measurement")
     func measureRange() throws {
         let points = [120.0, 140, nil, 160].enumerated().map { i, rate in

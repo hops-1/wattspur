@@ -7,6 +7,8 @@ import WattspurCore
 struct RouteMap: View {
     var route: RideExchange.Route
     var interactive = false
+    /// The spot under the finger on the chart (B-221), as a dot on the track.
+    var marker: CLLocationCoordinate2D?
 
     var body: some View {
         Map(initialPosition: .rect(Self.rect(for: segments.flatMap { $0 })),
@@ -14,6 +16,16 @@ struct RouteMap: View {
             ForEach(segments.indices, id: \.self) { index in
                 MapPolyline(coordinates: segments[index])
                     .stroke(Color.track, style: StrokeStyle(lineWidth: 4, lineCap: .round, lineJoin: .round))
+            }
+            if let marker {
+                Annotation("", coordinate: marker, anchor: .center) {
+                    Circle()
+                        .fill(Color.track)
+                        .stroke(.white, lineWidth: 3)
+                        .frame(width: 16, height: 16)
+                        .shadow(radius: 2)
+                        .accessibilityHidden(true)
+                }
             }
         }
         .mapControlVisibility(interactive ? .automatic : .hidden)
@@ -55,13 +67,14 @@ struct RideMap: View {
     /// For the sample ride, whose route is not in the folder.
     var route: RideExchange.Route?
     var interactive = false
+    var marker: CLLocationCoordinate2D?
     @State private var loaded: RideExchange.Route?
     @State private var finished = false
 
     var body: some View {
         Group {
             if let shown = route ?? loaded, shown.pointCount > 0 {
-                RouteMap(route: shown, interactive: interactive)
+                RouteMap(route: shown, interactive: interactive, marker: marker)
             } else {
                 Rectangle()
                     .fill(.quaternary)

@@ -25,7 +25,11 @@ struct WattspurApp: App {
         let buildMode = PhoneDatabase.Mode(infoValue: Bundle.main.object(forInfoDictionaryKey: "WattspurDatabase") as? String)
         let sync = PhoneSync(buildMode: buildMode, hadFolder: folder.url != nil, hadStore: PhoneSync.storeExists)
         _sync = State(initialValue: sync)
-        _library = State(initialValue: sync.makeLibrary(folder: folder))
+        let library = sync.makeLibrary(folder: folder)
+        #if DEBUG
+        if UserDefaults.standard.bool(forKey: "WattspurDemoRide") { library.importSampleRideForTesting() }
+        #endif
+        _library = State(initialValue: library)
     }
 
     /// Switches between iCloud and the folder at once (B-218).
