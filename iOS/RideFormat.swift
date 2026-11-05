@@ -84,6 +84,11 @@ enum RideFormat {
         "\(abs(g).formatted(.number.precision(.fractionLength(2)))) g"
     }
 
+    /// “12 %” of the distance (B-248).
+    static func percent(_ share: Double) -> String {
+        share.formatted(.percent.precision(.fractionLength(0)))
+    }
+
     /// “3.5 s” for a sprint (B-246).
     static func seconds(_ seconds: Double) -> String {
         "\(seconds.formatted(.number.precision(.fractionLength(1)))) s"
@@ -106,6 +111,15 @@ extension Color {
         case .medium: .orange
         case .strong: .red
         case .extreme: .purple
+        }
+    }
+
+    /// The track by road surface (B-248): grey smooth, yellow uneven, brown rough.
+    static func surface(_ band: RideMotion.SurfaceBand) -> Color {
+        switch band {
+        case .smooth: .gray
+        case .uneven: .yellow
+        case .rough: .brown
         }
     }
 }

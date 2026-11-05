@@ -6,11 +6,11 @@ import Testing
 struct RideMotionTests {
     /// One sample a second with the speed (km/h) and lean given, 10 m further each.
     static func samples(kmh: [Double], lean: [Double?]? = nil, acceleration: [Double?]? = nil,
-                        start: Double = 0) -> [RideSample] {
+                        roughness: [Double?]? = nil, start: Double = 0) -> [RideSample] {
         kmh.indices.map { i in
             RideSample(time: start + Double(i), latitude: 49.8 + Double(i) * 0.0001, longitude: 8.8,
                        distance: Double(i) * 10, speed: kmh[i] / 3.6,
-                       lean: lean?[i], acceleration: acceleration?[i])
+                       lean: lean?[i], acceleration: acceleration?[i], roughness: roughness?[i])
         }
     }
 
@@ -96,5 +96,21 @@ struct RideMotionTests {
         #expect(ChartMeasure.available(in: points).contains(.lean))
         #expect(!ChartMeasure.available(in: RideSeries.chartPoints(from: Self.samples(kmh: [10, 20]))).contains(.lean))
         #expect(RideTrack(samples: samples).fix(atDistanceKm: 0.01)?.lean == -30)
+    }
+
+    @Test("Share of the distance on an uneven surface, and the track by surface")
+    func surface() throws {
+        // Steps of 10 m; the 2nd and 3rd step are uneven or rough, the 4th smooth.
+        let samples = Self.samples(kmh: Array(repeating: 30, count: 5), lean: [0, 0, 0, 0, 0],
+                                   roughness: [0.05, 0.12, 0.4, 0.05, nil])
+        let motion = try #require(RideMotion(samples: samples, motorized: false))
+        #expect(abs((motion.roughShare ?? 0) - 2.0 / 3) < 0.001)
+        #expect(RideMotion.surfaceStretches(samples).map(\.band) == [.smooth, .uneven, .rough, .smooth])
+        #expect(RideMotion.SurfaceBand(roughness: 0.099) == .smooth)
+        #expect(RideMotion.SurfaceBand(roughness: 0.25) == .rough)
+
+        let without = Self.samples(kmh: [30, 30], lean: [0, 0])
+        #expect(try #require(RideMotion(samples: without, motorized: false)).roughShare == nil)
+        #expect(RideMotion.surfaceStretches(without).isEmpty)
     }
 }

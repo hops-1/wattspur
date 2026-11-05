@@ -26,6 +26,7 @@ struct TourDetailView: View {
     /// the motion sensors.
     @State private var motion: RideMotion?
     @State private var leanStretches: [RideMotion.LeanStretch] = []
+    @State private var surfaceStretches: [RideMotion.SurfaceStretch] = []
 
     private var marker: CLLocationCoordinate2D? {
         guard let latitude = spot?.latitude, let longitude = spot?.longitude else { return nil }
@@ -86,14 +87,16 @@ struct TourDetailView: View {
             track = library.track(for: ride)
             let found = library.motion(for: ride)
             motion = found?.figures
-            leanStretches = found?.stretches ?? []
+            leanStretches = found?.lean ?? []
+            surfaceStretches = found?.surface ?? []
         }
     }
 
     private var portrait: some View {
         ScrollView {
             VStack(alignment: .leading, spacing: 16) {
-                RideMap(ride: ride, route: route, interactive: true, marker: marker, leanStretches: leanStretches)
+                RideMap(ride: ride, route: route, interactive: true, marker: marker, leanStretches: leanStretches,
+                        surfaceStretches: surfaceStretches)
                     .frame(height: 300)
                     .clipShape(.rect(cornerRadius: 24))
                 // Right below the map, so both stay on screen while the finger is on a chart (B-221).
@@ -112,7 +115,8 @@ struct TourDetailView: View {
     /// right; map and chart stay side by side while the finger is on a chart (B-221).
     private var landscape: some View {
         HStack(spacing: 16) {
-            RideMap(ride: ride, route: route, interactive: true, marker: marker, leanStretches: leanStretches)
+            RideMap(ride: ride, route: route, interactive: true, marker: marker, leanStretches: leanStretches,
+                        surfaceStretches: surfaceStretches)
                 .clipShape(.rect(cornerRadius: 24))
                 .containerRelativeFrame(.horizontal) { width, _ in width * 0.45 }
             ScrollView {
@@ -154,7 +158,8 @@ struct TourDetailView: View {
                         .buttonBorderShape(.circle)
                 }
                 HStack(alignment: .top, spacing: 12) {
-                    RideMap(ride: ride, route: route, interactive: true, marker: marker, leanStretches: leanStretches)
+                    RideMap(ride: ride, route: route, interactive: true, marker: marker, leanStretches: leanStretches,
+                        surfaceStretches: surfaceStretches)
                         .frame(width: 170, height: 190)
                         .clipShape(.rect(cornerRadius: 20))
                     FigureGrid(ride: ride, motion: motion, compact: true)
@@ -307,6 +312,9 @@ struct FigureGrid: View {
             }
             if let sprint = motion.sprint {
                 items.append(Item(title: "0–\(Int(sprint.targetKmh)) km/h", value: RideFormat.seconds(sprint.seconds), systemImage: "stopwatch"))
+            }
+            if let share = motion.roughShare {
+                items.append(Item(title: "Uneven Surface", value: RideFormat.percent(share), systemImage: "road.lanes"))
             }
         }
         items.append(Item(title: "Total Time", value: RideFormat.duration(ride.elapsedTime), systemImage: "hourglass"))

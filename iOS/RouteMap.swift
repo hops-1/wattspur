@@ -11,22 +11,53 @@ struct RouteMap: View {
     var marker: CLLocationCoordinate2D?
     /// The track by lean angle (B-246); drawn instead of the plain line when there is one.
     var leanStretches: [RideMotion.LeanStretch] = []
+    /// The track by road surface (B-248); the detail map switches between the two.
+    var surfaceStretches: [RideMotion.SurfaceStretch] = []
+    /// Which colouring the detail map shows, remembered.
+    @AppStorage("trackColouring") private var colouring: TrackColouring = .lean
+
+    /// A coloured piece of the track.
+    private struct Piece: Identifiable {
+        let id: Int
+        let color: Color
+        let coordinates: [CLLocationCoordinate2D]
+    }
+
+    private func pieces<Band>(_ stretches: [RideMotion.Stretch<Band>], _ color: (Band) -> Color) -> [Piece] {
+        stretches.enumerated().map { index, stretch in
+            Piece(id: index, color: color(stretch.band),
+                  coordinates: zip(stretch.latitude, stretch.longitude).map { CLLocationCoordinate2D(latitude: $0, longitude: $1) })
+        }
+    }
+
+    /// The colouring shown: the chosen one if the ride has it, else the other.
+    private var shown: TrackColouring? {
+        switch (leanStretches.isEmpty, surfaceStretches.isEmpty) {
+        case (true, true): nil
+        case (false, true): .lean
+        case (true, false): .surface
+        case (false, false): colouring
+        }
+    }
 
     var body: some View {
         Map(initialPosition: .rect(Self.rect(for: segments.flatMap { $0 })),
             interactionModes: interactive ? .all : []) {
-            if leanStretches.isEmpty {
+            switch shown {
+            case .lean:
+                ForEach(pieces(leanStretches, Color.lean)) { piece in
+                    MapPolyline(coordinates: piece.coordinates)
+                        .stroke(piece.color, style: StrokeStyle(lineWidth: 5, lineCap: .round, lineJoin: .round))
+                }
+            case .surface:
+                ForEach(pieces(surfaceStretches, Color.surface)) { piece in
+                    MapPolyline(coordinates: piece.coordinates)
+                        .stroke(piece.color, style: StrokeStyle(lineWidth: 5, lineCap: .round, lineJoin: .round))
+                }
+            case nil:
                 ForEach(segments.indices, id: \.self) { index in
                     MapPolyline(coordinates: segments[index])
                         .stroke(Color.track, style: StrokeStyle(lineWidth: 4, lineCap: .round, lineJoin: .round))
-                }
-            } else {
-                ForEach(leanStretches.indices, id: \.self) { index in
-                    let stretch = leanStretches[index]
-                    MapPolyline(coordinates: zip(stretch.latitude, stretch.longitude).map {
-                        CLLocationCoordinate2D(latitude: $0, longitude: $1)
-                    })
-                    .stroke(Color.lean(stretch.band), style: StrokeStyle(lineWidth: 5, lineCap: .round, lineJoin: .round))
                 }
             }
             if let marker {
@@ -40,6 +71,9 @@ struct RouteMap: View {
                 }
             }
         }
+        // A fresh map for each colouring: SwiftUI's Map keeps the lines it has drawn and does not
+        // take new colours for them, so a switch between lean and surface showed the old ones.
+        .id(shown)
         .mapControlVisibility(interactive ? .automatic : .hidden)
         .allowsHitTesting(interactive)
         // MapKit's "Legal" link still takes taps despite allowsHitTesting(false) and opens
@@ -51,7 +85,23 @@ struct RouteMap: View {
             }
         }
         .overlay(alignment: .bottomLeading) {
-            if !leanStretches.isEmpty { LeanLegend().padding(8) }
+            switch shown {
+            case .lean: LeanLegend().padding(8)
+            case .surface: SurfaceLegend().padding(8)
+            case nil: EmptyView()
+            }
+        }
+        .overlay(alignment: .topLeading) {
+            // Both colourings there: a switch on the detail map (B-248).
+            if interactive, !leanStretches.isEmpty, !surfaceStretches.isEmpty {
+                Picker("Track Colour", selection: $colouring) {
+                    Text("Lean Angle").tag(TrackColouring.lean)
+                    Text("Surface").tag(TrackColouring.surface)
+                }
+                .pickerStyle(.segmented)
+                .fixedSize()
+                .padding(8)
+            }
         }
         .accessibilityHidden(!interactive)
     }
@@ -72,6 +122,44 @@ struct RouteMap: View {
         }
         let margin = max(rect.width, rect.height) * 0.15 + 200
         return rect.insetBy(dx: -margin, dy: -margin)
+    }
+}
+
+/// What the detail map colours the track by (B-248).
+enum TrackColouring: String {
+    case lean, surface
+}
+
+/// What the colours of the track by road surface mean (B-248).
+private struct SurfaceLegend: View {
+    var body: some View {
+        VStack(alignment: .leading, spacing: 4) {
+            Text("Surface").font(.caption2.weight(.semibold))
+            HStack(spacing: 6) {
+                ForEach(RideMotion.SurfaceBand.allCases, id: \.self) { band in
+                    HStack(spacing: 2) {
+                        Capsule().fill(Color.surface(band)).frame(width: 10, height: 4)
+                        Text(band.name).font(.caption2)
+                    }
+                }
+            }
+        }
+        .padding(.horizontal, 8)
+        .padding(.vertical, 6)
+        .glassEffect(.regular, in: .rect(cornerRadius: 10))
+        .accessibilityElement(children: .ignore)
+        .accessibilityLabel(Text("Track coloured by road surface: grey smooth, yellow uneven, brown rough"))
+    }
+}
+
+extension RideMotion.SurfaceBand {
+    /// "Smooth", "Uneven", "Rough".
+    var name: LocalizedStringKey {
+        switch self {
+        case .smooth: "Smooth"
+        case .uneven: "Uneven"
+        case .rough: "Rough"
+        }
     }
 }
 
@@ -108,13 +196,15 @@ struct RideMap: View {
     var interactive = false
     var marker: CLLocationCoordinate2D?
     var leanStretches: [RideMotion.LeanStretch] = []
+    var surfaceStretches: [RideMotion.SurfaceStretch] = []
     @State private var loaded: RideExchange.Route?
     @State private var finished = false
 
     var body: some View {
         Group {
             if let shown = route ?? loaded, shown.pointCount > 0 {
-                RouteMap(route: shown, interactive: interactive, marker: marker, leanStretches: leanStretches)
+                RouteMap(route: shown, interactive: interactive, marker: marker, leanStretches: leanStretches,
+                         surfaceStretches: surfaceStretches)
             } else {
                 Rectangle()
                     .fill(.quaternary)

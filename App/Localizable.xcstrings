@@ -92,6 +92,16 @@
         }
       }
     },
+    "Color the route by road surface" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Spur nach Belag einfärben"
+          }
+        }
+      }
+    },
     "Lean Angle" : {
       "localizations" : {
         "de" : {
@@ -212,6 +222,16 @@
         }
       }
     },
+    "Rough" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Holprig"
+          }
+        }
+      }
+    },
     "Saved before the first sync on %@." : {
       "localizations" : {
         "de" : {
@@ -222,12 +242,42 @@
         }
       }
     },
+    "Share of the distance on an uneven or rough surface" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Anteil der Strecke auf unebenem oder holprigem Belag"
+          }
+        }
+      }
+    },
+    "Smooth" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Glatt"
+          }
+        }
+      }
+    },
     "Stop syncing with iCloud?" : {
       "localizations" : {
         "de" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "Sync mit iCloud beenden?"
+          }
+        }
+      }
+    },
+    "Surface" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Belag"
           }
         }
       }
@@ -338,6 +388,26 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Unter 10 km"
+          }
+        }
+      }
+    },
+    "Uneven" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Uneben"
+          }
+        }
+      }
+    },
+    "Uneven Surface" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Unebener Belag"
           }
         }
       }
