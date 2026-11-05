@@ -7,6 +7,10 @@ Every DMG handed out to testers corresponds to one entry below.
 
 ## [Unreleased]
 
+### iPhone app 0.4.0 (in progress)
+
+- **Edit a ride:** the pencil at the top right of a ride's detail changes its name and its bike. With iCloud, the Mac gets the change too (B-240).
+
 ## [1.8.4] – 2026-11-05
 
 Wattspur syncs your library with the Wattspur app on the iPhone over iCloud: one library on both, in your own iCloud account. Together with it comes the iPhone app 0.3.0 for testers on TestFlight.

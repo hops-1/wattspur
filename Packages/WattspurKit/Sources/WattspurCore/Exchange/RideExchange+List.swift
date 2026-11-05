@@ -30,6 +30,12 @@ extension RideExchange.Library {
         return bikes.first { $0.id == id }
     }
 
+    /// The bikes to choose from when editing a ride (B-240): those not archived, plus the ride's own
+    /// bike even if it is archived, so the picker always shows the current choice.
+    public func bikesForEditing(current id: UUID?) -> [RideExchange.Bike] {
+        bikes.filter { !$0.isArchived || $0.id == id }
+    }
+
     /// The tiles “This Week” and “This Month”, without motorcycle rides (`BikeKind.isMotorized`).
     public func totals(now: Date = .now, calendar: Calendar = .current) -> RidePeriodTotals {
         RidePeriodTotals(rides: countedRides.map { (start: $0.startDate, distance: $0.distance) }, now: now, calendar: calendar)

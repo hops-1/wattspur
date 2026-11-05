@@ -142,4 +142,14 @@ struct RideExchangeListTests {
         #expect(library.bike(withID: bike.id)?.name == "Cube")
         #expect(library.bike(withID: nil) == nil)
     }
+
+    @Test("Editing offers the bikes in use plus the ride's own archived bike (B-240)")
+    func bikesForEditing() {
+        let cube = RideExchange.Bike(id: UUID(), name: "Cube", kind: "bike", color: "blue", isEbike: true, isArchived: false)
+        let old = RideExchange.Bike(id: UUID(), name: "Altes Rad", kind: "bike", color: "red", isEbike: true, isArchived: true)
+        let library = RideExchange.Library(generatedAt: .now, generator: "t", bikes: [cube, old], rides: [])
+        #expect(library.bikesForEditing(current: cube.id).map(\.name) == ["Cube"])
+        #expect(library.bikesForEditing(current: nil).map(\.name) == ["Cube"])
+        #expect(library.bikesForEditing(current: old.id).map(\.name) == ["Cube", "Altes Rad"])
+    }
 }

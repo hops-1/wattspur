@@ -131,6 +131,31 @@ struct PhoneDatabaseTests {
         #expect(database.library.ride(withID: id) == nil)
     }
 
+    @Test("A ride is renamed and moved to another bike (B-240)")
+    func edit() throws {
+        let id = try #require(save())
+        let cargo = database.library.makeBike(name: "Lastenrad", kind: .cargo)
+        #expect(database.edit(rideID: id, name: "  Zum Bäcker ", bikeID: cargo.id))
+        var ride = try #require(try database.snapshot(generator: "").rides.first)
+        #expect(ride.name == "Zum Bäcker")
+        #expect(ride.bikeID == cargo.id)
+
+        // A blank name and an unknown bike keep what the ride has; nothing changed.
+        #expect(!database.edit(rideID: id, name: "   ", bikeID: UUID()))
+        #expect(!database.edit(rideID: id, name: "Zum Bäcker", bikeID: cargo.id))
+        ride = try #require(try database.snapshot(generator: "").rides.first)
+        #expect(ride.name == "Zum Bäcker")
+        #expect(ride.bikeID == cargo.id)
+
+        // Only the name.
+        #expect(database.edit(rideID: id, name: "Heim", bikeID: nil))
+        ride = try #require(try database.snapshot(generator: "").rides.first)
+        #expect(ride.name == "Heim")
+        #expect(ride.bikeID == cargo.id)
+
+        #expect(!database.edit(rideID: UUID(), name: "Nichts", bikeID: nil))
+    }
+
     @Test("After 30 days the trash empties itself")
     func purge() throws {
         let old = try #require(save(start: 1_800_000_000))

@@ -8,12 +8,24 @@ struct TourDetailView: View {
     @Environment(PhoneLibrary.self) private var library
     @Environment(\.dismiss) private var dismiss
     @State private var confirmingDelete = false
-    var ride: RideExchange.Ride
+    @State private var editing = false
+    /// The ride as it was opened; `ride` follows later changes such as a new name (B-240).
+    private var opened: RideExchange.Ride
     /// For the sample ride, whose route is not in the folder.
     var route: RideExchange.Route?
     @State private var loaded: RideExchange.Route?
 
     private var shownRoute: RideExchange.Route? { route ?? loaded }
+
+    init(ride: RideExchange.Ride, route: RideExchange.Route? = nil) {
+        opened = ride
+        self.route = route
+    }
+
+    /// The current state of the ride in the library, after an edit here or on the Mac.
+    private var ride: RideExchange.Ride {
+        library.state?.rides.first { $0.id == opened.id } ?? opened
+    }
 
     var body: some View {
         ScrollView {
@@ -52,8 +64,12 @@ struct TourDetailView: View {
                 }
             }
             if library.usesDatabase, route == nil {
+                Button("Edit", systemImage: "pencil") { editing = true }
                 Button("Delete", systemImage: "trash") { confirmingDelete = true }
             }
+        }
+        .sheet(isPresented: $editing) {
+            EditRideSheet(ride: ride)
         }
         .confirmationDialog("Move this ride to the trash?", isPresented: $confirmingDelete, titleVisibility: .visible) {
             Button("Move to Trash", role: .destructive) {

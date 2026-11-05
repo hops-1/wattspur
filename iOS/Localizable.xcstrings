@@ -117,6 +117,16 @@
         }
       }
     },
+    "Cancel" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Abbrechen"
+          }
+        }
+      }
+    },
     "Check Again" : {
       "localizations" : {
         "de" : {
@@ -304,6 +314,26 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Strecke"
+          }
+        }
+      }
+    },
+    "Edit" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Bearbeiten"
+          }
+        }
+      }
+    },
+    "Edit Ride" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Fahrt bearbeiten"
           }
         }
       }
@@ -834,6 +864,16 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Vom Mac übernommen"
+          }
+        }
+      }
+    },
+    "The change reaches your Mac over iCloud." : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Die Änderung kommt über iCloud auf deinen Mac."
           }
         }
       }
