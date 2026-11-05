@@ -22,6 +22,10 @@ struct TourDetailView: View {
     @State private var track = RideTrack(samples: [])
     /// That spot; the map shows it as a dot while the finger stays on the chart.
     @State private var spot: RideTrack.Fix?
+    /// Lean, acceleration and sprint, and the track by lean angle (B-246); only rides recorded with
+    /// the motion sensors.
+    @State private var motion: RideMotion?
+    @State private var leanStretches: [RideMotion.LeanStretch] = []
 
     private var marker: CLLocationCoordinate2D? {
         guard let latitude = spot?.latitude, let longitude = spot?.longitude else { return nil }
@@ -80,13 +84,16 @@ struct TourDetailView: View {
             guard route == nil else { return }
             chartPoints = library.chartPoints(for: ride)
             track = library.track(for: ride)
+            let found = library.motion(for: ride)
+            motion = found?.figures
+            leanStretches = found?.stretches ?? []
         }
     }
 
     private var portrait: some View {
         ScrollView {
             VStack(alignment: .leading, spacing: 16) {
-                RideMap(ride: ride, route: route, interactive: true, marker: marker)
+                RideMap(ride: ride, route: route, interactive: true, marker: marker, leanStretches: leanStretches)
                     .frame(height: 300)
                     .clipShape(.rect(cornerRadius: 24))
                 // Right below the map, so both stay on screen while the finger is on a chart (B-221).
@@ -94,7 +101,7 @@ struct TourDetailView: View {
                     RideChartCarousel(ride: ride, points: chartPoints, track: track, spot: $spot)
                 }
                 info
-                FigureGrid(ride: ride)
+                FigureGrid(ride: ride, motion: motion)
                 elevationProfile
             }
             .padding()
@@ -105,7 +112,7 @@ struct TourDetailView: View {
     /// right; map and chart stay side by side while the finger is on a chart (B-221).
     private var landscape: some View {
         HStack(spacing: 16) {
-            RideMap(ride: ride, route: route, interactive: true, marker: marker)
+            RideMap(ride: ride, route: route, interactive: true, marker: marker, leanStretches: leanStretches)
                 .clipShape(.rect(cornerRadius: 24))
                 .containerRelativeFrame(.horizontal) { width, _ in width * 0.45 }
             ScrollView {
@@ -119,7 +126,7 @@ struct TourDetailView: View {
                     if hasCarousel {
                         RideChartCarousel(ride: ride, points: chartPoints, track: track, spot: $spot, height: 230)
                     }
-                    FigureGrid(ride: ride)
+                    FigureGrid(ride: ride, motion: motion)
                     elevationProfile
                 }
                 .padding(.bottom)
@@ -147,10 +154,10 @@ struct TourDetailView: View {
                         .buttonBorderShape(.circle)
                 }
                 HStack(alignment: .top, spacing: 12) {
-                    RideMap(ride: ride, route: route, interactive: true, marker: marker)
+                    RideMap(ride: ride, route: route, interactive: true, marker: marker, leanStretches: leanStretches)
                         .frame(width: 170, height: 190)
                         .clipShape(.rect(cornerRadius: 20))
-                    FigureGrid(ride: ride, compact: true)
+                    FigureGrid(ride: ride, motion: motion, compact: true)
                 }
                 if hasCarousel {
                     RideChartCarousel(ride: ride, points: chartPoints, track: track, spot: $spot, height: 230)
@@ -221,6 +228,8 @@ private struct DetailTitle: ViewModifier {
 /// The key figures in tiles, two per row; only those the ride has.
 struct FigureGrid: View {
     var ride: RideExchange.Ride
+    /// From the motion sensors (B-246); `nil` for other rides.
+    var motion: RideMotion? = nil
     /// Smaller tiles, beside the map in landscape (B-243).
     var compact = false
 
@@ -286,6 +295,19 @@ struct FigureGrid: View {
         }
         if let work = ride.work {
             items.append(Item(title: "Work", value: "\(Int(work.rounded())) kJ", systemImage: "flame"))
+        }
+        if let motion {
+            items.append(Item(title: "Max. Lean Left", value: RideFormat.lean(motion.maxLeanLeft), systemImage: "arrow.turn.up.left"))
+            items.append(Item(title: "Max. Lean Right", value: RideFormat.lean(motion.maxLeanRight), systemImage: "arrow.turn.up.right"))
+            if let g = motion.strongestAcceleration {
+                items.append(Item(title: "Max. Acceleration", value: RideFormat.gForce(g), systemImage: "arrow.up.forward.circle"))
+            }
+            if let g = motion.strongestBraking {
+                items.append(Item(title: "Max. Braking", value: RideFormat.gForce(g), systemImage: "exclamationmark.octagon"))
+            }
+            if let sprint = motion.sprint {
+                items.append(Item(title: "0–\(Int(sprint.targetKmh)) km/h", value: RideFormat.seconds(sprint.seconds), systemImage: "stopwatch"))
+            }
         }
         items.append(Item(title: "Total Time", value: RideFormat.duration(ride.elapsedTime), systemImage: "hourglass"))
         if let low = ride.minAltitude, let high = ride.maxAltitude {

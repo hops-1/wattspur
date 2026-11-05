@@ -9,13 +9,25 @@ struct RouteMap: View {
     var interactive = false
     /// The spot under the finger on the chart (B-221), as a dot on the track.
     var marker: CLLocationCoordinate2D?
+    /// The track by lean angle (B-246); drawn instead of the plain line when there is one.
+    var leanStretches: [RideMotion.LeanStretch] = []
 
     var body: some View {
         Map(initialPosition: .rect(Self.rect(for: segments.flatMap { $0 })),
             interactionModes: interactive ? .all : []) {
-            ForEach(segments.indices, id: \.self) { index in
-                MapPolyline(coordinates: segments[index])
-                    .stroke(Color.track, style: StrokeStyle(lineWidth: 4, lineCap: .round, lineJoin: .round))
+            if leanStretches.isEmpty {
+                ForEach(segments.indices, id: \.self) { index in
+                    MapPolyline(coordinates: segments[index])
+                        .stroke(Color.track, style: StrokeStyle(lineWidth: 4, lineCap: .round, lineJoin: .round))
+                }
+            } else {
+                ForEach(leanStretches.indices, id: \.self) { index in
+                    let stretch = leanStretches[index]
+                    MapPolyline(coordinates: zip(stretch.latitude, stretch.longitude).map {
+                        CLLocationCoordinate2D(latitude: $0, longitude: $1)
+                    })
+                    .stroke(Color.lean(stretch.band), style: StrokeStyle(lineWidth: 5, lineCap: .round, lineJoin: .round))
+                }
             }
             if let marker {
                 Annotation("", coordinate: marker, anchor: .center) {
@@ -37,6 +49,9 @@ struct RouteMap: View {
             if !interactive {
                 Color.clear.contentShape(.rect)
             }
+        }
+        .overlay(alignment: .bottomLeading) {
+            if !leanStretches.isEmpty { LeanLegend().padding(8) }
         }
         .accessibilityHidden(!interactive)
     }
@@ -60,6 +75,30 @@ struct RouteMap: View {
     }
 }
 
+/// What the colours of the track by lean angle mean (B-246).
+private struct LeanLegend: View {
+    var body: some View {
+        VStack(alignment: .leading, spacing: 4) {
+            Text("Lean Angle").font(.caption2.weight(.semibold))
+            HStack(spacing: 6) {
+                ForEach(RideMotion.LeanBand.allCases, id: \.self) { band in
+                    HStack(spacing: 2) {
+                        Capsule().fill(Color.lean(band)).frame(width: 10, height: 4)
+                        Text(verbatim: band == .extreme ? "40°+" : "\(Int(band.lowerBound))°")
+                            .font(.caption2)
+                            .monospacedDigit()
+                    }
+                }
+            }
+        }
+        .padding(.horizontal, 8)
+        .padding(.vertical, 6)
+        .glassEffect(.regular, in: .rect(cornerRadius: 10))
+        .accessibilityElement(children: .ignore)
+        .accessibilityLabel(Text("Track coloured by lean angle, from green upright to purple at 40° and more"))
+    }
+}
+
 /// The map of a ride once its route is loaded; a quiet placeholder until then or without GPS.
 struct RideMap: View {
     @Environment(PhoneLibrary.self) private var library
@@ -68,13 +107,14 @@ struct RideMap: View {
     var route: RideExchange.Route?
     var interactive = false
     var marker: CLLocationCoordinate2D?
+    var leanStretches: [RideMotion.LeanStretch] = []
     @State private var loaded: RideExchange.Route?
     @State private var finished = false
 
     var body: some View {
         Group {
             if let shown = route ?? loaded, shown.pointCount > 0 {
-                RouteMap(route: shown, interactive: interactive, marker: marker)
+                RouteMap(route: shown, interactive: interactive, marker: marker, leanStretches: leanStretches)
             } else {
                 Rectangle()
                     .fill(.quaternary)

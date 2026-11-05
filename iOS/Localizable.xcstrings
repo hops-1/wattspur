@@ -2324,6 +2324,116 @@
           }
         }
       }
+    },
+    "Lean Angle" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Schräglage"
+          }
+        }
+      }
+    },
+    "Left" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Links"
+          }
+        }
+      }
+    },
+    "Right" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Rechts"
+          }
+        }
+      }
+    },
+    "left" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "links"
+          }
+        }
+      }
+    },
+    "right" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "rechts"
+          }
+        }
+      }
+    },
+    "Max. Lean Left" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Max. Schräglage links"
+          }
+        }
+      }
+    },
+    "Max. Lean Right" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Max. Schräglage rechts"
+          }
+        }
+      }
+    },
+    "0–%lld km/h" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "0–%lld km/h"
+          }
+        }
+      }
+    },
+    "Track coloured by lean angle, from green upright to purple at 40° and more" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Spur nach Schräglage eingefärbt, von Grün aufrecht bis Lila ab 40°"
+          }
+        }
+      }
+    },
+    "Max. Acceleration" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Max. Beschleunigung"
+          }
+        }
+      }
+    },
+    "Max. Braking" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Max. Bremsung"
+          }
+        }
+      }
     }
   },
   "version" : "1.1"
