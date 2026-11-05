@@ -222,6 +222,12 @@ final class PhoneLibrary {
         database?.chartPoints(forRideID: ride.id, axis: axis) ?? []
     }
 
+    /// The time series of a ride, to show the spot under the finger on the chart on the map (B-221).
+    /// Empty in folder mode and for the sample ride.
+    func track(for ride: RideExchange.Ride) -> RideTrack {
+        database?.track(forRideID: ride.id) ?? RideTrack(samples: [])
+    }
+
     /// Renames a ride and changes its bike (B-240); over iCloud the Mac gets both.
     func edit(_ ride: RideExchange.Ride, name: String, bikeID: UUID?) {
         guard database?.edit(rideID: ride.id, name: name, bikeID: bikeID) == true else { return }

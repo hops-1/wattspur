@@ -1,4 +1,5 @@
 import Charts
+import MapKit
 import SwiftUI
 import WattspurCore
 
@@ -17,6 +18,15 @@ struct TourDetailView: View {
     @State private var loaded: RideExchange.Route?
     /// The measurements for the carousel (B-090, B-241); only from the iPhone's own store.
     @State private var chartPoints: [ChartPoint] = []
+    /// The time series, to look up the spot under the finger on a chart (B-221).
+    @State private var track = RideTrack(samples: [])
+    /// That spot; the map shows it as a dot while the finger stays on the chart.
+    @State private var spot: RideTrack.Fix?
+
+    private var marker: CLLocationCoordinate2D? {
+        guard let latitude = spot?.latitude, let longitude = spot?.longitude else { return nil }
+        return CLLocationCoordinate2D(latitude: latitude, longitude: longitude)
+    }
 
     private var shownRoute: RideExchange.Route? { route ?? loaded }
 
@@ -33,9 +43,13 @@ struct TourDetailView: View {
     var body: some View {
         ScrollView {
             VStack(alignment: .leading, spacing: 16) {
-                RideMap(ride: ride, route: route, interactive: true)
+                RideMap(ride: ride, route: route, interactive: true, marker: marker)
                     .frame(height: 300)
                     .clipShape(.rect(cornerRadius: 24))
+                // Right below the map, so both stay on screen while the finger is on a chart (B-221).
+                if !ChartMeasure.available(in: chartPoints).isEmpty {
+                    RideChartCarousel(ride: ride, points: chartPoints, track: track, spot: $spot)
+                }
                 VStack(alignment: .leading, spacing: 4) {
                     Text(RideFormat.date(ride.startDate, timeZone: ride.timeZone))
                         .font(.subheadline)
@@ -51,9 +65,7 @@ struct TourDetailView: View {
                     }
                 }
                 FigureGrid(ride: ride)
-                if !ChartMeasure.available(in: chartPoints).isEmpty {
-                    RideChartCarousel(ride: ride, points: chartPoints)
-                } else if let shownRoute, ElevationProfile.hasAltitude(shownRoute) {
+                if ChartMeasure.available(in: chartPoints).isEmpty, let shownRoute, ElevationProfile.hasAltitude(shownRoute) {
                     ElevationProfile(route: shownRoute)
                 }
             }
@@ -89,7 +101,9 @@ struct TourDetailView: View {
         }
         .task(id: ride.id) {
             // Decoding a few thousand samples is quick, but keep it out of every redraw.
-            if route == nil { chartPoints = library.chartPoints(for: ride) }
+            guard route == nil else { return }
+            chartPoints = library.chartPoints(for: ride)
+            track = library.track(for: ride)
         }
     }
 }

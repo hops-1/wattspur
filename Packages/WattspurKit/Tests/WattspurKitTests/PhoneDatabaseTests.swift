@@ -170,6 +170,16 @@ struct PhoneDatabaseTests {
         #expect(database.chartPoints(forRideID: UUID()).isEmpty)
     }
 
+    @Test("A spot on the chart is found on the track with its position (B-221)")
+    func track() throws {
+        let id = try #require(save())
+        let track = database.track(forRideID: id)
+        let fix = try #require(track.fix(atDistanceKm: 0.3))
+        #expect(abs(fix.distanceKm - 0.3) < 0.01)
+        #expect(fix.latitude != nil && fix.longitude != nil)
+        #expect(database.track(forRideID: UUID()).isEmpty)
+    }
+
     @Test("After 30 days the trash empties itself")
     func purge() throws {
         let old = try #require(save(start: 1_800_000_000))
