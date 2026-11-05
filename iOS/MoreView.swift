@@ -11,7 +11,7 @@ struct MoreView: View {
     @Environment(\.switchSync) private var switchSync
     @State private var confirmingOff = false
     @AppStorage(Recorder.vehicleKey) private var vehicle = RecordingVehicle.eBike
-    @AppStorage(MotionRawRecorder.enabledKey) private var recordsRawMotion = false
+    @AppStorage(MotionRecorder.rawLogKey) private var recordsRawMotion = false
     @Environment(\.isLandscape) private var isLandscape
 
     var body: some View {

@@ -294,7 +294,9 @@ public struct GPXRideImporter: RideImporter {
                                     power: point.power, cadence: point.cadence,
                                     cadenceMeasured: point.cadence != nil,
                                     heartRate: point.heartRate, temperature: point.temperature,
-                                    horizontalAccuracy: point.accuracy)
+                                    horizontalAccuracy: point.accuracy,
+                                    lean: point.lean, acceleration: point.acceleration,
+                                    roughness: point.roughness)
             if i > 0 {
                 let dt = sample.time - samples[i - 1].time
                 sample.speed = dt > 0 ? (distance - (samples[i - 1].distance ?? 0)) / dt : nil
@@ -453,6 +455,10 @@ private struct RawPoint {
     var temperature: Double?
     /// `wattspur:accuracy`, metres (recordings of the iPhone app).
     var accuracy: Double?
+    /// `wattspur:lean` (degrees), `wattspur:accel` and `wattspur:rough` (g), B-245.
+    var lean: Double?
+    var acceleration: Double?
+    var roughness: Double?
 
     var hasValidPosition: Bool {
         latitude.isFinite && longitude.isFinite
@@ -475,10 +481,13 @@ private final class GPXReader: NSObject, XMLParserDelegate {
         "cad": .cadence, "cadence": .cadence,
         "hr": .heartRate, "heartrate": .heartRate,
         "atemp": .temperature, "temp": .temperature,
-        "accuracy": .accuracy
+        "accuracy": .accuracy,
+        "lean": .lean, "accel": .acceleration, "rough": .roughness
     ]
 
-    private enum Value { case elevation, time, power, cadence, heartRate, temperature, accuracy }
+    private enum Value {
+        case elevation, time, power, cadence, heartRate, temperature, accuracy, lean, acceleration, roughness
+    }
 
     let maxPoints: Int
     var segments: [[RawPoint]] = []
@@ -610,6 +619,12 @@ private final class GPXReader: NSObject, XMLParserDelegate {
             if point?.heartRate == nil, let v = Self.whole(trimmed), v > 0 { point?.heartRate = v }
         case .accuracy:
             if point?.accuracy == nil, let v = Double(trimmed), v.isFinite, v >= 0 { point?.accuracy = v }
+        case .lean:
+            if point?.lean == nil, let v = Double(trimmed), v.isFinite, abs(v) <= 90 { point?.lean = v }
+        case .acceleration:
+            if point?.acceleration == nil, let v = Double(trimmed), v.isFinite, abs(v) <= 5 { point?.acceleration = v }
+        case .roughness:
+            if point?.roughness == nil, let v = Double(trimmed), v.isFinite, v >= 0, v <= 10 { point?.roughness = v }
         }
     }
 

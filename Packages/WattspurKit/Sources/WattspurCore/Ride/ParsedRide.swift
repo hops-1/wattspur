@@ -68,11 +68,19 @@ public struct RideSample: Sendable, Equatable, Codable {
     /// test ride shows when the GPS was good. Not written into stored data while `nil`, like the
     /// heart rate.
     public var horizontalAccuracy: Double?
+    /// Lean angle in degrees, positive left, from the motion sensors of the iPhone (B-245); like the
+    /// accuracy not written into stored data while `nil`. See `MotionValues`.
+    public var lean: Double?
+    /// Acceleration along the way in g, positive speeding up, negative braking (B-245).
+    public var acceleration: Double?
+    /// Shaking of the road in g (B-248).
+    public var roughness: Double?
 
     public init(time: TimeInterval, latitude: Double? = nil, longitude: Double? = nil,
                 altitude: Double? = nil, distance: Double? = nil, speed: Double? = nil,
                 power: Int? = nil, cadence: Int? = nil, cadenceMeasured: Bool = false,
-                heartRate: Int? = nil, temperature: Double? = nil, horizontalAccuracy: Double? = nil) {
+                heartRate: Int? = nil, temperature: Double? = nil, horizontalAccuracy: Double? = nil,
+                lean: Double? = nil, acceleration: Double? = nil, roughness: Double? = nil) {
         self.time = time
         self.latitude = latitude
         self.longitude = longitude
@@ -85,6 +93,9 @@ public struct RideSample: Sendable, Equatable, Codable {
         self.heartRate = heartRate
         self.temperature = temperature
         self.horizontalAccuracy = horizontalAccuracy
+        self.lean = lean
+        self.acceleration = acceleration
+        self.roughness = roughness
     }
 }
 
