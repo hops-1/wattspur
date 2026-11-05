@@ -29,10 +29,14 @@ struct TourDetailView: View {
     }
 
     private var shownRoute: RideExchange.Route? { route ?? loaded }
+    /// Beside the list of rides in landscape (B-243): the name as a heading instead of the title.
+    private var embedded: Bool
+    @Environment(\.isLandscape) private var isLandscape
 
-    init(ride: RideExchange.Ride, route: RideExchange.Route? = nil) {
+    init(ride: RideExchange.Ride, route: RideExchange.Route? = nil, embedded: Bool = false) {
         opened = ride
         self.route = route
+        self.embedded = embedded
     }
 
     /// The current state of the ride in the library, after an edit here or on the Mac.
@@ -41,38 +45,17 @@ struct TourDetailView: View {
     }
 
     var body: some View {
-        ScrollView {
-            VStack(alignment: .leading, spacing: 16) {
-                RideMap(ride: ride, route: route, interactive: true, marker: marker)
-                    .frame(height: 300)
-                    .clipShape(.rect(cornerRadius: 24))
-                // Right below the map, so both stay on screen while the finger is on a chart (B-221).
-                if !ChartMeasure.available(in: chartPoints).isEmpty {
-                    RideChartCarousel(ride: ride, points: chartPoints, track: track, spot: $spot)
-                }
-                VStack(alignment: .leading, spacing: 4) {
-                    Text(RideFormat.date(ride.startDate, timeZone: ride.timeZone))
-                        .font(.subheadline)
-                        .foregroundStyle(.secondary)
-                    if let bike = library.state?.bike(withID: ride.bikeID) {
-                        Label { Text(bike.name) } icon: { BikeBadge(bike: bike) }
-                            .font(.subheadline)
-                    }
-                    if ride.estimated {
-                        Label("Figures estimated from GPS", systemImage: "info.circle")
-                            .font(.footnote)
-                            .foregroundStyle(.secondary)
-                    }
-                }
-                FigureGrid(ride: ride)
-                if ChartMeasure.available(in: chartPoints).isEmpty, let shownRoute, ElevationProfile.hasAltitude(shownRoute) {
-                    ElevationProfile(route: shownRoute)
-                }
+        Group {
+            if embedded {
+                besideList
+            } else if isLandscape {
+                landscape
+            } else {
+                portrait
             }
-            .padding()
         }
-        .navigationTitle(ride.name)
-        .navigationBarTitleDisplayMode(.inline)
+        .modifier(DetailTitle(title: embedded ? nil : ride.name))
+        .hidesTabBarInLandscape()
         .toolbar {
             // Only rides of the iPhone's own store, not the sample ride or the Mac's state (B-217).
             if library.canShare(ride), route == nil {
@@ -106,29 +89,145 @@ struct TourDetailView: View {
             track = library.track(for: ride)
         }
     }
+
+    private var portrait: some View {
+        ScrollView {
+            VStack(alignment: .leading, spacing: 16) {
+                RideMap(ride: ride, route: route, interactive: true, marker: marker)
+                    .frame(height: 300)
+                    .clipShape(.rect(cornerRadius: 24))
+                // Right below the map, so both stay on screen while the finger is on a chart (B-221).
+                if hasCarousel {
+                    RideChartCarousel(ride: ride, points: chartPoints, track: track, spot: $spot)
+                }
+                info
+                FigureGrid(ride: ride)
+                elevationProfile
+            }
+            .padding()
+        }
+    }
+
+    /// Landscape (B-243): the map on the left over the whole height, figures and charts on the
+    /// right; map and chart stay side by side while the finger is on a chart (B-221).
+    private var landscape: some View {
+        HStack(spacing: 16) {
+            RideMap(ride: ride, route: route, interactive: true, marker: marker)
+                .clipShape(.rect(cornerRadius: 24))
+                .containerRelativeFrame(.horizontal) { width, _ in width * 0.45 }
+            ScrollView {
+                VStack(alignment: .leading, spacing: 12) {
+                    info
+                    if hasCarousel {
+                        RideChartCarousel(ride: ride, points: chartPoints, track: track, spot: $spot, height: 230)
+                    }
+                    FigureGrid(ride: ride)
+                    elevationProfile
+                }
+                .padding(.bottom)
+            }
+        }
+        .padding(.horizontal)
+    }
+
+    /// Beside the list of rides in landscape (B-243): name and date as a heading, a small map next
+    /// to the figures, the charts below.
+    private var besideList: some View {
+        ScrollView {
+            VStack(alignment: .leading, spacing: 12) {
+                VStack(alignment: .leading, spacing: 2) {
+                    Text(ride.name)
+                        .font(.title3.weight(.bold))
+                        .accessibilityAddTraits(.isHeader)
+                    info
+                }
+                HStack(alignment: .top, spacing: 12) {
+                    RideMap(ride: ride, route: route, interactive: true, marker: marker)
+                        .frame(width: 170, height: 190)
+                        .clipShape(.rect(cornerRadius: 20))
+                    FigureGrid(ride: ride, compact: true)
+                }
+                if hasCarousel {
+                    RideChartCarousel(ride: ride, points: chartPoints, track: track, spot: $spot, height: 230)
+                }
+                elevationProfile
+            }
+            .padding()
+        }
+    }
+
+    private var hasCarousel: Bool { !ChartMeasure.available(in: chartPoints).isEmpty }
+
+    /// Date, bike and whether the figures are estimated.
+    private var info: some View {
+        VStack(alignment: .leading, spacing: 4) {
+            Text(RideFormat.date(ride.startDate, timeZone: ride.timeZone))
+                .font(.subheadline)
+                .foregroundStyle(.secondary)
+            if let bike = library.state?.bike(withID: ride.bikeID) {
+                Label { Text(bike.name) } icon: { BikeBadge(bike: bike) }
+                    .font(.subheadline)
+            }
+            if ride.estimated {
+                Label("Figures estimated from GPS", systemImage: "info.circle")
+                    .font(.footnote)
+                    .foregroundStyle(.secondary)
+            }
+        }
+    }
+
+    /// Without the carousel, the elevation profile from the route.
+    @ViewBuilder private var elevationProfile: some View {
+        if !hasCarousel, let shownRoute, ElevationProfile.hasAltitude(shownRoute) {
+            ElevationProfile(route: shownRoute)
+        }
+    }
+}
+
+/// The ride's name as the title, except beside the list in landscape, where the list keeps its own.
+private struct DetailTitle: ViewModifier {
+    var title: String?
+
+    func body(content: Content) -> some View {
+        if let title {
+            content
+                .navigationTitle(title)
+                .navigationBarTitleDisplayMode(.inline)
+        } else {
+            content
+        }
+    }
 }
 
 /// The key figures in tiles, two per row; only those the ride has.
 struct FigureGrid: View {
     var ride: RideExchange.Ride
+    /// Smaller tiles, beside the map in landscape (B-243).
+    var compact = false
+
+    private var spacing: CGFloat { compact ? 8 : 12 }
 
     var body: some View {
-        LazyVGrid(columns: [GridItem(.flexible(), spacing: 12), GridItem(.flexible(), spacing: 12)], spacing: 12) {
+        LazyVGrid(columns: [GridItem(.flexible(), spacing: spacing), GridItem(.flexible(), spacing: spacing)], spacing: spacing) {
             ForEach(figures.indices, id: \.self) { index in
                 let figure = figures[index]
                 VStack(alignment: .leading, spacing: 4) {
+                    // Beside the map the tiles are narrow: the title without its icon, on one line.
                     Label(figure.title, systemImage: figure.systemImage)
+                        .labelStyle(compact ? AnyLabelStyle(.titleOnly) : AnyLabelStyle(.titleAndIcon))
                         .font(.caption)
                         .foregroundStyle(.secondary)
+                        .lineLimit(compact ? 1 : nil)
+                        .minimumScaleFactor(compact ? 0.8 : 1)
                     Text(figure.value)
-                        .font(.title3.weight(.semibold))
+                        .font(compact ? .headline : .title3.weight(.semibold))
                         .monospacedDigit()
                         .minimumScaleFactor(0.7)
                         .lineLimit(1)
                 }
                 .frame(maxWidth: .infinity, alignment: .leading)
-                .padding(12)
-                .glassEffect(.regular, in: .rect(cornerRadius: 16))
+                .padding(compact ? 8 : 12)
+                .glassEffect(.regular, in: .rect(cornerRadius: compact ? 12 : 16))
                 .accessibilityElement(children: .combine)
             }
         }
@@ -175,6 +274,17 @@ struct FigureGrid: View {
         }
         return items
     }
+}
+
+/// Either label style, chosen at run time.
+private struct AnyLabelStyle: LabelStyle {
+    private let make: (Configuration) -> AnyView
+
+    init(_ style: some LabelStyle) {
+        make = { AnyView(style.makeBody(configuration: $0)) }
+    }
+
+    func makeBody(configuration: Configuration) -> some View { make(configuration) }
 }
 
 /// The altitude over the distance, from the simplified route (one point every 20 m).

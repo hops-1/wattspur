@@ -117,7 +117,7 @@ extension GPXTrack {
     }
 
     /// Median of up to `points` neighbours; the window shrinks at both ends.
-    private static func median(_ values: [Double], points: Int) -> [Double] {
+    static func median(_ values: [Double], points: Int) -> [Double] {
         let half = Swift.max(0, points / 2)
         guard half > 0, values.count > 2 else { return values }
         return values.indices.map { i in
@@ -127,7 +127,7 @@ extension GPXTrack {
     }
 
     /// Ascent and descent: a change counts once it exceeds the last counted height by `threshold`.
-    private static func climb(_ heights: [Double], threshold: Double) -> (up: Double, down: Double) {
+    static func climb(_ heights: [Double], threshold: Double) -> (up: Double, down: Double) {
         guard var reference = heights.first else { return (0, 0) }
         var up = 0.0, down = 0.0
         for height in heights.dropFirst() {

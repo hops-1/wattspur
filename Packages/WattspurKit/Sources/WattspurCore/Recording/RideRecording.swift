@@ -143,6 +143,28 @@ public struct RideRecording: Codable, Sendable, Equatable {
         return metres / last.fix.date.timeIntervalSince(earlier.fix.date)
     }
 
+    /// Metres per second over the time in motion; 0 before the first metres.
+    public var averageSpeed: Double {
+        movingTime > 0 ? distance / movingTime : 0
+    }
+
+    /// Whole metres of climbing so far, counted like the ascent of a GPX ride (smoothed heights,
+    /// `GPXSummaryParameters.ascentThreshold`), so the figure while riding matches the saved ride;
+    /// `nil` while no stretch has two heights. Shown in the landscape recording (B-243).
+    public var ascent: Int? {
+        let parameters = GPXSummaryParameters.standard
+        var total = 0.0
+        var hasHeights = false
+        for points in segments {
+            let heights = points.compactMap(\.fix.altitude)
+            guard heights.count >= 2 else { continue }
+            hasHeights = true
+            total += GPXTrack.climb(GPXTrack.median(heights, points: parameters.altitudeMedianPoints),
+                                    threshold: parameters.ascentThreshold).up
+        }
+        return hasHeights ? Int(total.rounded()) : nil
+    }
+
     public var pointCount: Int { segments.reduce(0) { $0 + $1.count } }
 
     /// `true` until the first position is kept: the GPS is still settling (shown while recording).

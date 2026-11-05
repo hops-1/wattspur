@@ -63,6 +63,11 @@ enum RideFormat {
                                     numberFormatStyle: .number.precision(.fractionLength(1))))
     }
 
+    /// “23.5” without the unit, for the large speed of the landscape recording (B-243); always km/h, as `speed`.
+    static func speedNumber(_ metresPerSecond: Double) -> String {
+        (metresPerSecond * 3.6).formatted(.number.precision(.fractionLength(1)))
+    }
+
     /// “184 m” of altitude.
     static func altitude(_ metres: Double) -> String {
         ascent(Int(metres.rounded()))

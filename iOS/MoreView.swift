@@ -11,70 +11,92 @@ struct MoreView: View {
     @Environment(\.switchSync) private var switchSync
     @State private var confirmingOff = false
     @AppStorage(Recorder.vehicleKey) private var vehicle = RecordingVehicle.eBike
+    @Environment(\.isLandscape) private var isLandscape
 
     var body: some View {
-        Form {
-            if sync.canChoose {
-                Section {
-                    Toggle("Sync with iCloud", isOn: Binding(
-                        get: { sync.isOn },
-                        set: { if $0 { switchSync(true) } else { confirmingOff = true } }))
-                } footer: {
-                    if sync.isOn {
-                        Text("One library on this iPhone and your Mac, in your own iCloud account.")
-                    } else {
-                        Text("Without iCloud, rides reach the Mac through a folder it watches, or with “Share GPX”, e.g. by AirDrop.")
-                    }
-                }
-                .confirmationDialog("Stop syncing with iCloud?", isPresented: $confirmingOff, titleVisibility: .visible) {
-                    Button("Turn Off") { switchSync(false) }
-                } message: {
-                    Text("The rides stay in iCloud and on your Mac. This iPhone then shows the rides the Mac provides in the folder, and new rides go there as GPX.")
-                }
-            }
-            if library.usesDatabase {
-                Section {
-                    NavigationLink {
-                        TrashView()
-                    } label: {
-                        LabeledContent {
-                            Text(library.trash.count.formatted())
-                        } label: {
-                            Label("Trash", systemImage: "trash")
-                        }
-                    }
-                } header: {
-                    Text("Library")
-                } footer: {
-                    if library.mode == .iCloud {
-                        Text("Your rides are on this iPhone and in your own iCloud account, the same as on your Mac.")
-                    } else {
-                        Text("Your rides are on this iPhone. Sync with the Mac comes with iCloud.")
-                    }
-                }
-                if let monitor = library.syncMonitor {
-                    SyncSection(monitor: monitor)
+        Group {
+            if isLandscape {
+                // Two columns in landscape (B-243): library on the left, recording and version on the right.
+                HStack(spacing: 0) {
+                    Form { librarySections }
+                        .tabBarRoomInLandscape()
+                    Form { recordingSections }
                 }
             } else {
-                folderSection
-            }
-
-            Section {
-                Picker("Vehicle", selection: $vehicle) {
-                    Text("E-Bike").tag(RecordingVehicle.eBike)
-                    Text("Motorcycle").tag(RecordingVehicle.motorcycle)
+                Form {
+                    librarySections
+                    recordingSections
                 }
-            } header: {
-                Text("Recording")
-            } footer: {
-                Text("GPS jumps look like impossible speeds and are left out. For an e-bike that is above 100 km/h, for a motorcycle above 300 km/h.")
-            }
-
-            Section {
-                VersionFooter()
             }
         }
         .navigationTitle("More")
+    }
+
+    /// iCloud or the folder, the trash and the sync status.
+    @ViewBuilder private var librarySections: some View {
+        if sync.canChoose {
+            Section {
+                Toggle("Sync with iCloud", isOn: Binding(
+                    get: { sync.isOn },
+                    set: { if $0 { switchSync(true) } else { confirmingOff = true } }))
+            } footer: {
+                if sync.isOn {
+                    Text("One library on this iPhone and your Mac, in your own iCloud account.")
+                } else {
+                    Text("Without iCloud, rides reach the Mac through a folder it watches, or with “Share GPX”, e.g. by AirDrop.")
+                }
+            }
+            .confirmationDialog("Stop syncing with iCloud?", isPresented: $confirmingOff, titleVisibility: .visible) {
+                Button("Turn Off") { switchSync(false) }
+            } message: {
+                Text("The rides stay in iCloud and on your Mac. This iPhone then shows the rides the Mac provides in the folder, and new rides go there as GPX.")
+            }
+        }
+        if library.usesDatabase {
+            Section {
+                NavigationLink {
+                    TrashView()
+                        .hidesTabBarInLandscape()
+                } label: {
+                    LabeledContent {
+                        Text(library.trash.count.formatted())
+                    } label: {
+                        Label("Trash", systemImage: "trash")
+                    }
+                }
+            } header: {
+                Text("Library")
+            } footer: {
+                if library.mode == .iCloud {
+                    Text("Your rides are on this iPhone and in your own iCloud account, the same as on your Mac.")
+                } else {
+                    Text("Your rides are on this iPhone. Sync with the Mac comes with iCloud.")
+                }
+            }
+            if let monitor = library.syncMonitor {
+                SyncSection(monitor: monitor)
+            }
+        } else {
+            folderSection
+        }
+    }
+
+    /// The vehicle for the recording and the version.
+    @ViewBuilder private var recordingSections: some View {
+        Section {
+            Picker("Vehicle", selection: $vehicle) {
+                Text("E-Bike").tag(RecordingVehicle.eBike)
+                Text("Motorcycle").tag(RecordingVehicle.motorcycle)
+            }
+        } header: {
+            Text("Recording")
+        } footer: {
+            Text("GPS jumps look like impossible speeds and are left out. For an e-bike that is above 100 km/h, for a motorcycle above 300 km/h.")
+        }
+
+        Section {
+            VersionFooter()
+        }
     }
 
     private var folderSection: some View {

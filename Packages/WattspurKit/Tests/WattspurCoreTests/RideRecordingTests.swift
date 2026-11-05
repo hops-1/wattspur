@@ -21,6 +21,40 @@ struct RideRecordingTests {
         #expect(abs(recording.currentSpeed - 5) < 0.1)
     }
 
+    @Test("Average speed over the time in motion, ascent from the smoothed heights (B-243)")
+    func averageAndAscent() {
+        var recording = RideRecording(startDate: Self.start)
+        #expect(recording.averageSpeed == 0)
+        #expect(recording.ascent == nil)
+        // 60 s at 5 m/s, climbing 0.5 m per second with ±0.5 m of noise: 30 m up.
+        for second in 0...60 {
+            let noise = second.isMultiple(of: 2) ? 0.5 : -0.5
+            recording.add(Self.fix(Double(second), north: Double(second) * 5, altitude: 100 + Double(second) * 0.5 + noise))
+        }
+        #expect(abs(recording.averageSpeed - 5) < 0.05)
+        let ascent = recording.ascent ?? 0
+        #expect((28...31).contains(ascent))
+    }
+
+    @Test("Ascent adds up over pauses, and stays nil without heights")
+    func ascentOverPauses() {
+        var recording = RideRecording(startDate: Self.start)
+        for second in 0...10 { recording.add(Self.fix(Double(second), north: Double(second) * 5, altitude: 100 + Double(second))) }
+        recording.pause()
+        recording.resume()
+        for second in 20...30 { recording.add(Self.fix(Double(second), north: Double(second) * 5, altitude: 100 + Double(second))) }
+        // Each stretch is smoothed on its own, as in the saved GPX, so the two add up.
+        var one = RideRecording(startDate: Self.start)
+        for second in 0...10 { one.add(Self.fix(Double(second), north: Double(second) * 5, altitude: 100 + Double(second))) }
+        let single = one.ascent ?? 0
+        #expect(single >= 8)
+        #expect(recording.ascent == 2 * single)
+
+        var flat = RideRecording(startDate: Self.start)
+        for second in 0...10 { flat.add(Self.fix(Double(second), north: Double(second) * 5, altitude: nil)) }
+        #expect(flat.ascent == nil)
+    }
+
     @Test("Inaccurate positions and jumps are dropped")
     func dropsBadFixes() {
         var recording = RideRecording(startDate: Self.start)

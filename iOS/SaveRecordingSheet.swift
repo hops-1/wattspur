@@ -10,6 +10,8 @@ struct SaveRecordingSheet: View {
     @Environment(ImportFolder.self) private var folder
     @Environment(\.dismiss) private var dismiss
     var recording: RideRecording
+    /// Closes the window; beside the bar of the landscape recording it is no sheet (B-243).
+    var close: (() -> Void)?
 
     @State private var name = ""
     @State private var bikeID: UUID?
@@ -48,6 +50,9 @@ struct SaveRecordingSheet: View {
                 Section {
                     LabeledContent("Distance", value: RideFormat.distance(recording.distance))
                     LabeledContent("Riding Time", value: RideFormat.duration(recording.movingTime))
+                    if let ascent = recording.ascent {
+                        LabeledContent("Ascent", value: RideFormat.ascent(ascent))
+                    }
                 }
                 if recording.isTooShort {
                     Text("The recording has no track yet: GPS needs a few seconds of riding. Keep riding or discard it.")
@@ -64,7 +69,7 @@ struct SaveRecordingSheet: View {
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .cancellationAction) {
-                    Button("Keep Riding") { dismiss() }
+                    Button("Keep Riding") { finish() }
                 }
                 ToolbarItem(placement: .confirmationAction) {
                     Button("Save") { save() }
@@ -74,7 +79,7 @@ struct SaveRecordingSheet: View {
             .confirmationDialog("Discard this ride?", isPresented: $confirmingDiscard, titleVisibility: .visible) {
                 Button("Discard Ride", role: .destructive) {
                     _ = recorder.stop()
-                    dismiss()
+                    finish()
                 }
             }
         }
@@ -82,6 +87,15 @@ struct SaveRecordingSheet: View {
             name = RecordingView.defaultName(for: recording.startDate)
             bikeID = Self.defaultBike(among: bikes, last: recordings.lastBikeID, lastRide: library.state?.lastRide)
         }
+    }
+
+    init(recording: RideRecording, close: (() -> Void)? = nil) {
+        self.recording = recording
+        self.close = close
+    }
+
+    private func finish() {
+        if let close { close() } else { dismiss() }
     }
 
     /// The bike chosen last time, else the bike of the last ride from the Mac, else the first.
@@ -114,7 +128,7 @@ struct SaveRecordingSheet: View {
                            bike: bike, library: library, recordings: recordings, folder: folder)
             recordings.lastBikeID = bike?.id
             _ = recorder.stop()
-            dismiss()
+            finish()
         } catch {
             // The recording and its log stay, so nothing is lost; the rider can try again.
             problem = error.localizedDescription

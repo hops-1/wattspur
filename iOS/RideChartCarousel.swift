@@ -12,6 +12,8 @@ struct RideChartCarousel: View {
     /// Where on the ride the finger is (B-221); the detail shows it on the map.
     var track: RideTrack
     @Binding var spot: RideTrack.Fix?
+    /// Lower in landscape, where the screen is short (B-243).
+    var height: CGFloat = 290
     @State private var page: ChartMeasure?
 
     private var measures: [ChartMeasure] { ChartMeasure.available(in: points) }
@@ -28,7 +30,7 @@ struct RideChartCarousel: View {
         }
         .tabViewStyle(.page(indexDisplayMode: measures.count > 1 ? .always : .never))
         .indexViewStyle(.page(backgroundDisplayMode: .always))
-        .frame(height: 290)
+        .frame(height: height)
         .glassEffect(.regular, in: .rect(cornerRadius: 24))
         .onAppear { if page == nil { page = measures.first } }
         .onChange(of: page) { spot = nil }

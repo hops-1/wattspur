@@ -32,6 +32,21 @@ struct RidePeriodTotalsTests {
         #expect(totals.weekDistance == 15_000)
         #expect(totals.monthRides == 4)
         #expect(totals.monthDistance == 42_000)
+        #expect(totals.yearRides == 5)
+        #expect(totals.yearDistance == 72_000)
+    }
+
+    @Test func yearEndsAtNewYear() {
+        let cal = calendar("Europe/Berlin", firstWeekday: 2)
+        let now = date("2026-11-04T12:00:00", cal)
+        let rides = [
+            (start: date("2026-01-01T00:00:00", cal), distance: 1_000.0),
+            (start: date("2025-12-31T23:59:00", cal), distance: 2_000.0),
+            (start: date("2027-01-01T00:00:00", cal), distance: 4_000.0),
+        ]
+        let totals = RidePeriodTotals(rides: rides, now: now, calendar: cal)
+        #expect(totals.yearRides == 1)
+        #expect(totals.yearDistance == 1_000)
     }
 
     @Test func weekStartFollowsTheCalendar() {
