@@ -10,6 +10,7 @@ Every DMG handed out to testers corresponds to one entry below.
 ### iPhone app 0.4.0 (in progress)
 
 - **Edit a ride:** the pencil at the top right of a ride's detail changes its name and its bike. With iCloud, the Mac gets the change too (B-240).
+- **Charts to swipe:** with iCloud, the detail of a ride shows speed, power, cadence, heart rate and elevation, one chart per page with dots below, each with its maximum and average. Only what the ride has gets a page. Without iCloud the elevation profile stays (B-090, B-241).
 
 ## [1.8.4] – 2026-11-05
 

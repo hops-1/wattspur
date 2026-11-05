@@ -3,7 +3,8 @@ import SwiftUI
 import WattspurCore
 
 /// The tour detail on the iPhone (B-210): the map with the track, the key figures as a grid and
-/// the elevation profile. The values come finished from the Mac; the iPhone calculates nothing.
+/// the charts: with the iPhone's own store a carousel of all measurements (B-090), otherwise the
+/// elevation profile from the route.
 struct TourDetailView: View {
     @Environment(PhoneLibrary.self) private var library
     @Environment(\.dismiss) private var dismiss
@@ -14,6 +15,8 @@ struct TourDetailView: View {
     /// For the sample ride, whose route is not in the folder.
     var route: RideExchange.Route?
     @State private var loaded: RideExchange.Route?
+    /// The measurements for the carousel (B-090, B-241); only from the iPhone's own store.
+    @State private var chartPoints: [ChartPoint] = []
 
     private var shownRoute: RideExchange.Route? { route ?? loaded }
 
@@ -48,7 +51,9 @@ struct TourDetailView: View {
                     }
                 }
                 FigureGrid(ride: ride)
-                if let shownRoute, ElevationProfile.hasAltitude(shownRoute) {
+                if !ChartMeasure.available(in: chartPoints).isEmpty {
+                    RideChartCarousel(ride: ride, points: chartPoints)
+                } else if let shownRoute, ElevationProfile.hasAltitude(shownRoute) {
                     ElevationProfile(route: shownRoute)
                 }
             }
@@ -81,6 +86,10 @@ struct TourDetailView: View {
         }
         .task(id: ride.routeFile) {
             if route == nil { loaded = await library.route(for: ride) }
+        }
+        .task(id: ride.id) {
+            // Decoding a few thousand samples is quick, but keep it out of every redraw.
+            if route == nil { chartPoints = library.chartPoints(for: ride) }
         }
     }
 }

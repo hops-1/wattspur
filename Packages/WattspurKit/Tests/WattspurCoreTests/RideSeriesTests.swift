@@ -34,6 +34,30 @@ struct RideSeriesTests {
         #expect(RideSeries.chartPoints(from: ride.samples).allSatisfy { $0.heartRate == nil })
     }
 
+    @Test("The carousel shows only the measurements a ride has, in a fixed order (B-090)")
+    func measures() {
+        // The Bosch FIT: everything but the heart rate.
+        let fit = RideSeries.chartPoints(from: ride.samples)
+        #expect(ChartMeasure.available(in: fit) == [.speed, .power, .cadence, .altitude])
+        // A GPS recording with a heart rate but no power or cadence.
+        let gps = RideSeries.chartPoints(from: (0..<60).map {
+            RideSample(time: Double($0), altitude: 100, distance: Double($0) * 5, speed: 5, heartRate: 130)
+        }, bins: 10)
+        #expect(ChartMeasure.available(in: gps) == [.speed, .heartRate, .altitude])
+        #expect(ChartMeasure.available(in: []).isEmpty)
+    }
+
+    @Test("Highest and mean value of a measurement")
+    func measureRange() throws {
+        let points = [120.0, 140, nil, 160].enumerated().map { i, rate in
+            ChartPoint(id: i, distanceKm: Double(i), heartRate: rate)
+        }
+        let range = try #require(ChartMeasure.heartRate.range(in: points))
+        #expect(range.max == 160)
+        #expect(range.mean == 140)
+        #expect(ChartMeasure.power.range(in: points) == nil)
+    }
+
     @Test("Averaged values stay in plausible ranges")
     func ranges() {
         let points = RideSeries.chartPoints(from: ride.samples)
