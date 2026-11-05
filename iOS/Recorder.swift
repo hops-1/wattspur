@@ -19,6 +19,8 @@ final class Recorder {
     private(set) var status: String?
 
     var isRecording: Bool { recording != nil }
+    /// Siri or a shortcut asked to end the ride (B-225): the recording screen opens “Save Ride”.
+    var endRequested = false
 
     /// What is recorded, chosen in “More”; a motorcycle keeps speeds above 100 km/h.
     static let vehicleKey = "recordingVehicle"
@@ -101,6 +103,7 @@ final class Recorder {
 
     /// Ends the recording and hands it back; the log is removed.
     func stop() -> RideRecording? {
+        endRequested = false
         let finished = recording ?? unfinished
         stopUpdates()
         activity.end(recording)

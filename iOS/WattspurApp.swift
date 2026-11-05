@@ -1,3 +1,4 @@
+import AppIntents
 import SwiftData
 import SwiftUI
 import WattspurKit
@@ -14,15 +15,26 @@ struct WattspurApp: App {
     @State private var folder: ImportFolder
     @State private var library: PhoneLibrary
     @State private var sync: PhoneSync
-    @State private var recorder = Recorder()
+    @State private var recorder: Recorder
+    /// What Siri and the shortcuts ask the app to show (B-225).
+    @State private var intents: IntentRouter
     @State private var recordings = PhoneRecordings()
     @State private var tab = Tab.overview
     /// Search and filters of the ride list (B-222); the period tiles of the overview set them.
     @State private var rideFilter = RideFilter()
+    /// The ride “Open last ride” shows in the list (B-225).
+    @State private var openedRideID: UUID?
     /// FIT and GPX files opened with Wattspur (B-071).
     @State private var phoneImport = PhoneImport()
 
     init() {
+        // Siri and the shortcuts (B-225) reach the recorder and the app through these two.
+        let recorder = Recorder()
+        let intents = IntentRouter()
+        _recorder = State(initialValue: recorder)
+        _intents = State(initialValue: intents)
+        AppDependencyManager.shared.add(dependency: recorder)
+        AppDependencyManager.shared.add(dependency: intents)
         let folder = ImportFolder()
         _folder = State(initialValue: folder)
         // iCloud only when the build allows it (`WattspurDatabase` in the Info.plist, from
@@ -76,7 +88,7 @@ struct WattspurApp: App {
                 }
                 SwiftUI.Tab("Rides", systemImage: "list.bullet", value: Tab.rides) {
                     NavigationStack {
-                        RidesView(filter: $rideFilter)
+                        RidesView(filter: $rideFilter, openedRideID: $openedRideID)
                             .hidesTabBarInLandscape()
                             .hidesTitleBar()
                     }
@@ -141,6 +153,18 @@ struct WattspurApp: App {
                 Button("Discard", role: .destructive) { _ = recorder.stop() }
             } message: {
                 Text("Wattspur was closed while recording. Continue the ride, or end it and save what was recorded?")
+            }
+            // “Open last ride” from Siri or a shortcut (B-225): the rides, unfiltered, with the newest open.
+            .onChange(of: intents.request, initial: true) { _, request in
+                guard let request else { return }
+                intents.request = nil
+                switch request {
+                case .lastRide:
+                    guard let last = library.state?.lastRide else { tab = .rides; return }
+                    rideFilter = RideFilter()
+                    tab = .rides
+                    openedRideID = last.id
+                }
             }
             // The widget “This Week” shows the same week as the overview (B-224).
             .onChange(of: weekSnapshot, initial: true) { _, snapshot in

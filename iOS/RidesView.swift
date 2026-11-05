@@ -10,6 +10,8 @@ struct RidesView: View {
     @State private var selection: UUID?
     /// Search and filters (B-222), kept by the app: the period tiles of the overview set them.
     @Binding var filter: RideFilter
+    /// A ride to open, from “Open last ride” (Siri or a shortcut, B-225); cleared when it closes.
+    @Binding var openedRideID: UUID?
 
     var body: some View {
         Group {
@@ -30,6 +32,13 @@ struct RidesView: View {
             }
         }
         .navigationTitle("Rides")
+        // In landscape the ride is shown beside the list.
+        .onChange(of: openedRideID, initial: true) { _, id in
+            if isLandscape, let id {
+                selection = id
+                openedRideID = nil
+            }
+        }
     }
 
     /// The filter as it applies: a bike filter only with two bikes or more (`RideFilter.resolved`).
@@ -162,6 +171,17 @@ struct RidesView: View {
         .scrollDismissesKeyboard(.immediately)
         .safeAreaInset(edge: .top, spacing: 0) { filterBar(state, months: months) }
         .overlay { emptyState(state, months: months) }
+        .navigationDestination(isPresented: Binding(get: { openedRide(in: state) != nil },
+                                                    set: { if !$0 { openedRideID = nil } })) {
+            if let ride = openedRide(in: state) {
+                TourDetailView(ride: ride)
+            }
+        }
+    }
+
+    private func openedRide(in state: RideExchange.Library) -> RideExchange.Ride? {
+        guard let openedRideID, !isLandscape else { return nil }
+        return state.rides.first { $0.id == openedRideID }
     }
 }
 
