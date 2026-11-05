@@ -23,7 +23,7 @@ Kann Wattspur aus den Sensoren des iPhones die Schräglage, das Beschleunigen un
 ## Auswertung (geplant)
 - **Schräglage:** Drehrate um die Senkrechte = Drehrate projiziert auf die Schwerkraft; tan(Schräglage) = v · ω / g mit v vom GPS. Vergleich mit BMW Motorrad Connected.
 - **Längs und quer:** Ableitung des GPS-Tempos, verglichen mit der Beschleunigung längs des Kurses; welche Glättung das Brummen des Motors entfernt.
-- **Rütteln (B-248):** Stärke der Erschütterung nach Abzug von Kurven und Bremsen; lassen sich glatter Asphalt, Pflaster und Schotter trennen?
+- **Rütteln (B-248):** Stärke der Erschütterung nach Abzug von Kurven und Bremsen; lassen sich glatter Asphalt, Pflaster und Schotter trennen? Die App nutzt vorerst die Grenzen 0,1 g (uneben) und 0,25 g (holprig); diese Werte hier prüfen und anpassen (`RideMotion.SurfaceBand`).
 - Halterung gegen Tasche, Akku pro Stunde, läuft es bei gesperrtem Bildschirm ohne Lücken.
 
 ## Ergebnis

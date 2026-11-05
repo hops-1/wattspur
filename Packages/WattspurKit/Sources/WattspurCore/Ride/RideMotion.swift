@@ -13,6 +13,8 @@ public struct RideMotion: Sendable, Equatable {
     public var strongestBraking: Double?
     /// The best run from a standstill to `Sprint.target`; `nil` if the ride has none.
     public var sprint: Sprint?
+    /// The share of the distance on an uneven or rough surface (B-248), 0…1; `nil` without values.
+    public var roughShare: Double?
 
     public struct Sprint: Sendable, Equatable {
         /// km/h: 100 for a motorcycle, 25 for a bicycle.
@@ -40,6 +42,24 @@ public struct RideMotion: Sendable, Equatable {
         strongestAcceleration = accelerations.max().flatMap { $0 > 0 ? $0 : nil }
         strongestBraking = accelerations.min().flatMap { $0 < 0 ? -$0 : nil }
         sprint = Self.bestSprint(samples, targetKmh: Self.sprintTarget(motorized: motorized))
+        roughShare = Self.roughShare(samples)
+    }
+
+    /// The share of the distance whose roughness is at least `SurfaceBand.uneven`; each step between
+    /// two samples counts with the roughness of the later one, steps over a gap not at all.
+    static func roughShare(_ samples: [RideSample]) -> Double? {
+        var total = 0.0
+        var rough = 0.0
+        var previous: RideSample?
+        for sample in samples.sorted(by: { $0.time < $1.time }) {
+            defer { previous = sample }
+            guard let p = previous, let roughness = sample.roughness, let to = sample.distance, let from = p.distance,
+                  sample.time - p.time <= maxSampleGap else { continue }
+            let step = max(to - from, 0)
+            total += step
+            if SurfaceBand(roughness: roughness) >= .uneven { rough += step }
+        }
+        return total > 0 ? rough / total : nil
     }
 
     /// The fastest time from the last moment below `standstillKmh` to reaching `targetKmh`, with the
@@ -90,25 +110,60 @@ public struct RideMotion: Sendable, Equatable {
         public static func < (a: LeanBand, b: LeanBand) -> Bool { a.rawValue < b.rawValue }
     }
 
+    /// How rough the road was on a stretch (B-248), for the colour of the track on the map. The
+    /// limits are a first guess and get checked against the test rides of V-16.
+    public enum SurfaceBand: Int, CaseIterable, Sendable, Comparable {
+        /// Below 0.1 g: asphalt.
+        case smooth
+        /// 0.1 g to 0.25 g: worn asphalt, paving stones.
+        case uneven
+        /// 0.25 g and more: cobbles, gravel, forest tracks.
+        case rough
+
+        /// The lowest roughness of the band, in g.
+        public static let unevenFrom = 0.1
+        public static let roughFrom = 0.25
+
+        public init(roughness: Double) {
+            self = roughness >= Self.roughFrom ? .rough : roughness >= Self.unevenFrom ? .uneven : .smooth
+        }
+
+        public static func < (a: SurfaceBand, b: SurfaceBand) -> Bool { a.rawValue < b.rawValue }
+    }
+
     /// A piece of the track with one band; the next piece starts at its last point, so the line
     /// has no holes.
-    public struct LeanStretch: Sendable, Equatable {
-        public var band: LeanBand
+    public struct Stretch<Band: Sendable & Equatable>: Sendable, Equatable {
+        public var band: Band
         public var latitude: [Double]
         public var longitude: [Double]
     }
+
+    public typealias LeanStretch = Stretch<LeanBand>
+    public typealias SurfaceStretch = Stretch<SurfaceBand>
 
     /// The track in pieces of the same lean band, broken where the samples are more than
     /// `maxSampleGap` seconds apart (pause); empty without lean angles. Samples without a lean count
     /// as upright.
     public static func leanStretches(_ samples: [RideSample]) -> [LeanStretch] {
         guard samples.contains(where: { $0.lean != nil }) else { return [] }
-        var stretches: [LeanStretch] = []
-        var current: LeanStretch?
+        return stretches(samples) { LeanBand(lean: $0.lean ?? 0) }
+    }
+
+    /// The track in pieces of the same surface band (B-248), like `leanStretches`; empty without
+    /// roughness values. Samples without one count as smooth.
+    public static func surfaceStretches(_ samples: [RideSample]) -> [SurfaceStretch] {
+        guard samples.contains(where: { $0.roughness != nil }) else { return [] }
+        return stretches(samples) { SurfaceBand(roughness: $0.roughness ?? 0) }
+    }
+
+    private static func stretches<Band>(_ samples: [RideSample], band bandOf: (RideSample) -> Band) -> [Stretch<Band>] {
+        var stretches: [Stretch<Band>] = []
+        var current: Stretch<Band>?
         var lastTime: Double?
         for sample in samples.sorted(by: { $0.time < $1.time }) {
             guard let latitude = sample.latitude, let longitude = sample.longitude else { continue }
-            let band = LeanBand(lean: sample.lean ?? 0)
+            let band = bandOf(sample)
             if let last = lastTime, sample.time - last > maxSampleGap, let piece = current {
                 if piece.latitude.count > 1 { stretches.append(piece) }
                 current = nil
@@ -119,12 +174,12 @@ public struct RideMotion: Sendable, Equatable {
                 piece.longitude.append(longitude)
                 if piece.band != band {
                     stretches.append(piece)
-                    current = LeanStretch(band: band, latitude: [latitude], longitude: [longitude])
+                    current = Stretch(band: band, latitude: [latitude], longitude: [longitude])
                 } else {
                     current = piece
                 }
             } else {
-                current = LeanStretch(band: band, latitude: [latitude], longitude: [longitude])
+                current = Stretch(band: band, latitude: [latitude], longitude: [longitude])
             }
         }
         if let piece = current, piece.latitude.count > 1 { stretches.append(piece) }

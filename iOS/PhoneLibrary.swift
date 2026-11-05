@@ -224,7 +224,8 @@ final class PhoneLibrary {
 
     /// Lean, acceleration and sprint and the track by lean angle (B-246); `nil` in folder mode, for
     /// the sample ride and for rides without motion values.
-    func motion(for ride: RideExchange.Ride) -> (figures: RideMotion, stretches: [RideMotion.LeanStretch])? {
+    func motion(for ride: RideExchange.Ride)
+        -> (figures: RideMotion, lean: [RideMotion.LeanStretch], surface: [RideMotion.SurfaceStretch])? {
         database?.motion(forRideID: ride.id)
     }
 

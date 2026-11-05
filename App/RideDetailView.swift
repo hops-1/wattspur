@@ -67,6 +67,9 @@ private struct RideDetailContent: View {
     @State private var motion: RideMotion?
     @State private var leanStretches: [RideMotion.LeanStretch] = []
     @AppStorage(SettingsKey.routeByLean) private var colourByLean = true
+    /// The route by road surface (B-248).
+    @State private var surfaceStretches: [RideMotion.SurfaceStretch] = []
+    @AppStorage(SettingsKey.routeBySurface) private var colourBySurface = false
     @AppStorage(SettingsKey.showsCurvyRoads) private var showsCurvyRoads = false
     @Environment(CurvyRoadsStore.self) private var curvyRoads
     @State private var points: [ChartPoint] = []
@@ -116,6 +119,7 @@ private struct RideDetailContent: View {
             curves = CurvatureAnalyzer.analyze(samples).pieces
             motion = RideMotion(samples: samples, motorized: ride.isMotorized)
             leanStretches = RideMotion.leanStretches(samples)
+            surfaceStretches = RideMotion.surfaceStretches(samples)
             points = RideSeries.chartPoints(from: samples)
             timePoints = RideSeries.chartPoints(from: samples, axis: .time)
             cursor.reset(track: RideTrack(samples: samples))
@@ -195,8 +199,9 @@ extension RideDetailContent {
 
             // The route by lean angle hides the new stretches, which would cover it (B-247).
             RideMapView(route: route, mapType: mapType, joins: joins,
-                        newStretches: showsLean ? [] : newPaths.result(for: ride)?.stretches ?? [],
-                        curves: colourByCurves ? curves : [], leanStretches: colourByLean ? leanStretches : [],
+                        newStretches: showsLean || showsSurface ? [] : newPaths.result(for: ride)?.stretches ?? [],
+                        curves: colourByCurves ? curves : [], leanStretches: showsLean ? leanStretches : [],
+                        surfaceStretches: showsSurface ? surfaceStretches : [],
                         curvyRoads: curvyRoads.set(enabled: showsCurvyRoads))
                 .frame(height: mapHeight)
                 // A fresh map for each ride; route and new paths update it in place,
@@ -211,7 +216,7 @@ extension RideDetailContent {
                         if !curves.isEmpty {
                             Button {
                                 colourByCurves.toggle()
-                                if colourByCurves { colourByLean = false }
+                                if colourByCurves { colourByLean = false; colourBySurface = false }
                             } label: {
                                 Image(systemName: "road.lanes.curved.right")
                             }
@@ -228,7 +233,7 @@ extension RideDetailContent {
                             let on = showsLean
                             Button {
                                 colourByLean = !on
-                                if colourByLean { colourByCurves = false }
+                                if colourByLean { colourByCurves = false; colourBySurface = false }
                             } label: {
                                 Image(systemName: "angle")
                             }
@@ -237,6 +242,23 @@ extension RideDetailContent {
                             .tint(on ? Color.accentColor : nil)
                             .help(Text("Color the route by lean angle"))
                             .accessibilityLabel(Text("Color the route by lean angle"))
+                            .accessibilityValue(Text(on ? LocalizedStringKey("On") : LocalizedStringKey("Off")))
+                            .accessibilityAddTraits(.isToggle)
+                        }
+                        // Or by road surface (B-248).
+                        if !surfaceStretches.isEmpty {
+                            let on = showsSurface
+                            Button {
+                                colourBySurface = !on
+                                if colourBySurface { colourByCurves = false; colourByLean = false }
+                            } label: {
+                                Image(systemName: "road.lanes")
+                            }
+                            .buttonStyle(.glass)
+                            .buttonBorderShape(.circle)
+                            .tint(on ? Color.accentColor : nil)
+                            .help(Text("Color the route by road surface"))
+                            .accessibilityLabel(Text("Color the route by road surface"))
                             .accessibilityValue(Text(on ? LocalizedStringKey("On") : LocalizedStringKey("Off")))
                             .accessibilityAddTraits(.isToggle)
                         }
@@ -304,7 +326,9 @@ extension RideDetailContent {
     }
 
     /// Whether the map shows the route by lean angle (B-247).
-    private var showsLean: Bool { colourByLean && !colourByCurves && !leanStretches.isEmpty }
+    private var showsLean: Bool { colourByLean && !colourByCurves && !colourBySurface && !leanStretches.isEmpty }
+    /// Whether the map shows the route by road surface (B-248).
+    private var showsSurface: Bool { colourBySurface && !colourByCurves && !surfaceStretches.isEmpty }
 
     private var chartPoints: [ChartPoint] { chartAxis == .time ? timePoints : points }
 
@@ -415,9 +439,15 @@ struct KeyFiguresGrid: View {
                     Figure("Max. Acceleration", value: motion.strongestAcceleration.map(Self.g) ?? "–", unit: "g")
                     Figure("Max. Braking", value: motion.strongestBraking.map(Self.g) ?? "–", unit: "g")
                 }
-                if let sprint = motion.sprint {
+                if motion.sprint != nil || motion.roughShare != nil {
                     GridRow {
-                        Figure("0–\(Int(sprint.targetKmh)) km/h", value: Self.sprintSeconds(sprint.seconds), unit: "s")
+                        if let sprint = motion.sprint {
+                            Figure("0–\(Int(sprint.targetKmh)) km/h", value: Self.sprintSeconds(sprint.seconds), unit: "s")
+                        }
+                        if let share = motion.roughShare {
+                            Figure("Uneven Surface", value: (share * 100).formatted(.number.precision(.fractionLength(0))), unit: "%")
+                                .help(Text("Share of the distance on an uneven or rough surface"))
+                        }
                     }
                 }
             }

@@ -557,6 +557,16 @@
         }
       }
     },
+    "Rough" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Holprig"
+          }
+        }
+      }
+    },
     "Search rides" : {
       "localizations" : {
         "de" : {
@@ -607,12 +617,32 @@
         }
       }
     },
+    "Smooth" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Glatt"
+          }
+        }
+      }
+    },
     "Starts recording a ride with GPS." : {
       "localizations" : {
         "de" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "Startet die Aufnahme einer Fahrt mit GPS."
+          }
+        }
+      }
+    },
+    "Surface" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Belag"
           }
         }
       }
@@ -647,12 +677,52 @@
         }
       }
     },
+    "Track Colour" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Farbe der Spur"
+          }
+        }
+      }
+    },
+    "Track coloured by road surface: grey smooth, yellow uneven, brown rough" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Spur nach Belag eingefärbt: Grau glatt, Gelb uneben, Braun holprig"
+          }
+        }
+      }
+    },
     "Under 10 km" : {
       "localizations" : {
         "de" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "Unter 10 km"
+          }
+        }
+      }
+    },
+    "Uneven" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Uneben"
+          }
+        }
+      }
+    },
+    "Uneven Surface" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Unebener Belag"
           }
         }
       }
