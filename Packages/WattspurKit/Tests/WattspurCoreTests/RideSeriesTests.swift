@@ -20,6 +20,20 @@ struct RideSeriesTests {
         #expect(points.allSatisfy { $0.altitude != nil && $0.speedKmh != nil && $0.power != nil })
     }
 
+    @Test("Heart rate is averaged per bin over distance and over time (B-241)")
+    func heartRate() {
+        let samples = (0..<100).map { second in
+            RideSample(time: Double(second), distance: Double(second) * 5, speed: 5,
+                       heartRate: second < 50 ? 120 : 140)
+        }
+        let byDistance = RideSeries.chartPoints(from: samples, bins: 2)
+        #expect(byDistance.map(\.heartRate) == [120, 140])
+        let byTime = RideSeries.chartPoints(from: samples, axis: .time, bins: 2)
+        #expect(byTime.map(\.heartRate) == [120, 140])
+        // The Bosch FIT of the sample ride has no heart rate.
+        #expect(RideSeries.chartPoints(from: ride.samples).allSatisfy { $0.heartRate == nil })
+    }
+
     @Test("Averaged values stay in plausible ranges")
     func ranges() {
         let points = RideSeries.chartPoints(from: ride.samples)
