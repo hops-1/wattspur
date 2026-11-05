@@ -2,7 +2,7 @@
 
 Stand: 5.11.2026 (v0.26, Plan für iOS 0.4 mit Nils abgestimmt: Bearbeiten, Messwerte, Karussell, Kopplung, FIT-Import, Barometer; Filter nach 0.5; B-240 bis B-242 neu; davor v0.25 vom 3.11.2026, Fahrtvergleich vom 3.11.2026 mit Bosch Flow, Wattspur iOS und Apple Watch: B-232 bis B-237 eingeordnet; davor v0.24 vom 2.11.2026, Plan für die iOS-App 0.3 bis 0.6 und Mac 1.8.3 mit Sync über CloudKit; davor v0.23, Plan für die iOS-App 0.1 und 0.2; davor v0.22, Plan für 1.8.2; davor v0.21 vom 1.11.2026, 1.8.1 umgesetzt: Steigung, Lastenrad, Kurvigkeit und Ebene „Kurvige Straßen“; davor v0.20 vom 28.10.2026, Release 1.8.0 „Kartenstile“ vorbereitet; davor v0.19 vom 27.10.2026, Plan für 1.8 „Kartenstile“, der Bereich „Fahrten“ B-125 nach 1.9 verschoben; davor v0.18 vom 26.10.2026, Plan für 1.7 in zwei Releases 1.7.0 und 1.7.1; davor v0.17 vom 25.10.2026, Release 1.6.2 mit Update-Hinweis B-172; davor 1.6.1 mit Sicherheits-Fix, Architektur-Aufräumen B-162 bis B-169 und zwei Karten-Verbesserungen B-170, B-171; Plan für 1.7 bis 1.9) · Die IDs in Klammern verweisen auf `REQUIREMENTS.md`.
 Größe: **S** ≈ wenige Stunden, **M** ≈ 1–2 Tage, **L** ≈ mehrere Tage.
-Status: ☐ offen · ◐ in Arbeit · ☑ erledigt
+Status: ☐ offen · ◐ in Arbeit · ☑ erledigt · ✗ nicht nötig
 
 **Releaseplan (Hobbyprojekt, kein Termin):** kleine, jeweils nutzbare Zwischenstände.
 
@@ -35,7 +35,7 @@ Status: ☐ offen · ◐ in Arbeit · ☑ erledigt
 | iOS 0.1 | iOS-App „Hello World“: eigenes Target neben der Mac-App, nutzt das Paket, zeigt die Beispielfahrt; läuft im Simulator und auf Nils’ iPhone (B-204 bis B-207) | mich |
 | iOS 0.2 | Fahrten vom Mac ansehen, GPS-Aufnahme mit Karte, Aufnahme als GPX an den Mac und zum Teilen; Austausch über den iCloud-Ordner „Wattspur Import“, ohne CloudKit (V-14, B-178, B-208 bis B-214; Design C „Übersicht mit Kacheln“) | mich |
 | iOS 0.3 | Eine Datenbank auf iPhone und Mac: Sync über CloudKit, Aufnahme wird direkt zur Fahrt, Löschen auf dem iPhone, Verteilung über TestFlight (B-215 bis B-220, mit Mac 1.8.4); aus dem Fahrtvergleich: doppelte Fahrt, GPX-Zeit mit Millisekunden, Höhenmeter (B-232 bis B-234) | mich, Freunde über TestFlight |
-| iOS 0.4 | Auswerten und Importieren (**Plan 5.11.2026, abgestimmt mit Nils**): Fahrt bearbeiten, Messwerte im Tour-Detail, Diagramm-Karussell, Diagramm und Karte gekoppelt, FIT aus der Flow-App, Höhe vom Barometer, Strecke der Aufnahme genauer; externe TestFlight-Gruppe für Freunde (B-240, B-241, B-090, B-221, B-188, B-071, B-235, B-242, Rest von B-219) | mich, Freunde über TestFlight |
+| iOS 0.4 | Auswerten und Importieren (**Plan 5.11.2026, abgestimmt mit Nils**): Fahrt bearbeiten, Messwerte im Tour-Detail, Diagramm-Karussell, Diagramm und Karte gekoppelt, FIT aus der Flow-App, Höhe vom Barometer; externe TestFlight-Gruppe für Freunde (B-240, B-241, B-090, B-221, B-188, B-071, B-235, Rest von B-219; B-242 nicht nötig) | mich, Freunde über TestFlight |
 | iOS 0.5 | Unterwegs: Live-Aktivität bei der Aufnahme, Widget „Diese Woche“, Kurzbefehle und Siri, Filter und Suche in der Fahrtenliste (B-223 bis B-225, B-222); die Höhe vom Barometer (B-235) ist nach 0.4 vorgezogen | mich, Freunde |
 | iOS 0.6 | Karten und Highlights: Kartenstile, Karte aller Fahrten mit Heatmap, Highlights (B-186, B-226 bis B-228) | mich, Freunde |
 | iOS später | Bosch-Portal, Apple Watch, Fahrten mit Freunden teilen, Kalorien aus dem Puls (B-229 bis B-231, B-236) | – |
@@ -605,7 +605,7 @@ Vorschlag von Claude nach dem Lesen von Code und Doku, von Nils am 5.11.2026 ent
 | PR | Inhalt |
 |---|---|
 | 1 | B-240 Fahrt bearbeiten |
-| 2 | B-242 Strecke der Aufnahme |
+| 2 | ~~B-242 Strecke der Aufnahme~~ (nicht nötig, gemessen 5.11.2026) |
 | 3 | B-241 Messwerte im Tour-Detail |
 | 4 | B-090 Diagramm-Karussell |
 | 5 | B-221 Diagramm und Karte gekoppelt |
@@ -618,7 +618,7 @@ Vorschlag von Claude nach dem Lesen von Code und Doku, von Nils am 5.11.2026 ent
 |---|---|---|---|---|
 | B-219 | (Rest aus 0.3) **Externe TestFlight-Gruppe „Freunde“** mit Beta-App-Prüfung, Einladung per Link; Anleitung `docs/learning/32-testflight.md`. Der nächste Upload braucht `CURRENT_PROJECT_VERSION` 2. Macht Nils in App Store Connect | S | – | ◐ |
 | B-240 | **Fahrt bearbeiten auf dem iPhone** (neu 5.11.2026): Name und Bike einer Fahrt im Tour-Detail ändern (Menü oben rechts), über den Sync auch am Mac; nur mit iCloud, nicht für die Beispielfahrt. Seit 0.3 sind iPhone und Mac gleichberechtigt, bisher ging das nur am Mac. **Erledigt (5.11.2026):** Stift oben rechts im Tour-Detail öffnet „Fahrt bearbeiten“ mit Name und Bike; archivierte Bikes nur, wenn die Fahrt schon darauf liegt; eine zusammengefügte Fahrt nimmt ihre Teile mit; Logik in `PhoneDatabase.edit` mit Tests | S | – | ☑ |
-| B-242 | **Strecke der Aufnahme genauer** (neu 5.11.2026, Nebenbefund aus V-15): Eine Aufnahme zeigt etwa 1 % mehr Strecke als ihre eigene GPS-Spur (10,86 statt 10,75 km am 4.11.2026), weil `RideRecording` jeden Schritt ab 5 m zählt, auch GPS-Zittern. Zittern im Stand und bei langsamer Fahrt herausfiltern; Rechnung im Kit mit Tests | S | – | ☐ |
+| B-242 | **Strecke der Aufnahme genauer** (neu 5.11.2026, Nebenbefund aus V-15): Eine Aufnahme zeigt etwa 1 % mehr Strecke als ihre eigene GPS-Spur (10,86 statt 10,75 km am 4.11.2026), weil `RideRecording` jeden Schritt ab 5 m zählt, auch GPS-Zittern. Zittern im Stand und bei langsamer Fahrt herausfiltern; Rechnung im Kit mit Tests **Nicht nötig (gemessen 5.11.2026, Entscheidung Nils):** Fahrt vom 3.11.2026 morgens mit iPhone-GPX und Bosch-FIT aus der Bibliothek. In derselben Zeit ist die iPhone-Spur nicht länger als die GPS-Spur von Bosch (24,69 gegenüber 25,58 km); die ganze Aufnahme hat 25,96 km, davon 1,27 km in den 98 s vor und 200 s nach der Bosch-Aufnahme. Das Plus kam also vom längeren Aufnehmen, nicht vom Zittern; die Fahrt vom 4.11. lag nur im Development-Container und ließ sich nicht mehr prüfen. Keine Änderung am Code | S | – | ✗ |
 | B-241 | **Messwerte im Tour-Detail** (neu 5.11.2026): Das Detail auf dem iPhone kennt heute nur Ort, Höhe und Strecke (`RideExchange.Route`). Mit iCloud liest es die Zeitreihe der Fahrt (`samplesData`) aus der Datenbank: Tempo, Leistung, Trittfrequenz, Puls, Höhe über Strecke und Zeit, für die Anzeige im Kit ausgedünnt; Grundlage für B-090 und B-221 | S–M | – | ☐ |
 | B-090 | (vorhanden) **Diagramm-Karussell** im Tour-Detail: Tempo, Leistung, Trittfrequenz, Puls und Höhe (je nach vorhandenen Daten), Wischen nach links und rechts, Punkte unten, Max und Ø je Seite (TOUR-11); ohne iCloud bleibt das Höhenprofil | M | B-241 | ☐ |
 | B-221 | **Diagramm und Karte gekoppelt:** Finger aufs Diagramm zeigt den Punkt auf der Karte und die Werte an dieser Stelle, wie `RideCursor` am Mac; Logik der Zuordnung Zeit ↔ Ort ins Kit | M | B-090 | ☐ |
