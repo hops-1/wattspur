@@ -25,6 +25,26 @@
         }
       }
     },
+    "FIT Activity" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "FIT-Aktivität"
+          }
+        }
+      }
+    },
+    "GPX Track" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "GPX-Track"
+          }
+        }
+      }
+    },
     "NSHumanReadableCopyright" : {
       "comment" : "Copyright (human-readable)",
       "extractionState" : "extracted_with_value",

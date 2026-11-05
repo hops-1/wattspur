@@ -165,6 +165,10 @@ final class Recorder {
         fusion = AltitudeFusion()
         barometer = nil
         guard CMAltimeter.isRelativeAltitudeAvailable() else { return }
+        // With a barometer that may be used, the first seconds wait for it instead of starting
+        // with the GPS height (the first point of a test on 5.11.2026).
+        let access = CMAltimeter.authorizationStatus()
+        fusion.waitsForBarometer = access != .denied && access != .restricted
         altimeter.startRelativeAltitudeUpdates(to: .main) { [weak self] data, _ in
             guard let data else { return }
             let metres = data.relativeAltitude.doubleValue

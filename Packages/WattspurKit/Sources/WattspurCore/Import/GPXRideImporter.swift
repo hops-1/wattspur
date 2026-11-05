@@ -293,7 +293,8 @@ public struct GPXRideImporter: RideImporter {
                                     altitude: point.altitude, distance: distance,
                                     power: point.power, cadence: point.cadence,
                                     cadenceMeasured: point.cadence != nil,
-                                    heartRate: point.heartRate, temperature: point.temperature)
+                                    heartRate: point.heartRate, temperature: point.temperature,
+                                    horizontalAccuracy: point.accuracy)
             if i > 0 {
                 let dt = sample.time - samples[i - 1].time
                 sample.speed = dt > 0 ? (distance - (samples[i - 1].distance ?? 0)) / dt : nil
@@ -450,6 +451,8 @@ private struct RawPoint {
     var cadence: Int?
     var heartRate: Int?
     var temperature: Double?
+    /// `wattspur:accuracy`, metres (recordings of the iPhone app).
+    var accuracy: Double?
 
     var hasValidPosition: Bool {
         latitude.isFinite && longitude.isFinite
@@ -471,10 +474,11 @@ private final class GPXReader: NSObject, XMLParserDelegate {
         "power": .power, "powerinwatts": .power, "watts": .power,
         "cad": .cadence, "cadence": .cadence,
         "hr": .heartRate, "heartrate": .heartRate,
-        "atemp": .temperature, "temp": .temperature
+        "atemp": .temperature, "temp": .temperature,
+        "accuracy": .accuracy
     ]
 
-    private enum Value { case elevation, time, power, cadence, heartRate, temperature }
+    private enum Value { case elevation, time, power, cadence, heartRate, temperature, accuracy }
 
     let maxPoints: Int
     var segments: [[RawPoint]] = []
@@ -604,6 +608,8 @@ private final class GPXReader: NSObject, XMLParserDelegate {
             if point?.cadence == nil, let v = Self.whole(trimmed), v >= 0 { point?.cadence = v }
         case .heartRate:
             if point?.heartRate == nil, let v = Self.whole(trimmed), v > 0 { point?.heartRate = v }
+        case .accuracy:
+            if point?.accuracy == nil, let v = Double(trimmed), v.isFinite, v >= 0 { point?.accuracy = v }
         }
     }
 

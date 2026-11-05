@@ -37,6 +37,47 @@ struct RideRecordingTests {
         #expect(recording.pointCount == 2)
     }
 
+    @Test("At the start only an accurate position begins the track; the GPS jumps of the first seconds are left out")
+    func startWaitsForAccurateGPS() {
+        // Like the test of 5.11.2026: standing, the GPS jumps by 9, 24 and 12 m in the first seconds.
+        var recording = RideRecording(startDate: Self.start)
+        let settling = [(0.0, 0.0), (2, 9), (3, 33), (4, 21), (5, 15)]
+        for (second, north) in settling {
+            let kept = recording.add(Self.fix(second, north: north, accuracy: 25))
+            #expect(!kept)
+        }
+        #expect(recording.isWaitingForGPS)
+        let first = recording.add(Self.fix(7, north: 15, accuracy: 8))
+        #expect(first)
+        #expect(!recording.isWaitingForGPS)
+        // Once begun, the normal limit holds again, so a forest does not leave gaps.
+        let coarse = recording.add(Self.fix(8, north: 16, accuracy: 25))
+        #expect(coarse)
+        #expect(recording.distance == 0)
+    }
+
+    @Test("Without an accurate position the recording still begins after the start timeout")
+    func startTimeout() {
+        var recording = RideRecording(startDate: Self.start)
+        let early = recording.add(Self.fix(RideRecording.startTimeout - 1, north: 0, accuracy: 20))
+        let late = recording.add(Self.fix(RideRecording.startTimeout, north: 0, accuracy: 20))
+        #expect(!early)
+        #expect(late)
+    }
+
+    @Test("The GPS accuracy goes into the GPX and comes back on import")
+    func accuracyInGPX() throws {
+        var recording = RideRecording(startDate: Self.start)
+        recording.add(Self.fix(0, north: 0, accuracy: 4.7))
+        recording.add(Self.fix(1, north: 6, accuracy: 12.4))
+        let data = GPXWriter.document(name: "Test", segments: recording.gpxSegments, creator: GPXWriter.iPhoneCreator)
+        let text = String(decoding: data, as: UTF8.self)
+        #expect(text.contains("xmlns:wattspur="))
+        #expect(text.contains("<wattspur:accuracy>4.7</wattspur:accuracy>"))
+        let samples = try GPXRideImporter(timeZone: TimeZone(identifier: "UTC")!).parse(data).samples
+        #expect(samples.map(\.horizontalAccuracy) == [4.7, 12.4])
+    }
+
     @Test("On a motorcycle 130 km/h is kept, for an e-bike it is a jump; 500 m in a second is a jump for both")
     func motorcycle() {
         // 36 m a second is about 130 km/h.

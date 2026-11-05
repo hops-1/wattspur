@@ -96,4 +96,14 @@ struct AltitudeFusionTests {
         // Before, the first height was 176.7 m and the start counted almost 4 m of climb.
         #expect(Self.ascent(gps) > 3)
     }
+
+    @Test("With a barometer expected, the first seconds wait for it instead of taking the GPS height")
+    func waitsForBarometer() {
+        var fusion = AltitudeFusion()
+        fusion.waitsForBarometer = true
+        #expect(fusion.altitude(gps: 177.2, verticalAccuracy: 5, barometer: nil, at: Self.start) == nil)
+        // If it does not come, the GPS height stands in after the wait.
+        let late = Self.start.addingTimeInterval(AltitudeFusion.barometerWait)
+        #expect(fusion.altitude(gps: 177.2, verticalAccuracy: 5, barometer: nil, at: late) == 177.2)
+    }
 }

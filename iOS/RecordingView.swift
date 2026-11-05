@@ -17,6 +17,11 @@ struct RecordingView: View {
                     Label(status, systemImage: "location.slash")
                         .font(.footnote)
                         .foregroundStyle(.orange)
+                } else if recorder.recording?.isWaitingForGPS == true {
+                    // The first position has to be accurate (RideRecording.startAccuracy).
+                    Label("GPS is getting more accurate …", systemImage: "location.magnifyingglass")
+                        .font(.footnote)
+                        .foregroundStyle(.secondary)
                 }
                 if let recording = recorder.recording {
                     RecordingFigures(recording: recording)
