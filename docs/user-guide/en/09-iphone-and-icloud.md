@@ -42,6 +42,32 @@ If you do not want to use iCloud, or your storage is full and you do not want a 
 
 On the Mac, leave **Sync with iCloud** off then.
 
+## Looking at a ride
+Tap a ride in the list. The map is at the top, the charts right below it.
+- **Swipe:** with iCloud, each measure has a page of its own: speed, power, cadence, heart rate and elevation. Only what the ride has gets a page. The dots below show where you are. Each page names the maximum and the average; elevation names the ascent and the descent.
+- **Touch, hold and move:** a line marks the spot. At the top you then see the distance and the value there, for example “0.4 km · 25.2 km/h”. A dot on the map shows where that was. When you let go, the line and the dot disappear.
+- Without iCloud the ride shows the elevation profile as before.
+
+## Editing a ride
+The pencil at the top right of a ride's detail changes its **name** and its **bike**. With iCloud the Mac gets the change too. Without iCloud you edit rides on the Mac.
+
+## Rides from the Flow app
+The Bosch file of a ride has more values than a GPS recording, such as power and cadence. This is how it gets onto the iPhone:
+1. In the **Flow app**, open the ride and share it as a **FIT** file.
+2. Choose **Wattspur** in the share menu. You can also open a FIT or GPX file in the **Files** app with Wattspur.
+
+**With iCloud** it becomes a ride on the iPhone and reaches the Mac too. Wattspur asks the same questions as the Mac:
+- **Which bike?** A GPX file does not say which bike it belongs to. With two bikes or more, Wattspur asks.
+- **Already in the library:** if you recorded the ride with the iPhone too, you can choose **Use the Bosch Values**, **Keep Both** or **Skip**. Wattspur shows the start, distance and time of both.
+- A GPX file for a Bosch ride is attached to the ride. The Bosch values stay.
+
+**Without iCloud** the iPhone puts the file into the folder “Wattspur Import”. The Mac imports it from there like any other file.
+
+## Height while recording
+While recording, Wattspur measures the height with the iPhone's **barometer**, from the air pressure. That is much calmer than the GPS height alone, so the ascent comes closer to Bosch. The height above sea level still comes from the GPS: Wattspur keeps matching the two. So a change in the weather during the ride does not get in the way either.
+
+The first time you record, the iPhone asks once for **Motion & Fitness**. If you do not allow it, Wattspur uses the GPS height as before. You can change it in **Settings › Privacy & Security › Motion & Fitness**.
+
 ## Sharing a ride as GPX
 At the top right of a ride's detail, or by touching and holding a ride in the list: **Share GPX**. The file holds the whole track with time and altitude, and the bike. You can AirDrop it to the Mac, save it in the Files app or open it in komoot. Rides without GPS cannot be shared.
 

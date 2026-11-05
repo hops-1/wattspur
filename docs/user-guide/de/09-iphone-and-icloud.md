@@ -42,6 +42,32 @@ Wenn du iCloud nicht nutzen willst, oder dein Speicher voll ist und du kein grö
 
 Am Mac lässt du **Mit iCloud synchronisieren** dann aus.
 
+## Eine Fahrt ansehen
+Tippe in der Liste auf eine Fahrt. Oben steht die Karte, direkt darunter die Diagramme.
+- **Wischen:** Mit iCloud hat jede Messgröße eine eigene Seite: Tempo, Leistung, Trittfrequenz, Puls und Höhe. Es gibt nur Seiten für Werte, die die Fahrt hat. Die Punkte unten zeigen, wo du bist. Jede Seite nennt das Maximum und den Durchschnitt, bei der Höhe den Anstieg und den Abstieg.
+- **Finger halten und ziehen:** Eine Linie markiert die Stelle. Oben steht dann die Strecke und der Wert an dieser Stelle, z. B. „0,4 km · 25,2 km/h“. Auf der Karte zeigt ein Punkt, wo das war. Lässt du los, verschwinden Linie und Punkt.
+- Ohne iCloud zeigt die Fahrt wie bisher das Höhenprofil.
+
+## Eine Fahrt bearbeiten
+Mit dem Stift oben rechts in der Detailansicht änderst du den **Namen** und das **Bike** einer Fahrt. Mit iCloud kommt die Änderung auch am Mac an. Ohne iCloud bearbeitest du Fahrten am Mac.
+
+## Fahrten aus der Flow-App
+Die Bosch-Datei einer Fahrt hat mehr Werte als eine GPS-Aufnahme, z. B. Leistung und Trittfrequenz. So kommt sie auf das iPhone:
+1. Öffne in der **Flow-App** die Fahrt und teile sie als **FIT**-Datei.
+2. Wähle im Teilen-Menü **Wattspur**. Eine FIT- oder GPX-Datei in der **Dateien-App** kannst du ebenso mit Wattspur öffnen.
+
+**Mit iCloud** wird daraus eine Fahrt auf dem iPhone, und sie kommt auch an den Mac. Wattspur stellt dieselben Fragen wie am Mac:
+- **Welches Bike?** Eine GPX-Datei sagt nicht, zu welchem Bike sie gehört. Bei zwei oder mehr Bikes fragt Wattspur.
+- **Schon in der Bibliothek:** Hast du die Fahrt auch mit dem iPhone aufgenommen, kannst du **Bosch-Werte übernehmen**, **Beide behalten** oder **Überspringen**. Wattspur zeigt dazu Start, Strecke und Zeit von beiden.
+- Eine GPX-Datei zu einer Bosch-Fahrt hängt Wattspur an die Fahrt an. Die Bosch-Werte bleiben.
+
+**Ohne iCloud** legt das iPhone die Datei in den Ordner „Wattspur Import“. Der Mac importiert sie von dort wie jede andere Datei.
+
+## Höhe beim Aufnehmen
+Wattspur misst die Höhe beim Aufnehmen mit dem **Barometer** des iPhones, also über den Luftdruck. Das ist viel ruhiger als die GPS-Höhe allein, deshalb liegt der Anstieg näher an dem von Bosch. Die Höhe über dem Meer kommt weiter vom GPS: Wattspur gleicht beide laufend ab. So stört auch eine Wetteränderung während der Fahrt nicht.
+
+Beim ersten Aufnehmen fragt das iPhone einmal nach **Bewegung & Fitness**. Erlaubst du das nicht, nimmt Wattspur die GPS-Höhe wie bisher. Ändern kannst du das unter **Einstellungen › Datenschutz & Sicherheit › Bewegung & Fitness**.
+
 ## Eine Fahrt als GPX teilen
 In der Detailansicht einer Fahrt oben rechts, oder in der Liste mit langem Druck auf die Fahrt: **GPX teilen**. Die Datei enthält die ganze Spur mit Zeit und Höhe, dazu das Bike. Du kannst sie per AirDrop an den Mac schicken, in die Dateien-App legen oder in komoot öffnen. Fahrten ohne GPS lassen sich nicht teilen.
 

@@ -87,7 +87,9 @@ targets:
       base:
         PRODUCT_BUNDLE_IDENTIFIER: io.github.hops-1.wattspur.ios
         PRODUCT_NAME: Wattspur
-        MARKETING_VERSION: "0.3.0"
+        MARKETING_VERSION: "0.4.0"
+        # Higher than the last TestFlight upload (0.3.0 build 1)
+        CURRENT_PROJECT_VERSION: "2"
         # iPhone only for now; iPad later
         TARGETED_DEVICE_FAMILY: "1"
         GENERATE_INFOPLIST_FILE: YES
