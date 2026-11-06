@@ -12,7 +12,7 @@ Stand: 6.11.2026 · Entwurf, wächst mit jedem Bereich (B-251 bis B-258). Plan u
 | Tests, Skripte, CI, Projekt | B-258 | ☑ geprüft 6.11.2026 | R-01 bis R-16 |
 | Kit-Kern | B-251 | ☑ geprüft 6.11.2026 | R-17 bis R-26 |
 | Kit-Store | B-252 | ☑ geprüft 6.11.2026 | R-27 bis R-34 |
-| Sync und CloudKit | B-253 | ☐ | – |
+| Sync und CloudKit | B-253 | ☑ geprüft 6.11.2026 | R-35 bis R-43 |
 | Import | B-254 | ☐ | – |
 | Aufnahme | B-255 | ☐ | – |
 | Mac-App | B-256 | ☐ | – |
@@ -110,3 +110,31 @@ Geprüft am 6.11.2026 auf `main` (d812c47): `/code-review high` über `WattspurK
 | R-34 | Idee | `Store/RideLibrary.swift` | `RideLibrary` reicht nur noch an die Dienste weiter (etwa 70 einzeilige Methoden). Jede neue Funktion steht doppelt da. | In B-259 entscheiden: Apps nutzen die Dienste direkt, oder die Fassade bleibt bewusst | später |
 
 **Bewertung:** Modell und Dienste sind sauber und gut getestet; die CloudKit-Regeln sind abgesichert. Die Risiken kommen fast alle daher, dass seit 1.8.4 **zwei Geräte** an derselben Bibliothek arbeiten: ⌘Z auf gelöschte Fahrten (R-27), verschiedene Versionen der Rechnung (R-28), Wiederherstellen mit Sync (R-29). Dazu fehlen Rückmeldungen bei Fehlern (R-31, R-32). Für 0.5.2 sind es vier kleine PRs; R-30 muss vor der Korrektur der Zeitachse (R-18) kommen.
+
+---
+
+## B-253 – Sync und CloudKit
+
+Geprüft am 6.11.2026 auf `main` (d812c47): `/code-review high` über `SyncMergeService`, `SyncMergeWatcher`, `SyncMonitor`, `LibrarySync` (Kit), `App/ICloudSync.swift`, `iOS/PhoneSync.swift` und das Öffnen der Bibliothek in beiden Apps, dazu die Prüfliste.
+
+**Prüfliste:**
+- Das Schema ist in Production; das Review ändert es nicht. Neue Felder bleiben erlaubt, wenn sie optional sind oder einen Standardwert haben (Test `CloudKitSchemaTests`).
+- Vor dem ersten Einschalten am Mac gibt es eine Sicherung; der Sync ist als Standard aus (Mac) bzw. für neue Nutzer an (iPhone).
+- Doppelte Fahrer, Bikes, Ziele und Fahrten aus zwei Geräten führt `SyncMergeService` zusammen. Beide Geräte wählen dabei dasselbe Objekt (das älteste, bei Gleichstand die kleinere ID); das ist gut.
+- Abdeckung (aus B-258): `SyncMonitor` 44 %, `LibrarySync+Usage` und `+Schema` 0 % (nur Entwickler-Werkzeuge, ok).
+
+### Funde
+
+| ID | Schwere | Datei | Fund | Vorschlag | Ziel |
+|---|---|---|---|---|---|
+| R-35 | Fehler | `Store/Services/SyncMergeService.swift:120` | Dieselbe Datei auf beiden Geräten importiert (z. B. die FIT aus Flow per AirDrop an Mac und iPhone): Beim Zusammenführen bleibt die **ältere** Kopie, die neuere wird gelöscht. Ihr Name, ihr Bike, ihr Papierkorb-Zustand und angehängte Bosch-Werte gehen verloren. Der Kommentar verspricht das Gegenteil („Ein Name vom anderen Gerät gewinnt“). | Vor dem Löschen übernehmen, was der Nutzer an der anderen Kopie geändert hat (Name ≠ Dateiname, Bike ≠ Standard, Papierkorb nur wenn beide); Tests für jeden Fall | 0.5.2 |
+| R-36 | Risiko | `Store/Services/SyncMergeService.swift:65` | Zwei Bikes mit **gleichem Namen und gleicher Art** gelten als Doppel und werden zusammengelegt: alle Fahrten auf eines, das andere gelöscht. Legt jemand bewusst ein zweites „Cube“ an, ist es beim nächsten Sync weg. | Nur Standard-Bikes („Mein eBike“ ohne Änderung) und Bikes mit gleicher ID oder Seriennummer zusammenlegen | 0.5.2 |
+| R-37 | Risiko | `Store/SyncMergeWatcher.swift:56` | Das Zusammenführen wartet, bis kein iCloud-Import mehr läuft. Kommt das Ende eines Imports nie an (App im Hintergrund angehalten), wartet es bis zum nächsten Start der App: zwei „Mein eBike“ bleiben stehen. | Laufende Importe nach etwa 2 Minuten vergessen | 0.5.2 |
+| R-38 | Risiko | `Store/PhoneDatabase.swift:17` | Schaltet man am iPhone „Mit iCloud synchronisieren“ **aus**, liest die App nicht mehr ihre eigene Datenbank, sondern den alten Ordner von 0.2. Wer den Ordner nie hatte, sieht danach keine Fahrten mehr, und Aufnahmen werden keine Fahrten. | „Aus“ heißt: dieselbe Datenbank ohne iCloud (`local`); den Ordner nur für alte Ordner-Nutzer. Hängt mit R-13 zusammen | 0.5.2 |
+| R-39 | Risiko | `App/ICloudSync.swift:62` | Die Sicherung vor dem Sync gibt es nur beim **ersten** Einschalten. Wer den Sync aus- und Monate später wieder einschaltet, synchronisiert ohne frische Sicherung. | Bei jedem Einschalten sichern | 0.5.2 |
+| R-40 | Risiko | `App/ICloudSync.swift:98` | Ungeprüft: Kommen Fahrten, die **bei ausgeschaltetem Sync** importiert wurden, nach dem Wiedereinschalten in iCloud an? Bei ausgeschaltetem Sync öffnet die App die Datenbank ohne CloudKit; ob der Abgleich die Änderungen später noch sieht, testet nichts. | Test auf echten Geräten (Mac aus → 2 Fahrten → an → am iPhone da?). Fehlen sie: ein erzwungenes erneutes Hochladen | 0.5.2 (Test) |
+| R-41 | Risiko | `iOS/PhoneSync.swift:79`, `App/WattspurApp.swift:101` | Lässt sich die Bibliothek nicht öffnen (kaputte Datei, misslungene Umstellung, schlechte Sicherung), stürzt die App **bei jedem Start** ab (`fatalError`). Es gibt keinen Weg heraus außer Dateien von Hand zu löschen. | Statt Absturz eine Fehleransicht: Sicherungen zeigen, Diagnose, mit leerer Bibliothek starten (die alte bleibt liegen) | später |
+| R-42 | Aufräumen | `Store/SyncMonitor.swift:160` | Fehlt das Ende eines Sync-Vorgangs, zeigt die Einstellung „Synchronisiere …“ für den Rest der Sitzung und verdeckt den echten Stand. | Laufende Vorgänge nach einigen Minuten vergessen, wie R-37 | 0.5.2 |
+| R-43 | Idee | `Store/Services/SyncMergeService.swift:41` | Alle Fahrer werden zu einem zusammengelegt. Mit mehreren Fahrern (B-073) wäre das falsch. | In B-073 vermerken: vorher Standard-Fahrer kennzeichnen und nur diese zusammenlegen | später (B-073) |
+
+**Bewertung:** Der Sync ist vorsichtig gebaut (Sicherung, Status, klare Texte), und das Zusammenführen ist auf beiden Geräten gleich. Die Schwachstelle ist das **Zusammenführen von Doppeln**: Es löscht zu viel (R-35, R-36) oder wartet zu lange (R-37). Dazu kommen das Aus- und Einschalten (R-38 bis R-40) und der Absturz beim Öffnen (R-41). Für 0.5.2 sind es drei PRs: Doppel (R-35, R-36), Warten (R-37, R-42), Ein/Aus (R-38, R-39) – dazu der Test R-40 auf echten Geräten, den Nils mit mir macht.
