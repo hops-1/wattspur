@@ -13,7 +13,7 @@ Stand: 6.11.2026 · Entwurf, wächst mit jedem Bereich (B-251 bis B-258). Plan u
 | Kit-Kern | B-251 | ☑ geprüft 6.11.2026 | R-17 bis R-26 |
 | Kit-Store | B-252 | ☑ geprüft 6.11.2026 | R-27 bis R-34 |
 | Sync und CloudKit | B-253 | ☑ geprüft 6.11.2026 | R-35 bis R-43 |
-| Import | B-254 | ☐ | – |
+| Import | B-254 | ☑ geprüft 6.11.2026 | R-44 bis R-50 |
 | Aufnahme | B-255 | ☐ | – |
 | Mac-App | B-256 | ☐ | – |
 | iPhone-App | B-257 | ☐ | – |
@@ -138,3 +138,30 @@ Geprüft am 6.11.2026 auf `main` (d812c47): `/code-review high` über `SyncMerge
 | R-43 | Idee | `Store/Services/SyncMergeService.swift:41` | Alle Fahrer werden zu einem zusammengelegt. Mit mehreren Fahrern (B-073) wäre das falsch. | In B-073 vermerken: vorher Standard-Fahrer kennzeichnen und nur diese zusammenlegen | später (B-073) |
 
 **Bewertung:** Der Sync ist vorsichtig gebaut (Sicherung, Status, klare Texte), und das Zusammenführen ist auf beiden Geräten gleich. Die Schwachstelle ist das **Zusammenführen von Doppeln**: Es löscht zu viel (R-35, R-36) oder wartet zu lange (R-37). Dazu kommen das Aus- und Einschalten (R-38 bis R-40) und der Absturz beim Öffnen (R-41). Für 0.5.2 sind es drei PRs: Doppel (R-35, R-36), Warten (R-37, R-42), Ein/Aus (R-38, R-39) – dazu der Test R-40 auf echten Geräten, den Nils mit mir macht.
+
+---
+
+## B-254 – Import
+
+Geprüft am 6.11.2026 auf `main` (d812c47): `/code-review high` über `ImportService`, `ImportFlow`, `FolderImport`, `ImportReport` (Kit), `App/FolderWatcher.swift` und `iOS/PhoneImport.swift`, dazu die Prüfliste.
+
+**Prüfliste:**
+- Mac und iPhone nutzen denselben Ablauf (`ImportFlow`, B-188); gut.
+- Feindliche Dateien: Größe und Punktzahl sind begrenzt, der FIT-Decoder prüft jede Lese-Stelle (siehe B-251).
+- Dateien aus iCloud, die noch nicht geladen sind, überspringt der Ordner-Import und lädt sie an; nur ein Scan zur Zeit.
+- **Regel 8 verletzt:** `ImportReport` im Kit baut Texte mit `String(localized:)` (R-48).
+- Abdeckung (aus B-258): `ImportFlow` 74 %, `ImportReport` 76 %.
+
+### Funde
+
+| ID | Schwere | Datei | Fund | Vorschlag | Ziel |
+|---|---|---|---|---|---|
+| R-44 | Risiko | `Store/Services/ImportService.swift:47` | Die Prüfung auf Doppel sieht auch Fahrten im **Papierkorb**. Wer eine Fahrt versehentlich löscht und die Datei neu importiert, bekommt „schon vorhanden“, sieht aber nichts. Im überwachten Ordner wandert die Datei still nach „Importiert“, die Fahrt bleibt im Papierkorb und ist nach 30 Tagen weg. | Liegt das Doppel im Papierkorb: anbieten, es wiederherzustellen (im Ordner: wiederherstellen und protokollieren) | 0.5.2 |
+| R-45 | Risiko | `Import/FolderImport.swift:63` | Der Ordner-Import liest 1,5 s nach einer Änderung im Ordner. Wird eine Datei noch geschrieben (große Datei, langsames Netz), liest er sie halb und schiebt sie nach „Fehlerhaft“, obwohl sie heil ist. | Dateien überspringen, die sich in den letzten Sekunden geändert haben; mit `NSFileCoordinator` lesen | 0.5.2 |
+| R-46 | Risiko | `Import/ImportFlow.swift:63` | Ein zweiter Import, solange eine Frage des ersten offen ist (Bike, Doppel), ersetzt die offene Frage. Der erste Import bleibt ohne Entscheidung, seine Kopie liegt weiter im Temp-Ordner. Am iPhone reicht es, zwei Dateien kurz nacheinander mit „Öffnen mit“ zu öffnen. | Den zweiten Import warten lassen, bis der erste entschieden ist | 0.5.2 |
+| R-47 | Aufräumen | `Store/Services/ImportService.swift:21` | Lässt sich eine Datei nicht **lesen** (keine Rechte, nicht geladen, weg), meldet der Import „FIT zu kurz/beschädigt“. Protokoll und Diagnose zeigen dann einen Fehler im Leser, den es nicht gibt. | Eigenes Ergebnis „konnte nicht gelesen werden“ mit dem Fehler des Systems | 0.5.2 |
+| R-48 | Aufräumen | `Import/ImportReport.swift:62` | Texte für die Oberfläche im Kit (gegen Regel 8). Die Übersetzungen landen im Katalog des Pakets statt in denen der Apps; Mac und iPhone können verschieden formulieren. | Der Bericht liefert Art und Werte, jede App formt den Text selbst | 0.5.2 |
+| R-49 | Aufräumen | `iOS/PhoneImport.swift:30` | Am iPhone löscht der Import die Datei aus dem Eingang, bevor er sie gespeichert hat. Klappt das Speichern der Kopie nicht, ist die Datei weg, ohne Meldung. | Erst nach dem Import löschen; bei Fehler eine Meldung | 0.5.2 |
+| R-50 | Aufräumen | `Store/Services/ImportService.swift:27` | Lesen und Auswerten einer Datei laufen auf dem Hauptthread. 20 Fahrten auf einmal oder eine GPX mit 50 000 Punkten lassen die App sekundenlang hängen. | Lesen der Datei abseits des Hauptthreads (die Leser sind reine Werttypen), nur das Einfügen auf dem Hauptthread. Der ganze Umzug in einen `ModelActor` bleibt später | später |
+
+**Bewertung:** Der gemeinsame Ablauf für Mac und iPhone ist ein guter Schritt; die Leser selbst sind robust. Die Funde liegen an den Rändern: Papierkorb (R-44), halbe Dateien (R-45), zwei Importe zugleich (R-46) und ehrliche Fehlermeldungen (R-47, R-49). R-48 bringt die Texte zurück in die Apps. Für 0.5.2 sind es drei PRs: Papierkorb und Meldungen (R-44, R-47, R-49), Ordner (R-45), Ablauf und Texte (R-46, R-48).
