@@ -1,6 +1,6 @@
 # Review iOS 0.5.2 + Mac 1.8.7
 
-Stand: 6.11.2026 · Entwurf, wächst mit jedem Bereich (B-251 bis B-258). Plan und Regeln: `BACKLOG.md`, Abschnitt „iOS 0.5.2 + Mac 1.8.7 – Review“.
+Stand: 6.11.2026 · alle acht Bereiche geprüft, 66 Funde; wartet auf die Freigabe der Liste durch Nils. Plan und Regeln: `BACKLOG.md`, Abschnitt „iOS 0.5.2 + Mac 1.8.7 – Review“.
 
 **Schwere:** **Fehler** (falsches Ergebnis, Absturz, Datenverlust) · **Risiko** (geht heute, bricht leicht) · **Aufräumen** · **Idee**.
 **Ziel:** **0.5.2** (klein und sicher, kommt in dieses Release) oder **später** (wird eine Story im Backlog).
@@ -16,7 +16,7 @@ Stand: 6.11.2026 · Entwurf, wächst mit jedem Bereich (B-251 bis B-258). Plan u
 | Import | B-254 | ☑ geprüft 6.11.2026 | R-44 bis R-50 |
 | Aufnahme | B-255 | ☑ geprüft 6.11.2026 | R-51 bis R-56 |
 | Mac-App | B-256 | ☑ geprüft 6.11.2026 | R-57 bis R-61 |
-| iPhone-App | B-257 | ☐ | – |
+| iPhone-App | B-257 | ☑ geprüft 6.11.2026 | R-62 bis R-66 |
 
 ---
 
@@ -215,3 +215,74 @@ Geprüft am 6.11.2026 auf `main` (d812c47): `/code-review high` über `App/` (79
 | R-61 | Aufräumen | `App/RideListView.swift:84` | Die Fahrtenliste filtert und sortiert alle Fahrten bei jedem Neuzeichnen, also bei jedem Klick oder Hover. Mit 1 000 Fahrten wird die Liste träge. | Ergebnis merken und nur neu rechnen, wenn sich Suche, Filter oder Fahrten ändern | später |
 
 **Bewertung:** Die Mac-App ist ordentlich aufgebaut, hält die Regeln ein und geht mit dem Netz zurückhaltend um. Es gibt keinen echten Fehler. Die Funde betreffen veraltete Anzeige (R-57), Tempo bei großen Fahrten und Bibliotheken (R-58, R-61) und Reste (R-59, R-60). Die großen Dateien (`RideListView` 909, `ContentView` 677, `RideDetailView` 636 Zeilen) zu teilen, lohnt sich erst mit B-125 (ein Bereich „Fahrten“). Für 0.5.2 sind es zwei PRs: Tour-Detail (R-57, R-58) und Reste (R-60).
+
+---
+
+## B-257 – iPhone-App (`iOS/`, ohne Aufnahme)
+
+Geprüft am 6.11.2026 auf `main` (d812c47): `/code-review high` über `iOS/` ohne die Aufnahme (Start, `PhoneLibrary`, `PhoneSync`, Übersicht, Fahrten, Tour-Detail, Karte, Karussell, Querformat, Mehr, Papierkorb), dazu die Prüfliste.
+
+**Prüfliste:**
+- Regel 6 (nichts aus `App/` außer Ressourcen, kein AppKit): eingehalten.
+- Die iPhone-App hat **zwei Welten**: die eigene Datenbank (mit oder ohne iCloud) und den Ordner-Austausch von 0.2. Viele Funde dieses Reviews hängen am Ordner-Weg (R-13, R-38, R-59, R-66).
+- Die Schlüssel der Einstellungen stehen verstreut (R-65).
+- Der Absturz beim Öffnen einer kaputten Bibliothek: R-41.
+
+### Funde
+
+| ID | Schwere | Datei | Fund | Vorschlag | Ziel |
+|---|---|---|---|---|---|
+| R-62 | Risiko | `iOS/PhoneLibrary.swift:131`, `iOS/TourDetailView.swift:83` | Ändert der Mac eine Fahrt (Bosch-FIT ersetzt die Aufnahme, Zusammenfügen, neu gelesen), zeigt das iPhone in der Liste die neuen Zahlen, aber **Karte und Diagramme bleiben alt**, bis die App neu startet. Die Routen bleiben im Zwischenspeicher, das Detail lädt nur bei einer anderen Fahrt neu. | Zwischenspeicher beim Neuladen leeren und das Detail an einen Wert hängen, der sich mit der Fahrt ändert (wie R-57 am Mac) | 0.5.2 |
+| R-63 | Risiko | `iOS/PhoneSync.swift:71` | Schaltet man den Sync in „Mehr“ aus, läuft der Abgleich mit iCloud im Hintergrund weiter, bis die App beendet wird. Der Schalter sagt etwas anderes. | Beim Ausschalten die Datenbank schließen oder einen Neustart verlangen; zusammen mit R-38 | 0.5.2 |
+| R-64 | Aufräumen | `iOS/PhoneLibrary.swift:148` | Nach **jedem** iCloud-Ereignis baut das iPhone die ganze Liste neu, auch nach den eigenen Uploads. Beim ersten Sync einer großen Bibliothek geschieht das sehr oft, und jedes Umbenennen löst zwei weitere Neuaufbauten aus. | Nur bei Änderungen von außen und am Ende eines Imports neu laden | 0.5.2 |
+| R-65 | Aufräumen | `iOS/Recorder.swift:26` u. a. | Die Schlüssel der Einstellungen stehen in fünf Dateien, einer als nackter Text. Am Mac stehen sie an einem Ort (Regel 7). | Ein `PhoneSettingsKey` mit festen Werten; Regel 7 gilt dann auch fürs iPhone | 0.5.2 |
+| R-66 | Idee | `Config/iOS.xcconfig`, `iOS/ImportFolder.swift`, `App/PhoneState.swift` | Der Ordner-Austausch von 0.2 ist noch ein ganzer zweiter Weg: Standard ohne `Local.xcconfig`, Rückfall bei ausgeschaltetem Sync, „Stand fürs iPhone“ am Mac. Jede Änderung an Liste, Detail oder Import muss in beiden Welten gehen. | **Frage an Nils:** Ordner-Weg noch eine Version für bisherige Ordner-Nutzer behalten und dann entfernen? (Story B-263) | später |
+
+**Bewertung:** Die iPhone-App ist schlank und hält die Grenzen zur Mac-App ein. Was schwer wiegt, ist der doppelte Weg aus Ordner und Datenbank (R-66): Er verursacht die Hälfte der Funde rund ums iPhone. Für 0.5.2 sind es zwei PRs: Aktualisieren (R-62, R-64) und Einstellungen und Sync aus (R-63, R-65, mit R-38).
+
+---
+
+## Zusammenfassung
+
+| Bereich | Funde | Fehler | Risiko | Aufräumen | Idee | Für 0.5.2 | Später |
+|---|---|---|---|---|---|---|---|
+| B-258 Tests, Skripte, CI | 16 | 2 | 8 | 4 | 2 | 13 | 1 (+2 in B-253, B-254, B-257) |
+| B-251 Kit-Kern | 10 | 2 | 5 | 3 | 0 | 7 (+2 mit B-261) | 1 |
+| B-252 Kit-Store | 8 | 0 | 6 | 1 | 1 | 6 | 2 |
+| B-253 Sync | 9 | 1 | 6 | 1 | 1 | 7 | 2 |
+| B-254 Import | 7 | 0 | 3 | 4 | 0 | 6 | 1 |
+| B-255 Aufnahme | 6 | 1 | 3 | 1 | 1 | 5 (+1 mit B-261) | 0 |
+| B-256 Mac-App | 5 | 0 | 1 | 4 | 0 | 3 | 1 (+1 in B-257) |
+| B-257 iPhone-App | 5 | 0 | 2 | 2 | 1 | 4 | 1 |
+| **Summe** | **66** | **6** | **34** | **20** | **6** | **51** (+3 mit B-261) | **9** |
+
+R-01 und R-02 entfallen mit dem Streichen des Workflows (R-03). Die Zählung „für 0.5.2“ ist der Vorschlag; Nils gibt die Liste frei.
+
+**Die wichtigsten Funde für Nutzer:** R-51 (Fahrt weg nach Absturz), R-35 (Änderungen an Doppeln gehen verloren), R-17/R-18 (Zeitachse über mehrere Tage), R-53 (Aufnahme als Doppel verworfen), R-27 (⌘Z auf eine gelöschte Fahrt), R-28 (ältere App rechnet Werte zurück).
+
+### Vorschlag für die PRs in 0.5.2 (B-260)
+
+Reihenfolge: zuerst, was Daten schützt, dann Sync, dann der Rest. Je PR eine Gruppe, bei Fehlern zuerst ein Test.
+
+| # | PR | Funde |
+|---|---|---|
+| 1 | Aufnahme sicher speichern | R-51, R-52, R-53 |
+| 2 | Doppel aus zwei Geräten | R-35, R-36 |
+| 3 | ⌘Z und Versionen bei zwei Geräten | R-27, R-28 |
+| 4 | Neu lesen in Paketen | R-30 |
+| 5 | Zeitachse über mehrere Tage (nach 4) | R-17, R-18, R-24 |
+| 6 | Höhe bei der Aufnahme | R-19, R-20 |
+| 7 | Sync: Warten, Ein und Aus, Sicherung | R-37, R-42, R-38, R-39, R-63 |
+| 8 | Wiederherstellen mit Sync: Hinweis | R-29 (Teil 0.5.2) |
+| 9 | Speichern meldet Fehler | R-31 |
+| 10 | Import: Papierkorb, Meldungen, halbe Dateien | R-44, R-45, R-47, R-49 |
+| 11 | Import-Ablauf und Texte | R-46, R-48 |
+| 12 | Aktualisieren am Mac und iPhone | R-57, R-58, R-62, R-64, R-33 |
+| 13 | Live-Aktivität | R-54, R-55 |
+| 14 | Release-Workflow streichen, CI-Zeitlimit | R-03 (mit R-01, R-02), R-07 |
+| 15 | Architektur-Prüfung schärfen | R-05, R-06 |
+| 16 | Versionen und DMG-Skript | R-04, R-12 |
+| 17 | Tests stabil und sauber | R-08, R-09, R-10, R-11 |
+| 18 | Kleinigkeiten | R-16, R-25, R-26, R-60, R-65 |
+| – | Test auf echten Geräten mit Nils | R-40 |
+| – | mit V-16 (B-261) | R-21, R-23, R-56 |
