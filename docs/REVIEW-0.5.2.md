@@ -15,7 +15,7 @@ Stand: 6.11.2026 · Entwurf, wächst mit jedem Bereich (B-251 bis B-258). Plan u
 | Sync und CloudKit | B-253 | ☑ geprüft 6.11.2026 | R-35 bis R-43 |
 | Import | B-254 | ☑ geprüft 6.11.2026 | R-44 bis R-50 |
 | Aufnahme | B-255 | ☑ geprüft 6.11.2026 | R-51 bis R-56 |
-| Mac-App | B-256 | ☐ | – |
+| Mac-App | B-256 | ☑ geprüft 6.11.2026 | R-57 bis R-61 |
 | iPhone-App | B-257 | ☐ | – |
 
 ---
@@ -190,3 +190,28 @@ Geprüft am 6.11.2026 auf `main` (d812c47): `/code-review high` über `iOS/Recor
 | R-56 | Idee | `iOS/MotionRecorder.swift:57` | Die Bewegung wird bei **jeder** Aufnahme 50-mal pro Sekunde gelesen, auch beim E-Bike, wo die Schräglage nur ein Versuch ist. Was das an Akku kostet, ist noch offen (V-16). | Mit den Testfahrten messen (B-261); kostet es viel, beim Rad seltener messen oder abschaltbar machen | B-261 |
 
 **Bewertung:** Die Aufnahme ist gegen Abstürze gut geschützt – bis auf den einen Weg nach dem Absturz (R-51), der genau dann Daten verliert. R-51 bis R-53 sind die wichtigsten Funde des ganzen Reviews für Nutzer, weil eine gefahrene Strecke nicht wiederkommt. Für 0.5.2 sind es zwei PRs: Speichern und Protokoll (R-51 bis R-53), Live-Aktivität (R-54, R-55).
+
+---
+
+## B-256 – Mac-App (`App/`)
+
+Geprüft am 6.11.2026 auf `main` (d812c47): `/code-review high` über `App/` (79 Dateien, 15 300 Zeilen), mit Blick auf Start, Einstellungen, Update-Hinweis, Kartenkacheln, PDF, Fahrtenliste, Tour-Detail und Reste; dazu die Prüfliste. Sync am Mac (`ICloudSync`) steht in B-253, der Ordner-Wächter in B-254.
+
+**Prüfliste:**
+- Regel 4 und 7: eingehalten. Views schreiben nur über die Bibliothek (Ausnahme `DemoMode` für Bilder); Einstellungen stehen in `SettingsKey`, nur die Startargumente der Demo nutzen eigene Schlüssel (nur in Debug).
+- Netz: nur Kartenkacheln (eigener User-Agent, Cache, höchstens 4 Verbindungen je Server, nichts vorab) und der Update-Hinweis (einmal am Tag, abschaltbar). Passt zu `RECHERCHE-KARTEN.md`.
+- Nebenläufigkeit: zwei `@unchecked Sendable` (Kachel-Overlay, kurvige Straßen) mit nur lesend genutzten Feldern; `assumeIsolated` nur in Handlern auf der Main-Queue. In Ordnung.
+- Eine Warnung beim Bauen (R-16). Kein Test-Target (R-15).
+- Der Absturz beim Öffnen einer kaputten Bibliothek gilt auch am Mac (`WattspurApp.swift:101`), siehe R-41.
+
+### Funde
+
+| ID | Schwere | Datei | Fund | Vorschlag | Ziel |
+|---|---|---|---|---|---|
+| R-57 | Risiko | `App/RideDetailView.swift:115` | Das Tour-Detail rechnet Karte, Kurven, Schräglage und Diagramme nur neu, wenn eine **andere** Fahrt gewählt wird. Ändert sich die offene Fahrt (Bosch-FIT „Aktualisieren“, GPX mit Puls angehängt, Änderung vom iPhone per iCloud), zeigt es die alten Werte, bis man weg- und zurückklickt. | Die Aufgabe an einen Wert hängen, der sich mit der Zeitreihe ändert (z. B. Parser-Version und angehängte Quelle) | 0.5.2 |
+| R-58 | Aufräumen | `App/RideDetailView.swift:117` | Dieselbe Rechnung läuft auf dem Hauptthread. Bei langen Fahrten (Motorrad, 4 h) hängt das Öffnen kurz, und das Blättern mit den Pfeiltasten ruckelt. | Abseits des Hauptthreads rechnen, nur das Ergebnis setzen | 0.5.2 |
+| R-59 | Aufräumen | `App/PhoneState.swift:33` | Ist der alte „Stand fürs iPhone“ an, schreibt der Mac nach **jedem** Speichern den ganzen Stand samt Routen in iCloud Drive, auf dem Hauptthread. Bei einem Import von 30 Dateien geschieht das immer wieder. | Mit R-13 und R-38 entscheiden, ob der Ordner-Weg bleibt; wenn ja, abseits des Hauptthreads und gebündelt | B-257 |
+| R-60 | Aufräumen | `App/SpikeLibrary.swift` | Reste des abgeschlossenen Spikes V-15 (eigene Spike-Bibliothek, nur in Debug) verzweigen noch in Start und Sync-Einstellung. | Entfernen, samt dem Test dafür | 0.5.2 |
+| R-61 | Aufräumen | `App/RideListView.swift:84` | Die Fahrtenliste filtert und sortiert alle Fahrten bei jedem Neuzeichnen, also bei jedem Klick oder Hover. Mit 1 000 Fahrten wird die Liste träge. | Ergebnis merken und nur neu rechnen, wenn sich Suche, Filter oder Fahrten ändern | später |
+
+**Bewertung:** Die Mac-App ist ordentlich aufgebaut, hält die Regeln ein und geht mit dem Netz zurückhaltend um. Es gibt keinen echten Fehler. Die Funde betreffen veraltete Anzeige (R-57), Tempo bei großen Fahrten und Bibliotheken (R-58, R-61) und Reste (R-59, R-60). Die großen Dateien (`RideListView` 909, `ContentView` 677, `RideDetailView` 636 Zeilen) zu teilen, lohnt sich erst mit B-125 (ein Bereich „Fahrten“). Für 0.5.2 sind es zwei PRs: Tour-Detail (R-57, R-58) und Reste (R-60).
