@@ -1,6 +1,6 @@
 # Review iOS 0.5.2 + Mac 1.8.7
 
-Stand: 6.11.2026 · alle acht Bereiche geprüft, 66 Funde; wartet auf die Freigabe der Liste durch Nils. Plan und Regeln: `BACKLOG.md`, Abschnitt „iOS 0.5.2 + Mac 1.8.7 – Review“.
+Stand: 6.11.2026 · alle acht Bereiche geprüft, 66 Funde; Liste freigegeben von Nils am 6.11.2026 (PR #119). Plan und Regeln: `BACKLOG.md`, Abschnitt „iOS 0.5.2 + Mac 1.8.7 – Review“.
 
 **Schwere:** **Fehler** (falsches Ergebnis, Absturz, Datenverlust) · **Risiko** (geht heute, bricht leicht) · **Aufräumen** · **Idee**.
 **Ziel:** **0.5.2** (klein und sicher, kommt in dieses Release) oder **später** (wird eine Story im Backlog).
@@ -132,7 +132,7 @@ Geprüft am 6.11.2026 auf `main` (d812c47): `/code-review high` über `SyncMerge
 | R-37 | Risiko | `Store/SyncMergeWatcher.swift:56` | Das Zusammenführen wartet, bis kein iCloud-Import mehr läuft. Kommt das Ende eines Imports nie an (App im Hintergrund angehalten), wartet es bis zum nächsten Start der App: zwei „Mein eBike“ bleiben stehen. | Laufende Importe nach etwa 2 Minuten vergessen | 0.5.2 |
 | R-38 | Risiko | `Store/PhoneDatabase.swift:17` | Schaltet man am iPhone „Mit iCloud synchronisieren“ **aus**, liest die App nicht mehr ihre eigene Datenbank, sondern den alten Ordner von 0.2. Wer den Ordner nie hatte, sieht danach keine Fahrten mehr, und Aufnahmen werden keine Fahrten. | „Aus“ heißt: dieselbe Datenbank ohne iCloud (`local`); den Ordner nur für alte Ordner-Nutzer. Hängt mit R-13 zusammen | 0.5.2 |
 | R-39 | Risiko | `App/ICloudSync.swift:62` | Die Sicherung vor dem Sync gibt es nur beim **ersten** Einschalten. Wer den Sync aus- und Monate später wieder einschaltet, synchronisiert ohne frische Sicherung. | Bei jedem Einschalten sichern | 0.5.2 |
-| R-40 | Risiko | `App/ICloudSync.swift:98` | Ungeprüft: Kommen Fahrten, die **bei ausgeschaltetem Sync** importiert wurden, nach dem Wiedereinschalten in iCloud an? Bei ausgeschaltetem Sync öffnet die App die Datenbank ohne CloudKit; ob der Abgleich die Änderungen später noch sieht, testet nichts. | Test auf echten Geräten (Mac aus → 2 Fahrten → an → am iPhone da?). Fehlen sie: ein erzwungenes erneutes Hochladen | 0.5.2 (Test) |
+| R-40 | Risiko | `App/ICloudSync.swift:98` | Ungeprüft: Kommen Fahrten, die **bei ausgeschaltetem Sync** importiert wurden, nach dem Wiedereinschalten in iCloud an? Bei ausgeschaltetem Sync öffnet die App die Datenbank ohne CloudKit; ob der Abgleich die Änderungen später noch sieht, testet nichts. | Test auf echten Geräten (Mac aus → 2 Fahrten → an → am iPhone da?). Fehlen sie: ein erzwungenes erneutes Hochladen. **Nils (6.11.2026): später**, Story B-272 | später (B-272) |
 | R-41 | Risiko | `iOS/PhoneSync.swift:79`, `App/WattspurApp.swift:101` | Lässt sich die Bibliothek nicht öffnen (kaputte Datei, misslungene Umstellung, schlechte Sicherung), stürzt die App **bei jedem Start** ab (`fatalError`). Es gibt keinen Weg heraus außer Dateien von Hand zu löschen. | Statt Absturz eine Fehleransicht: Sicherungen zeigen, Diagnose, mit leerer Bibliothek starten (die alte bleibt liegen) | später |
 | R-42 | Aufräumen | `Store/SyncMonitor.swift:160` | Fehlt das Ende eines Sync-Vorgangs, zeigt die Einstellung „Synchronisiere …“ für den Rest der Sitzung und verdeckt den echten Stand. | Laufende Vorgänge nach einigen Minuten vergessen, wie R-37 | 0.5.2 |
 | R-43 | Idee | `Store/Services/SyncMergeService.swift:41` | Alle Fahrer werden zu einem zusammengelegt. Mit mehreren Fahrern (B-073) wäre das falsch. | In B-073 vermerken: vorher Standard-Fahrer kennzeichnen und nur diese zusammenlegen | später (B-073) |
@@ -236,7 +236,7 @@ Geprüft am 6.11.2026 auf `main` (d812c47): `/code-review high` über `iOS/` ohn
 | R-63 | Risiko | `iOS/PhoneSync.swift:71` | Schaltet man den Sync in „Mehr“ aus, läuft der Abgleich mit iCloud im Hintergrund weiter, bis die App beendet wird. Der Schalter sagt etwas anderes. | Beim Ausschalten die Datenbank schließen oder einen Neustart verlangen; zusammen mit R-38 | 0.5.2 |
 | R-64 | Aufräumen | `iOS/PhoneLibrary.swift:148` | Nach **jedem** iCloud-Ereignis baut das iPhone die ganze Liste neu, auch nach den eigenen Uploads. Beim ersten Sync einer großen Bibliothek geschieht das sehr oft, und jedes Umbenennen löst zwei weitere Neuaufbauten aus. | Nur bei Änderungen von außen und am Ende eines Imports neu laden | 0.5.2 |
 | R-65 | Aufräumen | `iOS/Recorder.swift:26` u. a. | Die Schlüssel der Einstellungen stehen in fünf Dateien, einer als nackter Text. Am Mac stehen sie an einem Ort (Regel 7). | Ein `PhoneSettingsKey` mit festen Werten; Regel 7 gilt dann auch fürs iPhone | 0.5.2 |
-| R-66 | Idee | `Config/iOS.xcconfig`, `iOS/ImportFolder.swift`, `App/PhoneState.swift` | Der Ordner-Austausch von 0.2 ist noch ein ganzer zweiter Weg: Standard ohne `Local.xcconfig`, Rückfall bei ausgeschaltetem Sync, „Stand fürs iPhone“ am Mac. Jede Änderung an Liste, Detail oder Import muss in beiden Welten gehen. | **Frage an Nils:** Ordner-Weg noch eine Version für bisherige Ordner-Nutzer behalten und dann entfernen? (Story B-263) | später |
+| R-66 | Idee | `Config/iOS.xcconfig`, `iOS/ImportFolder.swift`, `App/PhoneState.swift` | Der Ordner-Austausch von 0.2 ist noch ein ganzer zweiter Weg: Standard ohne `Local.xcconfig`, Rückfall bei ausgeschaltetem Sync, „Stand fürs iPhone“ am Mac. Jede Änderung an Liste, Detail oder Import muss in beiden Welten gehen. | **Entscheidung Nils (6.11.2026):** Ordner-Weg noch eine Version für bisherige Ordner-Nutzer behalten, dann entfernen (Story B-263) | später |
 
 **Bewertung:** Die iPhone-App ist schlank und hält die Grenzen zur Mac-App ein. Was schwer wiegt, ist der doppelte Weg aus Ordner und Datenbank (R-66): Er verursacht die Hälfte der Funde rund ums iPhone. Für 0.5.2 sind es zwei PRs: Aktualisieren (R-62, R-64) und Einstellungen und Sync aus (R-63, R-65, mit R-38).
 
@@ -249,12 +249,12 @@ Geprüft am 6.11.2026 auf `main` (d812c47): `/code-review high` über `iOS/` ohn
 | B-258 Tests, Skripte, CI | 16 | 2 | 8 | 4 | 2 | 13 | 1 (+2 in B-253, B-254, B-257) |
 | B-251 Kit-Kern | 10 | 2 | 5 | 3 | 0 | 7 (+2 mit B-261) | 1 |
 | B-252 Kit-Store | 8 | 0 | 6 | 1 | 1 | 6 | 2 |
-| B-253 Sync | 9 | 1 | 6 | 1 | 1 | 7 | 2 |
+| B-253 Sync | 9 | 1 | 6 | 1 | 1 | 6 | 3 |
 | B-254 Import | 7 | 0 | 3 | 4 | 0 | 6 | 1 |
 | B-255 Aufnahme | 6 | 1 | 3 | 1 | 1 | 5 (+1 mit B-261) | 0 |
 | B-256 Mac-App | 5 | 0 | 1 | 4 | 0 | 3 | 1 (+1 in B-257) |
 | B-257 iPhone-App | 5 | 0 | 2 | 2 | 1 | 4 | 1 |
-| **Summe** | **66** | **6** | **34** | **20** | **6** | **51** (+3 mit B-261) | **9** |
+| **Summe** | **66** | **6** | **34** | **20** | **6** | **50** (+3 mit B-261) | **10** |
 
 R-01 und R-02 entfallen mit dem Streichen des Workflows (R-03). Die Zählung „für 0.5.2“ ist der Vorschlag; Nils gibt die Liste frei.
 
@@ -284,5 +284,5 @@ Reihenfolge: zuerst, was Daten schützt, dann Sync, dann der Rest. Je PR eine Gr
 | 16 | Versionen und DMG-Skript | R-04, R-12 |
 | 17 | Tests stabil und sauber | R-08, R-09, R-10, R-11 |
 | 18 | Kleinigkeiten | R-16, R-25, R-26, R-60, R-65 |
-| – | Test auf echten Geräten mit Nils | R-40 |
+| – | Test auf echten Geräten mit Nils, später | R-40 → B-272 |
 | – | mit V-16 (B-261) | R-21, R-23, R-56 |
