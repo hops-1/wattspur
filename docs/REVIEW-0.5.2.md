@@ -10,7 +10,7 @@ Stand: 6.11.2026 · Entwurf, wächst mit jedem Bereich (B-251 bis B-258). Plan u
 | Bereich | Story | Stand | Funde |
 |---|---|---|---|
 | Tests, Skripte, CI, Projekt | B-258 | ☑ geprüft 6.11.2026 | R-01 bis R-16 |
-| Kit-Kern | B-251 | ☐ | – |
+| Kit-Kern | B-251 | ☑ geprüft 6.11.2026 | R-17 bis R-26 |
 | Kit-Store | B-252 | ☐ | – |
 | Sync und CloudKit | B-253 | ☐ | – |
 | Import | B-254 | ☐ | – |
@@ -52,3 +52,33 @@ Geprüft am 6.11.2026 auf `main` (d812c47): `/code-review high` über `scripts/`
 | R-16 | Aufräumen | `App/WattspurApp.swift:83` | `restored != nil` ist immer wahr: `try?` macht aus dem Ergebnis schon ein Optional, und `if let` packt es aus. Der Hinweis nach dem Wiederherstellen erscheint trotzdem richtig, es ist die einzige Warnung der Mac-App. | Die Bedingung `restored != nil` streichen | 0.5.2 |
 
 **Bewertung:** Grundlage solide. Die Tests sind zahlreich und schnell, die Abdeckung des Kits ist hoch, die lokale CI prüft mehr als GitHub. Echte Fehler stecken nur im Release-Workflow, und der wird bisher nicht benutzt. Die übrigen Funde sind klein und lassen sich in zwei bis drei PRs beheben: Workflow streichen und Zeitlimit (R-01 bis R-03, R-07), Architektur-Prüfung (R-05, R-06), Versionen (R-04, R-12), Tests (R-08 bis R-11), dazu R-16 als Einzeiler.
+
+---
+
+## B-251 – Kit-Kern (`WattspurCore`)
+
+Geprüft am 6.11.2026 auf `main` (d812c47): `/code-review high` über `Packages/WattspurKit/Sources/WattspurCore` (60 Dateien, 8 300 Zeilen), dazu die Prüfliste. Genau gelesen: FIT-Decoder, GPX-Import, Zusammenfügen, Aufnahme, Bewegung, Höhe, Steigung, beste Minute, Kalorien.
+
+**Prüfliste:**
+- Regel 1 (keine UI- und Datenbank-Frameworks): eingehalten.
+- Regel 8 (keine Texte für die Oberfläche): im Kern eingehalten. **Aber** `WattspurKit/Import/ImportReport.swift` nutzt `String(localized:)` – gehört zum Review des Imports (B-254).
+- Keine `fatalError`, kein `try!`, kein `@unchecked Sendable`, keine Logs. Die `!` stehen alle hinter einer Prüfung.
+- Der FIT-Decoder ist robust: Länge, Kopf, Prüfsumme und jede Lese-Stelle werden geprüft; die Tests mit feindlichen Dateien decken das ab.
+- Zeit und Kalender kommen überall als Parameter mit Standardwert, also testbar.
+
+### Funde
+
+| ID | Schwere | Datei | Fund | Vorschlag | Ziel |
+|---|---|---|---|---|---|
+| R-17 | Fehler | `Ride/RideMerge.swift:111` | Beim Zusammenfügen über **mehrere Tage** landet der zweite Teil eines späteren Tages einen Tag zu weit hinten. Grund: Der Abstand wird vom ersten Teil der ganzen Fahrt gemessen, nicht vom vorigen Teil. Beispiel: Tag 1 10 Uhr, Tag 2 10 Uhr und 14 Uhr → der letzte Teil beginnt bei 28 h statt bei 5 h. Diagramme haben eine Lücke von 26 h, die Gesamtzeit stimmt nicht. | Abstand = Lage des vorigen Teils + (Start dieses Teils − Start des vorigen); Test mit drei Teilen an zwei Tagen zuerst | 0.5.2 |
+| R-18 | Fehler | `Import/GPXRideImporter.swift:91` | Derselbe Fehler beim **GPX-Import**: eine Datei über zwei Tage mit zwei Abschnitten am zweiten Tag. | Mit R-17 und R-24 eine gemeinsame Rechnung; `parserVersion` erhöhen, damit betroffene Fahrten neu gelesen werden | 0.5.2 |
+| R-19 | Risiko | `Recording/AltitudeFusion.swift:64` | Mit Barometer wartet die Höhe auf eine GPS-Höhe mit höchstens 15 m Ungenauigkeit. Kommt die nie (Stadt, Wald: oft 16–30 m), hat die **ganze Aufnahme keine Höhe** – schlechter als vor B-235. | Nach `anchorTimeout` die besten vorhandenen GPS-Höhen nehmen, auch wenn sie ungenauer sind | 0.5.2 |
+| R-20 | Risiko | `Recording/AltitudeFusion.swift:55` | Ist das Barometer kurz veraltet (älter als 5 s), nimmt die Aufnahme die rohe GPS-Höhe, danach wieder die vom Barometer. Die Höhe springt um einige Meter hin und her, und jeder Sprung über 2 m zählt als Anstieg. | Während der Lücke die letzte Barometer-Höhe mit dem Versatz halten oder keine Höhe schreiben | 0.5.2 |
+| R-21 | Risiko | `Ride/RideMotion.swift:70` | „0 auf 25“ (bzw. 100) prüft nicht, ob der Wert möglich ist. Ein GPS-Ausreißer an der Ampel (8 m in einer Sekunde) ergibt „0 auf 25 in 1,1 s“. | Ziel muss ein paar Sekunden gehalten werden, oder Obergrenze für die Beschleunigung; mit den Testfahrten aus V-16 einstellen | B-261 |
+| R-22 | Risiko | `Import/GPXRideImporter.swift:243` | Ist der **erste** Punkt eines GPX-Abschnitts ein Ausreißer, gelten alle Punkte der nächsten 30 s als Sprung und fallen weg; der Anfang der Fahrt fehlt. | Wenn mehrere „Sprünge“ hintereinander zueinander passen, den einzelnen Punkt davor verwerfen; braucht eine echte Datei zum Prüfen | später |
+| R-23 | Risiko | `Ride/RideMotion.swift:40` | Größte Schräglage und stärkste Beschleunigung sind der Höchstwert eines einzigen Messpunkts. Ein Schlagloch oder ein Stoß ans Handy wird so zur Kennzahl und zum Rekord. | Wert nehmen, der etwa 1 s gehalten wurde; mit V-16 einstellen | B-261 |
+| R-24 | Aufräumen | `Ride/RideMerge.swift:103` | Die Lage der Teile auf einer Zeitachse ist zweimal gebaut (Zusammenfügen und GPX), mit verschiedenen Regeln für „derselbe Tag“ (Start des vorigen Teils bzw. sein Ende). Eine Fahrt über Mitternacht liegt deshalb verschieden, je nachdem, wie sie entstand. | Eine gemeinsame Funktion, zusammen mit R-17 und R-18 | 0.5.2 |
+| R-25 | Aufräumen | `Ride/RideTrack.swift:156` | `fix(atTime:)` baut bei jedem Aufruf eine Liste aller Indizes. Das passiert bei jeder Mausbewegung über dem Diagramm. | Direkt in `fixes` suchen | 0.5.2 |
+| R-26 | Aufräumen | `Recording/RideRecording.swift:162` | Der Anstieg in der Aufnahme wird bei jeder Anzeige über die ganze Fahrt neu gerechnet. Bei langen Fahrten kostet das mit der Zeit mehr Akku. | Anstieg je Abschnitt laufend mitführen | 0.5.2 |
+
+**Bewertung:** Der Kern ist sauber getrennt und gut getestet. Echte Fehler gibt es nur bei Fahrten über mehrere Tage (R-17, R-18) – selten, aber dann falsch. Die Bewegungswerte (R-21, R-23) und die Höhe beim Aufnehmen (R-19, R-20) sind neu und noch nicht an echten Fahrten geprüft; die Grenzen kommen mit B-261. Für 0.5.2 sind es drei PRs: Zeitachse (R-17, R-18, R-24), Höhe (R-19, R-20), Kleinigkeiten (R-25, R-26).
