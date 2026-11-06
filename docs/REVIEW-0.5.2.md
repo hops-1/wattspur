@@ -14,7 +14,7 @@ Stand: 6.11.2026 · Entwurf, wächst mit jedem Bereich (B-251 bis B-258). Plan u
 | Kit-Store | B-252 | ☑ geprüft 6.11.2026 | R-27 bis R-34 |
 | Sync und CloudKit | B-253 | ☑ geprüft 6.11.2026 | R-35 bis R-43 |
 | Import | B-254 | ☑ geprüft 6.11.2026 | R-44 bis R-50 |
-| Aufnahme | B-255 | ☐ | – |
+| Aufnahme | B-255 | ☑ geprüft 6.11.2026 | R-51 bis R-56 |
 | Mac-App | B-256 | ☐ | – |
 | iPhone-App | B-257 | ☐ | – |
 
@@ -165,3 +165,28 @@ Geprüft am 6.11.2026 auf `main` (d812c47): `/code-review high` über `ImportSer
 | R-50 | Aufräumen | `Store/Services/ImportService.swift:27` | Lesen und Auswerten einer Datei laufen auf dem Hauptthread. 20 Fahrten auf einmal oder eine GPX mit 50 000 Punkten lassen die App sekundenlang hängen. | Lesen der Datei abseits des Hauptthreads (die Leser sind reine Werttypen), nur das Einfügen auf dem Hauptthread. Der ganze Umzug in einen `ModelActor` bleibt später | später |
 
 **Bewertung:** Der gemeinsame Ablauf für Mac und iPhone ist ein guter Schritt; die Leser selbst sind robust. Die Funde liegen an den Rändern: Papierkorb (R-44), halbe Dateien (R-45), zwei Importe zugleich (R-46) und ehrliche Fehlermeldungen (R-47, R-49). R-48 bringt die Texte zurück in die Apps. Für 0.5.2 sind es drei PRs: Papierkorb und Meldungen (R-44, R-47, R-49), Ordner (R-45), Ablauf und Texte (R-46, R-48).
+
+---
+
+## B-255 – Aufnahme (iPhone)
+
+Geprüft am 6.11.2026 auf `main` (d812c47): `/code-review high` über `iOS/Recorder.swift`, `MotionRecorder.swift`, `SaveRecordingSheet.swift`, `PhoneRecordings.swift`, `RecordingActivityController.swift`, `RideIntents.swift`, `iOSShared/` und `iOSWidgets/`, dazu die Prüfliste. Die Rechnungen dahinter (`RideRecording`, `MotionFusion`, `AltitudeFusion`) stehen in B-251.
+
+**Prüfliste:**
+- Die Aufnahme schreibt jede Position sofort in ein Protokoll (`Aufnahme.jsonl`); nach einem Absturz fragt die App „Weiter“, „Beenden und sichern“ oder „Verwerfen“. Gut gedacht.
+- Die Bewegung läuft auf einer eigenen Queue; die Ursache des Absturzes von Build 6 ist sauber beschrieben und behoben.
+- „Fahrt starten“ per Siri startet nicht über eine unfertige Fahrt hinweg; gut.
+- Das Widget bindet nur `WattspurCore` ein, kein SwiftData (prüft niemand automatisch, siehe R-06).
+
+### Funde
+
+| ID | Schwere | Datei | Fund | Vorschlag | Ziel |
+|---|---|---|---|---|---|
+| R-51 | Fehler | `iOS/WattspurApp.swift:143` | Nach einem Absturz: **„Beenden und sichern“** verschluckt einen Fehler beim Speichern und löscht danach trotzdem das Protokoll der Aufnahme. Klappt das Speichern nicht, ist die ganze Fahrt weg, ohne Meldung. | Nur nach erfolgreichem Speichern beenden; sonst Fehler zeigen und das Protokoll behalten, wie im normalen Speichern-Dialog | 0.5.2 |
+| R-52 | Risiko | `iOS/Recorder.swift:225` | Das Protokoll schreibt mit einer alten Funktion, die bei einem Schreibfehler die App **abstürzen** lässt statt einen Fehler zu melden. Wird der Speicher während einer langen Fahrt voll (die Rohdaten brauchen etwa 20 MB pro Stunde), stürzt die App mitten in der Fahrt ab. | `try write(contentsOf:)` und ein Hinweis „Speicher voll“ | 0.5.2 |
+| R-53 | Risiko | `iOS/PhoneLibrary.swift:197` | Gilt eine neue Aufnahme als **Doppel** einer schon importierten GPX derselben Fahrt, meldet „Sichern“ Erfolg, aber die Aufnahme wird nicht gespeichert. Schräglage, Beschleunigung und Belag der Aufnahme sind weg. | Fragen (ersetzen oder als Doppel verwerfen) oder die Aufnahme an die Fahrt anhängen | 0.5.2 |
+| R-54 | Risiko | `iOS/RecordingActivityController.swift:15` | Beim Start beendet die App alle alten Live-Aktivitäten, aber verzögert. Startet Siri die Fahrt bei geschlossener App, kann dieses Aufräumen die **eben gestartete** Live-Aktivität gleich wieder beenden: kein Sperrbildschirm, kein Knopf Pause. | Die alten Aktivitäten beim Start merken und nur diese beenden | 0.5.2 |
+| R-55 | Aufräumen | `iOSShared/RecordingActivity.swift:51` | Auf einem iPhone mit Meilen zeigt die Live-Aktivität die Strecke in Meilen, das Tempo aber in km/h. | Tempo in mph, wenn die Strecke in Meilen ist | 0.5.2 |
+| R-56 | Idee | `iOS/MotionRecorder.swift:57` | Die Bewegung wird bei **jeder** Aufnahme 50-mal pro Sekunde gelesen, auch beim E-Bike, wo die Schräglage nur ein Versuch ist. Was das an Akku kostet, ist noch offen (V-16). | Mit den Testfahrten messen (B-261); kostet es viel, beim Rad seltener messen oder abschaltbar machen | B-261 |
+
+**Bewertung:** Die Aufnahme ist gegen Abstürze gut geschützt – bis auf den einen Weg nach dem Absturz (R-51), der genau dann Daten verliert. R-51 bis R-53 sind die wichtigsten Funde des ganzen Reviews für Nutzer, weil eine gefahrene Strecke nicht wiederkommt. Für 0.5.2 sind es zwei PRs: Speichern und Protokoll (R-51 bis R-53), Live-Aktivität (R-54, R-55).
