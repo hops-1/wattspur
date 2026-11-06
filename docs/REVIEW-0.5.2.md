@@ -11,7 +11,7 @@ Stand: 6.11.2026 · Entwurf, wächst mit jedem Bereich (B-251 bis B-258). Plan u
 |---|---|---|---|
 | Tests, Skripte, CI, Projekt | B-258 | ☑ geprüft 6.11.2026 | R-01 bis R-16 |
 | Kit-Kern | B-251 | ☑ geprüft 6.11.2026 | R-17 bis R-26 |
-| Kit-Store | B-252 | ☐ | – |
+| Kit-Store | B-252 | ☑ geprüft 6.11.2026 | R-27 bis R-34 |
 | Sync und CloudKit | B-253 | ☐ | – |
 | Import | B-254 | ☐ | – |
 | Aufnahme | B-255 | ☐ | – |
@@ -82,3 +82,31 @@ Geprüft am 6.11.2026 auf `main` (d812c47): `/code-review high` über `Packages/
 | R-26 | Aufräumen | `Recording/RideRecording.swift:162` | Der Anstieg in der Aufnahme wird bei jeder Anzeige über die ganze Fahrt neu gerechnet. Bei langen Fahrten kostet das mit der Zeit mehr Akku. | Anstieg je Abschnitt laufend mitführen | 0.5.2 |
 
 **Bewertung:** Der Kern ist sauber getrennt und gut getestet. Echte Fehler gibt es nur bei Fahrten über mehrere Tage (R-17, R-18) – selten, aber dann falsch. Die Bewegungswerte (R-21, R-23) und die Höhe beim Aufnehmen (R-19, R-20) sind neu und noch nicht an echten Fahrten geprüft; die Grenzen kommen mit B-261. Für 0.5.2 sind es drei PRs: Zeitachse (R-17, R-18, R-24), Höhe (R-19, R-20), Kleinigkeiten (R-25, R-26).
+
+---
+
+## B-252 – Kit-Store (`WattspurKit/Store`)
+
+Geprüft am 6.11.2026 auf `main` (d812c47): `/code-review high` über `WattspurKit/Store` (Modelle, `RideLibrary` und Dienste, Wartung, Backup, Brücken, `PhoneDatabase`), dazu die Prüfliste. Sync (`SyncMonitor`, `SyncMergeService`, `LibrarySync`) folgt in B-253, der Import in B-254.
+
+**Prüfliste:**
+- Regel 2 (alle `@Model` im Kit) und die CloudKit-Regeln (alles optional oder mit Standardwert, keine eindeutigen Felder, Beziehungen optional) sind eingehalten; der Test `CloudKitSchemaTests` sichert das.
+- Regel 4 (Views schreiben nur über `RideLibrary`): eingehalten, keine View ruft `insert`, `delete` oder `save`; nur `App/DemoMode.swift` (Demo-Bibliothek für Bilder) speichert direkt.
+- Regel 9 (abgeleitete Werte mit Version): eingehalten, aber der Vergleich ist `!=` statt `<` (R-28).
+- Fehler beim Speichern werden überall mit `try?` verschluckt (R-31).
+- Nur der Mac führt die Wartung aus (Papierkorb leeren, neu lesen, nachrechnen); das iPhone leert seinen Papierkorb selbst.
+
+### Funde
+
+| ID | Schwere | Datei | Fund | Vorschlag | Ziel |
+|---|---|---|---|---|---|
+| R-27 | Risiko | `Store/Services/LibraryService.swift:20` | Die Schritte für ⌘Z halten die Fahrt (bzw. das Bike, das Ziel) als Objekt fest. Seit dem Sync kann es inzwischen gelöscht sein, etwa endgültig auf dem iPhone. Dann greift ⌘Z am Mac auf ein gelöschtes Objekt zu – **Absturz** möglich. | Im Schritt nur die ID merken und die Fahrt neu holen; ist sie weg, nichts tun | 0.5.2 |
+| R-28 | Risiko | `Store/Models.swift:232` | Gespeicherte Werte (Übersichtsroute, beste Minute, Kurvigkeit und Steigung) gelten als veraltet, sobald ihre Version **anders** ist, nicht nur **älter**. Hat das iPhone (über TestFlight oft früher) eine neuere Rechnung als der Mac, rechnet der Mac die Werte mit der alten Rechnung zurück und schickt sie per iCloud ans iPhone. | `<` statt `!=` in den drei `needs…` und in den Abfragen der Wartung; Test mit einer „neueren“ Version | 0.5.2 |
+| R-29 | Risiko | `Store/LibraryBackup.swift:131` | **Wiederherstellen** tauscht die Datenbank samt dem Stand des iCloud-Syncs von damals. Bei eingeschaltetem Sync spielt iCloud danach die Änderungen seit der Sicherung wieder ein: Fahrten, die seitdem gelöscht wurden, verschwinden wieder; Änderungen am iPhone können die wiederhergestellten Werte überschreiben. Nichts warnt davor. | 0.5.2: Hinweis beim Wiederherstellen, solange Sync an ist (vorher Sync aus). Später: ein sauberer Weg für synchronisierte Bibliotheken | 0.5.2 + später |
+| R-30 | Risiko | `Store/Services/ImportService.swift:143` | „Neu lesen nach Parser-Update“ läuft beim Start auf einmal und auf dem Hauptthread. Erhöht R-18 die Version des GPX-Lesers, liest der Mac beim nächsten Start alle GPX-Fahrten neu, und die App hängt. | In Paketen und abseits des Hauptthreads wie die Übersichtsrouten; **muss vor R-18 kommen** | 0.5.2 |
+| R-31 | Risiko | `Store/Services/*` | Rund 40-mal `try? context.save()`: Schlägt das Speichern fehl (Platte voll, iCloud), sieht der Nutzer nichts, und die Änderung ist nach dem nächsten Start weg. Auch der Diagnosebericht weiß davon nichts. | Eine zentrale Funktion `save()` im `LibraryService`, die den Fehler protokolliert und an die App meldet | 0.5.2 |
+| R-32 | Risiko | `Store/Models.swift:178` | Lässt sich die Zeitreihe einer Fahrt nicht lesen, gibt `samples` still eine leere Liste. Karte und Diagramme sind leer, ohne Hinweis auf einen Schaden. | Lesefehler protokollieren (Diagnose) und aus einer leeren Liste keine gespeicherten Werte neu berechnen | später |
+| R-33 | Aufräumen | `Store/PhoneDatabase.swift:89` | Das Tour-Detail am iPhone liest die ganze Zeitreihe vier- bis fünfmal (Route, Diagramm, Cursor, Bewegung) und beim Wechsel der x-Achse noch einmal; bei langen Fahrten ruckelt das Öffnen. | Einmal lesen je geöffneter Fahrt und daraus alles ableiten | 0.5.2 |
+| R-34 | Idee | `Store/RideLibrary.swift` | `RideLibrary` reicht nur noch an die Dienste weiter (etwa 70 einzeilige Methoden). Jede neue Funktion steht doppelt da. | In B-259 entscheiden: Apps nutzen die Dienste direkt, oder die Fassade bleibt bewusst | später |
+
+**Bewertung:** Modell und Dienste sind sauber und gut getestet; die CloudKit-Regeln sind abgesichert. Die Risiken kommen fast alle daher, dass seit 1.8.4 **zwei Geräte** an derselben Bibliothek arbeiten: ⌘Z auf gelöschte Fahrten (R-27), verschiedene Versionen der Rechnung (R-28), Wiederherstellen mit Sync (R-29). Dazu fehlen Rückmeldungen bei Fehlern (R-31, R-32). Für 0.5.2 sind es vier kleine PRs; R-30 muss vor der Korrektur der Zeitachse (R-18) kommen.
