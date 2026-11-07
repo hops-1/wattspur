@@ -85,12 +85,12 @@ struct GPXRideStoreTests {
     }
 
     @Test("An older GPX parser version is re-parsed from the original file, keeping the name")
-    func reparse() throws {
+    func reparse() async throws {
         let ride = try importRide("garmin-tpx-v1-hr-cad-temp")
         library.rename(ride, to: "Meine Runde")
         ride.parserVersion = 0
         ride.samplesData = nil
-        #expect(library.reparseOutdatedRides() == 1)
+        #expect(await library.reparseOutdatedRides() == 1)
         #expect(ride.parserVersion == GPXRideImporter.parserVersion)
         #expect(ride.samples.count == 60)
         #expect(ride.name == "Meine Runde")

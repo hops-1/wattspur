@@ -175,12 +175,12 @@ struct RideLibraryMergeTests {
     }
 
     @Test("Re-parsing after a parser update rebuilds the merged ride from its parts (NFR-17)")
-    func reparse() throws {
+    func reparse() async throws {
         let (a, b) = try importBoth()
         let merged = try library.merge([a, b], name: "X")
         a.parserVersion = 0
         merged.timerTime = 0
-        #expect(library.reparseOutdatedRides() == 1)
+        #expect(await library.reparseOutdatedRides() == 1)
         #expect(merged.timerTime == a.timerTime + b.timerTime)
     }
 

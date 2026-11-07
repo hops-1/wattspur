@@ -78,7 +78,7 @@ public final class RideLibrary {
     /// from their archived original file. Local edits (name, trash) stay (NFR-17).
     /// Returns the number of updated rides.
     @discardableResult
-    public func reparseOutdatedRides() -> Int { imports.reparseOutdatedRides() }
+    public func reparseOutdatedRides(batchSize: Int = 20) async -> Int { await imports.reparseOutdatedRides(batchSize: batchSize) }
 
     /// Computes the overview route (B-104) of every ride that has none or one from
     /// an older `OverviewRoute.version`, e.g. rides imported before v1.4. Decoding

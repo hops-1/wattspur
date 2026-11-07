@@ -17,7 +17,7 @@ public final class LibraryMaintenance {
         library.purgeTrash()
         await Task.yield()
         // Rides imported with an older parser are re-read from their original file (NFR-17).
-        library.reparseOutdatedRides()
+        await library.reparseOutdatedRides()
         await Task.yield()
         // The import log is a help, not an archive (IMP-06).
         library.trimImportLog()

@@ -83,7 +83,7 @@ struct RideLibraryTests {
     }
 
     @Test("Rides from an older parser are re-parsed from the original file, keeping the name")
-    func reparsesOutdatedRides() throws {
+    func reparsesOutdatedRides() async throws {
         let result = library.importFile(data: fixture, fileName: fixtureName)
         guard case .imported(let id) = result.outcome, let ride = library.ride(withID: id) else {
             Issue.record("Import failed")
@@ -92,11 +92,27 @@ struct RideLibraryTests {
         library.rename(ride, to: "Test Fahrt")
         ride.parserVersion = 1
         ride.workKilojoules = 0
-        #expect(library.reparseOutdatedRides() == 1)
+        #expect(await library.reparseOutdatedRides() == 1)
         #expect(ride.parserVersion == FITRideImporter.parserVersion)
         #expect(abs(ride.workKilojoules - 319.7) < 0.5)
         #expect(ride.name == "Test Fahrt")
-        #expect(library.reparseOutdatedRides() == 0)
+        #expect(await library.reparseOutdatedRides() == 0)
+    }
+
+    @Test("Many outdated rides are re-read in batches, each saved; current ones are left (R-30)")
+    func reparsesInBatches() async throws {
+        for week in 1...3 {
+            library.importFile(data: try FITAnonymizer(latitudeOffset: 0, longitudeOffset: 0, weeks: week).anonymize(fixture),
+                               fileName: "W\(week).fit")
+        }
+        let rides = try container.mainContext.fetch(FetchDescriptor<Ride>()).filter { !$0.isSample }
+        try #require(rides.count == 3)
+        for ride in rides.prefix(2) { ride.parserVersion = 1; ride.workKilojoules = 0 }
+        try container.mainContext.save()
+
+        #expect(await library.reparseOutdatedRides(batchSize: 1) == 2)
+        for ride in rides { #expect(ride.parserVersion == FITRideImporter.parserVersion && ride.workKilojoules > 300) }
+        #expect(!container.mainContext.hasChanges)
     }
 
     @Test("Unsupported and broken files are reported, not imported")
@@ -169,7 +185,7 @@ struct RideLibraryTests {
     }
 
     @Test("Re-parsing and updating give a ride without bike the default bike")
-    func reparseAssignsDefaultBike() throws {
+    func reparseAssignsDefaultBike() async throws {
         let result = library.importFile(data: fixture, fileName: fixtureName)
         guard case .imported(let id) = result.outcome, let ride = library.ride(withID: id) else {
             Issue.record("Import failed")
@@ -178,7 +194,7 @@ struct RideLibraryTests {
         let bike = try #require(ride.bike)
         ride.bike = nil
         ride.parserVersion = 1
-        #expect(library.reparseOutdatedRides() == 1)
+        #expect(await library.reparseOutdatedRides() == 1)
         #expect(ride.bike === bike)
 
         ride.bike = nil

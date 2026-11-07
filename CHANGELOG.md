@@ -13,6 +13,7 @@ Every DMG handed out to testers corresponds to one entry below.
 
 ### Fixed
 
+- **Start after an update:** when a new version reads the ride files better, the rides are now read again in the background, a few at a time, instead of all at once while the app waits.
 - **⌘Z after a sync (Mac):** undoing a step for a ride, a bike or a saved route that was deleted in the meantime on the iPhone could make the app quit. Now the step does nothing.
 - **Mac and iPhone with different versions:** stored values (overview map, best minute, curviness and steepest climb) from a newer app were calculated back by an older one and sent back over iCloud. Now an older app leaves them as they are.
 - **The same file on Mac and iPhone:** when iCloud merged the two copies, the changes made to the newer one were lost: its name, its bike, that it was taken out of the trash, an attached GPX. Now they stay; where both copies were changed, the older one wins.

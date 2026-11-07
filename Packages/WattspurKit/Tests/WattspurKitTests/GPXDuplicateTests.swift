@@ -447,13 +447,13 @@ struct GPXDuplicateTests {
     // MARK: - Keeping the sensor values
 
     @Test("Re-parsing a Bosch ride with an attached GPX keeps the heart rate")
-    func reparseKeepsSensors() throws {
+    func reparseKeepsSensors() async throws {
         try importFIT()
         importGPX(Edit.addSensors(try Edit.text("pair-tour1-komoot")), as: "a.gpx")
         let ride = try #require(try rides().first)
         let before = ride.samples.filter { $0.heartRate != nil }.count
         ride.parserVersion = 1
-        #expect(library.reparseOutdatedRides() == 1)
+        #expect(await library.reparseOutdatedRides() == 1)
         #expect(ride.parserVersion == FITRideImporter.parserVersion)
         #expect(ride.samples.filter { $0.heartRate != nil }.count == before)
         #expect(before > 2000)
