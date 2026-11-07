@@ -23,8 +23,47 @@ Kann Wattspur aus den Sensoren des iPhones die Schräglage, das Beschleunigen un
 ## Auswertung (geplant)
 - **Schräglage:** Drehrate um die Senkrechte = Drehrate projiziert auf die Schwerkraft; tan(Schräglage) = v · ω / g mit v vom GPS. Vergleich mit BMW Motorrad Connected.
 - **Längs und quer:** Ableitung des GPS-Tempos, verglichen mit der Beschleunigung längs des Kurses; welche Glättung das Brummen des Motors entfernt.
-- **Rütteln (B-248):** Stärke der Erschütterung nach Abzug von Kurven und Bremsen; lassen sich glatter Asphalt, Pflaster und Schotter trennen? Die App nutzt vorerst die Grenzen 0,1 g (uneben) und 0,25 g (holprig); diese Werte hier prüfen und anpassen (`RideMotion.SurfaceBand`).
+- **Rütteln (B-248):** Stärke der Erschütterung nach Abzug von Kurven und Bremsen; lassen sich glatter Asphalt, Pflaster und Schotter trennen? Grenzen in `RideMotion.SurfaceBand`, Ergebnis unten.
 - Halterung gegen Tasche, Akku pro Stunde, läuft es bei gesperrtem Bildschirm ohne Lücken.
 
 ## Ergebnis
-Noch offen – folgt nach den Testfahrten.
+
+### Rütteln auf dem E-Bike (Testfahrten vom 7.11.2026)
+
+Zwei Fahrten von Nils mit dem E-Bike, iPhone in der Halterung am Lenker, quer und nach vorn geneigt: vormittags 37 km (Anstieg über den Teutoburger Wald mit Waldwegen, dann Straßen und Feldwege), nachmittags rund 50 km in drei Teilen (vor allem Straßen und Radwege). Die Rohdaten (50 Messungen pro Sekunde) sind vollständig, auch während der Pausen. Die Werte wurden je Sekunde mit derselben Rechnung wie `MotionFusion` neu berechnet und jede Sekunde dem nächsten Weg in OpenStreetMap zugeordnet (höchstens 12 m entfernt, kein anderer Belag ähnlich nah), rund 5 900 Sekunden vormittags und 6 000 nachmittags.
+
+| Belag laut OpenStreetMap | Rütteln (Median) |
+|---|---|
+| Asphalt (Straße, Radweg) | 0,10–0,17 g |
+| Wassergebundene Rad- und Fußwege (`compacted`) | 0,20–0,25 g |
+| Pflaster (`paving_stones`) | 0,30 g |
+| Forstwege am Teuto (`compacted`, `grade3`) und Erdwege (`ground`) | 0,63–0,76 g |
+
+- **Grenzen:** eben unter **0,20 g**, uneben ab 0,20 g, rau ab **0,45 g**. Die alten Grenzen (0,10 / 0,25 g) trafen OpenStreetMap nur zu 26 %: auch normaler Asphalt galt als uneben.
+- **Befestigt gegen unbefestigt** trennt das Rütteln gut (bei 0,36 g stimmen 95 % der Sekunden der Vormittagsfahrt).
+- **Schotter gegen Gelände trennt es nicht:** OpenStreetMap nennt grobe Forstwege und glatte Radwege beide `compacted`. Die Klassen beschreiben darum, wie es sich fährt, nicht den Belag.
+- Geprüft und verworfen: schnelles oder seitliches Rütteln statt des senkrechten, Rütteln im Verhältnis zum Tempo, längere Zeitfenster. Keines trennt besser. Die Frequenz liegt überall bei 13–15 Hz (Rahmen des Rads) und hilft nicht. Auf Asphalt hängt das Rütteln kaum vom Tempo ab.
+- **Offen:** andere Räder und Reifen, iPhone in der Tasche, Motorrad.
+
+### Steigung aus der Neigung des iPhones (dieselben Fahrten)
+
+In der Halterung steht das iPhone etwa 43° nach vorn geneigt; bergauf und bergab ändert sich dieser Winkel mit der Straße. Verglichen je 100 m mit der Steigung aus der Höhe vom Barometer (vormittags Bosch-FIT, nachmittags iPhone):
+
+| | Vormittag (hügelig) | Nachmittag (flach) |
+|---|---|---|
+| Nur Neigung, Nullpunkt = Mittel je Abschnitt | Korrelation 0,70; Anstiege zu flach | 0,48 |
+| Neigung, Nullpunkt aus dem Barometer über 1 km | **0,83**; 0,52° je % (Theorie 0,57°) | 0,54 |
+| Mittlere Abweichung / 90 % innerhalb | 1,5 / ±3,7 Prozentpunkte | 0,7 / ±1,7 Prozentpunkte |
+
+- Bergab passt schon die Neigung allein; bergauf zieht der lange Anstieg den geschätzten Nullpunkt um etwa 2° mit.
+- Beschleunigen und Bremsen stören kaum (Korrelation des Fehlers unter 0,3).
+- Auf 100 m macht schon 1 m Fehler des Barometers 1 % Steigung aus; ein Teil der Abweichung liegt also am Vergleichswert.
+- Idee dazu: P-34.
+
+### Übrige Signale
+
+- **Schräglage:** beim Rad meist ±20°, im Gelände bei langsamem Tempo vor allem Lenken und Ausgleichen; sagt wenig.
+- **Beschleunigung längs:** beim E-Bike nur ±0,06 g im Mittel über 10 s.
+- **Akku:** etwa 5 Prozentpunkte in 2 Stunden mit 50 Messungen pro Sekunde.
+
+Motorrad: noch offen.

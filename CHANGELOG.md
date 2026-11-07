@@ -7,6 +7,10 @@ Every DMG handed out to testers corresponds to one entry below.
 
 ## [Unreleased]
 
+### Changed
+
+- **Road surface:** new limits from two test rides on an e-bike, checked against OpenStreetMap: smooth below 0.2 g, uneven up to 0.45 g, rough above (before 0.1 g and 0.25 g, so normal asphalt counted as uneven). In German the bands are now „eben“, „uneben“ and „rau“ (B-248, V-16).
+
 ### Fixed
 
 - **Lean angle kept with the Bosch file:** when the Bosch FIT of a ride recorded with the iPhone came in, Wattspur took the Bosch values and dropped the lean angle, acceleration and road surface of the recording; only heart rate and temperature stayed. Now they stay too, also when a GPX is attached to a Bosch ride. Rides updated before keep missing them.

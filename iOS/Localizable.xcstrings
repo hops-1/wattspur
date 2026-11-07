@@ -562,7 +562,7 @@
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Holprig"
+            "value" : "Rau"
           }
         }
       }
@@ -622,7 +622,7 @@
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Glatt"
+            "value" : "Eben"
           }
         }
       }
@@ -692,7 +692,7 @@
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Spur nach Belag eingefärbt: Grau glatt, Gelb uneben, Braun holprig"
+            "value" : "Spur nach Belag eingefärbt: Grau eben, Gelb uneben, Braun rau"
           }
         }
       }

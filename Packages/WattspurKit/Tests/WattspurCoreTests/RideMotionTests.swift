@@ -102,12 +102,14 @@ struct RideMotionTests {
     func surface() throws {
         // Steps of 10 m; the 2nd and 3rd step are uneven or rough, the 4th smooth.
         let samples = Self.samples(kmh: Array(repeating: 30, count: 5), lean: [0, 0, 0, 0, 0],
-                                   roughness: [0.05, 0.12, 0.4, 0.05, nil])
+                                   roughness: [0.05, 0.3, 0.6, 0.05, nil])
         let motion = try #require(RideMotion(samples: samples, motorized: false))
         #expect(abs((motion.roughShare ?? 0) - 2.0 / 3) < 0.001)
         #expect(RideMotion.surfaceStretches(samples).map(\.band) == [.smooth, .uneven, .rough, .smooth])
-        #expect(RideMotion.SurfaceBand(roughness: 0.099) == .smooth)
-        #expect(RideMotion.SurfaceBand(roughness: 0.25) == .rough)
+        #expect(RideMotion.SurfaceBand(roughness: 0.199) == .smooth)
+        #expect(RideMotion.SurfaceBand(roughness: 0.2) == .uneven)
+        #expect(RideMotion.SurfaceBand(roughness: 0.449) == .uneven)
+        #expect(RideMotion.SurfaceBand(roughness: 0.45) == .rough)
 
         let without = Self.samples(kmh: [30, 30], lean: [0, 0])
         #expect(try #require(RideMotion(samples: without, motorized: false)).roughShare == nil)

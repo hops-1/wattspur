@@ -111,18 +111,19 @@ public struct RideMotion: Sendable, Equatable {
     }
 
     /// How rough the road was on a stretch (B-248), for the colour of the track on the map. The
-    /// limits are a first guess and get checked against the test rides of V-16.
+    /// limits come from two e-bike test rides of V-16 with the iPhone in the handlebar mount,
+    /// checked against the surface in OpenStreetMap (`docs/SPIKE-BEWEGUNG.md`).
     public enum SurfaceBand: Int, CaseIterable, Sendable, Comparable {
-        /// Below 0.1 g: asphalt.
+        /// Below 0.2 g: asphalt (0.10 to 0.17 g on the test rides).
         case smooth
-        /// 0.1 g to 0.25 g: worn asphalt, paving stones.
+        /// 0.2 g to 0.45 g: field paths, smooth gravel paths, paving stones.
         case uneven
-        /// 0.25 g and more: cobbles, gravel, forest tracks.
+        /// 0.45 g and more: forest tracks and off-road (0.6 to 0.8 g on the test rides).
         case rough
 
         /// The lowest roughness of the band, in g.
-        public static let unevenFrom = 0.1
-        public static let roughFrom = 0.25
+        public static let unevenFrom = 0.2
+        public static let roughFrom = 0.45
 
         public init(roughness: Double) {
             self = roughness >= Self.roughFrom ? .rough : roughness >= Self.unevenFrom ? .uneven : .smooth
