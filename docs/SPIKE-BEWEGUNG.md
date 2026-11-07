@@ -45,4 +45,25 @@ Zwei Fahrten von Nils mit dem E-Bike, iPhone in der Halterung am Lenker, quer un
 - Geprüft und verworfen: schnelles oder seitliches Rütteln statt des senkrechten, Rütteln im Verhältnis zum Tempo, längere Zeitfenster. Keines trennt besser. Die Frequenz liegt überall bei 13–15 Hz (Rahmen des Rads) und hilft nicht. Auf Asphalt hängt das Rütteln kaum vom Tempo ab.
 - **Offen:** andere Räder und Reifen, iPhone in der Tasche, Motorrad.
 
-Schräglage, Beschleunigung, Akku: noch offen.
+### Steigung aus der Neigung des iPhones (dieselben Fahrten)
+
+In der Halterung steht das iPhone etwa 43° nach vorn geneigt; bergauf und bergab ändert sich dieser Winkel mit der Straße. Verglichen je 100 m mit der Steigung aus der Höhe vom Barometer (vormittags Bosch-FIT, nachmittags iPhone):
+
+| | Vormittag (hügelig) | Nachmittag (flach) |
+|---|---|---|
+| Nur Neigung, Nullpunkt = Mittel je Abschnitt | Korrelation 0,70; Anstiege zu flach | 0,48 |
+| Neigung, Nullpunkt aus dem Barometer über 1 km | **0,83**; 0,52° je % (Theorie 0,57°) | 0,54 |
+| Mittlere Abweichung / 90 % innerhalb | 1,5 / ±3,7 Prozentpunkte | 0,7 / ±1,7 Prozentpunkte |
+
+- Bergab passt schon die Neigung allein; bergauf zieht der lange Anstieg den geschätzten Nullpunkt um etwa 2° mit.
+- Beschleunigen und Bremsen stören kaum (Korrelation des Fehlers unter 0,3).
+- Auf 100 m macht schon 1 m Fehler des Barometers 1 % Steigung aus; ein Teil der Abweichung liegt also am Vergleichswert.
+- Idee dazu: P-34.
+
+### Übrige Signale
+
+- **Schräglage:** beim Rad meist ±20°, im Gelände bei langsamem Tempo vor allem Lenken und Ausgleichen; sagt wenig.
+- **Beschleunigung längs:** beim E-Bike nur ±0,06 g im Mittel über 10 s.
+- **Akku:** etwa 5 Prozentpunkte in 2 Stunden mit 50 Messungen pro Sekunde.
+
+Motorrad: noch offen.
