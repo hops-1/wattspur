@@ -41,16 +41,28 @@ struct MoreView: View {
                     get: { sync.isOn },
                     set: { if $0 { switchSync(true) } else { confirmingOff = true } }))
             } footer: {
-                if sync.isOn {
-                    Text("One library on this iPhone and your Mac, in your own iCloud account.")
-                } else {
-                    Text("Without iCloud, rides reach the Mac through a folder it watches, or with “Share GPX”, e.g. by AirDrop.")
+                VStack(alignment: .leading, spacing: 4) {
+                    if sync.isOn {
+                        Text("One library on this iPhone and your Mac, in your own iCloud account.")
+                    } else if sync.folderUser {
+                        Text("Without iCloud, rides reach the Mac through a folder it watches, or with “Share GPX”, e.g. by AirDrop.")
+                    } else {
+                        Text("Without iCloud, the rides stay on this iPhone. They reach the Mac with “Share GPX”, e.g. by AirDrop.")
+                    }
+                    if sync.needsRestart {
+                        Text("Takes effect the next time Wattspur opens: close it in the app switcher.")
+                            .foregroundStyle(.orange)
+                    }
                 }
             }
             .confirmationDialog("Stop syncing with iCloud?", isPresented: $confirmingOff, titleVisibility: .visible) {
                 Button("Turn Off") { switchSync(false) }
             } message: {
-                Text("The rides stay in iCloud and on your Mac. This iPhone then shows the rides the Mac provides in the folder, and new rides go there as GPX.")
+                if sync.folderUser {
+                    Text("The rides stay in iCloud and on your Mac. This iPhone then shows the rides the Mac provides in the folder, and new rides go there as GPX.")
+                } else {
+                    Text("The rides stay in iCloud, on your Mac and on this iPhone. New rides then stay on this iPhone.")
+                }
             }
         }
         if library.usesDatabase {

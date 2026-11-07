@@ -102,6 +102,16 @@
         }
       }
     },
+    "Last backup before turning sync on: %@." : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Letzte Sicherung vor dem Einschalten des Sync: %@."
+          }
+        }
+      }
+    },
     "Lean Angle" : {
       "localizations" : {
         "de" : {

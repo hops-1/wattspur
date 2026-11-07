@@ -33,14 +33,22 @@ struct SyncMonitorTests {
         #expect(self.monitor().lastSync == start.addingTimeInterval(10))
     }
 
+    @Test("An event whose end never comes stops counting after a few minutes (R-42)")
+    func lostEnd() {
+        let monitor = monitor()
+        monitor.handle(event(.export, at: 0, ended: false))
+        #expect(monitor.isSyncing(at: start))
+        #expect(!monitor.isSyncing(at: start.addingTimeInterval(SyncMonitor.runningTimeout)))
+    }
+
     @Test("A running event counts as syncing until it ends")
     func syncing() {
         let monitor = monitor()
         let id = UUID()
         monitor.handle(event(.import, at: 0, ended: false, id: id))
-        #expect(monitor.isSyncing)
+        #expect(monitor.isSyncing(at: start))
         monitor.handle(event(.import, at: 3, id: id))
-        #expect(!monitor.isSyncing)
+        #expect(!monitor.isSyncing(at: start))
     }
 
     @Test("No network is only a problem once it has lasted two minutes")
@@ -58,16 +66,16 @@ struct SyncMonitorTests {
     func flightMode() {
         let monitor = monitor()
         monitor.handle(event(.export, at: 0, ended: false))
-        #expect(monitor.isSyncing)
+        #expect(monitor.isSyncing(at: start))
         monitor.setOnline(false, at: start)
-        #expect(!monitor.isSyncing)
+        #expect(!monitor.isSyncing(at: start))
         #expect(monitor.problem(now: start.addingTimeInterval(60)) == nil)
         #expect(monitor.problem(now: start.addingTimeInterval(120)) == .offline)
         monitor.handle(event(.import, at: 150))
         #expect(monitor.lastSync == nil)
         monitor.setOnline(true)
         #expect(monitor.problem(now: start.addingTimeInterval(300)) == nil)
-        #expect(monitor.isSyncing)
+        #expect(monitor.isSyncing(at: start))
     }
 
     @Test("A full iCloud and a missing account show at once")

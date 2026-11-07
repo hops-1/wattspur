@@ -63,7 +63,15 @@ public final class SyncMonitor {
     public private(set) var lastSync: Date?
     /// An import or export is running. Without a network the mirror keeps an export open until the
     /// connection is back (V-15, flight mode), so it does not count then.
-    public var isSyncing: Bool { !running.isEmpty && offlineSince == nil }
+    /// An event whose end never came (app suspended) stops counting after `runningTimeout` (R-42).
+    public var isSyncing: Bool { isSyncing(at: .now) }
+
+    func isSyncing(at now: Date) -> Bool {
+        offlineSince == nil && running.values.contains { now.timeIntervalSince($0) < Self.runningTimeout }
+    }
+
+    /// After this an import or export without an end no longer shows as running.
+    static let runningTimeout: TimeInterval = 5 * 60
     /// Something was saved on this device after the last export started, so it is not in iCloud yet.
     public var hasPendingChanges: Bool {
         guard let lastLocalSave else { return false }
@@ -71,7 +79,8 @@ public final class SyncMonitor {
     }
     public private(set) var account: SyncAccount = .unknown
 
-    private var running = Set<UUID>()
+    /// Running events with when they started.
+    private var running: [UUID: Date] = [:]
     private var failure: (kind: Failure, since: Date)?
     private var lastLocalSave: Date?
     private var lastExportStart: Date?
@@ -177,10 +186,11 @@ public final class SyncMonitor {
             lastExportStart = max(lastExportStart ?? event.startDate, event.startDate)
         }
         guard let end = event.endDate else {
-            if event.kind != .setup { running.insert(event.id) }
+            if event.kind != .setup { running[event.id] = event.startDate }
+            running = running.filter { event.startDate.timeIntervalSince($0.value) < Self.runningTimeout }
             return
         }
-        running.remove(event.id)
+        running[event.id] = nil
         if event.succeeded {
             failure = nil
             // Offline the mirror may end events as done that reached nothing (V-15, flight mode).

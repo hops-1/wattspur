@@ -225,10 +225,13 @@ struct PhoneDatabaseTests {
 struct PhoneSyncChoiceTests {
     @Test("Only a build with iCloud offers the choice; without iCloud it is the folder")
     func effective() {
-        #expect(PhoneDatabase.Mode.iCloud.effective(syncOn: true) == .iCloud)
-        #expect(PhoneDatabase.Mode.iCloud.effective(syncOn: false) == .folder)
-        #expect(PhoneDatabase.Mode.folder.effective(syncOn: true) == .folder)
-        #expect(PhoneDatabase.Mode.local.effective(syncOn: false) == .local)
+        #expect(PhoneDatabase.Mode.iCloud.effective(syncOn: true, folderUser: false) == .iCloud)
+        #expect(PhoneDatabase.Mode.iCloud.effective(syncOn: true, folderUser: true) == .iCloud)
+        // Off keeps the iPhone's own rides (R-38); only users of the folder way keep the folder.
+        #expect(PhoneDatabase.Mode.iCloud.effective(syncOn: false, folderUser: false) == .local)
+        #expect(PhoneDatabase.Mode.iCloud.effective(syncOn: false, folderUser: true) == .folder)
+        #expect(PhoneDatabase.Mode.folder.effective(syncOn: true, folderUser: false) == .folder)
+        #expect(PhoneDatabase.Mode.local.effective(syncOn: false, folderUser: false) == .local)
     }
 
     @Test("New users start with iCloud, users of the folder way keep it")

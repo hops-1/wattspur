@@ -8,7 +8,7 @@ Ab Wattspur 1.8.4 gibt es Wattspur auch auf dem iPhone, zuerst für Tester über
 3. Tippe bei Wattspur auf **Installieren**.
 
 ## Sync einschalten
-**Am Mac:** **Wattspur › Einstellungen › iCloud › Mit iCloud synchronisieren**. Beim ersten Mal legt Wattspur vorher eine Sicherung deiner Mediathek daneben an. Der Sync beginnt beim nächsten Start von Wattspur. Das erste Hochladen dauert je nach Menge ein paar Minuten.
+**Am Mac:** **Wattspur › Einstellungen › iCloud › Mit iCloud synchronisieren**. Jedes Mal legt Wattspur vorher eine Sicherung deiner Mediathek daneben an. Der Sync beginnt beim nächsten Start von Wattspur. Das erste Hochladen dauert je nach Menge ein paar Minuten.
 
 **Am iPhone:** **Mehr › Mit iCloud synchronisieren** ist bei einer neuen Installation schon an. Nach dem ersten Abgleich sind deine Fahrten vom Mac da.
 
@@ -36,9 +36,9 @@ Am iPhone steht zusätzlich eine Warnung, solange Änderungen noch auf den Uploa
 Schaltest du am iPhone iCloud für Wattspur aus (**Einstellungen › dein Name › iCloud**) oder meldest dich von iCloud ab, löscht iOS die Kopie auf dem iPhone. Deine Fahrten bleiben in iCloud und am Mac und kommen nach dem Einschalten zurück. Eine Fahrt, die noch nicht hochgeladen war, kann dabei aber verloren gehen. Schalte deshalb erst aus, wenn bei **Zuletzt synchronisiert** keine Warnung steht.
 
 ## Ohne iCloud
-Wenn du iCloud nicht nutzen willst, oder dein Speicher voll ist und du kein größeres Abo möchtest, schalte am iPhone **Mehr › Mit iCloud synchronisieren** aus. Dann arbeitet das iPhone wie vor 1.8.4:
-- **Über einen Ordner:** Am Mac schaltest du **Einstellungen › Import › Fahrten für das iPhone bereitstellen** ein. Das iPhone zeigt dann die Fahrten, die der Mac in den Ordner schreibt, und legt neue Aufnahmen als GPX dort ab. Der Ordner kann in iCloud Drive liegen, aber auch bei Dropbox oder OneDrive, solange der Mac ihn beobachtet.
+Wenn du iCloud nicht nutzen willst, oder dein Speicher voll ist und du kein größeres Abo möchtest, schalte am iPhone **Mehr › Mit iCloud synchronisieren** aus. Das gilt ab dem nächsten Öffnen von Wattspur. Die Fahrten bleiben dann auf dem iPhone, neue Aufnahmen auch:
 - **Per AirDrop:** Eine Aufnahme schickst du mit **GPX teilen** an den Mac und importierst sie dort wie jede andere Datei.
+- **Über einen Ordner:** nur, wenn du die iPhone-App schon vor 0.5 mit einem Ordner genutzt hast; das geht vorerst weiter. Am Mac schaltest du **Einstellungen › Import › Fahrten für das iPhone bereitstellen** ein. Das iPhone zeigt dann die Fahrten, die der Mac in den Ordner schreibt, und legt neue Aufnahmen als GPX dort ab.
 
 Am Mac lässt du **Mit iCloud synchronisieren** dann aus.
 

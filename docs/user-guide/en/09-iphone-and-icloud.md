@@ -8,7 +8,7 @@ From Wattspur 1.8.4 on, Wattspur also runs on the iPhone, first for testers on T
 3. Tap **Install** next to Wattspur.
 
 ## Turning sync on
-**On the Mac:** **Wattspur › Settings › iCloud › Sync with iCloud**. The first time, Wattspur saves a backup of your library beside it first. Sync starts the next time you open Wattspur. The first upload takes a few minutes, depending on how much there is.
+**On the Mac:** **Wattspur › Settings › iCloud › Sync with iCloud**. Each time, Wattspur first saves a backup of your library beside it. Sync starts the next time you open Wattspur. The first upload takes a few minutes, depending on how much there is.
 
 **On the iPhone:** **More › Sync with iCloud** is already on in a new installation. After the first sync your rides from the Mac are there.
 
@@ -36,9 +36,9 @@ On the iPhone a warning also shows while changes still wait for the upload.
 If you turn iCloud off for Wattspur on the iPhone (**Settings › your name › iCloud**) or sign out of iCloud, iOS deletes the copy on the iPhone. Your rides stay in iCloud and on the Mac and come back once it is on again. A ride that was not uploaded yet may be lost, though. So turn it off only when **Last synced** shows no warning.
 
 ## Without iCloud
-If you do not want to use iCloud, or your storage is full and you do not want a larger plan, turn off **More › Sync with iCloud** on the iPhone. The iPhone then works as before 1.8.4:
-- **Through a folder:** on the Mac, turn on **Settings › Import › Provide rides for the iPhone**. The iPhone then shows the rides the Mac writes into the folder, and puts new recordings there as GPX. The folder can be in iCloud Drive, but also in Dropbox or OneDrive, as long as the Mac watches it.
+If you do not want to use iCloud, or your storage is full and you do not want a larger plan, turn off **More › Sync with iCloud** on the iPhone. It takes effect the next time Wattspur opens. The rides then stay on the iPhone, and new recordings too:
 - **By AirDrop:** send a recording to the Mac with **Share GPX** and import it there like any other file.
+- **Through a folder:** only if you used the iPhone app before 0.5 with a folder: it keeps working that way for now. On the Mac, turn on **Settings › Import › Provide rides for the iPhone**. The iPhone then shows the rides the Mac writes into the folder, and puts new recordings there as GPX.
 
 On the Mac, leave **Sync with iCloud** off then.
 
