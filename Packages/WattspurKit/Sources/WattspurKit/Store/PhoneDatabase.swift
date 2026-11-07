@@ -28,9 +28,11 @@ public final class PhoneDatabase {
         public var usesStore: Bool { self != .folder }
 
         /// The way the app works when the user chose for or against iCloud (B-218). Only a build that
-        /// allows iCloud offers the choice; without iCloud the folder of iOS 0.2 stays.
-        public func effective(syncOn: Bool) -> Mode {
-            self == .iCloud ? (syncOn ? .iCloud : .folder) : self
+        /// allows iCloud offers the choice. Off means the iPhone's own store without iCloud (R-38); only
+        /// a user of the folder way of iOS 0.2 (`folderUser`) keeps the folder.
+        public func effective(syncOn: Bool, folderUser: Bool) -> Mode {
+            guard self == .iCloud, !syncOn else { return self }
+            return folderUser ? .folder : .local
         }
 
         /// Whether iCloud is on before the user chose: yes, except for users of the folder way, who

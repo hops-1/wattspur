@@ -667,6 +667,16 @@
         }
       }
     },
+    "Takes effect the next time Wattspur opens: close it in the app switcher." : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Gilt beim nächsten Öffnen von Wattspur: Schließe die App dazu im App-Umschalter."
+          }
+        }
+      }
+    },
     "Tells how far you rode this week." : {
       "localizations" : {
         "de" : {
@@ -683,6 +693,16 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Die Aufnahme bleibt erhalten. %@"
+          }
+        }
+      }
+    },
+    "The rides stay in iCloud, on your Mac and on this iPhone. New rides then stay on this iPhone." : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Die Fahrten bleiben in iCloud, auf deinem Mac und auf diesem iPhone. Neue Fahrten bleiben dann auf diesem iPhone."
           }
         }
       }
@@ -763,6 +783,16 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Wattspur hat eine nicht beendete Fahrt. Setze sie zuerst fort oder beende sie."
+          }
+        }
+      }
+    },
+    "Without iCloud, the rides stay on this iPhone. They reach the Mac with “Share GPX”, e.g. by AirDrop." : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ohne iCloud bleiben die Fahrten auf diesem iPhone. Zum Mac kommen sie mit „GPX teilen“, z. B. per AirDrop."
           }
         }
       }

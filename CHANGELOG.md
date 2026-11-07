@@ -13,6 +13,9 @@ Every DMG handed out to testers corresponds to one entry below.
 
 ### Fixed
 
+- **Turning sync off on the iPhone:** the iPhone then showed the old folder of iOS 0.2 instead of its own rides; without a folder it showed none, and recordings did not become rides. Now the rides stay on the iPhone; only users of the folder way keep the folder. The change takes effect the next time Wattspur opens, so the sync really stops.
+- **Sync status:** when iOS stopped the app in the middle of a sync, “Syncing …” could stay for the rest of the session, and doubles were merged only at the next launch. Both now give up after a few minutes.
+- **Backup before sync (Mac):** a fresh backup is now made each time sync is turned on, not only the first time.
 - **Height while recording (iPhone):** in town or in a forest, where the GPS height is never better than about 15 m, a recording had no height at all. Now the best of the rougher GPS heights set the level after 20 seconds. When the barometer drops out for a few seconds, the height no longer jumps to the GPS value and back, which counted as ascent.
 - **Rides over several days:** with two parts on a later day, the second one lay a whole day too far back in the charts, and the total time was too long. This was so for merged rides and for GPX files with several parts. GPX rides are read again once in the background after the update.
 - **Start after an update:** when a new version reads the ride files better, the rides are now read again in the background, a few at a time, instead of all at once while the app waits.

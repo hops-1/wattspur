@@ -64,6 +64,18 @@ struct SyncMergeWatcherTests {
         #expect(watcher.runningImports.isEmpty)
     }
 
+    @Test("An import whose end never comes is forgotten after the timeout, then it merges (R-37)")
+    func forgetsLostImport() async throws {
+        let watcher = SyncMergeWatcher(library: library, quietTime: .milliseconds(20), importTimeout: .milliseconds(200))
+        try makeTwoRiders()
+        watcher.handle(.init(id: UUID(), isImport: true, isFinished: false))
+        try await Task.sleep(for: .milliseconds(100))
+        #expect(try riders() == 2)
+        try await Task.sleep(for: .milliseconds(400))
+        #expect(try riders() == 1)
+        #expect(watcher.runningImports.isEmpty)
+    }
+
     @Test("Nothing to merge reports nothing")
     func nothingToMerge() {
         let watcher = SyncMergeWatcher(library: library)

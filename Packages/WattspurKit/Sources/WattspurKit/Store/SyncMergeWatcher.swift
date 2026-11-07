@@ -18,16 +18,23 @@ public final class SyncMergeWatcher {
 
     private let library: RideLibrary
     private let quietTime: Duration
+    private let importTimeout: Duration
     private var pending: Task<Void, Never>?
     private var watching: [Task<Void, Never>] = []
+    /// Imports of the mirror that have started and not yet ended, with when they started.
+    private var importStarts: [UUID: ContinuousClock.Instant] = [:]
     /// Imports of the mirror that have started and not yet ended.
-    private(set) var runningImports = Set<UUID>()
+    var runningImports: Set<UUID> { Set(importStarts.keys) }
     /// Called after a merge that removed something, e.g. to reload a list.
     public var onMerge: ((SyncMergeReport) -> Void)?
 
-    public init(library: RideLibrary, quietTime: Duration = .seconds(3)) {
+    /// - Parameter importTimeout: after this an import counts as ended even without its end: an app
+    ///   suspended in the background may never get it, and the merge would wait until the next launch
+    ///   (R-37).
+    public init(library: RideLibrary, quietTime: Duration = .seconds(3), importTimeout: Duration = .seconds(120)) {
         self.library = library
         self.quietTime = quietTime
+        self.importTimeout = importTimeout
     }
 
     /// Merges now and then after each change from iCloud.
@@ -61,19 +68,36 @@ public final class SyncMergeWatcher {
 
     func handle(_ event: Event) {
         if event.isImport {
-            if event.isFinished { runningImports.remove(event.id) } else { runningImports.insert(event.id) }
+            if event.isFinished {
+                importStarts[event.id] = nil
+            } else if importStarts[event.id] == nil {
+                importStarts[event.id] = .now
+            }
         }
         changed()
     }
 
-    /// Waits for quiet, then merges; a new change starts the wait again.
+    /// Waits for quiet, then merges; a new change starts the wait again. While an import runs it
+    /// looks again when the oldest one times out.
     func changed() {
         pending?.cancel()
         pending = Task { [weak self, quietTime] in
             try? await Task.sleep(for: quietTime)
-            guard !Task.isCancelled, let self, self.runningImports.isEmpty else { return }
+            guard !Task.isCancelled, let self else { return }
+            self.forgetStaleImports()
+            if let oldest = self.importStarts.values.min() {
+                try? await Task.sleep(until: oldest + self.importTimeout, clock: .continuous)
+                guard !Task.isCancelled else { return }
+                self.changed()
+                return
+            }
             self.mergeNow()
         }
+    }
+
+    private func forgetStaleImports() {
+        let now = ContinuousClock.now
+        importStarts = importStarts.filter { now - $0.value < importTimeout }
     }
 
     @discardableResult

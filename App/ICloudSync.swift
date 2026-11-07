@@ -24,7 +24,7 @@ final class ICloudSync {
     /// The setting; it takes effect at the next start.
     private(set) var isRequested: Bool
     private(set) var state: State = .idle
-    /// When the backup before the first sync was made (P-22); `nil` before that.
+    /// When the last backup before turning sync on was made (P-22); `nil` before the first.
     private(set) var backupDate: Date?
 
     private let defaults: UserDefaults
@@ -66,13 +66,11 @@ final class ICloudSync {
         #endif
     }
 
-    /// Asks, backs up the library the first time (P-22) and turns the setting on.
+    /// Asks, backs up the library (P-22) and turns the setting on. Each time, not only the first: sync
+    /// may have been off for months, and what comes from iCloud then meets a library changed since
+    /// (R-39).
     func turnOn(rideCount: Int) {
         guard !isRequested, state != .backingUp, confirmTurnOn(rideCount: rideCount) else { return }
-        guard backupDate == nil else {
-            setRequested(true)
-            return
-        }
         state = .backingUp
         let storeURL = LibraryLocation.storeURL
         let version = AppInfo.version, build = AppInfo.build
@@ -164,7 +162,7 @@ struct ICloudSettingsView: View {
             if let backupDate = sync.backupDate {
                 LabeledContent("Backup:") {
                     VStack(alignment: .leading, spacing: 4) {
-                        Text("Saved before the first sync on \(backupDate.formatted(date: .long, time: .shortened)).")
+                        Text("Last backup before turning sync on: \(backupDate.formatted(date: .long, time: .shortened)).")
                         Button("Show in Finder") { sync.showBackups() }
                     }
                 }
