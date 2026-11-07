@@ -80,6 +80,40 @@ struct AltitudeFusionTests {
         #expect(fusion.offset == 179)
     }
 
+    @Test("Without any good GPS height the best rough ones set the level after the timeout (R-19)")
+    func onlyRoughGPS() throws {
+        var fusion = AltitudeFusion()
+        var heights: [Double?] = []
+        for second in 0...30 {
+            // Town or forest: 20 to 30 m, the best ones the closest to the truth (200 m).
+            let accuracy = 20 + Double(second % 11)
+            let gps = 200 + (accuracy - 20) * (second.isMultiple(of: 2) ? 1 : -1)
+            heights.append(fusion.altitude(gps: gps, verticalAccuracy: accuracy, barometer: 0,
+                                           at: Self.start.addingTimeInterval(Double(second))))
+        }
+        #expect(heights.prefix(Int(AltitudeFusion.anchorTimeout)).allSatisfy { $0 == nil })
+        let last = try #require(heights.last ?? nil)
+        #expect(abs(last - 200) <= 2)
+    }
+
+    @Test("A briefly stale barometer holds its last height instead of the raw GPS (R-20)")
+    func staleBarometer() {
+        var fusion = AltitudeFusion()
+        for second in 0..<5 {
+            _ = fusion.altitude(gps: 200, verticalAccuracy: 5, barometer: 0, at: Self.start.addingTimeInterval(Double(second)))
+        }
+        let before = fusion.altitude(gps: 200, verticalAccuracy: 5, barometer: 1, at: Self.start.addingTimeInterval(5)) ?? 0
+        #expect(abs(before - 201) < 0.1)
+        // The barometer is stale for a few seconds; the GPS says 207.
+        #expect(fusion.altitude(gps: 207, verticalAccuracy: 5, barometer: nil, at: Self.start.addingTimeInterval(6)) == before)
+        // A barometer gone for longer gives no height rather than a flat line.
+        let gone = Self.start.addingTimeInterval(7 + AltitudeFusion.barometerHold + 1)
+        // Back again: the barometer height, the offset moved only a little towards the GPS.
+        let after = fusion.altitude(gps: 207, verticalAccuracy: 5, barometer: 1, at: Self.start.addingTimeInterval(7)) ?? 0
+        #expect(abs(after - 201) < 0.1)
+        #expect(fusion.altitude(gps: 207, verticalAccuracy: 5, barometer: nil, at: gone) == nil)
+    }
+
     @Test("At a standstill the first seconds give no climb (iPhone test 5.11.2026)")
     func standstill() {
         // GPS heights of 51 s in the office, one per second; the barometer stays at the start.
