@@ -24,6 +24,8 @@ struct WattspurApp: App {
     @State private var rideFilter = RideFilter()
     /// The ride “Open last ride” shows in the list (B-225).
     @State private var openedRideID: UUID?
+    /// Why “End and Save” of an unfinished ride failed; the recording and its log stay (R-51).
+    @State private var unfinishedProblem: String?
     /// FIT and GPX files opened with Wattspur (B-071).
     @State private var phoneImport = PhoneImport()
 
@@ -135,7 +137,8 @@ struct WattspurApp: App {
                 Text("Wattspur on the iPhone can now share one library with the Mac over iCloud: rides recorded here reach the Mac, and you can delete rides here. The Mac must sync with iCloud too (Wattspur › Settings › iCloud). You can switch at any time under More.")
             }
             // A recording the app could not finish (crash, killed): go on or end it.
-            .alert("Unfinished Ride", isPresented: Binding(get: { recorder.unfinished != nil && !recorder.isRecording },
+            .alert("Unfinished Ride", isPresented: Binding(get: { recorder.unfinished != nil && !recorder.isRecording
+                                                                  && unfinishedProblem == nil },
                                                            set: { _ in })) {
                 // The default answer; it also takes the place of the Cancel button iOS would add.
                 Button("Continue Recording", role: .cancel) { recorder.continueUnfinished() }
@@ -144,15 +147,28 @@ struct WattspurApp: App {
                         let bikes = (library.state?.bikes ?? []).filter { !$0.isArchived }
                         let id = SaveRecordingSheet.defaultBike(among: bikes, last: recordings.lastBikeID,
                                                                 lastRide: library.state?.lastRide)
-                        try? SaveRecordingSheet.store(recording, name: RecordingView.defaultName(for: recording.startDate),
-                                                      bike: bikes.first { $0.id == id }, library: library,
-                                                      recordings: recordings, folder: folder)
+                        do {
+                            try SaveRecordingSheet.store(recording, name: RecordingView.defaultName(for: recording.startDate),
+                                                         bike: bikes.first { $0.id == id }, library: library,
+                                                         recordings: recordings, folder: folder)
+                        } catch {
+                            // Ending now would delete the log and with it the whole ride.
+                            unfinishedProblem = error.localizedDescription
+                            return
+                        }
                     }
                     _ = recorder.stop()
                 }
                 Button("Discard", role: .destructive) { _ = recorder.stop() }
             } message: {
                 Text("Wattspur was closed while recording. Continue the ride, or end it and save what was recorded?")
+            }
+            // After it the question above comes again: nothing is lost, the rider can try once more.
+            .alert("Ride Not Saved", isPresented: Binding(get: { unfinishedProblem != nil },
+                                                          set: { if !$0 { unfinishedProblem = nil } })) {
+                Button("OK", role: .cancel) { unfinishedProblem = nil }
+            } message: {
+                Text("The recording is kept. \(unfinishedProblem ?? "")")
             }
             // “Open last ride” from Siri or a shortcut (B-225): the rides, unfiltered, with the newest open.
             .onChange(of: intents.request, initial: true) { _, request in

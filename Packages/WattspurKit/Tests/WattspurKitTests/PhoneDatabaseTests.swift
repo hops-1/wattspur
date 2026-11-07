@@ -105,6 +105,34 @@ struct PhoneDatabaseTests {
         #expect(try database.snapshot(generator: "Wattspur iOS").rides.count == 1)
     }
 
+    @Test("A recording of a ride already there as GPX updates it instead of being dropped (R-53)")
+    func duplicateUpdates() throws {
+        let start = 1_800_000_000.0
+        let id = try #require(save(start: start))
+        try #require(database.edit(rideID: id, name: "Mein Name", bikeID: nil))
+        // The same tour recorded again, a few seconds later and now with the lean angle.
+        var recording = RideRecording(startDate: Date(timeIntervalSince1970: start + 5))
+        for second in 0...120 {
+            var fix = RideRecording.Fix(date: Date(timeIntervalSince1970: start + 5 + Double(second)),
+                                        latitude: 49.8 + Double(second) * 6 / 111_195, longitude: 8.8,
+                                        altitude: 150, horizontalAccuracy: 5, speed: 6)
+            fix.motion = MotionValues(lean: 12, acceleration: 0.1, roughness: 0.3)
+            recording.add(fix)
+        }
+        let gpx = GPXWriter.document(name: "Zur Arbeit", segments: recording.gpxSegments, description: nil,
+                                     creator: GPXWriter.iPhoneCreator, bikeID: nil)
+        let result = database.saveRecording(gpx: gpx, fileName: "Zur Arbeit.gpx")
+        guard case .duplicate(let existing) = result.outcome else {
+            Issue.record("Expected the ride already there, got \(result.outcome)")
+            return
+        }
+        #expect(existing == id)
+        let rides = try database.snapshot(generator: "Wattspur iOS").rides
+        #expect(rides.count == 1)
+        #expect(rides.first?.name == "Mein Name")
+        #expect(database.motion(forRideID: id)?.figures.maxLeanLeft == 12)
+    }
+
     @Test("Trash, restore and delete for good (B-217)")
     func trash() throws {
         let id = try #require(save())

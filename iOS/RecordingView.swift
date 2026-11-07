@@ -84,6 +84,11 @@ struct RecordingView: View {
 
     /// Why there is no position, or that the GPS is still settling.
     @ViewBuilder private var gpsStatus: some View {
+        if let problem = recorder.logProblem {
+            Label(problem, systemImage: "externaldrive.badge.exclamationmark")
+                .font(.footnote)
+                .foregroundStyle(.orange)
+        }
         if let status = recorder.status {
             Label(status, systemImage: "location.slash")
                 .font(.footnote)
