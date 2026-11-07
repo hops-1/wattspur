@@ -162,6 +162,16 @@
         }
       }
     },
+    "Was in the trash – restored." : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Lag im Papierkorb – wiederhergestellt."
+          }
+        }
+      }
+    },
     "left" : {
       "localizations" : {
         "de" : {

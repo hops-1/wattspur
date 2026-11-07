@@ -13,6 +13,10 @@ Every DMG handed out to testers corresponds to one entry below.
 
 ### Fixed
 
+- **Importing a ride that is in the trash:** the file was taken as “already there”, and the ride stayed in the trash until it was deleted for good. Now it comes back, and the import log says so.
+- **Files still being written (Mac, watched folder):** a large file or one on a slow network could be read half and moved to “Failed”. Now the folder waits until the file has not changed for a few seconds.
+- **Files that cannot be read:** the import log now says that the file could not be read, instead of blaming a broken FIT file.
+- **Opening a file on the iPhone:** if Wattspur could not keep its copy, the file was gone without a word. Now it stays and the app says why.
 - **When saving fails:** if the library could not be saved, for example with a full disk, the change was gone after the next start without a word. Now Mac and iPhone say so.
 - **Restoring a backup with sync on (Mac):** the dialog now says that iCloud brings back what changed since the backup, and that sync should be turned off first to get the backup as it is.
 - **Turning sync off on the iPhone:** the iPhone then showed the old folder of iOS 0.2 instead of its own rides; without a folder it showed none, and recordings did not become rides. Now the rides stay on the iPhone; only users of the folder way keep the folder. The change takes effect the next time Wattspur opens, so the sync really stops.

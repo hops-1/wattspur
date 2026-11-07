@@ -23,6 +23,10 @@ public struct FolderImport {
         public var newlyUnsupported = 0
         /// iCloud files that are still downloading.
         public var downloading = 0
+        /// Files changed in the last seconds, maybe still being written; the next run takes them (R-45).
+        public var settling = 0
+        /// Duplicates that were in the trash and came back from it (R-44).
+        public var restored = 0
         /// IDs of the rides imported in this run.
         public var importedRideIDs: [UUID] = []
 
@@ -37,9 +41,14 @@ public struct FolderImport {
     public var failedFolderName: String
     let fileManager: FileManager
 
+    /// Seconds a file must be unchanged before it is read; a file still being written would be read
+    /// half and land in "Failed" (R-45).
+    public let settleTime: TimeInterval
+
     public init(library: RideLibrary, folder: URL, importedFolderName: String = "Imported",
-                failedFolderName: String = "Failed", fileManager: FileManager = .default) {
+                failedFolderName: String = "Failed", settleTime: TimeInterval = 3, fileManager: FileManager = .default) {
         self.library = library
+        self.settleTime = settleTime
         self.folder = folder
         self.importedFolderName = importedFolderName
         self.failedFolderName = failedFolderName
@@ -52,7 +61,7 @@ public struct FolderImport {
     public func run(now: Date = .now) async -> Summary {
         var summary = Summary()
         let contents = (try? fileManager.contentsOfDirectory(
-            at: folder, includingPropertiesForKeys: [.isRegularFileKey], options: [])) ?? []
+            at: folder, includingPropertiesForKeys: [.isRegularFileKey, .contentModificationDateKey], options: [])) ?? []
 
         for url in contents.sorted(by: { $0.lastPathComponent < $1.lastPathComponent }) {
             let name = url.lastPathComponent
@@ -73,6 +82,11 @@ public struct FolderImport {
                 continue
             }
 
+            if let changed = try? url.resourceValues(forKeys: [.contentModificationDateKey]).contentModificationDate,
+               now.timeIntervalSince(changed) < settleTime {
+                summary.settling += 1
+                continue
+            }
             guard let data = await Self.readData(at: url) else { continue }
             let result = library.importFile(data: data, fileName: name)
             switch result.outcome {
@@ -82,6 +96,7 @@ public struct FolderImport {
                 library.record(result, source: .folder, movedTo: move(url, to: importedFolderName), date: now)
             case .duplicate:
                 summary.duplicates += 1
+                if result.restoredFromTrash { summary.restored += 1 }
                 library.record(result, source: .folder, movedTo: move(url, to: importedFolderName), date: now)
             case .attached:
                 summary.attached += 1
@@ -109,8 +124,17 @@ public struct FolderImport {
     }
 
     /// Reads a file on a background thread.
+    /// Reads through `NSFileCoordinator`, so a file another process (iCloud, Dropbox) is writing is read
+    /// once it is done (R-45).
     private static func readData(at url: URL) async -> Data? {
-        await Task.detached(priority: .utility) { try? Data(contentsOf: url) }.value
+        await Task.detached(priority: .utility) {
+            var data: Data?
+            var error: NSError?
+            NSFileCoordinator().coordinate(readingItemAt: url, options: [], error: &error) { url in
+                data = try? Data(contentsOf: url)
+            }
+            return data
+        }.value
     }
 
     /// Moves a file into a subfolder, renaming it ("Ride 2.fit") if the name is taken.

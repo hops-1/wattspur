@@ -18,6 +18,7 @@ struct ImportLogService: LibraryService {
         case .duplicate(let id), .fitForGPX(let id):
             record = ImportRecord(fileName: result.fileName, outcome: .duplicate, source: source, date: date)
             record.rideID = id
+            if result.restoredFromTrash { record.detail = ImportRecord.restoredFromTrashDetail }
         case .attached(let id):
             record = ImportRecord(fileName: result.fileName, outcome: .attached, source: source, date: date)
             record.rideID = id

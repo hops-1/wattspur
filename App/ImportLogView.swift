@@ -316,6 +316,9 @@ private struct LogEntryRow: View {
             }
             return sourceText
         case .duplicate:
+            if record.detail == ImportRecord.restoredFromTrashDetail {
+                return String(localized: "Was in the trash – restored.")
+            }
             return String(localized: "Already in your library – not imported again.")
         case .unsupported:
             return String(localized: "File type not supported yet")

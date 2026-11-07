@@ -22,7 +22,7 @@ struct ImportService: LibraryService {
             let data = try Data(contentsOf: url)
             return importFile(data: data, fileName: url.lastPathComponent, bike: bike, detectDuplicates: detectDuplicates)
         } catch {
-            return ImportResult(fileName: url.lastPathComponent, outcome: .failed(.decoding(.fileTooShort)))
+            return ImportResult(fileName: url.lastPathComponent, outcome: .failed(.unreadable(error.localizedDescription)))
         }
     }
 
@@ -47,7 +47,15 @@ struct ImportService: LibraryService {
 
         let names = Self.parseFileName(fileName)
         if detectDuplicates, let existing = findDuplicate(sourceIdentifier: names.sourceIdentifier, parsed: parsed) {
-            return ImportResult(fileName: fileName, outcome: .duplicate(existingRideID: existing.id))
+            var result = ImportResult(fileName: fileName, outcome: .duplicate(existingRideID: existing.id))
+            // A ride thrown away by mistake and imported again comes back, instead of "already there"
+            // for a ride nobody sees that is deleted for good after 30 days (R-44).
+            let trashed = existing.mergedInto ?? existing
+            if trashed.deletedAt != nil {
+                RideService(env).restore(trashed)
+                result.restoredFromTrash = true
+            }
+            return result
         }
         // A recording of the iPhone app names its bike (B-213); it wins over the bike asked for.
         let named = parsed.suggestedBikeID.flatMap { id in bikes.bikes(includingArchived: true).first { $0.id == id } }

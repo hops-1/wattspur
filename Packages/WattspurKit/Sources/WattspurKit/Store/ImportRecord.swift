@@ -30,6 +30,8 @@ public final class ImportRecord {
     public var sourceRaw: String = ImportSource.manual.rawValue
     /// Technical reason for a failure, e.g. "decoding(checksumMismatch…)".
     public var detail: String = ""
+    /// `detail` of a duplicate that came back from the trash (R-44).
+    public static let restoredFromTrashDetail = "restoredFromTrash"
     public var rideID: UUID?
     /// Where the file is now, relative to the watched folder, e.g. "Failed/x.fit".
     public var movedTo: String?
