@@ -88,17 +88,9 @@ public struct GPXTrack: Sendable, Equatable {
         var result: [RideSample] = []
         result.reserveCapacity(pointCount)
         var distanceOffset = 0.0
-        var previous: Part?
-        var previousOffset = 0.0
-        for part in parts {
-            var offset = 0.0
-            if let previous {
-                if calendar.isDate(previous.endDate, inSameDayAs: part.startDate) {
-                    offset = part.startDate.timeIntervalSince(startDate)
-                } else {
-                    offset = previousOffset + previous.duration
-                }
-            }
+        let offsets = PartTimeline.offsets(starts: parts.map(\.startDate), durations: parts.map(\.duration),
+                                           calendar: calendar)
+        for (part, offset) in zip(parts, offsets) {
             for sample in part.samples {
                 var s = sample
                 s.time += offset
@@ -106,8 +98,6 @@ public struct GPXTrack: Sendable, Equatable {
                 result.append(s)
             }
             distanceOffset += part.distance
-            previous = part
-            previousOffset = offset
         }
         return result
     }
@@ -123,7 +113,8 @@ public struct GPXTrack: Sendable, Equatable {
 public struct GPXRideImporter: RideImporter {
     /// Bump whenever parsing changes so stored rides are re-parsed (NFR-17).
     /// 2 (3.11.2026): ascent from 2 m instead of 3 m (B-234).
-    public static let parserVersion = 2
+    /// 3 (7.11.2026): parts on a later day measured from the previous part, not the first (R-18).
+    public static let parserVersion = 3
     /// A gap this long (or a new segment) starts a new part: no ride time, no distance (confirmed 25.10.2026).
     public static let pauseGap: TimeInterval = 30
     /// A point further from the last kept one than this speed allows is a GPS jump (unless the ride was

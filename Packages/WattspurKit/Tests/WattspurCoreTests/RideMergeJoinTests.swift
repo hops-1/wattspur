@@ -62,6 +62,30 @@ struct RideMergeJoinTests {
         #expect(join.distance == 1000)
     }
 
+    @Test("Three parts on two days: the later part of day 2 lies after the earlier one, not a day later (R-17)")
+    func twoDaysThreeParts() throws {
+        // Day 1 10:00, day 2 10:00 and 14:00, ten minutes each.
+        let a = part(start: 0), b = part(start: 86_400), c = part(start: 86_400 + 4 * 3600)
+        let merged = try RideMerge.merge([a, b, c], timeZone: zone)
+        let joins = RideMerge.joins(of: [a, b, c], timeZone: zone)
+        let lastStart: TimeInterval = 600 + 4 * 3600
+        let end: TimeInterval = lastStart + 600
+        #expect(joins.map(\.time) == [600, lastStart])
+        #expect(merged.summary.elapsedTime == end)
+        #expect(merged.samples.last?.time == end)
+    }
+
+    @Test("A part that ends after midnight and one later that night keep their pause (R-24)")
+    func overMidnight() {
+        var calendar = Calendar(identifier: .gregorian)
+        calendar.timeZone = zone
+        // 23:00 for 90 minutes, then 01:00: the second starts on the day the first ended.
+        let late = morning.addingTimeInterval(13 * 3600)
+        let offsets = PartTimeline.offsets(starts: [late, late.addingTimeInterval(2 * 3600)],
+                                           durations: [5400, 600], calendar: calendar)
+        #expect(offsets == [0, 7200])
+    }
+
     @Test("The join agrees with the merged samples")
     func agreesWithMerge() throws {
         let a = part(start: 0), b = part(start: 1800, from: 10.52), c = part(start: 90_000, metres: 500)

@@ -267,6 +267,13 @@ struct GPXRideImporterTests {
         #expect(b.summary.elapsedTime == 20)
         #expect(b.summary.timerTime == 20)
 
+        // Two parts on the second day: the pause between them is measured from the second part (R-18).
+        let three = Doc.gpx([(0...10).map { Doc.point($0) }, (0...10).map { Doc.point($0, from: nextDay) },
+                             (3600...3610).map { Doc.point($0, from: nextDay) }])
+        let c = try importer.parse(three)
+        #expect(c.samples[22].time == 10 + 3600)
+        #expect(c.summary.elapsedTime == 10 + 3610)
+
         // The same two parts count as one day in a zone where both fall on one local day.
         let westCoast = GPXRideImporter(timeZone: TimeZone(identifier: "America/Los_Angeles")!)
         let near = Doc.gpx([(0...10).map { Doc.point($0) }, (0...10).map { Doc.point($0, from: Doc.base.addingTimeInterval(20 * 3600)) }])
