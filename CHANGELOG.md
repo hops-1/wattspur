@@ -13,6 +13,9 @@ Every DMG handed out to testers corresponds to one entry below.
 
 ### Fixed
 
+- **The open ride changes (Mac):** after “Update” with the Bosch file, an attached GPX or a change from the iPhone, the ride detail showed the old map, charts and lean angle until another ride was chosen. Now it updates, and long rides open without a pause.
+- **A ride the Mac changed (iPhone):** map and charts stayed old until the app was restarted. Now they show the new ride.
+- **Faster on the iPhone:** the tour detail reads a ride once instead of four times, and the list is no longer rebuilt after each of the iPhone's own uploads to iCloud.
 - **Two imports in a row:** a second file opened while Wattspur still asked about the first (the bike, or what to do with a ride already there) replaced that question, and the first file was left undecided. Now the second waits for the answer.
 - **Importing a ride that is in the trash:** the file was taken as “already there”, and the ride stayed in the trash until it was deleted for good. Now it comes back, and the import log says so.
 - **Files still being written (Mac, watched folder):** a large file or one on a slow network could be read half and moved to “Failed”. Now the folder waits until the file has not changed for a few seconds.

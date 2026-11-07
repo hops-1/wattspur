@@ -80,15 +80,16 @@ struct TourDetailView: View {
         .task(id: ride.routeFile) {
             if route == nil { loaded = await library.route(for: ride) }
         }
-        .task(id: ride.id) {
-            // Decoding a few thousand samples is quick, but keep it out of every redraw.
+        // Again when the Mac changed the ride: its route file name changes with it (R-62).
+        .task(id: "\(ride.id)|\(ride.routeFile ?? "")") {
+            // Decoding a few thousand samples is quick, but keep it out of every redraw; once (R-33).
             guard route == nil else { return }
-            chartPoints = library.chartPoints(for: ride)
-            track = library.track(for: ride)
-            let found = library.motion(for: ride)
-            motion = found?.figures
-            leanStretches = found?.lean ?? []
-            surfaceStretches = found?.surface ?? []
+            let detail = library.detail(for: ride)
+            chartPoints = detail.chartPoints
+            track = detail.track
+            motion = detail.motion?.figures
+            leanStretches = detail.motion?.lean ?? []
+            surfaceStretches = detail.motion?.surface ?? []
         }
     }
 

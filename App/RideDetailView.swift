@@ -112,23 +112,68 @@ private struct RideDetailContent: View {
                 .opacity(0)
                 .accessibilityHidden(true)
         }
-        .task(id: ride.id) {
-            // Decoding ~3 000 samples is quick, but keep it out of every redraw.
-            let samples = ride.samples
-            route = RideSeries.route(from: samples)
-            curves = CurvatureAnalyzer.analyze(samples).pieces
-            motion = RideMotion(samples: samples, motorized: ride.isMotorized)
-            leanStretches = RideMotion.leanStretches(samples)
-            surfaceStretches = RideMotion.surfaceStretches(samples)
-            points = RideSeries.chartPoints(from: samples)
-            timePoints = RideSeries.chartPoints(from: samples, axis: .time)
-            cursor.reset(track: RideTrack(samples: samples))
+        // Again when the open ride changes too (Bosch FIT, attached GPX, a change from the iPhone; R-57),
+        // and off the main thread, so a long ride does not stall opening or the arrow keys (R-58).
+        .task(id: DetailKey(ride)) {
+            let data = ride.samplesData
+            let motorized = ride.isMotorized
+            let computed = await Task.detached(priority: .userInitiated) { DetailValues(samplesData: data, motorized: motorized) }.value
+            guard !Task.isCancelled else { return }
+            route = computed.route
+            curves = computed.curves
+            motion = computed.motion
+            leanStretches = computed.lean
+            surfaceStretches = computed.surface
+            points = computed.points
+            timePoints = computed.timePoints
+            cursor.reset(track: computed.track)
             joins = sharedLibrary.joins(of: ride)
         }
     }
 }
 
 extension RideDetailContent {
+    /// What the detail's values depend on: the ride and its time series.
+    struct DetailKey: Hashable {
+        var id: UUID
+        var parserVersion: Int
+        var attachedSource: String?
+        var samplesBytes: Int
+        var importedAt: Date
+
+        init(_ ride: Ride) {
+            id = ride.id
+            parserVersion = ride.parserVersion
+            attachedSource = ride.attachedSourceName
+            samplesBytes = ride.samplesData?.count ?? 0
+            importedAt = ride.importedAt
+        }
+    }
+
+    /// Everything the detail derives from the time series, computed away from the main thread.
+    struct DetailValues: Sendable {
+        var route: [RoutePoint]
+        var curves: [CurvatureAnalyzer.Piece]
+        var motion: RideMotion?
+        var lean: [RideMotion.LeanStretch]
+        var surface: [RideMotion.SurfaceStretch]
+        var points: [ChartPoint]
+        var timePoints: [ChartPoint]
+        var track: RideTrack
+
+        nonisolated init(samplesData: Data?, motorized: Bool) {
+            let samples = samplesData.flatMap { try? PropertyListDecoder().decode([RideSample].self, from: $0) } ?? []
+            route = RideSeries.route(from: samples)
+            curves = CurvatureAnalyzer.analyze(samples).pieces
+            motion = RideMotion(samples: samples, motorized: motorized)
+            lean = RideMotion.leanStretches(samples)
+            surface = RideMotion.surfaceStretches(samples)
+            points = RideSeries.chartPoints(from: samples)
+            timePoints = RideSeries.chartPoints(from: samples, axis: .time)
+            track = RideTrack(samples: samples)
+        }
+    }
+
     struct SimilarCountKey: Hashable {
         var ride: UUID
         var ready: Bool
