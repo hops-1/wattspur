@@ -33,27 +33,34 @@ final class PhoneImport {
                             message: String(localized: "\(url.lastPathComponent) could not be read."))
             return
         }
-        Self.removeFromInbox(url)
-        if let database = library.database {
+        let taken = if let database = library.database {
             importIntoStore(data, fileName: url.lastPathComponent, database: database, library: library)
         } else {
             handOver(data, fileName: url.lastPathComponent, folder: folder)
         }
+        // Only once the file is safe elsewhere: removed before, a failed copy lost it (R-49).
+        if taken { Self.removeFromInbox(url) }
     }
 
     // MARK: - With the store
 
-    private func importIntoStore(_ data: Data, fileName: String, database: PhoneDatabase, library: PhoneLibrary) {
+    private func importIntoStore(_ data: Data, fileName: String, database: PhoneDatabase, library: PhoneLibrary) -> Bool {
         // The flow works with files; a copy of our own outlives the system's inbox and needs no access rights.
         let folder = FileManager.default.temporaryDirectory.appending(path: "Opened")
         try? FileManager.default.createDirectory(at: folder, withIntermediateDirectories: true)
         let copy = folder.appending(path: fileName)
         try? FileManager.default.removeItem(at: copy)
-        guard (try? data.write(to: copy)) != nil else { return }
+        do {
+            try data.write(to: copy)
+        } catch {
+            notice = Notice(title: String(localized: "Import Failed"), message: error.localizedDescription)
+            return false
+        }
         copies.append(copy)
         flow.onImported = { [weak library] _ in library?.reloadAfterImport() }
         flow.start([copy], library: database.library) { _, _ in }
         library.reloadAfterImport()
+        return true
     }
 
     /// The library after a decision (bike, update, new ride); the copies go once nothing is open.
@@ -66,18 +73,20 @@ final class PhoneImport {
 
     // MARK: - Folder mode
 
-    private func handOver(_ data: Data, fileName: String, folder: ImportFolder) {
+    private func handOver(_ data: Data, fileName: String, folder: ImportFolder) -> Bool {
         guard folder.url != nil else {
             notice = Notice(title: String(localized: "No Folder Chosen"),
                             message: String(localized: "Choose the folder “Wattspur Import” under More, or turn on Sync with iCloud, to import \(fileName)."))
-            return
+            return false
         }
         do {
             try folder.write(data, to: fileName)
             notice = Notice(title: String(localized: "File Handed to the Mac"),
                             message: String(localized: "\(fileName) is in the folder “Wattspur Import”. The Mac imports it and the ride shows here after that."))
+            return true
         } catch {
             notice = Notice(title: String(localized: "Import Failed"), message: error.localizedDescription)
+            return false
         }
     }
 

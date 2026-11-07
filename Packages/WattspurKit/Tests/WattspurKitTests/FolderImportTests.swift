@@ -32,7 +32,43 @@ struct FolderImportTests {
     }
 
     var importer: FolderImport {
-        FolderImport(library: library, folder: folder, importedFolderName: "Importiert", failedFolderName: "Fehlerhaft")
+        FolderImport(library: library, folder: folder, importedFolderName: "Importiert", failedFolderName: "Fehlerhaft", settleTime: 0)
+    }
+
+    @Test("A file changed in the last seconds waits for the next run instead of landing in Failed (R-45)")
+    func waitsForSettledFiles() async throws {
+        try write(fixture, "\(rideName).fit")
+        let patient = FolderImport(library: library, folder: folder, importedFolderName: "Importiert",
+                                   failedFolderName: "Fehlerhaft", settleTime: 60)
+        let early = await patient.run()
+        #expect(early.settling == 1 && early.imported == 0)
+        #expect(exists("\(rideName).fit"))
+        let later = await patient.run(now: .now.addingTimeInterval(61))
+        #expect(later.imported == 1 && later.settling == 0)
+    }
+
+    @Test("A file of a ride in the trash brings the ride back and says so in the log (R-44)")
+    func restoresTrashedDuplicate() async throws {
+        try write(fixture, "\(rideName).fit")
+        await importer.run()
+        let ride = try #require(try container.mainContext.fetch(FetchDescriptor<Ride>()).first { !$0.isSample })
+        library.moveToTrash(ride)
+        try write(fixture, "\(rideName).fit")
+        let summary = await importer.run()
+        #expect(summary.duplicates == 1 && summary.restored == 1)
+        #expect(ride.deletedAt == nil)
+        #expect(library.importRecords().contains { $0.outcome == .duplicate && $0.detail == ImportRecord.restoredFromTrashDetail })
+    }
+
+    @Test("A file that cannot be read says so, not that the reader failed (R-47)")
+    func unreadableFile() {
+        let missing = folder.appendingPathComponent("gone.fit")
+        let result = library.importFile(at: missing)
+        guard case .failed(.unreadable(let reason)) = result.outcome else {
+            Issue.record("Expected unreadable, got \(result.outcome)")
+            return
+        }
+        #expect(!reason.isEmpty)
     }
 
     @Test("Imported files move to the imported folder, broken ones to the failed folder")

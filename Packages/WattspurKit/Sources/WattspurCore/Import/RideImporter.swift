@@ -4,6 +4,9 @@ public enum RideImportError: Error, Equatable, Sendable {
     case decoding(FITDecodingError)
     case gpx(GPXImportError)
     case noRideData
+    /// The file could not be read at all (no access, not downloaded, gone), with the system's reason;
+    /// not a fault of the reader (R-47).
+    case unreadable(String)
 }
 
 /// A source format that can be turned into a `ParsedRide` (Requirements chapter 7).

@@ -28,6 +28,9 @@ public struct ImportResult: Sendable, Identifiable {
     public let id = UUID()
     public let fileName: String
     public let outcome: Outcome
+    /// A duplicate that was in the trash and came back from it: importing the file again means the
+    /// user wants the ride (R-44).
+    public var restoredFromTrash = false
 
     public init(fileName: String, outcome: Outcome) {
         self.fileName = fileName

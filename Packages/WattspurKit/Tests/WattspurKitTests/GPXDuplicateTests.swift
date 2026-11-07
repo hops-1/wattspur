@@ -538,7 +538,7 @@ struct GPXFolderImportTests {
     }
 
     private var watcher: FolderImport {
-        FolderImport(library: library, folder: folder, importedFolderName: "Importiert", failedFolderName: "Fehlerhaft")
+        FolderImport(library: library, folder: folder, importedFolderName: "Importiert", failedFolderName: "Fehlerhaft", settleTime: 0)
     }
 
     private func put(_ data: Data, _ name: String) throws {
@@ -577,7 +577,7 @@ struct GPXFolderImportTests {
         let lib2 = RideLibrary(context: other.mainContext, importers: [FITRideImporter(), GPXRideImporter()])
         let folder2 = FileManager.default.temporaryDirectory.appendingPathComponent("wattspur-gpx-\(UUID().uuidString)")
         try FileManager.default.createDirectory(at: folder2, withIntermediateDirectories: true)
-        let watcher2 = FolderImport(library: lib2, folder: folder2, importedFolderName: "Importiert", failedFolderName: "Fehlerhaft")
+        let watcher2 = FolderImport(library: lib2, folder: folder2, importedFolderName: "Importiert", failedFolderName: "Fehlerhaft", settleTime: 0)
         try GPXFixture.data("pair-tour1-bosch-flow").write(to: folder2.appendingPathComponent("tour.gpx"))
         let first = await watcher2.run()
         let ride = try #require(lib2.ride(withID: first.importedRideIDs[0]))

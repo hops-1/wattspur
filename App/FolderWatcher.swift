@@ -178,6 +178,8 @@ final class FolderWatcher {
         lastSummary = await importer.run()
         lastChecked = .now
         scanning = false
+        // A file still being written is left for a moment; look again once it has settled (R-45).
+        if lastSummary.settling > 0 { scheduleScan() }
         if rescanRequested {
             rescanRequested = false
             checkNow()
