@@ -205,6 +205,9 @@ struct RideMap: View {
             if let shown = route ?? loaded, shown.pointCount > 0 {
                 RouteMap(route: shown, interactive: interactive, marker: marker, leanStretches: leanStretches,
                          surfaceStretches: surfaceStretches)
+                    // A fresh map for each ride: `Map(initialPosition:)` frames the track only once,
+                    // so the tile "Last Ride" kept the view of the ride before (7.11.2026).
+                    .id(ride.id)
             } else {
                 Rectangle()
                     .fill(.quaternary)
@@ -221,6 +224,8 @@ struct RideMap: View {
         }
         .task(id: ride.routeFile) {
             guard route == nil else { return }
+            // Another ride in the same place (a new last ride): not the old track until the new one is loaded.
+            if loaded?.rideID != ride.id { loaded = nil }
             loaded = await library.route(for: ride)
             finished = true
         }

@@ -13,6 +13,8 @@ Every DMG handed out to testers corresponds to one entry below.
 
 ### Fixed
 
+- **Map of the last ride (iPhone):** after a new ride, the map in “Last Ride” kept showing the place of the ride before, with the new track at the edge. Now it shows the new ride.
+- **iPhone recording twice:** a recording saved on the iPhone and its GPX imported on the Mac before iCloud had brought it showed up twice. The clean-up after a sync now finds such doubles too and keeps the one imported first.
 - **Lean angle kept with the Bosch file:** when the Bosch FIT of a ride recorded with the iPhone came in, Wattspur took the Bosch values and dropped the lean angle, acceleration and road surface of the recording; only heart rate and temperature stayed. Now they stay too, also when a GPX is attached to a Bosch ride. Rides updated before keep missing them.
 
 ## [1.8.6] – 2026-11-06

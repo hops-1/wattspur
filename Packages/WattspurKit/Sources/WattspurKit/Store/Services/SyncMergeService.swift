@@ -136,10 +136,10 @@ struct SyncMergeService: LibraryService {
     /// The same export imported on two devices: the same Bosch ID (`sourceIdentifier`) and format.
     /// The ride imported first stays. Merged rides and their parts are left alone; the user decides there.
     private func mergeRides() -> Int {
-        let descriptor = FetchDescriptor<Ride>(predicate: #Predicate { $0.sourceIdentifier != "" && $0.mergedInto == nil })
+        let descriptor = FetchDescriptor<Ride>(predicate: #Predicate { $0.mergedInto == nil && !$0.isSample })
         let rides = ((try? context.fetch(descriptor)) ?? []).filter { !$0.isMerged }
         var removed = 0
-        for group in Dictionary(grouping: rides, by: { "\($0.sourceFormat)|\($0.sourceIdentifier)" }).values where group.count > 1 {
+        for group in Dictionary(grouping: rides, by: Self.syncKey).values where group.count > 1 {
             let sorted = group.sorted { Self.older($0.importedAt, $0.id, $1.importedAt, $1.id) }
             let keeper = sorted[0]
             for other in sorted.dropFirst() {
@@ -150,6 +150,24 @@ struct SyncMergeService: LibraryService {
             }
         }
         return removed
+    }
+
+    /// What makes two rides one: the Bosch ride UUID of an export. A GPX has none, so an iPhone
+    /// recording saved on the iPhone and the same GPX imported on the Mac before the sync brought it
+    /// (7.11.2026) match by bike, start, length and distance instead; two different rides never share
+    /// all of them to the millisecond and the metre.
+    private static func syncKey(_ ride: Ride) -> String {
+        if ride.sourceIdentifier != "" { return "\(ride.sourceFormat)|\(ride.sourceIdentifier)" }
+        guard isRecordingKeyed(ride) else { return "none|\(ride.id.uuidString)" }
+        let start = (ride.startDate.timeIntervalSinceReferenceDate * 1000).rounded()
+        return "gpx|\(ride.bike?.id.uuidString ?? "-")|\(start)|\(ride.elapsedTime.rounded())|\(ride.distance.rounded())"
+    }
+
+    /// A ride in the trash is left out: the user may have thrown one of the two away by hand, and the
+    /// one that stays must not be the thrown away one.
+    private static func isRecordingKeyed(_ ride: Ride) -> Bool {
+        ride.sourceIdentifier == "" && ride.sourceFormat == RideSource.gpx.rawValue && ride.distance > 0
+            && ride.deletedAt == nil
     }
 
     // MARK: - Order
