@@ -170,7 +170,7 @@ struct ImportService: LibraryService {
     func prepareOverviewRoutes(batchSize: Int = 20,
                                       progress: (_ done: Int, _ total: Int) -> Void = { _, _ in }) async -> Int {
         let version = OverviewRoute.version
-        let descriptor = FetchDescriptor<Ride>(predicate: #Predicate { $0.overviewRouteVersion != version })
+        let descriptor = FetchDescriptor<Ride>(predicate: #Predicate { $0.overviewRouteVersion < version })
         let outdated = (try? context.fetch(descriptor)) ?? []
         guard !outdated.isEmpty else { return 0 }
         // Parts first: a merged ride is put together from its parts' routes.
@@ -204,7 +204,7 @@ struct ImportService: LibraryService {
     func preparePeakPower(batchSize: Int = 20,
                           progress: (_ done: Int, _ total: Int) -> Void = { _, _ in }) async -> Int {
         let version = PeakPower.version
-        let descriptor = FetchDescriptor<Ride>(predicate: #Predicate { $0.peakPowerVersion != version })
+        let descriptor = FetchDescriptor<Ride>(predicate: #Predicate { $0.peakPowerVersion < version })
         let outdated = (try? context.fetch(descriptor)) ?? []
         guard !outdated.isEmpty else { return 0 }
         // Parts first: a merged ride takes the best of its parts.
@@ -244,7 +244,7 @@ struct ImportService: LibraryService {
     func prepareTrackFigures(batchSize: Int = 20,
                           progress: (_ done: Int, _ total: Int) -> Void = { _, _ in }) async -> Int {
         let version = TrackFigures.version
-        let descriptor = FetchDescriptor<Ride>(predicate: #Predicate { $0.trackFiguresVersion != version })
+        let descriptor = FetchDescriptor<Ride>(predicate: #Predicate { $0.trackFiguresVersion < version })
         let outdated = (try? context.fetch(descriptor)) ?? []
         guard !outdated.isEmpty else { return 0 }
         var done = 0

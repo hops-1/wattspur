@@ -184,6 +184,44 @@ struct RideLibraryMergeTests {
         #expect(merged.timerTime == a.timerTime + b.timerTime)
     }
 
+    @Test("⌘Z for a ride that was deleted since then, e.g. on the iPhone, does nothing (R-27)")
+    func undoAfterDeleteElsewhere() throws {
+        let (a, b) = try importBoth()
+        let undo = UndoManager()
+        undo.groupsByEvent = false
+        let library = RideLibrary(context: container.mainContext, undoManager: undo)
+        func step(_ body: () throws -> Void) rethrows {
+            undo.beginUndoGrouping()
+            defer { undo.endUndoGrouping() }
+            try body()
+        }
+        let keptID = b.id
+        step { library.rename(a, to: "Neu") }
+        step { library.moveToTrash(a) }
+        step { library.assign([a, b], to: library.makeBike(name: "Cube")) }
+        // The sync deletes ride a for good.
+        container.mainContext.delete(a)
+        try container.mainContext.save()
+        while undo.canUndo { undo.undo() }
+        let left = try container.mainContext.fetch(FetchDescriptor<Ride>())
+        #expect(left.map(\.id) == [keptID])
+        #expect(left.first?.bike?.name != "Cube")
+
+        // A merged ride deleted elsewhere takes its parts along; ⌘Z of the merge finds nothing.
+        let c = try #require(left.first)
+        guard case .imported(let again) = library.importFile(data: first, fileName: firstName).outcome else {
+            Issue.record("Expected a new import of ride a")
+            return
+        }
+        let d = try #require(library.ride(withID: again))
+        var merged: Ride!
+        try step { merged = try library.merge([c, d], name: "Zwei") }
+        container.mainContext.delete(merged)
+        try container.mainContext.save()
+        while undo.canUndo { undo.undo() }
+        #expect(try container.mainContext.fetch(FetchDescriptor<Ride>()).filter(\.isMerged).isEmpty)
+    }
+
     @Test("⌘Z steps back through merging, trash, restoring and splitting; redo goes forward again")
     func undoFlow() throws {
         let (a, b) = try importBoth()

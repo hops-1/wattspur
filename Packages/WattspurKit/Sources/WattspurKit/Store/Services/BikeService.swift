@@ -139,10 +139,20 @@ struct BikeService: LibraryService {
 
     /// Changes the bikes of rides; undo puts back each ride's previous bike.
     private func setBikes(_ changes: [(ride: Ride, bike: Bike?)]) {
-        let previous = changes.map { ($0.ride, $0.ride.bike) }
+        let previous = changes.map { (ride: $0.ride.id, bike: $0.ride.bike?.id) }
         for change in changes { change.ride.bike = change.bike }
         try? context.save()
-        registerUndo { $0.setBikes(previous) }
+        registerUndo { service in
+            let bikes = (try? service.context.fetch(FetchDescriptor<Bike>())) ?? []
+            let rides = previous.compactMap { change -> (ride: Ride, bike: Bike?)? in
+                guard let ride = service.ride(withID: change.ride) else { return nil }
+                guard let id = change.bike else { return (ride, nil) }
+                // A bike deleted since then (on another device) is not put back.
+                return bikes.first { $0.id == id }.map { (ride, $0) }
+            }
+            guard !rides.isEmpty else { return }
+            service.setBikes(rides)
+        }
     }
 
     /// Brings a library from before 1.5 in line with the model of PROF-03: one bike

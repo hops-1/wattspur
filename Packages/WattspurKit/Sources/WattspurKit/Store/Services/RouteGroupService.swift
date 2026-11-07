@@ -69,7 +69,11 @@ struct RouteGroupService: LibraryService {
         let old = group.name
         group.name = trimmed
         try? context.save()
-        registerUndo { $0.rename(group, to: old) }
+        let id = group.id
+        registerUndo { service in
+            guard let group = service.group(withID: id) else { return }
+            service.rename(group, to: old)
+        }
     }
 
     /// Changes how loosely rides must match. Which rides belong to the route changes with it.
@@ -80,7 +84,11 @@ struct RouteGroupService: LibraryService {
         group.threshold = newThreshold
         group.includeReverse = includeReverse
         try? context.save()
-        registerUndo { $0.update(group, threshold: oldThreshold, includeReverse: oldReverse) }
+        let id = group.id
+        registerUndo { service in
+            guard let group = service.group(withID: id) else { return }
+            service.update(group, threshold: oldThreshold, includeReverse: oldReverse)
+        }
     }
 
     /// Dissolves the route. The rides stay as they are; they only no longer belong to it.

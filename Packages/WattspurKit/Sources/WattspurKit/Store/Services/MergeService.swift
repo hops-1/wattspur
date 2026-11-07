@@ -27,7 +27,8 @@ struct MergeService: LibraryService {
         if let problem = mergeProblem(rides) { throw problem }
         let parts = mergeParts(of: rides)
         // Merged rides among the selection are dissolved; undo merges them again.
-        let previousGroups = rides.filter(\.isMerged).map { (parts: $0.sortedParts, name: $0.name, deletedAt: $0.deletedAt) }
+        let previousGroups = rides.filter(\.isMerged)
+            .map { (parts: $0.sortedParts.map(\.id), name: $0.name, deletedAt: $0.deletedAt) }
         let first = parts[0]
         let trimmed = name.trimmingCharacters(in: .whitespacesAndNewlines)
         let ride = Ride(name: trimmed.isEmpty ? first.name : trimmed, startDate: first.startDate)
@@ -43,10 +44,15 @@ struct MergeService: LibraryService {
         for part in parts { part.mergedInto = ride }
         refresh(ride)
         try? context.save()
+        let id = ride.id
         registerUndo { service in
+            // The ride or its parts may be gone since then, deleted on another device (R-27).
+            guard let ride = service.ride(withID: id) else { return }
             service.split(ride)
             for group in previousGroups {
-                let again = try? service.merge(group.parts, name: group.name)
+                let parts = group.parts.compactMap(service.ride(withID:))
+                guard parts.count > 1 else { continue }
+                let again = try? service.merge(parts, name: group.name)
                 again?.deletedAt = group.deletedAt
             }
         }
@@ -68,7 +74,10 @@ struct MergeService: LibraryService {
         ride.parts = []
         context.delete(ride)
         try? context.save()
+        let ids = parts.map(\.id)
         registerUndo { service in
+            let parts = ids.compactMap(service.ride(withID:))
+            guard parts.count > 1 else { return }
             for part in parts { part.deletedAt = nil }
             let again = try? service.merge(parts, name: name)
             again?.deletedAt = deletedAt
