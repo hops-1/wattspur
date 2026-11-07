@@ -11,6 +11,11 @@ if grep -rnE '^import (SwiftData|SwiftUI|AppKit|UIKit|MapKit|Charts)' "$CORE"; t
     echo "architecture: WattspurCore must not import UI or persistence frameworks (see docs/ARCHITECTURE.md)" >&2
     exit 1
 fi
+# Rule 8: no texts for the user in the package; each app words them and keeps the translations (R-48).
+if grep -rnE 'String\(localized|LocalizedStringKey|LocalizedStringResource' Packages/WattspurKit/Sources; then
+    echo "architecture: the package must not hold texts for the user; word them in the app (see docs/ARCHITECTURE.md, rule 8)" >&2
+    exit 1
+fi
 IOS="iOS iOSShared iOSWidgets"
 if grep -rnE '^import AppKit' $IOS; then
     echo "architecture: the iPhone app must not import AppKit (see docs/ARCHITECTURE.md)" >&2

@@ -1,7 +1,8 @@
 import Foundation
 import WattspurCore
 
-/// Summary shown after an import (simple form of the import log, IMP-06).
+/// Summary shown after an import (simple form of the import log, IMP-06). It holds what happened;
+/// each app words it (`ImportReport+Text.swift`), as the Kit has no texts (rule 8, R-48).
 public struct ImportReport: Identifiable {
     public struct Entry {
         public let url: URL
@@ -15,14 +16,15 @@ public struct ImportReport: Identifiable {
 
     public let id = UUID()
     public let entries: [Entry]
-    public var extraLines: [String] = []
+    /// Files whose update from a newer export failed (after a duplicate question).
+    public var failedUpdates: [String] = []
     /// Results that get their own question (a GPX or a Bosch file for a GPX ride, B-144) and are not
     /// part of the all-at-once question for plain duplicates.
     public var excluded: Set<UUID> = []
 
-    public init(entries: [Entry], extraLines: [String] = []) {
+    public init(entries: [Entry], failedUpdates: [String] = []) {
         self.entries = entries
-        self.extraLines = extraLines
+        self.failedUpdates = failedUpdates
     }
 
     /// Rides that were already there and are decided on together (IMP-02).
@@ -33,7 +35,7 @@ public struct ImportReport: Identifiable {
     /// `true` if there is something to tell besides duplicates and attached GPX files, which have
     /// their own question or notice.
     public var hasNews: Bool {
-        !extraLines.isEmpty || entries.contains { entry in
+        !failedUpdates.isEmpty || entries.contains { entry in
             switch entry.result.outcome {
             case .imported, .unsupported, .failed: true
             case .duplicate, .attached, .fitForGPX: false
@@ -45,53 +47,28 @@ public struct ImportReport: Identifiable {
     /// so the alert keeps its button on screen even for hundreds of files.
     public static let maxListedNames = 5
 
-    /// Imported count and problems, without duplicates. Unsupported files are
-    /// summarised by type instead of being listed one by one.
-    private var summaryLines: [String] {
-        var imported = 0
-        var unsupported: [String] = []
-        var unreadable: [String] = []
-        for entry in entries {
-            switch entry.result.outcome {
-            case .imported: imported += 1
-            case .duplicate, .attached, .fitForGPX: break
-            case .unsupported: unsupported.append(entry.result.fileName)
-            case .failed: unreadable.append(entry.result.fileName)
-            }
-        }
-        var lines = entries.isEmpty ? [] : [String(localized: "\(imported) rides imported")]
-        if !unsupported.isEmpty {
-            let types = Set(unsupported.map(Self.typeLabel)).sorted().formatted(.list(type: .and))
-            lines.append(String(localized: "\(unsupported.count) files skipped, file type not supported yet: \(types)"))
-        }
-        lines += Self.unreadableLines(unreadable) + extraLines
-        return lines
+    /// Rides the import added.
+    public var importedCount: Int {
+        entries.filter { if case .imported = $0.result.outcome { true } else { false } }.count
     }
 
-    /// "x.fit: file could not be read" for the first few, then "3 more files could not be read".
-    public static func unreadableLines(_ fileNames: [String]) -> [String] {
-        var lines = fileNames.prefix(maxListedNames).map { String(localized: "\($0): file could not be read") }
-        let rest = fileNames.count - maxListedNames
-        if rest > 0 { lines.append(String(localized: "\(rest) more files could not be read")) }
-        return lines
+    /// Files of a type Wattspur does not read.
+    public var unsupportedFileNames: [String] {
+        entries.compactMap { if case .unsupported = $0.result.outcome { $0.result.fileName } else { nil } }
     }
 
-    /// ".gpx", or "no extension".
-    private static func typeLabel(_ fileName: String) -> String {
-        let ext = (fileName as NSString).pathExtension.lowercased()
-        return ext.isEmpty ? String(localized: "no extension") : ".\(ext)"
+    /// The types of those files, e.g. "gpx", sorted; "" for a file without an extension.
+    public var unsupportedExtensions: [String] {
+        Set(unsupportedFileNames.map { ($0 as NSString).pathExtension.lowercased() }).sorted()
     }
 
-    public var message: String { summaryLines.joined(separator: "\n") }
+    /// Files that could not be read or imported, then those whose update failed.
+    public var unreadableFileNames: [String] {
+        entries.compactMap { if case .failed = $0.result.outcome { $0.result.fileName } else { nil } } + failedUpdates
+    }
 
-    /// Message of the duplicate dialog: what happened so far, then the question.
-    public var duplicateQuestion: String {
-        var names = duplicates.prefix(Self.maxListedNames).map { RideLibrary.parseFileName($0.result.fileName).title }
-        let rest = duplicates.count - Self.maxListedNames
-        if rest > 0 { names.append(String(localized: "\(rest) more")) }
-        var lines = summaryLines
-        lines.append(String(localized: "Already in your library: \(names.formatted(.list(type: .and)))"))
-        lines.append(String(localized: "Update them from the new files? Your names are kept."))
-        return lines.joined(separator: "\n")
+    /// The titles of the plain duplicates, for the question about them.
+    public var duplicateTitles: [String] {
+        duplicates.map { RideLibrary.parseFileName($0.result.fileName).title }
     }
 }
