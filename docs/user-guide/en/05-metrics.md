@@ -97,7 +97,7 @@ Only for rides recorded with the iPhone app 0.5.1 or later. While recording, the
 | Max. Lean Left, Right | From the speed and the turn around the vertical: tan(lean) = speed × turn rate ÷ g. So it does not matter how the iPhone sits in the mount or the pocket. Counts from 10 km/h, at most 70° |
 | Max. Acceleration, Max. Braking | The acceleration along the way in g, from the sensors and the GPS speed; curves do not count |
 | 0–100 km/h, 0–25 km/h | The fastest time from a standstill (below 3 km/h) to 100 km/h on a motorcycle, to 25 km/h on any other bike; at most 30 s, a gap of more than 5 s breaks it |
-| Uneven Surface | Share of the distance on an uneven or rough surface. The roughness is the strength of the vertical shaking without slow movements such as over a crest: smooth below 0.1 g, uneven up to 0.25 g, rough above |
+| Uneven Surface | Share of the distance on an uneven or rough surface. The roughness is the strength of the vertical shaking without slow movements such as over a crest: smooth below 0.2 g (asphalt), uneven up to 0.45 g (field paths, smooth gravel, paving stones), rough above (forest tracks, off-road). The limits hold for an e-bike with the iPhone in the handlebar mount |
 | Map by lean angle, by surface | The track in pieces: lean in steps of 10° (green upright to purple from 40°), surface in three steps (grey, yellow, brown) |
 
 ## Rounding

@@ -7,6 +7,10 @@ Every DMG handed out to testers corresponds to one entry below.
 
 ## [Unreleased]
 
+### Changed
+
+- **Road surface:** new limits from two test rides on an e-bike, checked against OpenStreetMap: smooth below 0.2 g, uneven up to 0.45 g, rough above (before 0.1 g and 0.25 g, so normal asphalt counted as uneven). In German the bands are now „eben“, „uneben“ and „rau“ (B-248, V-16).
+
 ## [1.8.6] – 2026-11-06
 
 Rides recorded with the iPhone app 0.5.1 bring lean angle, acceleration and how rough the road was. The Mac shows them in the ride detail, next to the iPhone. The values are a first version: the limits are checked against real test rides on a motorcycle and an e-bike and may still change.
