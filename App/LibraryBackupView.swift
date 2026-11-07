@@ -109,6 +109,10 @@ final class LibraryBackupCenter {
             text += " " + String(localized: "It holds \(count) rides.")
         }
         text += "\n\n" + String(localized: "Wattspur quits and replaces the library with the backup the next time you open it. Rides and changes since the backup are not in it. The current library is kept in a folder beside it.")
+        // The backup brings the sync state of back then; iCloud then plays in what changed since (R-29).
+        if UserDefaults.standard.bool(forKey: SettingsKey.iCloudSyncEnabled) {
+            text += "\n\n" + String(localized: "Sync with iCloud is on. After the restore, iCloud brings back what changed since the backup: rides deleted since then can disappear again, and changes from the iPhone can replace restored values. To get the backup as it is, turn sync off first.")
+        }
         if manifest.build.compare(AppInfo.build, options: .numeric) == .orderedDescending {
             text += "\n\n" + String(localized: "This backup was made by a newer version of Wattspur. Update Wattspur before you restore it.")
         }
