@@ -52,6 +52,25 @@ struct PeakPowerLibraryTests {
         #expect(await library.preparePeakPower() == 0)
     }
 
+    @Test("A value from a newer app (over iCloud) is not calculated back by this one (R-28)")
+    func newerVersionStays() async throws {
+        library.importFile(data: try Fixture.data("reinheim-rundfahrt"), fileName: "A.fit")
+        let ride = try #require(try rides().first)
+        ride.bestPower1Min = 999
+        ride.peakPowerVersion = PeakPower.version + 1
+        ride.trackFiguresVersion = TrackFigures.version + 1
+        ride.overviewRouteVersion = OverviewRoute.version + 1
+        try container.mainContext.save()
+
+        #expect(!ride.needsPeakPower && !ride.needsTrackFigures && !ride.needsOverviewRoute)
+        #expect(await library.preparePeakPower() == 0)
+        #expect(await library.prepareTrackFigures() == 0)
+        #expect(await library.prepareOverviewRoutes() == 0)
+        #expect(ride.bestPower1Min == 999)
+        #expect(ride.peakPowerVersion == PeakPower.version + 1)
+        #expect(ride.overviewRoute != nil)
+    }
+
     @Test("A merged ride takes the best minute of its parts")
     func merged() throws {
         let data = try Fixture.data("reinheim-rundfahrt")

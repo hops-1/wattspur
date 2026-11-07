@@ -13,6 +13,8 @@ Every DMG handed out to testers corresponds to one entry below.
 
 ### Fixed
 
+- **⌘Z after a sync (Mac):** undoing a step for a ride, a bike or a saved route that was deleted in the meantime on the iPhone could make the app quit. Now the step does nothing.
+- **Mac and iPhone with different versions:** stored values (overview map, best minute, curviness and steepest climb) from a newer app were calculated back by an older one and sent back over iCloud. Now an older app leaves them as they are.
 - **The same file on Mac and iPhone:** when iCloud merged the two copies, the changes made to the newer one were lost: its name, its bike, that it was taken out of the trash, an attached GPX. Now they stay; where both copies were changed, the older one wins.
 - **Two bikes with the same name:** iCloud no longer merges them into one. Only the default bike each device makes for itself, or two bikes with the same serial number, become one.
 - **Saving a ride after a crash (iPhone):** if “End and Save” of an unfinished ride failed, the ride was deleted without a word. Now the app says why and keeps the recording.

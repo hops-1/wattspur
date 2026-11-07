@@ -12,7 +12,11 @@ struct RideService: LibraryService {
         let old = ride.name
         ride.name = trimmed
         try? context.save()
-        registerUndo { $0.rename(ride, to: old) }
+        let id = ride.id
+        registerUndo { service in
+            guard let ride = service.ride(withID: id) else { return }
+            service.rename(ride, to: old)
+        }
     }
 
     /// Moves a ride to the trash (LIST-07). It stays restorable for 30 days.
@@ -35,10 +39,14 @@ struct RideService: LibraryService {
 
     /// Changes the trash state; undo puts back each ride's previous state.
     private func setDeletedAt(_ changes: [(ride: Ride, date: Date?)]) {
-        let previous = changes.map { ($0.ride, $0.ride.deletedAt) }
+        let previous = changes.map { (id: $0.ride.id, date: $0.ride.deletedAt) }
         for change in changes { change.ride.deletedAt = change.date }
         try? context.save()
-        registerUndo { $0.setDeletedAt(previous) }
+        registerUndo { service in
+            let rides = previous.compactMap { change in service.ride(withID: change.id).map { (ride: $0, date: change.date) } }
+            guard !rides.isEmpty else { return }
+            service.setDeletedAt(rides)
+        }
     }
 
     /// Permanently deletes trashed rides older than `days` (LIST-08), including the original file.

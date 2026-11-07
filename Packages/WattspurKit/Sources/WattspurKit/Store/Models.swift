@@ -283,15 +283,17 @@ extension Ride {
         samplesData = try? encoder.encode(samples)
     }
 
-    /// The stored overview route; `nil` if none is stored or it is outdated.
+    /// The stored overview route; `nil` if none is stored or it is outdated. One from a newer app
+    /// (over iCloud, R-28) is used as long as it can be read.
     public var overviewRoute: OverviewRoute? {
-        guard overviewRouteVersion == OverviewRoute.version else { return nil }
+        guard overviewRouteVersion >= OverviewRoute.version else { return nil }
         guard let overviewRouteData else { return OverviewRoute(segments: []) }
         return OverviewRoute(data: overviewRouteData)
     }
 
-    /// `true` while the overview route is missing or from an older version.
-    public var needsOverviewRoute: Bool { overviewRouteVersion != OverviewRoute.version }
+    /// `true` while the overview route is missing or from an older version. A value from a newer
+    /// version (the other device has a newer app) stays: an older app must not reckon it back (R-28).
+    public var needsOverviewRoute: Bool { overviewRouteVersion < OverviewRoute.version }
 
     func setOverviewRoute(_ route: OverviewRoute) {
         overviewRouteData = route.isEmpty ? nil : route.encoded()
@@ -299,7 +301,7 @@ extension Ride {
     }
 
     /// `true` while the best minute is not calculated or from an older version.
-    public var needsPeakPower: Bool { peakPowerVersion != PeakPower.version }
+    public var needsPeakPower: Bool { peakPowerVersion < PeakPower.version }
 
     func setPeakPower(_ value: Int?) {
         bestPower1Min = value
@@ -307,7 +309,7 @@ extension Ride {
     }
 
     /// `true` while the figures of the track are not calculated or from an older version.
-    public var needsTrackFigures: Bool { trackFiguresVersion != TrackFigures.version }
+    public var needsTrackFigures: Bool { trackFiguresVersion < TrackFigures.version }
 
     func setTrackFigures(_ figures: TrackFigures) {
         curvaturePerKm = figures.curvaturePerKm
