@@ -100,20 +100,13 @@ public enum RideMerge {
 
     /// Where each part (in time order) starts on the merged time and distance axes.
     private static func layout(of sorted: [Part], calendar: Calendar) -> [(time: TimeInterval, distance: Double)] {
+        let offsets = PartTimeline.offsets(starts: sorted.map(\.startDate),
+                                           durations: sorted.map(\.summary.elapsedTime), calendar: calendar)
         var result: [(time: TimeInterval, distance: Double)] = []
-        var elapsed: TimeInterval = 0
         var distance = 0.0
-        var previous: Part?
-        for part in sorted {
-            // Where this part starts on the merged time axis.
-            var offset = elapsed
-            if let previous, calendar.isDate(previous.startDate, inSameDayAs: part.startDate) {
-                offset = part.startDate.timeIntervalSince(sorted[0].startDate)
-            }
+        for (part, offset) in zip(sorted, offsets) {
             result.append((offset, distance))
-            elapsed = offset + part.summary.elapsedTime
             distance += part.summary.distance
-            previous = part
         }
         return result
     }
