@@ -13,6 +13,7 @@ Every DMG handed out to testers corresponds to one entry below.
 
 ### Fixed
 
+- **Height while recording (iPhone):** in town or in a forest, where the GPS height is never better than about 15 m, a recording had no height at all. Now the best of the rougher GPS heights set the level after 20 seconds. When the barometer drops out for a few seconds, the height no longer jumps to the GPS value and back, which counted as ascent.
 - **Rides over several days:** with two parts on a later day, the second one lay a whole day too far back in the charts, and the total time was too long. This was so for merged rides and for GPX files with several parts. GPX rides are read again once in the background after the update.
 - **Start after an update:** when a new version reads the ride files better, the rides are now read again in the background, a few at a time, instead of all at once while the app waits.
 - **⌘Z after a sync (Mac):** undoing a step for a ride, a bike or a saved route that was deleted in the meantime on the iPhone could make the app quit. Now the step does nothing.
