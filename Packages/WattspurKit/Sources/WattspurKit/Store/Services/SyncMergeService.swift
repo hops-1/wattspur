@@ -69,15 +69,17 @@ struct SyncMergeService: LibraryService {
 
     // MARK: - Bikes
 
-    /// Bikes with the same name and kind become the oldest of them. Then an untouched default bike
-    /// (no rides, nothing filled in), which a device makes on its first start, goes if an older open
-    /// bike exists: the user has named theirs, so the names differ.
+    /// Bikes that each device made for itself become the oldest of them: the default bike of the same
+    /// kind (its name not changed, possibly with rides already), or the same bike by its serial
+    /// number. Two bikes the user named alike stay two (R-36): a second "Cube" may be meant. Then an
+    /// untouched default bike (no rides, nothing filled in), which a device makes on its first start,
+    /// goes if an older open bike exists: the user has named theirs, so the names differ.
     private func mergeBikes() -> Int {
         var removed = 0
         let all = ((try? context.fetch(FetchDescriptor<Bike>())) ?? []).sorted(by: Self.older)
-        let groups = Dictionary(grouping: all) { "\($0.kindRawValue)|\(Self.normalized($0.name))" }
+        let groups = Dictionary(grouping: all, by: mergeKey)
         var gone = Set<UUID>()
-        for bikes in groups.values where bikes.count > 1 {
+        for (key, bikes) in groups where key != nil && bikes.count > 1 {
             let sorted = bikes.sorted(by: Self.older)
             let keeper = sorted[0]
             for other in sorted.dropFirst() {
@@ -96,6 +98,13 @@ struct SyncMergeService: LibraryService {
             removed += 1
         }
         return removed
+    }
+
+    /// `nil` for a bike that is only ever merged as an untouched default.
+    private func mergeKey(_ bike: Bike) -> String? {
+        if let serial = bike.serialNumber { return "serial|\(serial)" }
+        guard Self.normalized(bike.name) == Self.normalized(env.defaultBikeName) else { return nil }
+        return "default|\(bike.kindRawValue)"
     }
 
     private func isUntouchedDefault(_ bike: Bike) -> Bool {
@@ -143,13 +152,37 @@ struct SyncMergeService: LibraryService {
             let sorted = group.sorted { Self.older($0.importedAt, $0.id, $1.importedAt, $1.id) }
             let keeper = sorted[0]
             for other in sorted.dropFirst() {
-                // A name given on the other device wins over the one from the file.
-                if keeper.name.isEmpty { keeper.name = other.name }
+                take(from: other, to: keeper)
                 context.delete(other)
                 removed += 1
             }
         }
         return removed
+    }
+
+    /// What the user changed at the copy that goes (R-35): its name, its bike, that it is not in the
+    /// trash, a GPX attached to the Bosch ride. The keeper's own changes win; both devices end alike,
+    /// whichever merges first.
+    private func take(from other: Ride, to keeper: Ride) {
+        if !isRenamed(keeper), isRenamed(other) || keeper.name.isEmpty { keeper.name = other.name }
+        if !hasOwnBike(keeper), hasOwnBike(other) { keeper.bike = other.bike }
+        if other.deletedAt == nil { keeper.deletedAt = nil }
+        if keeper.attachedSourceFormat == nil, other.attachedSourceFormat != nil {
+            keeper.attachedSourceName = other.attachedSourceName
+            keeper.attachedSourceFormat = other.attachedSourceFormat
+            keeper.setSamples(other.samples)
+        }
+    }
+
+    /// Whether the ride's name is not the one its file gave it.
+    private func isRenamed(_ ride: Ride) -> Bool {
+        guard let fileName = ride.sourceFile?.fileName, !fileName.isEmpty else { return false }
+        return ride.name != ImportService.parseFileName(fileName).title
+    }
+
+    private func hasOwnBike(_ ride: Ride) -> Bool {
+        guard let bike = ride.bike else { return false }
+        return Self.normalized(bike.name) != Self.normalized(env.defaultBikeName)
     }
 
     /// What makes two rides one: the Bosch ride UUID of an export. A GPX has none, so an iPhone
