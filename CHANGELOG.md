@@ -13,6 +13,9 @@ Every DMG handed out to testers corresponds to one entry below.
 
 ### Fixed
 
+- **Saving a ride after a crash (iPhone):** if “End and Save” of an unfinished ride failed, the ride was deleted without a word. Now the app says why and keeps the recording.
+- **Full storage while recording (iPhone):** the app no longer quits in the middle of a ride; it goes on and shows that the ride is not backed up any more.
+- **A recording of a ride already there (iPhone):** it was dropped without a word when the same tour was already there as GPX. Now it updates that ride, which keeps its name and gets the lean angle and road surface.
 - **Map of the last ride (iPhone):** after a new ride, the map in “Last Ride” kept showing the place of the ride before, with the new track at the edge. Now it shows the new ride.
 - **iPhone recording twice:** a recording saved on the iPhone and its GPX imported on the Mac before iCloud had brought it showed up twice. The clean-up after a sync now finds such doubles too and keeps the one imported first.
 - **Lean angle kept with the Bosch file:** when the Bosch FIT of a ride recorded with the iPhone came in, Wattspur took the Bosch values and dropped the lean angle, acceleration and road surface of the recording; only heart rate and temperature stayed. Now they stay too, also when a GPX is attached to a Bosch ride. Rides updated before keep missing them.

@@ -17,6 +17,9 @@ final class Recorder {
     private(set) var unfinished: RideRecording?
     /// What the location service reported last, e.g. “Location access denied”.
     private(set) var status: String?
+    /// Set when the log of the recording could not be written (storage full, R-52): the ride goes on
+    /// in memory and can be saved, but would not survive a crash.
+    private(set) var logProblem: String?
 
     var isRecording: Bool { recording != nil }
     /// Siri or a shortcut asked to end the ride (B-225): the recording screen opens “Save Ride”.
@@ -66,6 +69,7 @@ final class Recorder {
         unfinished = nil
         let vehicle = Self.vehicle
         recording = RideRecording(startDate: date, vehicle: vehicle)
+        logProblem = nil
         FileManager.default.createFile(atPath: logURL.path, contents: nil)
         log = try? FileHandle(forWritingTo: logURL)
         write(.start(date))
@@ -79,6 +83,7 @@ final class Recorder {
         guard let unfinished, recording == nil else { return }
         recording = unfinished
         self.unfinished = nil
+        logProblem = nil
         log = try? FileHandle(forWritingTo: logURL)
         _ = try? log?.seekToEnd()
         // The time in between is a gap, not riding.
@@ -222,7 +227,15 @@ final class Recorder {
         }
     }
 
+    /// `FileHandle.write(_:)` raises an Objective-C exception on an error, which ends the app in the
+    /// middle of a ride (R-52); the throwing variant lets the recording go on.
     private func write(_ event: RecordingLog.Event) {
-        log?.write(RecordingLog.line(event))
+        guard let log else { return }
+        do {
+            try log.write(contentsOf: RecordingLog.line(event))
+            logProblem = nil
+        } catch {
+            logProblem = String(localized: "Storage full: the ride is not backed up")
+        }
     }
 }

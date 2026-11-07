@@ -134,9 +134,21 @@ public final class PhoneDatabase {
 
     /// Turns a finished recording into a ride: the GPX the iPhone writes anyway (with its bike), through
     /// the same import as on the Mac. Returns the outcome, e.g. `.imported(id)` or `.duplicate`.
+    ///
+    /// A recording that matches a ride already there (a GPX of the same tour, or the same recording
+    /// saved before a crash) is not dropped (R-53): it updates that ride, which keeps its name and
+    /// bike and takes the recording's lean angle, acceleration and road surface; a Bosch ride keeps
+    /// its own values and gets them added.
     @discardableResult
     public func saveRecording(gpx: Data, fileName: String) -> ImportResult {
-        library.importFile(data: gpx, fileName: fileName, bike: library.activeBike())
+        let result = library.importFile(data: gpx, fileName: fileName, bike: library.activeBike())
+        guard case .duplicate(let id) = result.outcome, let ride = library.ride(withID: id) else { return result }
+        do {
+            try library.update(ride, with: gpx, fileName: fileName)
+        } catch {
+            return ImportResult(fileName: fileName, outcome: .failed(error))
+        }
+        return result
     }
 
     // MARK: - Editing (B-240)
