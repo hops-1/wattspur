@@ -25,6 +25,22 @@ private enum Edit {
         return out + rest
     }
 
+    /// Adds the motion values of an iPhone recording (lean, acceleration, road surface; B-245, B-248)
+    /// to every track point, in Wattspur's own GPX extension.
+    static func addMotion(_ gpx: String) -> String {
+        var index = 0
+        var out = ""
+        var rest = Substring(gpx.replacingOccurrences(of: "<gpx ", with: "<gpx xmlns:wattspur=\"\(GPXWriter.wattspurNamespace)\" "))
+        while let end = rest.range(of: "</trkpt>") {
+            out += rest[..<end.lowerBound]
+            let lean = Double(index % 30) - 15
+            out += "<extensions><wattspur:lean>\(lean)</wattspur:lean><wattspur:accel>0.120</wattspur:accel><wattspur:rough>0.250</wattspur:rough></extensions></trkpt>"
+            rest = rest[end.upperBound...]
+            index += 1
+        }
+        return out + rest
+    }
+
     /// Only the first `count` track points.
     static func firstPoints(_ gpx: String, _ count: Int) -> String {
         var rest = Substring(gpx)
@@ -185,6 +201,41 @@ struct GPXDuplicateTests {
             Issue.record("Expected duplicate, got \(again.outcome)")
             return
         }
+    }
+
+    @Test("Updating an iPhone recording with the Bosch FIT keeps lean, acceleration and road surface")
+    func fitForGPXKeepsMotion() throws {
+        let gpxResult = importGPX(Edit.addMotion(try Edit.text("pair-tour1-bosch-flow")), as: "tour1.gpx")
+        guard case .imported(let gpxID) = gpxResult.outcome, let ride = library.ride(withID: gpxID) else {
+            Issue.record("Expected import")
+            return
+        }
+        let leansBefore = ride.samples.filter { $0.lean != nil }.count
+        #expect(leansBefore > 2000)
+
+        try library.update(ride, with: try GPXFixture.fitData("pair-tour1-bosch-flow"), fileName: "Beispielrunde-\(tour1UUID).fit")
+        #expect(ride.source == .fit)
+        #expect(ride.averagePower == 135)
+        let samples = ride.samples
+        #expect(samples.filter { $0.lean != nil }.count > 2000)
+        #expect(samples.filter { $0.acceleration == 0.12 }.count > 2000)
+        #expect(samples.filter { $0.roughness == 0.25 }.count > 2000)
+        #expect(samples.compactMap(\.lean).max() == 14)
+        #expect(samples.compactMap(\.lean).min() == -15)
+        // The figures of the ride detail come back from the Bosch time series.
+        #expect(RideMotion(samples: samples, motorized: false) != nil)
+    }
+
+    @Test("A GPX with motion values attached to a Bosch ride brings them along")
+    func gpxForFITKeepsMotion() throws {
+        _ = try importFIT()
+        let result = importGPX(Edit.addMotion(try Edit.text("pair-tour1-bosch-flow")), as: "tour1.gpx")
+        guard case .attached(let id) = result.outcome, let ride = library.ride(withID: id) else {
+            Issue.record("Expected attached, got \(result.outcome)")
+            return
+        }
+        #expect(ride.source == .fit)
+        #expect(ride.samples.filter { $0.lean != nil }.count > 2000)
     }
 
     @Test("Two GPX files of one tour are a duplicate, as with two FIT exports")

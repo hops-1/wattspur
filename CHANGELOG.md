@@ -7,6 +7,10 @@ Every DMG handed out to testers corresponds to one entry below.
 
 ## [Unreleased]
 
+### Fixed
+
+- **Lean angle kept with the Bosch file:** when the Bosch FIT of a ride recorded with the iPhone came in, Wattspur took the Bosch values and dropped the lean angle, acceleration and road surface of the recording; only heart rate and temperature stayed. Now they stay too, also when a GPX is attached to a Bosch ride. Rides updated before keep missing them.
+
 ## [1.8.6] – 2026-11-06
 
 Rides recorded with the iPhone app 0.5.1 bring lean angle, acceleration and how rough the road was. The Mac shows them in the ride detail, next to the iPhone. The values are a first version: the limits are checked against real test rides on a motorcycle and an e-bike and may still change.
