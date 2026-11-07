@@ -102,6 +102,16 @@
         }
       }
     },
+    "Could Not Save" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Speichern fehlgeschlagen"
+          }
+        }
+      }
+    },
     "Last backup before turning sync on: %@." : {
       "localizations" : {
         "de" : {
@@ -138,6 +148,16 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Der Sync mit iCloud ist an. Nach dem Wiederherstellen spielt iCloud wieder ein, was sich seit der Sicherung geändert hat: Seitdem gelöschte Fahrten können wieder verschwinden, und Änderungen vom iPhone können wiederhergestellte Werte ersetzen. Willst du die Sicherung genau so, schalte den Sync vorher aus."
+          }
+        }
+      }
+    },
+    "The last change could not be saved and may be lost when Wattspur quits. Check that there is free space on this device. %@" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Die letzte Änderung konnte nicht gespeichert werden und geht beim Beenden von Wattspur womöglich verloren. Prüfe, ob auf diesem Gerät genug Speicher frei ist. %@"
           }
         }
       }

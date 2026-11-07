@@ -28,7 +28,7 @@ struct GoalService: LibraryService {
 
     /// Writes changes a caller made to a model object (a bike being edited, the rider's name).
     func save() {
-        try? context.save()
+        LibrarySave.save(context)
     }
 
     /// Rides whose start has not been looked up for a time zone yet (B-006).

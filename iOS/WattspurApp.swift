@@ -117,6 +117,7 @@ struct WattspurApp: App {
             .environment(folder)
             .environment(sync)
             .environment(\.switchSync, SwitchSyncAction(switchSync))
+            .reportsSaveFailures()
             .environment(library)
             .environment(recorder)
             .environment(recordings)

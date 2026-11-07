@@ -13,6 +13,7 @@ Every DMG handed out to testers corresponds to one entry below.
 
 ### Fixed
 
+- **When saving fails:** if the library could not be saved, for example with a full disk, the change was gone after the next start without a word. Now Mac and iPhone say so.
 - **Restoring a backup with sync on (Mac):** the dialog now says that iCloud brings back what changed since the backup, and that sync should be turned off first to get the backup as it is.
 - **Turning sync off on the iPhone:** the iPhone then showed the old folder of iOS 0.2 instead of its own rides; without a folder it showed none, and recordings did not become rides. Now the rides stay on the iPhone; only users of the folder way keep the folder. The change takes effect the next time Wattspur opens, so the sync really stops.
 - **Sync status:** when iOS stopped the app in the middle of a sync, “Syncing …” could stay for the rest of the session, and doubles were merged only at the next launch. Both now give up after a few minutes.

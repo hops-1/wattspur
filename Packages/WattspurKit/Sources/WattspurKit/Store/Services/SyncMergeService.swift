@@ -41,7 +41,7 @@ struct SyncMergeService: LibraryService {
         if !report.isEmpty {
             // The active bike may have been one of the removed ones.
             _ = BikeService(env).activeBike()
-            try? context.save()
+            LibrarySave.save(context)
         }
         return report
     }

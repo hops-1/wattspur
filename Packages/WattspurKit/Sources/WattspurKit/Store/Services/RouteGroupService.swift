@@ -57,7 +57,7 @@ struct RouteGroupService: LibraryService {
         let group = RouteGroup(name: trimmed, threshold: RouteSimilarity.clampedThreshold(threshold),
                                includeReverse: includeReverse, referenceRoute: route, referenceRideID: ride.id)
         context.insert(group)
-        try? context.save()
+        LibrarySave.save(context)
         let id = group.id
         registerUndo { $0.remove(id) }
         return group
@@ -68,7 +68,7 @@ struct RouteGroupService: LibraryService {
         guard !trimmed.isEmpty, trimmed != group.name else { return }
         let old = group.name
         group.name = trimmed
-        try? context.save()
+        LibrarySave.save(context)
         let id = group.id
         registerUndo { service in
             guard let group = service.group(withID: id) else { return }
@@ -83,7 +83,7 @@ struct RouteGroupService: LibraryService {
         let oldThreshold = group.threshold, oldReverse = group.includeReverse
         group.threshold = newThreshold
         group.includeReverse = includeReverse
-        try? context.save()
+        LibrarySave.save(context)
         let id = group.id
         registerUndo { service in
             guard let group = service.group(withID: id) else { return }
@@ -95,7 +95,7 @@ struct RouteGroupService: LibraryService {
     func dissolve(_ group: RouteGroup) {
         let snapshot = Snapshot(group)
         context.delete(group)
-        try? context.save()
+        LibrarySave.save(context)
         registerUndo { $0.restore(snapshot) }
     }
 
@@ -107,7 +107,7 @@ struct RouteGroupService: LibraryService {
     private func restore(_ snapshot: Snapshot) {
         guard group(withID: snapshot.id) == nil else { return }
         context.insert(snapshot.makeGroup())
-        try? context.save()
+        LibrarySave.save(context)
         let id = snapshot.id
         registerUndo { $0.remove(id) }
     }
