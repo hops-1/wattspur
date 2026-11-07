@@ -138,27 +138,45 @@ struct ImportService: LibraryService {
 
     /// Re-parses rides whose stored parser version is older than the current one,
     /// from their archived original file. Local edits (name, trash) stay (NFR-17).
-    /// Returns the number of updated rides.
+    /// Like the overview routes (R-30): only the outdated rides are fetched, parsing runs off the
+    /// main actor in batches and each batch is saved, so a new parser version does not hang the app
+    /// at launch and an interrupted run goes on where it stopped. Returns the number of updated rides.
     @discardableResult
-    func reparseOutdatedRides() -> Int {
+    func reparseOutdatedRides(batchSize: Int = 20) async -> Int {
         var updated = 0
         var mergedToRefresh: Set<UUID> = []
-        let rides = (try? context.fetch(FetchDescriptor<Ride>())) ?? []
-        for ride in rides {
-            guard let file = ride.sourceFile, let data = file.data,
-                  let importer = importers.first(where: { $0.fileExtensions.contains(ride.sourceFormat) }),
-                  ride.parserVersion < importer.parserVersion,
-                  let parsed = try? importer.parse(data) else { continue }
-            let before = ride.attachedSourceFormat == nil ? nil : (samples: ride.samples, start: ride.startDate)
-            ride.apply(parsed)
-            if let before { carrySensorValues(from: before.samples, startDate: before.start, to: ride) }
-            if ride.bike == nil { ride.bike = bikes.defaultBike() }
-            if let merged = ride.mergedInto { mergedToRefresh.insert(merged.id) }
-            updated += 1
+        for importer in importers {
+            let version = importer.parserVersion
+            for format in importer.fileExtensions {
+                let descriptor = FetchDescriptor<Ride>(predicate: #Predicate {
+                    $0.sourceFormat == format && $0.parserVersion < version
+                })
+                let outdated = (try? context.fetch(descriptor)) ?? []
+                for start in stride(from: 0, to: outdated.count, by: max(1, batchSize)) {
+                    let batch = Array(outdated[start..<min(start + max(1, batchSize), outdated.count)])
+                    let files = batch.map { $0.sourceFile?.data }
+                    let parsed = await Task.detached(priority: .utility) {
+                        files.map { data in data.flatMap { try? importer.parse($0) } }
+                    }.value
+                    // The ride may have been deleted or updated meanwhile.
+                    for (ride, parsed) in zip(batch, parsed) where !ride.isDeleted && ride.parserVersion < version {
+                        guard let parsed else { continue }
+                        let before = ride.attachedSourceFormat == nil ? nil : (samples: ride.samples, start: ride.startDate)
+                        ride.apply(parsed)
+                        if let before { carrySensorValues(from: before.samples, startDate: before.start, to: ride) }
+                        if ride.bike == nil { ride.bike = bikes.defaultBike() }
+                        if let merged = ride.mergedInto { mergedToRefresh.insert(merged.id) }
+                        updated += 1
+                    }
+                    try? context.save()
+                }
+            }
         }
         // A merged ride has no file of its own; it is rebuilt from its updated parts.
-        for ride in rides where mergedToRefresh.contains(ride.id) { merges.refresh(ride) }
-        if updated > 0 { try? context.save() }
+        for id in mergedToRefresh {
+            if let ride = ride(withID: id) { merges.refresh(ride) }
+        }
+        if !mergedToRefresh.isEmpty { try? context.save() }
         return updated
     }
 
