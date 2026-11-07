@@ -75,19 +75,9 @@ Apple notarisiert nur Code mit Hardened Runtime, Developer-ID-Signatur und siche
 
 Nicht auf diesem Mac geprüft (kein Zertifikat): die tatsächliche Signatur und die Antwort von Apple. Das zeigt erst der erste echte Lauf.
 
-## 3b. Release-Workflow in CI
+## 3b. Kein Release-Workflow in CI
 
-`.github/workflows/release.yml` läuft **nur von Hand** (`workflow_dispatch`), nie bei Push oder PR, damit keine macOS-Minuten ohne Absicht verbraucht werden. Die Secrets legst du selbst unter Settings › Secrets and variables › Actions an; im Repository steht nichts davon:
-
-| Secret | Inhalt |
-|---|---|
-| `DEVELOPER_ID_CERT_P12` | Developer-ID-Zertifikat samt privatem Schlüssel als .p12, base64-kodiert |
-| `DEVELOPER_ID_CERT_PASSWORD` | Passwort der .p12 |
-| `APPLE_TEAM_ID` | Team-ID |
-| `APPLE_ID` | Apple-ID für `notarytool` |
-| `APPLE_APP_SPECIFIC_PASSWORD` | App-spezifisches Passwort |
-
-Der Workflow legt einen temporären Schlüsselbund an, speichert das notarytool-Profil und ruft `scripts/build-dmg.sh` auf. Er ist ungetestet, bis die Secrets existieren. iCloud braucht ein Provisioning-Profil mit Xcode-Konto; in CI ist deshalb vorerst der lokale Weg der verlässliche.
+Releases entstehen nur am Mac mit `scripts/build-dmg.sh` (Schritte 1 bis 3a). Den manuellen Workflow `release.yml` gibt es seit 0.5.2 / 1.8.7 nicht mehr (R-03, Entscheidung Nils 6.11.2026): Er lief nie, denn ohne angemeldetes Apple-Konto im Runner klappt `-allowProvisioningUpdates` nicht. Die Secrets dafür (`DEVELOPER_ID_CERT_P12`, `DEVELOPER_ID_CERT_PASSWORD`, `APPLE_TEAM_ID`, `APPLE_ID`, `APPLE_APP_SPECIFIC_PASSWORD`) können unter Settings › Secrets and variables › Actions gelöscht werden.
 
 ## 4. Vor dem ersten Sync-Release: Schema nach Production
 

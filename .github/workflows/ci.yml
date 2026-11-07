@@ -13,6 +13,8 @@ jobs:
   kit-tests:
     name: WattspurKit tests
     runs-on: macos-26
+    # A hanging step would otherwise run for six hours on the free macOS minutes (R-07).
+    timeout-minutes: 20
     steps:
       - uses: actions/checkout@v4
       - name: Check architecture rules
@@ -31,6 +33,8 @@ jobs:
   app-build:
     name: Build app
     runs-on: macos-26
+    # A hanging step would otherwise run for six hours on the free macOS minutes (R-07).
+    timeout-minutes: 30
     steps:
       - uses: actions/checkout@v4
       - name: Install xcodegen
