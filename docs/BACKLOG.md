@@ -858,6 +858,7 @@ Je Idee eine Story; Größe grob geschätzt. Details: REQUIREMENTS.md Kap. 4.12.
 | P-31 | Fahrt nachfahren auf Apple Karten in 2D, 3D und Satellit, mit Schieberegler, Pause und Anzeige von Zeit, Geschwindigkeit, Strecke und Höhe (IDEA-31); Wunsch von Nils 25.10.2026, bewusst **nach v1.9**; erst vor dem Bau in Stories zerlegen (Mockup zuerst) | L | ☐ |
 | P-32 | Akkustand und Fahrerleistung während der Fahrt mitschreiben über das Live Data Interface von Bosch (IDEA-32); Machbarkeit offen (Smartphone laut Bosch nicht im Umfang), nur nach einem Spike und nach B-070, bewusst **nach v1.9** | L | ☐ |
 | P-33 | Wheelie und Stoppie beim Motorrad: wie weit das Vorderrad hoch- oder runtergeht, aus der Lage des iPhones (nur in der Halterung sinnvoll); Rohdaten dafür hat V-16 (Idee 5.11.2026) | S | ☐ |
+| P-34 | **Steigung aus der Neigung des iPhones** (Idee 7.11.2026): In der Halterung ändert sich der Winkel des iPhones mit der Straße, um 0,52° je Prozent Steigung (Theorie 0,57°). Das Barometer liefert über 1 km den Nullpunkt (Winkel der Halterung), die Neigung die Feinheiten auf 100 m: an den Testfahrten aus V-16 Korrelation 0,83 zur Steigung vom Barometer, im Mittel 1,5 Prozentpunkte Abweichung; die Neigung allein unterschätzt lange Anstiege. Nutzen: genauere Steigung auf kurzen, steilen Rampen (Rekorde, Höhenprofil). Braucht die Lage des iPhones (Schwerkraft) je Punkt in der Aufnahme; nur in der Halterung, nicht in der Tasche. Auswertung in `docs/SPIKE-BEWEGUNG.md` | M | ☐ |
 
 ---
 
