@@ -13,6 +13,8 @@ Every DMG handed out to testers corresponds to one entry below.
 
 ### Fixed
 
+- **The same file on Mac and iPhone:** when iCloud merged the two copies, the changes made to the newer one were lost: its name, its bike, that it was taken out of the trash, an attached GPX. Now they stay; where both copies were changed, the older one wins.
+- **Two bikes with the same name:** iCloud no longer merges them into one. Only the default bike each device makes for itself, or two bikes with the same serial number, become one.
 - **Saving a ride after a crash (iPhone):** if “End and Save” of an unfinished ride failed, the ride was deleted without a word. Now the app says why and keeps the recording.
 - **Full storage while recording (iPhone):** the app no longer quits in the middle of a ride; it goes on and shows that the ride is not backed up any more.
 - **A recording of a ride already there (iPhone):** it was dropped without a word when the same tour was already there as GPX. Now it updates that ride, which keeps its name and gets the lean angle and road surface.

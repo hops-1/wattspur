@@ -174,6 +174,78 @@ struct SyncMergeTests {
         #expect(ids.contains(onMac.id) && ids.contains(other.id) && ids.contains(otherBike.id) && ids.contains(trashed.id))
     }
 
+    @Test("What the user changed at the copy that goes stays (R-35)")
+    func ridesKeepChanges() throws {
+        let owner = rider(createdAt: mac)
+        let standard = bike("Mein eBike", createdAt: mac, rider: owner)
+        let cube = bike("Cube", createdAt: mac, rider: owner)
+        func export(importedAt: Date, bike: Bike) -> Ride {
+            let ride = ride("bosch-1", importedAt: importedAt, bike: bike)
+            ride.name = "Reinheim Rundfahrt"
+            ride.sourceFile = SourceFile(fileName: "Reinheim Rundfahrt-5e1f0c2a-7b3d-4c8e-9a61-2f4d8b0c3e57.fit", data: Data())
+            return ride
+        }
+        let first = export(importedAt: mac, bike: standard)
+        first.deletedAt = mac
+        let second = export(importedAt: phone, bike: cube)
+        second.name = "Feierabend"
+        second.attachedSourceName = "Aufnahme.gpx"
+        second.attachedSourceFormat = "gpx"
+        second.setSamples([RideSample(time: 0, lean: 12)])
+        try context.save()
+
+        #expect(library.mergeSyncDuplicates().rides == 1)
+        let left = try #require(try context.fetch(FetchDescriptor<Ride>()).first)
+        #expect(left.id == first.id)
+        #expect(left.name == "Feierabend")
+        #expect(left.bike?.id == cube.id)
+        #expect(left.deletedAt == nil)
+        #expect(left.attachedSourceFormat == "gpx")
+        #expect(left.samples.first?.lean == 12)
+    }
+
+    @Test("The kept copy's own name, bike and trash win")
+    func ridesKeeperWins() throws {
+        let owner = rider(createdAt: mac)
+        let cube = bike("Cube", createdAt: mac, rider: owner)
+        let bulls = bike("Bulls", createdAt: mac, rider: owner)
+        let first = ride("bosch-1", importedAt: mac, bike: cube)
+        first.name = "Mein Name"
+        first.sourceFile = SourceFile(fileName: "Tour-bosch-1.fit", data: Data())
+        first.deletedAt = mac
+        let second = ride("bosch-1", importedAt: phone, bike: bulls)
+        second.name = "Anderer Name"
+        second.sourceFile = SourceFile(fileName: "Tour-bosch-1.fit", data: Data())
+        second.deletedAt = phone
+        try context.save()
+
+        #expect(library.mergeSyncDuplicates().rides == 1)
+        let left = try #require(try context.fetch(FetchDescriptor<Ride>()).first)
+        #expect(left.name == "Mein Name")
+        #expect(left.bike?.id == cube.id)
+        #expect(left.deletedAt == mac)
+    }
+
+    @Test("Two bikes the user named alike stay two; the same serial number is one bike (R-36)")
+    func bikesByNameOrSerial() throws {
+        let owner = rider(createdAt: mac)
+        let cube = bike("Cube", createdAt: mac, rider: owner)
+        let secondCube = bike("Cube", createdAt: phone, rider: owner)
+        _ = ride("a", importedAt: mac, bike: cube)
+        _ = ride("b", importedAt: phone, bike: secondCube)
+        let bosch = bike("Bulls", createdAt: mac, rider: owner)
+        bosch.serialNumber = 4711
+        let boschAgain = bike("Bulls Sonic", createdAt: phone, rider: owner)
+        boschAgain.serialNumber = 4711
+        _ = ride("c", importedAt: phone, bike: boschAgain)
+        try context.save()
+
+        #expect(library.mergeSyncDuplicates().bikes == 1)
+        let names = library.bikes().map(\.name).sorted()
+        #expect(names == ["Bulls", "Cube", "Cube"])
+        #expect(bosch.rides?.count == 1)
+    }
+
     @Test("A library without doubles is left alone")
     func nothingToDo() throws {
         let owner = rider(createdAt: mac)
