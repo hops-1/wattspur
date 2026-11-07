@@ -61,7 +61,7 @@ struct PhoneDatabaseTests {
         #expect(ride.bikeID == cargo.id)
         #expect(ride.source == "gpx")
         #expect(abs(ride.distance - 720) < 20)
-        #expect(ride.routeFile == id.uuidString)
+        #expect(ride.routeFile?.hasPrefix(id.uuidString) == true)
         #expect(snapshot.lastRide?.id == id)
     }
 
@@ -131,6 +131,26 @@ struct PhoneDatabaseTests {
         #expect(rides.count == 1)
         #expect(rides.first?.name == "Mein Name")
         #expect(database.motion(forRideID: id)?.figures.maxLeanLeft == 12)
+    }
+
+    @Test("The route file name changes with the ride, so the iPhone does not show an old route (R-62)")
+    func routeFileFollowsRide() throws {
+        let id = try #require(save())
+        let before = try #require(try database.snapshot(generator: "Wattspur iOS").rides.first?.routeFile)
+        let ride = try #require(database.library.ride(withID: id))
+        // The Mac replaced the time series, e.g. with the Bosch file.
+        ride.setSamples(Array(ride.samples.prefix(60)))
+        let after = try #require(try database.snapshot(generator: "Wattspur iOS").rides.first?.routeFile)
+        #expect(before != after)
+    }
+
+    @Test("The tour detail gets charts, track and motion from one reading (R-33)")
+    func detailOnce() throws {
+        let id = try #require(save())
+        let detail = database.detail(forRideID: id)
+        #expect(detail.chartPoints == database.chartPoints(forRideID: id))
+        #expect(!detail.chartPoints.isEmpty)
+        #expect(detail.motion == nil)
     }
 
     @Test("Trash, restore and delete for good (B-217)")

@@ -86,7 +86,12 @@ public final class PhoneDatabase {
         let rides = try PhoneStateWriter(context: context).listedRides()
         return RideExchange.Library(generatedAt: now, generator: generator,
                                     bikes: library.bikes().map(\.exchangeBike),
-                                    rides: rides.map { $0.exchangeRide(routeFile: $0.mayHaveRoute ? $0.id.uuidString : nil) })
+                                    rides: rides.map { ride in
+                                        // The name changes with the route, so a ride the Mac changed
+                                        // is not shown with the old one from the cache (R-62).
+                                        ride.exchangeRide(routeFile: ride.mayHaveRoute
+                                            ? RideExchange.routeFileName(rideID: ride.id, fingerprint: ride.routeFingerprint) : nil)
+                                    })
     }
 
     /// A ride as GPX for “Share”, e.g. by AirDrop to the Mac or to komoot: the full time series like
@@ -119,6 +124,25 @@ public final class PhoneDatabase {
     /// map (B-221), like `RideCursor` on the Mac. Empty for an unknown ride.
     public func track(forRideID id: UUID) -> RideTrack {
         RideTrack(samples: library.ride(withID: id)?.samples ?? [])
+    }
+
+    /// What the tour detail shows from the time series, read once (R-33): the charts, the track for
+    /// the spot under the finger and the motion values. Empty for an unknown ride.
+    public struct Detail: Sendable {
+        public var chartPoints: [ChartPoint] = []
+        public var track = RideTrack(samples: [])
+        public var motion: (figures: RideMotion, lean: [RideMotion.LeanStretch], surface: [RideMotion.SurfaceStretch])?
+    }
+
+    public func detail(forRideID id: UUID) -> Detail {
+        guard let ride = library.ride(withID: id) else { return Detail() }
+        let samples = ride.samples
+        var detail = Detail(chartPoints: RideSeries.chartPoints(from: samples, axis: .distance, bins: 300),
+                            track: RideTrack(samples: samples))
+        if let figures = RideMotion(samples: samples, motorized: ride.bike?.kind.isMotorized == true) {
+            detail.motion = (figures, RideMotion.leanStretches(samples), RideMotion.surfaceStretches(samples))
+        }
+        return detail
     }
 
     /// Lean, acceleration and the sprint of a ride, and its track by lean angle (B-246) and by road

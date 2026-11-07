@@ -145,15 +145,25 @@ final class PhoneLibrary {
     /// Reloads when iCloud brought changes from the Mac (B-216). CloudKit imports in batches, and the
     /// links between rides (merged parts) can come a moment after the rides, so the list waits until
     /// the changes have been quiet for a second instead of drawing every half state.
+    /// Only changes from outside count (R-64): the store's remote changes and the end of an import.
+    /// This iPhone's own uploads (exports) and the start of events change nothing to show.
     private func watchICloud() {
-        let names: [Notification.Name] = [.NSPersistentStoreRemoteChange, NSPersistentCloudKitContainer.eventChangedNotification]
-        for name in names {
-            iCloudWatching.append(Task { [weak self] in
-                for await _ in NotificationCenter.default.notifications(named: name).map({ _ in () }) {
-                    self?.scheduleReload()
+        iCloudWatching.append(Task { [weak self] in
+            for await _ in NotificationCenter.default.notifications(named: .NSPersistentStoreRemoteChange).map({ _ in () }) {
+                self?.scheduleReload()
+            }
+        })
+        iCloudWatching.append(Task { [weak self] in
+            let importsEnded = NotificationCenter.default.notifications(named: NSPersistentCloudKitContainer.eventChangedNotification)
+                .compactMap { note -> Bool? in
+                    guard let event = note.userInfo?[NSPersistentCloudKitContainer.eventNotificationUserInfoKey]
+                        as? NSPersistentCloudKitContainer.Event else { return nil }
+                    return event.type == .import && event.endDate != nil ? true : nil
                 }
-            })
-        }
+            for await _ in importsEnded {
+                self?.scheduleReload()
+            }
+        })
     }
 
     private var iCloudWatching: [Task<Void, Never>] = []
@@ -227,6 +237,12 @@ final class PhoneLibrary {
     func motion(for ride: RideExchange.Ride)
         -> (figures: RideMotion, lean: [RideMotion.LeanStretch], surface: [RideMotion.SurfaceStretch])? {
         database?.motion(forRideID: ride.id)
+    }
+
+    /// Charts, track and motion of a ride from one reading of its time series (R-33); empty in folder
+    /// mode and for the sample ride.
+    func detail(for ride: RideExchange.Ride) -> PhoneDatabase.Detail {
+        database?.detail(forRideID: ride.id) ?? PhoneDatabase.Detail()
     }
 
     /// The time series of a ride, to show the spot under the finger on the chart on the map (B-221).
