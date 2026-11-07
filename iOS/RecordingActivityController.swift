@@ -14,9 +14,12 @@ final class RecordingActivityController {
     private static let interval: TimeInterval = 5
 
     init() {
-        // An activity left over from a crash or a killed app shows nothing true any more.
-        Task {
-            for activity in Activity<RecordingAttributes>.activities {
+        // An activity left over from a crash or a killed app shows nothing true any more. Only those
+        // there now: Siri may start a ride with the app closed, and its new activity must stay (R-54).
+        let leftOver = Set(Activity<RecordingAttributes>.activities.map(\.id))
+        guard !leftOver.isEmpty else { return }
+        Task.detached {
+            for activity in Activity<RecordingAttributes>.activities where leftOver.contains(activity.id) {
                 await activity.end(nil, dismissalPolicy: .immediate)
             }
         }

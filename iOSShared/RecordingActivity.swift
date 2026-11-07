@@ -39,7 +39,7 @@ enum RecordingControl {
     static var togglePause: () -> Void = {}
 }
 
-/// Numbers for the Live Activity, in the units of the app: km or miles by region, speed in km/h.
+/// Numbers for the Live Activity, in the units of the app: km and km/h, or miles and mph by region.
 enum ActivityFormat {
     static func distance(_ metres: Double) -> String {
         let unit: UnitLength = Locale.current.measurementSystem == .metric ? .kilometers : .miles
@@ -55,8 +55,10 @@ enum ActivityFormat {
         return (value.formatted(.number.precision(.fractionLength(1))), metric ? "km" : "mi")
     }
 
+    /// In mph where the distance is in miles (R-55).
     static func speed(_ metresPerSecond: Double) -> String {
-        Measurement(value: metresPerSecond, unit: UnitSpeed.metersPerSecond).converted(to: .kilometersPerHour)
+        let unit: UnitSpeed = Locale.current.measurementSystem == .metric ? .kilometersPerHour : .milesPerHour
+        return Measurement(value: metresPerSecond, unit: UnitSpeed.metersPerSecond).converted(to: unit)
             .formatted(.measurement(width: .abbreviated, usage: .asProvided,
                                     numberFormatStyle: .number.precision(.fractionLength(1))))
     }
