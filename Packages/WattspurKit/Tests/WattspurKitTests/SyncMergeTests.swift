@@ -148,6 +148,32 @@ struct SyncMergeTests {
         #expect(ids.contains(first.id) && ids.contains(gpxSame.id) && ids.contains(noID.id) && ids.contains(noIDTwin.id))
     }
 
+    @Test("An iPhone recording saved on the iPhone and imported as GPX on the Mac stays once")
+    func recordingTwice() throws {
+        let owner = rider(createdAt: mac)
+        let cube = bike("Cube", createdAt: mac, rider: owner)
+        func recording(importedAt: Date, distance: Double = 35_072.7, bike: Bike? = nil) -> Ride {
+            let ride = ride("", importedAt: importedAt, bike: bike ?? cube)
+            ride.sourceFormat = "gpx"
+            ride.startDate = Date(timeIntervalSince1970: 1_778_152_463.25)
+            ride.elapsedTime = 18_029
+            ride.distance = distance
+            return ride
+        }
+        let onMac = recording(importedAt: mac)
+        _ = recording(importedAt: phone)
+        let other = recording(importedAt: phone, distance: 14_934)
+        let otherBike = recording(importedAt: phone, bike: bike("Bulls", createdAt: mac, rider: owner))
+        let trashed = recording(importedAt: mac.addingTimeInterval(-60))
+        trashed.deletedAt = phone
+        try context.save()
+
+        #expect(library.mergeSyncDuplicates().rides == 1)
+        let ids = try context.fetch(FetchDescriptor<Ride>()).map(\.id)
+        #expect(ids.count == 4)
+        #expect(ids.contains(onMac.id) && ids.contains(other.id) && ids.contains(otherBike.id) && ids.contains(trashed.id))
+    }
+
     @Test("A library without doubles is left alone")
     func nothingToDo() throws {
         let owner = rider(createdAt: mac)
