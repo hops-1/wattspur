@@ -132,6 +132,11 @@ public final class PhoneDatabase {
         public var chartPoints: [ChartPoint] = []
         public var track = RideTrack(samples: [])
         public var motion: (figures: RideMotion, lean: [RideMotion.LeanStretch], surface: [RideMotion.SurfaceStretch])?
+
+        public init(chartPoints: [ChartPoint] = [], track: RideTrack = RideTrack(samples: [])) {
+            self.chartPoints = chartPoints
+            self.track = track
+        }
     }
 
     public func detail(forRideID id: UUID) -> Detail {
