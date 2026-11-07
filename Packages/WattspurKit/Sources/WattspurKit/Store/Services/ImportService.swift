@@ -115,7 +115,7 @@ struct ImportService: LibraryService {
         if let identifier = Self.parseFileName(fileName).sourceIdentifier { ride.sourceIdentifier = identifier }
         if incoming == .fit, before.source == .gpx {
             // The Bosch values replace the estimate; the GPX stays noted as an additional source and
-            // its heart rate and temperature are kept.
+            // its heart rate, temperature and motion values are kept.
             ride.attachedSourceName = before.fileName
             ride.attachedSourceFormat = RideSource.gpx.rawValue
             carrySensorValues(from: before.samples, startDate: before.start, to: ride)
@@ -365,8 +365,8 @@ struct ImportService: LibraryService {
         return max(0, overlap) / shorter
     }
 
-    /// Adds the extra source of a GPX file to a Bosch ride: its heart rate and temperature go into the
-    /// time series, the file is noted. The Bosch values stay (Requirements 3.3).
+    /// Adds the extra source of a GPX file to a Bosch ride: its heart rate, temperature and motion
+    /// values go into the time series, the file is noted. The Bosch values stay (Requirements 3.3).
     func attach(_ parsed: ParsedRide, fileName: String, to ride: Ride) {
         carrySensorValues(from: parsed.samples, startDate: parsed.startDate, to: ride)
         ride.attachedSourceName = fileName
@@ -382,10 +382,19 @@ struct ImportService: LibraryService {
         let shift = startDate.timeIntervalSince(ride.startDate)
         let heartRates = source.compactMap { s in s.heartRate.map { (time: s.time + shift, value: Double($0)) } }
         let temperatures = source.compactMap { s in s.temperature.map { (time: s.time + shift, value: $0) } }
-        guard !heartRates.isEmpty || !temperatures.isEmpty else { return }
+        // The motion values of an iPhone recording (B-245, B-248): a Bosch file has none, so without
+        // carrying them over a FIT for the same ride would wipe lean, acceleration and road surface.
+        let leans = source.compactMap { s in s.lean.map { (time: s.time + shift, value: $0) } }
+        let accelerations = source.compactMap { s in s.acceleration.map { (time: s.time + shift, value: $0) } }
+        let roughness = source.compactMap { s in s.roughness.map { (time: s.time + shift, value: $0) } }
+        guard !heartRates.isEmpty || !temperatures.isEmpty || !leans.isEmpty || !accelerations.isEmpty
+                || !roughness.isEmpty else { return }
         let order = samples.indices.sorted { samples[$0].time < samples[$1].time }
         Self.assign(heartRates, to: order, in: &samples) { $0.heartRate = Int($1.rounded()) }
         Self.assign(temperatures, to: order, in: &samples) { $0.temperature = $1 }
+        Self.assign(leans, to: order, in: &samples) { $0.lean = $1 }
+        Self.assign(accelerations, to: order, in: &samples) { $0.acceleration = $1 }
+        Self.assign(roughness, to: order, in: &samples) { $0.roughness = $1 }
         ride.setSamples(samples)
     }
 
