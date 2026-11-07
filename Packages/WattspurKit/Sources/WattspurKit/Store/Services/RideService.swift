@@ -11,7 +11,7 @@ struct RideService: LibraryService {
         guard !trimmed.isEmpty, trimmed != ride.name else { return }
         let old = ride.name
         ride.name = trimmed
-        try? context.save()
+        LibrarySave.save(context)
         let id = ride.id
         registerUndo { service in
             guard let ride = service.ride(withID: id) else { return }
@@ -41,7 +41,7 @@ struct RideService: LibraryService {
     private func setDeletedAt(_ changes: [(ride: Ride, date: Date?)]) {
         let previous = changes.map { (id: $0.ride.id, date: $0.ride.deletedAt) }
         for change in changes { change.ride.deletedAt = change.date }
-        try? context.save()
+        LibrarySave.save(context)
         registerUndo { service in
             let rides = previous.compactMap { change in service.ride(withID: change.id).map { (ride: $0, date: change.date) } }
             guard !rides.isEmpty else { return }
@@ -56,13 +56,13 @@ struct RideService: LibraryService {
         for ride in (try? context.fetch(descriptor)) ?? [] where (ride.deletedAt ?? now) <= cutoff {
             context.delete(ride)
         }
-        try? context.save()
+        LibrarySave.save(context)
     }
 
     /// Deletes the sample ride for good, including its original file.
     func removeSamples() {
         sampleRides().forEach(context.delete)
-        try? context.save()
+        LibrarySave.save(context)
     }
 
     func sampleRides() -> [Ride] {

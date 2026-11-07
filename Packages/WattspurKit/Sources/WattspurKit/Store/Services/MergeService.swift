@@ -43,7 +43,7 @@ struct MergeService: LibraryService {
         }
         for part in parts { part.mergedInto = ride }
         refresh(ride)
-        try? context.save()
+        LibrarySave.save(context)
         let id = ride.id
         registerUndo { service in
             // The ride or its parts may be gone since then, deleted on another device (R-27).
@@ -73,7 +73,7 @@ struct MergeService: LibraryService {
         }
         ride.parts = []
         context.delete(ride)
-        try? context.save()
+        LibrarySave.save(context)
         let ids = parts.map(\.id)
         registerUndo { service in
             let parts = ids.compactMap(service.ride(withID:))
@@ -81,7 +81,7 @@ struct MergeService: LibraryService {
             for part in parts { part.deletedAt = nil }
             let again = try? service.merge(parts, name: name)
             again?.deletedAt = deletedAt
-            try? service.context.save()
+            LibrarySave.save(service.context)
         }
         return parts
     }

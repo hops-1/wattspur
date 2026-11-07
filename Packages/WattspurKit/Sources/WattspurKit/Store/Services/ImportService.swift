@@ -59,7 +59,7 @@ struct ImportService: LibraryService {
                     return ImportResult(fileName: fileName, outcome: .duplicate(existingRideID: similar.id))
                 }
                 attach(parsed, fileName: fileName, to: similar)
-                try? context.save()
+                LibrarySave.save(context)
                 return ImportResult(fileName: fileName, outcome: .attached(rideID: similar.id))
             case (.gpx?, .gpx?):
                 return ImportResult(fileName: fileName, outcome: .duplicate(existingRideID: similar.id))
@@ -79,7 +79,7 @@ struct ImportService: LibraryService {
         ride.bike = target
         ride.sourceFile = SourceFile(fileName: fileName, data: data)
         context.insert(ride)
-        try? context.save()
+        LibrarySave.save(context)
         return ImportResult(fileName: fileName, outcome: .imported(rideID: ride.id))
     }
 
@@ -105,7 +105,7 @@ struct ImportService: LibraryService {
         if incoming == .gpx, ride.source == .fit {
             attach(parsed, fileName: fileName, to: ride)
             if let merged = ride.mergedInto { merges.refresh(merged) }
-            try? context.save()
+            LibrarySave.save(context)
             return
         }
 
@@ -133,7 +133,7 @@ struct ImportService: LibraryService {
             ride.sourceFile = SourceFile(fileName: fileName, data: data)
         }
         if let merged = ride.mergedInto { merges.refresh(merged) }
-        try? context.save()
+        LibrarySave.save(context)
     }
 
     /// Re-parses rides whose stored parser version is older than the current one,
@@ -168,7 +168,7 @@ struct ImportService: LibraryService {
                         if let merged = ride.mergedInto { mergedToRefresh.insert(merged.id) }
                         updated += 1
                     }
-                    try? context.save()
+                    LibrarySave.save(context)
                 }
             }
         }
@@ -176,7 +176,7 @@ struct ImportService: LibraryService {
         for id in mergedToRefresh {
             if let ride = ride(withID: id) { merges.refresh(ride) }
         }
-        if !mergedToRefresh.isEmpty { try? context.save() }
+        if !mergedToRefresh.isEmpty { LibrarySave.save(context) }
         return updated
     }
 
@@ -204,12 +204,12 @@ struct ImportService: LibraryService {
             for (ride, route) in zip(batch, routes) where !ride.isDeleted && ride.needsOverviewRoute {
                 ride.setOverviewRoute(route)
             }
-            try? context.save()
+            LibrarySave.save(context)
             done += batch.count
             progress(done, outdated.count)
         }
         for ride in merged where !ride.isDeleted && ride.needsOverviewRoute { ride.updateOverviewRouteFromParts() }
-        try? context.save()
+        LibrarySave.save(context)
         progress(outdated.count, outdated.count)
         return outdated.count
     }
@@ -243,12 +243,12 @@ struct ImportService: LibraryService {
             for (ride, value) in zip(batch, values) where !ride.isDeleted && ride.needsPeakPower {
                 ride.setPeakPower(value)
             }
-            try? context.save()
+            LibrarySave.save(context)
             done += batch.count
             progress(done, outdated.count)
         }
         for ride in merged where !ride.isDeleted && ride.needsPeakPower { ride.updatePeakPowerFromParts() }
-        try? context.save()
+        LibrarySave.save(context)
         progress(outdated.count, outdated.count)
         return outdated.count
     }
@@ -280,7 +280,7 @@ struct ImportService: LibraryService {
             for (ride, value) in zip(batch, values) where !ride.isDeleted && ride.needsTrackFigures {
                 ride.setTrackFigures(value)
             }
-            try? context.save()
+            LibrarySave.save(context)
             done += batch.count
             progress(done, outdated.count)
         }
@@ -294,14 +294,14 @@ struct ImportService: LibraryService {
     func importSample(data: Data, name: String) -> Ride? {
         if let existing = RideService(env).sampleRides().first {
             existing.deletedAt = nil
-            try? context.save()
+            LibrarySave.save(context)
             return existing
         }
         let result = importFile(data: data, fileName: "SampleRide.fit")
         guard case .imported(let id) = result.outcome, let ride = ride(withID: id) else { return nil }
         ride.isSample = true
         ride.name = name
-        try? context.save()
+        LibrarySave.save(context)
         return ride
     }
 

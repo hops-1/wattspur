@@ -186,7 +186,7 @@ public final class PhoneDatabase {
     public func deletePermanently(rideID: UUID) {
         guard let ride = library.ride(withID: rideID), ride.isInTrash else { return }
         context.delete(ride)
-        try? context.save()
+        LibrarySave.save(context)
     }
 
     /// The trash, last trashed first. Merged rides' parts and the sample ride are not in it.

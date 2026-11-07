@@ -427,6 +427,16 @@
         }
       }
     },
+    "Could Not Save" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Speichern fehlgeschlagen"
+          }
+        }
+      }
+    },
     "Distance This Week" : {
       "localizations" : {
         "de" : {
@@ -683,6 +693,16 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Sagt, wie weit du diese Woche gefahren bist."
+          }
+        }
+      }
+    },
+    "The last change could not be saved and may be lost when Wattspur quits. Check that there is free space on this device. %@" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Die letzte Änderung konnte nicht gespeichert werden und geht beim Beenden von Wattspur womöglich verloren. Prüfe, ob auf diesem Gerät genug Speicher frei ist. %@"
           }
         }
       }

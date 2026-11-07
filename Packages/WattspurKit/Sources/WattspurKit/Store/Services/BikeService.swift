@@ -56,7 +56,7 @@ struct BikeService: LibraryService {
         let rider = defaultRider()
         bike.rider = rider
         rider.activeBikeID = bike.id
-        try? context.save()
+        LibrarySave.save(context)
     }
 
     /// Adds a bike after the existing ones. An empty name becomes the default name.
@@ -71,7 +71,7 @@ struct BikeService: LibraryService {
         bike.sortOrder = position
         context.insert(bike)
         bike.rider = defaultRider()
-        try? context.save()
+        LibrarySave.save(context)
         return bike
     }
 
@@ -86,14 +86,14 @@ struct BikeService: LibraryService {
         let rider = defaultRider()
         if rider.activeBikeID == bike.id { rider.activeBikeID = nil }
         activeBike()
-        try? context.save()
+        LibrarySave.save(context)
     }
 
     /// Takes a bike out of the archive; it does not become the active bike.
     func unarchive(_ bike: Bike) {
         guard bike.isArchived else { return }
         bike.isArchived = false
-        try? context.save()
+        LibrarySave.save(context)
     }
 
     // MARK: - First bike and body data (B-138)
@@ -106,7 +106,7 @@ struct BikeService: LibraryService {
         let trimmed = name.trimmingCharacters(in: .whitespacesAndNewlines)
         if !trimmed.isEmpty { bike.name = trimmed }
         bike.color = color
-        try? context.save()
+        LibrarySave.save(context)
         return bike
     }
 
@@ -118,7 +118,7 @@ struct BikeService: LibraryService {
         rider.heightCm = ProfileInput.accepted(heightCm, in: ProfileInput.heightCm)
         rider.birthYear = ProfileInput.accepted(birthYear, in: ProfileInput.birthYears())
         rider.sex = sex
-        try? context.save()
+        LibrarySave.save(context)
     }
 
     // MARK: - Assigning rides (B-135)
@@ -141,7 +141,7 @@ struct BikeService: LibraryService {
     private func setBikes(_ changes: [(ride: Ride, bike: Bike?)]) {
         let previous = changes.map { (ride: $0.ride.id, bike: $0.ride.bike?.id) }
         for change in changes { change.ride.bike = change.bike }
-        try? context.save()
+        LibrarySave.save(context)
         registerUndo { service in
             let bikes = (try? service.context.fetch(FetchDescriptor<Bike>())) ?? []
             let rides = previous.compactMap { change -> (ride: Ride, bike: Bike?)? in
@@ -182,7 +182,7 @@ struct BikeService: LibraryService {
         let before = rider.activeBikeID
         activeBike()
         if rider.activeBikeID != before { changed = true }
-        if changed { try? context.save() }
+        if changed { LibrarySave.save(context) }
         return changed
     }
 
@@ -218,7 +218,7 @@ struct BikeService: LibraryService {
             let target = activeBike()
             for ride in orphans { ride.bike = target }
         }
-        if deleted > 0 || !orphans.isEmpty { try? context.save() }
+        if deleted > 0 || !orphans.isEmpty { LibrarySave.save(context) }
         return deleted
     }
 

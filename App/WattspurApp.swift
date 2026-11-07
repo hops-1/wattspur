@@ -134,6 +134,7 @@ struct WattspurApp: App {
                 .environment(\.librarySyncs, iCloudSync.isActive)
                 .task { await maintenance.run(library: library) }
                 .task { await curvyRoads.load() }
+                .reportsSaveFailures()
         }
         .modelContainer(container)
         .defaultSize(width: 1280, height: 860)

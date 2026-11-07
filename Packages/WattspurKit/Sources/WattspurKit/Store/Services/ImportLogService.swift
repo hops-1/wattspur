@@ -29,7 +29,7 @@ struct ImportLogService: LibraryService {
         }
         record.movedTo = movedTo
         context.insert(record)
-        try? context.save()
+        LibrarySave.save(context)
         return record
     }
 
@@ -38,7 +38,7 @@ struct ImportLogService: LibraryService {
         let record = ImportRecord(fileName: fileName, outcome: .updated, source: source, date: date)
         record.rideID = rideID
         context.insert(record)
-        try? context.save()
+        LibrarySave.save(context)
     }
 
     /// `true` if an unsupported file of this name is already in the log, so the
@@ -62,7 +62,7 @@ struct ImportLogService: LibraryService {
     func trimImportLog(olderThan days: Int = 90, now: Date = .now) {
         let cutoff = now.addingTimeInterval(-TimeInterval(days) * 86_400)
         try? context.delete(model: ImportRecord.self, where: #Predicate { $0.date < cutoff })
-        try? context.save()
+        LibrarySave.save(context)
     }
 
     // MARK: - Records (ADV-R2)
@@ -87,7 +87,7 @@ struct ImportLogService: LibraryService {
             let kinds = breaks.filter { $0.rideID == entry.rideID }.map(\.kind)
             if !kinds.isEmpty { entry.recordKinds = kinds }
         }
-        try? context.save()
+        LibrarySave.save(context)
         return breaks
     }
 
