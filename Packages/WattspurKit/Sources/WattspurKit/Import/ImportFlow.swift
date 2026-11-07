@@ -50,12 +50,18 @@ public final class ImportFlow {
         public var sensors: Bool
     }
 
-    public var bikeQuestion: BikeQuestion?
+    public var bikeQuestion: BikeQuestion? {
+        // Cancelled by the app: the next waiting import may start. Answered, `confirm` starts it after
+        // this one has run.
+        didSet { if bikeQuestion == nil, !confirming { startWaitingIfIdle() } }
+    }
     public var comparisons: [Comparison] = []
     /// The summary alert.
     public var report: ImportReport?
     /// Duplicates of two FIT files: the old question for all of them at once (IMP-02).
-    public var plainDuplicates: ImportReport?
+    public var plainDuplicates: ImportReport? {
+        didSet { if plainDuplicates == nil { startWaitingIfIdle() } }
+    }
     public var attached: Attached?
     /// Called with the rides a run added, e.g. to select the last one and look for merge suggestions.
     public var onImported: ([UUID]) -> Void = { _ in }
@@ -65,6 +71,13 @@ public final class ImportFlow {
     private var bikeID: UUID?
     private var afterComparisons: (() -> Void)?
     private var failedUpdates: [String] = []
+    /// Imports that came while a question of an earlier one was open; they start once it is
+    /// answered, so they do not replace it (R-46).
+    private var waiting: [() -> Void] = []
+    private var confirming = false
+
+    /// A question of an import is open.
+    public var isAsking: Bool { bikeQuestion != nil || !comparisons.isEmpty || plainDuplicates != nil }
 
     public init() {}
 
@@ -76,6 +89,10 @@ public final class ImportFlow {
     /// two or more bikes.
     public func start(_ urls: [URL], library: RideLibrary, record: @escaping ImportRecorder) {
         guard !urls.isEmpty else { return }
+        guard !isAsking else {
+            waiting.append { [weak self] in self?.start(urls, library: library, record: record) }
+            return
+        }
         let asking = urls.filter(Self.isGPX).contains { !Self.namesKnownBike($0, library: library) }
         if asking, library.bikes(includingArchived: false).count >= 2 {
             bikeQuestion = BikeQuestion(urls: urls)
@@ -97,8 +114,11 @@ public final class ImportFlow {
     }
 
     public func confirm(_ question: BikeQuestion, bike: Bike, library: RideLibrary, record: @escaping ImportRecorder) {
+        confirming = true
         bikeQuestion = nil
+        confirming = false
         run(question.urls, gpxBike: bike, library: library, record: record)
+        startWaitingIfIdle()
     }
 
     private func run(_ urls: [URL], gpxBike: Bike?, library: RideLibrary, record: ImportRecorder) {
@@ -199,9 +219,16 @@ public final class ImportFlow {
         afterComparisons = nil
         next?()
         if !failedUpdates.isEmpty {
-            report = ImportReport(entries: [], extraLines: ImportReport.unreadableLines(failedUpdates))
+            report = ImportReport(entries: [], failedUpdates: failedUpdates)
             failedUpdates = []
         }
+        startWaitingIfIdle()
+    }
+
+    /// Starts the next waiting import once no question is open.
+    private func startWaitingIfIdle() {
+        guard !isAsking, !waiting.isEmpty else { return }
+        waiting.removeFirst()()
     }
 
     /// The plain duplicates: update all of them from the new files.
@@ -218,7 +245,7 @@ public final class ImportFlow {
         }
         plainDuplicates = nil
         if !failed.isEmpty {
-            self.report = ImportReport(entries: [], extraLines: ImportReport.unreadableLines(failed))
+            self.report = ImportReport(entries: [], failedUpdates: failed)
         }
     }
 }

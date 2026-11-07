@@ -48,7 +48,7 @@ struct ImportFlowTests {
         #expect(flow.bikeQuestion == nil)
         let report = try #require(flow.report)
         #expect(report.hasNews)
-        #expect(report.message.contains("1"))
+        #expect(report.importedCount == 1)
     }
 
     @Test("A GPX file asks for the bike once there are two, and goes to the chosen one")
@@ -64,6 +64,22 @@ struct ImportFlowTests {
         #expect(flow.bikeQuestion == nil)
         let id = try #require(imported.first)
         #expect(library.ride(withID: id)?.bike?.id == cargo.id)
+    }
+
+    @Test("A second import while the first asks waits for the answer, then runs (R-46)")
+    func secondImportWaits() throws {
+        let cargo = library.makeBike(name: "Lastenrad", kind: .cargo)
+        let first = try gpx
+        flow.start([first], library: library) { _, _ in }
+        let question = try #require(flow.bikeQuestion)
+        var imported: [UUID] = []
+        flow.onImported = { imported += $0 }
+        flow.start([try fit], library: library) { _, _ in }
+        #expect(flow.bikeQuestion?.id == question.id)
+        #expect(imported.isEmpty)
+        flow.confirm(question, bike: cargo, library: library) { _, _ in }
+        #expect(imported.count == 2)
+        #expect(library.ride(withID: imported[0])?.bike?.id == cargo.id)
     }
 
     @Test("With one bike a GPX file needs no question")

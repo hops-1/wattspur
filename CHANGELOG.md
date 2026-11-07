@@ -13,6 +13,7 @@ Every DMG handed out to testers corresponds to one entry below.
 
 ### Fixed
 
+- **Two imports in a row:** a second file opened while Wattspur still asked about the first (the bike, or what to do with a ride already there) replaced that question, and the first file was left undecided. Now the second waits for the answer.
 - **Importing a ride that is in the trash:** the file was taken as “already there”, and the ride stayed in the trash until it was deleted for good. Now it comes back, and the import log says so.
 - **Files still being written (Mac, watched folder):** a large file or one on a slow network could be read half and moved to “Failed”. Now the folder waits until the file has not changed for a few seconds.
 - **Files that cannot be read:** the import log now says that the file could not be read, instead of blaming a broken FIT file.
