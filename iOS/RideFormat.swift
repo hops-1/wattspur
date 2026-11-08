@@ -114,12 +114,12 @@ extension Color {
         }
     }
 
-    /// The track by road surface (B-248): grey smooth, yellow uneven, brown rough.
+    /// The track by road surface (B-248): grey smooth, yellow-orange uneven, red rough (B-276).
     static func surface(_ band: RideMotion.SurfaceBand) -> Color {
         switch band {
         case .smooth: .gray
-        case .uneven: .yellow
-        case .rough: .brown
+        case .uneven: Color(red: 1, green: 0.66, blue: 0.1)
+        case .rough: .red
         }
     }
 }

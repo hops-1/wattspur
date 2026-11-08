@@ -138,8 +138,21 @@ struct PhoneDatabaseTests {
         let id = try #require(save())
         let before = try #require(try database.snapshot(generator: "Wattspur iOS").rides.first?.routeFile)
         let ride = try #require(database.library.ride(withID: id))
-        // The Mac replaced the time series, e.g. with the Bosch file.
-        ride.setSamples(Array(ride.samples.prefix(60)))
+        // The Mac replaced the time series, e.g. with the Bosch file, and with it the overview route.
+        // The fingerprint reads only such inline values, never the time series itself (B-276).
+        let shorter = Array(ride.samples.prefix(60))
+        ride.setSamples(shorter)
+        ride.setOverviewRoute(OverviewRoute(samples: shorter))
+        let after = try #require(try database.snapshot(generator: "Wattspur iOS").rides.first?.routeFile)
+        #expect(before != after)
+    }
+
+    @Test("A GPX attached on the Mac changes the route file name too (B-276)")
+    func routeFileFollowsAttachedSource() throws {
+        let id = try #require(save())
+        let before = try #require(try database.snapshot(generator: "Wattspur iOS").rides.first?.routeFile)
+        let ride = try #require(database.library.ride(withID: id))
+        ride.attachedSourceName = "Tour.gpx"
         let after = try #require(try database.snapshot(generator: "Wattspur iOS").rides.first?.routeFile)
         #expect(before != after)
     }

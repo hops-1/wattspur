@@ -567,12 +567,12 @@ private struct LeanLegend: View {
 }
 
 extension Color {
-    /// The route by road surface (B-248): grey smooth, amber uneven, brown rough.
+    /// The route by road surface (B-248): grey smooth, yellow-orange uneven, red rough (B-276).
     static func surface(_ band: RideMotion.SurfaceBand) -> Color {
         switch band {
         case .smooth: .adaptive(light: 0x9AA0A8, dark: 0xB8BDC4)
-        case .uneven: .adaptive(light: 0xE0A100, dark: 0xFFD43B)
-        case .rough: .adaptive(light: 0x8A4B14, dark: 0xC8823F)
+        case .uneven: .adaptive(light: 0xF59F00, dark: 0xFFB238)
+        case .rough: .adaptive(light: 0xE03131, dark: 0xFF5C5C)
         }
     }
 }
