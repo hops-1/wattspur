@@ -205,9 +205,10 @@ struct RideMap: View {
             if let shown = route ?? loaded, shown.pointCount > 0 {
                 RouteMap(route: shown, interactive: interactive, marker: marker, leanStretches: leanStretches,
                          surfaceStretches: surfaceStretches)
-                    // A fresh map for each ride: `Map(initialPosition:)` frames the track only once,
-                    // so the tile "Last Ride" kept the view of the ride before (7.11.2026).
-                    .id(ride.id)
+                    // A fresh map for each route: `Map(initialPosition:)` frames the track only once,
+                    // so the tile "Last Ride" kept the view of the ride before (B-275), and of the
+                    // recording after the Mac brought its Bosch file (B-279).
+                    .id(shown.identity)
             } else {
                 Rectangle()
                     .fill(.quaternary)

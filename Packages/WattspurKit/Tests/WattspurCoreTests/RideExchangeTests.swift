@@ -152,4 +152,17 @@ struct RideExchangeListTests {
         #expect(library.bikesForEditing(current: nil).map(\.name) == ["Cube"])
         #expect(library.bikesForEditing(current: old.id).map(\.name) == ["Cube", "Altes Rad"])
     }
+
+    @Test("A route of the same ride that changed has another identity, the same route the same (B-279)")
+    func routeIdentity() {
+        let id = UUID()
+        func route(_ lats: [Double]) -> RideExchange.Route {
+            RideExchange.Route(rideID: id, segments: [.init(latitude: lats, longitude: lats.map { _ in 8.5 },
+                                                            altitude: lats.map { _ in nil },
+                                                            distance: lats.indices.map { Double($0) * 100 })])
+        }
+        #expect(route([52.0, 52.1]).identity == route([52.0, 52.1]).identity)
+        #expect(route([52.0, 52.1]).identity != route([52.0, 52.1, 52.2]).identity)
+        #expect(route([52.0, 52.1]).identity != route([51.9, 52.1]).identity)
+    }
 }
