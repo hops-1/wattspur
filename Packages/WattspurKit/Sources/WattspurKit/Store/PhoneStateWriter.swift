@@ -97,7 +97,9 @@ extension Ride {
     }
 
     /// Changes whenever the route of the ride can have changed: an update from a file, a merge
-    /// or a split. Cheap: it reads no time series.
+    /// or a split. Cheap: it reads no time series. Only inline values: the time series lives in a
+    /// file of its own, and reading it for every ride while iCloud replaces that file crashed the
+    /// iPhone (B-276).
     var routeFingerprint: UInt64 {
         RideExchange.fingerprint(routeFingerprintText)
     }
@@ -106,7 +108,7 @@ extension Ride {
         if isMerged {
             return sortedParts.map(\.routeFingerprintText).joined(separator: "+")
         }
-        return "\(id.uuidString)|\(startDate.timeIntervalSince1970)|\(distance)|\(elapsedTime)|\(samplesData?.count ?? 0)|\(RideExchange.routeSpacing)"
+        return "\(id.uuidString)|\(startDate.timeIntervalSince1970)|\(distance)|\(elapsedTime)|\(overviewRouteData.map { RideExchange.fingerprint(bytes: $0) } ?? 0)|\(overviewRouteVersion)|\(attachedSourceName ?? "")|\(RideExchange.routeSpacing)"
     }
 
     func exchangeRide(routeFile: String?) -> RideExchange.Ride {

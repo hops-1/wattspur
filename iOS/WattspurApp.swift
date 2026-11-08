@@ -189,6 +189,11 @@ struct WattspurApp: App {
                     WidgetCenter.shared.reloadTimelines(ofKind: WidgetShare.weekWidgetKind)
                 }
             }
+            // While a ride is recorded and the app is in front, the screen stays on; otherwise
+            // iOS dims it and locks the phone after the auto-lock time (B-276).
+            .onChange(of: recorder.isRecording && scenePhase == .active, initial: true) { _, keepOn in
+                UIApplication.shared.isIdleTimerDisabled = keepOn
+            }
             // The Mac may have written a new state while the app was in the background.
             .onChange(of: scenePhase, initial: true) { _, phase in
                 if phase == .active {
