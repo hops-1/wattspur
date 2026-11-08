@@ -138,14 +138,20 @@ extension RideDetailContent {
         var id: UUID
         var parserVersion: Int
         var attachedSource: String?
-        var samplesBytes: Int
+        /// Inline values that change with the time series; the series itself is not read here,
+        /// as iCloud may replace its file at any time (B-276).
+        var distance: Double
+        var elapsedTime: TimeInterval
+        var overviewBytes: Int
         var importedAt: Date
 
         init(_ ride: Ride) {
             id = ride.id
             parserVersion = ride.parserVersion
             attachedSource = ride.attachedSourceName
-            samplesBytes = ride.samplesData?.count ?? 0
+            distance = ride.distance
+            elapsedTime = ride.elapsedTime
+            overviewBytes = ride.overviewRouteData?.count ?? 0
             importedAt = ride.importedAt
         }
     }
