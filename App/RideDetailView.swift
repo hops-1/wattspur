@@ -248,9 +248,10 @@ extension RideDetailContent {
             RideSourceLine(ride: ride)
             routeLine
 
-            // The route by lean angle hides the new stretches, which would cover it (B-247).
+            // A colouring of the route (curves, lean angle, surface) hides the new stretches, which
+            // would cover it in red too (B-247, B-278).
             RideMapView(route: route, mapType: mapType, joins: joins,
-                        newStretches: showsLean || showsSurface ? [] : newPaths.result(for: ride)?.stretches ?? [],
+                        newStretches: showsCurves || showsLean || showsSurface ? [] : newPaths.result(for: ride)?.stretches ?? [],
                         curves: colourByCurves ? curves : [], leanStretches: showsLean ? leanStretches : [],
                         surfaceStretches: showsSurface ? surfaceStretches : [],
                         curvyRoads: curvyRoads.set(enabled: showsCurvyRoads))
@@ -377,6 +378,7 @@ extension RideDetailContent {
     }
 
     /// Whether the map shows the route by lean angle (B-247).
+    private var showsCurves: Bool { colourByCurves && !curves.isEmpty }
     private var showsLean: Bool { colourByLean && !colourByCurves && !colourBySurface && !leanStretches.isEmpty }
     /// Whether the map shows the route by road surface (B-248).
     private var showsSurface: Bool { colourBySurface && !colourByCurves && !surfaceStretches.isEmpty }
