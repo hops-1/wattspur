@@ -2,6 +2,10 @@
 // in it, the app is signed ad hoc as before and has no iCloud access. With the developer account
 // Local.xcconfig switches to Developer ID and the entitlements with the iCloud container
 // (template: Local.xcconfig.example, steps: docs/RELEASE.md).
+// The version of the Mac app; scripts/build-dmg.sh reads it from here (R-12). The build number
+// counts the commits and comes from the script.
+MARKETING_VERSION = 1.8.6
+
 WATTSPUR_MAC_SIGN_STYLE = Manual
 WATTSPUR_MAC_SIGN_IDENTITY = -
 WATTSPUR_MAC_ENTITLEMENTS = App/Wattspur.entitlements

@@ -10,7 +10,8 @@ options:
 settings:
   base:
     SWIFT_VERSION: "6.0"
-    MARKETING_VERSION: "1.8.6"
+    # The versions: the Mac's in Config/Mac.xcconfig, the iPhone's (app and widgets) in
+    # Config/iOS.xcconfig, each in one place (R-04, R-12).
     CURRENT_PROJECT_VERSION: "1"
     SWIFT_STRICT_CONCURRENCY: complete
 packages:
@@ -93,9 +94,6 @@ targets:
         # Live Activity while recording (B-223).
         INFOPLIST_KEY_NSSupportsLiveActivities: YES
         PRODUCT_NAME: Wattspur
-        MARKETING_VERSION: "0.5.1"
-        # Higher than the last TestFlight upload (0.5.1 build 7)
-        CURRENT_PROJECT_VERSION: "8"
         # iPhone only for now; iPad later
         TARGETED_DEVICE_FAMILY: "1"
         GENERATE_INFOPLIST_FILE: YES
@@ -125,8 +123,8 @@ targets:
         INFOPLIST_PREFIX_HEADER: $(DERIVED_FILE_DIR)/WattspurGitInfo.h
     preBuildScripts:
       - *gitCommitScript
-  # Widget extension of the iPhone app (B-223, B-224). Its version must match the app's: change
-  # MARKETING_VERSION and CURRENT_PROJECT_VERSION in both targets for every upload.
+  # Widget extension of the iPhone app (B-223, B-224). Its version must match the app's; both take it
+  # from Config/iOS.xcconfig (R-04).
   Wattspur Widgets:
     type: app-extension
     platform: iOS
@@ -144,8 +142,6 @@ targets:
       base:
         PRODUCT_BUNDLE_IDENTIFIER: io.github.hops-1.wattspur.ios.widgets
         PRODUCT_NAME: WattspurWidgets
-        MARKETING_VERSION: "0.5.1"
-        CURRENT_PROJECT_VERSION: "8"
         TARGETED_DEVICE_FAMILY: "1"
         GENERATE_INFOPLIST_FILE: YES
         INFOPLIST_FILE: Config/iOS-Widgets-Info.plist
