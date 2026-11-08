@@ -26,6 +26,7 @@ struct CurvyRoadLibraryTests {
     @Test("An import keeps the region; another with the same state replaces it")
     func installAndReplace() throws {
         let work = try folder()
+        defer { try? FileManager.default.removeItem(at: work) }
         let library = CurvyRoadLibrary(directory: work.appendingPathComponent("store"))
         #expect(library.regions().isEmpty && library.roads().isEmpty)
 
@@ -56,6 +57,7 @@ struct CurvyRoadLibraryTests {
     @Test("A file that is no curvature data leaves the library as it was")
     func refused() throws {
         let work = try folder()
+        defer { try? FileManager.default.removeItem(at: work) }
         let library = CurvyRoadLibrary(directory: work.appendingPathComponent("store"))
         let url = work.appendingPathComponent("route.kml")
         try Data("<kml><Document/></kml>".utf8).write(to: url)
@@ -66,6 +68,7 @@ struct CurvyRoadLibraryTests {
     @Test("A damaged region file is skipped, the others stay")
     func damagedFile() throws {
         let work = try folder()
+        defer { try? FileManager.default.removeItem(at: work) }
         let library = CurvyRoadLibrary(directory: work.appendingPathComponent("store"))
         let url = work.appendingPathComponent("hessen.kml")
         try kml(roads: 2).write(to: url)

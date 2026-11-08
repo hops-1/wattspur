@@ -7,7 +7,7 @@ import TestFixtures
 
 @MainActor
 @Suite("State for the iPhone")
-struct PhoneStateWriterTests {
+final class PhoneStateWriterTests {
     let container: ModelContainer
     let library: RideLibrary
     let folder: URL
@@ -19,6 +19,9 @@ struct PhoneStateWriterTests {
         folder = FileManager.default.temporaryDirectory.appendingPathComponent("wattspur-phone-\(UUID().uuidString)")
         try FileManager.default.createDirectory(at: folder, withIntermediateDirectories: true)
     }
+
+    // The temporary folder goes with the suite (R-10).
+    deinit { try? FileManager.default.removeItem(at: folder) }
 
     var writer: PhoneStateWriter { PhoneStateWriter(context: container.mainContext) }
     var routesFolder: URL { folder.appending(path: "iPhone/Routen") }

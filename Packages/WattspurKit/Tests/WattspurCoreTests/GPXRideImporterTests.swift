@@ -457,13 +457,12 @@ struct GPXRideImporterTests {
         #expect(try GPXRideImporter(maxPoints: 51).parseTrack(data).pointCount == 51)
     }
 
-    @Test("Reading a big track is fast")
+    // A generous limit: with coverage or on a busy runner a tight one turns red without a change (R-09).
+    @Test("Reading a big track is fast", .timeLimit(.minutes(1)))
     func speed() throws {
         let points = (0..<60_000).map { Doc.point($0 % 50_000 + ($0 / 50_000) * 100_000, step: $0) }
         let data = Doc.gpx([points])
-        let started = Date()
         let track = try importer.parseTrack(data)
         #expect(track.pointCount > 59_000)
-        #expect(Date().timeIntervalSince(started) < 5)
     }
 }

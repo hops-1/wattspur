@@ -29,6 +29,16 @@ struct SyncMergeWatcherTests {
 
     private func riders() throws -> Int { try context.fetchCount(FetchDescriptor<Rider>()) }
 
+    /// Waits until `condition` holds, up to `limit`; a fixed wait is too short on a busy machine (R-08).
+    private func eventually(within limit: Duration = .seconds(3), _ condition: () throws -> Bool) async rethrows -> Bool {
+        let end = ContinuousClock.now + limit
+        while ContinuousClock.now < end {
+            if try condition() { return true }
+            try? await Task.sleep(for: .milliseconds(20))
+        }
+        return try condition()
+    }
+
     @Test("Start merges at once and reports it")
     func mergesAtStart() throws {
         try makeTwoRiders()
@@ -46,8 +56,7 @@ struct SyncMergeWatcherTests {
         let watcher = SyncMergeWatcher(library: library, quietTime: .milliseconds(50))
         try makeTwoRiders()
         watcher.changed()
-        try await Task.sleep(for: .milliseconds(300))
-        #expect(try riders() == 1)
+        #expect(try await eventually { try riders() == 1 })
     }
 
     @Test("No merge while an import is running, then after it ends")
@@ -59,20 +68,18 @@ struct SyncMergeWatcherTests {
         try await Task.sleep(for: .milliseconds(300))
         #expect(try riders() == 2)
         watcher.handle(.init(id: id, isImport: true, isFinished: true))
-        try await Task.sleep(for: .milliseconds(300))
-        #expect(try riders() == 1)
+        #expect(try await eventually { try riders() == 1 })
         #expect(watcher.runningImports.isEmpty)
     }
 
     @Test("An import whose end never comes is forgotten after the timeout, then it merges (R-37)")
     func forgetsLostImport() async throws {
-        let watcher = SyncMergeWatcher(library: library, quietTime: .milliseconds(20), importTimeout: .milliseconds(200))
+        let watcher = SyncMergeWatcher(library: library, quietTime: .milliseconds(20), importTimeout: .milliseconds(600))
         try makeTwoRiders()
         watcher.handle(.init(id: UUID(), isImport: true, isFinished: false))
         try await Task.sleep(for: .milliseconds(100))
         #expect(try riders() == 2)
-        try await Task.sleep(for: .milliseconds(400))
-        #expect(try riders() == 1)
+        #expect(try await eventually { try riders() == 1 })
         #expect(watcher.runningImports.isEmpty)
     }
 

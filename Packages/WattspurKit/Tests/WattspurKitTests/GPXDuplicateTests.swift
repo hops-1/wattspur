@@ -433,6 +433,8 @@ struct GPXDuplicateTests {
 
         let dir = FileManager.default.temporaryDirectory.appendingPathComponent("wattspur-facts-\(UUID().uuidString)")
         try FileManager.default.createDirectory(at: dir, withIntermediateDirectories: true)
+
+        defer { try? FileManager.default.removeItem(at: dir) }
         let url = dir.appendingPathComponent("Beispielrunde-\(tour1UUID).fit")
         try GPXFixture.fitData("pair-tour1-bosch-flow").write(to: url)
         let incoming = try #require(library.facts(ofFileAt: url))
@@ -524,7 +526,7 @@ struct RouteMatchTests {
 
 @MainActor
 @Suite("Watched folder with FIT and GPX")
-struct GPXFolderImportTests {
+final class GPXFolderImportTests {
     let container: ModelContainer
     let library: RideLibrary
     let folder: URL
@@ -536,6 +538,9 @@ struct GPXFolderImportTests {
         folder = FileManager.default.temporaryDirectory.appendingPathComponent("wattspur-gpx-\(UUID().uuidString)")
         try FileManager.default.createDirectory(at: folder, withIntermediateDirectories: true)
     }
+
+    // The temporary folder goes with the suite (R-10).
+    deinit { try? FileManager.default.removeItem(at: folder) }
 
     private var watcher: FolderImport {
         FolderImport(library: library, folder: folder, importedFolderName: "Importiert", failedFolderName: "Fehlerhaft", settleTime: 0)
@@ -577,6 +582,7 @@ struct GPXFolderImportTests {
         let lib2 = RideLibrary(context: other.mainContext, importers: [FITRideImporter(), GPXRideImporter()])
         let folder2 = FileManager.default.temporaryDirectory.appendingPathComponent("wattspur-gpx-\(UUID().uuidString)")
         try FileManager.default.createDirectory(at: folder2, withIntermediateDirectories: true)
+        defer { try? FileManager.default.removeItem(at: folder2) }
         let watcher2 = FolderImport(library: lib2, folder: folder2, importedFolderName: "Importiert", failedFolderName: "Fehlerhaft", settleTime: 0)
         try GPXFixture.data("pair-tour1-bosch-flow").write(to: folder2.appendingPathComponent("tour.gpx"))
         let first = await watcher2.run()
