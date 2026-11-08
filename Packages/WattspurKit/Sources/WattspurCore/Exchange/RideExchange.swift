@@ -187,6 +187,18 @@ public enum RideExchange {
         }
 
         public var pointCount: Int { segments.reduce(0) { $0 + $1.count } }
+
+        /// Changes when the route of the ride changes, e.g. when the Mac brings the Bosch file for a
+        /// recording: the iPhone map frames a route only once, so it starts anew with a new one (B-279).
+        public var identity: String {
+            let ends = segments.compactMap { segment -> String? in
+                guard let firstLat = segment.latitude.first, let firstLon = segment.longitude.first,
+                      let lastLat = segment.latitude.last, let lastLon = segment.longitude.last else { return nil }
+                return "\(firstLat),\(firstLon)>\(lastLat),\(lastLon)"
+            }
+            let length = segments.last?.distance.last ?? 0
+            return "\(rideID.uuidString)|\(pointCount)|\(length)|" + ends.joined(separator: ";")
+        }
     }
 
     // MARK: - Files
