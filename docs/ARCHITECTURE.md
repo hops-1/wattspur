@@ -25,7 +25,7 @@ Pfeile zeigen die erlaubte Richtung der Abhängigkeit; zurück darf es nie gehen
 4. **Views schreiben nur über `RideLibrary`.** `@Query` zum Lesen ist erlaubt, `modelContext.insert/delete/save` in einer View nicht. Ziele, Bikes, Papierkorb, Zusammenführen: immer eine Methode der Bibliothek.
 5. **Eine Bibliothek für die ganze App.** `WattspurApp` erzeugt sie und gibt sie in die Environment (`@Environment(RideLibrary.self)`). Das Rückgängig-Machen gehört zum Fenster: `library.using(undoManager)`.
 6. **Die iPhone-App (`iOS/`) nimmt nichts aus `App/` außer Ressourcen** (Beispielfahrt, Icon) und importiert kein `AppKit`. Was beide Apps brauchen, wandert ins Paket, nie per Kopie. `scripts/check-architecture.sh` prüft beides (die Quellen des Targets in `project.yml`).
-7. **Einstellungsschlüssel stehen in `App/AppSettings.swift` (`SettingsKey`).** Die Werte nie ändern; eine neue Einstellung bekommt eine neue Zeile.
+7. **Einstellungsschlüssel stehen an einem Ort:** am Mac in `App/AppSettings.swift` (`SettingsKey`), am iPhone in `iOS/PhoneSettingsKey.swift` (`PhoneSettingsKey`, seit 0.5.2). Die Werte nie ändern; eine neue Einstellung bekommt eine neue Zeile.
 8. **Das Kit enthält keine Texte für die Oberfläche** (`String(localized:)` nur in der App).
 9. **Abgeleitete Werte einer Fahrt werden gespeichert und tragen eine Version** (beste Minute, Übersichtsroute, Kurvigkeit und stärkste Steigung). Ändert sich die Rechnung, wird die Version erhöht (`TrackFigures.version`), und `LibraryMaintenance` rechnet ältere Fahrten im Hintergrund nach. Eine neue Spalte kommt in `docs/reference/data-exchange.md`, sonst schlägt der Test fehl.
 

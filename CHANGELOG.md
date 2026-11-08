@@ -13,6 +13,7 @@ Every DMG handed out to testers corresponds to one entry below.
 
 ### Fixed
 
+- **Smoother:** moving the pointer over the charts on the Mac no longer builds a list of the whole ride each time, and the ascent shown while recording on the iPhone counts only the current stretch again.
 - **Live Activity (iPhone):** a ride started with Siri while the app was closed could lose its Live Activity right away, with no Pause button on the Lock Screen. And where distances are in miles, the speed now shows in mph too.
 - **The open ride changes (Mac):** after “Update” with the Bosch file, an attached GPX or a change from the iPhone, the ride detail showed the old map, charts and lean angle until another ride was chosen. Now it updates, and long rides open without a pause.
 - **A ride the Mac changed (iPhone):** map and charts stayed old until the app was restarted. Now they show the new ride.

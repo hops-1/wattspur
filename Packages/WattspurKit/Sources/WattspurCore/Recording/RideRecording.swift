@@ -132,6 +132,14 @@ public struct RideRecording: Codable, Sendable, Equatable {
         isPaused = false
         if !(segments.last ?? []).isEmpty { segments.append([]) }
         anchor = nil
+        // Everything but the new, empty stretch is finished now.
+        let finished = segments.count - 1
+        let cache = ascentCache ?? AscentCache()
+        if finished > cache.segments {
+            let more = Self.climb(of: segments[cache.segments..<finished])
+            ascentCache = AscentCache(segments: finished, metres: cache.metres + more.metres,
+                                      hasHeights: cache.hasHeights || more.hasHeights)
+        }
     }
 
     // MARK: - Figures while riding
@@ -156,17 +164,34 @@ public struct RideRecording: Codable, Sendable, Equatable {
     /// `GPXSummaryParameters.ascentThreshold`), so the figure while riding matches the saved ride;
     /// `nil` while no stretch has two heights. Shown in the landscape recording (B-243).
     public var ascent: Int? {
+        // Finished stretches come from the cache; only the current one is counted again (R-26).
+        let done = ascentCache.flatMap { $0.segments < segments.count ? $0 : nil } ?? AscentCache()
+        let rest = Self.climb(of: segments[done.segments...])
+        let hasHeights = done.hasHeights || rest.hasHeights
+        return hasHeights ? Int((done.metres + rest.metres).rounded()) : nil
+    }
+
+    /// The climb of the stretches before the current one, so `ascent` need not count them again.
+    struct AscentCache: Codable, Sendable, Equatable {
+        var segments = 0
+        var metres = 0.0
+        var hasHeights = false
+    }
+
+    private var ascentCache: AscentCache?
+
+    private static func climb(of stretches: ArraySlice<[Point]>) -> (metres: Double, hasHeights: Bool) {
         let parameters = GPXSummaryParameters.standard
         var total = 0.0
         var hasHeights = false
-        for points in segments {
+        for points in stretches {
             let heights = points.compactMap(\.fix.altitude)
             guard heights.count >= 2 else { continue }
             hasHeights = true
             total += GPXTrack.climb(GPXTrack.median(heights, points: parameters.altitudeMedianPoints),
                                     threshold: parameters.ascentThreshold).up
         }
-        return hasHeights ? Int(total.rounded()) : nil
+        return (total, hasHeights)
     }
 
     public var pointCount: Int { segments.reduce(0) { $0 + $1.count } }

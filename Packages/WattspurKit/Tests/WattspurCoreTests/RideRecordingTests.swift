@@ -36,6 +36,24 @@ struct RideRecordingTests {
         #expect((28...31).contains(ascent))
     }
 
+    @Test("A recording saved before the ascent cache (0.5.1) gives the same ascent (R-26)")
+    func ascentWithoutCache() throws {
+        var recording = RideRecording(startDate: Self.start)
+        for stretch in 0..<3 {
+            for second in 0...10 {
+                let t = Double(stretch * 20 + second)
+                recording.add(Self.fix(t, north: t * 5, altitude: 100 + t))
+            }
+            recording.pause()
+            recording.resume()
+        }
+        var json = try #require(try JSONSerialization.jsonObject(with: JSONEncoder().encode(recording)) as? [String: Any])
+        json["ascentCache"] = nil
+        let old = try JSONDecoder().decode(RideRecording.self, from: JSONSerialization.data(withJSONObject: json))
+        #expect(recording.ascent != nil)
+        #expect(old.ascent == recording.ascent)
+    }
+
     @Test("Ascent adds up over pauses, and stays nil without heights")
     func ascentOverPauses() {
         var recording = RideRecording(startDate: Self.start)

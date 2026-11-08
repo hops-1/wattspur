@@ -72,7 +72,6 @@ struct WattspurApp: App {
             done.wait()
         }
         let usesDemo = DemoMode.isOn
-        if SpikeLibrary.isOn && !usesDemo { SpikeLibrary.prepare() }
         #else
         let usesDemo = false
         #endif
@@ -80,16 +79,12 @@ struct WattspurApp: App {
         if !usesDemo {
             let storeURL = LibraryLocation.storeURL
             let manifest = LibraryBackup.pendingManifest(storeURL: storeURL)
-            if let restored = try? LibraryBackup.applyPendingRestore(storeURL: storeURL), restored != nil, let manifest {
+            if (try? LibraryBackup.applyPendingRestore(storeURL: storeURL)) != nil, let manifest {
                 notice.show(backupDate: manifest.createdAt)
             }
         }
         _restoreNotice = State(initialValue: notice)
-        #if DEBUG
-        let sync = SpikeLibrary.isOn ? ICloudSync(defaults: SpikeLibrary.defaults) : ICloudSync()
-        #else
         let sync = ICloudSync()
-        #endif
         _iCloudSync = State(initialValue: sync)
         do {
             #if DEBUG

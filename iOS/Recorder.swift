@@ -26,7 +26,7 @@ final class Recorder {
     var endRequested = false
 
     /// What is recorded, chosen in “More”; a motorcycle keeps speeds above 100 km/h.
-    static let vehicleKey = "recordingVehicle"
+    static let vehicleKey = PhoneSettingsKey.recordingVehicle
     static var vehicle: RecordingVehicle {
         UserDefaults.standard.string(forKey: vehicleKey).flatMap(RecordingVehicle.init(rawValue:)) ?? .eBike
     }

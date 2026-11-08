@@ -46,7 +46,7 @@ struct WattspurApp: App {
         _sync = State(initialValue: sync)
         let library = sync.makeLibrary(folder: folder)
         #if DEBUG
-        if UserDefaults.standard.bool(forKey: "WattspurDemoRide") { library.importSampleRideForTesting() }
+        if UserDefaults.standard.bool(forKey: PhoneSettingsKey.demoRide) { library.importSampleRideForTesting() }
         #endif
         _library = State(initialValue: library)
     }
