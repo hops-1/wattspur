@@ -13,11 +13,12 @@ A release that checks and tidies the code before the next big steps: no new feat
 
 ### Changed
 
-- **Road surface:** new limits from two test rides on an e-bike, checked against OpenStreetMap: smooth below 0.2 g, uneven up to 0.45 g, rough above (before 0.1 g and 0.25 g, so normal asphalt counted as uneven). In German the bands are now „eben“, „uneben“ and „rau“ (B-248, V-16).
+- **Road surface:** new limits from three test rides on an e-bike, checked against OpenStreetMap and against what was ridden: smooth below 0.4 g, uneven up to 0.6 g, rough above (before 0.1 g and 0.25 g, so normal asphalt counted as uneven). The roughness is now averaged over 10 seconds before it gets a colour, so a manhole cover or a kerb no longer makes a rough spot. Asphalt and even paving stones are smooth, forest tracks rough. This works for all rides at once; nothing is calculated again. In German the bands are now „eben“, „uneben“ and „rau“ (B-248, B-261, V-16).
 - **Road surface colours:** uneven is now yellow-orange and rough a clear red, instead of the earthy amber and brown (B-276).
 
 ### Fixed
 
+- **Curves and new paths (Mac):** with “Curves” on, the map drew the new paths in red on top, so tight curves and new paths looked alike. Now curves hide the new paths, as lean angle and surface do (B-278).
 - **Smoother:** moving the pointer over the charts on the Mac no longer builds a list of the whole ride each time, and the ascent shown while recording on the iPhone counts only the current stretch again.
 - **The open ride changes (Mac):** after “Update” with the Bosch file, an attached GPX or a change from the iPhone, the ride detail showed the old map, charts and lean angle until another ride was chosen. Now it updates, and long rides open without a pause.
 - **Two imports in a row:** a second file opened while Wattspur still asked about the first (the bike, or what to do with a ride already there) replaced that question, and the first file was left undecided. Now the second waits for the answer.
@@ -37,7 +38,7 @@ A release that checks and tidies the code before the next big steps: no new feat
 - **iPhone recording twice:** a recording saved on the iPhone and its GPX imported on the Mac before iCloud had brought it showed up twice. The clean-up after a sync now finds such doubles too and keeps the one imported first.
 - **Lean angle kept with the Bosch file:** when the Bosch FIT of a ride recorded with the iPhone came in, Wattspur took the Bosch values and dropped the lean angle, acceleration and road surface of the recording; only heart rate and temperature stayed. Now they stay too, also when a GPX is attached to a Bosch ride. Rides updated before keep missing them.
 
-### iPhone app 0.5.2 (TestFlight, build 10)
+### iPhone app 0.5.2 (TestFlight, build 11)
 
 The same fixes for what Mac and iPhone share (sync, import, saving, rides over several days, versions), and these for the iPhone:
 
@@ -49,7 +50,7 @@ The same fixes for what Mac and iPhone share (sync, import, saving, rides over s
 - **Height while recording:** in town or in a forest, where the GPS height is never better than about 15 m, a recording had no height at all. Now the best of the rougher GPS heights set the level after 20 seconds. When the barometer drops out for a few seconds, the height no longer jumps to the GPS value and back, which counted as ascent.
 - **Turning sync off on the iPhone:** the iPhone then showed the old folder of iOS 0.2 instead of its own rides; without a folder it showed none, and recordings did not become rides. Now the rides stay on the iPhone; only users of the folder way keep the folder. The change takes effect the next time Wattspur opens, so the sync really stops.
 - **Live Activity:** a ride started with Siri while the app was closed could lose its Live Activity right away, with no Pause button on the Lock Screen. And where distances are in miles, the speed now shows in mph too.
-- **Map of the last ride:** after a new ride, the map in “Last Ride” kept showing the place of the ride before, with the new track at the edge. Now it shows the new ride.
+- **Map of the last ride:** after a new ride, the map in “Last Ride” kept showing the place of the ride before, with the new track at the edge. The same happened when the Mac brought the Bosch file for a recording. Now it shows the whole ride in both cases (B-275, B-279).
 - **A ride the Mac changed:** map and charts stayed old until the app was restarted. Now they show the new ride.
 - **Faster on the iPhone:** the tour detail reads a ride once instead of four times, and the list is no longer rebuilt after each of the iPhone's own uploads to iCloud.
 - **Opening a file on the iPhone:** if Wattspur could not keep its copy, the file was gone without a word. Now it stays and the app says why.
