@@ -60,14 +60,27 @@ final class CachingTileOverlay: MKTileOverlay, @unchecked Sendable {
                              y: path.y >> max(0, path.z - source.maxZoom)))
     }
 
+    /// Posted on the main thread, with the overlay as object, when one of its tiles arrived.
+    static let tileArrived = Notification.Name("CachingTileOverlay.tileArrived")
+
     override func loadTile(at path: MKTileOverlayPath, result: @escaping @Sendable (Data?, (any Error)?) -> Void) {
         let source = source
-        Task {
+        Task { [weak self] in
+            let steps = max(0, path.z - source.maxZoom)
+            let parent = Tile(zoom: path.z - steps, x: path.x >> steps, y: path.y >> steps)
             do {
-                let steps = max(0, path.z - source.maxZoom)
-                let parent = Tile(zoom: path.z - steps, x: path.x >> steps, y: path.y >> steps)
-                let data = try await TileLoader.data(for: parent, from: source)
+                let data: Data
+                do {
+                    data = try await TileLoader.data(for: parent, from: source)
+                } catch {
+                    // One more try for a busy server; a failed tile stays empty until the map reloads it.
+                    try await Task.sleep(for: .seconds(2))
+                    data = try await TileLoader.data(for: parent, from: source)
+                }
                 result(steps == 0 ? data : Self.enlarge(data, steps: steps, x: path.x, y: path.y, size: source.tileSize), nil)
+                await MainActor.run { [weak self] in
+                    NotificationCenter.default.post(name: Self.tileArrived, object: self)
+                }
             } catch {
                 result(nil, error)
             }
@@ -92,11 +105,46 @@ final class CachingTileOverlay: MKTileOverlay, @unchecked Sendable {
 
 /// Draws the tiles paler and less colourful, so the routes stand out on them like on Apple's
 /// muted map (wish of Nils after testing 1.8, 27.10.2026). Only on screen; the PDF does the same.
-final class MutedTileRenderer: MKTileOverlayRenderer {
+/// `@unchecked Sendable`: MapKit draws renderers off the main thread anyway; `redrawPending` is
+/// only touched on the main thread.
+final class MutedTileRenderer: MKTileOverlayRenderer, @unchecked Sendable {
     /// How much colour is taken out, 0 … 1.
     static let desaturation: CGFloat = 0.45
     /// How strong the white veil over the tiles is, 0 … 1.
     static let veil: CGFloat = 0.3
+
+    // MapKit draws a tile that arrives late only at the zoom it was asked for. CyclOSM and
+    // OpenTopoMap render new tiles in one to four seconds; when the map's zoom moved on in
+    // that time, parts of the map stayed empty until another overlay changed (bug of Nils,
+    // 9.11.2026). So the whole renderer draws again shortly after tiles arrived.
+    private var observer: (any NSObjectProtocol)?
+    private var redrawPending = false
+
+    /// A renderer for `overlay` that redraws when its tiles arrive. No `init` override: MapKit's
+    /// `init(tileOverlay:)` calls `init(overlay:)` on the subclass, which Swift would no longer
+    /// inherit, and the app crashed with "unimplemented initializer" (test DMG 1.8.7 (604)).
+    static func make(for overlay: MKTileOverlay) -> MutedTileRenderer {
+        let renderer = MutedTileRenderer(tileOverlay: overlay)
+        renderer.observer = NotificationCenter.default.addObserver(forName: CachingTileOverlay.tileArrived,
+                                                                   object: overlay, queue: .main) { [weak renderer] _ in
+            MainActor.assumeIsolated { renderer?.scheduleRedraw() }
+        }
+        return renderer
+    }
+
+    deinit {
+        if let observer { NotificationCenter.default.removeObserver(observer) }
+    }
+
+    /// At most one redraw every 0.3 s while many tiles come in.
+    @MainActor private func scheduleRedraw() {
+        guard !redrawPending else { return }
+        redrawPending = true
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) { [weak self] in
+            self?.redrawPending = false
+            self?.setNeedsDisplay()
+        }
+    }
 
     override func draw(_ mapRect: MKMapRect, zoomScale: MKZoomScale, in context: CGContext) {
         super.draw(mapRect, zoomScale: zoomScale, in: context)

@@ -136,7 +136,7 @@ private struct ComparisonMapRepresentable: NSViewRepresentable {
         var curvyRoads: CurvyRoadSet?
 
         func mapView(_ mapView: MKMapView, rendererFor overlay: any MKOverlay) -> MKOverlayRenderer {
-            if let tiles = overlay as? MKTileOverlay { return MutedTileRenderer(tileOverlay: tiles) }
+            if let tiles = overlay as? MKTileOverlay { return MutedTileRenderer.make(for: tiles) }
             if overlay is CurvyRoadsOverlay { return CurvyRoadsRenderer(overlay: overlay) }
             return overlay is ComparisonRoutesOverlay ? ComparisonRoutesRenderer(overlay: overlay) : MKOverlayRenderer(overlay: overlay)
         }
