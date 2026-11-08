@@ -20,8 +20,8 @@ final class PhoneSync {
     let folderUser: Bool
 
     private let defaults: UserDefaults
-    static let enabledKey = "iCloudSyncEnabled"
-    static let offerShownKey = "iCloudSyncOfferShown"
+    static let enabledKey = PhoneSettingsKey.iCloudSyncEnabled
+    static let offerShownKey = PhoneSettingsKey.iCloudSyncOfferShown
 
     /// `hadFolder`: a folder was chosen before; `hadStore`: the iPhone's own store exists (a build
     /// with the store ran before). Only who had a folder and no store knows just the folder way.

@@ -154,9 +154,14 @@ public struct RideTrack: Sendable, Equatable {
     /// The sample nearest to a time; `nil` inside a pause or gap and beyond the ends of the ride.
     public func fix(atTime seconds: Double) -> Fix? {
         guard !fixes.isEmpty else { return nil }
-        let indices = Array(fixes.indices)
-        let i = nearest(in: indices, to: seconds) { fixes[$0].time }
-        return abs(fixes[i].time - seconds) <= Self.maxTimeDistance ? fixes[i] : nil
+        // Straight in the fixes, without a list of all indices on every move of the mouse (R-25).
+        var low = 0, high = fixes.count - 1
+        while low < high {
+            let mid = (low + high) / 2
+            if fixes[mid].time < seconds { low = mid + 1 } else { high = mid }
+        }
+        if low > 0, abs(fixes[low - 1].time - seconds) <= abs(fixes[low].time - seconds) { low -= 1 }
+        return abs(fixes[low].time - seconds) <= Self.maxTimeDistance ? fixes[low] : nil
     }
 
     /// The sample with a position nearest to the given one, and how far away it is in metres.

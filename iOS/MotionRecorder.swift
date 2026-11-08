@@ -19,7 +19,7 @@ import WattspurCore
 /// written about once a second. The fusion sits behind a lock, as the GPS points come on the main actor.
 final class MotionRecorder: @unchecked Sendable {
     /// The test switch in “More”.
-    static let rawLogKey = "recordRawMotion"
+    static let rawLogKey = PhoneSettingsKey.recordRawMotion
     static var writesRawLog: Bool { UserDefaults.standard.bool(forKey: rawLogKey) }
 
     private let manager = CMMotionManager()

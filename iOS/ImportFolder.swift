@@ -21,7 +21,7 @@ final class ImportFolder {
         }
     }
 
-    private static let bookmarkKey = "importFolderBookmark"
+    private static let bookmarkKey = PhoneSettingsKey.importFolderBookmark
 
     /// The chosen folder, or `nil` before the first choice.
     private(set) var url: URL?

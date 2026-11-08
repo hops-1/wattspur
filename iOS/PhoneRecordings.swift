@@ -151,8 +151,8 @@ final class PhoneRecordings {
 
     /// The last bike chosen when saving, as the default for the next ride.
     var lastBikeID: UUID? {
-        get { UserDefaults.standard.string(forKey: "lastRecordingBike").flatMap(UUID.init(uuidString:)) }
-        set { UserDefaults.standard.set(newValue?.uuidString, forKey: "lastRecordingBike") }
+        get { UserDefaults.standard.string(forKey: PhoneSettingsKey.lastRecordingBike).flatMap(UUID.init(uuidString:)) }
+        set { UserDefaults.standard.set(newValue?.uuidString, forKey: PhoneSettingsKey.lastRecordingBike) }
     }
 
     // MARK: - Helpers

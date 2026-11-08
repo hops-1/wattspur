@@ -14,7 +14,7 @@ struct RouteMap: View {
     /// The track by road surface (B-248); the detail map switches between the two.
     var surfaceStretches: [RideMotion.SurfaceStretch] = []
     /// Which colouring the detail map shows, remembered.
-    @AppStorage("trackColouring") private var colouring: TrackColouring = .lean
+    @AppStorage(PhoneSettingsKey.trackColouring) private var colouring: TrackColouring = .lean
 
     /// A coloured piece of the track.
     private struct Piece: Identifiable {
