@@ -9,7 +9,7 @@ Welcher Weg genommen wird, steht in der ignorierten Datei `Config/Local.xcconfig
 
 ## 1. Version vorbereiten (beide Wege)
 
-1. `MARKETING_VERSION` in `project.yml` erhöhen (Semantic Versioning).
+1. `MARKETING_VERSION` in `Config/Mac.xcconfig` erhöhen (Semantic Versioning). Die iPhone-App hat ihre Version und Build-Nummer in `Config/iOS.xcconfig`, für App und Widgets gemeinsam. `scripts/build-dmg.sh` bricht bei nicht eingecheckten Änderungen ab (zum Ausprobieren: `--allow-dirty`).
 2. In `CHANGELOG.md` den Abschnitt `[Unreleased]` in `[x.y.z] – Datum` umbenennen, mit einem Satz darüber, was die Version bringt.
 3. Den Release-Commit über einen PR auf `main` bringen; der Check `local-ci` muss grün sein (`scripts/ci-local.sh`).
 4. `main` auschecken und sicherstellen, dass nichts uncommittet ist (sonst zeigt „Über Wattspur“ den Commit mit `-dirty`).

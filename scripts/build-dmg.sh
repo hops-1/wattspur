@@ -3,6 +3,7 @@
 #
 #   scripts/build-dmg.sh            → dist/Wattspur-<version>-<build>.dmg
 #   scripts/build-dmg.sh --check    → only says which way it would sign and what is missing
+#   scripts/build-dmg.sh --allow-dirty → builds even with uncommitted changes (not for testers)
 #
 # Two ways, chosen in the ignored Config/Local.xcconfig (template: Local.xcconfig.example):
 # - Ad hoc (default, without a developer account): signed with "-" and not notarized, so Gatekeeper
@@ -17,7 +18,14 @@ cd "$ROOT"
 export DEVELOPER_DIR="${DEVELOPER_DIR:-/Applications/Xcode.app/Contents/Developer}"
 
 CHECK_ONLY=false
-[ "${1:-}" = "--check" ] && CHECK_ONLY=true
+ALLOW_DIRTY=false
+for arg in "$@"; do
+    case "$arg" in
+        --check) CHECK_ONLY=true ;;
+        --allow-dirty) ALLOW_DIRTY=true ;;
+        *) echo "error: unknown option $arg" >&2; exit 1 ;;
+    esac
+done
 
 # A value from Config/Local.xcconfig, the last line that sets it; empty if the file or the line is missing.
 setting() {
@@ -74,7 +82,9 @@ if $CHECK_ONLY; then
     exit 0
 fi
 
-VERSION="$(sed -n 's/^ *MARKETING_VERSION: *"\(.*\)"/\1/p' project.yml | head -1)"
+# The Mac's version, from its own config, not from whatever comes first in project.yml (R-12).
+VERSION="$(sed -n 's/^MARKETING_VERSION *= *\([^ ]*\).*/\1/p' Config/Mac.xcconfig | tail -1)"
+[ -n "$VERSION" ] || { echo "error: no MARKETING_VERSION in Config/Mac.xcconfig" >&2; exit 1; }
 # The build number counts the commits, so every DMG gets a higher one. The public
 # repository started without the 217 commits of the private one (V-05); they are
 # added, so 1.6.0 continues above the testers' 1.5.0 (build 179).
@@ -84,8 +94,14 @@ NAME="Wattspur-${VERSION}-${BUILD}"
 WORK="$ROOT/.build/dmg"
 DIST="$ROOT/dist"
 
+# A DMG for testers comes from a committed state, so its commit says what is in it (R-12).
 if [ -n "$(git status --porcelain)" ]; then
-    echo "warning: uncommitted changes – the About window will show the commit as '-dirty'." >&2
+    if $ALLOW_DIRTY; then
+        echo "warning: uncommitted changes – the About window will show the commit as '-dirty'." >&2
+    else
+        echo "error: uncommitted changes; commit them first, or build anyway with --allow-dirty." >&2
+        exit 1
+    fi
 fi
 
 echo "==> Wattspur $VERSION ($BUILD)"

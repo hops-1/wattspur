@@ -8,7 +8,7 @@ Story: B-046 (NFR-09, NFR-18)
   - Es erzeugt das Projekt mit xcodegen und baut ein Release-Archiv mit `xcodebuild archive`.
   - Es prüft die Signatur und packt die App mit `hdiutil` in `dist/Wattspur-<Version>-<Build>.dmg`, dazu eine SHA-256-Prüfsumme.
   - Im DMG liegen die App, eine Verknüpfung auf „Programme“ zum Hineinziehen und `Read Me First.txt` (Englisch und Deutsch) mit der Gatekeeper-Anleitung.
-- **Build-Nummer** = Anzahl der Commits (`git rev-list --count HEAD`). So hat jedes DMG eine höhere Nummer, ohne dass man sie von Hand pflegen muss. Die Version (`MARKETING_VERSION`) steht weiter in `project.yml`.
+- **Build-Nummer** = Anzahl der Commits (`git rev-list --count HEAD`). So hat jedes DMG eine höhere Nummer, ohne dass man sie von Hand pflegen muss. Die Version (`MARKETING_VERSION`) steht in `Config/Mac.xcconfig` (bis 1.8.6 in `project.yml`).
 
 ## Warum so
 - **Icon Composer statt PNG-Satz**: Seit macOS 26 bestehen Icons aus Ebenen (Hintergrund, Spur, Startpunkt). Das System legt daraus den Liquid-Glass-Effekt an und erzeugt die Varianten Dunkel, Getönt und Klar selbst. Ein klassisches `AppIcon.appiconset` würde macOS 26 in einen grauen Rahmen setzen. Die `.icon`-Datei ist ein Ordner mit `icon.json` und SVG-Ebenen, lässt sich mit Git gut vergleichen und im Icon Composer aus Xcode öffnen.
