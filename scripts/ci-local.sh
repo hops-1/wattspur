@@ -31,6 +31,8 @@ status() {
 
 STEP=""
 trap 'status failure "Failed: $STEP"; echo "local-ci: failed at $STEP" >&2' ERR
+# Stopped with Ctrl-C or killed: the pull request must not keep showing "pending" (R-11).
+trap 'status error "Stopped at $STEP"; echo "local-ci: stopped at $STEP" >&2; exit 130' INT TERM
 
 TOOLCHAIN="$(xcodebuild -version | head -1), macOS $(sw_vers -productVersion)"
 status pending "Running ($TOOLCHAIN)"

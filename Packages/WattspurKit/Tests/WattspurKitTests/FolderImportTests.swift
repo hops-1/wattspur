@@ -7,7 +7,7 @@ import TestFixtures
 
 @MainActor
 @Suite("Watched folder and import log")
-struct FolderImportTests {
+final class FolderImportTests {
     let container: ModelContainer
     let library: RideLibrary
     let fixture: Data
@@ -22,6 +22,9 @@ struct FolderImportTests {
         folder = FileManager.default.temporaryDirectory.appendingPathComponent("wattspur-test-\(UUID().uuidString)")
         try FileManager.default.createDirectory(at: folder, withIntermediateDirectories: true)
     }
+
+    // The temporary folder goes with the suite (R-10).
+    deinit { try? FileManager.default.removeItem(at: folder) }
 
     func write(_ data: Data, _ name: String, in dir: URL? = nil) throws {
         try data.write(to: (dir ?? folder).appendingPathComponent(name))

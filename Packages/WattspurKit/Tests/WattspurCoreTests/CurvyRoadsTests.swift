@@ -4,7 +4,7 @@ import Testing
 @testable import WattspurCore
 
 @Suite("Curvy roads from roadcurvature.com (B-182)")
-struct CurvyRoadsTests {
+final class CurvyRoadsTests {
     // MARK: Helpers
 
     /// A KML like roadcurvature's, with the figures in the description's text.
@@ -78,9 +78,13 @@ struct CurvyRoadsTests {
         return out
     }
 
+    /// The suite's own temporary folder; it goes with the suite (R-10).
+    let root = FileManager.default.temporaryDirectory.appendingPathComponent("curvy-\(UUID().uuidString)")
+    deinit { try? FileManager.default.removeItem(at: root) }
+
     /// Writes data into a new file in a folder of its own and returns the file.
-    static func file(_ name: String, _ data: Data) throws -> URL {
-        let folder = FileManager.default.temporaryDirectory.appendingPathComponent("curvy-\(UUID().uuidString)")
+    func file(_ name: String, _ data: Data) throws -> URL {
+        let folder = root.appendingPathComponent(UUID().uuidString)
         try FileManager.default.createDirectory(at: folder, withIntermediateDirectories: true)
         let url = folder.appendingPathComponent(name)
         try data.write(to: url)
@@ -91,7 +95,7 @@ struct CurvyRoadsTests {
 
     @Test("A KML gives the roads with curvature, length and the line as latitude and longitude")
     func readKML() throws {
-        let url = try Self.file("hessen.kml", Data(Self.sample.utf8))
+        let url = try file("hessen.kml", Data(Self.sample.utf8))
         let roads = try CurvyRoads.read(from: url)
         // The motorway link is left out; nobody cycles there.
         #expect(roads.map(\.name) == ["Nibelungenstraße (B 47)", "Waldweg"])
@@ -111,7 +115,8 @@ struct CurvyRoadsTests {
         for deflate in [true, false] {
             let archive = Self.zip([(name: "hessen/doc.kml", data: kml, deflate: deflate),
                                     (name: "images/legend.png", data: Data([1, 2, 3]), deflate: false)])
-            let roads = try CurvyRoads.read(from: try Self.file("hessen.c_300.kmz", archive))
+            let url = try file("hessen.c_300.kmz", archive)
+            let roads = try CurvyRoads.read(from: url)
             #expect(roads.count == 2)
         }
     }
@@ -119,7 +124,8 @@ struct CurvyRoadsTests {
     @Test("Files that are not curvature data are turned down")
     func foreign() throws {
         func fails(_ name: String, _ data: Data, _ expected: CurvyRoads.Failure) throws {
-            #expect(throws: expected) { try CurvyRoads.read(from: try Self.file(name, data)) }
+            let url = try file(name, data)
+            #expect(throws: expected) { try CurvyRoads.read(from: url) }
         }
         // A KML without the figures, a text file called KMZ, a ZIP without KML, no XML at all.
         try fails("route.kml", Data(Self.kml([]).utf8), .notCurvatureData)
@@ -135,7 +141,7 @@ struct CurvyRoadsTests {
         let archive = Self.zip([(name: "doc.kml", data: Data(Self.sample.utf8), deflate: true)])
         for cut in [10, archive.count / 2, archive.count - 5] {
             #expect(throws: (any Error).self) {
-                try CurvyRoads.read(from: try Self.file("cut.kmz", archive.prefix(cut)))
+                try CurvyRoads.read(from: try file("cut.kmz", archive.prefix(cut)))
             }
         }
     }
@@ -145,18 +151,18 @@ struct CurvyRoadsTests {
         var limits = CurvyRoads.Limits()
         limits.roads = 1
         #expect(throws: CurvyRoads.Failure.tooLarge) {
-            try CurvyRoads.read(from: try Self.file("a.kml", Data(Self.sample.utf8)), limits: limits)
+            try CurvyRoads.read(from: try file("a.kml", Data(Self.sample.utf8)), limits: limits)
         }
         limits = CurvyRoads.Limits()
         limits.points = 4
         #expect(throws: CurvyRoads.Failure.tooLarge) {
-            try CurvyRoads.read(from: try Self.file("b.kml", Data(Self.sample.utf8)), limits: limits)
+            try CurvyRoads.read(from: try file("b.kml", Data(Self.sample.utf8)), limits: limits)
         }
         limits = CurvyRoads.Limits()
         limits.uncompressedBytes = 100
         let archive = Self.zip([(name: "doc.kml", data: Data(Self.sample.utf8), deflate: true)])
         #expect(throws: CurvyRoads.Failure.tooLarge) {
-            try CurvyRoads.read(from: try Self.file("c.kmz", archive), limits: limits)
+            try CurvyRoads.read(from: try file("c.kmz", archive), limits: limits)
         }
     }
 
@@ -170,7 +176,7 @@ struct CurvyRoadsTests {
         #expect(archive.entries.map(\.name) == ["a/doc.kml", "b.txt"])
         let entry = try #require(archive.entry(withSuffix: ".KML"))
         #expect(entry.uncompressedSize == text.count && entry.compressedSize < text.count)
-        let target = try Self.file("out.kml", Data())
+        let target = try file("out.kml", Data())
         try archive.extract(entry, to: target, limit: 1_000_000)
         #expect(try Data(contentsOf: target) == text)
         #expect(throws: ZipArchive.Failure.notAZipFile) { try ZipArchive(data: Data("PK".utf8)) }

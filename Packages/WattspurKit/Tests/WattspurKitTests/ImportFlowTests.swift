@@ -8,7 +8,7 @@ import TestFixtures
 /// The decisions of the manual import, now in the Kit so the iPhone can use them too (B-188).
 @MainActor
 @Suite("Manual import steps")
-struct ImportFlowTests {
+final class ImportFlowTests {
     let container: ModelContainer
     let library: RideLibrary
     let flow = ImportFlow()
@@ -22,6 +22,9 @@ struct ImportFlowTests {
         folder = FileManager.default.temporaryDirectory.appending(path: "ImportFlowTests-\(UUID().uuidString)")
         try FileManager.default.createDirectory(at: folder, withIntermediateDirectories: true)
     }
+
+    // The temporary folder goes with the suite (R-10).
+    deinit { try? FileManager.default.removeItem(at: folder) }
 
     private func file(_ name: String, _ data: Data) throws -> URL {
         let url = folder.appending(path: name)
