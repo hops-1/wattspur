@@ -142,7 +142,7 @@ extension RideDetailContent {
         /// as iCloud may replace its file at any time (B-276).
         var distance: Double
         var elapsedTime: TimeInterval
-        var overviewBytes: Int
+        var overview: UInt64
         var importedAt: Date
 
         init(_ ride: Ride) {
@@ -151,7 +151,7 @@ extension RideDetailContent {
             attachedSource = ride.attachedSourceName
             distance = ride.distance
             elapsedTime = ride.elapsedTime
-            overviewBytes = ride.overviewRouteData?.count ?? 0
+            overview = ride.overviewRouteData.map { RideExchange.fingerprint(bytes: $0) } ?? 0
             importedAt = ride.importedAt
         }
     }

@@ -108,7 +108,7 @@ extension Ride {
         if isMerged {
             return sortedParts.map(\.routeFingerprintText).joined(separator: "+")
         }
-        return "\(id.uuidString)|\(startDate.timeIntervalSince1970)|\(distance)|\(elapsedTime)|\(overviewRouteData?.count ?? 0)|\(overviewRouteVersion)|\(RideExchange.routeSpacing)"
+        return "\(id.uuidString)|\(startDate.timeIntervalSince1970)|\(distance)|\(elapsedTime)|\(overviewRouteData.map { RideExchange.fingerprint(bytes: $0) } ?? 0)|\(overviewRouteVersion)|\(attachedSourceName ?? "")|\(RideExchange.routeSpacing)"
     }
 
     func exchangeRide(routeFile: String?) -> RideExchange.Ride {

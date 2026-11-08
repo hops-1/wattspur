@@ -204,8 +204,13 @@ public enum RideExchange {
 
     /// FNV-1a over the given text: stable across launches, unlike `Hasher`.
     public static func fingerprint(_ text: String) -> UInt64 {
+        fingerprint(bytes: text.utf8)
+    }
+
+    /// The same FNV-1a hash over raw bytes, stable across launches and devices.
+    public static func fingerprint(bytes: some Sequence<UInt8>) -> UInt64 {
         var hash: UInt64 = 0xcbf2_9ce4_8422_2325
-        for byte in text.utf8 {
+        for byte in bytes {
             hash ^= UInt64(byte)
             hash = hash &* 0x0000_0100_0000_01b3
         }
