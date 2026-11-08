@@ -7,7 +7,7 @@ Every DMG handed out to testers corresponds to one entry below.
 
 ## [Unreleased]
 
-## [1.8.7] – 2026-11-08
+## [1.8.7] – 2026-11-09
 
 A release that checks and tidies the code before the next big steps: no new features, but 51 fixes from a review of the whole app, most of them for Mac and iPhone working on the same library over iCloud. Nothing changes in how Wattspur looks or works, except that these errors are gone.
 
@@ -18,6 +18,7 @@ A release that checks and tidies the code before the next big steps: no new feat
 
 ### Fixed
 
+- **Empty map tiles (Mac):** with CyclOSM and OpenTopoMap, parts of the map could stay empty after zooming until another layer was switched. These servers take up to a few seconds for new tiles; the map now draws them as soon as they arrive, and a tile that failed is tried once more (B-282).
 - **Curves and new paths (Mac):** with “Curves” on, the map drew the new paths in red on top, so tight curves and new paths looked alike. Now curves hide the new paths, as lean angle and surface do (B-278).
 - **Smoother:** moving the pointer over the charts on the Mac no longer builds a list of the whole ride each time, and the ascent shown while recording on the iPhone counts only the current stretch again.
 - **The open ride changes (Mac):** after “Update” with the Bosch file, an attached GPX or a change from the iPhone, the ride detail showed the old map, charts and lean angle until another ride was chosen. Now it updates, and long rides open without a pause.
