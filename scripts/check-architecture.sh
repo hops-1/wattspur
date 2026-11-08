@@ -3,7 +3,8 @@
 # import SwiftData, SwiftUI, AppKit or MapKit (the compiler already forbids what the target does not
 # depend on, but a new import line in Core would make the target depend on the system framework).
 # The iPhone app (iOS/) must not import AppKit and must take nothing from App/ but resources (B-206);
-# the widgets must not import SwiftData; the package holds no texts for the user (rule 8).
+# the widgets must not import SwiftData; the package holds no texts for the user (rule 8); the apps
+# write the library only through RideLibrary (rule 4) and the package saves through LibrarySave (rule 10).
 set -euo pipefail
 cd "$(dirname "$0")/.."
 
@@ -66,5 +67,18 @@ for path in $APP_PATHS; do
             exit 1 ;;
     esac
 done
+
+# Rule 4: the apps change the library only through RideLibrary, never through a model context of
+# their own. DemoMode.swift fills a separate demo library for screenshots and may (B-259).
+if grep -rnE '([Cc]ontext|mainContext)\.(save|insert|delete)\(|modelContext' App iOS iOSShared iOSWidgets \
+        | grep -v '^App/DemoMode\.swift:'; then
+    echo "architecture: the apps write the library only through RideLibrary (see docs/ARCHITECTURE.md, rule 4)" >&2
+    exit 1
+fi
+# Rule 10: the package saves only through LibrarySave, which reports a failed save (R-31, B-259).
+if grep -rnE '[Cc]ontext\.save\(' Packages/WattspurKit/Sources | grep -v '/Store/LibrarySave\.swift:'; then
+    echo "architecture: save the library with LibrarySave.save(_:), not context.save() (see docs/ARCHITECTURE.md, rule 10)" >&2
+    exit 1
+fi
 
 echo "architecture: ok"

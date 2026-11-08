@@ -1,87 +1,164 @@
 # Architektur
 
-Stand: 1.8.1. Kurz gefasst, wo was liegt und welche Regeln gelten. Die Gründe stehen in der Lern-Notiz [25](learning/25-architektur-aufraeumen.md).
+Stand: Mac 1.8.7 und iPhone 0.5.2 (Review, B-259). Kurz gefasst, wo was liegt, wie die Daten fließen und welche Regeln gelten. Die Gründe stehen in den Lern-Notizen [25](learning/25-architektur-aufraeumen.md) (Schichten) und [34](learning/34-review.md) (Review). Die Funde des Reviews stehen in [REVIEW-0.5.2](REVIEW-0.5.2.md).
 
 ## Überblick
 
 ```
-App (SwiftUI, macOS)     Views, PDF, Karten, Ordner-Wächter, Einstellungen
-  │        iOS (SwiftUI, iPhone)   Übersicht, Fahrten vom Mac (iOS 0.x)
-  │          │
-  ▼          ▼
-WattspurKit (Store)      SwiftData-Modelle, RideLibrary und ihre Dienste, Ordner-Import
+App (macOS)            iOS (iPhone)              iOSWidgets (Erweiterung)
+Views, Karten, PDF,    Übersicht, Fahrten,       Live-Aktivität,
+Ordner, Sync-Schalter  Aufnahme, Kurzbefehle     Widget „Diese Woche“
+  │                      │        │                 │
+  │                      │        └── iOSShared ────┤  ActivityKit, App Intents, App Group
+  ▼                      ▼                          ▼
+WattspurKit (Store)                              WattspurCore allein
+SwiftData-Modelle, RideLibrary und ihre Dienste, (kein SwiftData)
+Sync, Import-Ablauf, iPhone-Datenbank
   │   re-exportiert
   ▼
-WattspurCore (rein)      FIT- und GPX-Leser, Werttypen, Analysen, Filter, Diagnosebericht
+WattspurCore (rein)
+FIT und GPX, Werttypen, Analysen, Aufnahme-Rechnung, Austauschformat
 ```
 
 Pfeile zeigen die erlaubte Richtung der Abhängigkeit; zurück darf es nie gehen.
 
+**Größe (8.11.2026):** Mac-App 15 300 Zeilen in 80 Dateien, iPhone-App 4 600 in 30, Widgets und `iOSShared` 440, `WattspurCore` 8 400 in 61, `WattspurKit` 4 300 in 31, Tests 10 900 in 76 (653 Tests).
+
 ## Regeln
 
-1. **`WattspurCore` kennt weder SwiftData noch SwiftUI, AppKit oder MapKit.** Es rechnet auf Werttypen (`RideFigures`, `HighlightRide`, `MapRide`, `ParsedRide`, `RideSample`). Der Compiler erzwingt das für Module, die es nicht einbinden; `scripts/check-architecture.sh` prüft, dass keine solche Import-Zeile hineinkommt (läuft in der CI und in `scripts/ci-local.sh`).
-2. **`WattspurKit` behält seinen Namen und alle `@Model`-Klassen** (`Ride`, `Bike`, `Rider`, `Goal`, `RouteGroup`, `SourceFile`, `ImportRecord`). Ein Umzug der Klassen in ein anderes Modul könnte bestehende Bibliotheken unlesbar machen.
-3. **Die Brücke vom Modell zu den Werttypen steht an einem Ort:** `Store/RideBridges.swift` (und `Bike+Statistics.swift`). Neue Umrechnungen von `Ride` in einen reinen Typ kommen dorthin, nicht in einen Core-Ordner.
-4. **Views schreiben nur über `RideLibrary`.** `@Query` zum Lesen ist erlaubt, `modelContext.insert/delete/save` in einer View nicht. Ziele, Bikes, Papierkorb, Zusammenführen: immer eine Methode der Bibliothek.
-5. **Eine Bibliothek für die ganze App.** `WattspurApp` erzeugt sie und gibt sie in die Environment (`@Environment(RideLibrary.self)`). Das Rückgängig-Machen gehört zum Fenster: `library.using(undoManager)`.
-6. **Die iPhone-App (`iOS/`) nimmt nichts aus `App/` außer Ressourcen** (Beispielfahrt, Icon) und importiert kein `AppKit`. Was beide Apps brauchen, wandert ins Paket, nie per Kopie. `scripts/check-architecture.sh` prüft beides (die Quellen des Targets in `project.yml`).
-7. **Einstellungsschlüssel stehen an einem Ort:** am Mac in `App/AppSettings.swift` (`SettingsKey`), am iPhone in `iOS/PhoneSettingsKey.swift` (`PhoneSettingsKey`, seit 0.5.2). Die Werte nie ändern; eine neue Einstellung bekommt eine neue Zeile.
-8. **Das Kit enthält keine Texte für die Oberfläche** (`String(localized:)` nur in der App).
-9. **Abgeleitete Werte einer Fahrt werden gespeichert und tragen eine Version** (beste Minute, Übersichtsroute, Kurvigkeit und stärkste Steigung). Ändert sich die Rechnung, wird die Version erhöht (`TrackFigures.version`), und `LibraryMaintenance` rechnet ältere Fahrten im Hintergrund nach. Eine neue Spalte kommt in `docs/reference/data-exchange.md`, sonst schlägt der Test fehl.
+Die Regeln mit ✓ prüft `scripts/check-architecture.sh` (lokal in `scripts/ci-local.sh` und in GitHub Actions).
+
+1. ✓ **`WattspurCore` kennt weder SwiftData noch SwiftUI, AppKit, UIKit, MapKit oder Charts.** Es rechnet auf Werttypen (`RideFigures`, `HighlightRide`, `MapRide`, `ParsedRide`, `RideSample`, `RideExchange`). Die Prüfung erkennt jede Form einer Import-Zeile in Swift 6 (`public import`, `@preconcurrency import`, `import struct …`) und prüft ihre Muster selbst.
+2. **`WattspurKit` behält seinen Namen und alle `@Model`-Klassen** (`Ride`, `Bike`, `Rider`, `Goal`, `RouteGroup`, `SourceFile`, `ImportRecord`). Ein Umzug in ein anderes Modul könnte bestehende Bibliotheken unlesbar machen. **Das CloudKit-Schema ist in Production:** neue Felder und Typen ja, nie umbenennen, löschen oder den Typ ändern; jedes neue Feld braucht einen Standardwert oder ist optional.
+3. **Die Brücke vom Modell zu den Werttypen steht an einem Ort:** `Store/RideBridges.swift` (dazu `Bike+Statistics.swift` und `DuplicateFacts+Ride.swift`). Neue Umrechnungen von `Ride` in einen reinen Typ kommen dorthin.
+4. ✓ **Die Apps schreiben nur über `RideLibrary`** (am iPhone über `PhoneDatabase`, die `RideLibrary` nutzt). `@Query` zum Lesen ist erlaubt, `modelContext.insert/delete/save` in der App nicht. Einzige Ausnahme: `App/DemoMode.swift` füllt eine eigene Demo-Bibliothek für Screenshots.
+5. **Eine Bibliothek je App.** `WattspurApp` erzeugt sie und gibt sie in die Environment (`@Environment(RideLibrary.self)`). Das Rückgängig-Machen gehört zum Fenster: `library.using(undoManager)`. Ein Rückgängig-Schritt merkt sich die **ID** einer Fahrt, nicht das Objekt: Hat der Sync die Fahrt inzwischen gelöscht, tut ⌘Z nichts (R-27).
+6. ✓ **Die iPhone-App (`iOS/`, `iOSShared/`, `iOSWidgets/`) nimmt nichts aus `App/` außer Ressourcen** (Beispielfahrt, Icon) und importiert kein `AppKit`. Die Widgets und `iOSShared` importieren kein SwiftData. Was beide Apps brauchen, wandert ins Paket, nie per Kopie. Geprüft werden die Quellen beider iPhone-Targets in `project.yml`, in beiden Schreibweisen.
+7. **Einstellungsschlüssel stehen an einem Ort:** am Mac in `App/AppSettings.swift` (`SettingsKey`), am iPhone in `iOS/PhoneSettingsKey.swift` (`PhoneSettingsKey`). Die Werte nie ändern; eine neue Einstellung bekommt eine neue Zeile.
+8. ✓ **Das Kit enthält keine Texte für die Oberfläche.** Es liefert Fakten (z. B. `ImportReport`, `SyncProblem`), jede App formuliert sie selbst (`ImportReport+Text.swift`) und hält die Übersetzungen.
+9. **Abgeleitete Werte einer Fahrt werden gespeichert und tragen eine Version** (beste Minute, Übersichtsroute, Kurvigkeit, stärkste Steigung; `TrackFigures.version`, dazu `parserVersion` je Leser). Ändert sich die Rechnung, wird die Version erhöht, und `LibraryMaintenance` rechnet ältere Fahrten im Hintergrund nach, in Paketen. Nachgerechnet wird nur **nach oben**: Eine ältere App lässt Werte einer neueren Version in Ruhe (R-28). Eine neue Spalte kommt in `docs/reference/data-exchange.md`, sonst schlägt der Test fehl.
+10. ✓ **Gespeichert wird über `LibrarySave.save(_:)`.** Es meldet einen Fehler (`LibrarySave.failedNotification`), und beide Apps zeigen ihn (`SaveFailureAlert.swift`, `.reportsSaveFailures()`). Ein `try? context.save()` würde den Fehler verschlucken (R-31).
+11. **Versionen stehen an einer Stelle:** Mac in `Config/Mac.xcconfig`, iPhone und Widget gemeinsam in `Config/iOS.xcconfig` (`MARKETING_VERSION`, `CURRENT_PROJECT_VERSION`). `scripts/build-dmg.sh` liest die Mac-Version von dort und baut nur aus einem sauberen Stand (R-04, R-12).
+
+## Datenfluss
+
+### Import (Mac und iPhone)
+
+```
+Datei (FIT/GPX) ──► ImportFlow ──► RideLibrary.importFile ──► ImportService ──► FIT-/GPXRideImporter (Core)
+  Ziehen, Öffnen,    Fragen: Bike,                              Duplikat?       ParsedRide
+  Teilen am iPhone   Doppel, GPX anhängen                       anhängen?        │
+                       │                                                         ▼
+                       └── ImportReport (Fakten) ──► App formuliert          Ride + SourceFile
+```
+
+- `ImportFlow` (Kit) hält nur die Entscheidungen und eine **Warteschlange**: Ein zweiter Import wartet, bis der erste fertig ist (R-46). Jede App zeichnet ihre eigenen Fragen.
+- Der **überwachte Ordner** am Mac (`FolderWatcher` → `FolderImport`) fragt niemanden. Er nimmt eine Datei erst, wenn sie ein paar Sekunden unverändert ist, und liest sie mit `NSFileCoordinator` (R-45).
+- Eine Datei zu einer Fahrt im Papierkorb holt die Fahrt zurück und sagt es (R-44).
+
+### Aufnahme (iPhone)
+
+```
+CLLocationUpdate ──► Recorder ──► RideRecording (Core) ──► GPXWriter ──► PhoneDatabase.saveRecording ──► Import wie oben
+CMAltimeter     ──► AltitudeFusion (Höhe)       │
+CMDeviceMotion  ──► MotionRecorder ──► MotionFusion (Schräglage, Rütteln)
+                                                 └──► Protokolldatei je Ereignis (nach Absturz: weiter oder beenden)
+```
+
+- Jeder Punkt geht sofort in eine Protokolldatei. Nach einem Absturz bietet die App an, weiterzufahren oder zu beenden. Scheitert das Speichern, bleibt das Protokoll liegen und die App sagt es (R-51, R-52).
+- Gilt eine Aufnahme als Doppel, wird die vorhandene Fahrt aktualisiert, nicht verworfen (R-53).
+- Live-Aktivität und Knopf „Pause“ kommen über `iOSShared` (`RecordingAttributes`, `ToggleRecordingPauseIntent`); Siri und Kurzbefehle über `iOS/RideIntents.swift`.
+
+### Sync über iCloud (Mac und iPhone)
+
+```
+Mac: SwiftData + CloudKit ◄──── private Datenbank in iCloud ────► iPhone: SwiftData + CloudKit
+     (LibrarySync)                                                     (PhoneDatabase, Modus icloud)
+        │                                                                  │
+        └── SyncMergeWatcher ──► RideLibrary.mergeSyncDuplicates ◄──────────┘
+            SyncMonitor ──► Status in Einstellungen / „Mehr“
+```
+
+- **Beide Geräte haben dieselbe Bibliothek**, gespiegelt von `NSPersistentCloudKitContainer`. CloudKit kennt keine eindeutigen Schlüssel, also entstehen Doppel (zwei „Mein eBike“, dieselbe Datei auf zwei Geräten importiert).
+- `SyncMergeService` führt sie zusammen. Was bleibt, entscheidet nur, was **beide Geräte gleich sehen** (ältestes `createdAt`, dann `id`), nie Zählungen. Die zweite Kopie gibt vorher ihre Änderungen ab (Name, Bike, Papierkorb, angehängte Datei; R-35). Bikes werden nur bei gleicher Seriennummer oder als unberührtes Standard-Bike zusammengeführt (R-36).
+- `SyncMergeWatcher` wartet, bis CloudKit eine Weile still ist und kein Import läuft; ein Import ohne Ende gilt nach 120 s als beendet (R-37).
+- Einschalten am Mac legt **jedes Mal** vorher eine Sicherung an (R-39). Der Schalter wirkt beim nächsten Start; die Bibliothek bleibt dieselbe Datei.
+- `SyncMonitor` liefert Fakten (`SyncProblem`, letzter Sync); die Apps formulieren sie.
+
+### iPhone ohne iCloud: der Ordner-Weg (iOS 0.2, läuft aus)
+
+Ohne iCloud schreibt der Mac den Stand als `Stand.json` und Routen-Dateien in den Unterordner `iPhone` des Import-Ordners (`PhoneState` → `PhoneStateWriter`, Format in [data-exchange](reference/data-exchange.md)). Das iPhone liest ihn (`ImportFolder`, `PhoneLibrary`) und legt Aufnahmen als GPX in den Ordner, den der Mac überwacht (`PhoneRecordings`). `PhoneDatabase.Mode` (`folder`, `local`, `icloud`) wählt der Build, `Mode.effective(syncOn:folderUser:)` die Wahl des Nutzers. **Entscheidung Nils (6.11.2026):** Der Ordner-Weg bleibt noch eine Version und geht dann (B-263).
+
+### Widget
+
+Die App legt bei jeder Änderung einen `WeekSnapshot` (Core) in die App Group `group.io.github.hops-1.wattspur` (`iOSShared/WidgetShare.swift`). Das Widget liest nur diesen Schnappschuss und rechnet die Woche selbst aus, damit es am Montag ohne die App bei null beginnt.
 
 ## WattspurCore
 
 | Ordner | Inhalt |
 |---|---|
 | `FIT/` | Container-Decoder, Basistypen, Profil, Anonymisierer |
-| `Import/` | `RideImporter` (Protokoll), FIT- und GPX-Importer, `ImportResult` |
-| `Ride/` | `ParsedRide`, Samples, Zusammenführen, Reihen für Diagramme, GPX-Schreiber, Kalorienmodell, Routen, Routenähnlichkeit (`RouteSimilarity`, `RouteSignature`, `RouteIndex`), gespeicherte Strecken (`RouteGrouping`: Mitgliedschaft und Vorschläge), beste Minute (`PeakPower`), Steigung an einer Stelle und stärkste Steigung und Gefälle (`RideTrack`) |
-| `Analysis/` | Summen und Trends, Rekorde, Vergleich, Karte (Filter, Dichte), neue Wege, Verlauf einer Strecke (`RouteHistory`), Kurvigkeit einer Fahrt (`CurvatureAnalyzer`, mit den Wörtern `Curviness`) und die zusammen gespeicherten Werte `TrackFigures` |
-| `Library/` | Reine Typen rund um die Bibliothek: Filter, Quellen, Bike-Statistik, Duplikat-Fakten, Tagesfilter aus den Highlights (`RideDayFilter`), Summen für Woche und Monat der iPhone-Übersicht (`RidePeriodTotals`) |
-| `Map/` | Kachelserver (`TileSource`) und Kachel-Rechnung in Web Mercator (`TileMath`, `Tile`, `MercatorRect`); kurvige Straßen von roadcurvature.com: `CurvyRoad`, `CurvyRegion` (eigenes kompaktes Dateiformat), der KMZ/KML-Leser mit eigenem `ZipArchive` |
-| `Support/` | Diagnosebericht, Versionen (`AppVersion`), Version und Commit der laufenden App (`AppInfo`, für beide Apps) |
+| `Import/` | `RideImporter` (Protokoll), FIT- und GPX-Importer, `GPXSummary`, `ImportResult` |
+| `Ride/` | `ParsedRide`, Samples, Zusammenführen und Vorschläge, Zeitachse über Teile und Tage (`PartTimeline`), Reihen für Diagramme, GPX-Schreiber, Kalorienmodell, Routen und Routenähnlichkeit, gespeicherte Strecken, beste Minute, Steigung (`RideTrack`), Bewegungswerte einer Fahrt (`RideMotion`), Radumfang (`WheelCheck`) |
+| `Recording/` | Rechnung der Aufnahme ohne Sensoren: `RideRecording` (Punkte, Pausen, Strecke, Anstieg), `AltitudeFusion` (Barometer an GPS-Höhe, grobe GPS-Höhe ohne Barometer), `MotionFusion` (Schräglage, Beschleunigung, Rütteln), `MotionRawLog` (CSV für den Test V-16) |
+| `Analysis/` | Summen und Trends, Rekorde, Vergleich, Karte (Filter, Dichte), neue Wege, Verlauf einer Strecke, Kurvigkeit, `TrackFigures` |
+| `Library/` | Filter, Quellen, Bike-Statistik und -Profil, Duplikat-Fakten, Tagesfilter, Summen für Woche und Monat, `WeekSnapshot` für das Widget |
+| `Exchange/` | `RideExchange`: das Austauschformat (JSON) und die Werte, die die iPhone-Views zeigen, aus beiden Quellen |
+| `Map/` | Kachelserver und Kachel-Rechnung (Web Mercator); kurvige Straßen von roadcurvature.com mit eigenem Dateiformat und KMZ-Leser |
+| `Support/` | Diagnosebericht, Versionen (`AppVersion`), Version und Commit der laufenden App (`AppInfo`) |
 
 ## WattspurKit (Store)
 
 | Teil | Inhalt |
 |---|---|
-| `Store/Models.swift`, `ImportRecord.swift` | SwiftData-Modelle |
-| `Store/RideLibrary.swift` | Die eine Tür für die App; reicht an die Dienste weiter (Übergangsfassade) |
-| `Store/Services/` | `ImportService`, `RideService`, `MergeService`, `BikeService`, `ImportLogService`, `GoalService`, `RouteGroupService`, dazu `LibraryService` (gemeinsame Umgebung und Rückgängig) |
-| `Store/LibraryBackup.swift` | Sicherung und Wiederherstellung der Mediathek als Ordner (SQLite-Backup, Austausch beim Start) |
+| `Store/Models.swift`, `ImportRecord.swift` | SwiftData-Modelle (CloudKit-tauglich: alles optional oder mit Standardwert, keine eindeutigen Schlüssel) |
+| `Store/RideLibrary.swift` | Die eine Tür für beide Apps; reicht an die Dienste weiter (siehe „Entscheidungen“) |
+| `Store/Services/` | `ImportService`, `RideService`, `MergeService`, `BikeService`, `ImportLogService`, `GoalService`, `RouteGroupService`, `SyncMergeService`, dazu `LibraryService` (gemeinsame Umgebung und Rückgängig) |
+| `Store/LibrarySave.swift` | Speichern an einer Stelle, mit Meldung bei Fehlern |
+| `Store/LibrarySync*.swift` | Konfiguration mit oder ohne CloudKit; Schema anlegen und Speicher messen (nur Debug) |
+| `Store/SyncMergeWatcher.swift`, `SyncMonitor.swift` | Wann Doppel zusammengeführt werden; Stand und Probleme des Sync |
+| `Store/PhoneDatabase.swift` | Die Bibliothek des iPhones: liefert `RideExchange`-Werte, speichert Aufnahmen, bearbeitet und löscht |
+| `Store/PhoneStateWriter.swift` | Stand für das iPhone im Ordner-Weg |
+| `Store/LibraryBackup.swift` | Sicherung und Wiederherstellung als Ordner (SQLite-Backup, Austausch beim Start) |
+| `Store/LibraryMaintenance.swift` | Aufräumen nach dem ersten Fenster, Nachrechnen nach Version, in Paketen |
 | `Store/RideBridges.swift` | Modell → Werttypen |
-| `Store/LibraryMaintenance.swift` | Aufräumen nach dem ersten Fenster, auch das Nachrechnen gespeicherter Werte nach Version |
-| `Store/CurvyRoadLibrary.swift` | Die importierten Regionen als Dateien in einem Ordner der App; nicht in der SwiftData-Datei und nicht im Backup |
-| `Import/FolderImport.swift` | Überwachter Ordner |
+| `Store/CurvyRoadLibrary.swift` | Importierte Regionen als Dateien, nicht in SwiftData und nicht im Backup |
+| `Import/` | `FolderImport` (überwachter Ordner), `ImportFlow` (Fragen und Warteschlange), `ImportReport` (Fakten) |
 
-**Dienste:** zustandslose Structs, die aus einer `LibraryEnvironment` (Kontext, Importer, UndoManager, Standard-Bikename) gebaut werden. Sie nutzen sich nur in eine Richtung: Import → Zusammenführen → Bikes. `RideService`, `ImportLogService`, `GoalService` und `RouteGroupService` stehen für sich.
+**Dienste:** zustandslose Structs, gebaut aus einer `LibraryEnvironment` (Kontext, Importer, UndoManager, Standard-Bikename). Sie nutzen sich nur in eine Richtung: Import → Zusammenführen → Bikes. Die übrigen stehen für sich.
 
-## App
+## App (macOS)
 
-Views in `App/`; die großen Bereiche haben eigene Ordner (`Highlights/`, `Analysis/`, `Compare/`). `@Observable`-Hilfsobjekte (`FolderWatcher`, `ImportLog`, `NewPathsStore`, `RouteSimilarityStore` (Suche, gespeicherte Strecken, Vorschläge), `LibraryBackupCenter`, `MergeSuggestionCenter`, `BikeAssignmentNotice`) liegen in der Environment. `DemoMode` und `SampleRide` sind für Screenshots und die Beispielfahrt.
+Views in `App/`; große Bereiche in eigenen Ordnern (`Highlights/`, `Analysis/`, `Compare/`). `@Observable`-Hilfsobjekte in der Environment: `FolderWatcher`, `ImportLog`, `NewPathsStore`, `RouteSimilarityStore`, `LibraryBackupCenter`, `MergeSuggestionCenter`, `BikeAssignmentNotice`, `ICloudSync`, `PhoneState`, `CurvyRoadsStore`. `DemoMode` und `SampleRide` sind für Screenshots und die Beispielfahrt.
 
-Karten: Alle drei Karten (Tour-Detail, Karte aller Fahrten, Vergleich) sind `MKMapView` mit eigenen Overlays. `MapTiles.swift` bringt die OSM-Kacheln (`TileLoader` mit Cache und User-Agent, `CachingTileOverlay`, `MutedTileRenderer`, `MKMapView.show(_:)`), `MapBackdrop.swift` das Kartenbild der PDFs (Apples Schnappschuss oder zusammengesetzte Kacheln), `MapCustomizePopover.swift` und `MapStyleThumbnail.swift` das Fenster „Karte anpassen“. `CurvyRoads.swift` bringt die Ebene „Kurvige Straßen“: `CurvyRoadsStore` (in der Environment) hält die geladenen Regionen, ein `CurvyRoadsOverlay` mit eigenem Renderer zeichnet nur Straßen, die die Kachel schneiden, dazu Legende und der Abschnitt „Ebenen“ im Fenster „Karte anpassen“. Die Einfärbung der Route nach Kurven steckt in `RideMapView`.
+**Karten:** Tour-Detail, Karte aller Fahrten und Vergleich sind `MKMapView` mit eigenen Overlays. `MapTiles.swift` bringt die OSM-Kacheln (Cache, User-Agent), `MapBackdrop.swift` das Kartenbild der PDFs, `CurvyRoads.swift` die Ebene „Kurvige Straßen“. Das Tour-Detail rechnet seine Werte abseits des Hauptthreads (`DetailValues`, R-58).
 
-## iOS
+## iOS (iPhone)
 
-Target `Wattspur iOS` in `project.yml` (iPhone, ab iOS 26, Bundle-ID `io.github.hops-1.wattspur.ios`, eigene Versionsnummern 0.x, eigenes Schema), Quellen in `iOS/`, Texte in `iOS/Localizable.xcstrings`. Stand 0.2: `TabView` mit *Übersicht · Fahrten · Mehr*. Das iPhone hat keine SwiftData-Bibliothek: Es liest den Stand, den der Mac in den Import-Ordner schreibt (`RideExchange` im Kern, `PhoneStateWriter` im Kit, Format in [data-exchange](reference/data-exchange.md)), über `ImportFolder` (Lesezeichen auf den gewählten iCloud-Ordner, `NSFileCoordinator`) und `PhoneLibrary` (lokale Kopie für offline). Es rechnet nichts nach und ändert nichts. Ohne Stand zeigt die Übersicht die Beispielfahrt, mit `FITRideImporter` direkt gelesen. Karten sind SwiftUI-`Map` mit `MapPolyline` (`RouteMap`), nicht die `MKMapView`-Karten der Mac-App; das Höhenprofil ist Swift Charts.
+Target `Wattspur iOS` (ab iOS 26, Bundle-ID `io.github.hops-1.wattspur.ios`, Versionen 0.x), Quellen in `iOS/`, Texte in `iOS/Localizable.xcstrings`. `TabView` mit *Übersicht · Fahrten · Mehr*. Die Views zeigen `RideExchange`-Werte, egal ob sie aus der eigenen Datenbank oder dem Ordner kommen. Karten sind SwiftUI-`Map` mit `MapPolyline` (`RouteMap`), das Höhenprofil ist Swift Charts. Die Route liegt als Datei mit einem Fingerabdruck im Namen; eine geänderte Fahrt bekommt eine neue Datei (R-62).
 
+**Erweiterung `Wattspur Widgets`** (`iOSWidgets/`): Live-Aktivität der Aufnahme und Widget „Diese Woche“. Eigene Texte, keine iCloud-Entitlements, dieselbe Versionsnummer wie die App.
 
-**Eigene Datenbank (B-216, B-217, hinter einem Schalter):** `WATTSPUR_IOS_DATABASE` in `Config/iOS.xcconfig` (über `Local.xcconfig` änderbar) landet als `WattspurDatabase` in der Info.plist und wählt `PhoneDatabase.Mode`. `folder` (Standard) ist der Weg von 0.2 oben. `local` öffnet eine SwiftData-Bibliothek mit dem Modell aus dem Kit, ohne CloudKit, zum Ausprobieren im Simulator. `icloud` öffnet dieselbe Bibliothek mit `cloudKitDatabase: .private(…)` und braucht `iOS/Wattspur-iOS-iCloud.entitlements` (über `WATTSPUR_IOS_ENTITLEMENTS`) und den Developer-Account. `PhoneDatabase` (Kit) liefert die Fahrten als `RideExchange`-Werte, daher bleiben Übersicht, Liste und Tour-Detail gleich. Eine Aufnahme geht als GPX durch denselben Import wie am Mac und wird direkt eine Fahrt. Löschen geht mit Papierkorb (30 Tage, wie am Mac). Ab `local` braucht das iPhone den Ordner nicht mehr.
-
-Signierung: `Config/iOS.xcconfig` (automatisch); das Team steht nur in der ignorierten `Config/Local.xcconfig` (Vorlage `Local.xcconfig.example`), Anleitung in der Lern-Notiz [30](learning/30-ios-app.md). Ohne die Datei baut das Projekt für den Simulator. Der Commit für die Versionszeile kommt wie am Mac über das Pre-Build-Script und `Config/Info.plist`.
-
-**Erweiterung (B-223):** Das Target `Wattspur Widgets` (`iOSWidgets/`, WidgetKit, Bundle-ID `io.github.hops-1.wattspur.ios.widgets`) wird in die App eingebettet und zeigt die Live-Aktivität einer Aufnahme und das Widget „Diese Woche“ (B-224). Was App und Erweiterung beide brauchen und nur auf dem iPhone gilt (ActivityKit, App Intents), liegt in `iOSShared/` und gehört zu beiden Targets: `RecordingAttributes` und `ToggleRecordingPauseIntent`. Der Knopf Pause ist ein `LiveActivityIntent`, der im Prozess der App läuft; die App setzt dafür `RecordingControl.togglePause`. Die Erweiterung hat eigene Texte (`iOSWidgets/Localizable.xcstrings`), keine iCloud-Entitlements und dieselbe Versionsnummer wie die App. **Widget (B-224):** App und Erweiterung teilen die App Group `group.io.github.hops-1.wattspur` (in `iOS/Wattspur-iOS.entitlements`, `iOS/Wattspur-iOS-iCloud.entitlements` und `iOSWidgets/WattspurWidgets.entitlements`). Die App legt dort mit `WidgetShare` einen `WeekSnapshot` ab (Kit, `WattspurCore`): die Fahrten der laufenden Woche ohne Motorrad, wie in der Übersicht, und die letzte Fahrt. Das Widget rechnet die Woche selbst aus, damit es am Montag ohne die App bei null beginnt. Die Erweiterung bindet dafür nur `WattspurCore` ein, kein SwiftData. **Kurzbefehle und Siri (B-225):** Die App Intents liegen in der App (`iOS/RideIntents.swift`, Sätze in `iOS/AppShortcuts.xcstrings`). Sie erreichen den `Recorder` und einen kleinen `IntentRouter` über `AppDependencyManager`; „Fahrt beenden“ setzt `Recorder.endRequested`, die Aufnahme öffnet dann „Fahrt speichern“. Die Antworten übersetzt die App selbst (`IntentDialog.app`), sonst zeigte die App Kurzbefehle sie auf Englisch.
-
-Gebaut wird das iOS-Target nur lokal: `scripts/ci-local.sh` baut es für `generic/platform=iOS Simulator` ohne Signierung. In GitHub Actions gibt es keinen iOS-Build (die macOS-Minuten reichen nicht); dort generiert `xcodegen` das Target nur mit.
+**Signierung:** Team und Entitlements nur in der ignorierten `Config/Local.xcconfig` (Vorlage `Local.xcconfig.example`), Anleitung in Lern-Notiz [30](learning/30-ios-app.md). Ohne die Datei baut das Projekt für den Simulator im Modus `folder`. Gebaut wird das iPhone nur lokal (`scripts/ci-local.sh`, Simulator ohne Signierung); GitHub Actions baut nur den Mac und das Paket.
 
 ## Tests
 
-`Tests/WattspurCoreTests` (ohne SwiftData), `Tests/WattspurKitTests` (mit In-Memory-Bibliothek), `Tests/TestFixtures` (gemeinsame FIT- und GPX-Dateien). `swift test --no-parallel` im Paket; `--no-parallel`, weil SwiftData unter macOS 26 beim parallelen Anlegen vieler In-Memory-Container abstürzen kann.
+`Tests/WattspurCoreTests` (ohne SwiftData), `Tests/WattspurKitTests` (mit In-Memory-Bibliothek), `Tests/TestFixtures` (gemeinsame FIT- und GPX-Dateien). `swift test --no-parallel` im Paket; `--no-parallel`, weil SwiftData beim parallelen Anlegen vieler In-Memory-Container abstürzen kann. Tests, die Ordner anlegen, räumen sie wieder weg. Abdeckung des Kits beim Review: 93 % der Zeilen.
+
+## Entscheidungen (B-259)
+
+- **`RideLibrary` bleibt die eine Tür (B-271, R-34).** Beide Apps brauchen fast alles davon. Die Fassade macht Regel 4 prüfbar, hält Rückgängig und Speichern an einer Stelle und lässt die Dienste `internal`. Sie wird nicht verkleinert. Neue Funktionen kommen als Dienst mit einer dünnen Methode in `RideLibrary`.
+- **Große Dateien** (`RideListView`, `ContentView`, `RideDetailView`) werden erst mit B-125 (ein Bereich „Fahrten“) geteilt; jetzt wäre es ein Umbau ohne Nutzen.
+- **Keine Änderung am CloudKit-Schema in einem Review-Release.**
 
 ## Offen
 
-- Die Fassade `RideLibrary` kann schrumpfen, wenn die App die Dienste direkt kennt.
-- Wartung und Ordner-Import laufen auf dem Hauptthread, nur zeitlich nach hinten gelegt; echtes Hintergrundlaufen bräuchte einen `ModelActor`.
-- `HighlightsData` hält `Ride`-Objekte und bleibt deshalb in der App; eine Fassung auf `HighlightRide` allein könnte nach Core ziehen.
-- Die App hat kein Test-Target; die Regeln für `AppSettings` und die Views werden von Hand geprüft.
+| Punkt | Story |
+|---|---|
+| Ordner-Weg des iPhones beenden; danach `local` oder `icloud` als Standard des Simulators | B-263 |
+| Fehleransicht statt Absturz, wenn sich die Bibliothek nicht öffnen lässt | B-264 |
+| Sicherung zurückholen, während der Sync an ist | B-265 |
+| Import, Neu-Lesen und Nachrechnen in einem `ModelActor` statt zeitlich verschoben auf dem Hauptthread | B-266 |
+| Test-Target für Mac- und iPhone-App | B-267 |
+| Test auf echten Geräten: Sync aus, importieren, Sync an | B-272 |
+| `HighlightsData` hält `Ride`-Objekte und bleibt deshalb in der App; eine Fassung auf `HighlightRide` könnte nach Core | – |
