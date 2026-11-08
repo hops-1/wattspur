@@ -14,6 +14,7 @@ A release that checks and tidies the code before the next big steps: no new feat
 ### Changed
 
 - **Road surface:** new limits from two test rides on an e-bike, checked against OpenStreetMap: smooth below 0.2 g, uneven up to 0.45 g, rough above (before 0.1 g and 0.25 g, so normal asphalt counted as uneven). In German the bands are now „eben“, „uneben“ and „rau“ (B-248, V-16).
+- **Road surface colours:** uneven is now yellow-orange and rough a clear red, instead of the earthy amber and brown (B-276).
 
 ### Fixed
 
@@ -36,10 +37,12 @@ A release that checks and tidies the code before the next big steps: no new feat
 - **iPhone recording twice:** a recording saved on the iPhone and its GPX imported on the Mac before iCloud had brought it showed up twice. The clean-up after a sync now finds such doubles too and keeps the one imported first.
 - **Lean angle kept with the Bosch file:** when the Bosch FIT of a ride recorded with the iPhone came in, Wattspur took the Bosch values and dropped the lean angle, acceleration and road surface of the recording; only heart rate and temperature stayed. Now they stay too, also when a GPX is attached to a Bosch ride. Rides updated before keep missing them.
 
-### iPhone app 0.5.2 (TestFlight, build 9)
+### iPhone app 0.5.2 (TestFlight, build 10)
 
 The same fixes for what Mac and iPhone share (sync, import, saving, rides over several days, versions), and these for the iPhone:
 
+- **Crash during sync:** with a ride changed on the Mac, the iPhone could quit while iCloud brought the change (TestFlight build 9). It no longer reads the time series of every ride to see what changed (B-276).
+- **Screen stays on while recording:** with Wattspur in front, the screen no longer dims and locks during a ride (B-276).
 - **Saving a ride after a crash:** if “End and Save” of an unfinished ride failed, the ride was deleted without a word. Now the app says why and keeps the recording.
 - **Full storage while recording:** the app no longer quits in the middle of a ride; it goes on and shows that the ride is not backed up any more.
 - **A recording of a ride already there:** it was dropped without a word when the same tour was already there as GPX. Now it updates that ride, which keeps its name and gets the lean angle and road surface.
