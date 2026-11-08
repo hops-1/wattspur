@@ -7,6 +7,10 @@ Every DMG handed out to testers corresponds to one entry below.
 
 ## [Unreleased]
 
+## [1.8.7] – 2026-11-08
+
+A release that checks and tidies the code before the next big steps: no new features, but 51 fixes from a review of the whole app, most of them for Mac and iPhone working on the same library over iCloud. Nothing changes in how Wattspur looks or works, except that these errors are gone.
+
 ### Changed
 
 - **Road surface:** new limits from two test rides on an e-bike, checked against OpenStreetMap: smooth below 0.2 g, uneven up to 0.45 g, rough above (before 0.1 g and 0.25 g, so normal asphalt counted as uneven). In German the bands are now „eben“, „uneben“ and „rau“ (B-248, V-16).
@@ -14,33 +18,38 @@ Every DMG handed out to testers corresponds to one entry below.
 ### Fixed
 
 - **Smoother:** moving the pointer over the charts on the Mac no longer builds a list of the whole ride each time, and the ascent shown while recording on the iPhone counts only the current stretch again.
-- **Live Activity (iPhone):** a ride started with Siri while the app was closed could lose its Live Activity right away, with no Pause button on the Lock Screen. And where distances are in miles, the speed now shows in mph too.
 - **The open ride changes (Mac):** after “Update” with the Bosch file, an attached GPX or a change from the iPhone, the ride detail showed the old map, charts and lean angle until another ride was chosen. Now it updates, and long rides open without a pause.
-- **A ride the Mac changed (iPhone):** map and charts stayed old until the app was restarted. Now they show the new ride.
-- **Faster on the iPhone:** the tour detail reads a ride once instead of four times, and the list is no longer rebuilt after each of the iPhone's own uploads to iCloud.
 - **Two imports in a row:** a second file opened while Wattspur still asked about the first (the bike, or what to do with a ride already there) replaced that question, and the first file was left undecided. Now the second waits for the answer.
 - **Importing a ride that is in the trash:** the file was taken as “already there”, and the ride stayed in the trash until it was deleted for good. Now it comes back, and the import log says so.
 - **Files still being written (Mac, watched folder):** a large file or one on a slow network could be read half and moved to “Failed”. Now the folder waits until the file has not changed for a few seconds.
 - **Files that cannot be read:** the import log now says that the file could not be read, instead of blaming a broken FIT file.
-- **Opening a file on the iPhone:** if Wattspur could not keep its copy, the file was gone without a word. Now it stays and the app says why.
 - **When saving fails:** if the library could not be saved, for example with a full disk, the change was gone after the next start without a word. Now Mac and iPhone say so.
 - **Restoring a backup with sync on (Mac):** the dialog now says that iCloud brings back what changed since the backup, and that sync should be turned off first to get the backup as it is.
-- **Turning sync off on the iPhone:** the iPhone then showed the old folder of iOS 0.2 instead of its own rides; without a folder it showed none, and recordings did not become rides. Now the rides stay on the iPhone; only users of the folder way keep the folder. The change takes effect the next time Wattspur opens, so the sync really stops.
 - **Sync status:** when iOS stopped the app in the middle of a sync, “Syncing …” could stay for the rest of the session, and doubles were merged only at the next launch. Both now give up after a few minutes.
 - **Backup before sync (Mac):** a fresh backup is now made each time sync is turned on, not only the first time.
-- **Height while recording (iPhone):** in town or in a forest, where the GPS height is never better than about 15 m, a recording had no height at all. Now the best of the rougher GPS heights set the level after 20 seconds. When the barometer drops out for a few seconds, the height no longer jumps to the GPS value and back, which counted as ascent.
 - **Rides over several days:** with two parts on a later day, the second one lay a whole day too far back in the charts, and the total time was too long. This was so for merged rides and for GPX files with several parts. GPX rides are read again once in the background after the update.
 - **Start after an update:** when a new version reads the ride files better, the rides are now read again in the background, a few at a time, instead of all at once while the app waits.
 - **⌘Z after a sync (Mac):** undoing a step for a ride, a bike or a saved route that was deleted in the meantime on the iPhone could make the app quit. Now the step does nothing.
 - **Mac and iPhone with different versions:** stored values (overview map, best minute, curviness and steepest climb) from a newer app were calculated back by an older one and sent back over iCloud. Now an older app leaves them as they are.
 - **The same file on Mac and iPhone:** when iCloud merged the two copies, the changes made to the newer one were lost: its name, its bike, that it was taken out of the trash, an attached GPX. Now they stay; where both copies were changed, the older one wins.
 - **Two bikes with the same name:** iCloud no longer merges them into one. Only the default bike each device makes for itself, or two bikes with the same serial number, become one.
-- **Saving a ride after a crash (iPhone):** if “End and Save” of an unfinished ride failed, the ride was deleted without a word. Now the app says why and keeps the recording.
-- **Full storage while recording (iPhone):** the app no longer quits in the middle of a ride; it goes on and shows that the ride is not backed up any more.
-- **A recording of a ride already there (iPhone):** it was dropped without a word when the same tour was already there as GPX. Now it updates that ride, which keeps its name and gets the lean angle and road surface.
-- **Map of the last ride (iPhone):** after a new ride, the map in “Last Ride” kept showing the place of the ride before, with the new track at the edge. Now it shows the new ride.
 - **iPhone recording twice:** a recording saved on the iPhone and its GPX imported on the Mac before iCloud had brought it showed up twice. The clean-up after a sync now finds such doubles too and keeps the one imported first.
 - **Lean angle kept with the Bosch file:** when the Bosch FIT of a ride recorded with the iPhone came in, Wattspur took the Bosch values and dropped the lean angle, acceleration and road surface of the recording; only heart rate and temperature stayed. Now they stay too, also when a GPX is attached to a Bosch ride. Rides updated before keep missing them.
+
+### iPhone app 0.5.2 (TestFlight, build 9)
+
+The same fixes for what Mac and iPhone share (sync, import, saving, rides over several days, versions), and these for the iPhone:
+
+- **Saving a ride after a crash:** if “End and Save” of an unfinished ride failed, the ride was deleted without a word. Now the app says why and keeps the recording.
+- **Full storage while recording:** the app no longer quits in the middle of a ride; it goes on and shows that the ride is not backed up any more.
+- **A recording of a ride already there:** it was dropped without a word when the same tour was already there as GPX. Now it updates that ride, which keeps its name and gets the lean angle and road surface.
+- **Height while recording:** in town or in a forest, where the GPS height is never better than about 15 m, a recording had no height at all. Now the best of the rougher GPS heights set the level after 20 seconds. When the barometer drops out for a few seconds, the height no longer jumps to the GPS value and back, which counted as ascent.
+- **Turning sync off on the iPhone:** the iPhone then showed the old folder of iOS 0.2 instead of its own rides; without a folder it showed none, and recordings did not become rides. Now the rides stay on the iPhone; only users of the folder way keep the folder. The change takes effect the next time Wattspur opens, so the sync really stops.
+- **Live Activity:** a ride started with Siri while the app was closed could lose its Live Activity right away, with no Pause button on the Lock Screen. And where distances are in miles, the speed now shows in mph too.
+- **Map of the last ride:** after a new ride, the map in “Last Ride” kept showing the place of the ride before, with the new track at the edge. Now it shows the new ride.
+- **A ride the Mac changed:** map and charts stayed old until the app was restarted. Now they show the new ride.
+- **Faster on the iPhone:** the tour detail reads a ride once instead of four times, and the list is no longer rebuilt after each of the iPhone's own uploads to iCloud.
+- **Opening a file on the iPhone:** if Wattspur could not keep its copy, the file was gone without a word. Now it stays and the app says why.
 
 ## [1.8.6] – 2026-11-06
 
