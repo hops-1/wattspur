@@ -100,19 +100,32 @@ struct RideMotionTests {
 
     @Test("Share of the distance on an uneven surface, and the track by surface")
     func surface() throws {
-        // Steps of 10 m; the 2nd and 3rd step are uneven or rough, the 4th smooth.
-        let samples = Self.samples(kmh: Array(repeating: 30, count: 5), lean: [0, 0, 0, 0, 0],
-                                   roughness: [0.05, 0.3, 0.6, 0.05, nil])
+        // One sample a second, 10 m apart: 12 s smooth, 12 s uneven, 12 s rough, 12 s smooth.
+        let roughness = Array(repeating: 0.1, count: 12) + Array(repeating: 0.5, count: 12)
+            + Array(repeating: 0.8, count: 12) + Array(repeating: 0.1, count: 12)
+        let samples = Self.samples(kmh: Array(repeating: 36, count: roughness.count),
+                                   lean: roughness.map { _ in 0 }, roughness: roughness)
         let motion = try #require(RideMotion(samples: samples, motorized: false))
-        #expect(abs((motion.roughShare ?? 0) - 2.0 / 3) < 0.001)
+        #expect(abs((motion.roughShare ?? 0) - 24.0 / 47) < 0.03)
         #expect(RideMotion.surfaceStretches(samples).map(\.band) == [.smooth, .uneven, .rough, .smooth])
-        #expect(RideMotion.SurfaceBand(roughness: 0.199) == .smooth)
-        #expect(RideMotion.SurfaceBand(roughness: 0.2) == .uneven)
-        #expect(RideMotion.SurfaceBand(roughness: 0.449) == .uneven)
-        #expect(RideMotion.SurfaceBand(roughness: 0.45) == .rough)
+        #expect(RideMotion.SurfaceBand(roughness: 0.399) == .smooth)
+        #expect(RideMotion.SurfaceBand(roughness: 0.4) == .uneven)
+        #expect(RideMotion.SurfaceBand(roughness: 0.599) == .uneven)
+        #expect(RideMotion.SurfaceBand(roughness: 0.6) == .rough)
 
         let without = Self.samples(kmh: [30, 30], lean: [0, 0])
         #expect(try #require(RideMotion(samples: without, motorized: false)).roughShare == nil)
         #expect(RideMotion.surfaceStretches(without).isEmpty)
+    }
+
+    @Test("A single jolt on smooth asphalt is no rough stretch; the median over 10 s takes it out (B-261)")
+    func surfaceSmoothing() {
+        var roughness = Array(repeating: 0.15, count: 30)
+        roughness[14] = 0.9
+        roughness[15] = 0.7
+        let samples = Self.samples(kmh: Array(repeating: 25, count: 30), lean: roughness.map { _ in 0 },
+                                   roughness: roughness)
+        #expect(RideMotion.surfaceStretches(samples).map(\.band) == [.smooth])
+        #expect(RideMotion.smoothedRoughness(samples).map(\.time) == samples.map(\.time))
     }
 }

@@ -45,13 +45,13 @@ public struct RideMotion: Sendable, Equatable {
         roughShare = Self.roughShare(samples)
     }
 
-    /// The share of the distance whose roughness is at least `SurfaceBand.uneven`; each step between
-    /// two samples counts with the roughness of the later one, steps over a gap not at all.
+    /// The share of the distance whose smoothed roughness is at least `SurfaceBand.uneven`; each step
+    /// between two samples counts with the roughness of the later one, steps over a gap not at all.
     static func roughShare(_ samples: [RideSample]) -> Double? {
         var total = 0.0
         var rough = 0.0
         var previous: RideSample?
-        for sample in samples.sorted(by: { $0.time < $1.time }) {
+        for sample in smoothedRoughness(samples) {
             defer { previous = sample }
             guard let p = previous, let roughness = sample.roughness, let to = sample.distance, let from = p.distance,
                   sample.time - p.time <= maxSampleGap else { continue }
@@ -114,16 +114,18 @@ public struct RideMotion: Sendable, Equatable {
     /// limits come from two e-bike test rides of V-16 with the iPhone in the handlebar mount,
     /// checked against the surface in OpenStreetMap (`docs/SPIKE-BEWEGUNG.md`).
     public enum SurfaceBand: Int, CaseIterable, Sendable, Comparable {
-        /// Below 0.2 g: asphalt (0.10 to 0.17 g on the test rides).
+        /// Below 0.4 g: asphalt, also a worn side road (up to 0.3 g), smooth paths and even paving
+        /// stones (about 0.3 g).
         case smooth
-        /// 0.2 g to 0.45 g: field paths, smooth gravel paths, paving stones.
+        /// 0.4 g to 0.6 g: field paths and coarse gravel.
         case uneven
-        /// 0.45 g and more: forest tracks and off-road (0.6 to 0.8 g on the test rides).
+        /// 0.6 g and more: forest tracks and off-road (0.6 to 1.0 g on the Hermannsweg, 8.11.2026).
         case rough
 
-        /// The lowest roughness of the band, in g.
-        public static let unevenFrom = 0.2
-        public static let roughFrom = 0.45
+        /// The lowest smoothed roughness of the band, in g. Raised after the ride of 8.11.2026
+        /// (B-261): with 0.2 and 0.45 g, half of the asphalt and paving stones counted as uneven.
+        public static let unevenFrom = 0.4
+        public static let roughFrom = 0.6
 
         public init(roughness: Double) {
             self = roughness >= Self.roughFrom ? .rough : roughness >= Self.unevenFrom ? .uneven : .smooth
@@ -151,11 +153,34 @@ public struct RideMotion: Sendable, Equatable {
         return stretches(samples) { LeanBand(lean: $0.lean ?? 0) }
     }
 
-    /// The track in pieces of the same surface band (B-248), like `leanStretches`; empty without
-    /// roughness values. Samples without one count as smooth.
+    /// The track in pieces of the same surface band (B-248), like `leanStretches`, by the smoothed
+    /// roughness; empty without roughness values. Samples without one count as smooth.
     public static func surfaceStretches(_ samples: [RideSample]) -> [SurfaceStretch] {
         guard samples.contains(where: { $0.roughness != nil }) else { return [] }
-        return stretches(samples) { SurfaceBand(roughness: $0.roughness ?? 0) }
+        return stretches(smoothedRoughness(samples)) { SurfaceBand(roughness: $0.roughness ?? 0) }
+    }
+
+    /// Seconds on each side over which the roughness is smoothed before it gets a band: a manhole
+    /// cover or a kerb is no rough stretch (B-261).
+    static let surfaceWindow = 5.0
+
+    /// The samples in time order, each with the median roughness of the samples within
+    /// `surfaceWindow` seconds; samples without roughness keep none. Only for the bands: the stored
+    /// values stay as recorded, so other limits need no new calculation.
+    static func smoothedRoughness(_ samples: [RideSample]) -> [RideSample] {
+        let sorted = samples.sorted { $0.time < $1.time }
+        var result = sorted
+        var low = 0
+        var high = 0
+        for i in sorted.indices where sorted[i].roughness != nil {
+            let time = sorted[i].time
+            while sorted[low].time < time - surfaceWindow { low += 1 }
+            high = max(high, i)
+            while high + 1 < sorted.count, sorted[high + 1].time <= time + surfaceWindow { high += 1 }
+            let values = sorted[low...high].compactMap(\.roughness).sorted()
+            result[i].roughness = (values[(values.count - 1) / 2] + values[values.count / 2]) / 2
+        }
+        return result
     }
 
     private static func stretches<Band>(_ samples: [RideSample], band bandOf: (RideSample) -> Band) -> [Stretch<Band>] {
