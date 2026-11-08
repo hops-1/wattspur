@@ -120,12 +120,16 @@ final class MutedTileRenderer: MKTileOverlayRenderer, @unchecked Sendable {
     private var observer: (any NSObjectProtocol)?
     private var redrawPending = false
 
-    override init(tileOverlay overlay: MKTileOverlay) {
-        super.init(tileOverlay: overlay)
-        observer = NotificationCenter.default.addObserver(forName: CachingTileOverlay.tileArrived, object: overlay,
-                                                          queue: .main) { [weak self] _ in
-            MainActor.assumeIsolated { self?.scheduleRedraw() }
+    /// A renderer for `overlay` that redraws when its tiles arrive. No `init` override: MapKit's
+    /// `init(tileOverlay:)` calls `init(overlay:)` on the subclass, which Swift would no longer
+    /// inherit, and the app crashed with "unimplemented initializer" (test DMG 1.8.7 (604)).
+    static func make(for overlay: MKTileOverlay) -> MutedTileRenderer {
+        let renderer = MutedTileRenderer(tileOverlay: overlay)
+        renderer.observer = NotificationCenter.default.addObserver(forName: CachingTileOverlay.tileArrived,
+                                                                   object: overlay, queue: .main) { [weak renderer] _ in
+            MainActor.assumeIsolated { renderer?.scheduleRedraw() }
         }
+        return renderer
     }
 
     deinit {
