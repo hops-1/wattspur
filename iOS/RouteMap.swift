@@ -15,6 +15,8 @@ struct RouteMap: View {
     var surfaceStretches: [RideMotion.SurfaceStretch] = []
     /// Which colouring the detail map shows, remembered.
     @AppStorage(PhoneSettingsKey.trackColouring) private var colouring: TrackColouring = .lean
+    /// The track by height (B-283), worked out from the route once per route; every ride with heights has it.
+    @State private var elevation: RouteElevation.Result?
 
     /// A coloured piece of the track.
     private struct Piece: Identifiable {
@@ -30,14 +32,18 @@ struct RouteMap: View {
         }
     }
 
-    /// The colouring shown: the chosen one if the ride has it, else the other.
+    /// The colourings this ride has.
+    private var available: [TrackColouring] {
+        (leanStretches.isEmpty ? [] : [.lean]) + (surfaceStretches.isEmpty ? [] : [.surface])
+            + (elevation == nil ? [] : [.elevation])
+    }
+
+    /// The colouring shown: the chosen one if the ride has it, else lean angle or surface. The height
+    /// only when chosen, so a ride without motion keeps its plain line unless asked (B-283).
     private var shown: TrackColouring? {
-        switch (leanStretches.isEmpty, surfaceStretches.isEmpty) {
-        case (true, true): nil
-        case (false, true): .lean
-        case (true, false): .surface
-        case (false, false): colouring
-        }
+        if colouring == .plain { return nil }
+        if available.contains(colouring) { return colouring }
+        return available.first { $0 != .elevation }
     }
 
     var body: some View {
@@ -54,7 +60,12 @@ struct RouteMap: View {
                     MapPolyline(coordinates: piece.coordinates)
                         .stroke(piece.color, style: StrokeStyle(lineWidth: 5, lineCap: .round, lineJoin: .round))
                 }
-            case nil:
+            case .elevation:
+                ForEach(pieces(elevation?.stretches ?? [], { $0.map(Color.elevation) ?? .gray })) { piece in
+                    MapPolyline(coordinates: piece.coordinates)
+                        .stroke(piece.color, style: StrokeStyle(lineWidth: 5, lineCap: .round, lineJoin: .round))
+                }
+            case nil, .plain?:
                 ForEach(segments.indices, id: \.self) { index in
                     MapPolyline(coordinates: segments[index])
                         .stroke(Color.track, style: StrokeStyle(lineWidth: 4, lineCap: .round, lineJoin: .round))
@@ -88,20 +99,25 @@ struct RouteMap: View {
             switch shown {
             case .lean: LeanLegend().padding(8)
             case .surface: SurfaceLegend().padding(8)
-            case nil: EmptyView()
+            case .elevation: elevation.map { ElevationLegend(scale: $0.scale).padding(8) }
+            case nil, .plain?: EmptyView()
             }
         }
         .overlay(alignment: .topLeading) {
-            // Both colourings there: a switch on the detail map (B-248).
-            if interactive, !leanStretches.isEmpty, !surfaceStretches.isEmpty {
-                Picker("Track Colour", selection: $colouring) {
-                    Text("Lean Angle").tag(TrackColouring.lean)
-                    Text("Surface").tag(TrackColouring.surface)
+            // A switch on the detail map between the colourings the ride has (B-248, B-283).
+            if interactive, !available.isEmpty {
+                Picker("Track Colour", selection: Binding(get: { shown ?? .plain }, set: { colouring = $0 })) {
+                    ForEach(available + [.plain], id: \.self) { option in
+                        Text(option.name).tag(option)
+                    }
                 }
                 .pickerStyle(.segmented)
                 .fixedSize()
                 .padding(8)
             }
+        }
+        .task(id: route.identity) {
+            elevation = RouteElevation.stretches(route)
         }
         .accessibilityHidden(!interactive)
     }
@@ -125,9 +141,43 @@ struct RouteMap: View {
     }
 }
 
-/// What the detail map colours the track by (B-248).
+/// What the detail map colours the track by (B-248, B-283). Stored: only add cases.
 enum TrackColouring: String {
-    case lean, surface
+    case lean, surface, elevation
+    /// One colour, without a colouring.
+    case plain
+
+    var name: LocalizedStringKey {
+        switch self {
+        case .lean: "Lean Angle"
+        case .surface: "Surface"
+        case .elevation: "Route Elevation"
+        case .plain: "Plain"
+        }
+    }
+}
+
+/// What the colours of the track by height mean (B-283): blue at the lowest point, red at the highest.
+struct ElevationLegend: View {
+    let scale: RouteElevation.Scale
+
+    var body: some View {
+        VStack(alignment: .leading, spacing: 4) {
+            Text("Route Elevation").font(.caption2.weight(.semibold))
+            HStack(spacing: 6) {
+                Text(RideFormat.altitude(scale.lowest)).font(.caption2).monospacedDigit()
+                Capsule()
+                    .fill(LinearGradient(colors: (0..<RouteElevation.levels).map(Color.elevation), startPoint: .leading, endPoint: .trailing))
+                    .frame(width: 50, height: 4)
+                Text(RideFormat.altitude(scale.highest)).font(.caption2).monospacedDigit()
+            }
+        }
+        .padding(.horizontal, 8)
+        .padding(.vertical, 6)
+        .glassEffect(.regular, in: .rect(cornerRadius: 10))
+        .accessibilityElement(children: .ignore)
+        .accessibilityLabel(Text("Track coloured by elevation, from blue at \(RideFormat.altitude(scale.lowest)) to red at \(RideFormat.altitude(scale.highest))"))
+    }
 }
 
 /// What the colours of the track by road surface mean (B-248).

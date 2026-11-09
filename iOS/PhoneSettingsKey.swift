@@ -19,6 +19,8 @@ enum PhoneSettingsKey {
     static let importFolderBookmark = "importFolderBookmark"
     /// Whether the recording map turns with the direction of travel instead of north up (B-280).
     static let recordingMapHeadingUp = "recordingMapHeadingUp"
+    /// Whether the recording map colours the track by height (B-283).
+    static let recordingTrackByElevation = "recordingTrackByElevation"
     /// Set by UI tests and screenshots: import the sample ride at launch.
     static let demoRide = "WattspurDemoRide"
 }

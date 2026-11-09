@@ -55,4 +55,17 @@ struct RouteElevationTests {
         #expect(Set(result.stretches.compactMap(\.band)).count == RouteElevation.levels)
         #expect(result.scale.highest > result.scale.lowest + 50)
     }
+
+    @Test("From the route of the iPhone, with its segments apart")
+    func fromRoute() throws {
+        let route = RideExchange.Route(rideID: UUID(), segments: [
+            .init(latitude: [50, 50.001, 50.002], longitude: [8, 8, 8], altitude: [100, 120, 140], distance: [0, 110, 220]),
+            .init(latitude: [50.01, 50.011], longitude: [8, 8], altitude: [nil, 300], distance: [1000, 1110]),
+        ])
+        let result = try #require(RouteElevation.stretches(route))
+        #expect(result.scale.lowest == 100)
+        #expect(result.scale.highest == 300)
+        // No piece runs from the first segment into the second.
+        #expect(result.stretches.allSatisfy { ($0.latitude.max() ?? 0) < 50.005 || ($0.latitude.min() ?? 0) > 50.005 })
+    }
 }

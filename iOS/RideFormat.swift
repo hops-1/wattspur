@@ -114,6 +114,12 @@ extension Color {
         }
     }
 
+    /// A step of the track by height (B-283): blue low to red high, the palette of the Kit, as on the Mac.
+    static func elevation(_ level: Int) -> Color {
+        let rgb = RouteElevation.palette[min(max(level, 0), RouteElevation.palette.count - 1)]
+        return Color(red: Double((rgb >> 16) & 0xFF) / 255, green: Double((rgb >> 8) & 0xFF) / 255, blue: Double(rgb & 0xFF) / 255)
+    }
+
     /// The track by road surface (B-248): grey smooth, yellow-orange uneven, red rough (B-276).
     static func surface(_ band: RideMotion.SurfaceBand) -> Color {
         switch band {
