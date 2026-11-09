@@ -183,14 +183,16 @@ public struct RideMotion: Sendable, Equatable {
         return result
     }
 
-    static func stretches<Band>(_ samples: [RideSample], band bandOf: (RideSample) -> Band) -> [Stretch<Band>] {
+    /// `maxGap`: seconds between two samples from which the line breaks (a pause).
+    static func stretches<Band>(_ samples: [RideSample], maxGap: Double = maxSampleGap,
+                                band bandOf: (RideSample) -> Band) -> [Stretch<Band>] {
         var stretches: [Stretch<Band>] = []
         var current: Stretch<Band>?
         var lastTime: Double?
         for sample in samples.sorted(by: { $0.time < $1.time }) {
             guard let latitude = sample.latitude, let longitude = sample.longitude else { continue }
             let band = bandOf(sample)
-            if let last = lastTime, sample.time - last > maxSampleGap, let piece = current {
+            if let last = lastTime, sample.time - last > maxGap, let piece = current {
                 if piece.latitude.count > 1 { stretches.append(piece) }
                 current = nil
             }
