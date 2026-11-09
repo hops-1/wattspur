@@ -150,13 +150,13 @@ Target `Wattspur iOS` (ab iOS 26, Bundle-ID `io.github.hops-1.wattspur.ios`, Ver
 - **`RideLibrary` bleibt die eine Tür (B-271, R-34).** Beide Apps brauchen fast alles davon. Die Fassade macht Regel 4 prüfbar, hält Rückgängig und Speichern an einer Stelle und lässt die Dienste `internal`. Sie wird nicht verkleinert. Neue Funktionen kommen als Dienst mit einer dünnen Methode in `RideLibrary`.
 - **Große Dateien** (`RideListView`, `ContentView`, `RideDetailView`) werden erst mit B-125 (ein Bereich „Fahrten“) geteilt; jetzt wäre es ein Umbau ohne Nutzen.
 - **Keine Änderung am CloudKit-Schema in einem Review-Release.**
+- **Öffnet die Bibliothek nicht (B-264, R-41),** halten Mac und iPhone nicht mehr mit `fatalError` an. Der Mac öffnet dann eine leere Bibliothek nur im Speicher, zeigt `LibraryErrorView` statt `ContentView` und startet nichts, was importiert oder synchronisiert; Einstellungen und Import-Fenster zeigen nur einen Hinweis. Das iPhone zeigt die Ansicht statt der Tabs. „Mit leerer Bibliothek starten“ verschiebt die alte mit `LibraryBackup.setAsideDamaged` in einen Ordner „Damaged Library …“; gelöscht wird nichts.
 
 ## Offen
 
 | Punkt | Story |
 |---|---|
 | Ordner-Weg des iPhones beenden; danach `local` oder `icloud` als Standard des Simulators | B-263 |
-| Fehleransicht statt Absturz, wenn sich die Bibliothek nicht öffnen lässt | B-264 |
 | Sicherung zurückholen, während der Sync an ist | B-265 |
 | Import, Neu-Lesen und Nachrechnen in einem `ModelActor` statt zeitlich verschoben auf dem Hauptthread | B-266 |
 | Test-Target für Mac- und iPhone-App | B-267 |

@@ -77,130 +77,142 @@ struct WattspurApp: App {
 
     var body: some Scene {
         WindowGroup {
-            TabView(selection: $tab) {
-                SwiftUI.Tab("Overview", systemImage: "square.grid.2x2", value: Tab.overview) {
-                    NavigationStack {
-                        OverviewView { period in
-                            rideFilter = RideFilter(period: period)
-                            tab = .rides
-                        }
-                            .hidesTabBarInLandscape()
-                            .hidesTitleBar()
-                    }
+            // The library did not open (B-264): the way out instead of the tabs, and nothing that imports or records.
+            if let failure = sync.libraryFailure {
+                LibraryErrorView(error: failure, storeURL: sync.failedStoreURL) {
+                    library = sync.makeLibrary(folder: folder)
+                    Task { await library.refresh() }
                 }
-                SwiftUI.Tab("Rides", systemImage: "list.bullet", value: Tab.rides) {
-                    NavigationStack {
-                        RidesView(filter: $rideFilter, openedRideID: $openedRideID)
-                            .hidesTabBarInLandscape()
-                            .hidesTitleBar()
+            } else {
+                mainView
+            }
+        }
+    }
+
+    private var mainView: some View {
+        TabView(selection: $tab) {
+            SwiftUI.Tab("Overview", systemImage: "square.grid.2x2", value: Tab.overview) {
+                NavigationStack {
+                    OverviewView { period in
+                        rideFilter = RideFilter(period: period)
+                        tab = .rides
                     }
-                }
-                SwiftUI.Tab("More", systemImage: "ellipsis", value: Tab.more) {
-                    NavigationStack {
-                        MoreView()
-                            .hidesTabBarInLandscape()
-                            .hidesTitleBar()
-                    }
+                        .hidesTabBarInLandscape()
+                        .hidesTitleBar()
                 }
             }
-            // In landscape the tab bar sits at the bottom left, in every tab (B-243).
-            .overlay(alignment: .bottomLeading) {
-                LandscapeTabBar(tab: $tab)
+            SwiftUI.Tab("Rides", systemImage: "list.bullet", value: Tab.rides) {
+                NavigationStack {
+                    RidesView(filter: $rideFilter, openedRideID: $openedRideID)
+                        .hidesTabBarInLandscape()
+                        .hidesTitleBar()
+                }
             }
-            .tint(.track)
-            // A FIT from the Flow app or a GPX from the Files app, shared to or opened with Wattspur.
-            .onOpenURL { url in
-                phoneImport.open(url, library: library, folder: folder)
+            SwiftUI.Tab("More", systemImage: "ellipsis", value: Tab.more) {
+                NavigationStack {
+                    MoreView()
+                        .hidesTabBarInLandscape()
+                        .hidesTitleBar()
+                }
+            }
+        }
+        // In landscape the tab bar sits at the bottom left, in every tab (B-243).
+        .overlay(alignment: .bottomLeading) {
+            LandscapeTabBar(tab: $tab)
+        }
+        .tint(.track)
+        // A FIT from the Flow app or a GPX from the Files app, shared to or opened with Wattspur.
+        .onOpenURL { url in
+            phoneImport.open(url, library: library, folder: folder)
+            tab = .rides
+        }
+        .phoneImport(phoneImport)
+        .environment(folder)
+        .environment(sync)
+        .environment(\.switchSync, SwitchSyncAction(switchSync))
+        .reportsSaveFailures()
+        .environment(library)
+        .environment(recorder)
+        .environment(recordings)
+        // The recording covers everything while it runs (B-211).
+        .fullScreenCover(isPresented: Binding(get: { recorder.isRecording }, set: { _ in })) {
+            RecordingView()
+                .environment(folder)
+                .environment(library)
+                .environment(recorder)
+                .environment(recordings)
+        }
+        // Users of the folder way hear once that iCloud is possible now (B-218).
+        .alert("Sync with iCloud?", isPresented: Binding(get: { sync.offerPending && !recorder.isRecording },
+                                                         set: { if !$0 { sync.offerDone() } })) {
+            Button("Use iCloud") { switchSync(to: true) }
+            Button("Keep the Folder", role: .cancel) { sync.offerDone() }
+        } message: {
+            Text("Wattspur on the iPhone can now share one library with the Mac over iCloud: rides recorded here reach the Mac, and you can delete rides here. The Mac must sync with iCloud too (Wattspur › Settings › iCloud). You can switch at any time under More.")
+        }
+        // A recording the app could not finish (crash, killed): go on or end it.
+        .alert("Unfinished Ride", isPresented: Binding(get: { recorder.unfinished != nil && !recorder.isRecording
+                                                              && unfinishedProblem == nil },
+                                                       set: { _ in })) {
+            // The default answer; it also takes the place of the Cancel button iOS would add.
+            Button("Continue Recording", role: .cancel) { recorder.continueUnfinished() }
+            Button("End and Save") {
+                if let recording = recorder.unfinished, !recording.isTooShort {
+                    let bikes = (library.state?.bikes ?? []).filter { !$0.isArchived }
+                    let id = SaveRecordingSheet.defaultBike(among: bikes, last: recordings.lastBikeID,
+                                                            lastRide: library.state?.lastRide)
+                    do {
+                        try SaveRecordingSheet.store(recording, name: RecordingView.defaultName(for: recording.startDate),
+                                                     bike: bikes.first { $0.id == id }, library: library,
+                                                     recordings: recordings, folder: folder)
+                    } catch {
+                        // Ending now would delete the log and with it the whole ride.
+                        unfinishedProblem = error.localizedDescription
+                        return
+                    }
+                }
+                _ = recorder.stop()
+            }
+            Button("Discard", role: .destructive) { _ = recorder.stop() }
+        } message: {
+            Text("Wattspur was closed while recording. Continue the ride, or end it and save what was recorded?")
+        }
+        // After it the question above comes again: nothing is lost, the rider can try once more.
+        .alert("Ride Not Saved", isPresented: Binding(get: { unfinishedProblem != nil },
+                                                      set: { if !$0 { unfinishedProblem = nil } })) {
+            Button("OK", role: .cancel) { unfinishedProblem = nil }
+        } message: {
+            Text("The recording is kept. \(unfinishedProblem ?? "")")
+        }
+        // “Open last ride” from Siri or a shortcut (B-225): the rides, unfiltered, with the newest open.
+        .onChange(of: intents.request, initial: true) { _, request in
+            guard let request else { return }
+            intents.request = nil
+            switch request {
+            case .lastRide:
+                guard let last = library.state?.lastRide else { tab = .rides; return }
+                rideFilter = RideFilter()
                 tab = .rides
+                openedRideID = last.id
             }
-            .phoneImport(phoneImport)
-            .environment(folder)
-            .environment(sync)
-            .environment(\.switchSync, SwitchSyncAction(switchSync))
-            .reportsSaveFailures()
-            .environment(library)
-            .environment(recorder)
-            .environment(recordings)
-            // The recording covers everything while it runs (B-211).
-            .fullScreenCover(isPresented: Binding(get: { recorder.isRecording }, set: { _ in })) {
-                RecordingView()
-                    .environment(folder)
-                    .environment(library)
-                    .environment(recorder)
-                    .environment(recordings)
+        }
+        // The widget “This Week” shows the same week as the overview (B-224).
+        .onChange(of: weekSnapshot, initial: true) { _, snapshot in
+            if WidgetShare.save(snapshot) {
+                WidgetCenter.shared.reloadTimelines(ofKind: WidgetShare.weekWidgetKind)
             }
-            // Users of the folder way hear once that iCloud is possible now (B-218).
-            .alert("Sync with iCloud?", isPresented: Binding(get: { sync.offerPending && !recorder.isRecording },
-                                                             set: { if !$0 { sync.offerDone() } })) {
-                Button("Use iCloud") { switchSync(to: true) }
-                Button("Keep the Folder", role: .cancel) { sync.offerDone() }
-            } message: {
-                Text("Wattspur on the iPhone can now share one library with the Mac over iCloud: rides recorded here reach the Mac, and you can delete rides here. The Mac must sync with iCloud too (Wattspur › Settings › iCloud). You can switch at any time under More.")
-            }
-            // A recording the app could not finish (crash, killed): go on or end it.
-            .alert("Unfinished Ride", isPresented: Binding(get: { recorder.unfinished != nil && !recorder.isRecording
-                                                                  && unfinishedProblem == nil },
-                                                           set: { _ in })) {
-                // The default answer; it also takes the place of the Cancel button iOS would add.
-                Button("Continue Recording", role: .cancel) { recorder.continueUnfinished() }
-                Button("End and Save") {
-                    if let recording = recorder.unfinished, !recording.isTooShort {
-                        let bikes = (library.state?.bikes ?? []).filter { !$0.isArchived }
-                        let id = SaveRecordingSheet.defaultBike(among: bikes, last: recordings.lastBikeID,
-                                                                lastRide: library.state?.lastRide)
-                        do {
-                            try SaveRecordingSheet.store(recording, name: RecordingView.defaultName(for: recording.startDate),
-                                                         bike: bikes.first { $0.id == id }, library: library,
-                                                         recordings: recordings, folder: folder)
-                        } catch {
-                            // Ending now would delete the log and with it the whole ride.
-                            unfinishedProblem = error.localizedDescription
-                            return
-                        }
-                    }
-                    _ = recorder.stop()
-                }
-                Button("Discard", role: .destructive) { _ = recorder.stop() }
-            } message: {
-                Text("Wattspur was closed while recording. Continue the ride, or end it and save what was recorded?")
-            }
-            // After it the question above comes again: nothing is lost, the rider can try once more.
-            .alert("Ride Not Saved", isPresented: Binding(get: { unfinishedProblem != nil },
-                                                          set: { if !$0 { unfinishedProblem = nil } })) {
-                Button("OK", role: .cancel) { unfinishedProblem = nil }
-            } message: {
-                Text("The recording is kept. \(unfinishedProblem ?? "")")
-            }
-            // “Open last ride” from Siri or a shortcut (B-225): the rides, unfiltered, with the newest open.
-            .onChange(of: intents.request, initial: true) { _, request in
-                guard let request else { return }
-                intents.request = nil
-                switch request {
-                case .lastRide:
-                    guard let last = library.state?.lastRide else { tab = .rides; return }
-                    rideFilter = RideFilter()
-                    tab = .rides
-                    openedRideID = last.id
-                }
-            }
-            // The widget “This Week” shows the same week as the overview (B-224).
-            .onChange(of: weekSnapshot, initial: true) { _, snapshot in
-                if WidgetShare.save(snapshot) {
-                    WidgetCenter.shared.reloadTimelines(ofKind: WidgetShare.weekWidgetKind)
-                }
-            }
-            // While a ride is recorded and the app is in front, the screen stays on; otherwise
-            // iOS dims it and locks the phone after the auto-lock time (B-276).
-            .onChange(of: recorder.isRecording && scenePhase == .active, initial: true) { _, keepOn in
-                UIApplication.shared.isIdleTimerDisabled = keepOn
-            }
-            // The Mac may have written a new state while the app was in the background.
-            .onChange(of: scenePhase, initial: true) { _, phase in
-                if phase == .active {
-                    Task {
-                        await library.refresh()
-                        await recordings.refreshStatuses(state: library.state, folder: folder)
-                    }
+        }
+        // While a ride is recorded and the app is in front, the screen stays on; otherwise
+        // iOS dims it and locks the phone after the auto-lock time (B-276).
+        .onChange(of: recorder.isRecording && scenePhase == .active, initial: true) { _, keepOn in
+            UIApplication.shared.isIdleTimerDisabled = keepOn
+        }
+        // The Mac may have written a new state while the app was in the background.
+        .onChange(of: scenePhase, initial: true) { _, phase in
+            if phase == .active {
+                Task {
+                    await library.refresh()
+                    await recordings.refreshStatuses(state: library.state, folder: folder)
                 }
             }
         }

@@ -52,6 +52,8 @@ public struct DiagnosticReport: Sendable {
     public var gpxRidesByParserVersion: [Int: Int]
     public var importLog: [ImportLogEntry]
     public var createdAt: Date
+    /// Why the library did not open (B-264); `nil` when it opened. The home folder is replaced by `~`.
+    public var libraryError: String?
 
     public init(appVersion: String, build: String, commit: String,
                 parserVersion: Int = FITRideImporter.parserVersion,
@@ -60,7 +62,7 @@ public struct DiagnosticReport: Sendable {
                 locale: String = Locale.current.identifier,
                 rideCount: Int, trashedRideCount: Int, ridesByParserVersion: [Int: Int],
                 gpxRidesByParserVersion: [Int: Int] = [:],
-                importLog: [ImportLogEntry], createdAt: Date = .now) {
+                importLog: [ImportLogEntry], createdAt: Date = .now, libraryError: String? = nil) {
         self.appVersion = appVersion
         self.build = build
         self.commit = commit
@@ -74,6 +76,18 @@ public struct DiagnosticReport: Sendable {
         self.gpxRidesByParserVersion = gpxRidesByParserVersion
         self.importLog = importLog
         self.createdAt = createdAt
+        self.libraryError = libraryError.map { Self.withoutHome($0) }
+    }
+
+    /// The text of an error without the user's home folder, which holds the account name.
+    public static func withoutHome(_ text: String, home: String = NSHomeDirectory()) -> String {
+        guard !home.isEmpty else { return text }
+        return text.replacingOccurrences(of: home, with: "~")
+    }
+
+    private var libraryLine: String {
+        guard let libraryError else { return "Library: open" }
+        return "Library: could not be opened: \(libraryError)"
     }
 
     /// Plain text, English on purpose so the developer can read every report.
@@ -89,6 +103,7 @@ public struct DiagnosticReport: Sendable {
             "macOS: \(osVersion)",
             "Locale: \(locale)",
             "",
+            libraryLine,
             "Rides: \(rideCount) (in trash: \(trashedRideCount))",
             "Rides by parser version: " + (ridesByParserVersion.isEmpty ? "–" :
                 ridesByParserVersion.keys.sorted().map { "v\($0): \(ridesByParserVersion[$0] ?? 0)" }.joined(separator: ", ")),
