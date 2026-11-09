@@ -21,6 +21,17 @@ final class Recorder {
     /// in memory and can be saved, but would not survive a crash.
     private(set) var logProblem: String?
 
+    /// Where the iPhone is and how it moves, from the last GPS fix, for the map with the direction of
+    /// travel up (B-280); also while paused.
+    struct Movement: Equatable {
+        var latitude: Double
+        var longitude: Double
+        var course: Double
+        var courseAccuracy: Double
+        var speed: Double
+    }
+    private(set) var movement: Movement?
+
     var isRecording: Bool { recording != nil }
     /// Siri or a shortcut asked to end the ride (B-225): the recording screen opens “Save Ride”.
     var endRequested = false
@@ -176,6 +187,8 @@ final class Recorder {
             status = nil
         }
         if let location = update.location {
+            movement = Movement(latitude: location.coordinate.latitude, longitude: location.coordinate.longitude,
+                                course: location.course, courseAccuracy: location.courseAccuracy, speed: location.speed)
             motion?.record(location)
             // While paused the motion is not part of the ride: the interval starts afresh.
             if recording?.isPaused == true {
