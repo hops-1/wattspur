@@ -9,7 +9,7 @@ import WidgetKit
 /// the rides, “More” with iCloud and the trash, and the GPS recording (docs/BACKLOG.md).
 @main
 struct WattspurApp: App {
-    enum Tab: Hashable { case overview, rides, more }
+    enum Tab: Hashable { case overview, rides, map, more }
 
     @Environment(\.scenePhase) private var scenePhase
     @State private var library: PhoneLibrary
@@ -43,6 +43,7 @@ struct WattspurApp: App {
         let library = sync.makeLibrary()
         #if DEBUG
         if UserDefaults.standard.bool(forKey: PhoneSettingsKey.demoRide) { library.importSampleRideForTesting() }
+        library.importDemoCopiesForTesting(UserDefaults.standard.integer(forKey: "WattspurDemoRides"))
         // `-WattspurOfflineTiles YES`: the OpenStreetMap tiles fail as without a network (B-226).
         if UserDefaults.standard.bool(forKey: "WattspurOfflineTiles") { TileLoader.simulatesOffline = true }
         #endif
@@ -97,6 +98,14 @@ struct WattspurApp: App {
             SwiftUI.Tab("Rides", systemImage: "list.bullet", value: Tab.rides) {
                 NavigationStack {
                     RidesView(filter: $rideFilter, openedRideID: $openedRideID)
+                        .hidesTabBarInLandscape()
+                        .hidesTitleBar()
+                }
+            }
+            // The map of all rides (B-227), as on the Mac.
+            SwiftUI.Tab("Map", systemImage: "map", value: Tab.map) {
+                NavigationStack {
+                    RidesMapScreen()
                         .hidesTabBarInLandscape()
                         .hidesTitleBar()
                 }

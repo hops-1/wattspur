@@ -76,6 +76,12 @@ public final class PhoneDatabase {
 
     // MARK: - Reading
 
+    /// The rides for the map of all rides (B-227): the listed rides that pass `filter`, with their
+    /// overview routes, newest first, and how many it cannot draw. The same as on the Mac.
+    public func mapOverview(filter: MapFilter) -> MapOverview {
+        MapOverview((try? ExchangeRides.listed(in: context)) ?? [], filter: filter)
+    }
+
     /// The rides of the list and all bikes in the exchange format. A ride with GPS names its own id
     /// as `routeFile`; `route(forRideID:)` reads it.
     public func snapshot(generator: String, now: Date = .now) throws -> RideExchange.Library {

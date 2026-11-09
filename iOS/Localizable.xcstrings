@@ -177,6 +177,16 @@
         }
       }
     },
+    "%lld Rides Here" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%lld Fahrten hier"
+          }
+        }
+      }
+    },
     "%lld rides imported" : {
       "localizations" : {
         "de" : {
@@ -217,12 +227,32 @@
         }
       }
     },
+    "%lld rides · %@" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%1$lld Fahrten · %2$@"
+          }
+        }
+      }
+    },
     "%lld rpm" : {
       "localizations" : {
         "de" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "%lld 1/min"
+          }
+        }
+      }
+    },
+    "%lld without GPS" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%lld ohne GPS"
           }
         }
       }
@@ -447,6 +477,16 @@
         }
       }
     },
+    "Choose another period or bike, or record a ride." : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Wähle einen anderen Zeitraum oder ein anderes Bike, oder nimm eine Fahrt auf."
+          }
+        }
+      }
+    },
     "Clear search" : {
       "localizations" : {
         "de" : {
@@ -507,6 +547,16 @@
         }
       }
     },
+    "Display" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Darstellung"
+          }
+        }
+      }
+    },
     "Distance This Week" : {
       "localizations" : {
         "de" : {
@@ -543,6 +593,26 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Beendet die Aufnahme und öffnet „Fahrt speichern“."
+          }
+        }
+      }
+    },
+    "Heat Map" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Wärmekarte"
+          }
+        }
+      }
+    },
+    "Heat map: rides per area, from blue for one ride to red for 20 and more" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Wärmekarte: Fahrten je Fläche, von Blau für eine Fahrt bis Rot für 20 und mehr"
           }
         }
       }
@@ -593,6 +663,16 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Mediathek nicht geöffnet"
+          }
+        }
+      }
+    },
+    "Lines" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Linien"
           }
         }
       }
@@ -673,6 +753,16 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Gerade wird keine Fahrt aufgenommen."
+          }
+        }
+      }
+    },
+    "No Rides on the Map" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Keine Fahrten auf der Karte"
           }
         }
       }
@@ -803,6 +893,16 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Fahrt gestartet. Gute Fahrt!"
+          }
+        }
+      }
+    },
+    "Rides per Area" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Fahrten je Fläche"
           }
         }
       }

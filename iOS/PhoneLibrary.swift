@@ -198,7 +198,27 @@ final class PhoneLibrary {
         database.library.importFile(data: data, fileName: "Testfahrt Beispiel.fit")
         reload()
     }
+
+    /// For trying the map of all rides with many rides (B-227): `-WattspurDemoRides 300` adds that many
+    /// copies of the sample ride, one week apart and shifted a little, so the heat map has places
+    /// ridden often and seldom. Debug builds only; copies already there are skipped as duplicates.
+    func importDemoCopiesForTesting(_ count: Int) {
+        guard count > 0, let database, let url = Bundle.main.url(forResource: "SampleRide", withExtension: "fit"),
+              let data = try? Data(contentsOf: url) else { return }
+        for week in 1...count {
+            let shift = Double(week % 7) * 0.004
+            guard let copy = try? FITAnonymizer(latitudeOffset: shift, longitudeOffset: Double(week % 5) * 0.006,
+                                                trimDistance: 0, weeks: -week).anonymize(data) else { continue }
+            database.library.importFile(data: copy, fileName: "Demo \(week).fit")
+        }
+        reload()
+    }
     #endif
+
+    /// The rides for the map of all rides (B-227), filtered like on the Mac; empty without the store.
+    func mapOverview(filter: MapFilter) -> MapOverview {
+        database?.mapOverview(filter: filter) ?? MapOverview(rides: [])
+    }
 
     /// Renames a ride and changes its bike (B-240); over iCloud the Mac gets both.
     func edit(_ ride: RideExchange.Ride, name: String, bikeID: UUID?) {
