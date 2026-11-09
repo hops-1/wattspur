@@ -1,4 +1,5 @@
 import SwiftUI
+import WattspurMap
 
 /// A small drawn picture of a map style for the "Customize Map" window (B-061), after komoot:
 /// always the same scene (a park, a river, a main road and a path) in the colours of the style,

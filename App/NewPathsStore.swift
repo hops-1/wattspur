@@ -1,6 +1,7 @@
 import Observation
 import SwiftUI
 import WattspurKit
+import WattspurMap
 
 /// "New paths" of every ride (B-115): computed in the background from the overview
 /// routes whenever the rides change, and kept for the ride detail and the map.
@@ -91,5 +92,5 @@ struct NewPathsFigure: View {
 extension Color {
     /// New stretches on the ride's map and their figure: orange, apart from the
     /// accent-coloured route (at least 3:1 against the map, NFR-16).
-    static let newPaths = Color.adaptive(light: 0xC2410C, dark: 0xFF8A4C)
+    static let newPaths = Color.map(MapPalette.newPaths)
 }

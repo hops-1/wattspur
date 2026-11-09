@@ -4,48 +4,18 @@ import Observation
 import SwiftUI
 import UniformTypeIdentifiers
 import WattspurKit
+import WattspurMap
 
 // The layer "Curvy roads" on the maps (B-183): roads from roadcurvature.com that the user has
 // imported (B-182), drawn below the route in orange (from 300) and red (from 1000).
-
-/// All imported roads in one piece, handed to the map renderers. Immutable, so any thread may read it.
-final class CurvyRoadSet: @unchecked Sendable {
-    /// Tells the maps whether the set has changed.
-    let id = UUID()
-    let roads: [CurvyRoad]
-
-    init(roads: [CurvyRoad]) { self.roads = roads }
-
-    /// The road nearest to a position within `metres`, for the tooltip.
-    func nearest(latitude: Double, longitude: Double, within metres: Double) -> CurvyRoad? {
-        let margin = metres / 111_320 * 1.5
-        let lonMargin = margin / max(0.2, cos(latitude * .pi / 180))
-        var best: (road: CurvyRoad, distance: Double)?
-        for road in roads where road.intersects(minLatitude: latitude - margin, maxLatitude: latitude + margin,
-                                               minLongitude: longitude - lonMargin, maxLongitude: longitude + lonMargin) {
-            let distance = road.distance(toLatitude: latitude, longitude: longitude)
-            if distance <= metres, distance < (best?.distance ?? .infinity) { best = (road, distance) }
-        }
-        return best?.road
-    }
-}
-
-extension CurvyRoad {
-    var coordinates2D: [CLLocationCoordinate2D] {
-        (0..<pointCount).map { CLLocationCoordinate2D(latitude: Double(coordinates[2 * $0]), longitude: Double(coordinates[2 * $0 + 1])) }
-    }
-}
 
 extension MKMapView {
     /// Names the curvy road under the mouse in the map's tooltip, if the layer is on and the map is zoomed in far
     /// enough to show it; `point` is in the view's coordinates.
     func updateCurvyRoadTooltip(at point: NSPoint, roads: CurvyRoadSet?) {
         guard let roads else { toolTip = nil; return }
-        let here = convert(point, toCoordinateFrom: self)
-        let beside = convert(CGPoint(x: point.x + 20, y: point.y), toCoordinateFrom: self)
         // Metres in 20 points of the screen.
-        let metres = CLLocation(latitude: here.latitude, longitude: here.longitude)
-            .distance(from: CLLocation(latitude: beside.latitude, longitude: beside.longitude))
+        let (here, metres) = self.metres(across: 20, at: point)
         guard metres / 20 <= CurvyRoads.maximumMetresPerPoint else { toolTip = nil; return }
         // Within 10 points of the screen.
         toolTip = roads.nearest(latitude: here.latitude, longitude: here.longitude, within: metres / 2)?.tooltip
@@ -155,63 +125,10 @@ final class CurvyRoadsStore {
 
 // MARK: - Drawing
 
-/// One overlay for all roads; the renderer draws the ones in the tile it is asked for.
-final class CurvyRoadsOverlay: NSObject, MKOverlay {
-    let set: CurvyRoadSet
-    let curvyColor: CGColor
-    let veryCurvyColor: CGColor
-    var boundingMapRect: MKMapRect { .world }
-    var coordinate: CLLocationCoordinate2D { CLLocationCoordinate2D(latitude: 0, longitude: 0) }
-
-    init(set: CurvyRoadSet, dark: Bool) {
-        self.set = set
-        var curvy = CGColor(gray: 0, alpha: 1), veryCurvy = CGColor(gray: 0, alpha: 1)
-        NSAppearance(named: dark ? .darkAqua : .aqua)?.performAsCurrentDrawingAppearance {
-            curvy = NSColor(Color.curvyRoad(veryCurvy: false)).cgColor
-            veryCurvy = NSColor(Color.curvyRoad(veryCurvy: true)).cgColor
-        }
-        curvyColor = curvy
-        veryCurvyColor = veryCurvy
-    }
-}
-
-final class CurvyRoadsRenderer: MKOverlayRenderer {
-    override func draw(_ mapRect: MKMapRect, zoomScale: MKZoomScale, in context: CGContext) {
-        guard let overlay = overlay as? CurvyRoadsOverlay else { return }
-        // Zoomed out too far, all roads of a state would be a tangle.
-        let centre = MKMapPoint(x: mapRect.midX, y: mapRect.midY).coordinate
-        let metresPerPoint = (1 / zoomScale) / MKMapPointsPerMeterAtLatitude(centre.latitude)
-        guard metresPerPoint <= CurvyRoads.maximumMetresPerPoint else { return }
-        // The geographic box of the tile, with room for the width of the lines.
-        let margin = mapRect.width * 0.05
-        let northWest = MKMapPoint(x: mapRect.minX - margin, y: mapRect.minY - margin).coordinate
-        let southEast = MKMapPoint(x: mapRect.maxX + margin, y: mapRect.maxY + margin).coordinate
-        let scale = 1 / zoomScale
-        context.setLineCap(.round)
-        context.setLineJoin(.round)
-        // The curvy ones first, so the very curvy lie on top.
-        for veryCurvy in [false, true] {
-            context.setStrokeColor(veryCurvy ? overlay.veryCurvyColor : overlay.curvyColor)
-            context.setLineWidth((veryCurvy ? 4 : 3) * scale)
-            context.beginPath()
-            for road in overlay.set.roads where road.isVeryCurvy == veryCurvy
-                && road.intersects(minLatitude: southEast.latitude, maxLatitude: northWest.latitude,
-                                   minLongitude: northWest.longitude, maxLongitude: southEast.longitude) {
-                for i in 0..<road.pointCount {
-                    let p = point(for: MKMapPoint(CLLocationCoordinate2D(latitude: Double(road.coordinates[2 * i]),
-                                                                          longitude: Double(road.coordinates[2 * i + 1]))))
-                    if i == 0 { context.move(to: p) } else { context.addLine(to: p) }
-                }
-            }
-            context.strokePath()
-        }
-    }
-}
-
 extension Color {
     /// Orange for curvy roads (from 300), red for very curvy ones (from 1000); different from the route and the new paths.
     static func curvyRoad(veryCurvy: Bool) -> Color {
-        veryCurvy ? .adaptive(light: 0xD7263D, dark: 0xFF6B7A) : .adaptive(light: 0xE08600, dark: 0xFFB020)
+        .map(MapPalette.curvyRoad(veryCurvy: veryCurvy))
     }
 }
 

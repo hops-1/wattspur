@@ -3,6 +3,7 @@ import MapKit
 import SwiftData
 import SwiftUI
 import WattspurKit
+import WattspurMap
 
 /// 2–4 rides side by side: a table of all figures and the charts on top of each
 /// other (B-100 … B-103, CMP-01 … CMP-06). The rides selected in the list are the

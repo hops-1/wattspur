@@ -1,17 +1,11 @@
+import AppKit
 import MapKit
 import SwiftUI
 import WattspurKit
+import WattspurMap
 
-/// Map type of all maps (MAP-01): Apple's three and the OpenStreetMap styles (B-061, MAP-02).
-/// The raw values are stored in the settings; the first three are the ones from before 1.8.
-enum RideMapType: String, CaseIterable, Identifiable {
-    case standard, satellite, hybrid
-    case openStreetMap = "osm", cyclOSM = "cyclosm", openTopoMap = "opentopomap"
-    var id: Self { self }
-
-    static let apple: [RideMapType] = [.standard, .satellite, .hybrid]
-    static let openStreetMapStyles: [RideMapType] = [.openStreetMap, .cyclOSM, .openTopoMap]
-
+/// The names of the map types and SwiftUI's fallback; the type itself is in the package (B-186).
+extension RideMapType {
     var label: LocalizedStringKey {
         switch self {
         case .standard: "Standard"
@@ -20,16 +14,6 @@ enum RideMapType: String, CaseIterable, Identifiable {
         case .openStreetMap: "OpenStreetMap"
         case .cyclOSM: "CyclOSM"
         case .openTopoMap: "OpenTopoMap"
-        }
-    }
-
-    /// The tile server of an OpenStreetMap style; `nil` for Apple's maps.
-    var tileSource: TileSource? {
-        switch self {
-        case .standard, .satellite, .hybrid: nil
-        case .openStreetMap: .openStreetMap
-        case .cyclOSM: .cyclOSM
-        case .openTopoMap: .openTopoMap
         }
     }
 
@@ -43,28 +27,14 @@ enum RideMapType: String, CaseIterable, Identifiable {
     }
 }
 
-/// A short black line across the route where two parts of a merged ride meet (B-131).
-struct JoinTick: Equatable {
-    var coordinate: CLLocationCoordinate2D
-    /// Degrees clockwise from north: the direction of travel, so the line can be drawn across it.
-    var heading: Double
-
-    static func == (a: JoinTick, b: JoinTick) -> Bool {
-        a.coordinate.latitude == b.coordinate.latitude && a.coordinate.longitude == b.coordinate.longitude && a.heading == b.heading
-    }
-
-    /// One per end: a single one where the parts meet, two across a gap.
-    static func ticks(of joins: [RideMerge.Join]) -> [JoinTick] {
-        joins.flatMap(\.ends).map {
-            JoinTick(coordinate: CLLocationCoordinate2D(latitude: $0.latitude, longitude: $0.longitude), heading: $0.heading)
+extension RouteColors {
+    /// The accent colour and the grey of the Mac, resolved for the light or dark appearance.
+    static func mac(dark: Bool) -> RouteColors {
+        var colors = RouteColors(accent: CGColor(gray: 0, alpha: 1), noHeight: CGColor(gray: 0.5, alpha: 1))
+        NSAppearance(named: dark ? .darkAqua : .aqua)?.performAsCurrentDrawingAppearance {
+            colors = RouteColors(accent: NSColor.controlAccentColor.cgColor, noHeight: NSColor.systemGray.cgColor)
         }
-    }
-
-    /// The unit vector across the direction of travel, in map or image coordinates where
-    /// north is up and y grows downwards.
-    var across: (dx: Double, dy: Double) {
-        let radians = heading * .pi / 180
-        return (cos(radians), sin(radians))
+        return colors
     }
 }
 
@@ -96,17 +66,12 @@ struct RideMapView: View {
     }
 
     /// Start and finish closer than 100 m count as one point (a loop).
-    private var isLoop: Bool {
-        guard let first = coordinates.first, let last = coordinates.last else { return false }
-        return CLLocation(latitude: first.latitude, longitude: first.longitude)
-            .distance(from: CLLocation(latitude: last.latitude, longitude: last.longitude)) < 100
-    }
+    private var isLoop: Bool { RideMarker.isLoop(coordinates) }
 
     var body: some View {
-        RideMapRepresentable(coordinates: coordinates, newStretches: newStretches, curves: curves,
-                             leanStretches: curves.isEmpty ? leanStretches : [],
-                             surfaceStretches: curves.isEmpty && leanStretches.isEmpty ? surfaceStretches : [],
-                             elevationStretches: curves.isEmpty && leanStretches.isEmpty && surfaceStretches.isEmpty ? elevation?.stretches ?? [] : [],
+        RideMapRepresentable(coordinates: coordinates, newStretches: newStretches,
+                             colouring: .first(curves: curves, lean: leanStretches, surface: surfaceStretches,
+                                               elevation: elevation?.stretches ?? []),
                              curvyRoads: curvyRoads,
                              ticks: JoinTick.ticks(of: joins), mapType: mapType, isLoop: isLoop, dark: colorScheme == .dark, cursor: cursor)
             .mapCredits(for: mapType, curvyRoads: curvyRoads != nil)
@@ -145,10 +110,7 @@ struct RideMapView: View {
 private struct RideMapRepresentable: NSViewRepresentable {
     let coordinates: [CLLocationCoordinate2D]
     let newStretches: [[RoutePoint]]
-    let curves: [CurvatureAnalyzer.Piece]
-    let leanStretches: [RideMotion.LeanStretch]
-    let surfaceStretches: [RideMotion.SurfaceStretch]
-    let elevationStretches: [RouteElevation.Stretch]
+    let colouring: RouteColouring
     let curvyRoads: CurvyRoadSet?
     let ticks: [JoinTick]
     let mapType: RideMapType
@@ -163,11 +125,8 @@ private struct RideMapRepresentable: NSViewRepresentable {
         map.delegate = context.coordinator
         map.onMove = { [weak map, weak coordinator = context.coordinator] point in
             guard let map, let coordinator else { return }
-            let here = map.convert(point, toCoordinateFrom: map)
             // Close enough to the route: 20 points of the screen, in metres.
-            let beside = map.convert(CGPoint(x: point.x + 20, y: point.y), toCoordinateFrom: map)
-            let metres = CLLocation(latitude: here.latitude, longitude: here.longitude)
-                .distance(from: CLLocation(latitude: beside.latitude, longitude: beside.longitude))
+            let (here, metres) = map.metres(across: 20, at: point)
             // A curvy road under the mouse says its name and curvature in a tooltip (B-183).
             map.updateCurvyRoadTooltip(at: point, roads: coordinator.curvyRoads)
             guard let cursor = coordinator.cursor else { return }
@@ -195,31 +154,33 @@ private struct RideMapRepresentable: NSViewRepresentable {
         // Rebuilt whenever route, new stretches or appearance change; one overlay, so
         // there is no order between route and new stretches left to MapKit.
         let drawingKey = "\(coordinates.count)|\(coordinates.first.map { "\($0.latitude),\($0.longitude)" } ?? "")"
-            + "|\(newStretches.map(\.count))|\(curves.count)|\(curves.first?.points.count ?? 0)|\(leanStretches.count)|\(leanStretches.first?.latitude.count ?? 0)|\(surfaceStretches.count)|\(surfaceStretches.first?.latitude.count ?? 0)|\(elevationStretches.count)|\(elevationStretches.first?.latitude.count ?? 0)|\(curvyRoads?.id.uuidString ?? "-")|\(ticks.count)|\(ticks.first.map { "\($0.coordinate.latitude)" } ?? "")|\(dark)"
+            + "|\(newStretches.map(\.count))|\(colouring.key)|\(curvyRoads?.id.uuidString ?? "-")|\(ticks.count)|\(ticks.first.map { "\($0.coordinate.latitude)" } ?? "")|\(dark)"
         if coordinator.drawingKey != drawingKey {
             coordinator.drawingKey = drawingKey
             map.removeOverlays(map.drawnOverlays)
             // The curvy roads first, so the route lies on top of them.
             if let curvyRoads { map.addOverlay(CurvyRoadsOverlay(set: curvyRoads, dark: dark), level: map.drawnOverlayLevel) }
             if coordinates.count > 1 {
-                map.addOverlay(RideRouteOverlay(route: coordinates, newStretches: newStretches, curves: curves,
-                                                 leanStretches: leanStretches, surfaceStretches: surfaceStretches,
-                                                 elevationStretches: elevationStretches,
-                                                 ticks: ticks, dark: dark), level: map.drawnOverlayLevel)
+                map.addOverlay(RideRouteOverlay(route: coordinates, newStretches: newStretches, colouring: colouring,
+                                                 ticks: ticks, dark: dark, colors: .mac(dark: dark)), level: map.drawnOverlayLevel)
             }
         }
         // Markers and the visible area follow the route only, not the new stretches.
-        let routeKey = "\(coordinates.count)|\(coordinates.first.map { "\($0.latitude),\($0.longitude)" } ?? "")"
+        // The loop marker is in the label colour, so it is made again with the appearance.
+        let markerKey = "\(coordinates.count)|\(coordinates.first.map { "\($0.latitude),\($0.longitude)" } ?? "")"
+        let routeKey = "\(markerKey)|\(dark)"
         if coordinator.routeKey != routeKey {
+            let routeChanged = coordinator.routeKey?.hasPrefix(markerKey + "|") != true
             coordinator.routeKey = routeKey
-            map.removeAnnotations(map.annotations)
+            coordinator.dark = dark
+            map.removeAnnotations(map.annotations.filter { $0 is RideMarker })
             if let start = coordinates.first {
-                map.addAnnotation(RideMarker(coordinate: start, kind: isLoop ? .loop : .start))
+                map.addAnnotation(RideMarker(coordinate: start, kind: isLoop ? .loop : .start, title: RideMarker.title(isLoop ? .loop : .start)))
             }
             if !isLoop, coordinates.count > 1, let finish = coordinates.last {
-                map.addAnnotation(RideMarker(coordinate: finish, kind: .finish))
+                map.addAnnotation(RideMarker(coordinate: finish, kind: .finish, title: RideMarker.title(.finish)))
             }
-            Self.fit(map, to: coordinates)
+            if routeChanged { Self.fit(map, to: coordinates) }
         }
         coordinator.showCursor(cursor?.current, on: map)
     }
@@ -232,9 +193,7 @@ private struct RideMapRepresentable: NSViewRepresentable {
                 fit(map, to: coordinates, attempt: attempt + 1)
                 return
             }
-            let rect = coordinates.reduce(MKMapRect.null) {
-                $0.union(MKMapRect(origin: MKMapPoint($1), size: MKMapSize(width: 0, height: 0)))
-            }
+            let rect = MKMapRect(covering: coordinates)
             guard !rect.isNull else { return }
             map.setVisibleMapRect(rect, edgePadding: NSEdgeInsets(top: 50, left: 40, bottom: 40, right: 40), animated: false)
         }
@@ -246,6 +205,7 @@ private struct RideMapRepresentable: NSViewRepresentable {
         var routeKey: String?
         var cursor: RideCursor?
         var curvyRoads: CurvyRoadSet?
+        var dark = false
         private var cursorAnnotation: CursorAnnotation?
 
         /// Moves the dot that shows the spot of the coupling, or takes it off the map.
@@ -272,15 +232,13 @@ private struct RideMapRepresentable: NSViewRepresentable {
         }
 
         func mapView(_ mapView: MKMapView, rendererFor overlay: any MKOverlay) -> MKOverlayRenderer {
-            if let tiles = overlay as? MKTileOverlay { return MutedTileRenderer.make(for: tiles) }
-            if overlay is CurvyRoadsOverlay { return CurvyRoadsRenderer(overlay: overlay) }
-            return overlay is RideRouteOverlay ? RideRouteRenderer(overlay: overlay) : MKOverlayRenderer(overlay: overlay)
+            MapRenderers.renderer(for: overlay)
         }
 
         func mapView(_ mapView: MKMapView, viewFor annotation: any MKAnnotation) -> MKAnnotationView? {
             if annotation is CursorAnnotation {
                 let view = MKAnnotationView(annotation: annotation, reuseIdentifier: nil)
-                view.image = CursorAnnotation.image
+                view.image = Self.cursorImage
                 view.displayPriority = .required
                 view.zPriority = .max
                 view.canShowCallout = false
@@ -288,11 +246,13 @@ private struct RideMapRepresentable: NSViewRepresentable {
             }
             guard let marker = annotation as? RideMarker else { return nil }
             let view = MKAnnotationView(annotation: marker, reuseIdentifier: nil)
-            view.image = marker.kind.image
+            view.image = RideMarker.image(marker.kind, dark: dark)
             view.displayPriority = .required
             view.toolTip = marker.title
             return view
         }
+
+        static let cursorImage = RouteMarkerImage.cursor().map { NSImage(cgImage: $0, size: NSSize(width: 18, height: 18)) }
     }
 }
 
@@ -319,57 +279,8 @@ final class TrackingMapView: MKMapView {
     }
 }
 
-/// The spot shared with the charts: a white dot with a dark ring.
-private final class CursorAnnotation: NSObject, MKAnnotation {
-    @objc dynamic var coordinate: CLLocationCoordinate2D
-
-    init(coordinate: CLLocationCoordinate2D) { self.coordinate = coordinate }
-
-    static let image = NSImage(size: NSSize(width: 18, height: 18), flipped: false) { _ in
-        let dot = NSRect(x: 3, y: 3, width: 12, height: 12)
-        NSColor.black.setFill()
-        NSBezierPath(ovalIn: dot.insetBy(dx: -2, dy: -2)).fill()
-        NSColor.white.setFill()
-        NSBezierPath(ovalIn: dot).fill()
-        return true
-    }
-}
-
-/// Start, finish, or both in one for a loop.
-private final class RideMarker: NSObject, MKAnnotation {
-    enum Kind {
-        case start, finish, loop
-
-        var color: NSColor {
-            switch self {
-            case .start: .systemGreen
-            case .finish: .systemRed
-            case .loop: .labelColor
-            }
-        }
-
-        /// A 14 pt dot with a white ring and a light shadow, as before in SwiftUI.
-        var image: NSImage {
-            NSImage(size: NSSize(width: 22, height: 22), flipped: false) { _ in
-                let dot = NSRect(x: 4, y: 4, width: 14, height: 14)
-                NSGraphicsContext.saveGraphicsState()
-                let shadow = NSShadow()
-                shadow.shadowBlurRadius = 2
-                shadow.shadowColor = .black.withAlphaComponent(0.33)
-                shadow.set()
-                NSColor.white.setFill()
-                NSBezierPath(ovalIn: dot.insetBy(dx: -1.5, dy: -1.5)).fill()
-                NSGraphicsContext.restoreGraphicsState()
-                color.setFill()
-                NSBezierPath(ovalIn: dot.insetBy(dx: 1.5, dy: 1.5)).fill()
-                return true
-            }
-        }
-    }
-
-    let coordinate: CLLocationCoordinate2D
-    let kind: Kind
-    var title: String? {
+extension RideMarker {
+    static func title(_ kind: Kind) -> String {
         switch kind {
         case .start: String(localized: "Start")
         case .finish: String(localized: "Finish")
@@ -377,113 +288,17 @@ private final class RideMarker: NSObject, MKAnnotation {
         }
     }
 
-    init(coordinate: CLLocationCoordinate2D, kind: Kind) {
-        self.coordinate = coordinate
-        self.kind = kind
-    }
-}
-
-/// The route and its new stretches in map coordinates, with the colours resolved
-/// for the appearance, so the renderer can draw from any thread.
-private final class RideRouteOverlay: NSObject, MKOverlay {
-    let route: [MKMapPoint]
-    let stretches: [[MKMapPoint]]
-    /// The route by curve (B-181) or by lean angle (B-247), with the colours resolved for the appearance.
-    let pieces: [(color: CGColor, points: [MKMapPoint])]
-    let ticks: [(point: MKMapPoint, across: (dx: Double, dy: Double))]
-    let routeColor: CGColor
-    let newColor: CGColor
-    let boundingMapRect: MKMapRect
-    var coordinate: CLLocationCoordinate2D { MKMapPoint(x: boundingMapRect.midX, y: boundingMapRect.midY).coordinate }
-
-    init(route: [CLLocationCoordinate2D], newStretches: [[RoutePoint]], curves: [CurvatureAnalyzer.Piece],
-         leanStretches: [RideMotion.LeanStretch] = [], surfaceStretches: [RideMotion.SurfaceStretch] = [],
-         elevationStretches: [RouteElevation.Stretch] = [], ticks: [JoinTick], dark: Bool) {
-        self.route = route.map(MKMapPoint.init)
-        stretches = newStretches.map { $0.map { MKMapPoint(CLLocationCoordinate2D(latitude: $0.latitude, longitude: $0.longitude)) } }
-        self.ticks = ticks.map { (MKMapPoint($0.coordinate), $0.across) }
-        var routeColor = CGColor(gray: 0, alpha: 1)
-        var newColor = CGColor(gray: 0, alpha: 1)
-        var kindColors: [CurvatureAnalyzer.Kind: CGColor] = [:]
-        var bandColors: [RideMotion.LeanBand: CGColor] = [:]
-        var surfaceColors: [RideMotion.SurfaceBand: CGColor] = [:]
-        let levelColors = (0..<RouteElevation.levels).map { NSColor(Color.elevation($0)).cgColor }
-        let noHeight = NSColor.systemGray.cgColor
+    /// A 14 pt dot with a white ring and a light shadow: green start, red finish, label colour for a loop.
+    static func image(_ kind: Kind, dark: Bool) -> NSImage? {
+        var color = CGColor(gray: 0, alpha: 1)
         NSAppearance(named: dark ? .darkAqua : .aqua)?.performAsCurrentDrawingAppearance {
-            routeColor = NSColor.controlAccentColor.cgColor
-            newColor = NSColor(Color.newPaths).cgColor
-            for kind in CurvatureAnalyzer.Kind.allCases { kindColors[kind] = NSColor(Color.curve(kind)).cgColor }
-            for band in RideMotion.LeanBand.allCases { bandColors[band] = NSColor(Color.lean(band)).cgColor }
-            for band in RideMotion.SurfaceBand.allCases { surfaceColors[band] = NSColor(Color.surface(band)).cgColor }
-        }
-        pieces = curves.map { piece in
-            (kindColors[piece.kind] ?? routeColor,
-             piece.points.map { MKMapPoint(CLLocationCoordinate2D(latitude: $0.latitude, longitude: $0.longitude)) })
-        } + leanStretches.map { stretch in
-            (bandColors[stretch.band] ?? routeColor,
-             zip(stretch.latitude, stretch.longitude).map { MKMapPoint(CLLocationCoordinate2D(latitude: $0, longitude: $1)) })
-        } + surfaceStretches.map { stretch in
-            (surfaceColors[stretch.band] ?? routeColor,
-             zip(stretch.latitude, stretch.longitude).map { MKMapPoint(CLLocationCoordinate2D(latitude: $0, longitude: $1)) })
-        } + elevationStretches.map { stretch in
-            (stretch.band.map { levelColors[$0] } ?? noHeight,
-             zip(stretch.latitude, stretch.longitude).map { MKMapPoint(CLLocationCoordinate2D(latitude: $0, longitude: $1)) })
-        }
-        self.routeColor = routeColor
-        self.newColor = newColor
-        let rect = (self.route + stretches.joined()).reduce(MKMapRect.null) {
-            $0.union(MKMapRect(origin: $1, size: MKMapSize(width: 0, height: 0)))
-        }
-        // Margin for the width of the lines at the edges.
-        boundingMapRect = rect.isNull ? .world : rect.insetBy(dx: -rect.width * 0.05 - 500, dy: -rect.height * 0.05 - 500)
-    }
-}
-
-/// Draws, in this order: the route's white outline and accent line, then the new
-/// stretches' white outline and orange line, so the new stretches are always on top,
-/// and last the black ticks where the parts of a merged ride meet.
-private final class RideRouteRenderer: MKOverlayRenderer {
-    override func draw(_ mapRect: MKMapRect, zoomScale: MKZoomScale, in context: CGContext) {
-        guard let overlay = overlay as? RideRouteOverlay else { return }
-        let scale = 1 / zoomScale
-        context.setLineCap(.round)
-        context.setLineJoin(.round)
-        func stroke(_ points: [MKMapPoint], width: CGFloat, color: CGColor) {
-            guard points.count > 1 else { return }
-            context.beginPath()
-            context.move(to: point(for: points[0]))
-            for p in points.dropFirst() { context.addLine(to: point(for: p)) }
-            context.setLineWidth(width * scale)
-            context.setStrokeColor(color)
-            context.strokePath()
-        }
-        let white = CGColor(gray: 1, alpha: 1)
-        // Both lines are equally wide, so neither looks heavier at any zoom; the new stretches
-        // stand out by colour and by lying on top.
-        stroke(overlay.route, width: 8, color: white)
-        if overlay.pieces.isEmpty {
-            stroke(overlay.route, width: 4.5, color: overlay.routeColor)
-        } else {
-            // Round caps make the pieces join without a gap.
-            for piece in overlay.pieces { stroke(piece.points, width: 4.5, color: piece.color) }
-        }
-        for stretch in overlay.stretches { stroke(stretch, width: 8, color: white) }
-        for stretch in overlay.stretches { stroke(stretch, width: 4.5, color: overlay.newColor) }
-        // A tick reaches a few points beyond the line on both sides.
-        let half = 12 * scale
-        context.setLineCap(.butt)
-        for tick in overlay.ticks {
-            let from = point(for: MKMapPoint(x: tick.point.x - tick.across.dx * half, y: tick.point.y - tick.across.dy * half))
-            let to = point(for: MKMapPoint(x: tick.point.x + tick.across.dx * half, y: tick.point.y + tick.across.dy * half))
-            for (width, color) in [(4.5, white), (2.5, CGColor(gray: 0, alpha: 1))] as [(CGFloat, CGColor)] {
-                context.beginPath()
-                context.move(to: from)
-                context.addLine(to: to)
-                context.setLineWidth(width * scale)
-                context.setStrokeColor(color)
-                context.strokePath()
+            color = switch kind {
+            case .start: NSColor.systemGreen.cgColor
+            case .finish: NSColor.systemRed.cgColor
+            case .loop: NSColor.labelColor.cgColor
             }
         }
+        return RouteMarkerImage.marker(color: color).map { NSImage(cgImage: $0, size: NSSize(width: 22, height: 22)) }
     }
 }
 
@@ -511,13 +326,10 @@ private struct NewPathsLegend: View {
 
 extension Color {
     /// The colours of the curve kinds on the ride's map (B-181): red tight, amber gentle, grey straight.
-    static func curve(_ kind: CurvatureAnalyzer.Kind) -> Color {
-        switch kind {
-        case .tight: .adaptive(light: 0xC81D25, dark: 0xFF5A5F)
-        case .gentle: .adaptive(light: 0xE0A100, dark: 0xFFD43B)
-        case .straight: .adaptive(light: 0x7A7F87, dark: 0xA8ADB5)
-        }
-    }
+    static func curve(_ kind: CurvatureAnalyzer.Kind) -> Color { .map(MapPalette.curve(kind)) }
+
+    /// A colour of the maps' palette (B-186), for the light or dark appearance.
+    static func map(_ pair: MapPalette.Pair) -> Color { .adaptive(light: pair.light, dark: pair.dark) }
 }
 
 /// "Tight curve", "Gentle curve" and "Straight" for the colours of the route (B-181, NFR-16).
@@ -546,15 +358,7 @@ private struct CurvesLegend: View {
 extension Color {
     /// The route by lean angle (B-247), as on the iPhone (B-246): from green upright through yellow and
     /// orange to red and purple.
-    static func lean(_ band: RideMotion.LeanBand) -> Color {
-        switch band {
-        case .upright: .adaptive(light: 0x2E9E44, dark: 0x5BD075)
-        case .slight: .adaptive(light: 0xE0A100, dark: 0xFFD43B)
-        case .medium: .adaptive(light: 0xE8590C, dark: 0xFF922B)
-        case .strong: .adaptive(light: 0xC81D25, dark: 0xFF5A5F)
-        case .extreme: .adaptive(light: 0x8E3FC9, dark: 0xC08BFF)
-        }
-    }
+    static func lean(_ band: RideMotion.LeanBand) -> Color { .map(MapPalette.lean(band)) }
 }
 
 /// What the colours of the route by lean angle mean (B-247).
@@ -581,13 +385,7 @@ private struct LeanLegend: View {
 
 extension Color {
     /// The route by road surface (B-248): grey smooth, yellow-orange uneven, red rough (B-276).
-    static func surface(_ band: RideMotion.SurfaceBand) -> Color {
-        switch band {
-        case .smooth: .adaptive(light: 0x9AA0A8, dark: 0xB8BDC4)
-        case .uneven: .adaptive(light: 0xF59F00, dark: 0xFFB238)
-        case .rough: .adaptive(light: 0xE03131, dark: 0xFF5C5C)
-        }
-    }
+    static func surface(_ band: RideMotion.SurfaceBand) -> Color { .map(MapPalette.surface(band)) }
 }
 
 /// What the colours of the route by road surface mean (B-248).
@@ -616,7 +414,7 @@ private struct SurfaceLegend: View {
 extension Color {
     /// A step of the route by height (B-063): blue low to red high, from the palette in the Kit.
     static func elevation(_ level: Int) -> Color {
-        let rgb = RouteElevation.palette[min(max(level, 0), RouteElevation.palette.count - 1)]
+        let rgb = MapPalette.elevation(level)
         return Color(red: Double((rgb >> 16) & 0xFF) / 255, green: Double((rgb >> 8) & 0xFF) / 255, blue: Double(rgb & 0xFF) / 255)
     }
 }

@@ -2,6 +2,7 @@ import AppKit
 import SwiftData
 import SwiftUI
 import WattspurKit
+import WattspurMap
 
 /// Settings window (⌘,): general settings and the watched folder (B-042: SET-01, SET-02, SET-07).
 struct SettingsView: View {

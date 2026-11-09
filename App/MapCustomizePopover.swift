@@ -1,4 +1,5 @@
 import SwiftUI
+import WattspurMap
 
 /// The "Customize Map" button on a map and its window (B-061, after komoot): the map type as
 /// pictures, and on the map of all rides also lines or heat map. Replaces the segmented pickers
