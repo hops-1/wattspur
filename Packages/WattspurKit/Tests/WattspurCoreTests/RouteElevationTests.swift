@@ -40,10 +40,13 @@ struct RouteElevationTests {
         #expect(RouteElevation.stretches(samples([nil, nil, nil])) == nil)
     }
 
-    @Test("A pause breaks the route like the other colourings")
+    @Test("A pause longer than five minutes breaks the route; a minute does not")
     func pause() throws {
+        var short = samples([100, 100, 100, 100])
+        for index in 2..<4 { short[index].time += 60 }
+        #expect(try #require(RouteElevation.stretches(short)).stretches.count == 1)
         var list = samples([100, 100, 100, 100])
-        for index in 2..<4 { list[index].time += 60 }
+        for index in 2..<4 { list[index].time += 600 }
         let result = try #require(RouteElevation.stretches(list))
         #expect(result.stretches.count == 2)
     }
@@ -67,5 +70,35 @@ struct RouteElevationTests {
         #expect(result.scale.highest == 300)
         // No piece runs from the first segment into the second.
         #expect(result.stretches.allSatisfy { ($0.latitude.max() ?? 0) < 50.005 || ($0.latitude.min() ?? 0) > 50.005 })
+    }
+
+    @Test("A GPX with a point every few seconds is coloured without holes")
+    func sparsePoints() throws {
+        // Like the GPX of 29.10.2026: about 7 s between points, some up to 90 s.
+        let gaps: [Double] = [7, 3, 9, 6, 12, 2, 8, 90, 7, 5, 6, 11]
+        var time = 0.0
+        var list: [RideSample] = []
+        for (index, gap) in gaps.enumerated() {
+            list.append(RideSample(time: time, latitude: 49.9 + Double(index) * 0.0005, longitude: 8.8,
+                                   altitude: 130 + Double(index) * 4))
+            time += gap
+        }
+        let result = try #require(RouteElevation.stretches(list))
+        // One line through all points: each piece starts where the one before ended.
+        let points = result.stretches.reduce(0) { $0 + $1.latitude.count } - (result.stretches.count - 1)
+        #expect(points == gaps.count)
+        for (a, b) in zip(result.stretches, result.stretches.dropFirst()) {
+            #expect(a.latitude.last == b.latitude.first)
+        }
+    }
+
+    @Test("A long gap, as between the parts of a merged ride, still breaks the line")
+    func longGap() throws {
+        let list = [RideSample(time: 0, latitude: 49.9, longitude: 8.8, altitude: 100),
+                    RideSample(time: 5, latitude: 49.901, longitude: 8.8, altitude: 100),
+                    RideSample(time: 3_600, latitude: 49.95, longitude: 8.8, altitude: 100),
+                    RideSample(time: 3_605, latitude: 49.951, longitude: 8.8, altitude: 100)]
+        let result = try #require(RouteElevation.stretches(list))
+        #expect(result.stretches.count == 2)
     }
 }

@@ -7,6 +7,18 @@ Every DMG handed out to testers corresponds to one entry below.
 
 ## [Unreleased]
 
+## [1.8.9] – 2026-11-09
+
+A small fix for the route by elevation. Together with the iPhone app 0.5.4 (13).
+
+### Changed
+
+- **The folder exchange with the iPhone now ends with iPhone 0.6 and Mac 1.8.10** (1.8.8 said 1.8.9, which is this small update).
+
+### Fixed
+
+- **Route by elevation with GPX files from other devices:** the route showed white holes where the file has a point only every few seconds. The colouring broke the line at every gap over 5 seconds, as for lean angle and surface; now only at gaps over 5 minutes, e.g. between the parts of a merged ride (B-063, B-283).
+
 ## [1.8.8] – 2026-11-09
 
 Out on the bike: the route by elevation on the Mac and the iPhone, the recording map in the direction of travel, a profile while riding, and Bosch parts of one recording joined into one ride. Plus a way out when the library does not open, a much quicker ride list, and the notice that the folder exchange with the iPhone ends with 0.6. Together with the iPhone app 0.5.3 (12).

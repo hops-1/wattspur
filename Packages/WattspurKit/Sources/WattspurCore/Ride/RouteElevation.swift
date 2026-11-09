@@ -9,6 +9,11 @@ public enum RouteElevation {
     /// A ride flatter than this gets a scale of this height around its middle, so a few metres of
     /// noise on a flat ride do not run through all colours.
     public static let minimumRange = 20.0
+    /// Seconds between two samples from which the coloured line breaks. Not the 5 s of the lean angle:
+    /// a GPX file from another device often has a point only every 5 to 10 s (a ride of 29.10.2026:
+    /// median 7 s, 230 of 361 gaps over 5 s), and with 5 s most pieces had one point and were not
+    /// drawn. Only the gap between the parts of a merged ride is this long.
+    public static let maxGap = 300.0
 
     /// The colours of the steps as RGB, from blue (low) through green and yellow to red (high), the
     /// same on the Mac and the iPhone and in light and dark.
@@ -54,7 +59,7 @@ public enum RouteElevation {
         let heights = samples.compactMap { $0.latitude != nil && $0.longitude != nil ? $0.altitude : nil }
         guard let lowest = heights.min(), let highest = heights.max() else { return nil }
         let scale = Scale(lowest: lowest, highest: highest)
-        let stretches = RideMotion.stretches(samples) { sample -> Int? in sample.altitude.map(scale.level(of:)) }
+        let stretches = RideMotion.stretches(samples, maxGap: maxGap) { sample -> Int? in sample.altitude.map(scale.level(of:)) }
         return Result(scale: scale, stretches: stretches)
     }
 
@@ -71,7 +76,7 @@ public enum RouteElevation {
                 time += 1
             }
             // A gap longer than a pause, so the next segment starts a new piece.
-            time += RideMotion.maxSampleGap * 10
+            time += maxGap * 2
         }
         return stretches(samples)
     }
