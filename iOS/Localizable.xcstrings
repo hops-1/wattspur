@@ -337,6 +337,16 @@
         }
       }
     },
+    "Altitude profile of the ride so far" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Höhenprofil der bisherigen Fahrt"
+          }
+        }
+      }
+    },
     "Any Distance" : {
       "localizations" : {
         "de" : {
@@ -697,6 +707,16 @@
         }
       }
     },
+    "Profile" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Profil"
+          }
+        }
+      }
+    },
     "Reset" : {
       "localizations" : {
         "de" : {
@@ -813,6 +833,16 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Eben"
+          }
+        }
+      }
+    },
+    "Speed profile of the ride so far" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tempoprofil der bisherigen Fahrt"
           }
         }
       }
@@ -943,6 +973,16 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Die Mediathek wird in einen Ordner „Damaged Library“ daneben verschoben, nicht gelöscht."
+          }
+        }
+      }
+    },
+    "The profile appears after the first few hundred metres." : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Das Profil erscheint nach den ersten paar hundert Metern."
           }
         }
       }

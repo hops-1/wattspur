@@ -23,6 +23,8 @@ enum PhoneSettingsKey {
     static let recordingTrackByElevation = "recordingTrackByElevation"
     /// The notice that the folder exchange ends with 0.6 was shown (B-263).
     static let folderEndNoticeShown = "folderEndNoticeShown"
+    /// Height or speed in the profile while recording (B-277).
+    static let recordingProfileKind = "recordingProfileKind"
     /// Set by UI tests and screenshots: import the sample ride at launch.
     static let demoRide = "WattspurDemoRide"
 }
