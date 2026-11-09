@@ -49,4 +49,10 @@ enum RideFormat {
     static func lean(_ degrees: Double) -> String {
         "\(abs(degrees).formatted(.number.precision(.fractionLength(0))))°"
     }
+
+    /// "312 m" of height, whole metres (B-063).
+    static func altitude(_ metres: Double) -> String {
+        Measurement(value: metres.rounded(), unit: UnitLength.meters)
+            .formatted(.measurement(width: .abbreviated, usage: .asProvided, numberFormatStyle: .number.precision(.fractionLength(0))))
+    }
 }

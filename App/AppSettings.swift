@@ -37,6 +37,8 @@ enum SettingsKey {
     static let routeByLean = "routeByLean"
     /// The ride's map coloured by road surface (B-248).
     static let routeBySurface = "routeBySurface"
+    /// The route by height on the ride's map (B-063).
+    static let routeByElevation = "routeByElevation"
     /// The layer "Curvy roads" on the maps (B-183).
     static let showsCurvyRoads = "showsCurvyRoads"
     static let compareShowsDeviation = "compareShowsDeviation"

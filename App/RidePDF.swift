@@ -16,6 +16,8 @@ struct RideReport {
     var joins: [RideMerge.Join] = []
     /// How calories are estimated, as in the ride detail (B-067).
     var calories: CalorieModel = .fromWork
+    /// The route by height, when the ride detail shows it (B-063).
+    var elevation: RouteElevation.Result?
 
     var fileName: String { PDFExport.fileName(ride.name) }
 
@@ -23,7 +25,12 @@ struct RideReport {
         let line = PDFExport.MapLine(
             coordinates: route.map { CLLocationCoordinate2D(latitude: $0.latitude, longitude: $0.longitude) },
             color: NSColor.controlAccentColor, showsEndpoints: true, joinTicks: JoinTick.ticks(of: joins))
-        let map = await PDFExport.mapImage([line], mapType: mapType, size: CGSize(width: PDFExport.contentWidth, height: 380))
+        // The route by height lies on the plain route, so start, finish and joins stay.
+        let heights = (elevation?.stretches ?? []).map { stretch in
+            PDFExport.MapLine(coordinates: zip(stretch.latitude, stretch.longitude).map { CLLocationCoordinate2D(latitude: $0, longitude: $1) },
+                              color: stretch.band.map { NSColor(Color.elevation($0)) } ?? .systemGray)
+        }
+        let map = await PDFExport.mapImage([line] + heights, mapType: mapType, size: CGSize(width: PDFExport.contentWidth, height: 380))
         let firstPage = VStack(alignment: .leading, spacing: 20) {
             VStack(alignment: .leading, spacing: 4) {
                 Text(ride.name).font(.largeTitle.bold())
@@ -53,6 +60,9 @@ struct RideReport {
                     .resizable()
                     .frame(width: PDFExport.contentWidth, height: 380)
                     .clipShape(RoundedRectangle(cornerRadius: 12))
+                    .overlay(alignment: .bottomLeading) {
+                        if let elevation { ElevationLegend(scale: elevation.scale).padding(12) }
+                    }
             }
             KeyFiguresGrid(ride: ride, calories: calories)
             DetailsGrid(ride: ride)
