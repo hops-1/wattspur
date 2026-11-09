@@ -38,7 +38,7 @@ Schaltest du am iPhone iCloud für Wattspur aus (**Einstellungen › dein Name �
 ## Ohne iCloud
 Wenn du iCloud nicht nutzen willst, oder dein Speicher voll ist und du kein größeres Abo möchtest, schalte am iPhone **Mehr › Mit iCloud synchronisieren** aus. Das gilt ab dem nächsten Öffnen von Wattspur. Die Fahrten bleiben dann auf dem iPhone, neue Aufnahmen auch:
 - **Per AirDrop:** Eine Aufnahme schickst du mit **GPX teilen** an den Mac und importierst sie dort wie jede andere Datei.
-- **Über einen Ordner:** nur, wenn du die iPhone-App schon vor 0.5 mit einem Ordner genutzt hast; das geht vorerst weiter. Am Mac schaltest du **Einstellungen › Import › Fahrten für das iPhone bereitstellen** ein. Das iPhone zeigt dann die Fahrten, die der Mac in den Ordner schreibt, und legt neue Aufnahmen als GPX dort ab.
+- **Über einen Ordner:** nur, wenn du die iPhone-App schon vor 0.5 mit einem Ordner genutzt hast. **Dieser Weg endet mit der iPhone-App 0.6 und Wattspur 1.8.9;** schalte bis dahin den Sync mit iCloud ein. „GPX teilen“ bleibt. Am Mac schaltest du **Einstellungen › Import › Fahrten für das iPhone bereitstellen** ein. Das iPhone zeigt dann die Fahrten, die der Mac in den Ordner schreibt, und legt neue Aufnahmen als GPX dort ab.
 
 Am Mac lässt du **Mit iCloud synchronisieren** dann aus.
 
@@ -60,6 +60,7 @@ Die Bosch-Datei einer Fahrt hat mehr Werte als eine GPS-Aufnahme, z. B. Leistung
 - **Welches Bike?** Eine GPX-Datei sagt nicht, zu welchem Bike sie gehört. Bei zwei oder mehr Bikes fragt Wattspur.
 - **Schon in der Bibliothek:** Hast du die Fahrt auch mit dem iPhone aufgenommen, kannst du **Bosch-Werte übernehmen**, **Beide behalten** oder **Überspringen**. Wattspur zeigt dazu Start, Strecke und Zeit von beiden.
 - Eine GPX-Datei zu einer Bosch-Fahrt hängt Wattspur an die Fahrt an. Die Bosch-Werte bleiben.
+- **Eine Tour in mehreren Bosch-Teilen:** Die Flow-App teilt eine Tour mit langen Pausen in mehrere Fahrten, das iPhone nimmt sie als eine auf. Liegen die Bosch-Fahrten ganz in der Zeit deiner Aufnahme und ergeben zusammen ihre Strecke, fügt Wattspur sie zu einer Fahrt zusammen. Sie bekommt Name und Bike der Aufnahme und deren Puls, Schräglage und Belag. Die Aufnahme selbst kommt in den Papierkorb, dort kannst du sie wiederherstellen. Es ist egal, welche Datei zuletzt kommt. Hast du die Teile schon früher importiert, lege eine ihrer FIT-Dateien noch einmal ab.
 
 **Ohne iCloud** legt das iPhone die Datei in den Ordner „Wattspur Import“. Der Mac importiert sie von dort wie jede andere Datei.
 
@@ -72,6 +73,13 @@ Beim ersten Aufnehmen fragt das iPhone einmal nach **Bewegung & Fitness**. Erlau
 Ab 0.5.1 liest das iPhone beim Aufnehmen auch seine Bewegungssensoren, mit derselben Freigabe **Bewegung & Fitness** wie das Barometer. Im Tour-Detail stehen dann Kacheln für die größte Schräglage links und rechts, die stärkste Beschleunigung und Bremsung, die beste Zeit aus dem Stand und den Anteil unebenen Belags. Im Karussell gibt es die Seite **Schräglage**. Die Karte färbt die Spur nach Schräglage; mit dem Umschalter oben auf der Karte wechselst du zu **Belag**. Wie die Werte entstehen, steht unter [Kennzahlen](05-metrics.md). Am Mac siehst du dieselben Werte im Tour-Detail.
 
 Für Tests gibt es unter **Mehr › Test** den Schalter **Rohdaten der Bewegung mitschreiben**. Ist er an, legt jede Aufnahme zusätzlich eine Datei in der Dateien-App ab (**Auf meinem iPhone › Wattspur › Bewegung**), etwa 20 MB pro Stunde. Normalerweise bleibt er aus.
+
+## Unterwegs: Fahrtrichtung, Höhe und Profil
+- **Karte in Fahrtrichtung:** Der Knopf unten rechts auf der Karte der Aufnahme wechselt zwischen **Norden oben** und **Fahrtrichtung oben**, wie in einer Navi-App. Die Richtung kommt aus der GPS-Bewegung, nicht vom Kompass, der in der Tasche falsch zeigt. Im Stand und unter etwa 7 km/h dreht sich die Karte nicht.
+- **Spur nach Höhe:** Der Knopf mit dem Berg darüber färbt die bisher gefahrene Spur von Blau (tief) bis Rot (hoch); die Skala wächst mit den Höhen, die du schon gefahren bist. Im Tour-Detail wählst du über der Karte zwischen **Schräglage**, **Belag**, **Höhe** und **Einfarbig**, je nachdem, was die Fahrt hat.
+- **Profil während der Fahrt:** Wische die Werte unter der Karte zur Seite (im Querformat die Werte in der Leiste links). Dort wächst das Profil der bisherigen Fahrt mit; oben wählst du **Höhe** oder **Tempo**.
+
+Wattspur merkt sich alle drei Einstellungen.
 
 ## Eine Fahrt als GPX teilen
 In der Detailansicht einer Fahrt oben rechts, oder in der Liste mit langem Druck auf die Fahrt: **GPX teilen**. Die Datei enthält die ganze Spur mit Zeit und Höhe, dazu das Bike. Du kannst sie per AirDrop an den Mac schicken, in die Dateien-App legen oder in komoot öffnen. Fahrten ohne GPS lassen sich nicht teilen.

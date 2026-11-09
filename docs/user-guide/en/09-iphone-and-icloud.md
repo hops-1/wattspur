@@ -38,7 +38,7 @@ If you turn iCloud off for Wattspur on the iPhone (**Settings › your name › 
 ## Without iCloud
 If you do not want to use iCloud, or your storage is full and you do not want a larger plan, turn off **More › Sync with iCloud** on the iPhone. It takes effect the next time Wattspur opens. The rides then stay on the iPhone, and new recordings too:
 - **By AirDrop:** send a recording to the Mac with **Share GPX** and import it there like any other file.
-- **Through a folder:** only if you used the iPhone app before 0.5 with a folder: it keeps working that way for now. On the Mac, turn on **Settings › Import › Provide rides for the iPhone**. The iPhone then shows the rides the Mac writes into the folder, and puts new recordings there as GPX.
+- **Through a folder:** only if you used the iPhone app before 0.5 with a folder. **This way ends with the iPhone app 0.6 and Wattspur 1.8.9;** turn on sync with iCloud before then. “Share GPX” stays. On the Mac, turn on **Settings › Import › Provide rides for the iPhone**. The iPhone then shows the rides the Mac writes into the folder, and puts new recordings there as GPX.
 
 On the Mac, leave **Sync with iCloud** off then.
 
@@ -60,6 +60,7 @@ The Bosch file of a ride has more values than a GPS recording, such as power and
 - **Which bike?** A GPX file does not say which bike it belongs to. With two bikes or more, Wattspur asks.
 - **Already in the library:** if you recorded the ride with the iPhone too, you can choose **Use the Bosch Values**, **Keep Both** or **Skip**. Wattspur shows the start, distance and time of both.
 - A GPX file for a Bosch ride is attached to the ride. The Bosch values stay.
+- **One tour in several Bosch parts:** the Flow app splits a tour with long pauses into several rides, the iPhone records it as one. When the Bosch rides lie wholly inside the time of your recording and add up to its distance, Wattspur merges them into one ride. It gets the recording's name and bike and its heart rate, lean angle and surface. The recording itself goes to the trash, where you can restore it. It does not matter which file comes last. If you imported the parts earlier, drop one of their FIT files once more.
 
 **Without iCloud** the iPhone puts the file into the folder “Wattspur Import”. The Mac imports it from there like any other file.
 
@@ -72,6 +73,13 @@ The first time you record, the iPhone asks once for **Motion & Fitness**. If you
 From 0.5.1 on, the iPhone also reads its motion sensors while recording, with the same permission **Motion & Fitness** as the barometer. The ride detail then has tiles for the strongest lean to the left and right, the strongest acceleration and braking, the best time from a standstill and the share of uneven surface. The carousel has the page **Lean Angle**. The map colours the track by lean angle; the switch at the top of the map changes to **Surface**. How the values come about is under [Metrics](05-metrics.md). The Mac shows the same values in the ride detail.
 
 For tests, **More › Test** has the switch **Record Raw Motion**. When it is on, every recording also puts a file into the Files app (**On My iPhone › Wattspur › Bewegung**), about 20 MB per hour. Normally it stays off.
+
+## On the road: direction, elevation and profile
+- **Map in the direction of travel:** the button at the bottom right of the recording map switches between **north up** and **direction of travel up**, like a navigation app. The direction comes from the GPS movement, not from the compass, which is wrong in a pocket. Standing still and below about 7 km/h the map does not turn.
+- **Track by elevation:** the mountain button above it colours the track so far from blue (low) to red (high); the scale grows with the heights you have ridden. In the ride detail, choose above the map between **Lean Angle**, **Surface**, **Elevation** and **Plain**, depending on what the ride has.
+- **Profile while riding:** swipe the figures below the map aside (in landscape, the figures in the bar on the left). The profile of the ride so far grows there; choose **Altitude** or **Speed** at the top.
+
+Wattspur remembers all three settings.
 
 ## Sharing a ride as GPX
 At the top right of a ride's detail, or by touching and holding a ride in the list: **Share GPX**. The file holds the whole track with time and altitude, and the bike. You can AirDrop it to the Mac, save it in the Files app or open it in komoot. Rides without GPS cannot be shared.
