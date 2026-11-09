@@ -138,7 +138,12 @@ struct MoreView: View {
         } header: {
             Text("Wattspur Import")
         } footer: {
-            Text("Choose the folder the Mac watches: “Wattspur Import” in iCloud Drive, or a folder in another service such as Dropbox or OneDrive. Without a folder, send recordings to the Mac with “Share GPX”, e.g. by AirDrop.")
+            VStack(alignment: .leading, spacing: 4) {
+                Text("Choose the folder the Mac watches: “Wattspur Import” in iCloud Drive, or a folder in another service such as Dropbox or OneDrive. Without a folder, send recordings to the Mac with “Share GPX”, e.g. by AirDrop.")
+                // B-263, part 1: the way out of the folder before it goes in 0.6.
+                Text("The folder exchange ends with version 0.6. Use Sync with iCloud instead.")
+                    .foregroundStyle(.orange)
+            }
         }
     }
 }
