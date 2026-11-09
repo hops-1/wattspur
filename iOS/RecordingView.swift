@@ -8,6 +8,9 @@ struct RecordingView: View {
     @Environment(Recorder.self) private var recorder
     @State private var camera: MapCameraPosition = .userLocation(followsHeading: false, fallback: .automatic)
     @State private var ending = false
+    /// Figures or profile below the map and in the bar on the left (B-277).
+    enum Page: Hashable { case figures, profile }
+    @State private var page = Page.figures
     /// The map turns with the direction of travel instead of north up (B-280); remembered.
     @AppStorage(PhoneSettingsKey.recordingMapHeadingUp) private var headingUp = false
     /// The direction the map points in while `headingUp`; kept while standing.
@@ -46,7 +49,18 @@ struct RecordingView: View {
             VStack(spacing: 16) {
                 gpsStatus
                 if let recording = recorder.recording {
-                    RecordingFigures(recording: recording)
+                    // Swipe from the figures to the profile of the ride so far (B-277).
+                    TabView(selection: $page) {
+                        RecordingFigures(recording: recording)
+                            .padding(.top, 28)
+                            .tag(Page.figures)
+                        RecordingProfileView(recording: recording)
+                            .padding(.bottom, 28)
+                            .tag(Page.profile)
+                    }
+                    .tabViewStyle(.page(indexDisplayMode: .always))
+                    .indexViewStyle(.page(backgroundDisplayMode: .always))
+                    .frame(height: 210)
                 }
                 buttons
             }
@@ -64,9 +78,20 @@ struct RecordingView: View {
                 VStack(alignment: .leading, spacing: 10) {
                     gpsStatus
                     if let recording = recorder.recording {
-                        LandscapeRecordingFigures(recording: recording)
+                        // Swipe from the figures to a small profile of the ride so far (B-277).
+                        TabView(selection: $page) {
+                            LandscapeRecordingFigures(recording: recording)
+                                .frame(maxHeight: .infinity, alignment: .top)
+                                .tag(Page.figures)
+                            RecordingProfileView(recording: recording, compact: true)
+                                .padding(.bottom, 26)
+                                .tag(Page.profile)
+                        }
+                        .tabViewStyle(.page(indexDisplayMode: .always))
+                        .indexViewStyle(.page(backgroundDisplayMode: .always))
+                    } else {
+                        Spacer(minLength: 0)
                     }
-                    Spacer(minLength: 0)
                     buttons
                 }
                 .padding(14)

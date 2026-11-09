@@ -21,6 +21,8 @@ enum PhoneSettingsKey {
     static let recordingMapHeadingUp = "recordingMapHeadingUp"
     /// Whether the recording map colours the track by height (B-283).
     static let recordingTrackByElevation = "recordingTrackByElevation"
+    /// Height or speed in the profile while recording (B-277).
+    static let recordingProfileKind = "recordingProfileKind"
     /// Set by UI tests and screenshots: import the sample ride at launch.
     static let demoRide = "WattspurDemoRide"
 }
