@@ -12,6 +12,8 @@ struct RecordingView: View {
     @AppStorage(PhoneSettingsKey.recordingMapHeadingUp) private var headingUp = false
     /// The direction the map points in while `headingUp`; kept while standing.
     @State private var mapHeading: Double?
+    /// The track by height while recording (B-283); remembered.
+    @AppStorage(PhoneSettingsKey.recordingTrackByElevation) private var byElevation = false
     /// The zoom the rider chose, kept while the map turns.
     @State private var cameraDistance = 1_500.0
     @Environment(\.isLandscape) private var isLandscape
@@ -111,12 +113,24 @@ struct RecordingView: View {
         Map(position: $camera) {
             UserAnnotation()
             if let route = recorder.recording?.route {
-                ForEach(route.segments.indices, id: \.self) { index in
-                    let segment = route.segments[index]
-                    MapPolyline(coordinates: zip(segment.latitude, segment.longitude).map {
-                        CLLocationCoordinate2D(latitude: $0, longitude: $1)
-                    })
-                    .stroke(Color.track, style: StrokeStyle(lineWidth: 5, lineCap: .round, lineJoin: .round))
+                // By height (B-283): the scale follows the heights ridden so far; only worked out while on.
+                if byElevation, let elevation = RouteElevation.stretches(route) {
+                    ForEach(elevation.stretches.indices, id: \.self) { index in
+                        let stretch = elevation.stretches[index]
+                        MapPolyline(coordinates: zip(stretch.latitude, stretch.longitude).map {
+                            CLLocationCoordinate2D(latitude: $0, longitude: $1)
+                        })
+                        .stroke(stretch.band.map(Color.elevation) ?? .gray,
+                                style: StrokeStyle(lineWidth: 5, lineCap: .round, lineJoin: .round))
+                    }
+                } else {
+                    ForEach(route.segments.indices, id: \.self) { index in
+                        let segment = route.segments[index]
+                        MapPolyline(coordinates: zip(segment.latitude, segment.longitude).map {
+                            CLLocationCoordinate2D(latitude: $0, longitude: $1)
+                        })
+                        .stroke(Color.track, style: StrokeStyle(lineWidth: 5, lineCap: .round, lineJoin: .round))
+                    }
                 }
             }
         }
@@ -135,6 +149,20 @@ struct RecordingView: View {
             if on { follow(recorder.movement) } else { camera = .userLocation(followsHeading: false, fallback: .automatic) }
         }
         .overlay(alignment: .bottomTrailing) {
+            VStack(spacing: 10) {
+            Button {
+                byElevation.toggle()
+            } label: {
+                Image(systemName: "mountain.2")
+                    .font(.title3)
+                    .frame(width: 44, height: 44)
+            }
+            .buttonStyle(.glass)
+            .buttonBorderShape(.circle)
+            .tint(byElevation ? Color.track : nil)
+            .accessibilityLabel(Text("Color the route by elevation"))
+            .accessibilityValue(Text(byElevation ? LocalizedStringKey("On") : LocalizedStringKey("Off")))
+            .accessibilityAddTraits(.isToggle)
             Button {
                 headingUp.toggle()
             } label: {
@@ -145,10 +173,20 @@ struct RecordingView: View {
             .buttonStyle(.glass)
             .buttonBorderShape(.circle)
             .tint(headingUp ? Color.track : nil)
-            .padding(12)
             .accessibilityLabel(Text("Direction of travel up"))
             .accessibilityValue(Text(headingUp ? LocalizedStringKey("On") : LocalizedStringKey("Off")))
             .accessibilityAddTraits(.isToggle)
+            }
+            .padding(12)
+        }
+        .overlay(alignment: .bottomLeading) {
+            if byElevation, let route = recorder.recording?.route, let elevation = RouteElevation.stretches(route) {
+                ElevationLegend(scale: elevation.scale)
+                    .padding(isLandscape ? 0 : 8)
+                    // In landscape the bar with the figures covers the left side.
+                    .padding(.leading, isLandscape ? 270 : 0)
+                    .padding(.bottom, isLandscape ? 12 : 0)
+            }
         }
     }
 

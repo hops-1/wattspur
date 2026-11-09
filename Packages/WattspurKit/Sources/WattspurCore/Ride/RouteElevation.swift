@@ -57,4 +57,22 @@ public enum RouteElevation {
         let stretches = RideMotion.stretches(samples) { sample -> Int? in sample.altitude.map(scale.level(of:)) }
         return Result(scale: scale, stretches: stretches)
     }
+
+    /// The same from the route the iPhone draws (B-283): the route of a ride, or of the recording so
+    /// far, which keeps a point every 10 m with its height. The segments stay apart.
+    public static func stretches(_ route: RideExchange.Route) -> Result? {
+        var samples: [RideSample] = []
+        var time = 0.0
+        for segment in route.segments {
+            for index in segment.latitude.indices where index < segment.longitude.count {
+                let altitude = index < segment.altitude.count ? segment.altitude[index] : nil
+                samples.append(RideSample(time: time, latitude: segment.latitude[index],
+                                          longitude: segment.longitude[index], altitude: altitude))
+                time += 1
+            }
+            // A gap longer than a pause, so the next segment starts a new piece.
+            time += RideMotion.maxSampleGap * 10
+        }
+        return stretches(samples)
+    }
 }
