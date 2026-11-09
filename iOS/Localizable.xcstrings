@@ -447,6 +447,16 @@
         }
       }
     },
+    "Color the route by elevation" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Spur nach Höhe einfärben"
+          }
+        }
+      }
+    },
     "Could Not Save" : {
       "localizations" : {
         "de" : {
@@ -657,6 +667,16 @@
         }
       }
     },
+    "Plain" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Einfarbig"
+          }
+        }
+      }
+    },
     "Reset" : {
       "localizations" : {
         "de" : {
@@ -693,6 +713,16 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Rau"
+          }
+        }
+      }
+    },
+    "Route Elevation" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Höhe"
           }
         }
       }
@@ -923,6 +953,16 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Farbe der Spur"
+          }
+        }
+      }
+    },
+    "Track coloured by elevation, from blue at %@ to red at %@" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Spur nach Höhe eingefärbt, von Blau bei %@ bis Rot bei %@"
           }
         }
       }
