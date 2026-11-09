@@ -150,6 +150,21 @@ struct WattspurApp: App {
         } message: {
             Text("Wattspur on the iPhone can now share one library with the Mac over iCloud: rides recorded here reach the Mac, and you can delete rides here. The Mac must sync with iCloud too (Wattspur › Settings › iCloud). You can switch at any time under More.")
         }
+        // The folder exchange ends with 0.6 (B-263, part 1): who still uses it hears it once.
+        .alert("The Folder Exchange Ends", isPresented: Binding(get: { sync.folderEndNoticePending && !recorder.isRecording },
+                                                                set: { if !$0 { sync.folderEndNoticeDone() } })) {
+            if sync.canChoose {
+                Button("Use iCloud") {
+                    sync.folderEndNoticeDone()
+                    switchSync(to: true)
+                }
+                Button("Later", role: .cancel) { sync.folderEndNoticeDone() }
+            } else {
+                Button("OK", role: .cancel) { sync.folderEndNoticeDone() }
+            }
+        } message: {
+            Text("From version 0.6, Wattspur on the iPhone no longer exchanges rides with the Mac through a folder. Turn on Sync with iCloud, here under More and on the Mac under Wattspur › Settings › iCloud, to keep one library on both. “Share GPX” stays.")
+        }
         // A recording the app could not finish (crash, killed): go on or end it.
         .alert("Unfinished Ride", isPresented: Binding(get: { recorder.unfinished != nil && !recorder.isRecording
                                                               && unfinishedProblem == nil },

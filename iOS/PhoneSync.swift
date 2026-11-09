@@ -18,6 +18,8 @@ final class PhoneSync {
     private(set) var offerPending: Bool
     /// Knows only the folder way of iOS 0.2: without iCloud the folder stays (B-263, R-38).
     let folderUser: Bool
+    /// The notice that the folder exchange ends with 0.6 was shown once (B-263, part 1).
+    private(set) var folderEndNoticeShown: Bool
 
     private let defaults: UserDefaults
     static let enabledKey = PhoneSettingsKey.iCloudSyncEnabled
@@ -37,6 +39,17 @@ final class PhoneSync {
         let on = defaults.bool(forKey: Self.enabledKey)
         isOn = on
         offerPending = buildMode == .iCloud && !on && folderUser && !defaults.bool(forKey: Self.offerShownKey)
+        folderEndNoticeShown = defaults.bool(forKey: PhoneSettingsKey.folderEndNoticeShown)
+    }
+
+    /// Who still uses the folder hears once that it ends with 0.6 (B-263); not on top of the offer above.
+    var folderEndNoticePending: Bool {
+        mode == .folder && !folderEndNoticeShown && !offerPending
+    }
+
+    func folderEndNoticeDone() {
+        folderEndNoticeShown = true
+        defaults.set(true, forKey: PhoneSettingsKey.folderEndNoticeShown)
     }
 
     var canChoose: Bool { buildMode == .iCloud }

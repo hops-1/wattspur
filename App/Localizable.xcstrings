@@ -202,6 +202,16 @@
         }
       }
     },
+    "Providing rides in the folder ends with Wattspur 1.8.9 and the iPhone app 0.6. Use Sync with iCloud on the Mac and the iPhone instead." : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Das Bereitstellen im Ordner endet mit Wattspur 1.8.9 und der iPhone-App 0.6. Nutze stattdessen den Sync mit iCloud am Mac und auf dem iPhone."
+          }
+        }
+      }
+    },
     "Restore Backup…" : {
       "localizations" : {
         "de" : {

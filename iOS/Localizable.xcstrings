@@ -537,6 +537,16 @@
         }
       }
     },
+    "From version 0.6, Wattspur on the iPhone no longer exchanges rides with the Mac through a folder. Turn on Sync with iCloud, here under More and on the Mac under Wattspur › Settings › iCloud, to keep one library on both. “Share GPX” stays." : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ab Version 0.6 tauscht Wattspur auf dem iPhone keine Fahrten mehr über einen Ordner mit dem Mac aus. Schalte „Mit iCloud synchronisieren“ ein, hier unter Mehr und am Mac unter Wattspur › Einstellungen › iCloud, dann hast du eine Mediathek auf beiden. „GPX teilen“ bleibt."
+          }
+        }
+      }
+    },
     "Last 30 Days" : {
       "localizations" : {
         "de" : {
@@ -553,6 +563,16 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Letzte 365 Tage"
+          }
+        }
+      }
+    },
+    "Later" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Später"
           }
         }
       }
@@ -897,12 +917,32 @@
         }
       }
     },
+    "The Folder Exchange Ends" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Der Ordner-Austausch endet"
+          }
+        }
+      }
+    },
     "The Library Could Not Be Opened" : {
       "localizations" : {
         "de" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "Die Mediathek ließ sich nicht öffnen"
+          }
+        }
+      }
+    },
+    "The folder exchange ends with version 0.6. Use Sync with iCloud instead." : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Der Ordner-Austausch endet mit Version 0.6. Nutze stattdessen den Sync mit iCloud."
           }
         }
       }
