@@ -14,6 +14,7 @@ Every DMG handed out to testers corresponds to one entry below.
 
 ### Changed
 
+- **Bosch parts of one iPhone recording:** Bosch Flow saves a tour with long pauses as several rides, the iPhone as one recording. When the Bosch rides that lie inside a recording add up to its distance, Wattspur now merges them into one ride with the recording's name and bike, keeps its heart rate, lean angle and road surface, and moves the recording to the trash (it can be restored there). It works whichever file comes last; for parts imported before, drop one of their FIT files again (B-274).
 - **Ride list on the Mac:** much quicker with many rides. Filtering, sorting and the record stars are only worked out again when the rides, the search or a filter change, not on every click (B-270, R-61). Measured with demo rides: about 10 ms instead of 180 ms per update with 300 rides.
 
 ### Fixed
