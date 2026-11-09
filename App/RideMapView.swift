@@ -84,6 +84,8 @@ struct RideMapView: View {
     var surfaceStretches: [RideMotion.SurfaceStretch] = []
     /// The imported curvy roads, drawn below the route; `nil` while the layer is off (B-183).
     var curvyRoads: CurvyRoadSet?
+    /// The route by height (B-063); used only while the other colourings are empty.
+    var elevation: RouteElevation.Result?
 
     @Environment(\.colorScheme) private var colorScheme
     /// The spot shared with the charts (B-062); not there in the PDF.
@@ -103,7 +105,9 @@ struct RideMapView: View {
     var body: some View {
         RideMapRepresentable(coordinates: coordinates, newStretches: newStretches, curves: curves,
                              leanStretches: curves.isEmpty ? leanStretches : [],
-                             surfaceStretches: curves.isEmpty && leanStretches.isEmpty ? surfaceStretches : [], curvyRoads: curvyRoads,
+                             surfaceStretches: curves.isEmpty && leanStretches.isEmpty ? surfaceStretches : [],
+                             elevationStretches: curves.isEmpty && leanStretches.isEmpty && surfaceStretches.isEmpty ? elevation?.stretches ?? [] : [],
+                             curvyRoads: curvyRoads,
                              ticks: JoinTick.ticks(of: joins), mapType: mapType, isLoop: isLoop, dark: colorScheme == .dark, cursor: cursor)
             .mapCredits(for: mapType, curvyRoads: curvyRoads != nil)
             .clipShape(RoundedRectangle(cornerRadius: 14))
@@ -116,6 +120,8 @@ struct RideMapView: View {
                         LeanLegend()
                     } else if !surfaceStretches.isEmpty {
                         SurfaceLegend()
+                    } else if let elevation {
+                        ElevationLegend(scale: elevation.scale)
                     }
                     if !newStretches.isEmpty { NewPathsLegend() }
                 }
@@ -142,6 +148,7 @@ private struct RideMapRepresentable: NSViewRepresentable {
     let curves: [CurvatureAnalyzer.Piece]
     let leanStretches: [RideMotion.LeanStretch]
     let surfaceStretches: [RideMotion.SurfaceStretch]
+    let elevationStretches: [RouteElevation.Stretch]
     let curvyRoads: CurvyRoadSet?
     let ticks: [JoinTick]
     let mapType: RideMapType
@@ -188,7 +195,7 @@ private struct RideMapRepresentable: NSViewRepresentable {
         // Rebuilt whenever route, new stretches or appearance change; one overlay, so
         // there is no order between route and new stretches left to MapKit.
         let drawingKey = "\(coordinates.count)|\(coordinates.first.map { "\($0.latitude),\($0.longitude)" } ?? "")"
-            + "|\(newStretches.map(\.count))|\(curves.count)|\(curves.first?.points.count ?? 0)|\(leanStretches.count)|\(leanStretches.first?.latitude.count ?? 0)|\(surfaceStretches.count)|\(surfaceStretches.first?.latitude.count ?? 0)|\(curvyRoads?.id.uuidString ?? "-")|\(ticks.count)|\(ticks.first.map { "\($0.coordinate.latitude)" } ?? "")|\(dark)"
+            + "|\(newStretches.map(\.count))|\(curves.count)|\(curves.first?.points.count ?? 0)|\(leanStretches.count)|\(leanStretches.first?.latitude.count ?? 0)|\(surfaceStretches.count)|\(surfaceStretches.first?.latitude.count ?? 0)|\(elevationStretches.count)|\(elevationStretches.first?.latitude.count ?? 0)|\(curvyRoads?.id.uuidString ?? "-")|\(ticks.count)|\(ticks.first.map { "\($0.coordinate.latitude)" } ?? "")|\(dark)"
         if coordinator.drawingKey != drawingKey {
             coordinator.drawingKey = drawingKey
             map.removeOverlays(map.drawnOverlays)
@@ -197,6 +204,7 @@ private struct RideMapRepresentable: NSViewRepresentable {
             if coordinates.count > 1 {
                 map.addOverlay(RideRouteOverlay(route: coordinates, newStretches: newStretches, curves: curves,
                                                  leanStretches: leanStretches, surfaceStretches: surfaceStretches,
+                                                 elevationStretches: elevationStretches,
                                                  ticks: ticks, dark: dark), level: map.drawnOverlayLevel)
             }
         }
@@ -390,7 +398,7 @@ private final class RideRouteOverlay: NSObject, MKOverlay {
 
     init(route: [CLLocationCoordinate2D], newStretches: [[RoutePoint]], curves: [CurvatureAnalyzer.Piece],
          leanStretches: [RideMotion.LeanStretch] = [], surfaceStretches: [RideMotion.SurfaceStretch] = [],
-         ticks: [JoinTick], dark: Bool) {
+         elevationStretches: [RouteElevation.Stretch] = [], ticks: [JoinTick], dark: Bool) {
         self.route = route.map(MKMapPoint.init)
         stretches = newStretches.map { $0.map { MKMapPoint(CLLocationCoordinate2D(latitude: $0.latitude, longitude: $0.longitude)) } }
         self.ticks = ticks.map { (MKMapPoint($0.coordinate), $0.across) }
@@ -399,6 +407,8 @@ private final class RideRouteOverlay: NSObject, MKOverlay {
         var kindColors: [CurvatureAnalyzer.Kind: CGColor] = [:]
         var bandColors: [RideMotion.LeanBand: CGColor] = [:]
         var surfaceColors: [RideMotion.SurfaceBand: CGColor] = [:]
+        let levelColors = (0..<RouteElevation.levels).map { NSColor(Color.elevation($0)).cgColor }
+        let noHeight = NSColor.systemGray.cgColor
         NSAppearance(named: dark ? .darkAqua : .aqua)?.performAsCurrentDrawingAppearance {
             routeColor = NSColor.controlAccentColor.cgColor
             newColor = NSColor(Color.newPaths).cgColor
@@ -414,6 +424,9 @@ private final class RideRouteOverlay: NSObject, MKOverlay {
              zip(stretch.latitude, stretch.longitude).map { MKMapPoint(CLLocationCoordinate2D(latitude: $0, longitude: $1)) })
         } + surfaceStretches.map { stretch in
             (surfaceColors[stretch.band] ?? routeColor,
+             zip(stretch.latitude, stretch.longitude).map { MKMapPoint(CLLocationCoordinate2D(latitude: $0, longitude: $1)) })
+        } + elevationStretches.map { stretch in
+            (stretch.band.map { levelColors[$0] } ?? noHeight,
              zip(stretch.latitude, stretch.longitude).map { MKMapPoint(CLLocationCoordinate2D(latitude: $0, longitude: $1)) })
         }
         self.routeColor = routeColor
@@ -597,5 +610,38 @@ private struct SurfaceLegend: View {
             Capsule().fill(Color.surface(band)).frame(width: 30, height: 4.5).accessibilityHidden(true)
             Text(text).font(.caption)
         }
+    }
+}
+
+extension Color {
+    /// A step of the route by height (B-063): blue low to red high, from the palette in the Kit.
+    static func elevation(_ level: Int) -> Color {
+        let rgb = RouteElevation.palette[min(max(level, 0), RouteElevation.palette.count - 1)]
+        return Color(red: Double((rgb >> 16) & 0xFF) / 255, green: Double((rgb >> 8) & 0xFF) / 255, blue: Double(rgb & 0xFF) / 255)
+    }
+}
+
+/// What the colours of the route by height mean (B-063): a bar from blue to red with the lowest and
+/// the highest point of the ride.
+struct ElevationLegend: View {
+    let scale: RouteElevation.Scale
+
+    var body: some View {
+        VStack(alignment: .leading, spacing: 6) {
+            Text("Route Elevation").font(.caption.weight(.bold))
+            HStack(spacing: 8) {
+                Text(RideFormat.altitude(scale.lowest)).font(.caption).monospacedDigit()
+                Capsule()
+                    .fill(LinearGradient(colors: (0..<RouteElevation.levels).map(Color.elevation), startPoint: .leading, endPoint: .trailing))
+                    .frame(width: 70, height: 4.5)
+                    .accessibilityHidden(true)
+                Text(RideFormat.altitude(scale.highest)).font(.caption).monospacedDigit()
+            }
+        }
+        .padding(.vertical, 8)
+        .padding(.horizontal, 10)
+        .background(.regularMaterial, in: RoundedRectangle(cornerRadius: 10))
+        .accessibilityElement(children: .ignore)
+        .accessibilityLabel(Text("Track coloured by elevation, from blue at \(RideFormat.altitude(scale.lowest)) to red at \(RideFormat.altitude(scale.highest))"))
     }
 }

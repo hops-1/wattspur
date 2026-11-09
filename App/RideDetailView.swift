@@ -70,6 +70,9 @@ private struct RideDetailContent: View {
     /// The route by road surface (B-248).
     @State private var surfaceStretches: [RideMotion.SurfaceStretch] = []
     @AppStorage(SettingsKey.routeBySurface) private var colourBySurface = false
+    /// The route by height (B-063).
+    @State private var elevation: RouteElevation.Result?
+    @AppStorage(SettingsKey.routeByElevation) private var colourByElevation = false
     @AppStorage(SettingsKey.showsCurvyRoads) private var showsCurvyRoads = false
     @Environment(CurvyRoadsStore.self) private var curvyRoads
     @State private var points: [ChartPoint] = []
@@ -124,6 +127,7 @@ private struct RideDetailContent: View {
             motion = computed.motion
             leanStretches = computed.lean
             surfaceStretches = computed.surface
+            elevation = computed.elevation
             points = computed.points
             timePoints = computed.timePoints
             cursor.reset(track: computed.track)
@@ -163,6 +167,7 @@ extension RideDetailContent {
         var motion: RideMotion?
         var lean: [RideMotion.LeanStretch]
         var surface: [RideMotion.SurfaceStretch]
+        var elevation: RouteElevation.Result?
         var points: [ChartPoint]
         var timePoints: [ChartPoint]
         var track: RideTrack
@@ -174,6 +179,7 @@ extension RideDetailContent {
             motion = RideMotion(samples: samples, motorized: motorized)
             lean = RideMotion.leanStretches(samples)
             surface = RideMotion.surfaceStretches(samples)
+            elevation = RouteElevation.stretches(samples)
             points = RideSeries.chartPoints(from: samples)
             timePoints = RideSeries.chartPoints(from: samples, axis: .time)
             track = RideTrack(samples: samples)
@@ -251,10 +257,11 @@ extension RideDetailContent {
             // A colouring of the route (curves, lean angle, surface) hides the new stretches, which
             // would cover it in red too (B-247, B-278).
             RideMapView(route: route, mapType: mapType, joins: joins,
-                        newStretches: showsCurves || showsLean || showsSurface ? [] : newPaths.result(for: ride)?.stretches ?? [],
+                        newStretches: showsCurves || showsLean || showsSurface || showsElevation ? [] : newPaths.result(for: ride)?.stretches ?? [],
                         curves: colourByCurves ? curves : [], leanStretches: showsLean ? leanStretches : [],
                         surfaceStretches: showsSurface ? surfaceStretches : [],
-                        curvyRoads: curvyRoads.set(enabled: showsCurvyRoads))
+                        curvyRoads: curvyRoads.set(enabled: showsCurvyRoads),
+                        elevation: showsElevation ? elevation : nil)
                 .frame(height: mapHeight)
                 // A fresh map for each ride; route and new paths update it in place,
                 // drawn in a fixed order (B-127).
@@ -268,7 +275,7 @@ extension RideDetailContent {
                         if !curves.isEmpty {
                             Button {
                                 colourByCurves.toggle()
-                                if colourByCurves { colourByLean = false; colourBySurface = false }
+                                if colourByCurves { colourByLean = false; colourBySurface = false; colourByElevation = false }
                             } label: {
                                 Image(systemName: "road.lanes.curved.right")
                             }
@@ -285,7 +292,7 @@ extension RideDetailContent {
                             let on = showsLean
                             Button {
                                 colourByLean = !on
-                                if colourByLean { colourByCurves = false; colourBySurface = false }
+                                if colourByLean { colourByCurves = false; colourBySurface = false; colourByElevation = false }
                             } label: {
                                 Image(systemName: "angle")
                             }
@@ -302,7 +309,7 @@ extension RideDetailContent {
                             let on = showsSurface
                             Button {
                                 colourBySurface = !on
-                                if colourBySurface { colourByCurves = false; colourByLean = false }
+                                if colourBySurface { colourByCurves = false; colourByLean = false; colourByElevation = false }
                             } label: {
                                 Image(systemName: "road.lanes")
                             }
@@ -311,6 +318,23 @@ extension RideDetailContent {
                             .tint(on ? Color.accentColor : nil)
                             .help(Text("Color the route by road surface"))
                             .accessibilityLabel(Text("Color the route by road surface"))
+                            .accessibilityValue(Text(on ? LocalizedStringKey("On") : LocalizedStringKey("Off")))
+                            .accessibilityAddTraits(.isToggle)
+                        }
+                        // Or by height (B-063).
+                        if elevation != nil {
+                            let on = showsElevation
+                            Button {
+                                colourByElevation = !on
+                                if colourByElevation { colourByCurves = false; colourByLean = false; colourBySurface = false }
+                            } label: {
+                                Image(systemName: "mountain.2")
+                            }
+                            .buttonStyle(.glass)
+                            .buttonBorderShape(.circle)
+                            .tint(on ? Color.accentColor : nil)
+                            .help(Text("Color the route by elevation"))
+                            .accessibilityLabel(Text("Color the route by elevation"))
                             .accessibilityValue(Text(on ? LocalizedStringKey("On") : LocalizedStringKey("Off")))
                             .accessibilityAddTraits(.isToggle)
                         }
@@ -379,16 +403,19 @@ extension RideDetailContent {
 
     /// Whether the map shows the route by lean angle (B-247).
     private var showsCurves: Bool { colourByCurves && !curves.isEmpty }
-    private var showsLean: Bool { colourByLean && !colourByCurves && !colourBySurface && !leanStretches.isEmpty }
+    private var showsLean: Bool { colourByLean && !colourByCurves && !colourBySurface && !colourByElevation && !leanStretches.isEmpty }
     /// Whether the map shows the route by road surface (B-248).
     private var showsSurface: Bool { colourBySurface && !colourByCurves && !surfaceStretches.isEmpty }
+    /// Whether the map shows the route by height (B-063).
+    private var showsElevation: Bool { colourByElevation && !colourByCurves && !colourBySurface && elevation != nil }
 
     private var chartPoints: [ChartPoint] { chartAxis == .time ? timePoints : points }
 
     private func exportPDF(_ target: PDFExport.Target) async {
         exporting = true
         defer { exporting = false }
-        let report = RideReport(ride: ride, route: route, points: chartPoints, mapType: mapType, axis: chartAxis, joins: joins, calories: calories)
+        let report = RideReport(ride: ride, route: route, points: chartPoints, mapType: mapType, axis: chartAxis, joins: joins, calories: calories,
+                                elevation: showsElevation ? elevation : nil)
         PDFExport.deliver(await report.pdfData(), fileName: report.fileName, to: target)
     }
 }

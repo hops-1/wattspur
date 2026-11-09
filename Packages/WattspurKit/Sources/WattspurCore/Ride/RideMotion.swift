@@ -183,7 +183,7 @@ public struct RideMotion: Sendable, Equatable {
         return result
     }
 
-    private static func stretches<Band>(_ samples: [RideSample], band bandOf: (RideSample) -> Band) -> [Stretch<Band>] {
+    static func stretches<Band>(_ samples: [RideSample], band bandOf: (RideSample) -> Band) -> [Stretch<Band>] {
         var stretches: [Stretch<Band>] = []
         var current: Stretch<Band>?
         var lastTime: Double?

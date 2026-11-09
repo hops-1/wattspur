@@ -102,6 +102,16 @@
         }
       }
     },
+    "Color the route by elevation" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Spur nach Höhe einfärben"
+          }
+        }
+      }
+    },
     "Color the route by lean angle" : {
       "localizations" : {
         "de" : {
@@ -198,6 +208,16 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Backup wiederherstellen …"
+          }
+        }
+      }
+    },
+    "Route Elevation" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Höhe"
           }
         }
       }
@@ -308,6 +328,16 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Die Mediathek wird in einen Ordner „Damaged Library“ daneben verschoben, nicht gelöscht. Danach öffnet Wattspur neu mit einer leeren Mediathek."
+          }
+        }
+      }
+    },
+    "Track coloured by elevation, from blue at %@ to red at %@" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Spur nach Höhe eingefärbt, von Blau bei %@ bis Rot bei %@"
           }
         }
       }
