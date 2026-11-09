@@ -1,12 +1,12 @@
 import MapKit
 import SwiftUI
 import WattspurCore
+import WattspurMap
 
 /// The recording in full screen (B-211, design C): the map with the track and the own position,
 /// time, distance, speed and altitude, Pause and Stop. Opened by “Start Ride” in the overview.
 struct RecordingView: View {
     @Environment(Recorder.self) private var recorder
-    @State private var camera: MapCameraPosition = .userLocation(followsHeading: false, fallback: .automatic)
     @State private var ending = false
     /// Figures or profile below the map and in the bar on the left (B-277).
     enum Page: Hashable { case figures, profile }
@@ -17,8 +17,8 @@ struct RecordingView: View {
     @State private var mapHeading: Double?
     /// The track by height while recording (B-283); remembered.
     @AppStorage(PhoneSettingsKey.recordingTrackByElevation) private var byElevation = false
-    /// The zoom the rider chose, kept while the map turns.
-    @State private var cameraDistance = 1_500.0
+    /// The style of every map (B-226), chosen in the ride's detail or under More.
+    @AppStorage(PhoneSettingsKey.mapType) private var mapType: RideMapType = .standard
     @Environment(\.isLandscape) private var isLandscape
 
     var body: some View {
@@ -135,43 +135,15 @@ struct RecordingView: View {
     }
 
     private var map: some View {
-        Map(position: $camera) {
-            UserAnnotation()
-            if let route = recorder.recording?.route {
-                // By height (B-283): the scale follows the heights ridden so far; only worked out while on.
-                if byElevation, let elevation = RouteElevation.stretches(route) {
-                    ForEach(elevation.stretches.indices, id: \.self) { index in
-                        let stretch = elevation.stretches[index]
-                        MapPolyline(coordinates: zip(stretch.latitude, stretch.longitude).map {
-                            CLLocationCoordinate2D(latitude: $0, longitude: $1)
-                        })
-                        .stroke(stretch.band.map(Color.elevation) ?? .gray,
-                                style: StrokeStyle(lineWidth: 5, lineCap: .round, lineJoin: .round))
-                    }
-                } else {
-                    ForEach(route.segments.indices, id: \.self) { index in
-                        let segment = route.segments[index]
-                        MapPolyline(coordinates: zip(segment.latitude, segment.longitude).map {
-                            CLLocationCoordinate2D(latitude: $0, longitude: $1)
-                        })
-                        .stroke(Color.track, style: StrokeStyle(lineWidth: 5, lineCap: .round, lineJoin: .round))
-                    }
-                }
-            }
-        }
-        .mapControls {
-            MapUserLocationButton()
-            MapCompass()
-        }
-        .onMapCameraChange(frequency: .onEnd) { context in
-            cameraDistance = context.camera.distance
-        }
+        RecordingMapView(mapType: mapType, segments: trackSegments, colouring: trackColouring,
+                         heading: headingUp ? mapHeading : nil,
+                         center: recorder.movement.map { CLLocationCoordinate2D(latitude: $0.latitude, longitude: $0.longitude) })
         .onChange(of: recorder.movement) { _, movement in
             follow(movement)
         }
         .onChange(of: headingUp) { _, on in
             mapHeading = nil
-            if on { follow(recorder.movement) } else { camera = .userLocation(followsHeading: false, fallback: .automatic) }
+            if on { follow(recorder.movement) }
         }
         .overlay(alignment: .bottomTrailing) {
             VStack(spacing: 10) {
@@ -215,17 +187,25 @@ struct RecordingView: View {
         }
     }
 
-    /// With the direction of travel up, the map follows the position and turns to the course of the
-    /// GPS; standing, it keeps its direction (B-280). North up, MapKit follows the position itself.
+    /// The track so far, one line per segment.
+    private var trackSegments: [[CLLocationCoordinate2D]] {
+        (recorder.recording?.route.segments ?? []).map { segment in
+            zip(segment.latitude, segment.longitude).map { CLLocationCoordinate2D(latitude: $0, longitude: $1) }
+        }
+    }
+
+    /// By height (B-283): the scale follows the heights ridden so far; only worked out while on.
+    private var trackColouring: RouteColouring {
+        guard byElevation, let route = recorder.recording?.route, let elevation = RouteElevation.stretches(route) else { return .plain }
+        return .elevation(elevation.stretches)
+    }
+
+    /// With the direction of travel up, the map turns to the course of the GPS; standing, it keeps its
+    /// direction (B-280). North up, MapKit follows the position itself.
     private func follow(_ movement: Recorder.Movement?) {
         guard headingUp, let movement else { return }
         mapHeading = MapHeading.next(current: mapHeading, course: movement.course,
                                      courseAccuracy: movement.courseAccuracy, speed: movement.speed)
-        guard let heading = mapHeading else { return }
-        let center = CLLocationCoordinate2D(latitude: movement.latitude, longitude: movement.longitude)
-        withAnimation(.linear(duration: 0.8)) {
-            camera = .camera(MapCamera(centerCoordinate: center, distance: cameraDistance, heading: heading, pitch: 0))
-        }
     }
 
     private var buttons: some View {
