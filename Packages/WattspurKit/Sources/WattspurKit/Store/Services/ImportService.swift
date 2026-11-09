@@ -55,6 +55,8 @@ struct ImportService: LibraryService {
                 RideService(env).restore(trashed)
                 result.restoredFromTrash = true
             }
+            // A Bosch part imported before B-274 joins its recording when its file comes again.
+            RecordingPartsService(env).joinParts(around: existing)
             return result
         }
         // A recording of the iPhone app names its bike (B-213); it wins over the bike asked for.
@@ -88,6 +90,12 @@ struct ImportService: LibraryService {
         ride.sourceFile = SourceFile(fileName: fileName, data: data)
         context.insert(ride)
         LibrarySave.save(context)
+        // Several Bosch parts of one iPhone recording become one ride with its values (B-274), whichever
+        // file comes last.
+        let parts = RecordingPartsService(env)
+        if let merged = ride.source == .fit ? parts.joinParts(around: ride) : parts.joinParts(of: ride) {
+            return ImportResult(fileName: fileName, outcome: .imported(rideID: merged.id))
+        }
         return ImportResult(fileName: fileName, outcome: .imported(rideID: ride.id))
     }
 
