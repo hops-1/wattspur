@@ -467,6 +467,16 @@
         }
       }
     },
+    "Direction of travel up" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Fahrtrichtung oben"
+          }
+        }
+      }
+    },
     "Distance This Week" : {
       "localizations" : {
         "de" : {
@@ -583,6 +593,26 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Gerade wird keine Fahrt aufgenommen."
+          }
+        }
+      }
+    },
+    "Off" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Aus"
+          }
+        }
+      }
+    },
+    "On" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ein"
           }
         }
       }

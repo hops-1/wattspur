@@ -8,6 +8,12 @@ struct RecordingView: View {
     @Environment(Recorder.self) private var recorder
     @State private var camera: MapCameraPosition = .userLocation(followsHeading: false, fallback: .automatic)
     @State private var ending = false
+    /// The map turns with the direction of travel instead of north up (B-280); remembered.
+    @AppStorage(PhoneSettingsKey.recordingMapHeadingUp) private var headingUp = false
+    /// The direction the map points in while `headingUp`; kept while standing.
+    @State private var mapHeading: Double?
+    /// The zoom the rider chose, kept while the map turns.
+    @State private var cameraDistance = 1_500.0
     @Environment(\.isLandscape) private var isLandscape
 
     var body: some View {
@@ -117,6 +123,45 @@ struct RecordingView: View {
         .mapControls {
             MapUserLocationButton()
             MapCompass()
+        }
+        .onMapCameraChange(frequency: .onEnd) { context in
+            cameraDistance = context.camera.distance
+        }
+        .onChange(of: recorder.movement) { _, movement in
+            follow(movement)
+        }
+        .onChange(of: headingUp) { _, on in
+            mapHeading = nil
+            if on { follow(recorder.movement) } else { camera = .userLocation(followsHeading: false, fallback: .automatic) }
+        }
+        .overlay(alignment: .bottomTrailing) {
+            Button {
+                headingUp.toggle()
+            } label: {
+                Image(systemName: headingUp ? "location.north.line.fill" : "location.north.line")
+                    .font(.title3)
+                    .frame(width: 44, height: 44)
+            }
+            .buttonStyle(.glass)
+            .buttonBorderShape(.circle)
+            .tint(headingUp ? Color.track : nil)
+            .padding(12)
+            .accessibilityLabel(Text("Direction of travel up"))
+            .accessibilityValue(Text(headingUp ? LocalizedStringKey("On") : LocalizedStringKey("Off")))
+            .accessibilityAddTraits(.isToggle)
+        }
+    }
+
+    /// With the direction of travel up, the map follows the position and turns to the course of the
+    /// GPS; standing, it keeps its direction (B-280). North up, MapKit follows the position itself.
+    private func follow(_ movement: Recorder.Movement?) {
+        guard headingUp, let movement else { return }
+        mapHeading = MapHeading.next(current: mapHeading, course: movement.course,
+                                     courseAccuracy: movement.courseAccuracy, speed: movement.speed)
+        guard let heading = mapHeading else { return }
+        let center = CLLocationCoordinate2D(latitude: movement.latitude, longitude: movement.longitude)
+        withAnimation(.linear(duration: 0.8)) {
+            camera = .camera(MapCamera(centerCoordinate: center, distance: cameraDistance, heading: heading, pitch: 0))
         }
     }
 

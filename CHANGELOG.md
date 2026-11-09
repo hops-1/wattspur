@@ -10,6 +10,7 @@ Every DMG handed out to testers corresponds to one entry below.
 ### Added
 
 - **Route by elevation on the Mac:** a fourth switch at the top left of the ride's map, next to curves, lean angle and surface, colours the route from blue at the lowest point of the ride to red at the highest. The legend shows both heights; stretches without a height are grey. Like the other colourings, only one is on at a time, the choice is remembered, and it also shows in the PDF of the ride (B-063).
+- **iPhone: map in the direction of travel.** A button at the bottom right of the recording map switches between north up and the direction of travel up, like a navigation app. The direction comes from the GPS movement, not from the compass, which is wrong with the iPhone in a pocket. Standing still or below about 7 km/h the map does not turn. The choice is remembered (B-280).
 
 ### Changed
 
