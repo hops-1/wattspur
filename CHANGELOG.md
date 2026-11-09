@@ -7,6 +7,10 @@ Every DMG handed out to testers corresponds to one entry below.
 
 ## [Unreleased]
 
+### Added
+
+- **Route by elevation on the Mac:** a fourth switch at the top left of the ride's map, next to curves, lean angle and surface, colours the route from blue at the lowest point of the ride to red at the highest. The legend shows both heights; stretches without a height are grey. Like the other colourings, only one is on at a time, the choice is remembered, and it also shows in the PDF of the ride (B-063).
+
 ### Changed
 
 - **Ride list on the Mac:** much quicker with many rides. Filtering, sorting and the record stars are only worked out again when the rides, the search or a filter change, not on every click (B-270, R-61). Measured with demo rides: about 10 ms instead of 180 ms per update with 300 rides.
