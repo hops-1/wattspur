@@ -7,8 +7,34 @@ import WattspurKit
 /// Where the library file lives. The same place the container opens (the default store).
 enum LibraryLocation {
     static var storeURL: URL {
-        ModelConfiguration().url
+        #if DEBUG
+        if isBrokenLibraryTest { return brokenLibraryTestURL }
+        #endif
+        return ModelConfiguration().url
     }
+
+    #if DEBUG
+    /// `-WattspurBrokenLibraryTest YES` (debug builds only): opens a library in a temporary folder that
+    /// starts out damaged, to try the view for a library that does not open (B-264) without touching the
+    /// real one. “Start with an Empty Library” then opens an empty one there.
+    static var isBrokenLibraryTest: Bool { UserDefaults.standard.bool(forKey: "WattspurBrokenLibraryTest") }
+
+    static var brokenLibraryTestURL: URL {
+        FileManager.default.temporaryDirectory.appending(path: "WattspurBrokenLibraryTest/default.store")
+    }
+
+    /// Writes a damaged file the first time (nothing there and nothing set aside yet) and returns the
+    /// configuration for the test library, without iCloud.
+    static func prepareBrokenLibraryTest() -> ModelConfiguration {
+        let url = brokenLibraryTestURL
+        let fm = FileManager.default
+        try? fm.createDirectory(at: url.deletingLastPathComponent(), withIntermediateDirectories: true)
+        if !fm.fileExists(atPath: url.path), LibraryBackup.keptFolders(storeURL: url).isEmpty {
+            try? Data(repeating: 7, count: 8192).write(to: url)
+        }
+        return LibrarySync.configuration(requested: false, available: false, url: url)
+    }
+    #endif
 }
 
 /// "Library Backup…" (P-22): saves the whole library as a folder and brings it back.

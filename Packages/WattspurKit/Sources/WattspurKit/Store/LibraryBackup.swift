@@ -190,12 +190,12 @@ public enum LibraryBackup {
     }
 
     /// The store, its journal files and the blob folder.
-    private static func libraryFileNames(for storeURL: URL) -> [String] {
+    static func libraryFileNames(for storeURL: URL) -> [String] {
         let name = storeURL.lastPathComponent
         return [name, name + "-wal", name + "-shm", supportFolder(for: storeURL).lastPathComponent]
     }
 
-    private static func uniqueFolder(named name: String, in parent: URL) -> URL {
+    static func uniqueFolder(named name: String, in parent: URL) -> URL {
         var url = parent.appending(path: name)
         var n = 2
         while FileManager.default.fileExists(atPath: url.path) {
@@ -205,7 +205,7 @@ public enum LibraryBackup {
         return url
     }
 
-    private static func timestamp(_ date: Date) -> String {
+    static func timestamp(_ date: Date) -> String {
         let formatter = DateFormatter()
         formatter.locale = Locale(identifier: "en_US_POSIX")
         formatter.dateFormat = "yyyy-MM-dd HHmm"

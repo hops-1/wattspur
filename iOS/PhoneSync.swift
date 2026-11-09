@@ -76,11 +76,18 @@ final class PhoneSync {
     private static var openStore: PhoneDatabase?
     /// The mode the store was opened with.
     private static var openStoreMode: PhoneDatabase.Mode?
+    /// Why the store did not open (B-264, R-41); the app then shows `LibraryErrorView` instead of the tabs.
+    private(set) var libraryFailure: String?
+    /// The file that did not open, for “Start with an Empty Library”.
+    private(set) var failedStoreURL: URL?
 
     /// The library for `mode`, with the store opened when needed.
     func makeLibrary(folder: ImportFolder) -> PhoneLibrary {
         let mode = self.mode
-        guard let configuration = mode.configuration else { return PhoneLibrary(folder: folder) }
+        guard var configuration = mode.configuration else { return PhoneLibrary(folder: folder) }
+        #if DEBUG
+        if Self.isBrokenLibraryTest { configuration = Self.prepareBrokenLibraryTest() }
+        #endif
         if Self.openStore == nil {
             do {
                 let container = try ModelContainer(for: Schema(WattspurSchema.models), configurations: configuration)
@@ -88,11 +95,35 @@ final class PhoneSync {
                 database.purgeTrash()
                 Self.openStore = database
                 Self.openStoreMode = mode
+                libraryFailure = nil
+                failedStoreURL = nil
             } catch {
-                fatalError("Could not open the Wattspur library: \(error)")
+                // Before, the app stopped here at every start (R-41). Now it shows the way out; the
+                // library stays on disk as it is.
+                libraryFailure = String(describing: error)
+                failedStoreURL = configuration.url
+                return PhoneLibrary(folder: folder)
             }
         }
         // Until the next start the store stays as it was opened, with or without iCloud.
         return PhoneLibrary(folder: folder, database: Self.openStore, mode: Self.openStoreMode ?? mode)
     }
+
+    #if DEBUG
+    /// `-WattspurBrokenLibraryTest YES` (debug builds only): a library in a temporary folder that starts
+    /// out damaged, to try the view for a library that does not open (B-264) without touching the real one.
+    static var isBrokenLibraryTest: Bool { UserDefaults.standard.bool(forKey: "WattspurBrokenLibraryTest") }
+
+    /// Writes a damaged file the first time (nothing there and nothing set aside yet) and returns the
+    /// configuration for the test library, without iCloud.
+    private static func prepareBrokenLibraryTest() -> ModelConfiguration {
+        let url = FileManager.default.temporaryDirectory.appending(path: "WattspurBrokenLibraryTest/default.store")
+        let fm = FileManager.default
+        try? fm.createDirectory(at: url.deletingLastPathComponent(), withIntermediateDirectories: true)
+        if !fm.fileExists(atPath: url.path), LibraryBackup.keptFolders(storeURL: url).isEmpty {
+            try? Data(repeating: 7, count: 8192).write(to: url)
+        }
+        return LibrarySync.configuration(requested: false, available: false, url: url)
+    }
+    #endif
 }

@@ -62,6 +62,16 @@
         }
       }
     },
+    "Backups before iCloud and earlier libraries Wattspur kept. To bring a backup back, choose it with “Restore Backup…”; it replaces the library at the next start." : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Backups vor iCloud und frühere Mediatheken, die Wattspur aufbewahrt hat. Um ein Backup zurückzuholen, wähle es mit „Backup wiederherstellen …“; es ersetzt die Mediathek beim nächsten Start."
+          }
+        }
+      }
+    },
     "Before that, Wattspur saves a backup of the library beside it." : {
       "localizations" : {
         "de" : {
@@ -78,6 +88,16 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Ändere die Suche oder die Filter."
+          }
+        }
+      }
+    },
+    "Choose what to do in the main window of Wattspur." : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Entscheide im Hauptfenster von Wattspur, was passieren soll."
           }
         }
       }
@@ -112,6 +132,16 @@
         }
       }
     },
+    "Create Diagnostics" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Diagnose erstellen"
+          }
+        }
+      }
+    },
     "Last backup before turning sync on: %@." : {
       "localizations" : {
         "de" : {
@@ -142,12 +172,112 @@
         }
       }
     },
+    "Moves the library into a folder “Damaged Library” beside it and opens Wattspur with an empty one. With iCloud, the synced rides come back." : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Verschiebt die Mediathek in einen Ordner „Damaged Library“ daneben und öffnet Wattspur mit einer leeren. Mit iCloud kommen die synchronisierten Fahrten zurück."
+          }
+        }
+      }
+    },
+    "Open Again" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Neu öffnen"
+          }
+        }
+      }
+    },
+    "Restore Backup…" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Backup wiederherstellen …"
+          }
+        }
+      }
+    },
+    "Saves a report with versions and the error, without rides or positions. Send it yourself if you want help." : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sichert einen Bericht mit Versionen und dem Fehler, ohne Fahrten oder Positionen. Schick ihn selbst, wenn du Hilfe möchtest."
+          }
+        }
+      }
+    },
+    "Show Backups" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Backups zeigen"
+          }
+        }
+      }
+    },
+    "Start with an Empty Library" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Mit leerer Mediathek starten"
+          }
+        }
+      }
+    },
+    "Start with an Empty Library…" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Mit leerer Mediathek starten …"
+          }
+        }
+      }
+    },
+    "Start with an empty library?" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Mit leerer Mediathek starten?"
+          }
+        }
+      }
+    },
     "Sync with iCloud is on. After the restore, iCloud brings back what changed since the backup: rides deleted since then can disappear again, and changes from the iPhone can replace restored values. To get the backup as it is, turn sync off first." : {
       "localizations" : {
         "de" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "Der Sync mit iCloud ist an. Nach dem Wiederherstellen spielt iCloud wieder ein, was sich seit der Sicherung geändert hat: Seitdem gelöschte Fahrten können wieder verschwinden, und Änderungen vom iPhone können wiederhergestellte Werte ersetzen. Willst du die Sicherung genau so, schalte den Sync vorher aus."
+          }
+        }
+      }
+    },
+    "The Library Could Not Be Opened" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Die Mediathek ließ sich nicht öffnen"
+          }
+        }
+      }
+    },
+    "The backup is ready. Wattspur restores it when it opens again." : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Das Backup ist bereit. Wattspur stellt es beim nächsten Öffnen wieder her."
           }
         }
       }
@@ -162,12 +292,42 @@
         }
       }
     },
+    "The library could not be moved aside: %@" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Die Mediathek konnte nicht beiseitegelegt werden: %@"
+          }
+        }
+      }
+    },
+    "The library is moved into a folder “Damaged Library” beside it, not deleted. Wattspur then opens again with an empty library." : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Die Mediathek wird in einen Ordner „Damaged Library“ daneben verschoben, nicht gelöscht. Danach öffnet Wattspur neu mit einer leeren Mediathek."
+          }
+        }
+      }
+    },
     "Was in the trash – restored." : {
       "localizations" : {
         "de" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "Lag im Papierkorb – wiederhergestellt."
+          }
+        }
+      }
+    },
+    "Wattspur could not open your library. The file may be damaged, or an update or a restore went wrong. Nothing has been deleted: the library stays where it is until you choose what to do." : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Wattspur konnte deine Mediathek nicht öffnen. Die Datei ist vielleicht beschädigt, oder ein Update oder eine Wiederherstellung ging schief. Gelöscht wurde nichts: Die Mediathek bleibt, wo sie ist, bis du entscheidest, was passieren soll."
           }
         }
       }

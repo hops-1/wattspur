@@ -41,3 +41,25 @@ struct DiagnosticReportTests {
         #expect(dup.outcome == "duplicate")
     }
 }
+
+@Suite("Diagnostic report for a library that did not open")
+struct DiagnosticReportLibraryErrorTests {
+    @Test("Says the library is open, or why it did not open, without the home folder")
+    func libraryError() {
+        let open = DiagnosticReport(appVersion: "1", build: "1", commit: "x", rideCount: 0, trashedRideCount: 0,
+                                    ridesByParserVersion: [:], importLog: [])
+        #expect(open.text.contains("Library: open"))
+
+        let message = "SwiftData error at \(NSHomeDirectory())/Library/Application Support/default.store"
+        let broken = DiagnosticReport(appVersion: "1", build: "1", commit: "x", rideCount: 0, trashedRideCount: 0,
+                                      ridesByParserVersion: [:], importLog: [], libraryError: message)
+        #expect(broken.text.contains("Library: could not be opened: SwiftData error at ~/Library/Application Support/default.store"))
+        #expect(!broken.text.contains(NSHomeDirectory()))
+    }
+
+    @Test("Removing the home folder leaves other text alone")
+    func withoutHome() {
+        #expect(DiagnosticReport.withoutHome("/Users/a/x and /Users/ab", home: "/Users/a") == "~/x and ~b")
+        #expect(DiagnosticReport.withoutHome("no path", home: "") == "no path")
+    }
+}

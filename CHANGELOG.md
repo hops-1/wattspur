@@ -7,6 +7,10 @@ Every DMG handed out to testers corresponds to one entry below.
 
 ## [Unreleased]
 
+### Fixed
+
+- **A library that does not open** no longer makes Wattspur stop at every start, on the Mac and on the iPhone. Instead a window explains what happened and offers a way out: show the backups (and restore one on the Mac), create a diagnostics report, or start with an empty library. Nothing is deleted: the old library moves into a folder “Damaged Library” beside it; with iCloud, the synced rides come back (B-264, R-41).
+
 ## [1.8.7] – 2026-11-09
 
 A release that checks and tidies the code before the next big steps: no new features, but 51 fixes from a review of the whole app, most of them for Mac and iPhone working on the same library over iCloud. Nothing changes in how Wattspur looks or works, except that these errors are gone.

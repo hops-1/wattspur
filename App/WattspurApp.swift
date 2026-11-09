@@ -5,6 +5,9 @@ import WattspurKit
 @main
 struct WattspurApp: App {
     let container: ModelContainer
+    /// Why the library did not open (B-264, R-41). Then the main window shows `LibraryErrorView`, the
+    /// container is an empty one in memory, and nothing that imports or syncs starts.
+    let libraryFailure: String?
     @State private var importLog = ImportLog()
     /// The one library of the app; windows get their own undo manager from it (`RideLibrary.using(_:)`).
     @State private var library: RideLibrary
@@ -86,14 +89,20 @@ struct WattspurApp: App {
         _restoreNotice = State(initialValue: notice)
         let sync = ICloudSync()
         _iCloudSync = State(initialValue: sync)
+        var configuration = sync.configuration
+        #if DEBUG
+        if LibraryLocation.isBrokenLibraryTest { configuration = LibraryLocation.prepareBrokenLibraryTest() }
+        #endif
         do {
             #if DEBUG
-            container = DemoMode.isOn ? try DemoMode.makeContainer() : try ModelContainer(for: Schema(WattspurSchema.models), configurations: sync.configuration)
+            container = DemoMode.isOn ? try DemoMode.makeContainer() : try ModelContainer(for: Schema(WattspurSchema.models), configurations: configuration)
             #else
-            container = try ModelContainer(for: Schema(WattspurSchema.models), configurations: sync.configuration)
+            container = try ModelContainer(for: Schema(WattspurSchema.models), configurations: configuration)
             #endif
+            libraryFailure = nil
         } catch {
-            fatalError("Could not open the Wattspur library: \(error)")
+            libraryFailure = String(describing: error)
+            container = Self.standInContainer()
         }
         // The name of the first bike and of bikes without a name (REQUIREMENTS.md 10.16).
         let library = RideLibrary(context: container.mainContext, defaultBikeName: String(localized: "My eBike"))
@@ -102,78 +111,69 @@ struct WattspurApp: App {
         _watcher = State(initialValue: watcher)
         _phoneState = State(initialValue: PhoneState(context: container.mainContext, watcher: watcher))
         // Earlier versions created one bike per ride from the export's serial number; they become one.
-        library.mergeBikes()
-        // One bike named "Mein eBike" for the rider, active, all rides on it (B-074).
-        library.prepareBikes()
+        if libraryFailure == nil {
+            library.mergeBikes()
+            // One bike named "Mein eBike" for the rider, active, all rides on it (B-074).
+            library.prepareBikes()
+        }
         // With iCloud, each device makes its own rider and "My eBike"; after the sync they become one (B-216).
-        if sync.isActive && !usesDemo {
+        if sync.isActive && !usesDemo && libraryFailure == nil {
             let syncMerge = SyncMergeWatcher(library: library)
             syncMerge.start()
             _syncMerge = State(initialValue: syncMerge)
         }
     }
 
+    /// An empty library in memory, so the windows have a container while the real one does not open.
+    /// Nothing is saved into it; the views that could import are replaced (`LibraryClosedNote`).
+    private static func standInContainer() -> ModelContainer {
+        do {
+            return try ModelContainer(for: Schema(WattspurSchema.models), configurations: ModelConfiguration(isStoredInMemoryOnly: true))
+        } catch {
+            // A store in memory has no file that could be damaged; this does not happen.
+            fatalError("Could not create a library in memory: \(error)")
+        }
+    }
+
     var body: some Scene {
         WindowGroup {
-            ContentView()
-                .environment(library)
-                .environment(importLog)
-                .environment(watcher)
-                .environment(newPaths)
-                .environment(curvyRoads)
-                .environment(routeSimilarity)
-                .environment(mergeSuggestions)
-                .environment(assignmentNotice)
-                .environment(updates)
-                .environment(restoreNotice)
-                .environment(\.librarySyncs, iCloudSync.isActive)
-                .task { await maintenance.run(library: library) }
-                .task { await curvyRoads.load() }
-                .reportsSaveFailures()
+            if let libraryFailure {
+                LibraryErrorView(error: libraryFailure)
+                    .environment(backup)
+            } else {
+                mainWindow
+            }
         }
         .modelContainer(container)
         .defaultSize(width: 1280, height: 860)
-        .commands {
-            CommandGroup(replacing: .appInfo) {
-                Button("About Wattspur") { openWindow(id: "about") }
-                Button("Check for Updates…") { Task { await updates.checkManually() } }
-                    .disabled(updates.isChecking)
-            }
-            CommandGroup(replacing: .help) {
-                Link("Wattspur Handbook", destination: HelpLinks.url(.handbook))
-                    .keyboardShortcut("?", modifiers: .command)
-                Link("Importing Rides", destination: HelpLinks.url(.importing))
-                Link("Questions and Troubleshooting", destination: HelpLinks.url(.faq))
-                Link("Release Notes", destination: HelpLinks.releases)
-                Divider()
-                Button("Create Diagnostics…") { openWindow(id: "diagnostics") }
-            }
-            CommandGroup(after: .importExport) {
-                Button("Import Curvy Roads…") { curvyRoads.chooseFiles() }
-                Button("Library Backup…") { openWindow(id: "backup") }
-                Button("Import Log") { openWindow(id: "importLog") }
-                    .keyboardShortcut("l", modifiers: [.command, .option])
-            }
-        }
+        .commands { commands }
 
         Window("Import", id: "importLog") {
-            ImportLogView()
-                .environment(library)
-                .environment(importLog)
-                .environment(watcher)
-                .environment(mergeSuggestions)
+            if libraryFailure != nil {
+                LibraryClosedNote()
+            } else {
+                ImportLogView()
+                    .environment(library)
+                    .environment(importLog)
+                    .environment(watcher)
+                    .environment(mergeSuggestions)
+            }
         }
         .modelContainer(container)
         .defaultSize(width: 860, height: 700)
 
         Settings {
-            SettingsView()
-                .environment(library)
-                .environment(watcher)
-                .environment(phoneState)
-                .environment(curvyRoads)
-                .environment(iCloudSync)
-                .environment(\.librarySyncs, iCloudSync.isActive)
+            if libraryFailure != nil {
+                LibraryClosedNote()
+            } else {
+                SettingsView()
+                    .environment(library)
+                    .environment(watcher)
+                    .environment(phoneState)
+                    .environment(curvyRoads)
+                    .environment(iCloudSync)
+                    .environment(\.librarySyncs, iCloudSync.isActive)
+            }
         }
         .modelContainer(container)
 
@@ -192,12 +192,58 @@ struct WattspurApp: App {
         .restorationBehavior(.disabled)
 
         Window("Diagnostics", id: "diagnostics") {
-            DiagnosticsView()
-                .environment(library)
-                .environment(importLog)
+            if let libraryFailure {
+                LibraryErrorView(error: libraryFailure)
+                    .environment(backup)
+            } else {
+                DiagnosticsView()
+                    .environment(library)
+                    .environment(importLog)
+            }
         }
         .modelContainer(container)
         .windowResizability(.contentSize)
         .restorationBehavior(.disabled)
+    }
+
+    private var mainWindow: some View {
+        ContentView()
+            .environment(library)
+            .environment(importLog)
+            .environment(watcher)
+            .environment(newPaths)
+            .environment(curvyRoads)
+            .environment(routeSimilarity)
+            .environment(mergeSuggestions)
+            .environment(assignmentNotice)
+            .environment(updates)
+            .environment(restoreNotice)
+            .environment(\.librarySyncs, iCloudSync.isActive)
+            .task { await maintenance.run(library: library) }
+            .task { await curvyRoads.load() }
+            .reportsSaveFailures()
+    }
+
+    @CommandsBuilder private var commands: some Commands {
+        CommandGroup(replacing: .appInfo) {
+            Button("About Wattspur") { openWindow(id: "about") }
+            Button("Check for Updates…") { Task { await updates.checkManually() } }
+                .disabled(updates.isChecking)
+        }
+        CommandGroup(replacing: .help) {
+            Link("Wattspur Handbook", destination: HelpLinks.url(.handbook))
+                .keyboardShortcut("?", modifiers: .command)
+            Link("Importing Rides", destination: HelpLinks.url(.importing))
+            Link("Questions and Troubleshooting", destination: HelpLinks.url(.faq))
+            Link("Release Notes", destination: HelpLinks.releases)
+            Divider()
+            Button("Create Diagnostics…") { openWindow(id: "diagnostics") }
+        }
+        CommandGroup(after: .importExport) {
+            Button("Import Curvy Roads…") { curvyRoads.chooseFiles() }
+            Button("Library Backup…") { openWindow(id: "backup") }
+            Button("Import Log") { openWindow(id: "importLog") }
+                .keyboardShortcut("l", modifiers: [.command, .option])
+        }
     }
 }

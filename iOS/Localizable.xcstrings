@@ -257,6 +257,16 @@
         }
       }
     },
+    "A report with versions and the error, without rides or positions. Send it yourself if you want help." : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ein Bericht mit Versionen und dem Fehler, ohne Fahrten oder Positionen. Schick ihn selbst, wenn du Hilfe möchtest."
+          }
+        }
+      }
+    },
     "A ride is already being recorded." : {
       "localizations" : {
         "de" : {
@@ -387,6 +397,16 @@
         }
       }
     },
+    "Backups" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Backups"
+          }
+        }
+      }
+    },
     "Bike" : {
       "localizations" : {
         "de" : {
@@ -437,12 +457,42 @@
         }
       }
     },
+    "Create Diagnostics" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Diagnose erstellen"
+          }
+        }
+      }
+    },
     "Distance This Week" : {
       "localizations" : {
         "de" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "Strecke dieser Woche"
+          }
+        }
+      }
+    },
+    "Done" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Fertig"
+          }
+        }
+      }
+    },
+    "Earlier libraries Wattspur kept on this iPhone. Backups to restore are made on the Mac (File › Library Backup…)." : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Frühere Mediatheken, die Wattspur auf diesem iPhone aufbewahrt hat. Backups zum Wiederherstellen entstehen am Mac (Ablage › Mediathek-Backup …)."
           }
         }
       }
@@ -477,6 +527,26 @@
         }
       }
     },
+    "Library Not Opened" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Mediathek nicht geöffnet"
+          }
+        }
+      }
+    },
+    "Moves the library into a folder “Damaged Library” beside it and opens an empty one. With iCloud, the synced rides come back." : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Verschiebt die Mediathek in einen Ordner „Damaged Library“ daneben und öffnet eine leere. Mit iCloud kommen die synchronisierten Fahrten zurück."
+          }
+        }
+      }
+    },
     "Name the ride and save it." : {
       "localizations" : {
         "de" : {
@@ -493,6 +563,16 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Keine Treffer"
+          }
+        }
+      }
+    },
+    "No earlier libraries on this iPhone. With iCloud, the rides are also on the Mac and in iCloud." : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Keine früheren Mediatheken auf diesem iPhone. Mit iCloud sind die Fahrten auch am Mac und in iCloud."
           }
         }
       }
@@ -607,6 +687,16 @@
         }
       }
     },
+    "Show Backups" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Backups zeigen"
+          }
+        }
+      }
+    },
     "Shows all rides" : {
       "localizations" : {
         "de" : {
@@ -643,6 +733,26 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Eben"
+          }
+        }
+      }
+    },
+    "Start with an Empty Library" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Mit leerer Mediathek starten"
+          }
+        }
+      }
+    },
+    "Start with an empty library?" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Mit leerer Mediathek starten?"
           }
         }
       }
@@ -697,12 +807,42 @@
         }
       }
     },
+    "The Library Could Not Be Opened" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Die Mediathek ließ sich nicht öffnen"
+          }
+        }
+      }
+    },
     "The last change could not be saved and may be lost when Wattspur quits. Check that there is free space on this device. %@" : {
       "localizations" : {
         "de" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "Die letzte Änderung konnte nicht gespeichert werden und geht beim Beenden von Wattspur womöglich verloren. Prüfe, ob auf diesem Gerät genug Speicher frei ist. %@"
+          }
+        }
+      }
+    },
+    "The library could not be moved aside: %@" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Die Mediathek konnte nicht beiseitegelegt werden: %@"
+          }
+        }
+      }
+    },
+    "The library is moved into a folder “Damaged Library” beside it, not deleted." : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Die Mediathek wird in einen Ordner „Damaged Library“ daneben verschoben, nicht gelöscht."
           }
         }
       }
@@ -793,6 +933,26 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Unebener Belag"
+          }
+        }
+      }
+    },
+    "Wattspur could not open your library. The file may be damaged, or an update went wrong. Nothing has been deleted: the library stays where it is until you choose what to do." : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Wattspur konnte deine Mediathek nicht öffnen. Die Datei ist vielleicht beschädigt, oder ein Update ging schief. Gelöscht wurde nichts: Die Mediathek bleibt, wo sie ist, bis du entscheidest, was passieren soll."
+          }
+        }
+      }
+    },
+    "Wattspur diagnostics" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Wattspur-Diagnose"
           }
         }
       }
