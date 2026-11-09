@@ -7,6 +7,10 @@ Every DMG handed out to testers corresponds to one entry below.
 
 ## [Unreleased]
 
+## [1.8.8] – 2026-11-09
+
+Out on the bike: the route by elevation on the Mac and the iPhone, the recording map in the direction of travel, a profile while riding, and Bosch parts of one recording joined into one ride. Plus a way out when the library does not open, a much quicker ride list, and the notice that the folder exchange with the iPhone ends with 0.6. Together with the iPhone app 0.5.3 (12).
+
 ### Added
 
 - **iPhone: profile while riding.** Swipe the figures of the recording aside to see the height or speed profile of the ride so far, growing as you ride; in landscape it sits in the bar on the left. The choice between height and speed is remembered. However long the ride, the profile is drawn from at most 150 points, so the recording does not slow down (B-277).

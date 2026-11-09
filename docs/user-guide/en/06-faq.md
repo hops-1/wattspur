@@ -86,5 +86,8 @@ Every bend counts, also the turns at junctions and a path that wobbles, so ordin
 ### How do I get the curvy roads on the map?
 Download the “c_300” KMZ file of your state from roadcurvature.com and import it with **File › Import Curvy Roads…**, then switch on **Layers** in **Customize Map**. See [Curvy roads](04-views.md#curvy-roads).
 
+### Wattspur says “The Library Could Not Be Opened”
+The library file is damaged, or an update or a restore went wrong. Nothing is deleted. You have three ways out: **Show Backups** (on the Mac also **Restore Backup…**, which replaces the library at the next start), **Create Diagnostics** (a report without rides that you can send) or **Start with an Empty Library**. The old library then moves into a folder “Damaged Library …” beside it; with iCloud, your rides come back afterwards.
+
 ### How do I start from scratch?
 Make a backup first if you might want your rides back (see above). Quit Wattspur and delete the folder `~/Library/Containers/io.github.hops-1.wattspur`. At the next start Wattspur is empty and the setup assistant appears again. Your files in the import folder stay; move them from **Imported** back into the import folder if you want to import them again.

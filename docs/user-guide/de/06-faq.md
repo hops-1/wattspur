@@ -86,5 +86,8 @@ Jede Biegung zählt, auch das Abbiegen an Kreuzungen und ein Weg, der sich schl�
 ### Wie bekomme ich die kurvigen Straßen auf die Karte?
 Lade die KMZ-Datei „c_300“ deines Bundeslands von roadcurvature.com herunter und importiere sie mit **Ablage › Kurvige Straßen importieren …**, dann schalte unter **Karte anpassen** die **Ebenen** ein. Siehe [Kurvige Straßen](04-views.md#kurvige-straßen).
 
+### Wattspur zeigt „Die Mediathek ließ sich nicht öffnen“
+Die Datei der Mediathek ist beschädigt, oder ein Update oder eine Wiederherstellung ging schief. Gelöscht ist nichts. Du hast drei Wege: **Backups zeigen** (am Mac auch **Backup wiederherstellen …**, es ersetzt die Mediathek beim nächsten Start), **Diagnose erstellen** (ein Bericht ohne Fahrten, den du mir schicken kannst) oder **Mit leerer Mediathek starten**. Dann wandert die alte Mediathek in einen Ordner „Damaged Library …“ daneben; mit iCloud kommen deine Fahrten danach wieder.
+
 ### Wie fange ich von vorn an?
 Mach vorher ein Backup, falls du deine Fahrten vielleicht zurückhaben willst (siehe oben). Wattspur beenden und den Ordner `~/Library/Containers/io.github.hops-1.wattspur` löschen. Beim nächsten Start ist Wattspur leer, und der Einrichtungsassistent erscheint wieder. Deine Dateien im Import-Ordner bleiben. Verschiebe sie aus **Importiert** zurück in den Import-Ordner, wenn du sie neu importieren willst.
