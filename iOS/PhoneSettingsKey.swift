@@ -24,6 +24,9 @@ enum PhoneSettingsKey {
     // "folderEndNoticeShown" (the notice in 0.5.3 that the folder ends with 0.6) is no longer read.
     /// The notice that the folder exchange ended was shown (B-263, part 2).
     static let folderGoneNoticeShown = "folderGoneNoticeShown"
+    /// The map style of every map, Apple's or an OpenStreetMap style (`RideMapType`, B-226); the same
+    /// raw values as on the Mac.
+    static let mapType = "mapType"
     /// Height or speed in the profile while recording (B-277).
     static let recordingProfileKind = "recordingProfileKind"
     /// Set by UI tests and screenshots: import the sample ride at launch.

@@ -86,6 +86,9 @@ targets:
         buildPhase: resources
     dependencies:
       - package: WattspurKit
+      # The maps, the same as on the Mac (B-186, B-226).
+      - package: WattspurKit
+        product: WattspurMap
       # Embedded in the app: Live Activity of a recording (B-223) and the widget “This Week” (B-224).
       - target: Wattspur Widgets
     configFiles:

@@ -2,6 +2,7 @@ import AppIntents
 import SwiftData
 import SwiftUI
 import WattspurKit
+import WattspurMap
 import WidgetKit
 
 /// The iPhone app (iOS 0.x, B-204 ff.), design C: the overview with the totals and the last ride,
@@ -42,6 +43,8 @@ struct WattspurApp: App {
         let library = sync.makeLibrary()
         #if DEBUG
         if UserDefaults.standard.bool(forKey: PhoneSettingsKey.demoRide) { library.importSampleRideForTesting() }
+        // `-WattspurOfflineTiles YES`: the OpenStreetMap tiles fail as without a network (B-226).
+        if UserDefaults.standard.bool(forKey: "WattspurOfflineTiles") { TileLoader.simulatesOffline = true }
         #endif
         _library = State(initialValue: library)
     }

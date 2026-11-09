@@ -22,7 +22,7 @@ WattspurCore (rein)
 FIT und GPX, Werttypen, Analysen, Aufnahme-Rechnung, Austauschformat
 ```
 
-Pfeile zeigen die erlaubte Richtung der Abhängigkeit; zurück darf es nie gehen. `WattspurMap` nutzt bisher nur der Mac; das iPhone kommt mit B-226 dazu.
+Pfeile zeigen die erlaubte Richtung der Abhängigkeit; zurück darf es nie gehen. `WattspurMap` nutzen beide Apps; am iPhone die Detailkarte und die Kachel „Letzte Fahrt“ (B-226), die Aufnahme-Karte folgt.
 
 **Größe (8.11.2026):** Mac-App 15 300 Zeilen in 80 Dateien, iPhone-App 4 600 in 30, Widgets und `iOSShared` 440, `WattspurCore` 8 400 in 61, `WattspurKit` 4 300 in 31, Tests 10 900 in 76 (653 Tests).
 
@@ -138,7 +138,7 @@ Views in `App/`; große Bereiche in eigenen Ordnern (`Highlights/`, `Analysis/`,
 
 ## iOS (iPhone)
 
-Target `Wattspur iOS` (ab iOS 26, Bundle-ID `io.github.hops-1.wattspur.ios`, Versionen 0.x), Quellen in `iOS/`, Texte in `iOS/Localizable.xcstrings`. `TabView` mit *Übersicht · Fahrten · Mehr*. Die Views zeigen `RideExchange`-Werte, egal ob sie aus der eigenen Datenbank oder dem Ordner kommen. Karten sind SwiftUI-`Map` mit `MapPolyline` (`RouteMap`), das Höhenprofil ist Swift Charts. Die Route liegt als Datei mit einem Fingerabdruck im Namen; eine geänderte Fahrt bekommt eine neue Datei (R-62).
+Target `Wattspur iOS` (ab iOS 26, Bundle-ID `io.github.hops-1.wattspur.ios`, Versionen 0.x), Quellen in `iOS/`, Texte in `iOS/Localizable.xcstrings`. `TabView` mit *Übersicht · Fahrten · Mehr*. Die Views zeigen `RideExchange`-Werte, egal ob sie aus der eigenen Datenbank oder dem Ordner kommen. Die Karte einer Fahrt ist `PhoneMapView`, ein `MKMapView` mit den Overlays aus `WattspurMap`, damit sie auch die OpenStreetMap-Stile zeigt (B-226); die Aufnahme-Karte ist noch SwiftUI-`Map` mit `MapPolyline`. Das Höhenprofil ist Swift Charts. Die Route liegt als Datei mit einem Fingerabdruck im Namen; eine geänderte Fahrt bekommt eine neue Datei (R-62).
 
 **Erweiterung `Wattspur Widgets`** (`iOSWidgets/`): Live-Aktivität der Aufnahme und Widget „Diese Woche“. Eigene Texte, keine iCloud-Entitlements, dieselbe Versionsnummer wie die App.
 
