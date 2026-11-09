@@ -61,6 +61,7 @@ struct LandscapeTabBar: View {
                 HStack(spacing: 2) {
                     item(.overview, "Overview", systemImage: "square.grid.2x2")
                     item(.rides, "Rides", systemImage: "list.bullet")
+                    item(.map, "Map", systemImage: "map")
                     item(.more, "More", systemImage: "ellipsis")
                 }
                 .padding(4)

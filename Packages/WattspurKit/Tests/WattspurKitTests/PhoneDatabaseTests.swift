@@ -254,6 +254,31 @@ struct PhoneDatabaseTests {
     }
 }
 
+/// The map of all rides on the iPhone (B-227).
+@MainActor
+@Suite("iPhone: map of all rides")
+struct PhoneMapOverviewTests {
+    @Test("Shows the rides with a route; bike and period filter like on the Mac")
+    func overview() throws {
+        let container = try ModelContainer(for: Schema(WattspurSchema.models),
+                                           configurations: ModelConfiguration(isStoredInMemoryOnly: true))
+        let database = PhoneDatabase(container: container, defaultBikeName: "Mein eBike")
+        let result = database.library.importFile(data: try Fixture.data("reinheim-rundfahrt"), fileName: "Reinheim.fit")
+        guard case .imported(let id) = result.outcome, let ride = database.library.ride(withID: id) else {
+            Issue.record("not imported"); return
+        }
+        let all = database.mapOverview(filter: MapFilter())
+        #expect(all.rides.map(\.id) == [id])
+        #expect(all.rides.first.map { $0.route.segments.joined().count > 10 } == true)
+        #expect(database.mapOverview(filter: MapFilter(bike: .bike(UUID()))).rides.isEmpty)
+        #expect(database.mapOverview(filter: MapFilter(bike: .bike(try #require(ride.bike?.id)))).rides.count == 1)
+        let before = DateInterval(start: ride.startDate.addingTimeInterval(-86_400 * 30), duration: 86_400)
+        #expect(database.mapOverview(filter: MapFilter(interval: before)).rides.isEmpty)
+        database.moveToTrash(rideID: id)
+        #expect(database.mapOverview(filter: MapFilter()).rides.isEmpty)
+    }
+}
+
 /// iCloud or not on the iPhone (B-218); the folder way ended with 0.6 (B-263).
 @Suite("iPhone: iCloud or not")
 struct PhoneSyncChoiceTests {

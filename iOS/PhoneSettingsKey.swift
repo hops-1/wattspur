@@ -27,6 +27,11 @@ enum PhoneSettingsKey {
     /// The map style of every map, Apple's or an OpenStreetMap style (`RideMapType`, B-226); the same
     /// raw values as on the Mac.
     static let mapType = "mapType"
+    /// The map of all rides (B-227): lines or heat map (`RidesMapStyle.Mode`), the period (`RidePeriod`)
+    /// and the bike (`BikeFilter`).
+    static let ridesMapMode = "ridesMapMode"
+    static let ridesMapPeriod = "ridesMapPeriod"
+    static let ridesMapBike = "ridesMapBike"
     /// Height or speed in the profile while recording (B-277).
     static let recordingProfileKind = "recordingProfileKind"
     /// Set by UI tests and screenshots: import the sample ride at launch.
