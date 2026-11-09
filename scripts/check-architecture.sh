@@ -1,6 +1,6 @@
 #!/bin/bash
 # Checks the layer rules of docs/ARCHITECTURE.md that the compiler cannot: WattspurCore must not
-# import SwiftData, SwiftUI, AppKit or MapKit (the compiler already forbids what the target does not
+# import SwiftData, SwiftUI, AppKit or MapKit; WattspurMap only MapKit and Core Graphics, no UI of one platform (the compiler already forbids what the target does not
 # depend on, but a new import line in Core would make the target depend on the system framework).
 # The iPhone app (iOS/) must not import AppKit and must take nothing from App/ but resources (B-206);
 # the widgets must not import SwiftData; the package holds no texts for the user (rule 8); the apps
@@ -32,6 +32,17 @@ self_test
 CORE="Packages/WattspurKit/Sources/WattspurCore"
 if grep -rnE "$(import_of "$UI_AND_DATA")" "$CORE"; then
     echo "architecture: WattspurCore must not import UI or persistence frameworks (see docs/ARCHITECTURE.md)" >&2
+    exit 1
+fi
+# The maps of both apps (B-186): MapKit and Core Graphics, but nothing of one platform's UI, so the
+# iPhone can use them; and no SwiftUI or SwiftData, the apps add the views.
+MAP="Packages/WattspurKit/Sources/WattspurMap"
+if grep -rnE "$(import_of 'AppKit|UIKit|SwiftUI|SwiftData|Charts')" "$MAP"; then
+    echo "architecture: WattspurMap must not import AppKit, UIKit, SwiftUI or SwiftData; the apps add the views (see docs/ARCHITECTURE.md)" >&2
+    exit 1
+fi
+if grep -rnE '\b(NS|UI)(Color|Image|Appearance|BezierPath|EdgeInsets|View|Event|GraphicsContext|Font)\b' "$MAP"; then
+    echo "architecture: WattspurMap must not use AppKit or UIKit types (see docs/ARCHITECTURE.md)" >&2
     exit 1
 fi
 # Rule 8: no texts for the user in the package; each app words them and keeps the translations (R-48).

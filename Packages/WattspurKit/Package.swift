@@ -11,6 +11,7 @@ let package = Package(
     products: [
         .library(name: "WattspurKit", targets: ["WattspurKit"]),
         .library(name: "WattspurCore", targets: ["WattspurCore"]),
+        .library(name: "WattspurMap", targets: ["WattspurMap"]),
         .executable(name: "anonymize-fit", targets: ["anonymize-fit"]),
     ],
     targets: [
@@ -20,11 +21,15 @@ let package = Package(
         // The store: the SwiftData models, the RideLibrary and the watched-folder import. It keeps
         // the name WattspurKit so the model classes stay in the module they were in.
         .target(name: "WattspurKit", dependencies: ["WattspurCore"]),
+        // The maps of both apps on MapKit (B-186): tiles, the route and its colours, the map of all
+        // rides, the cursor. Free of AppKit, UIKit and SwiftUI; each app adds only its view and input.
+        .target(name: "WattspurMap", dependencies: ["WattspurCore"]),
         // Developer tool that makes the sample ride (V-05): swift run anonymize-fit --help
         .executableTarget(name: "anonymize-fit", dependencies: ["WattspurCore"]),
         // The FIT and GPX files of the tests, shared by both test targets.
         .target(name: "TestFixtures", path: "Tests/TestFixtures", resources: [.copy("Fixtures")]),
         .testTarget(name: "WattspurCoreTests", dependencies: ["WattspurCore", "TestFixtures"]),
         .testTarget(name: "WattspurKitTests", dependencies: ["WattspurKit", "WattspurCore", "TestFixtures"]),
+        .testTarget(name: "WattspurMapTests", dependencies: ["WattspurMap", "WattspurCore"]),
     ]
 )

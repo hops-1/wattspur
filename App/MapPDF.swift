@@ -1,6 +1,7 @@
 import MapKit
 import SwiftUI
 import WattspurKit
+import WattspurMap
 
 /// The map of all rides as a PDF (B-106, Requirements 10.11): the visible area in
 /// the current drawing, the tiles of the visible area and the legend, A4 portrait.

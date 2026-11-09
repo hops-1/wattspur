@@ -2,6 +2,7 @@ import MapKit
 import SwiftData
 import SwiftUI
 import WattspurKit
+import WattspurMap
 
 /// The "Map" section (v1.4, ⌘5): all rides on one map as komoot-like heat lines,
 /// filtered by period or by the rides selected in the list, with the totals of

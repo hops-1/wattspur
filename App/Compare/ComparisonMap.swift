@@ -2,6 +2,7 @@ import MapKit
 import SwiftData
 import SwiftUI
 import WattspurKit
+import WattspurMap
 
 // MARK: - Map of all compared routes
 
@@ -104,7 +105,7 @@ private struct ComparisonMapRepresentable: NSViewRepresentable {
         map.removeOverlays(map.drawnOverlays)
         map.removeAnnotations(map.annotations)
         if let curvyRoads { map.addOverlay(CurvyRoadsOverlay(set: curvyRoads, dark: dark), level: map.drawnOverlayLevel) }
-        let overlay = ComparisonRoutesOverlay(routes: routes, dark: dark)
+        let overlay = ComparisonRoutesOverlay(lines: Self.lines(routes, dark: dark))
         if !overlay.lines.isEmpty {
             map.addOverlay(overlay, level: map.drawnOverlayLevel)
         }
@@ -115,6 +116,18 @@ private struct ComparisonMapRepresentable: NSViewRepresentable {
         if ridesChanged && !routedIDs.isEmpty {
             Self.fit(map, to: overlay.routesRect)
         }
+    }
+
+    /// Each route in its column's colour, resolved for the appearance, and its dash.
+    private static func lines(_ routes: [ComparedRoute], dark: Bool) -> [ComparisonRoutesOverlay.Line] {
+        var lines: [ComparisonRoutesOverlay.Line] = []
+        NSAppearance(named: dark ? .darkAqua : .aqua)?.performAsCurrentDrawingAppearance {
+            lines = routes.compactMap {
+                ComparisonRoutesOverlay.Line(coordinates: $0.coordinates, color: NSColor(ComparisonStyle.color($0.index)).cgColor,
+                                             dash: ComparisonStyle.dash($0.index).map { $0 * 1.6 })
+            }
+        }
+        return lines
     }
 
     /// Shows all routes once the map has its size (see `RideMapRepresentable.fit`).
@@ -136,9 +149,7 @@ private struct ComparisonMapRepresentable: NSViewRepresentable {
         var curvyRoads: CurvyRoadSet?
 
         func mapView(_ mapView: MKMapView, rendererFor overlay: any MKOverlay) -> MKOverlayRenderer {
-            if let tiles = overlay as? MKTileOverlay { return MutedTileRenderer.make(for: tiles) }
-            if overlay is CurvyRoadsOverlay { return CurvyRoadsRenderer(overlay: overlay) }
-            return overlay is ComparisonRoutesOverlay ? ComparisonRoutesRenderer(overlay: overlay) : MKOverlayRenderer(overlay: overlay)
+            MapRenderers.renderer(for: overlay)
         }
 
         func mapView(_ mapView: MKMapView, viewFor annotation: any MKAnnotation) -> MKAnnotationView? {
@@ -183,59 +194,6 @@ private final class ComparisonStartMarker: NSObject, MKAnnotation {
                                        width: symbol.size.width, height: symbol.size.height))
             }
             return true
-        }
-    }
-}
-
-/// All compared routes in map coordinates with their colours resolved, so the renderer can
-/// draw them from any thread in a fixed order: the first column at the bottom.
-private final class ComparisonRoutesOverlay: NSObject, MKOverlay {
-    struct Line {
-        var points: [MKMapPoint]
-        var color: CGColor
-        var dash: [CGFloat]
-    }
-
-    let lines: [Line]
-    let routesRect: MKMapRect
-    let boundingMapRect: MKMapRect
-    var coordinate: CLLocationCoordinate2D { MKMapPoint(x: boundingMapRect.midX, y: boundingMapRect.midY).coordinate }
-
-    init(routes: [ComparedRoute], dark: Bool) {
-        var lines: [Line] = []
-        NSAppearance(named: dark ? .darkAqua : .aqua)?.performAsCurrentDrawingAppearance {
-            lines = routes.filter { $0.coordinates.count > 1 }.map {
-                Line(points: $0.coordinates.map(MKMapPoint.init), color: NSColor(ComparisonStyle.color($0.index)).cgColor,
-                     dash: ComparisonStyle.dash($0.index).map { $0 * 1.6 })
-            }
-        }
-        self.lines = lines
-        let rect = lines.flatMap(\.points).reduce(MKMapRect.null) {
-            $0.union(MKMapRect(origin: $1, size: MKMapSize(width: 0, height: 0)))
-        }
-        routesRect = rect
-        // Margin for the width of the lines at the edges.
-        boundingMapRect = rect.isNull ? .world : rect.insetBy(dx: -rect.width * 0.05 - 500, dy: -rect.height * 0.05 - 500)
-    }
-}
-
-/// A white outline under each route, then the route in its colour and dash, as the SwiftUI map drew them.
-private final class ComparisonRoutesRenderer: MKOverlayRenderer {
-    override func draw(_ mapRect: MKMapRect, zoomScale: MKZoomScale, in context: CGContext) {
-        guard let overlay = overlay as? ComparisonRoutesOverlay else { return }
-        let scale = 1 / zoomScale
-        context.setLineCap(.round)
-        context.setLineJoin(.round)
-        for line in overlay.lines {
-            for (width, color, dash) in [(7, CGColor(gray: 1, alpha: 1), [] as [CGFloat]), (4, line.color, line.dash)] as [(CGFloat, CGColor, [CGFloat])] {
-                context.beginPath()
-                context.move(to: point(for: line.points[0]))
-                for p in line.points.dropFirst() { context.addLine(to: point(for: p)) }
-                context.setLineWidth(width * scale)
-                context.setLineDash(phase: 0, lengths: dash.map { $0 * scale })
-                context.setStrokeColor(color)
-                context.strokePath()
-            }
         }
     }
 }

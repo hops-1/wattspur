@@ -3,6 +3,7 @@ import MapKit
 import SwiftUI
 import UniformTypeIdentifiers
 import WattspurKit
+import WattspurMap
 
 /// Shared PDF export (CMP-07, P-20): SwiftUI views on A4 portrait in the light
 /// appearance, a map snapshot with routes drawn on top, and handing the file to

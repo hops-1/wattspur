@@ -1,6 +1,7 @@
 import MapKit
 import SwiftUI
 import WattspurKit
+import WattspurMap
 
 /// The comparison as a PDF (CMP-07): page 1 with the map and the charts, then the table.
 @MainActor

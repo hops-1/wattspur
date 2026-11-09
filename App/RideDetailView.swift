@@ -1,6 +1,7 @@
 import SwiftData
 import SwiftUI
 import WattspurKit
+import WattspurMap
 
 /// Ride detail: map, key figures, details and charts (TOUR-01 … TOUR-05).
 struct RideDetailView: View {

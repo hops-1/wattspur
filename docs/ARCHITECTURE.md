@@ -6,10 +6,12 @@ Stand: Mac 1.8.7 und iPhone 0.5.2 (Review, B-259). Kurz gefasst, wo was liegt, w
 
 ```
 App (macOS)            iOS (iPhone)              iOSWidgets (Erweiterung)
-Views, Karten, PDF,    Übersicht, Fahrten,       Live-Aktivität,
-Ordner, Sync-Schalter  Aufnahme, Kurzbefehle     Widget „Diese Woche“
-  │                      │        │                 │
-  │                      │        └── iOSShared ────┤  ActivityKit, App Intents, App Group
+Views, Karten-Hülle,   Übersicht, Fahrten,       Live-Aktivität,
+PDF, Ordner, Sync      Aufnahme, Kurzbefehle     Widget „Diese Woche“
+  │       │              │        │                 │
+  │       ▼              │        └── iOSShared ────┤  ActivityKit, App Intents, App Group
+  │   WattspurMap (MapKit, ohne AppKit/UIKit/SwiftUI): Kacheln, Route und Farben,
+  │   Karte aller Fahrten, Marker und Cursor; nutzt nur WattspurCore
   ▼                      ▼                          ▼
 WattspurKit (Store)                              WattspurCore allein
 SwiftData-Modelle, RideLibrary und ihre Dienste, (kein SwiftData)
@@ -20,7 +22,7 @@ WattspurCore (rein)
 FIT und GPX, Werttypen, Analysen, Aufnahme-Rechnung, Austauschformat
 ```
 
-Pfeile zeigen die erlaubte Richtung der Abhängigkeit; zurück darf es nie gehen.
+Pfeile zeigen die erlaubte Richtung der Abhängigkeit; zurück darf es nie gehen. `WattspurMap` nutzt bisher nur der Mac; das iPhone kommt mit B-226 dazu.
 
 **Größe (8.11.2026):** Mac-App 15 300 Zeilen in 80 Dateien, iPhone-App 4 600 in 30, Widgets und `iOSShared` 440, `WattspurCore` 8 400 in 61, `WattspurKit` 4 300 in 31, Tests 10 900 in 76 (653 Tests).
 
@@ -39,6 +41,7 @@ Die Regeln mit ✓ prüft `scripts/check-architecture.sh` (lokal in `scripts/ci-
 9. **Abgeleitete Werte einer Fahrt werden gespeichert und tragen eine Version** (beste Minute, Übersichtsroute, Kurvigkeit, stärkste Steigung; `TrackFigures.version`, dazu `parserVersion` je Leser). Ändert sich die Rechnung, wird die Version erhöht, und `LibraryMaintenance` rechnet ältere Fahrten im Hintergrund nach, in Paketen. Nachgerechnet wird nur **nach oben**: Eine ältere App lässt Werte einer neueren Version in Ruhe (R-28). Eine neue Spalte kommt in `docs/reference/data-exchange.md`, sonst schlägt der Test fehl.
 10. ✓ **Gespeichert wird über `LibrarySave.save(_:)`.** Es meldet einen Fehler (`LibrarySave.failedNotification`), und beide Apps zeigen ihn (`SaveFailureAlert.swift`, `.reportsSaveFailures()`). Ein `try? context.save()` würde den Fehler verschlucken (R-31).
 11. **Versionen stehen an einer Stelle:** Mac in `Config/Mac.xcconfig`, iPhone und Widget gemeinsam in `Config/iOS.xcconfig` (`MARKETING_VERSION`, `CURRENT_PROJECT_VERSION`). `scripts/build-dmg.sh` liest die Mac-Version von dort und baut nur aus einem sauberen Stand (R-04, R-12).
+12. ✓ **`WattspurMap` kennt weder AppKit noch UIKit, SwiftUI oder SwiftData** (B-186), auch keine Typen wie `NSColor` oder `UIImage`. Es rechnet und zeichnet mit MapKit und Core Graphics. Farben des Systems (Akzent, Grau, Vergleichsfarben) löst die App für hell oder dunkel auf und gibt sie als `CGColor` hinein (`RouteColors`); die übrigen Kartenfarben stehen als Hex-Werte in `MapPalette`, und die Legenden der App bauen ihre Farben daraus. Bilder (Marker, Cursor) liefert das Modul als `CGImage`; die App verpackt sie in ihren Bildtyp. Was nur eine Plattform kann, bleibt in der App: die `…Representable`-Hülle, Maus und Klick (`TrackingMapView`, `NSClickGestureRecognizer`), Tooltips, der Rand beim Einpassen (`NSEdgeInsets`) und die Quellenangabe als Text.
 
 ## Datenfluss
 
@@ -131,7 +134,7 @@ Die App legt bei jeder Änderung einen `WeekSnapshot` (Core) in die App Group `g
 
 Views in `App/`; große Bereiche in eigenen Ordnern (`Highlights/`, `Analysis/`, `Compare/`). `@Observable`-Hilfsobjekte in der Environment: `FolderWatcher`, `ImportLog`, `NewPathsStore`, `RouteSimilarityStore`, `LibraryBackupCenter`, `MergeSuggestionCenter`, `BikeAssignmentNotice`, `ICloudSync`, `CurvyRoadsStore`. `DemoMode` und `SampleRide` sind für Screenshots und die Beispielfahrt.
 
-**Karten:** Tour-Detail, Karte aller Fahrten und Vergleich sind `MKMapView` mit eigenen Overlays. `MapTiles.swift` bringt die OSM-Kacheln (Cache, User-Agent), `MapBackdrop.swift` das Kartenbild der PDFs, `CurvyRoads.swift` die Ebene „Kurvige Straßen“. Das Tour-Detail rechnet seine Werte abseits des Hauptthreads (`DetailValues`, R-58).
+**Karten:** Tour-Detail, Karte aller Fahrten und Vergleich sind `MKMapView` mit den Overlays aus `WattspurMap` (B-186): `RideRouteOverlay` mit `RouteColouring`, `RidesMapOverlay` mit `RidesMapStyle`, `ComparisonRoutesOverlay`, `CurvyRoadsOverlay` und die Kacheln (`CachingTileOverlay`, `MutedTileRenderer`, `TileLoader` mit Cache und User-Agent). Jeder Delegate holt seinen Renderer bei `MapRenderers.renderer(for:)`. In der App bleiben die Hüllen (`RideMapView`, `RidesMapLayer`, `ComparisonMap`), die Legenden, die Quellenangabe (`MapTiles.swift`), `MapBackdrop.swift` für das Kartenbild der PDFs (die Kacheln setzt `TileMosaic` im Paket zusammen) und `CurvyRoads.swift` für Import und Einstellungen der Ebene „Kurvige Straßen“. Das Tour-Detail rechnet seine Werte abseits des Hauptthreads (`DetailValues`, R-58).
 
 ## iOS (iPhone)
 

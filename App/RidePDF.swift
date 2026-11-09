@@ -1,6 +1,7 @@
 import MapKit
 import SwiftUI
 import WattspurKit
+import WattspurMap
 
 /// One ride as a PDF (P-20, pulled into v1.2): page 1 with the map, key figures and
 /// details, then the four charts.
