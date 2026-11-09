@@ -38,7 +38,7 @@ If you turn iCloud off for Wattspur on the iPhone (**Settings › your name › 
 ## Without iCloud
 If you do not want to use iCloud, or your storage is full and you do not want a larger plan, turn off **More › Sync with iCloud** on the iPhone. It takes effect the next time Wattspur opens. The rides then stay on the iPhone, and new recordings too:
 - **By AirDrop:** send a recording to the Mac with **Share GPX** and import it there like any other file.
-- **Through a folder:** only if you used the iPhone app before 0.5 with a folder. **This way ends with the iPhone app 0.6 and Wattspur 1.8.9;** turn on sync with iCloud before then. “Share GPX” stays. On the Mac, turn on **Settings › Import › Provide rides for the iPhone**. The iPhone then shows the rides the Mac writes into the folder, and puts new recordings there as GPX.
+- **Through a folder:** only if you used the iPhone app before 0.5 with a folder. **This way ends with the iPhone app 0.6 and Wattspur 1.8.10;** turn on sync with iCloud before then. “Share GPX” stays. On the Mac, turn on **Settings › Import › Provide rides for the iPhone**. The iPhone then shows the rides the Mac writes into the folder, and puts new recordings there as GPX.
 
 On the Mac, leave **Sync with iCloud** off then.
 

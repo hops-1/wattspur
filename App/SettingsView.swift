@@ -210,9 +210,9 @@ struct ImportSettingsView: View {
                     .font(.caption)
                     .foregroundStyle(.secondary)
                     .fixedSize(horizontal: false, vertical: true)
-                    // B-263, part 1: the folder for the iPhone goes with Mac 1.8.9 and iPhone 0.6.
+                    // B-263, part 1: the folder for the iPhone goes with Mac 1.8.10 and iPhone 0.6.
                     if phoneState.isEnabled {
-                        Text("Providing rides in the folder ends with Wattspur 1.8.9 and the iPhone app 0.6. Use Sync with iCloud on the Mac and the iPhone instead.")
+                        Text("Providing rides in the folder ends with Wattspur 1.8.10 and the iPhone app 0.6. Use Sync with iCloud on the Mac and the iPhone instead.")
                             .font(.caption)
                             .foregroundStyle(.orange)
                             .fixedSize(horizontal: false, vertical: true)

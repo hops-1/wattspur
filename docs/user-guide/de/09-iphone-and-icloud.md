@@ -38,7 +38,7 @@ Schaltest du am iPhone iCloud für Wattspur aus (**Einstellungen › dein Name �
 ## Ohne iCloud
 Wenn du iCloud nicht nutzen willst, oder dein Speicher voll ist und du kein größeres Abo möchtest, schalte am iPhone **Mehr › Mit iCloud synchronisieren** aus. Das gilt ab dem nächsten Öffnen von Wattspur. Die Fahrten bleiben dann auf dem iPhone, neue Aufnahmen auch:
 - **Per AirDrop:** Eine Aufnahme schickst du mit **GPX teilen** an den Mac und importierst sie dort wie jede andere Datei.
-- **Über einen Ordner:** nur, wenn du die iPhone-App schon vor 0.5 mit einem Ordner genutzt hast. **Dieser Weg endet mit der iPhone-App 0.6 und Wattspur 1.8.9;** schalte bis dahin den Sync mit iCloud ein. „GPX teilen“ bleibt. Am Mac schaltest du **Einstellungen › Import › Fahrten für das iPhone bereitstellen** ein. Das iPhone zeigt dann die Fahrten, die der Mac in den Ordner schreibt, und legt neue Aufnahmen als GPX dort ab.
+- **Über einen Ordner:** nur, wenn du die iPhone-App schon vor 0.5 mit einem Ordner genutzt hast. **Dieser Weg endet mit der iPhone-App 0.6 und Wattspur 1.8.10;** schalte bis dahin den Sync mit iCloud ein. „GPX teilen“ bleibt. Am Mac schaltest du **Einstellungen › Import › Fahrten für das iPhone bereitstellen** ein. Das iPhone zeigt dann die Fahrten, die der Mac in den Ordner schreibt, und legt neue Aufnahmen als GPX dort ab.
 
 Am Mac lässt du **Mit iCloud synchronisieren** dann aus.
 
