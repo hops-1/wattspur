@@ -7,6 +7,10 @@ Every DMG handed out to testers corresponds to one entry below.
 
 ## [Unreleased]
 
+### Changed
+
+- **Ride list on the Mac:** much quicker with many rides. Filtering, sorting and the record stars are only worked out again when the rides, the search or a filter change, not on every click (B-270, R-61). Measured with demo rides: about 10 ms instead of 180 ms per update with 300 rides.
+
 ### Fixed
 
 - **A library that does not open** no longer makes Wattspur stop at every start, on the Mac and on the iPhone. Instead a window explains what happened and offers a way out: show the backups (and restore one on the Mac), create a diagnostics report, or start with an empty library. Nothing is deleted: the old library moves into a folder “Damaged Library” beside it; with iCloud, the synced rides come back (B-264, R-41).

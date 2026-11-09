@@ -44,7 +44,7 @@ struct RideListView: View {
     private var bikeFilter: BikeFilter { scope == nil ? bikeFilterChoice.resolved(knownBikeIDs: Set(bikes.map(\.id))) : .all }
     /// The source filter of this list, remembered (B-145); only with a ride from a GPX file.
     @AppStorage(SettingsKey.sourceFilterRides) private var sourceFilterChoice: SourceFilter = .all
-    private var hasGPXRides: Bool { rides.contains { $0.source == .gpx } }
+    private var hasGPXRides: Bool { facts.contains { $0.source == .gpx } }
     private var sourceFilter: SourceFilter { scope == nil ? sourceFilterChoice.resolved(hasGPXRides: hasGPXRides) : .all }
     /// Copies of the list's filters for the year in review (B-145).
     @AppStorage(SettingsKey.bikeFilterHighlights) private var highlightsBikeFilter: BikeFilter = .all
@@ -71,6 +71,10 @@ struct RideListView: View {
     @State private var saveRequest: SaveRouteRequest?
     @State private var renamingRoute: RouteGroup?
     @State private var newRouteName = ""
+    /// The shown rides and the record holders, worked out again only when their inputs change (B-270).
+    @State private var shownMemo = Memo<RideListInputs, [Ride]>()
+    @State private var recordsMemo = Memo<[RideListFact], Set<UUID>>()
+    @State private var pass = RideListPass()
 
     /// Search, period filter and sort order applied (LIST-05). With "Similar to" only the rides on that
     /// route, the ride asked about first.
@@ -81,23 +85,41 @@ struct RideListView: View {
                    distance: scope == nil ? distance : .all)
     }
 
+    /// The facts of all listed rides, read at the start of this pass of `body`.
+    private var facts: [RideListFact] { pass.facts }
+
     private var filteredRides: [Ride] {
+        let inputs = RideListInputs(facts: facts, filter: listFilter, source: sourceFilter, sortOrder: sortOrder,
+                                    scope: scope?.rideIDs, day: activeDayFilter?.rideIDs,
+                                    similar: activeSimilarFilter, hits: similarHits)
+        return shownMemo.value(for: inputs) {
+            let byID = Dictionary(rides.map { ($0.id, $0) }, uniquingKeysWith: { first, _ in first })
+            return Self.shownIDs(inputs).compactMap { byID[$0] }
+        }
+    }
+
+    /// The ids of the shown rides, in order: search, bike, source, period and distance (LIST-05),
+    /// or only the rides of a day, or the rides on a route with the ride asked about first.
+    private static func shownIDs(_ inputs: RideListInputs) -> [UUID] {
+        let order = inputs.sortOrder
         // The rides of a day from the highlights are shown whatever period, bike or source the
         // list has, else some of them could be missing (B-130); the search still applies.
-        if let day = activeDayFilter {
-            return rides
-                .filter { day.rideIDs.contains($0.id) }
-                .filter { RideFilter(text: searchText).admits(name: $0.name, startDate: $0.startDate, bikeID: nil, distance: $0.distance) }
-                .sorted { sortOrder.areInIncreasingOrder($0.sortKey, $1.sortKey) }
+        if let day = inputs.day {
+            let search = RideFilter(text: inputs.filter.text)
+            return inputs.facts
+                .filter { day.contains($0.id) }
+                .filter { search.admits(name: $0.name, startDate: $0.startDate, bikeID: nil, distance: $0.distance) }
+                .sorted { order.areInIncreasingOrder($0.sortKey, $1.sortKey) }
+                .map(\.id)
         }
-        let base = rides
-            .filter { scope?.rideIDs.contains($0.id) ?? true }
-            .filter { $0.isFromSource(sourceFilter) }
-            .filter { listFilter.admits(name: $0.name, startDate: $0.startDate, bikeID: $0.bike?.id, distance: $0.distance) }
-        guard let filter = activeSimilarFilter else {
-            return base.sorted { sortOrder.areInIncreasingOrder($0.sortKey, $1.sortKey) }
+        let base = inputs.facts
+            .filter { inputs.scope?.contains($0.id) ?? true }
+            .filter { inputs.source.admits(source: $0.source) }
+            .filter { inputs.filter.admits(name: $0.name, startDate: $0.startDate, bikeID: $0.bikeID, distance: $0.distance) }
+        guard let filter = inputs.similar else {
+            return base.sorted { order.areInIncreasingOrder($0.sortKey, $1.sortKey) }.map(\.id)
         }
-        let hits = similarHits ?? [:]
+        let hits = inputs.hits ?? [:]
         var matches = base.filter { $0.id != filter.referenceID && hits[$0.id] != nil }
         switch filter.sort {
         case .similarity:
@@ -105,7 +127,7 @@ struct RideListView: View {
         case .date:
             matches.sort { $0.startDate > $1.startDate }
         }
-        return rides.filter { $0.id == filter.referenceID } + matches
+        return inputs.facts.filter { $0.id == filter.referenceID }.map(\.id) + matches.map(\.id)
     }
 
     /// The filter, in the main list only.
@@ -139,7 +161,9 @@ struct RideListView: View {
     }
 
     var body: some View {
-        listWithRoutes
+        // Read the rides once; filtering, sorting and records reuse this (B-270).
+        pass.facts = rides.map(RideListFact.init)
+        return listWithRoutes
             .confirmationDialog(
                 Text("Move \(trashCandidates?.count ?? 0) rides to the trash?"),
                 isPresented: Binding(get: { trashCandidates != nil }, set: { if !$0 { trashCandidates = nil } }),
@@ -263,8 +287,11 @@ struct RideListView: View {
 
     /// Rides that hold a record now get a star (ADV-R2).
     private var recordHolders: Set<UUID> {
-        let records = RideRecords.records(rides.filter(\.countsInTotals).map(\.highlightRide), calendar: GoalPeriod.calendar())
-        return Set(records.filter(\.kind.isRideRecord).flatMap(\.rideIDs))
+        recordsMemo.value(for: facts) {
+            let counted = rides.filter(\.countsInTotals).map(\.highlightRide)
+            let records = RideRecords.records(counted, calendar: GoalPeriod.calendar())
+            return Set(records.filter(\.kind.isRideRecord).flatMap(\.rideIDs))
+        }
     }
 
     private var list: some View {
