@@ -44,19 +44,6 @@ enum RideFormat {
         date.formatted(.dateTime.month(.wide).year())
     }
 
-    /// “Heute, 14:02” or “31.10.26, 09:15”: when the Mac wrote its state.
-    static func stateDate(_ date: Date) -> String {
-        relativeFormatter.string(from: date)
-    }
-
-    private static let relativeFormatter: DateFormatter = {
-        let formatter = DateFormatter()
-        formatter.dateStyle = .short
-        formatter.timeStyle = .short
-        formatter.doesRelativeDateFormatting = true
-        return formatter
-    }()
-
     /// “23.5 km/h”.
     static func speed(_ metresPerSecond: Double) -> String {
         Measurement(value: metresPerSecond, unit: UnitSpeed.metersPerSecond).converted(to: .kilometersPerHour)

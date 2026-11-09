@@ -5,19 +5,18 @@ import WattspurKit
 
 /// FIT and GPX files opened with Wattspur on the iPhone (B-071), e.g. shared from the Flow app or
 /// opened in the Files app. With the iPhone's own store they go through the same import as on the
-/// Mac (`ImportFlow`, B-188): duplicates, a Bosch FIT for a GPX ride, the bike of a GPX file. In
-/// folder mode the file goes into the folder the Mac watches, which imports it.
+/// Mac (`ImportFlow`, B-188): duplicates, a Bosch FIT for a GPX ride, the bike of a GPX file.
 @MainActor
 @Observable
 final class PhoneImport {
-    /// What happened in folder mode, or why nothing could happen.
+    /// Why nothing could happen.
     struct Notice: Identifiable {
         let id = UUID()
         var title: String
         var message: String
     }
 
-    /// The decisions of the import with the iPhone's own store.
+    /// The decisions of the import.
     let flow = ImportFlow()
     var notice: Notice?
     /// Copies of the opened files, kept while the flow may still need them.
@@ -26,23 +25,19 @@ final class PhoneImport {
     static let fileExtensions: Set<String> = ["fit", "gpx"]
 
     /// Takes a file the system handed to the app.
-    func open(_ url: URL, library: PhoneLibrary, folder: ImportFolder) {
+    func open(_ url: URL, library: PhoneLibrary) {
         guard Self.fileExtensions.contains(url.pathExtension.lowercased()) else { return }
         guard let data = Self.read(url) else {
             notice = Notice(title: String(localized: "Import Failed"),
                             message: String(localized: "\(url.lastPathComponent) could not be read."))
             return
         }
-        let taken = if let database = library.database {
-            importIntoStore(data, fileName: url.lastPathComponent, database: database, library: library)
-        } else {
-            handOver(data, fileName: url.lastPathComponent, folder: folder)
-        }
+        // Without the store (it did not open, B-264) the app shows only the way out, so this stays a guard.
+        guard let database = library.database else { return }
+        let taken = importIntoStore(data, fileName: url.lastPathComponent, database: database, library: library)
         // Only once the file is safe elsewhere: removed before, a failed copy lost it (R-49).
         if taken { Self.removeFromInbox(url) }
     }
-
-    // MARK: - With the store
 
     private func importIntoStore(_ data: Data, fileName: String, database: PhoneDatabase, library: PhoneLibrary) -> Bool {
         // The flow works with files; a copy of our own outlives the system's inbox and needs no access rights.
@@ -69,25 +64,6 @@ final class PhoneImport {
         guard flow.bikeQuestion == nil, flow.comparisons.isEmpty, flow.plainDuplicates == nil else { return }
         for copy in copies { try? FileManager.default.removeItem(at: copy) }
         copies = []
-    }
-
-    // MARK: - Folder mode
-
-    private func handOver(_ data: Data, fileName: String, folder: ImportFolder) -> Bool {
-        guard folder.url != nil else {
-            notice = Notice(title: String(localized: "No Folder Chosen"),
-                            message: String(localized: "Choose the folder “Wattspur Import” under More, or turn on Sync with iCloud, to import \(fileName)."))
-            return false
-        }
-        do {
-            try folder.write(data, to: fileName)
-            notice = Notice(title: String(localized: "File Handed to the Mac"),
-                            message: String(localized: "\(fileName) is in the folder “Wattspur Import”. The Mac imports it and the ride shows here after that."))
-            return true
-        } catch {
-            notice = Notice(title: String(localized: "Import Failed"), message: error.localizedDescription)
-            return false
-        }
     }
 
     // MARK: - Files

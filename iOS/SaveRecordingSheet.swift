@@ -1,13 +1,10 @@
 import SwiftUI
 import WattspurCore
 
-/// After Stop (B-212): name the ride, choose the bike, then save it for the Mac, discard it, or
-/// keep riding.
+/// After Stop (B-212): name the ride, choose the bike, then save it, discard it, or keep riding.
 struct SaveRecordingSheet: View {
     @Environment(Recorder.self) private var recorder
-    @Environment(PhoneRecordings.self) private var recordings
     @Environment(PhoneLibrary.self) private var library
-    @Environment(ImportFolder.self) private var folder
     @Environment(\.dismiss) private var dismiss
     var recording: RideRecording
     /// Closes the window; beside the bar of the landscape recording it is no sheet (B-243).
@@ -41,10 +38,6 @@ struct SaveRecordingSheet: View {
                         Text("The ride is saved on this iPhone and reaches your Mac over iCloud.")
                     case .local:
                         Text("The ride is saved on this iPhone.")
-                    case .folder:
-                        Text(folder.url == nil
-                             ? "No folder is chosen: the ride stays on the iPhone, in the Files app under “On My iPhone › Wattspur”."
-                             : "The ride goes as GPX into the folder “Wattspur Import”. The Mac imports it on the bike chosen here.")
                     }
                 }
                 Section {
@@ -85,7 +78,7 @@ struct SaveRecordingSheet: View {
         }
         .onAppear {
             name = RecordingView.defaultName(for: recording.startDate)
-            bikeID = Self.defaultBike(among: bikes, last: recordings.lastBikeID, lastRide: library.state?.lastRide)
+            bikeID = Self.defaultBike(among: bikes, last: Self.lastBikeID, lastRide: library.state?.lastRide)
         }
     }
 
@@ -106,14 +99,16 @@ struct SaveRecordingSheet: View {
         return bikes.first?.id
     }
 
-    /// Saves a finished recording: with the iPhone's own store it becomes a ride there (B-216), else it
-    /// goes as GPX into the folder for the Mac (B-212). The GPX is the same either way, with its bike.
+    /// The last bike chosen when saving, as the default for the next ride.
+    static var lastBikeID: UUID? {
+        get { UserDefaults.standard.string(forKey: PhoneSettingsKey.lastRecordingBike).flatMap(UUID.init(uuidString:)) }
+        set { UserDefaults.standard.set(newValue?.uuidString, forKey: PhoneSettingsKey.lastRecordingBike) }
+    }
+
+    /// Saves a finished recording as a ride of the iPhone's own store (B-216): as GPX with its bike
+    /// (creator “Wattspur iOS”, B-213) through the Kit's import, as on the Mac.
     static func store(_ recording: RideRecording, name: String, bike: RideExchange.Bike?,
-                      library: PhoneLibrary, recordings: PhoneRecordings, folder: ImportFolder) throws {
-        guard library.usesDatabase else {
-            try recordings.save(recording, name: name, bike: bike, folder: folder)
-            return
-        }
+                      library: PhoneLibrary) throws {
         let note = bike.map { String(localized: "Bike: \($0.name)") }
         let data = GPXWriter.document(name: name, segments: recording.gpxSegments, description: note,
                                       creator: GPXWriter.iPhoneCreator, bikeID: bike?.id)
@@ -125,8 +120,8 @@ struct SaveRecordingSheet: View {
         let bike = bikes.first { $0.id == bikeID }
         do {
             try Self.store(recording, name: title.isEmpty ? RecordingView.defaultName(for: recording.startDate) : title,
-                           bike: bike, library: library, recordings: recordings, folder: folder)
-            recordings.lastBikeID = bike?.id
+                           bike: bike, library: library)
+            Self.lastBikeID = bike?.id
             _ = recorder.stop()
             finish()
         } catch {

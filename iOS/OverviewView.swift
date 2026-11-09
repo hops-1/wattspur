@@ -2,13 +2,11 @@ import SwiftUI
 import WattspurCore
 
 /// The tab “Overview” of design C (B-214): the totals of this week and this month, the last ride
-/// with a small map, and a way to all rides. The figures come from the Mac; until there is a
-/// state, the sample ride shows what the tiles will look like.
+/// with a small map, and a way to all rides. Until there is a ride, the sample ride shows what the
+/// tiles will look like.
 struct OverviewView: View {
     @Environment(PhoneLibrary.self) private var library
     @Environment(Recorder.self) private var recorder
-    @Environment(PhoneRecordings.self) private var recordings
-    @Environment(ImportFolder.self) private var folder
     /// Switches to the tab “Rides”, filtered to a period (B-222); `.all` shows every ride.
     var showRides: (RidePeriod) -> Void
     @State private var sample = SampleRide.load()
@@ -20,7 +18,6 @@ struct OverviewView: View {
         }
         .refreshable {
             await library.refresh()
-            await recordings.refreshStatuses(state: library.state, folder: folder)
         }
         .navigationTitle("Overview")
     }
@@ -37,7 +34,6 @@ struct OverviewView: View {
                     }
                     .buttonStyle(.plain)
                     StartRideButton { recorder.start() }
-                    RecordingsSection()
                     Button { showRides(.all) } label: {
                         HStack {
                             Text("All Rides")
@@ -64,18 +60,11 @@ struct OverviewView: View {
                     }
                     .buttonStyle(.plain)
                     StartRideButton { recorder.start() }
-                    RecordingsSection()
                     Text("Sample data: the tiles count the sample ride's week and month.")
                         .font(.footnote)
                         .foregroundStyle(.secondary)
                         .frame(maxWidth: .infinity, alignment: .leading)
-                    if library.usesDatabase {
-                        FirstRidePrompt()
-                    } else if library.status == .noFolder {
-                        ChooseFolderPrompt()
-                    } else {
-                        MacSettingPrompt()
-                    }
+                    FirstRidePrompt()
                 }
             }
             .padding()
@@ -103,12 +92,11 @@ struct OverviewView: View {
                         }
                         .buttonStyle(.plain)
                     }
-                    RecordingsSection()
                 }
                 .frame(width: 340)
                 VStack(spacing: 16) {
                     if let state = library.state, state.lastRide != nil {
-                        landscapeTiles(totals: totals(state), allRides: state.rides.count + recordings.waiting.count, linked: true)
+                        landscapeTiles(totals: totals(state), allRides: state.rides.count, linked: true)
                         StateLine()
                             .frame(maxWidth: .infinity, alignment: .leading)
                     } else if let sample {
@@ -119,13 +107,7 @@ struct OverviewView: View {
                             .font(.footnote)
                             .foregroundStyle(.secondary)
                             .frame(maxWidth: .infinity, alignment: .leading)
-                        if library.usesDatabase {
-                            FirstRidePrompt()
-                        } else if library.status == .noFolder {
-                            ChooseFolderPrompt()
-                        } else {
-                            MacSettingPrompt()
-                        }
+                        FirstRidePrompt()
                     }
                 }
             }
@@ -142,12 +124,9 @@ struct OverviewView: View {
         }
     }
 
-    /// The Mac's rides plus the recordings it does not have yet (B-214).
+    /// The totals of the library (B-214); motorcycle rides stay out, like on the Mac.
     private func totals(_ state: RideExchange.Library) -> RidePeriodTotals {
-        // Motorcycle rides stay out of the totals, like on the Mac.
-        let rides = state.countedRides.map { (start: $0.startDate, distance: $0.distance) }
-            + recordings.waiting.filter { !state.isMotorized(bikeID: $0.bikeID) }.map { (start: $0.startDate, distance: $0.distance) }
-        return RidePeriodTotals(rides: rides)
+        RidePeriodTotals(rides: state.countedRides.map { (start: $0.startDate, distance: $0.distance) })
     }
 
     private func landscapeTiles(totals: RidePeriodTotals, allRides: Int, linked: Bool) -> some View {
@@ -204,96 +183,6 @@ struct OverviewView: View {
                 StatTile(title: "This Month", value: totals.monthRides.formatted(),
                          unit: totals.monthRides == 1 ? "ride" : "rides", systemImage: "bicycle")
             }
-        }
-    }
-}
-
-/// The rides recorded here that the Mac does not have yet (B-212), with their status, sharing
-/// and deleting. Hidden while there are none.
-struct RecordingsSection: View {
-    @Environment(PhoneRecordings.self) private var recordings
-    @Environment(PhoneLibrary.self) private var library
-    @Environment(ImportFolder.self) private var folder
-    @State private var deleting: PhoneRecordings.Entry?
-
-    var body: some View {
-        if !recordings.waiting.isEmpty {
-            VStack(alignment: .leading, spacing: 12) {
-                Text("Recordings")
-                    .font(.subheadline.weight(.semibold))
-                    .foregroundStyle(.secondary)
-                ForEach(recordings.waiting) { entry in
-                    row(entry)
-                    if entry.id != recordings.waiting.last?.id { Divider() }
-                }
-            }
-            .padding()
-            .glassEffect(.regular, in: .rect(cornerRadius: 24))
-            // iCloud and the Mac take a minute or two: look again while the list is shown.
-            .task {
-                while !Task.isCancelled {
-                    await recordings.refreshStatuses(state: library.state, folder: folder)
-                    try? await Task.sleep(for: .seconds(30))
-                }
-            }
-            .confirmationDialog("Delete this recording?", isPresented: Binding(get: { deleting != nil }, set: { if !$0 { deleting = nil } }),
-                                titleVisibility: .visible, presenting: deleting) { entry in
-                Button("Delete Recording", role: .destructive) { recordings.delete(entry, folder: folder) }
-            } message: { _ in
-                Text("The ride is removed from the iPhone, and from the folder if the Mac has not imported it yet.")
-            }
-        }
-    }
-
-    private func row(_ entry: PhoneRecordings.Entry) -> some View {
-        HStack(alignment: .firstTextBaseline) {
-            VStack(alignment: .leading, spacing: 4) {
-                HStack(spacing: 6) {
-                    Text(entry.name).font(.headline).lineLimit(2)
-                    if let bike = library.state?.bike(withID: entry.bikeID) { BikeBadge(bike: bike) }
-                }
-                Text("\(RideFormat.duration(entry.movingTime)) · \(RideFormat.distance(entry.distance))")
-                    .font(.subheadline)
-                    .monospacedDigit()
-                StatusLabel(status: recordings.statuses[entry.id])
-            }
-            Spacer()
-            Menu {
-                ShareLink(item: recordings.localURL(of: entry)) {
-                    Label("Share GPX", systemImage: "square.and.arrow.up")
-                }
-                Button("Delete", systemImage: "trash", role: .destructive) { deleting = entry }
-            } label: {
-                Image(systemName: "ellipsis.circle")
-                    .font(.title3)
-                    .accessibilityLabel(Text("Actions"))
-            }
-        }
-    }
-}
-
-/// Where a recording is on its way to the Mac.
-struct StatusLabel: View {
-    var status: PhoneRecordings.Status?
-
-    var body: some View {
-        switch status {
-        case .onlyHere:
-            Label("Only on the iPhone", systemImage: "iphone").font(.footnote).foregroundStyle(.secondary)
-        case .waitingForiCloud, nil:
-            VStack(alignment: .leading, spacing: 2) {
-                Label("Waiting for iCloud", systemImage: "icloud.and.arrow.up").font(.footnote).foregroundStyle(.orange)
-                // Seen on the iPhone (V-14): iOS sometimes uploads only once the Files app shows the folder.
-                Text("If it stays like this, open the folder once in the Files app.")
-                    .font(.caption)
-                    .foregroundStyle(.secondary)
-            }
-        case .waitingForMac:
-            Label("Waiting for the Mac", systemImage: "desktopcomputer").font(.footnote).foregroundStyle(.secondary)
-        case .takenOver:
-            Label("Taken over by the Mac", systemImage: "checkmark.circle").font(.footnote).foregroundStyle(.green)
-        case .failed:
-            Label("The Mac could not read it", systemImage: "exclamationmark.triangle").font(.footnote).foregroundStyle(.red)
         }
     }
 }

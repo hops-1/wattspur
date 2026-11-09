@@ -7,6 +7,11 @@ Every DMG handed out to testers corresponds to one entry below.
 
 ## [Unreleased]
 
+### Removed
+
+- **Providing rides for the iPhone in the import folder** (Settings › Import › iPhone), as announced in 1.8.8: the iPhone app 0.6 has its own library and syncs it with the Mac over iCloud. The import folder itself works as before, also for a GPX shared from the iPhone. A subfolder “iPhone” left in the import folder is no longer written; you can delete it (B-263).
+- **iPhone app 0.6: the folder exchange.** The iPhone no longer shows rides from a folder and no longer puts recordings there. Without iCloud, rides stay on the iPhone; “Share GPX” takes one to the Mac. Who still used the folder sees a notice once, with the way to iCloud (B-263).
+
 ### Fixed
 
 - **Bosch parts of one iPhone recording:** the parts of 7 Nov 2026 were not joined. A Bosch file can give a start long before its first point (there 11:00 for a ride that began at 12:14), so the part seemed to start before the recording; now the first and last point count. And Bosch rides merged before (by hand) were left out; now they count as parts too. Importing one of the Bosch files again joins them (B-274).

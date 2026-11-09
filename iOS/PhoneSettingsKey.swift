@@ -11,18 +11,19 @@ enum PhoneSettingsKey {
     static let trackColouring = "trackColouring"
     /// The user's choice for iCloud sync (B-218).
     static let iCloudSyncEnabled = "iCloudSyncEnabled"
-    /// The offer to switch to iCloud was shown to a user of the folder way.
-    static let iCloudSyncOfferShown = "iCloudSyncOfferShown"
+    // "iCloudSyncOfferShown" (the offer to switch to iCloud, iOS 0.3 to 0.5) is no longer read.
     /// The bike of the last saved recording, as the default for the next.
     static let lastRecordingBike = "lastRecordingBike"
-    /// The bookmark of the folder the Mac watches (iOS 0.2).
+    /// The bookmark of the folder the Mac watched (iOS 0.2 to 0.5). Since 0.6 only read to know who
+    /// used the folder way (B-263).
     static let importFolderBookmark = "importFolderBookmark"
     /// Whether the recording map turns with the direction of travel instead of north up (B-280).
     static let recordingMapHeadingUp = "recordingMapHeadingUp"
     /// Whether the recording map colours the track by height (B-283).
     static let recordingTrackByElevation = "recordingTrackByElevation"
-    /// The notice that the folder exchange ends with 0.6 was shown (B-263).
-    static let folderEndNoticeShown = "folderEndNoticeShown"
+    // "folderEndNoticeShown" (the notice in 0.5.3 that the folder ends with 0.6) is no longer read.
+    /// The notice that the folder exchange ended was shown (B-263, part 2).
+    static let folderGoneNoticeShown = "folderGoneNoticeShown"
     /// Height or speed in the profile while recording (B-277).
     static let recordingProfileKind = "recordingProfileKind"
     /// Set by UI tests and screenshots: import the sample ride at launch.

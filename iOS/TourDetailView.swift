@@ -13,7 +13,7 @@ struct TourDetailView: View {
     @State private var editing = false
     /// The ride as it was opened; `ride` follows later changes such as a new name (B-240).
     private var opened: RideExchange.Ride
-    /// For the sample ride, whose route is not in the folder.
+    /// For the sample ride, whose route is not in the store.
     var route: RideExchange.Route?
     @State private var loaded: RideExchange.Route?
     /// The measurements for the carousel (B-090, B-241); only from the iPhone's own store.
@@ -182,7 +182,7 @@ struct TourDetailView: View {
                 Label("Share GPX", systemImage: "square.and.arrow.up")
             }
         }
-        if library.usesDatabase, route == nil {
+        if library.database != nil, route == nil {
             Button("Edit", systemImage: "pencil") { editing = true }
             Button("Delete", systemImage: "trash") { confirmingDelete = true }
         }

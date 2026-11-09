@@ -1,6 +1,7 @@
 import Foundation
 import SwiftData
 import Testing
+import TestFixtures
 @testable import WattspurKit
 @testable import WattspurCore
 
@@ -31,16 +32,16 @@ struct PhoneDatabaseTests {
         return nil
     }
 
-    @Test("The mode comes from the Info.plist; anything unknown keeps the folder of iOS 0.2")
+    @Test("The mode comes from the Info.plist; anything unknown, also the old folder, is the store without sync")
     func mode() {
-        #expect(PhoneDatabase.Mode(infoValue: nil) == .folder)
-        #expect(PhoneDatabase.Mode(infoValue: "") == .folder)
-        #expect(PhoneDatabase.Mode(infoValue: "$(WATTSPUR_IOS_DATABASE)") == .folder)
+        #expect(PhoneDatabase.Mode(infoValue: nil) == .local)
+        #expect(PhoneDatabase.Mode(infoValue: "") == .local)
+        #expect(PhoneDatabase.Mode(infoValue: "$(WATTSPUR_IOS_DATABASE)") == .local)
+        #expect(PhoneDatabase.Mode(infoValue: "folder") == .local)
         #expect(PhoneDatabase.Mode(infoValue: "local") == .local)
         #expect(PhoneDatabase.Mode(infoValue: "iCloud") == .iCloud)
-        #expect(PhoneDatabase.Mode.folder.configuration == nil)
-        #expect(PhoneDatabase.Mode.local.configuration?.cloudKitContainerIdentifier == nil)
-        #expect(PhoneDatabase.Mode.iCloud.configuration?.cloudKitContainerIdentifier == LibrarySync.containerIdentifier)
+        #expect(PhoneDatabase.Mode.local.configuration.cloudKitContainerIdentifier == nil)
+        #expect(PhoneDatabase.Mode.iCloud.configuration.cloudKitContainerIdentifier == LibrarySync.containerIdentifier)
     }
 
     @Test("A new database has the first bike, like the Mac")
@@ -253,26 +254,33 @@ struct PhoneDatabaseTests {
     }
 }
 
-/// iCloud or the folder on the iPhone (B-218).
-@Suite("iPhone: iCloud or folder")
+/// iCloud or not on the iPhone (B-218); the folder way ended with 0.6 (B-263).
+@Suite("iPhone: iCloud or not")
 struct PhoneSyncChoiceTests {
-    @Test("Only a build with iCloud offers the choice; without iCloud it is the folder")
+    @Test("Only a build with iCloud offers the choice; off is the iPhone's own store")
     func effective() {
-        #expect(PhoneDatabase.Mode.iCloud.effective(syncOn: true, folderUser: false) == .iCloud)
-        #expect(PhoneDatabase.Mode.iCloud.effective(syncOn: true, folderUser: true) == .iCloud)
-        // Off keeps the iPhone's own rides (R-38); only users of the folder way keep the folder.
-        #expect(PhoneDatabase.Mode.iCloud.effective(syncOn: false, folderUser: false) == .local)
-        #expect(PhoneDatabase.Mode.iCloud.effective(syncOn: false, folderUser: true) == .folder)
-        #expect(PhoneDatabase.Mode.folder.effective(syncOn: true, folderUser: false) == .folder)
-        #expect(PhoneDatabase.Mode.local.effective(syncOn: false, folderUser: false) == .local)
+        #expect(PhoneDatabase.Mode.iCloud.effective(syncOn: true) == .iCloud)
+        #expect(PhoneDatabase.Mode.iCloud.effective(syncOn: false) == .local)
+        #expect(PhoneDatabase.Mode.local.effective(syncOn: true) == .local)
+        #expect(PhoneDatabase.Mode.local.effective(syncOn: false) == .local)
     }
 
-    @Test("New users start with iCloud, users of the folder way keep it")
-    func firstStart() {
-        #expect(PhoneDatabase.Mode.syncOnAtFirstStart(hadFolder: false, hadStore: false))
-        #expect(!PhoneDatabase.Mode.syncOnAtFirstStart(hadFolder: true, hadStore: false))
-        // Had both, e.g. a test build with the store after iOS 0.2: the store wins.
-        #expect(PhoneDatabase.Mode.syncOnAtFirstStart(hadFolder: true, hadStore: true))
-        #expect(PhoneDatabase.Mode.syncOnAtFirstStart(hadFolder: false, hadStore: true))
+    @Test("Only who had a folder and never the store used the folder way")
+    func folderUser() {
+        #expect(PhoneDatabase.Mode.wasFolderUser(hadFolder: true, hadStore: false))
+        #expect(!PhoneDatabase.Mode.wasFolderUser(hadFolder: false, hadStore: false))
+        // Had both, e.g. a test build with the store after iOS 0.2: the store was used.
+        #expect(!PhoneDatabase.Mode.wasFolderUser(hadFolder: true, hadStore: true))
+        #expect(!PhoneDatabase.Mode.wasFolderUser(hadFolder: false, hadStore: true))
+    }
+
+    @Test("The snapshot leaves out sample rides")
+    @MainActor
+    func snapshotSkipsSamples() throws {
+        let container = try ModelContainer(for: Schema(WattspurSchema.models),
+                                           configurations: ModelConfiguration(isStoredInMemoryOnly: true))
+        let database = PhoneDatabase(container: container, defaultBikeName: "Mein eBike")
+        _ = database.library.importSample(data: try Fixture.data("reinheim-rundfahrt"), name: "Beispielfahrt")
+        #expect(try database.snapshot(generator: "t").rides.isEmpty)
     }
 }

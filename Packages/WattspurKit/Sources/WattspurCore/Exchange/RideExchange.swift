@@ -1,12 +1,11 @@
 import Foundation
 
-/// The stable exchange format (B-178): what the Mac writes for the iPhone (B-208) and the iPhone
-/// reads (B-209). JSON with fixed field names, SI units and ISO 8601 dates; documented in
-/// `docs/reference/data-exchange.md`. Unlike the backup, it promises to stay readable: new fields
-/// may be added, but a field is never renamed or given a new meaning without raising `schemaVersion`.
-///
-/// The library file holds the rides with their key figures and the bikes; each ride's route is a
-/// file of its own, so the list stays small and the iPhone loads a route only when it shows it.
+/// The exchange format (B-178): the rides with their key figures and the bikes, and each ride's
+/// route on its own, so the list stays small and the iPhone loads a route only when it shows it.
+/// Until iPhone 0.6 and Mac 1.8.10 the Mac wrote it as JSON into the import folder for the iPhone
+/// (B-208, B-209); that folder exchange ended (B-263). Now the iPhone's views get it from their own
+/// store (`PhoneDatabase.snapshot`). The JSON coding stays, with fixed field names, SI units and
+/// ISO 8601 dates.
 public enum RideExchange {
     /// Raise when a field is removed or changes its meaning (not when one is added).
     public static let schemaVersion = 1
@@ -202,12 +201,6 @@ public enum RideExchange {
     }
 
     // MARK: - Files
-
-    /// The subfolder of the import folder that the Mac writes for the iPhone. The folder import
-    /// looks only at files directly in the import folder, so it never touches this one.
-    public static let folderName = "iPhone"
-    public static let libraryFileName = "Stand.json"
-    public static let routesFolderName = "Routen"
 
     /// The route file of a ride: its ID and a fingerprint of what the route is made from.
     public static func routeFileName(rideID: UUID, fingerprint: UInt64) -> String {

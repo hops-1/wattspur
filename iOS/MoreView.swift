@@ -2,10 +2,8 @@ import SwiftUI
 import WattspurCore
 import WattspurKit
 
-/// The tab “More” (design C): the folder shared with the Mac, or with the iPhone's own store the
-/// trash (B-217), and the version.
+/// The tab “More” (design C): iCloud, the trash (B-217), the recording and the version.
 struct MoreView: View {
-    @Environment(ImportFolder.self) private var folder
     @Environment(PhoneLibrary.self) private var library
     @Environment(PhoneSync.self) private var sync
     @Environment(\.switchSync) private var switchSync
@@ -33,7 +31,7 @@ struct MoreView: View {
         .navigationTitle("More")
     }
 
-    /// iCloud or the folder, the trash and the sync status.
+    /// iCloud, the trash and the sync status.
     @ViewBuilder private var librarySections: some View {
         if sync.canChoose {
             Section {
@@ -44,8 +42,6 @@ struct MoreView: View {
                 VStack(alignment: .leading, spacing: 4) {
                     if sync.isOn {
                         Text("One library on this iPhone and your Mac, in your own iCloud account.")
-                    } else if sync.folderUser {
-                        Text("Without iCloud, rides reach the Mac through a folder it watches, or with “Share GPX”, e.g. by AirDrop.")
                     } else {
                         Text("Without iCloud, the rides stay on this iPhone. They reach the Mac with “Share GPX”, e.g. by AirDrop.")
                     }
@@ -58,39 +54,31 @@ struct MoreView: View {
             .confirmationDialog("Stop syncing with iCloud?", isPresented: $confirmingOff, titleVisibility: .visible) {
                 Button("Turn Off") { switchSync(false) }
             } message: {
-                if sync.folderUser {
-                    Text("The rides stay in iCloud and on your Mac. This iPhone then shows the rides the Mac provides in the folder, and new rides go there as GPX.")
-                } else {
-                    Text("The rides stay in iCloud, on your Mac and on this iPhone. New rides then stay on this iPhone.")
-                }
+                Text("The rides stay in iCloud, on your Mac and on this iPhone. New rides then stay on this iPhone.")
             }
         }
-        if library.usesDatabase {
-            Section {
-                NavigationLink {
-                    TrashView()
-                        .hidesTabBarInLandscape()
+        Section {
+            NavigationLink {
+                TrashView()
+                    .hidesTabBarInLandscape()
+            } label: {
+                LabeledContent {
+                    Text(library.trash.count.formatted())
                 } label: {
-                    LabeledContent {
-                        Text(library.trash.count.formatted())
-                    } label: {
-                        Label("Trash", systemImage: "trash")
-                    }
-                }
-            } header: {
-                Text("Library")
-            } footer: {
-                if library.mode == .iCloud {
-                    Text("Your rides are on this iPhone and in your own iCloud account, the same as on your Mac.")
-                } else {
-                    Text("Your rides are on this iPhone. Sync with the Mac comes with iCloud.")
+                    Label("Trash", systemImage: "trash")
                 }
             }
-            if let monitor = library.syncMonitor {
-                SyncSection(monitor: monitor)
+        } header: {
+            Text("Library")
+        } footer: {
+            if library.mode == .iCloud {
+                Text("Your rides are on this iPhone and in your own iCloud account, the same as on your Mac.")
+            } else {
+                Text("Your rides are on this iPhone. Sync with the Mac comes with iCloud.")
             }
-        } else {
-            folderSection
+        }
+        if let monitor = library.syncMonitor {
+            SyncSection(monitor: monitor)
         }
     }
 
@@ -118,32 +106,6 @@ struct MoreView: View {
 
         Section {
             VersionFooter()
-        }
-    }
-
-    private var folderSection: some View {
-        Section {
-            if let url = folder.url {
-                LabeledContent("Folder", value: url.lastPathComponent)
-            } else {
-                Text("No folder chosen yet.")
-                    .foregroundStyle(.secondary)
-            }
-            ChooseFolderButton(title: folder.url == nil ? "Choose Folder…" : "Choose Another Folder…")
-            if let problem = folder.problem {
-                Text(problem)
-                    .font(.footnote)
-                    .foregroundStyle(.red)
-            }
-        } header: {
-            Text("Wattspur Import")
-        } footer: {
-            VStack(alignment: .leading, spacing: 4) {
-                Text("Choose the folder the Mac watches: “Wattspur Import” in iCloud Drive, or a folder in another service such as Dropbox or OneDrive. Without a folder, send recordings to the Mac with “Share GPX”, e.g. by AirDrop.")
-                // B-263, part 1: the way out of the folder before it goes in 0.6.
-                Text("The folder exchange ends with version 0.6. Use Sync with iCloud instead.")
-                    .foregroundStyle(.orange)
-            }
         }
     }
 }

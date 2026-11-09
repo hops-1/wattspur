@@ -11,40 +11,36 @@ import WattspurCore
 /// the ride on the iPhone and finds duplicates the same way.
 @MainActor
 public final class PhoneDatabase {
-    /// Where the iPhone's rides come from, set at build time (`WattspurDatabase` in the Info.plist).
+    /// Whether the iPhone's store syncs, set at build time (`WattspurDatabase` in the Info.plist). The
+    /// folder way of iOS 0.2 (the Mac's state in a shared folder) ended with 0.6 (B-263).
     public enum Mode: String, Sendable, CaseIterable {
-        /// iOS 0.2: the Mac's state in the shared folder; a recording goes there as GPX.
-        case folder
         /// The iPhone's own store without sync, to try it without the developer account.
         case local
         /// The iPhone's own store, synced over iCloud; needs the iCloud entitlement.
         case iCloud = "icloud"
 
-        /// The mode for a value from the Info.plist; anything unknown keeps the folder.
+        /// The mode for a value from the Info.plist; anything unknown (also the old "folder") is
+        /// the store without sync.
         public init(infoValue: String?) {
-            self = infoValue.flatMap { Mode(rawValue: $0.lowercased()) } ?? .folder
+            self = infoValue.flatMap { Mode(rawValue: $0.lowercased()) } ?? .local
         }
-
-        public var usesStore: Bool { self != .folder }
 
         /// The way the app works when the user chose for or against iCloud (B-218). Only a build that
-        /// allows iCloud offers the choice. Off means the iPhone's own store without iCloud (R-38); only
-        /// a user of the folder way of iOS 0.2 (`folderUser`) keeps the folder.
-        public func effective(syncOn: Bool, folderUser: Bool) -> Mode {
-            guard self == .iCloud, !syncOn else { return self }
-            return folderUser ? .folder : .local
+        /// allows iCloud offers the choice; off means the iPhone's own store without iCloud (R-38).
+        public func effective(syncOn: Bool) -> Mode {
+            self == .iCloud && syncOn ? .iCloud : .local
         }
 
-        /// Whether iCloud is on before the user chose: yes, except for users of the folder way, who
-        /// had a folder and never the iPhone's own store. They keep it and get an offer.
-        public static func syncOnAtFirstStart(hadFolder: Bool, hadStore: Bool) -> Bool {
-            !(hadFolder && !hadStore)
+        /// Whether this iPhone used the folder way of iOS 0.2 until it ended in 0.6 (B-263): a folder
+        /// was chosen and the iPhone's own store never existed. Such a user hears once that the folder
+        /// is gone; iCloud is not switched on without asking.
+        public static func wasFolderUser(hadFolder: Bool, hadStore: Bool) -> Bool {
+            hadFolder && !hadStore
         }
 
-        /// The configuration of the store; `nil` in folder mode, which has none.
-        public var configuration: ModelConfiguration? {
+        /// The configuration of the store.
+        public var configuration: ModelConfiguration {
             switch self {
-            case .folder: nil
             case .local: LibrarySync.configuration(requested: false, available: false)
             case .iCloud: LibrarySync.configuration(requested: true, available: true)
             }
@@ -83,7 +79,7 @@ public final class PhoneDatabase {
     /// The rides of the list and all bikes in the exchange format. A ride with GPS names its own id
     /// as `routeFile`; `route(forRideID:)` reads it.
     public func snapshot(generator: String, now: Date = .now) throws -> RideExchange.Library {
-        let rides = try PhoneStateWriter(context: context).listedRides()
+        let rides = try ExchangeRides.listed(in: context)
         return RideExchange.Library(generatedAt: now, generator: generator,
                                     bikes: library.bikes().map(\.exchangeBike),
                                     rides: rides.map { ride in
