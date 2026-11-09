@@ -26,9 +26,14 @@ public enum TileLoader {
         return URLSession(configuration: configuration)
     }()
 
+    /// Set by tests and the debug builds' `-WattspurOfflineTiles YES`: every tile fails as without a
+    /// network and an empty cache, to see what the maps show then.
+    nonisolated(unsafe) public static var simulatesOffline = false
+
     /// The tile's image data. Without a network a tile seen before still comes from the
     /// cache, even when the server would want it checked again.
     public static func data(for tile: Tile, from source: TileSource) async throws -> Data {
+        if simulatesOffline { throw URLError(.notConnectedToInternet) }
         let url = source.url(for: tile)
         do {
             let (data, response) = try await session.data(from: url)

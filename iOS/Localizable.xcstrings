@@ -347,6 +347,16 @@
         }
       }
     },
+    "Apple" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Apple"
+          }
+        }
+      }
+    },
     "Ascent" : {
       "localizations" : {
         "de" : {
@@ -477,6 +487,16 @@
         }
       }
     },
+    "CyclOSM" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "CyclOSM"
+          }
+        }
+      }
+    },
     "Direction of travel up" : {
       "localizations" : {
         "de" : {
@@ -527,6 +547,16 @@
         }
       }
     },
+    "Hybrid" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Hybrid"
+          }
+        }
+      }
+    },
     "Last 30 Days" : {
       "localizations" : {
         "de" : {
@@ -563,6 +593,36 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Mediathek nicht geöffnet"
+          }
+        }
+      }
+    },
+    "Map" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Karte"
+          }
+        }
+      }
+    },
+    "Map data and style: open the licence" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Kartendaten und Darstellung: Lizenz öffnen"
+          }
+        }
+      }
+    },
+    "Map Style" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Kartenstil"
           }
         }
       }
@@ -643,6 +703,26 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Letzte Fahrt öffnen"
+          }
+        }
+      }
+    },
+    "OpenStreetMap" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "OpenStreetMap"
+          }
+        }
+      }
+    },
+    "OpenTopoMap" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "OpenTopoMap"
           }
         }
       }
@@ -747,6 +827,16 @@
         }
       }
     },
+    "Satellite" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Satellit"
+          }
+        }
+      }
+    },
     "Search rides" : {
       "localizations" : {
         "de" : {
@@ -823,6 +913,16 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Tempoprofil der bisherigen Fahrt"
+          }
+        }
+      }
+    },
+    "Standard" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Standard"
           }
         }
       }
@@ -943,6 +1043,16 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Die Mediathek wird in einen Ordner „Damaged Library“ daneben verschoben, nicht gelöscht."
+          }
+        }
+      }
+    },
+    "The OpenStreetMap styles come from volunteer servers; Wattspur loads only the tiles on screen and keeps them for a while. Without a connection the route shows on a plain ground." : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Die OpenStreetMap-Stile kommen von Servern Freiwilliger. Wattspur lädt nur die Kacheln, die du siehst, und hebt sie eine Weile auf. Ohne Verbindung steht die Route auf leerem Grund."
           }
         }
       }

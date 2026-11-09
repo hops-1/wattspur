@@ -1,6 +1,7 @@
 import SwiftUI
 import WattspurCore
 import WattspurKit
+import WattspurMap
 
 /// The tab “More” (design C): iCloud, the trash (B-217), the recording and the version.
 struct MoreView: View {
@@ -10,6 +11,8 @@ struct MoreView: View {
     @State private var confirmingOff = false
     @AppStorage(Recorder.vehicleKey) private var vehicle = RecordingVehicle.eBike
     @AppStorage(MotionRecorder.rawLogKey) private var recordsRawMotion = false
+    /// The style of every map (B-226), the same choice as on the detail map.
+    @AppStorage(PhoneSettingsKey.mapType) private var mapType: RideMapType = .standard
     @Environment(\.isLandscape) private var isLandscape
 
     var body: some View {
@@ -82,8 +85,23 @@ struct MoreView: View {
         }
     }
 
-    /// The vehicle for the recording and the version.
+    /// The map style, the vehicle for the recording and the version.
     @ViewBuilder private var recordingSections: some View {
+        Section {
+            Picker("Map Style", selection: $mapType) {
+                Section("Apple") {
+                    ForEach(RideMapType.apple) { Text($0.label).tag($0) }
+                }
+                Section("OpenStreetMap") {
+                    ForEach(RideMapType.openStreetMapStyles) { Text($0.label).tag($0) }
+                }
+            }
+        } header: {
+            Text("Map")
+        } footer: {
+            Text("The OpenStreetMap styles come from volunteer servers; Wattspur loads only the tiles on screen and keeps them for a while. Without a connection the route shows on a plain ground.")
+        }
+
         Section {
             Picker("Vehicle", selection: $vehicle) {
                 Text("E-Bike").tag(RecordingVehicle.eBike)

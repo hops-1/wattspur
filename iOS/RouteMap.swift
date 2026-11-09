@@ -1,9 +1,10 @@
 import MapKit
 import SwiftUI
 import WattspurCore
+import WattspurMap
 
-/// The track of a ride on an Apple map, one line per recording. Without `interactive` it is a
-/// picture: no panning or zooming, and every tap goes to the tile around it.
+/// The track of a ride on the map, one line per recording, in the chosen map style (B-226).
+/// Without `interactive` it is a picture: no panning or zooming, and every tap goes to the tile around it.
 struct RouteMap: View {
     var route: RideExchange.Route
     var interactive = false
@@ -17,20 +18,8 @@ struct RouteMap: View {
     @AppStorage(PhoneSettingsKey.trackColouring) private var colouring: TrackColouring = .lean
     /// The track by height (B-283), worked out from the route once per route; every ride with heights has it.
     @State private var elevation: RouteElevation.Result?
-
-    /// A coloured piece of the track.
-    private struct Piece: Identifiable {
-        let id: Int
-        let color: Color
-        let coordinates: [CLLocationCoordinate2D]
-    }
-
-    private func pieces<Band>(_ stretches: [RideMotion.Stretch<Band>], _ color: (Band) -> Color) -> [Piece] {
-        stretches.enumerated().map { index, stretch in
-            Piece(id: index, color: color(stretch.band),
-                  coordinates: zip(stretch.latitude, stretch.longitude).map { CLLocationCoordinate2D(latitude: $0, longitude: $1) })
-        }
-    }
+    /// Apple's map or an OpenStreetMap style (B-226), the same for every map; remembered.
+    @AppStorage(PhoneSettingsKey.mapType) private var mapType: RideMapType = .standard
 
     /// The colourings this ride has.
     private var available: [TrackColouring] {
@@ -46,46 +35,19 @@ struct RouteMap: View {
         return available.first { $0 != .elevation }
     }
 
-    var body: some View {
-        Map(initialPosition: .rect(Self.rect(for: segments.flatMap { $0 })),
-            interactionModes: interactive ? .all : []) {
-            switch shown {
-            case .lean:
-                ForEach(pieces(leanStretches, Color.lean)) { piece in
-                    MapPolyline(coordinates: piece.coordinates)
-                        .stroke(piece.color, style: StrokeStyle(lineWidth: 5, lineCap: .round, lineJoin: .round))
-                }
-            case .surface:
-                ForEach(pieces(surfaceStretches, Color.surface)) { piece in
-                    MapPolyline(coordinates: piece.coordinates)
-                        .stroke(piece.color, style: StrokeStyle(lineWidth: 5, lineCap: .round, lineJoin: .round))
-                }
-            case .elevation:
-                ForEach(pieces(elevation?.stretches ?? [], { $0.map(Color.elevation) ?? .gray })) { piece in
-                    MapPolyline(coordinates: piece.coordinates)
-                        .stroke(piece.color, style: StrokeStyle(lineWidth: 5, lineCap: .round, lineJoin: .round))
-                }
-            case nil, .plain?:
-                ForEach(segments.indices, id: \.self) { index in
-                    MapPolyline(coordinates: segments[index])
-                        .stroke(Color.track, style: StrokeStyle(lineWidth: 4, lineCap: .round, lineJoin: .round))
-                }
-            }
-            if let marker {
-                Annotation("", coordinate: marker, anchor: .center) {
-                    Circle()
-                        .fill(Color.track)
-                        .stroke(.white, lineWidth: 3)
-                        .frame(width: 16, height: 16)
-                        .shadow(radius: 2)
-                        .accessibilityHidden(true)
-                }
-            }
+    /// The colouring for the map's overlay.
+    private var routeColouring: RouteColouring {
+        switch shown {
+        case .lean: .lean(leanStretches)
+        case .surface: .surface(surfaceStretches)
+        case .elevation: .elevation(elevation?.stretches ?? [])
+        case nil, .plain?: .plain
         }
-        // A fresh map for each colouring: SwiftUI's Map keeps the lines it has drawn and does not
-        // take new colours for them, so a switch between lean and surface showed the old ones.
-        .id(shown)
-        .mapControlVisibility(interactive ? .automatic : .hidden)
+    }
+
+    var body: some View {
+        PhoneMapView(mapType: mapType, segments: segments, colouring: routeColouring, marker: marker,
+                     interactive: interactive, area: Self.rect(for: segments.flatMap { $0 }))
         .allowsHitTesting(interactive)
         // MapKit's "Legal" link still takes taps despite allowsHitTesting(false) and opens
         // Safari; a clear layer on top catches them, so they reach the tile (the attribution
@@ -101,6 +63,13 @@ struct RouteMap: View {
             case .surface: SurfaceLegend().padding(8)
             case .elevation: elevation.map { ElevationLegend(scale: $0.scale).padding(8) }
             case nil, .plain?: EmptyView()
+            }
+        }
+        .overlay(alignment: .topTrailing) {
+            // The map style on the detail map (B-226); the same choice as under More.
+            if interactive {
+                MapTypeMenu(mapType: $mapType)
+                    .padding(8)
             }
         }
         .overlay(alignment: .topLeading) {
@@ -138,6 +107,31 @@ struct RouteMap: View {
         }
         let margin = max(rect.width, rect.height) * 0.15 + 200
         return rect.insetBy(dx: -margin, dy: -margin)
+    }
+}
+
+/// Chooses the map style (B-226): Apple's three and the OpenStreetMap styles, as on the Mac.
+struct MapTypeMenu: View {
+    @Binding var mapType: RideMapType
+
+    var body: some View {
+        Menu {
+            Picker("Map Style", selection: $mapType) {
+                Section("Apple") {
+                    ForEach(RideMapType.apple) { Text($0.label).tag($0) }
+                }
+                Section("OpenStreetMap") {
+                    ForEach(RideMapType.openStreetMapStyles) { Text($0.label).tag($0) }
+                }
+            }
+        } label: {
+            Image(systemName: "square.3.layers.3d")
+                .font(.body)
+                .frame(width: 36, height: 36)
+        }
+        .buttonStyle(.glass)
+        .buttonBorderShape(.circle)
+        .accessibilityLabel(Text("Map Style"))
     }
 }
 

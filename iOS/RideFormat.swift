@@ -1,6 +1,7 @@
 import Foundation
 import SwiftUI
 import WattspurCore
+import WattspurMap
 
 /// Number formats of the iPhone app; units follow the device's region.
 enum RideFormat {
@@ -90,29 +91,24 @@ extension Color {
             : UIColor(red: 0xC2 / 255, green: 0x18 / 255, blue: 0x7A / 255, alpha: 1)
     })
 
-    /// The track by lean angle (B-246): from green upright through yellow and orange to red and purple.
-    static func lean(_ band: RideMotion.LeanBand) -> Color {
-        switch band {
-        case .upright: .green
-        case .slight: .yellow
-        case .medium: .orange
-        case .strong: .red
-        case .extreme: .purple
-        }
-    }
+    /// The track by lean angle (B-246), from the maps' palette, the same as on the Mac (B-226).
+    static func lean(_ band: RideMotion.LeanBand) -> Color { .map(MapPalette.lean(band)) }
 
     /// A step of the track by height (B-283): blue low to red high, the palette of the Kit, as on the Mac.
     static func elevation(_ level: Int) -> Color {
-        let rgb = RouteElevation.palette[min(max(level, 0), RouteElevation.palette.count - 1)]
+        let rgb = MapPalette.elevation(level)
         return Color(red: Double((rgb >> 16) & 0xFF) / 255, green: Double((rgb >> 8) & 0xFF) / 255, blue: Double(rgb & 0xFF) / 255)
     }
 
-    /// The track by road surface (B-248): grey smooth, yellow-orange uneven, red rough (B-276).
-    static func surface(_ band: RideMotion.SurfaceBand) -> Color {
-        switch band {
-        case .smooth: .gray
-        case .uneven: Color(red: 1, green: 0.66, blue: 0.1)
-        case .rough: .red
-        }
+    /// The track by road surface (B-248), from the maps' palette, the same as on the Mac (B-226).
+    static func surface(_ band: RideMotion.SurfaceBand) -> Color { .map(MapPalette.surface(band)) }
+
+    /// A colour of the maps' palette for the light or dark appearance (B-226).
+    static func map(_ pair: MapPalette.Pair) -> Color {
+        Color(UIColor { traits in
+            let hex = pair.hex(dark: traits.userInterfaceStyle == .dark)
+            return UIColor(red: CGFloat(hex >> 16 & 0xFF) / 255, green: CGFloat(hex >> 8 & 0xFF) / 255,
+                           blue: CGFloat(hex & 0xFF) / 255, alpha: 1)
+        })
     }
 }

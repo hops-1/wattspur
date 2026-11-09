@@ -92,7 +92,8 @@ public enum RouteColouring: Sendable {
 /// The route of one ride and its new stretches in map coordinates, with the colours resolved
 /// for the appearance, so the renderer can draw from any thread.
 public final class RideRouteOverlay: NSObject, MKOverlay, @unchecked Sendable {
-    let route: [MKMapPoint]
+    /// One line per recording, so a merged ride keeps the gap between its parts.
+    let route: [[MKMapPoint]]
     let stretches: [[MKMapPoint]]
     /// The coloured pieces of the route; empty draws it in `routeColor`.
     let pieces: [(color: CGColor, points: [MKMapPoint])]
@@ -104,15 +105,21 @@ public final class RideRouteOverlay: NSObject, MKOverlay, @unchecked Sendable {
 
     /// - Parameter newStretches: stretches no earlier ride had passed (B-115), drawn on top in orange.
     /// - Parameter ticks: where the parts of a merged ride meet (B-131).
-    public init(route: [CLLocationCoordinate2D], newStretches: [[RoutePoint]], colouring: RouteColouring,
-                ticks: [JoinTick], dark: Bool, colors: RouteColors) {
-        self.route = route.map(MKMapPoint.init)
+    public convenience init(route: [CLLocationCoordinate2D], newStretches: [[RoutePoint]], colouring: RouteColouring,
+                            ticks: [JoinTick], dark: Bool, colors: RouteColors) {
+        self.init(segments: [route], newStretches: newStretches, colouring: colouring, ticks: ticks, dark: dark, colors: colors)
+    }
+
+    /// The route as one line per recording (the iPhone's `RideExchange.Route`).
+    public init(segments: [[CLLocationCoordinate2D]], newStretches: [[RoutePoint]] = [], colouring: RouteColouring,
+                ticks: [JoinTick] = [], dark: Bool, colors: RouteColors) {
+        route = segments.map { $0.map(MKMapPoint.init) }
         stretches = newStretches.map { $0.map { MKMapPoint(CLLocationCoordinate2D(latitude: $0.latitude, longitude: $0.longitude)) } }
         self.ticks = ticks.map { (MKMapPoint($0.coordinate), $0.across) }
         pieces = colouring.pieces(dark: dark, colors: colors).map { ($0.color, $0.coordinates.map(MKMapPoint.init)) }
         routeColor = colors.accent
         newColor = MapPalette.newPaths.cgColor(dark: dark)
-        let rect = MKMapRect(covering: self.route + stretches.joined())
+        let rect = MKMapRect(covering: Array(route.joined()) + Array(stretches.joined()))
         // Margin for the width of the lines at the edges.
         boundingMapRect = rect.isNull ? .world : rect.insetBy(dx: -rect.width * 0.05 - 500, dy: -rect.height * 0.05 - 500)
     }
@@ -139,9 +146,9 @@ public final class RideRouteRenderer: MKOverlayRenderer {
         let white = CGColor(gray: 1, alpha: 1)
         // Both lines are equally wide, so neither looks heavier at any zoom; the new stretches
         // stand out by colour and by lying on top.
-        stroke(overlay.route, width: 8, color: white)
+        for line in overlay.route { stroke(line, width: 8, color: white) }
         if overlay.pieces.isEmpty {
-            stroke(overlay.route, width: 4.5, color: overlay.routeColor)
+            for line in overlay.route { stroke(line, width: 4.5, color: overlay.routeColor) }
         } else {
             // Round caps make the pieces join without a gap.
             for piece in overlay.pieces { stroke(piece.points, width: 4.5, color: piece.color) }
