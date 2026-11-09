@@ -202,16 +202,6 @@
         }
       }
     },
-    "Providing rides in the folder ends with Wattspur 1.8.10 and the iPhone app 0.6. Use Sync with iCloud on the Mac and the iPhone instead." : {
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Das Bereitstellen im Ordner endet mit Wattspur 1.8.10 und der iPhone-App 0.6. Nutze stattdessen den Sync mit iCloud am Mac und auf dem iPhone."
-          }
-        }
-      }
-    },
     "Restore Backup…" : {
       "localizations" : {
         "de" : {
@@ -662,6 +652,16 @@
         }
       }
     },
+    "Wattspur on the iPhone gets your rides over iCloud (Settings › iCloud). A ride shared from the iPhone as GPX can go into this folder like any other file." : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Wattspur auf dem iPhone bekommt deine Fahrten über iCloud (Einstellungen › iCloud). Eine Fahrt, die du am iPhone als GPX teilst, kann wie jede andere Datei in diesen Ordner."
+          }
+        }
+      }
+    },
     "Wattspur uploads all %lld rides with their time series and routes, your bikes, profile, goals and saved routes into your own iCloud account. Only you can see them there. The first upload can take a while." : {
       "localizations" : {
         "de" : {
@@ -702,16 +702,6 @@
         }
       }
     },
-    "Choose an import folder and switch watching on." : {
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Wähle einen Import-Ordner und schalte das Beobachten ein."
-          }
-        }
-      }
-    },
     "iPhone:" : {
       "localizations" : {
         "de" : {
@@ -722,52 +712,12 @@
         }
       }
     },
-    "Last written %@ · %lld rides" : {
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Zuletzt geschrieben %1$@ · %2$lld Fahrten"
-          }
-        }
-      }
-    },
-    "Provide rides for the iPhone" : {
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Fahrten für das iPhone bereitstellen"
-          }
-        }
-      }
-    },
     "Source: iPhone" : {
       "localizations" : {
         "de" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "Quelle: iPhone"
-          }
-        }
-      }
-    },
-    "Wattspur writes your rides into the subfolder “iPhone” of the import folder, at most once a minute. The Wattspur app on the iPhone reads them from there." : {
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Wattspur schreibt deine Fahrten in den Unterordner „iPhone“ des Import-Ordners, höchstens einmal pro Minute. Die Wattspur-App auf dem iPhone liest sie dort."
-          }
-        }
-      }
-    },
-    "Will be written in a moment." : {
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Wird gleich geschrieben."
           }
         }
       }
@@ -9743,16 +9693,6 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Alle Angaben sind freiwillig und bleiben auf deinen Geräten und in deinem eigenen iCloud. Wattspur nutzt sie in einer späteren Version für eine Kalorienschätzung „mit Profil“."
-          }
-        }
-      }
-    },
-    "This Mac syncs with iCloud, so Wattspur on the iPhone has the rides itself once it syncs too. Provide the rides in the folder only for an iPhone without iCloud." : {
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Dieser Mac synchronisiert mit iCloud, Wattspur auf dem iPhone hat die Fahrten darum selbst, sobald es auch synchronisiert. Stelle die Fahrten nur für ein iPhone ohne iCloud im Ordner bereit."
           }
         }
       }

@@ -6,122 +6,55 @@ import Observation
 import WattspurCore
 import WattspurKit
 
-/// The rides the iPhone shows, from one of two places (`PhoneDatabase.Mode`):
-/// - **Folder** (iOS 0.2, B-209): the state the Mac writes into `Wattspur Import/iPhone` (B-208), with
-///   a copy in the app, so the list also shows without a connection. The iPhone only reads.
-/// - **Database** (B-216): the iPhone's own store. It gives the same `RideExchange` values, so the
-///   views stay the same; recordings become rides and rides can go to the trash (B-217).
+/// The rides the iPhone shows, from its own store (B-216, `PhoneDatabase`), with or without iCloud.
+/// It gives them as `RideExchange` values, so the views stay the same as when they showed the Mac's
+/// state from a folder (iOS 0.2 to 0.5, ended with 0.6, B-263). Recordings become rides and rides
+/// can go to the trash (B-217).
 @MainActor @Observable
 final class PhoneLibrary {
-    enum Status: Equatable {
-        /// No folder chosen yet.
-        case noFolder
-        /// The folder has no state: the setting on the Mac is off.
-        case noState
-        case loaded
-    }
-
-    /// The last state read, from the folder or from the copy.
+    /// The last state read from the store; `nil` before the first reading and when the store did not open.
     private(set) var state: RideExchange.Library?
-    private(set) var isLoading = false
-    /// What went wrong when reading last; the list then shows the copy.
+    /// What went wrong when reading last.
     private(set) var problem: String?
     /// Routes loaded in this session, by file name.
     private var routes: [String: RideExchange.Route] = [:]
 
-    private let folder: ImportFolder
-    /// The iPhone's own store; `nil` in folder mode.
+    /// The iPhone's own store; `nil` only when it did not open (B-264), then `LibraryErrorView` shows.
     let database: PhoneDatabase?
-    /// Where the rides come from, set at build time.
+    /// With or without iCloud.
     let mode: PhoneDatabase.Mode
     /// Last sync and problems in iCloud mode (B-220); `nil` otherwise.
     private(set) var syncMonitor: SyncMonitor?
-    /// The trash of the store (B-217), newest first; empty in folder mode.
+    /// The trash of the store (B-217), newest first.
     private(set) var trash: [PhoneDatabase.TrashedRide] = []
-    private let cacheFolder: URL
-    private var cachedStateURL: URL { cacheFolder.appending(path: RideExchange.libraryFileName) }
-    private var cachedRoutesFolder: URL { cacheFolder.appending(path: RideExchange.routesFolderName) }
 
-    init(folder: ImportFolder, database: PhoneDatabase? = nil, mode: PhoneDatabase.Mode = .folder,
-         cacheFolder: URL = .applicationSupportDirectory.appending(path: "Stand vom Mac")) {
-        self.folder = folder
+    init(database: PhoneDatabase?, mode: PhoneDatabase.Mode = .local) {
         self.database = database
-        self.mode = database == nil ? .folder : mode
-        self.cacheFolder = cacheFolder
-        if database != nil {
-            reload()
-            if self.mode == .iCloud {
-                watchICloud()
-                startSyncMerge()
-                syncMonitor = SyncMonitor.forLibrary()
-                syncMonitor?.start()
-            }
-        } else if let data = try? Data(contentsOf: cachedStateURL) {
-            state = try? RideExchange.library(from: data)
+        self.mode = mode
+        // The rides of the Mac's state from iOS 0.2 to 0.5; not read since 0.6 (B-263).
+        try? FileManager.default.removeItem(at: .applicationSupportDirectory.appending(path: "Stand vom Mac"))
+        guard database != nil else { return }
+        reload()
+        if mode == .iCloud {
+            watchICloud()
+            startSyncMerge()
+            syncMonitor = SyncMonitor.forLibrary()
+            syncMonitor?.start()
         }
     }
 
-    var usesDatabase: Bool { database != nil }
-
-    var status: Status {
-        if state != nil { return .loaded }
-        return folder.url == nil ? .noFolder : .noState
-    }
-
-    /// Reads the state from the folder again (at launch, when the app comes back, on pull to refresh).
+    /// Reads the store again (at launch, when the app comes back, on pull to refresh).
     func refresh() async {
-        if database != nil {
-            syncMonitor?.refreshAccount()
-            reload()
-            return
-        }
-        guard folder.url != nil, !isLoading else { return }
-        isLoading = true
-        defer { isLoading = false }
-        do {
-            let data = try await folder.readInBackground("\(RideExchange.folderName)/\(RideExchange.libraryFileName)")
-            let fresh = try RideExchange.library(from: data)
-            state = fresh
-            problem = nil
-            saveCopy(data, keeping: fresh)
-        } catch RideExchange.ReadError.newerSchema {
-            problem = String(localized: "The Mac wrote a newer format. Update Wattspur on the iPhone.")
-        } catch let error as CocoaError where error.code == .fileReadNoSuchFile {
-            // The Mac has not written yet; a copy from another folder must not stay.
-            if state == nil { problem = nil }
-        } catch {
-            problem = error.localizedDescription
-        }
+        syncMonitor?.refreshAccount()
+        reload()
     }
 
-    /// Forgets the state when another folder is chosen.
-    func folderChanged() async {
-        state = nil
-        routes = [:]
-        try? FileManager.default.removeItem(at: cacheFolder)
-        await refresh()
-    }
-
-    /// The route of a ride: from the store, or from this session, the copy, or the folder.
+    /// The route of a ride, from this session or the store.
     func route(for ride: RideExchange.Ride) async -> RideExchange.Route? {
         guard let file = ride.routeFile else { return nil }
         if let route = routes[file] { return route }
-        if let database {
-            let route = database.route(forRideID: ride.id)
-            routes[file] = route
-            return route
-        }
-        let cached = cachedRoutesFolder.appending(path: file)
-        if let data = try? Data(contentsOf: cached), let route = try? RideExchange.route(from: data) {
-            routes[file] = route
-            return route
-        }
-        guard let data = try? await folder.readInBackground(
-            "\(RideExchange.folderName)/\(RideExchange.routesFolderName)/\(file)"),
-              let route = try? RideExchange.route(from: data) else { return nil }
+        let route = database?.route(forRideID: ride.id)
         routes[file] = route
-        try? FileManager.default.createDirectory(at: cachedRoutesFolder, withIntermediateDirectories: true)
-        try? data.write(to: cached, options: .atomic)
         return route
     }
 
@@ -210,7 +143,7 @@ final class PhoneLibrary {
         }
     }
 
-    /// Whether a ride can be shared as GPX: one of the iPhone's own store with GPS.
+    /// Whether a ride can be shared as GPX: one with GPS.
     func canShare(_ ride: RideExchange.Ride) -> Bool {
         database != nil && ride.routeFile != nil
     }
@@ -226,27 +159,26 @@ final class PhoneLibrary {
     }
 
     /// The measurements of a ride for the charts (B-241), from the iPhone's own store: speed, power,
-    /// cadence, heart rate and altitude, averaged like on the Mac. Empty in folder mode, whose state
-    /// from the Mac has no time series, and for the sample ride.
+    /// cadence, heart rate and altitude, averaged like on the Mac. Empty for the sample ride.
     func chartPoints(for ride: RideExchange.Ride, axis: ChartAxis = .distance) -> [ChartPoint] {
         database?.chartPoints(forRideID: ride.id, axis: axis) ?? []
     }
 
-    /// Lean, acceleration and sprint and the track by lean angle (B-246); `nil` in folder mode, for
-    /// the sample ride and for rides without motion values.
+    /// Lean, acceleration and sprint and the track by lean angle (B-246); `nil` for the sample
+    /// ride and for rides without motion values.
     func motion(for ride: RideExchange.Ride)
         -> (figures: RideMotion, lean: [RideMotion.LeanStretch], surface: [RideMotion.SurfaceStretch])? {
         database?.motion(forRideID: ride.id)
     }
 
-    /// Charts, track and motion of a ride from one reading of its time series (R-33); empty in folder
-    /// mode and for the sample ride.
+    /// Charts, track and motion of a ride from one reading of its time series (R-33); empty for the
+    /// sample ride.
     func detail(for ride: RideExchange.Ride) -> PhoneDatabase.Detail {
         database?.detail(forRideID: ride.id) ?? PhoneDatabase.Detail()
     }
 
     /// The time series of a ride, to show the spot under the finger on the chart on the map (B-221).
-    /// Empty in folder mode and for the sample ride.
+    /// Empty for the sample ride.
     func track(for ride: RideExchange.Ride) -> RideTrack {
         database?.track(forRideID: ride.id) ?? RideTrack(samples: [])
     }
@@ -288,18 +220,6 @@ final class PhoneLibrary {
         database?.deletePermanently(rideID: ride.id)
         routes[ride.id.uuidString] = nil
         reload()
-    }
-
-    /// Stores the state and drops routes it no longer names.
-    private func saveCopy(_ data: Data, keeping state: RideExchange.Library) {
-        let fileManager = FileManager.default
-        try? fileManager.createDirectory(at: cachedRoutesFolder, withIntermediateDirectories: true)
-        try? data.write(to: cachedStateURL, options: .atomic)
-        let named = Set(state.rides.compactMap(\.routeFile))
-        for file in (try? fileManager.contentsOfDirectory(atPath: cachedRoutesFolder.path)) ?? [] where !named.contains(file) {
-            try? fileManager.removeItem(at: cachedRoutesFolder.appending(path: file))
-        }
-        routes = routes.filter { named.contains($0.key) }
     }
 }
 

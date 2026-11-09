@@ -5,10 +5,10 @@
 	<!-- Replaced at build time from Config/… prefix header (see project.yml) -->
 	<key>WattspurGitCommit</key>
 	<string>WATTSPUR_GIT_COMMIT</string>
-	<!-- Where the rides come from (B-216): folder, local or icloud, from Config/iOS.xcconfig -->
+	<!-- Whether the store syncs (B-216): local or icloud, from Config/iOS.xcconfig -->
 	<key>WattspurDatabase</key>
 	<string>$(WATTSPUR_IOS_DATABASE)</string>
-	<!-- Recordings without a chosen folder show in the Files app (B-211) -->
+	<!-- The raw motion files (V-16, “Bewegung”) show in the Files app -->
 	<key>UIFileSharingEnabled</key>
 	<true/>
 	<!-- GPS recording keeps running with the screen locked (V-14, B-211) -->

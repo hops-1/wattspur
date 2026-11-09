@@ -241,7 +241,7 @@ private struct LeanLegend: View {
 struct RideMap: View {
     @Environment(PhoneLibrary.self) private var library
     var ride: RideExchange.Ride
-    /// For the sample ride, whose route is not in the folder.
+    /// For the sample ride, whose route is not in the store.
     var route: RideExchange.Route?
     var interactive = false
     var marker: CLLocationCoordinate2D?

@@ -12,8 +12,6 @@ struct WattspurApp: App {
     /// The one library of the app; windows get their own undo manager from it (`RideLibrary.using(_:)`).
     @State private var library: RideLibrary
     @State private var watcher: FolderWatcher
-    /// The state for the iPhone in the import folder (B-208).
-    @State private var phoneState: PhoneState
     /// Housekeeping that waits for the first window (see `LibraryMaintenance`).
     @State private var maintenance = LibraryMaintenance()
     /// "New paths" of every ride, for the ride detail and the map (B-115).
@@ -109,7 +107,6 @@ struct WattspurApp: App {
         _library = State(initialValue: library)
         let watcher = FolderWatcher(library: library)
         _watcher = State(initialValue: watcher)
-        _phoneState = State(initialValue: PhoneState(context: container.mainContext, watcher: watcher))
         // Earlier versions created one bike per ride from the export's serial number; they become one.
         if libraryFailure == nil {
             library.mergeBikes()
@@ -169,7 +166,6 @@ struct WattspurApp: App {
                 SettingsView()
                     .environment(library)
                     .environment(watcher)
-                    .environment(phoneState)
                     .environment(curvyRoads)
                     .environment(iCloudSync)
                     .environment(\.librarySyncs, iCloudSync.isActive)

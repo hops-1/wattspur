@@ -122,14 +122,11 @@ private struct GeneralSettingsView: View {
 
 struct ImportSettingsView: View {
     @Environment(FolderWatcher.self) private var watcher
-    @Environment(PhoneState.self) private var phoneState
-    @Environment(\.librarySyncs) private var librarySyncs
     @Environment(\.openWindow) private var openWindow
     @AppStorage(SettingsKey.mergeSuggestionGapMinutes) private var mergeGapMinutes = RideMergeSuggestion.defaultGapMinutes
 
     var body: some View {
         @Bindable var watcher = watcher
-        @Bindable var phoneState = phoneState
         Form {
             LabeledContent("Watch folder:") {
                 VStack(alignment: .leading, spacing: 4) {
@@ -194,31 +191,12 @@ struct ImportSettingsView: View {
                         .fixedSize(horizontal: false, vertical: true)
                 }
             }
+            // The folder for the iPhone (B-208) ended with Mac 1.8.10 and iPhone 0.6 (B-263).
             LabeledContent("iPhone:") {
-                VStack(alignment: .leading, spacing: 4) {
-                    // With iCloud the iPhone has the library itself (B-218); the folder is only for an iPhone without sync.
-                    if !librarySyncs || phoneState.isEnabled {
-                        Toggle("Provide rides for the iPhone", isOn: $phoneState.isEnabled)
-                    }
-                    Group {
-                        if librarySyncs {
-                            Text("This Mac syncs with iCloud, so Wattspur on the iPhone has the rides itself once it syncs too. Provide the rides in the folder only for an iPhone without iCloud.")
-                        } else {
-                            Text("Wattspur writes your rides into the subfolder “iPhone” of the import folder, at most once a minute. The Wattspur app on the iPhone reads them from there.")
-                        }
-                    }
+                Text("Wattspur on the iPhone gets your rides over iCloud (Settings › iCloud). A ride shared from the iPhone as GPX can go into this folder like any other file.")
                     .font(.caption)
                     .foregroundStyle(.secondary)
                     .fixedSize(horizontal: false, vertical: true)
-                    // B-263, part 1: the folder for the iPhone goes with Mac 1.8.10 and iPhone 0.6.
-                    if phoneState.isEnabled {
-                        Text("Providing rides in the folder ends with Wattspur 1.8.10 and the iPhone app 0.6. Use Sync with iCloud on the Mac and the iPhone instead.")
-                            .font(.caption)
-                            .foregroundStyle(.orange)
-                            .fixedSize(horizontal: false, vertical: true)
-                    }
-                    PhoneStateStatusText()
-                }
             }
             HStack {
                 Spacer()
@@ -230,25 +208,6 @@ struct ImportSettingsView: View {
         }
         .formStyle(.columns)
         .padding(.vertical, 8)
-    }
-}
-
-/// "Last written today at 14:02 · 84 rides", or what is wrong.
-struct PhoneStateStatusText: View {
-    @Environment(PhoneState.self) private var phoneState
-
-    var body: some View {
-        if !phoneState.isEnabled {
-            EmptyView()
-        } else if let problem = phoneState.problem {
-            Text(problem).font(.caption).foregroundStyle(.red)
-        } else if let written = phoneState.lastWritten {
-            Text("Last written \(written.formatted(date: .omitted, time: .shortened)) · \(phoneState.lastRides) rides")
-                .font(.caption)
-                .foregroundStyle(.secondary)
-        } else {
-            Text("Will be written in a moment.").font(.caption).foregroundStyle(.secondary)
-        }
     }
 }
 

@@ -36,20 +36,17 @@ On the iPhone a warning also shows while changes still wait for the upload.
 If you turn iCloud off for Wattspur on the iPhone (**Settings › your name › iCloud**) or sign out of iCloud, iOS deletes the copy on the iPhone. Your rides stay in iCloud and on the Mac and come back once it is on again. A ride that was not uploaded yet may be lost, though. So turn it off only when **Last synced** shows no warning.
 
 ## Without iCloud
-If you do not want to use iCloud, or your storage is full and you do not want a larger plan, turn off **More › Sync with iCloud** on the iPhone. It takes effect the next time Wattspur opens. The rides then stay on the iPhone, and new recordings too:
-- **By AirDrop:** send a recording to the Mac with **Share GPX** and import it there like any other file.
-- **Through a folder:** only if you used the iPhone app before 0.5 with a folder. **This way ends with the iPhone app 0.6 and Wattspur 1.8.10;** turn on sync with iCloud before then. “Share GPX” stays. On the Mac, turn on **Settings › Import › Provide rides for the iPhone**. The iPhone then shows the rides the Mac writes into the folder, and puts new recordings there as GPX.
+If you do not want to use iCloud, or your storage is full and you do not want a larger plan, turn off **More › Sync with iCloud** on the iPhone. It takes effect the next time Wattspur opens. The rides then stay on the iPhone, and new recordings too. To get a ride to the Mac, send it with **Share GPX**, e.g. by AirDrop, and import it there like any other file.
 
-On the Mac, leave **Sync with iCloud** off then.
+**The folder exchange has ended:** up to the iPhone app 0.5 and Wattspur 1.8.9, the iPhone could also show the rides the Mac wrote into the folder “Wattspur Import”. With the iPhone app 0.6 and Wattspur 1.8.10 this way is gone. If you used it, the iPhone tells you once; turn on sync with iCloud on both, and your rides from the Mac come to the iPhone. A subfolder “iPhone” left in the import folder is no longer used; you can delete it.
 
 ## Looking at a ride
 Tap a ride in the list. The map is at the top, the charts right below it.
 - **Swipe:** with iCloud, each measure has a page of its own: speed, power, cadence, heart rate and elevation. Only what the ride has gets a page. The dots below show where you are. Each page names the maximum and the average; elevation names the ascent and the descent.
 - **Touch, hold and move:** a line marks the spot. At the top you then see the distance and the value there, for example “0.4 km · 25.2 km/h”. A dot on the map shows where that was. When you let go, the line and the dot disappear.
-- Without iCloud the ride shows the elevation profile as before.
 
 ## Editing a ride
-The pencil at the top right of a ride's detail changes its **name** and its **bike**. With iCloud the Mac gets the change too. Without iCloud you edit rides on the Mac.
+The pencil at the top right of a ride's detail changes its **name** and its **bike**. With iCloud the Mac gets the change too. Without iCloud it stays on the iPhone.
 
 ## Rides from the Flow app
 The Bosch file of a ride has more values than a GPS recording, such as power and cadence. This is how it gets onto the iPhone:
@@ -62,7 +59,7 @@ The Bosch file of a ride has more values than a GPS recording, such as power and
 - A GPX file for a Bosch ride is attached to the ride. The Bosch values stay.
 - **One tour in several Bosch parts:** the Flow app splits a tour with long pauses into several rides, the iPhone records it as one. When the Bosch rides lie wholly inside the time of your recording and add up to its distance, Wattspur merges them into one ride. It gets the recording's name and bike and its heart rate, lean angle and surface. The recording itself goes to the trash, where you can restore it. It does not matter which file comes last. If you imported the parts earlier, drop one of their FIT files once more.
 
-**Without iCloud** the iPhone puts the file into the folder “Wattspur Import”. The Mac imports it from there like any other file.
+**Without iCloud** it becomes a ride on the iPhone only.
 
 ## Height while recording
 While recording, Wattspur measures the height with the iPhone's **barometer**, from the air pressure. That is much calmer than the GPS height alone, so the ascent comes closer to Bosch. The height above sea level still comes from the GPS: Wattspur keeps matching the two. So a change in the weather during the ride does not get in the way either.

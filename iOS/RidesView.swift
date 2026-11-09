@@ -1,8 +1,8 @@
 import SwiftUI
 import WattspurCore
 
-/// The tab “Rides” (B-209): the rides from the Mac by month, newest first. Pull down to read the
-/// state again; the copy in the app shows them without a connection too.
+/// The tab “Rides” (B-209): the rides of the library by month, newest first. Pull down to read
+/// the store again.
 struct RidesView: View {
     @Environment(PhoneLibrary.self) private var library
     @Environment(\.isLandscape) private var isLandscape
@@ -15,19 +15,11 @@ struct RidesView: View {
 
     var body: some View {
         Group {
-            switch library.status {
-            case .noFolder:
-                ChooseFolderPrompt()
-            case .noState:
-                MacSettingPrompt()
-                    .refreshable { await library.refresh() }
-            case .loaded:
-                if let state = library.state {
-                    if isLandscape {
-                        split(state)
-                    } else {
-                        list(state)
-                    }
+            if let state = library.state {
+                if isLandscape {
+                    split(state)
+                } else {
+                    list(state)
                 }
             }
         }
@@ -73,7 +65,7 @@ struct RidesView: View {
         let chosen = shownRides.first { $0.id == selection } ?? shownRides.first
         return HStack(spacing: 0) {
             List {
-                if !library.usesDatabase || library.problem != nil {
+                if library.problem != nil {
                     Section {
                         StateLine()
                     }
@@ -121,34 +113,25 @@ struct RidesView: View {
                 Label("Share GPX", systemImage: "square.and.arrow.up")
             }
         }
-        if library.usesDatabase {
-            Button("Move to Trash", systemImage: "trash", role: .destructive) { library.moveToTrash(ride) }
-        }
+        Button("Move to Trash", systemImage: "trash", role: .destructive) { library.moveToTrash(ride) }
     }
 
-    /// Only the iPhone's own rides can be deleted; those from the Mac's state cannot (B-217).
-    @ViewBuilder private func deleteAction(for ride: RideExchange.Ride) -> some View {
-        if library.usesDatabase {
-            Button("Delete", systemImage: "trash", role: .destructive) { library.moveToTrash(ride) }
-                .tint(.red)
-        }
+    /// Into the trash (B-217), here and over iCloud on the Mac too.
+    private func deleteAction(for ride: RideExchange.Ride) -> some View {
+        Button("Delete", systemImage: "trash", role: .destructive) { library.moveToTrash(ride) }
+            .tint(.red)
     }
 
-    @ViewBuilder private var noRides: some View {
-        if library.usesDatabase {
-            ContentUnavailableView("No Rides", systemImage: "bicycle",
-                                   description: Text("Record a ride in the overview."))
-        } else {
-            ContentUnavailableView("No Rides", systemImage: "bicycle",
-                                   description: Text("The Mac has no rides yet."))
-        }
+    private var noRides: some View {
+        ContentUnavailableView("No Rides", systemImage: "bicycle",
+                               description: Text("Record a ride in the overview."))
     }
 
     private func list(_ state: RideExchange.Library) -> some View {
         let months = state.months(filteredBy: effectiveFilter(state))
         return List {
-            // The line about the Mac's state; the iPhone's own store has none, unless something went wrong.
-            if !library.usesDatabase || library.problem != nil {
+            // Only when reading the store went wrong.
+            if library.problem != nil {
                 Section {
                     StateLine()
                 }
@@ -185,22 +168,15 @@ struct RidesView: View {
     }
 }
 
-/// “State from the Mac: Today, 14:02”, or why it could not be read again.
+/// Why the store could not be read again; empty when all is well.
 struct StateLine: View {
     @Environment(PhoneLibrary.self) private var library
 
     var body: some View {
-        VStack(alignment: .leading, spacing: 4) {
-            if let state = library.state, !library.usesDatabase {
-                Label("State from the Mac: \(RideFormat.stateDate(state.generatedAt))", systemImage: "desktopcomputer")
-                    .font(.footnote)
-                    .foregroundStyle(.secondary)
-            }
-            if let problem = library.problem {
-                Label(problem, systemImage: "exclamationmark.triangle")
-                    .font(.footnote)
-                    .foregroundStyle(.orange)
-            }
+        if let problem = library.problem {
+            Label(problem, systemImage: "exclamationmark.triangle")
+                .font(.footnote)
+                .foregroundStyle(.orange)
         }
     }
 }

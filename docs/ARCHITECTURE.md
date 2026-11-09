@@ -85,9 +85,9 @@ Mac: SwiftData + CloudKit ◄──── private Datenbank in iCloud ───�
 - Einschalten am Mac legt **jedes Mal** vorher eine Sicherung an (R-39). Der Schalter wirkt beim nächsten Start; die Bibliothek bleibt dieselbe Datei.
 - `SyncMonitor` liefert Fakten (`SyncProblem`, letzter Sync); die Apps formulieren sie.
 
-### iPhone ohne iCloud: der Ordner-Weg (iOS 0.2, läuft aus)
+### iPhone ohne iCloud
 
-Ohne iCloud schreibt der Mac den Stand als `Stand.json` und Routen-Dateien in den Unterordner `iPhone` des Import-Ordners (`PhoneState` → `PhoneStateWriter`, Format in [data-exchange](reference/data-exchange.md)). Das iPhone liest ihn (`ImportFolder`, `PhoneLibrary`) und legt Aufnahmen als GPX in den Ordner, den der Mac überwacht (`PhoneRecordings`). `PhoneDatabase.Mode` (`folder`, `local`, `icloud`) wählt der Build, `Mode.effective(syncOn:folderUser:)` die Wahl des Nutzers. **Entscheidung Nils (6.11.2026):** Der Ordner-Weg bleibt noch eine Version und geht dann (B-263).
+Das iPhone hat immer seine eigene Bibliothek (`PhoneDatabase`); `PhoneDatabase.Mode` (`local`, `icloud`) wählt der Build, `Mode.effective(syncOn:)` die Wahl des Nutzers. Ohne iCloud bleiben die Fahrten auf dem iPhone, „GPX teilen“ bringt eine an den Mac. Die Ansichten bekommen die Fahrten weiter im Austauschformat (`RideExchange`, gebaut von `PhoneDatabase.snapshot`). **Der Ordner-Weg aus iOS 0.2** (der Mac schrieb `Stand.json` in den Unterordner `iPhone` des Import-Ordners, das iPhone las ihn und legte Aufnahmen als GPX dorthin) **endete mit iPhone 0.6 und Mac 1.8.10 (B-263, Entscheidung Nils 6.11.2026).** Wer ihn noch nutzte (`Mode.wasFolderUser`), sieht einmal einen Hinweis mit dem Weg zu iCloud.
 
 ### Widget
 
@@ -118,7 +118,7 @@ Die App legt bei jeder Änderung einen `WeekSnapshot` (Core) in die App Group `g
 | `Store/LibrarySync*.swift` | Konfiguration mit oder ohne CloudKit; Schema anlegen und Speicher messen (nur Debug) |
 | `Store/SyncMergeWatcher.swift`, `SyncMonitor.swift` | Wann Doppel zusammengeführt werden; Stand und Probleme des Sync |
 | `Store/PhoneDatabase.swift` | Die Bibliothek des iPhones: liefert `RideExchange`-Werte, speichert Aufnahmen, bearbeitet und löscht |
-| `Store/PhoneStateWriter.swift` | Stand für das iPhone im Ordner-Weg |
+| `Store/RideExchange+Store.swift` | Fahrten der Bibliothek im Austauschformat für die iPhone-Ansichten |
 | `Store/LibraryBackup.swift` | Sicherung und Wiederherstellung als Ordner (SQLite-Backup, Austausch beim Start) |
 | `Store/LibraryMaintenance.swift` | Aufräumen nach dem ersten Fenster, Nachrechnen nach Version, in Paketen |
 | `Store/RideBridges.swift` | Modell → Werttypen |
@@ -129,7 +129,7 @@ Die App legt bei jeder Änderung einen `WeekSnapshot` (Core) in die App Group `g
 
 ## App (macOS)
 
-Views in `App/`; große Bereiche in eigenen Ordnern (`Highlights/`, `Analysis/`, `Compare/`). `@Observable`-Hilfsobjekte in der Environment: `FolderWatcher`, `ImportLog`, `NewPathsStore`, `RouteSimilarityStore`, `LibraryBackupCenter`, `MergeSuggestionCenter`, `BikeAssignmentNotice`, `ICloudSync`, `PhoneState`, `CurvyRoadsStore`. `DemoMode` und `SampleRide` sind für Screenshots und die Beispielfahrt.
+Views in `App/`; große Bereiche in eigenen Ordnern (`Highlights/`, `Analysis/`, `Compare/`). `@Observable`-Hilfsobjekte in der Environment: `FolderWatcher`, `ImportLog`, `NewPathsStore`, `RouteSimilarityStore`, `LibraryBackupCenter`, `MergeSuggestionCenter`, `BikeAssignmentNotice`, `ICloudSync`, `CurvyRoadsStore`. `DemoMode` und `SampleRide` sind für Screenshots und die Beispielfahrt.
 
 **Karten:** Tour-Detail, Karte aller Fahrten und Vergleich sind `MKMapView` mit eigenen Overlays. `MapTiles.swift` bringt die OSM-Kacheln (Cache, User-Agent), `MapBackdrop.swift` das Kartenbild der PDFs, `CurvyRoads.swift` die Ebene „Kurvige Straßen“. Das Tour-Detail rechnet seine Werte abseits des Hauptthreads (`DetailValues`, R-58).
 
@@ -139,7 +139,7 @@ Target `Wattspur iOS` (ab iOS 26, Bundle-ID `io.github.hops-1.wattspur.ios`, Ver
 
 **Erweiterung `Wattspur Widgets`** (`iOSWidgets/`): Live-Aktivität der Aufnahme und Widget „Diese Woche“. Eigene Texte, keine iCloud-Entitlements, dieselbe Versionsnummer wie die App.
 
-**Signierung:** Team und Entitlements nur in der ignorierten `Config/Local.xcconfig` (Vorlage `Local.xcconfig.example`), Anleitung in Lern-Notiz [30](learning/30-ios-app.md). Ohne die Datei baut das Projekt für den Simulator im Modus `folder`. Gebaut wird das iPhone nur lokal (`scripts/ci-local.sh`, Simulator ohne Signierung); GitHub Actions baut nur den Mac und das Paket.
+**Signierung:** Team und Entitlements nur in der ignorierten `Config/Local.xcconfig` (Vorlage `Local.xcconfig.example`), Anleitung in Lern-Notiz [30](learning/30-ios-app.md). Ohne die Datei baut das Projekt für den Simulator im Modus `local` (eigene Bibliothek ohne iCloud). Gebaut wird das iPhone nur lokal (`scripts/ci-local.sh`, Simulator ohne Signierung); GitHub Actions baut nur den Mac und das Paket.
 
 ## Tests
 
@@ -156,7 +156,6 @@ Target `Wattspur iOS` (ab iOS 26, Bundle-ID `io.github.hops-1.wattspur.ios`, Ver
 
 | Punkt | Story |
 |---|---|
-| Ordner-Weg des iPhones beenden; danach `local` oder `icloud` als Standard des Simulators | B-263 |
 | Sicherung zurückholen, während der Sync an ist | B-265 |
 | Import, Neu-Lesen und Nachrechnen in einem `ModelActor` statt zeitlich verschoben auf dem Hauptthread | B-266 |
 | Test-Target für Mac- und iPhone-App | B-267 |

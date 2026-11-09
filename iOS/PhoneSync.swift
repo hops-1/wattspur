@@ -3,53 +3,47 @@ import Observation
 import SwiftData
 import WattspurKit
 
-/// Which way the rides take between iPhone and Mac (B-218): over iCloud, or without it over a folder
-/// the Mac watches and “Share” (iOS 0.2). The build says whether iCloud is possible at all
-/// (`WattspurDatabase` in the Info.plist); with it, the user chooses in “More”.
+/// Whether the iPhone's store syncs with the Mac over iCloud (B-218). The build says whether iCloud is
+/// possible at all (`WattspurDatabase` in the Info.plist); with it, the user chooses in “More”. Without
+/// iCloud the rides stay on the iPhone, and “Share GPX” takes one to the Mac.
 ///
-/// Without iCloud the user may not want it or have no room for it, so the folder way stays.
+/// The folder way of iOS 0.2 ended with 0.6 (B-263). Who still used it hears that once, with the way
+/// to iCloud; their rides are on the Mac, which gives them back over iCloud.
 @MainActor @Observable
 final class PhoneSync {
     /// What the build allows.
     let buildMode: PhoneDatabase.Mode
     /// The user's choice; only matters when the build allows iCloud.
     private(set) var isOn: Bool
-    /// A user of the folder way gets the offer to switch once.
-    private(set) var offerPending: Bool
-    /// Knows only the folder way of iOS 0.2: without iCloud the folder stays (B-263, R-38).
-    let folderUser: Bool
-    /// The notice that the folder exchange ends with 0.6 was shown once (B-263, part 1).
-    private(set) var folderEndNoticeShown: Bool
+    /// Used the folder way until 0.6 and has not heard yet that it ended (B-263).
+    private(set) var folderGoneNoticePending: Bool
 
     private let defaults: UserDefaults
     static let enabledKey = PhoneSettingsKey.iCloudSyncEnabled
-    static let offerShownKey = PhoneSettingsKey.iCloudSyncOfferShown
 
-    /// `hadFolder`: a folder was chosen before; `hadStore`: the iPhone's own store exists (a build
-    /// with the store ran before). Only who had a folder and no store knows just the folder way.
+    /// `hadFolder`: a folder was chosen before (iOS 0.2 to 0.5); `hadStore`: the iPhone's own store
+    /// exists. Only who had a folder and no store used the folder way.
     init(buildMode: PhoneDatabase.Mode, hadFolder: Bool, hadStore: Bool, defaults: UserDefaults = .standard) {
         self.buildMode = buildMode
         self.defaults = defaults
-        let folderUser = !PhoneDatabase.Mode.syncOnAtFirstStart(hadFolder: hadFolder, hadStore: hadStore)
-        self.folderUser = folderUser
+        let folderUser = PhoneDatabase.Mode.wasFolderUser(hadFolder: hadFolder, hadStore: hadStore)
         if defaults.object(forKey: Self.enabledKey) == nil {
-            // New users start with iCloud; users of the folder way keep it until they switch.
+            // New users start with iCloud. A user of the folder way had chosen against it (the key
+            // was set to off for them) and keeps that choice; the notice offers the switch.
             defaults.set(!folderUser, forKey: Self.enabledKey)
         }
-        let on = defaults.bool(forKey: Self.enabledKey)
-        isOn = on
-        offerPending = buildMode == .iCloud && !on && folderUser && !defaults.bool(forKey: Self.offerShownKey)
-        folderEndNoticeShown = defaults.bool(forKey: PhoneSettingsKey.folderEndNoticeShown)
+        isOn = defaults.bool(forKey: Self.enabledKey)
+        folderGoneNoticePending = folderUser && !defaults.bool(forKey: PhoneSettingsKey.folderGoneNoticeShown)
     }
 
-    /// Who still uses the folder hears once that it ends with 0.6 (B-263); not on top of the offer above.
-    var folderEndNoticePending: Bool {
-        mode == .folder && !folderEndNoticeShown && !offerPending
+    /// Whether this iPhone had chosen a folder (iOS 0.2 to 0.5), from the bookmark it kept.
+    static func hadFolder(defaults: UserDefaults = .standard) -> Bool {
+        defaults.data(forKey: PhoneSettingsKey.importFolderBookmark) != nil
     }
 
-    func folderEndNoticeDone() {
-        folderEndNoticeShown = true
-        defaults.set(true, forKey: PhoneSettingsKey.folderEndNoticeShown)
+    func folderGoneNoticeDone() {
+        folderGoneNoticePending = false
+        defaults.set(true, forKey: PhoneSettingsKey.folderGoneNoticeShown)
     }
 
     var canChoose: Bool { buildMode == .iCloud }
@@ -61,25 +55,19 @@ final class PhoneSync {
 
     /// The way the app works now.
     var mode: PhoneDatabase.Mode {
-        buildMode.effective(syncOn: isOn, folderUser: folderUser)
+        buildMode.effective(syncOn: isOn)
     }
 
     /// The store is open with or without iCloud, and the choice now wants the other: that takes a new
     /// start, as the mirror cannot be stopped or the file opened twice (R-63).
     var needsRestart: Bool {
-        guard let open = Self.openStoreMode, mode.usesStore else { return false }
+        guard let open = Self.openStoreMode else { return false }
         return open != mode
     }
 
     func set(_ on: Bool) {
         isOn = on
         defaults.set(on, forKey: Self.enabledKey)
-        offerDone()
-    }
-
-    func offerDone() {
-        offerPending = false
-        defaults.set(true, forKey: Self.offerShownKey)
     }
 
     // MARK: - Store
@@ -95,9 +83,9 @@ final class PhoneSync {
     private(set) var failedStoreURL: URL?
 
     /// The library for `mode`, with the store opened when needed.
-    func makeLibrary(folder: ImportFolder) -> PhoneLibrary {
+    func makeLibrary() -> PhoneLibrary {
         let mode = self.mode
-        guard var configuration = mode.configuration else { return PhoneLibrary(folder: folder) }
+        var configuration = mode.configuration
         #if DEBUG
         if Self.isBrokenLibraryTest { configuration = Self.prepareBrokenLibraryTest() }
         #endif
@@ -115,11 +103,11 @@ final class PhoneSync {
                 // library stays on disk as it is.
                 libraryFailure = String(describing: error)
                 failedStoreURL = configuration.url
-                return PhoneLibrary(folder: folder)
+                return PhoneLibrary(database: nil, mode: mode)
             }
         }
         // Until the next start the store stays as it was opened, with or without iCloud.
-        return PhoneLibrary(folder: folder, database: Self.openStore, mode: Self.openStoreMode ?? mode)
+        return PhoneLibrary(database: Self.openStore, mode: Self.openStoreMode ?? mode)
     }
 
     #if DEBUG

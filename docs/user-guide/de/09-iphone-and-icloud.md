@@ -36,20 +36,17 @@ Am iPhone steht zusätzlich eine Warnung, solange Änderungen noch auf den Uploa
 Schaltest du am iPhone iCloud für Wattspur aus (**Einstellungen › dein Name › iCloud**) oder meldest dich von iCloud ab, löscht iOS die Kopie auf dem iPhone. Deine Fahrten bleiben in iCloud und am Mac und kommen nach dem Einschalten zurück. Eine Fahrt, die noch nicht hochgeladen war, kann dabei aber verloren gehen. Schalte deshalb erst aus, wenn bei **Zuletzt synchronisiert** keine Warnung steht.
 
 ## Ohne iCloud
-Wenn du iCloud nicht nutzen willst, oder dein Speicher voll ist und du kein größeres Abo möchtest, schalte am iPhone **Mehr › Mit iCloud synchronisieren** aus. Das gilt ab dem nächsten Öffnen von Wattspur. Die Fahrten bleiben dann auf dem iPhone, neue Aufnahmen auch:
-- **Per AirDrop:** Eine Aufnahme schickst du mit **GPX teilen** an den Mac und importierst sie dort wie jede andere Datei.
-- **Über einen Ordner:** nur, wenn du die iPhone-App schon vor 0.5 mit einem Ordner genutzt hast. **Dieser Weg endet mit der iPhone-App 0.6 und Wattspur 1.8.10;** schalte bis dahin den Sync mit iCloud ein. „GPX teilen“ bleibt. Am Mac schaltest du **Einstellungen › Import › Fahrten für das iPhone bereitstellen** ein. Das iPhone zeigt dann die Fahrten, die der Mac in den Ordner schreibt, und legt neue Aufnahmen als GPX dort ab.
+Wenn du iCloud nicht nutzen willst, oder dein Speicher voll ist und du kein größeres Abo möchtest, schalte am iPhone **Mehr › Mit iCloud synchronisieren** aus. Das gilt ab dem nächsten Öffnen von Wattspur. Die Fahrten bleiben dann auf dem iPhone, neue Aufnahmen auch. Eine Fahrt schickst du mit **GPX teilen** an den Mac, z. B. per AirDrop, und importierst sie dort wie jede andere Datei.
 
-Am Mac lässt du **Mit iCloud synchronisieren** dann aus.
+**Der Ordner-Austausch ist beendet:** Bis zur iPhone-App 0.5 und Wattspur 1.8.9 konnte das iPhone auch die Fahrten zeigen, die der Mac in den Ordner „Wattspur Import“ schrieb. Mit der iPhone-App 0.6 und Wattspur 1.8.10 gibt es diesen Weg nicht mehr. Hast du ihn genutzt, sagt dir das iPhone das einmal. Schalte an beiden den Sync mit iCloud ein, dann kommen deine Fahrten vom Mac auf das iPhone. Einen Unterordner „iPhone“ im Import-Ordner braucht Wattspur nicht mehr; du kannst ihn löschen.
 
 ## Eine Fahrt ansehen
 Tippe in der Liste auf eine Fahrt. Oben steht die Karte, direkt darunter die Diagramme.
 - **Wischen:** Mit iCloud hat jede Messgröße eine eigene Seite: Tempo, Leistung, Trittfrequenz, Puls und Höhe. Es gibt nur Seiten für Werte, die die Fahrt hat. Die Punkte unten zeigen, wo du bist. Jede Seite nennt das Maximum und den Durchschnitt, bei der Höhe den Anstieg und den Abstieg.
 - **Finger halten und ziehen:** Eine Linie markiert die Stelle. Oben steht dann die Strecke und der Wert an dieser Stelle, z. B. „0,4 km · 25,2 km/h“. Auf der Karte zeigt ein Punkt, wo das war. Lässt du los, verschwinden Linie und Punkt.
-- Ohne iCloud zeigt die Fahrt wie bisher das Höhenprofil.
 
 ## Eine Fahrt bearbeiten
-Mit dem Stift oben rechts in der Detailansicht änderst du den **Namen** und das **Bike** einer Fahrt. Mit iCloud kommt die Änderung auch am Mac an. Ohne iCloud bearbeitest du Fahrten am Mac.
+Mit dem Stift oben rechts in der Detailansicht änderst du den **Namen** und das **Bike** einer Fahrt. Mit iCloud kommt die Änderung auch am Mac an. Ohne iCloud bleibt sie auf dem iPhone.
 
 ## Fahrten aus der Flow-App
 Die Bosch-Datei einer Fahrt hat mehr Werte als eine GPS-Aufnahme, z. B. Leistung und Trittfrequenz. So kommt sie auf das iPhone:
@@ -62,7 +59,7 @@ Die Bosch-Datei einer Fahrt hat mehr Werte als eine GPS-Aufnahme, z. B. Leistung
 - Eine GPX-Datei zu einer Bosch-Fahrt hängt Wattspur an die Fahrt an. Die Bosch-Werte bleiben.
 - **Eine Tour in mehreren Bosch-Teilen:** Die Flow-App teilt eine Tour mit langen Pausen in mehrere Fahrten, das iPhone nimmt sie als eine auf. Liegen die Bosch-Fahrten ganz in der Zeit deiner Aufnahme und ergeben zusammen ihre Strecke, fügt Wattspur sie zu einer Fahrt zusammen. Sie bekommt Name und Bike der Aufnahme und deren Puls, Schräglage und Belag. Die Aufnahme selbst kommt in den Papierkorb, dort kannst du sie wiederherstellen. Es ist egal, welche Datei zuletzt kommt. Hast du die Teile schon früher importiert, lege eine ihrer FIT-Dateien noch einmal ab.
 
-**Ohne iCloud** legt das iPhone die Datei in den Ordner „Wattspur Import“. Der Mac importiert sie von dort wie jede andere Datei.
+**Ohne iCloud** wird daraus nur eine Fahrt auf dem iPhone.
 
 ## Höhe beim Aufnehmen
 Wattspur misst die Höhe beim Aufnehmen mit dem **Barometer** des iPhones, also über den Luftdruck. Das ist viel ruhiger als die GPS-Höhe allein, deshalb liegt der Anstieg näher an dem von Bosch. Die Höhe über dem Meer kommt weiter vom GPS: Wattspur gleicht beide laufend ab. So stört auch eine Wetteränderung während der Fahrt nicht.
