@@ -38,26 +38,30 @@ struct RecordingPartsTests {
         return GPXWriter.document(name: "Harzrunde", segments: recording.gpxSegments, creator: GPXWriter.iPhoneCreator)
     }
 
-    /// A Bosch ride as the FIT import makes it, from `from` for `seconds`, 5 % longer than the GPS.
+    /// A Bosch ride as the FIT import makes it, with points from `from` for `seconds`, 5 % longer than
+    /// the GPS. `lead` seconds: the start in the file lies that long before the first point, as on
+    /// 7.11.2026 (start 11:00, first point 12:14), and the elapsed time counts from there.
     @discardableResult
-    private func boschRide(from offset: Int, seconds: Int, name: String) -> Ride {
-        let ride = Ride(name: name, startDate: start.addingTimeInterval(Double(offset)))
+    private func boschRide(from offset: Int, seconds: Int, name: String, lead: Int = 0) -> Ride {
+        let ride = Ride(name: name, startDate: start.addingTimeInterval(Double(offset - lead)))
         ride.sourceFormat = RideSource.fit.rawValue
-        ride.elapsedTime = Double(seconds)
+        ride.elapsedTime = Double(seconds + lead)
         ride.timerTime = Double(seconds)
         ride.distance = Double(seconds) * 6 * 1.05
         ride.averagePower = 150
-        ride.setSamples((0...seconds).map { RideSample(time: Double($0), latitude: 49.8, longitude: 8.8, power: 150) })
+        ride.setSamples((lead...(lead + seconds)).map { RideSample(time: Double($0), latitude: 49.8, longitude: 8.8, power: 150) })
         container.mainContext.insert(ride)
         return ride
     }
 
     private var legs: [(start: Int, seconds: Int)] { [(0, 600), (1500, 600), (3000, 600)] }
 
-    private var parts: RecordingPartsService {
-        RecordingPartsService(LibraryEnvironment(context: container.mainContext, importers: [FITRideImporter(), GPXRideImporter()],
-                                                 undoManager: nil, defaultBikeName: "Mein eBike"))
+    private var env: LibraryEnvironment {
+        LibraryEnvironment(context: container.mainContext, importers: [FITRideImporter(), GPXRideImporter()],
+                           undoManager: nil, defaultBikeName: "Mein eBike")
     }
+
+    private var parts: RecordingPartsService { RecordingPartsService(env) }
 
     private func id(_ result: ImportResult) -> UUID? {
         if case .imported(let id) = result.outcome { return id }
@@ -107,5 +111,34 @@ struct RecordingPartsTests {
         let ride = try #require(library.ride(withID: rideID))
         #expect(ride.isMerged)
         #expect(ride.name == "Harzrunde")
+    }
+
+    @Test("A Bosch start long before the first point still counts by the points (7.11.2026)")
+    func startBeforeFirstPoint() throws {
+        _ = library.importFile(data: recording(legs: legs), fileName: "Harzrunde.gpx")
+        let first = boschRide(from: 10, seconds: 590, name: "Tour 1", lead: 4440)
+        boschRide(from: 1510, seconds: 590, name: "Tour 2")
+        boschRide(from: 3010, seconds: 590, name: "Tour 3")
+
+        let merged = try #require(parts.joinParts(around: first))
+        #expect(merged.sortedParts.count == 3)
+        #expect(merged.samples.contains { $0.lean == 12 })
+    }
+
+    @Test("Bosch rides merged before count as parts, also when a part of them comes again")
+    func mergedBefore() throws {
+        let recorded = library.importFile(data: recording(legs: legs), fileName: "Harzrunde.gpx")
+        let recordingID = try #require(id(recorded))
+        let first = boschRide(from: 10, seconds: 590, name: "Tour 1", lead: 4440)
+        let second = boschRide(from: 1510, seconds: 590, name: "Tour 2")
+        let third = boschRide(from: 3010, seconds: 590, name: "Tour 3")
+        let earlier = try MergeService(env).merge([second, third], name: "Rückweg")
+        #expect(earlier.isMerged)
+
+        let merged = try #require(parts.joinParts(around: third))
+        #expect(merged.name == "Harzrunde")
+        #expect(Set(merged.sortedParts.map(\.id)) == Set([first.id, second.id, third.id]))
+        #expect(merged.samples.contains { $0.lean == 12 })
+        #expect(library.ride(withID: recordingID)?.deletedAt != nil)
     }
 }

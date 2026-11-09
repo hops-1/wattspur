@@ -7,6 +7,10 @@ Every DMG handed out to testers corresponds to one entry below.
 
 ## [Unreleased]
 
+### Fixed
+
+- **Bosch parts of one iPhone recording:** the parts of 7 Nov 2026 were not joined. A Bosch file can give a start long before its first point (there 11:00 for a ride that began at 12:14), so the part seemed to start before the recording; now the first and last point count. And Bosch rides merged before (by hand) were left out; now they count as parts too. Importing one of the Bosch files again joins them (B-274).
+
 ## [1.8.9] – 2026-11-09
 
 A small fix for the route by elevation. Together with the iPhone app 0.5.4 (13).
