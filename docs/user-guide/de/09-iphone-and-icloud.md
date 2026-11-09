@@ -78,6 +78,20 @@ Für Tests gibt es unter **Mehr › Test** den Schalter **Rohdaten der Bewegung 
 
 Wattspur merkt sich alle drei Einstellungen.
 
+## Kartenstile
+Ab 0.6 hat das iPhone die Kartenstile des Mac: von Apple **Standard**, **Satellit** und **Hybrid**, dazu **OpenStreetMap**, **CyclOSM** (für Radfahrer, mit Radwegen in Blau) und **OpenTopoMap** (Höhenlinien und Schattierung). Den Stil wählst du mit dem Knopf mit den Ebenen oben rechts auf der Karte einer Fahrt oder unter **Mehr › Karte › Kartenstil**. Er gilt für jede Karte, auch für die Aufnahme, und Wattspur merkt ihn sich.
+
+Die OpenStreetMap-Stile kommen von Servern, die Freiwillige betreiben. Wattspur lädt nur die Kacheln, die du siehst, und behält sie eine Weile. So erscheinen Gegenden, die du schon gesehen hast, auch ohne Netz. In einer Gegend, die du noch nicht gesehen hast, steht die Route auf einem leeren Grund. Die **Quellenangabe** der Karte bleibt in einer Ecke; auf der Karte einer Fahrt öffnet ein Tipp darauf die Lizenz.
+
+## Karte aller Fahrten
+Der Tab **Karte** zeigt alle deine Fahrten auf einer Karte.
+- **Linien** oder **Wärmekarte:** Die Wärmekarte färbt jede Fläche danach, wie viele Fahrten dort entlangführen, von Blau (eine Fahrt) bis Rot (20 und mehr).
+- **Zeitraum** (Knopf mit dem Kalender) und **Bike** (erst ab zwei Bikes) wählen, welche Fahrten erscheinen. Daneben ist der Kartenstil.
+- Unter den Knöpfen steht, wie viele Fahrten es sind und wie weit, zum Beispiel „84 Fahrten · 1.520 km“.
+- **Tippe auf eine Strecke:** Eine Liste zeigt die Fahrten dort, und sie heben sich auf der Karte ab. Ein Tipp auf eine öffnet sie.
+
+Wattspur merkt sich die Auswahl. Die Karte zeigt, wo du fährst, und damit auch, wo du wohnst. Überlege, bevor du ein Bildschirmfoto davon teilst.
+
 ## Eine Fahrt als GPX teilen
 In der Detailansicht einer Fahrt oben rechts, oder in der Liste mit langem Druck auf die Fahrt: **GPX teilen**. Die Datei enthält die ganze Spur mit Zeit und Höhe, dazu das Bike. Du kannst sie per AirDrop an den Mac schicken, in die Dateien-App legen oder in komoot öffnen. Fahrten ohne GPS lassen sich nicht teilen.
 
