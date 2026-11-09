@@ -20,22 +20,26 @@ struct RecordingPartsService: LibraryService {
     static let distanceShare = 0.9...1.2
 
     /// After a Bosch ride came in (or came again): if it belongs to a recording together with other
-    /// Bosch rides, merges them and returns the merged ride; else `nil` and nothing changes.
+    /// Bosch rides, merges them and returns the merged ride; else `nil` and nothing changes. A part of a
+    /// merged ride stands for that ride.
     @discardableResult
     func joinParts(around ride: Ride) -> Ride? {
-        guard ride.source == .fit, ride.mergedInto == nil, !ride.isMerged, ride.deletedAt == nil, !ride.isSample,
+        let ride = ride.mergedInto ?? ride
+        guard Self.isBosch(ride), ride.deletedAt == nil, !ride.isSample,
               let recording = recording(containing: ride) else { return nil }
         return joinParts(of: recording)
     }
 
     /// The Bosch rides inside `recording`, merged with its values, if they add up to its distance.
+    /// Bosch rides merged before (by hand, or two parts of three) count as one piece of it.
     @discardableResult
     func joinParts(of recording: Ride) -> Ride? {
-        let parts = boschRides(inside: recording)
+        let pieces = boschRides(inside: recording)
+        let parts = pieces.flatMap { $0.isMerged ? $0.sortedParts : [$0] }
         guard parts.count >= 2 else { return nil }
         let samples = recording.samples
         let path = GPSPath.length(of: samples)
-        let sum = parts.reduce(0) { $0 + $1.distance }
+        let sum = pieces.reduce(0) { $0 + $1.distance }
         guard path > 0, Self.distanceShare.contains(sum / path) else { return nil }
 
         let imports = ImportService(env)
@@ -45,38 +49,65 @@ struct RecordingPartsService: LibraryService {
             part.attachedSourceFormat = RideSource.gpx.rawValue
             if let bike = recording.bike { part.bike = bike }
         }
-        guard let merged = try? MergeService(env).merge(parts, name: recording.name) else { return nil }
+        guard let merged = try? MergeService(env).merge(pieces, name: recording.name) else { return nil }
         if let bike = recording.bike { merged.bike = bike }
         RideService(env).moveToTrash(recording)
         LibrarySave.save(context)
         return merged
     }
 
+    /// A Bosch ride on its own, or a merged ride made of Bosch rides only.
+    private static func isBosch(_ ride: Ride) -> Bool {
+        guard ride.mergedInto == nil else { return false }
+        if ride.isMerged { return ride.sortedParts.allSatisfy { $0.source == .fit } }
+        return ride.source == .fit
+    }
+
+    /// When the ride really ran: from its first to its last point. The start in a Bosch file can lie
+    /// long before the first point (7.11.2026: start 11:00, first point 12:14), and the elapsed time
+    /// counts from there; without points, the start and the elapsed time.
+    static func span(of ride: Ride) -> ClosedRange<Date> {
+        let samples = ride.samples
+        guard let first = samples.first?.time, let last = samples.last?.time, last >= first else {
+            return ride.startDate...ride.startDate.addingTimeInterval(max(ride.elapsedTime, 0))
+        }
+        return ride.startDate.addingTimeInterval(first)...ride.startDate.addingTimeInterval(last)
+    }
+
     /// A GPX ride on its own (no Bosch file attached, not merged) whose time covers the ride's.
     private func recording(containing ride: Ride) -> Ride? {
-        let start = ride.startDate, end = ride.startDate.addingTimeInterval(ride.elapsedTime)
-        let from = start.addingTimeInterval(-ImportService.similarLookBack)
+        let span = Self.span(of: ride)
+        let from = span.lowerBound.addingTimeInterval(-ImportService.similarLookBack)
+        let to = span.lowerBound.addingTimeInterval(Self.spanTolerance)
         let descriptor = FetchDescriptor<Ride>(predicate: #Predicate {
-            $0.startDate >= from && $0.startDate <= start && $0.deletedAt == nil && !$0.isSample
+            $0.startDate >= from && $0.startDate <= to && $0.deletedAt == nil && !$0.isSample
         })
         return ((try? context.fetch(descriptor)) ?? []).first { candidate in
-            candidate.source == .gpx && candidate.attachedSourceFormat == nil
-                && candidate.mergedInto == nil && !candidate.isMerged
-                && candidate.startDate.addingTimeInterval(-Self.spanTolerance) <= start
-                && candidate.startDate.addingTimeInterval(candidate.elapsedTime + Self.spanTolerance) >= end
+            guard candidate.source == .gpx, candidate.attachedSourceFormat == nil,
+                  candidate.mergedInto == nil, !candidate.isMerged else { return false }
+            return Self.window(of: candidate).contains(span.lowerBound) && Self.window(of: candidate).contains(span.upperBound)
         }
     }
 
-    /// The Bosch rides that lie wholly inside the recording's time, oldest first.
+    /// The recording's time with the tolerance on both sides.
+    private static func window(of recording: Ride) -> ClosedRange<Date> {
+        let span = span(of: recording)
+        return span.lowerBound.addingTimeInterval(-spanTolerance)...span.upperBound.addingTimeInterval(spanTolerance)
+    }
+
+    /// The Bosch rides (and merged Bosch rides) whose points lie wholly inside the recording's time,
+    /// oldest first. A Bosch start may lie hours before its first point, so the search reaches back.
     private func boschRides(inside recording: Ride) -> [Ride] {
-        let from = recording.startDate.addingTimeInterval(-Self.spanTolerance)
-        let to = recording.startDate.addingTimeInterval(recording.elapsedTime + Self.spanTolerance)
+        let window = Self.window(of: recording)
+        let from = window.lowerBound.addingTimeInterval(-ImportService.similarLookBack)
+        let to = window.upperBound
         let descriptor = FetchDescriptor<Ride>(predicate: #Predicate {
             $0.startDate >= from && $0.startDate <= to && $0.deletedAt == nil && !$0.isSample
         }, sortBy: [SortDescriptor(\.startDate)])
-        return ((try? context.fetch(descriptor)) ?? []).filter {
-            $0.source == .fit && $0.mergedInto == nil && !$0.isMerged
-                && $0.startDate.addingTimeInterval($0.elapsedTime) <= to
+        return ((try? context.fetch(descriptor)) ?? []).filter { ride in
+            guard ride.id != recording.id, Self.isBosch(ride) else { return false }
+            let span = Self.span(of: ride)
+            return window.contains(span.lowerBound) && window.contains(span.upperBound)
         }
     }
 }
