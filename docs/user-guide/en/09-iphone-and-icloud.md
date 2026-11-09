@@ -78,6 +78,20 @@ For tests, **More › Test** has the switch **Record Raw Motion**. When it is on
 
 Wattspur remembers all three settings.
 
+## Map styles
+From 0.6 on, the iPhone has the map styles of the Mac: Apple's **Standard**, **Satellite** and **Hybrid**, and **OpenStreetMap**, **CyclOSM** (for cyclists, with cycle paths in blue) and **OpenTopoMap** (contour lines and hill shading). Choose the style with the layers button at the top right of a ride's map or under **More › Map › Map Style**. It counts for every map, including the recording, and Wattspur remembers it.
+
+The OpenStreetMap styles come from servers run by volunteers. Wattspur loads only the tiles on screen and keeps them for a while, so areas you have seen also show without a network. In an area you have not seen, the route shows on a plain ground. The **credit** of the map stays in a corner; in the ride's map, tap it to read the licence.
+
+## Map of all rides
+The tab **Map** shows all your rides on one map.
+- **Lines** or **Heat Map:** the heat map colours each area by how many rides pass there, from blue (one ride) to red (20 and more).
+- **Period** (calendar button) and **Bike** (only from two bikes on) choose which rides show. Next to them is the map style.
+- Below the buttons you see how many rides it is and how far, for example “84 rides · 1,520 km”.
+- **Tap a route:** a list shows the rides there, and they stand out on the map. Tap one to open it.
+
+Wattspur remembers the choices. The map shows where you ride, and so where you live. Think before you share a screenshot of it.
+
 ## Sharing a ride as GPX
 At the top right of a ride's detail, or by touching and holding a ride in the list: **Share GPX**. The file holds the whole track with time and altitude, and the bike. You can AirDrop it to the Mac, save it in the Files app or open it in komoot. Rides without GPS cannot be shared.
 

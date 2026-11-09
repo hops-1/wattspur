@@ -7,6 +7,20 @@ Every DMG handed out to testers corresponds to one entry below.
 
 ## [Unreleased]
 
+## [1.8.10] – 2026-11-09
+
+Maps on the iPhone: the map styles of the Mac, also while recording, and a map of all rides with a heat map. The folder exchange with the iPhone has ended; Mac and iPhone share the library over iCloud. Plus the fix for Bosch parts of one recording. Together with the iPhone app 0.6.0 (14).
+
+### Added
+
+- **iPhone: map styles.** Besides Apple's Standard, Satellite and Hybrid, the iPhone now offers OpenStreetMap, CyclOSM and OpenTopoMap, as the Mac does. Choose the style with the layers button on the ride's map or under More › Map Style; it counts for every map and is remembered. Each OpenStreetMap style shows its credit; tap it in the ride's map to read the licence. Tiles are kept for a while, so areas you have seen also show without a network; an unseen area shows the route on a plain ground (B-226).
+- **iPhone: the recording map in your map style,** with the route coloured as before. The buttons for your position and the compass sit at the top right; north up and direction of travel up work as before (B-226).
+- **iPhone: map of all rides,** a new tab “Map”. It shows your rides as lines or as a heat map (how many rides pass an area, from blue to red), filtered by period and, with two bikes or more, by bike; the choices are remembered. Tap a route to see the rides there and open one (B-227).
+
+### Changed
+
+- **The maps of Mac and iPhone share one code base.** Nothing changes on the Mac; the route, its colours and the map styles are now drawn the same way on both (B-186).
+
 ### Removed
 
 - **Providing rides for the iPhone in the import folder** (Settings › Import › iPhone), as announced in 1.8.8: the iPhone app 0.6 has its own library and syncs it with the Mac over iCloud. The import folder itself works as before, also for a GPX shared from the iPhone. A subfolder “iPhone” left in the import folder is no longer written; you can delete it (B-263).

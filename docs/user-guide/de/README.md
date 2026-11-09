@@ -17,7 +17,7 @@ Wattspur ist eine kostenlose Mac-App für die Fahrten, die du mit einem Bosch-eB
 6. [Fragen und Fehlerbehebung](06-faq.md)
 7. [Profil und Bikes](07-profile-and-bikes.md): Körperdaten, mehrere Bikes, Fahrten zuweisen, Filter
 8. [GPX-Dateien importieren](08-importing-gpx.md): Fahrten anderer Bikes und Apps, geschätzte Summen, dieselbe Fahrt als FIT und GPX, Filter nach Quelle
-9. [iPhone und iCloud](09-iphone-and-icloud.md): Wattspur aufs iPhone, Sync einschalten, Sync-Status, ohne iCloud, GPX teilen, Motorrad
+9. [iPhone und iCloud](09-iphone-and-icloud.md): Wattspur aufs iPhone, Sync einschalten, Sync-Status, ohne iCloud, Kartenstile, Karte aller Fahrten, GPX teilen, Motorrad
 
 ## Voraussetzungen
 - Ein Mac mit **macOS 26** oder neuer.
