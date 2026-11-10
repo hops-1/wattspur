@@ -31,7 +31,7 @@ Nils wünscht sich eine iPad-App (10.11.2026). Sie soll alles können, was die M
 - **Seitenleiste:**
   - oben der Umschalter Rad · Fahrzeuge · Laufen (wie B-288 am Mac);
   - darunter Übersicht, Fahrten, Karte, ab iPad 2 auch Analyse und Highlights;
-  - unten Papierkorb, Geräte und Einstellungen.
+  - unten Profil (mit den Geräten, B-299), Papierkorb und die Rubriken aus „Mehr“ (B-298).
 - **Liste und Detail** stehen nebeneinander, wie am Mac.
 - **Detail:** Statt des Karussells zeigt das iPad alle Diagramme in einer Spalte unter der Karte. Dafür ist genug Platz.
 - **Übersicht:** Die Kacheln stehen in einem Raster, „Fahrt starten“ bleibt groß.
