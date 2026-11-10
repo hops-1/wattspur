@@ -49,7 +49,8 @@ private struct RecordingMapRepresentable: UIViewRepresentable {
         map.showsUserLocation = true
         map.showsCompass = false
         map.setUserTrackingMode(.follow, animated: false)
-        // The button that brings the own position back and the compass, at the top right as before.
+        // The button that brings the own position back and the compass, at the top right below the
+        // map style button (44 pt with 12 pt margin, from RecordingView).
         let buttons = UIStackView(arrangedSubviews: [MKUserTrackingButton(mapView: map), {
             let compass = MKCompassButton(mapView: map)
             compass.compassVisibility = .adaptive
@@ -61,8 +62,8 @@ private struct RecordingMapRepresentable: UIViewRepresentable {
         buttons.translatesAutoresizingMaskIntoConstraints = false
         map.addSubview(buttons)
         NSLayoutConstraint.activate([
-            buttons.topAnchor.constraint(equalTo: map.safeAreaLayoutGuide.topAnchor, constant: 8),
-            buttons.trailingAnchor.constraint(equalTo: map.safeAreaLayoutGuide.trailingAnchor, constant: -8),
+            buttons.topAnchor.constraint(equalTo: map.safeAreaLayoutGuide.topAnchor, constant: 68),
+            buttons.centerXAnchor.constraint(equalTo: map.safeAreaLayoutGuide.trailingAnchor, constant: -34),
         ])
         return map
     }
