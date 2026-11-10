@@ -73,7 +73,7 @@ For tests, **More › Test** has the switch **Record Raw Motion**. When it is on
 
 ## On the road: direction, elevation and profile
 - **Map in the direction of travel:** the button at the bottom right of the recording map switches between **north up** and **direction of travel up**, like a navigation app. The direction comes from the GPS movement, not from the compass, which is wrong in a pocket. Standing still and below about 7 km/h the map does not turn.
-- **Track by elevation:** the mountain button above it colours the track so far from blue (low) to red (high); the scale grows with the heights you have ridden. In the ride detail, the pink button at the top left of the map chooses between **Lean Angle**, **Surface**, **Elevation** and **Plain**, depending on what the ride has; the legend sits below it.
+- **Track by elevation:** the mountain button above it colours the track so far from blue (low) to red (high); the scale grows with the heights you have ridden. In the ride detail, the pink button at the top left of the map chooses between **Lean Angle**, **Surface**, **Elevation** and **Plain**, depending on what the ride has. The legend sits small at the bottom left; tap it to fold it to its colours, tap again for the values.
 - **Profile while riding:** swipe the figures below the map aside (in landscape, the figures in the bar on the left). The profile of the ride so far grows there; choose **Altitude** or **Speed** at the top.
 
 Wattspur remembers all three settings.
