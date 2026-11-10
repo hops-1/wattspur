@@ -79,7 +79,7 @@ For tests, **More › Test** has the switch **Record Raw Motion**. When it is on
 Wattspur remembers all three settings.
 
 ## Map styles
-From 0.6 on, the iPhone has the map styles of the Mac: Apple's **Standard**, **Satellite** and **Hybrid**, and **OpenStreetMap**, **CyclOSM** (for cyclists, with cycle paths in blue) and **OpenTopoMap** (contour lines and hill shading). Choose the style with the layers button at the top right of a ride's map, at the top left of the recording map, or under **More › Map › Map Style**. It counts for every map, including the recording, and Wattspur remembers it.
+From 0.6 on, the iPhone has the map styles of the Mac: Apple's **Standard**, **Satellite** and **Hybrid**, and **OpenStreetMap**, **CyclOSM** (for cyclists, with cycle paths in blue) and **OpenTopoMap** (contour lines and hill shading). Choose the style with the layers button at the top right of a ride's map and of the recording map, or under **More › Map › Map Style**. It counts for every map, including the recording, and Wattspur remembers it.
 
 The OpenStreetMap styles come from servers run by volunteers. Wattspur loads only the tiles on screen and keeps them for a while, so areas you have seen also show without a network. In an area you have not seen, the route shows on a plain ground. The **credit** of the map stays at the bottom right; in the ride's map, tap it to read the licence.
 

@@ -79,7 +79,7 @@ Für Tests gibt es unter **Mehr › Test** den Schalter **Rohdaten der Bewegung 
 Wattspur merkt sich alle drei Einstellungen.
 
 ## Kartenstile
-Ab 0.6 hat das iPhone die Kartenstile des Mac: von Apple **Standard**, **Satellit** und **Hybrid**, dazu **OpenStreetMap**, **CyclOSM** (für Radfahrer, mit Radwegen in Blau) und **OpenTopoMap** (Höhenlinien und Schattierung). Den Stil wählst du mit dem Knopf mit den Ebenen oben rechts auf der Karte einer Fahrt, oben links auf der Karte der Aufnahme oder unter **Mehr › Karte › Kartenstil**. Er gilt für jede Karte, auch für die Aufnahme, und Wattspur merkt ihn sich.
+Ab 0.6 hat das iPhone die Kartenstile des Mac: von Apple **Standard**, **Satellit** und **Hybrid**, dazu **OpenStreetMap**, **CyclOSM** (für Radfahrer, mit Radwegen in Blau) und **OpenTopoMap** (Höhenlinien und Schattierung). Den Stil wählst du mit dem Knopf mit den Ebenen oben rechts auf der Karte einer Fahrt und der Aufnahme oder unter **Mehr › Karte › Kartenstil**. Er gilt für jede Karte, auch für die Aufnahme, und Wattspur merkt ihn sich.
 
 Die OpenStreetMap-Stile kommen von Servern, die Freiwillige betreiben. Wattspur lädt nur die Kacheln, die du siehst, und behält sie eine Weile. So erscheinen Gegenden, die du schon gesehen hast, auch ohne Netz. In einer Gegend, die du noch nicht gesehen hast, steht die Route auf einem leeren Grund. Die **Quellenangabe** der Karte bleibt unten rechts; auf der Karte einer Fahrt öffnet ein Tipp darauf die Lizenz.
 

@@ -186,11 +186,11 @@ struct RecordingView: View {
                     .padding(.bottom, (isLandscape ? 12 : 0) + creditRoom)
             }
         }
-        .overlay(alignment: .topLeading) {
-            // The map style while riding (B-226), the same choice as in the detail and under More.
+        .overlay(alignment: .topTrailing) {
+            // The map style while riding (B-226), at the top right as on every other map; the buttons
+            // for the position and the compass sit below it.
             MapTypeMenu(mapType: $mapType, size: 44)
                 .padding(12)
-                .padding(.leading, isLandscape ? 290 : 0)
         }
     }
 
