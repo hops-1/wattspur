@@ -2734,6 +2734,26 @@
           }
         }
       }
+    },
+    "Shows the values of the colours" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Zeigt die Werte zu den Farben"
+          }
+        }
+      }
+    },
+    "Shows only the colours" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Zeigt nur die Farben"
+          }
+        }
+      }
     }
   },
   "version" : "1.1"

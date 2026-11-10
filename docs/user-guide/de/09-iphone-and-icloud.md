@@ -73,7 +73,7 @@ Für Tests gibt es unter **Mehr › Test** den Schalter **Rohdaten der Bewegung 
 
 ## Unterwegs: Fahrtrichtung, Höhe und Profil
 - **Karte in Fahrtrichtung:** Der Knopf unten rechts auf der Karte der Aufnahme wechselt zwischen **Norden oben** und **Fahrtrichtung oben**, wie in einer Navi-App. Die Richtung kommt aus der GPS-Bewegung, nicht vom Kompass, der in der Tasche falsch zeigt. Im Stand und unter etwa 7 km/h dreht sich die Karte nicht.
-- **Spur nach Höhe:** Der Knopf mit dem Berg darüber färbt die bisher gefahrene Spur von Blau (tief) bis Rot (hoch); die Skala wächst mit den Höhen, die du schon gefahren bist. Im Tour-Detail wählt der rosa Knopf oben links auf der Karte zwischen **Schräglage**, **Belag**, **Höhe** und **Einfarbig**, je nachdem, was die Fahrt hat; die Legende steht darunter.
+- **Spur nach Höhe:** Der Knopf mit dem Berg darüber färbt die bisher gefahrene Spur von Blau (tief) bis Rot (hoch); die Skala wächst mit den Höhen, die du schon gefahren bist. Im Tour-Detail wählt der rosa Knopf oben links auf der Karte zwischen **Schräglage**, **Belag**, **Höhe** und **Einfarbig**, je nachdem, was die Fahrt hat. Die Legende steht klein unten links; ein Tipp klappt sie auf die Farben zusammen, ein zweiter zeigt wieder die Werte.
 - **Profil während der Fahrt:** Wische die Werte unter der Karte zur Seite (im Querformat die Werte in der Leiste links). Dort wächst das Profil der bisherigen Fahrt mit; oben wählst du **Höhe** oder **Tempo**.
 
 Wattspur merkt sich alle drei Einstellungen.

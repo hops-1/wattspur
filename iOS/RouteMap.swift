@@ -20,6 +20,8 @@ struct RouteMap: View {
     @State private var elevation: RouteElevation.Result?
     /// Apple's map or an OpenStreetMap style (B-226), the same for every map; remembered.
     @AppStorage(PhoneSettingsKey.mapType) private var mapType: RideMapType = .standard
+    /// The legend shows only its colours; tapped on the detail's map, remembered.
+    @AppStorage(PhoneSettingsKey.mapLegendFolded) private var legendFolded = false
 
     /// The colourings this ride has.
     private var available: [TrackColouring] {
@@ -57,10 +59,12 @@ struct RouteMap: View {
                 Color.clear.contentShape(.rect)
             }
         }
-        .overlay(alignment: .topLeading) {
-            // The legend at the top left, so the credit at the bottom stays free; on the detail's map
-            // below the colouring.
-            if !interactive { legend.padding(8) }
+        .overlay(alignment: .bottomLeading) {
+            // Small at the bottom left, above the credit of an OpenStreetMap style, so it covers
+            // little of the ride; on the detail's map a tap folds it to its colours.
+            legendView
+                .padding(.leading, 8)
+                .padding(.bottom, 6 + (mapType.tileSource == nil ? 0 : (interactive ? 34 : 22)))
         }
         .overlay(alignment: .topTrailing) {
             // The map style on the detail map (B-226); the same choice as under More.
@@ -73,14 +77,11 @@ struct RouteMap: View {
             // The colourings the ride has (B-248, B-283), as one button with a menu: four segments
             // were too wide for a small iPhone and covered the style button.
             if interactive {
-                VStack(alignment: .leading, spacing: 8) {
-                    if !available.isEmpty {
-                        TrackColouringMenu(options: available + [.plain],
-                                           selection: Binding(get: { shown ?? .plain }, set: { colouring = $0 }))
-                    }
-                    legend
+                if !available.isEmpty {
+                    TrackColouringMenu(options: available + [.plain],
+                                       selection: Binding(get: { shown ?? .plain }, set: { colouring = $0 }))
+                        .padding(8)
                 }
-                .padding(8)
             }
         }
         .task(id: route.identity) {
@@ -89,12 +90,28 @@ struct RouteMap: View {
         .accessibilityHidden(!interactive)
     }
 
+    /// Without a title (the button above names the colouring), folded to the colours on request.
     @ViewBuilder private var legend: some View {
+        let style: LegendStyle = interactive && legendFolded ? .folded : .compact
         switch shown {
-        case .lean: LeanLegend()
-        case .surface: SurfaceLegend()
-        case .elevation: elevation.map { ElevationLegend(scale: $0.scale) }
+        case .lean: LeanLegend(style: style)
+        case .surface: SurfaceLegend(style: style)
+        case .elevation: elevation.map { ElevationLegend(scale: $0.scale, style: style) }
         case nil, .plain?: EmptyView()
+        }
+    }
+
+    @ViewBuilder private var legendView: some View {
+        if interactive, shown != nil, shown != .plain {
+            Button {
+                withAnimation(.snappy) { legendFolded.toggle() }
+            } label: {
+                legend
+            }
+            .buttonStyle(.plain)
+            .accessibilityHint(Text(legendFolded ? "Shows the values of the colours" : "Shows only the colours"))
+        } else {
+            legend
         }
     }
 
@@ -205,24 +222,42 @@ enum TrackColouring: String {
     }
 }
 
-/// What the colours of the track by height mean (B-283): blue at the lowest point, red at the highest.
-struct ElevationLegend: View {
-    let scale: RouteElevation.Scale
+/// How much a legend of the coloured track shows: with its title (recording), one line of values
+/// (the ride's map, whose button names the colouring), or only the colours (folded).
+enum LegendStyle { case full, compact, folded }
+
+/// The glass behind a legend, with the title only in `.full`.
+private struct LegendFrame<Content: View>: View {
+    let title: LocalizedStringKey
+    let style: LegendStyle
+    @ViewBuilder var content: Content
 
     var body: some View {
         VStack(alignment: .leading, spacing: 4) {
-            Text("Route Elevation").font(.caption2.weight(.semibold))
+            if style == .full { Text(title).font(.caption2.weight(.semibold)) }
+            content
+        }
+        .padding(.horizontal, style == .folded ? 6 : 8)
+        .padding(.vertical, style == .full ? 6 : 5)
+        .glassEffect(.regular, in: .rect(cornerRadius: style == .full ? 10 : 8))
+    }
+}
+
+/// What the colours of the track by height mean (B-283): blue at the lowest point, red at the highest.
+struct ElevationLegend: View {
+    let scale: RouteElevation.Scale
+    var style = LegendStyle.full
+
+    var body: some View {
+        LegendFrame(title: "Route Elevation", style: style) {
             HStack(spacing: 6) {
-                Text(RideFormat.altitude(scale.lowest)).font(.caption2).monospacedDigit()
+                if style != .folded { Text(RideFormat.altitude(scale.lowest)).font(.caption2).monospacedDigit() }
                 Capsule()
                     .fill(LinearGradient(colors: (0..<RouteElevation.levels).map(Color.elevation), startPoint: .leading, endPoint: .trailing))
-                    .frame(width: 50, height: 4)
-                Text(RideFormat.altitude(scale.highest)).font(.caption2).monospacedDigit()
+                    .frame(width: style == .folded ? 28 : 50, height: 4)
+                if style != .folded { Text(RideFormat.altitude(scale.highest)).font(.caption2).monospacedDigit() }
             }
         }
-        .padding(.horizontal, 8)
-        .padding(.vertical, 6)
-        .glassEffect(.regular, in: .rect(cornerRadius: 10))
         .accessibilityElement(children: .ignore)
         .accessibilityLabel(Text("Track coloured by elevation, from blue at \(RideFormat.altitude(scale.lowest)) to red at \(RideFormat.altitude(scale.highest))"))
     }
@@ -230,21 +265,19 @@ struct ElevationLegend: View {
 
 /// What the colours of the track by road surface mean (B-248).
 private struct SurfaceLegend: View {
+    var style = LegendStyle.full
+
     var body: some View {
-        VStack(alignment: .leading, spacing: 4) {
-            Text("Surface").font(.caption2.weight(.semibold))
-            HStack(spacing: 6) {
+        LegendFrame(title: "Surface", style: style) {
+            HStack(spacing: style == .folded ? 2 : 6) {
                 ForEach(RideMotion.SurfaceBand.allCases, id: \.self) { band in
                     HStack(spacing: 2) {
                         Capsule().fill(Color.surface(band)).frame(width: 10, height: 4)
-                        Text(band.name).font(.caption2)
+                        if style != .folded { Text(band.name).font(.caption2) }
                     }
                 }
             }
         }
-        .padding(.horizontal, 8)
-        .padding(.vertical, 6)
-        .glassEffect(.regular, in: .rect(cornerRadius: 10))
         .accessibilityElement(children: .ignore)
         .accessibilityLabel(Text("Track coloured by road surface: grey smooth, yellow uneven, brown rough"))
     }
@@ -263,23 +296,23 @@ extension RideMotion.SurfaceBand {
 
 /// What the colours of the track by lean angle mean (B-246).
 private struct LeanLegend: View {
+    var style = LegendStyle.full
+
     var body: some View {
-        VStack(alignment: .leading, spacing: 4) {
-            Text("Lean Angle").font(.caption2.weight(.semibold))
-            HStack(spacing: 6) {
+        LegendFrame(title: "Lean Angle", style: style) {
+            HStack(spacing: style == .folded ? 2 : 6) {
                 ForEach(RideMotion.LeanBand.allCases, id: \.self) { band in
                     HStack(spacing: 2) {
                         Capsule().fill(Color.lean(band)).frame(width: 10, height: 4)
-                        Text(verbatim: band == .extreme ? "40°+" : "\(Int(band.lowerBound))°")
-                            .font(.caption2)
-                            .monospacedDigit()
+                        if style != .folded {
+                            Text(verbatim: band == .extreme ? "40°+" : "\(Int(band.lowerBound))°")
+                                .font(.caption2)
+                                .monospacedDigit()
+                        }
                     }
                 }
             }
         }
-        .padding(.horizontal, 8)
-        .padding(.vertical, 6)
-        .glassEffect(.regular, in: .rect(cornerRadius: 10))
         .accessibilityElement(children: .ignore)
         .accessibilityLabel(Text("Track coloured by lean angle, from green upright to purple at 40° and more"))
     }

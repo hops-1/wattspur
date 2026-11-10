@@ -32,6 +32,8 @@ enum PhoneSettingsKey {
     static let ridesMapMode = "ridesMapMode"
     static let ridesMapPeriod = "ridesMapPeriod"
     static let ridesMapBike = "ridesMapBike"
+    /// The legend of the coloured track on the ride's map is folded to its colours (tap to unfold).
+    static let mapLegendFolded = "mapLegendFolded"
     /// Height or speed in the profile while recording (B-277).
     static let recordingProfileKind = "recordingProfileKind"
     /// Set by UI tests and screenshots: import the sample ride at launch.
