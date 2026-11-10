@@ -103,7 +103,7 @@ Live-Aktivität und Sperrbildschirm zeigen dieselben Werte.
   - Laufen: Pace, Höhe, Schrittfrequenz, Puls.
 - Die Karte aller Fahrten und die Wärmekarte zeigen nur die gewählte Sportart.
 
-**Mehr › Geräte (neu).** Bikes, Fahrzeuge und Schuhe lassen sich auch am iPhone anlegen und bearbeiten, mit Name, Art, Farbe, Foto und Kilometerstand. Die Einstellung „E-Bike oder Motorrad“ fällt weg.
+**Profil › Geräte (neu).** Die Geräte stehen im Profil am iPhone (B-299); „Mehr“ ist eine Liste mit Rubriken (B-298). Bikes, Fahrzeuge und Schuhe lassen sich auch am iPhone anlegen und bearbeiten, mit Name, Art, Farbe, Foto und Kilometerstand. Die Einstellung „E-Bike oder Motorrad“ fällt weg.
 
 **Widget.** „Diese Woche“ zeigt das Rad. Beim Bearbeiten des Widgets kann man die Sportart wählen.
 
