@@ -90,21 +90,9 @@
     "%lld more files could not be read" : {
       "localizations" : {
         "de" : {
-          "variations" : {
-            "plural" : {
-              "one" : {
-                "stringUnit" : {
-                  "state" : "translated",
-                  "value" : "%lld weitere Datei konnte nicht gelesen werden"
-                }
-              },
-              "other" : {
-                "stringUnit" : {
-                  "state" : "translated",
-                  "value" : "%lld weitere Dateien konnten nicht gelesen werden"
-                }
-              }
-            }
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%lld weitere Dateien konnten nicht gelesen werden"
           }
         },
         "en" : {
@@ -3082,6 +3070,146 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Papierkorb leeren"
+          }
+        }
+      }
+    },
+    "%lld new" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%lld neu"
+          }
+        }
+      }
+    },
+    "%lld completed" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%lld ergänzt"
+          }
+        }
+      }
+    },
+    "%lld duplicates" : {
+      "localizations" : {
+        "en" : {
+          "variations" : {
+            "plural" : {
+              "one" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "%lld duplicate"
+                }
+              },
+              "other" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "%lld duplicates"
+                }
+              }
+            }
+          }
+        },
+        "de" : {
+          "variations" : {
+            "plural" : {
+              "one" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "%lld doppelt"
+                }
+              },
+              "other" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "%lld doppelt"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "%lld files skipped, file type not supported" : {
+      "localizations" : {
+        "en" : {
+          "variations" : {
+            "plural" : {
+              "one" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "%lld file skipped, file type not supported"
+                }
+              },
+              "other" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "%lld files skipped, file type not supported"
+                }
+              }
+            }
+          }
+        },
+        "de" : {
+          "variations" : {
+            "plural" : {
+              "one" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "%lld Datei übersprungen, Dateityp wird nicht unterstützt"
+                }
+              },
+              "other" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "%lld Dateien übersprungen, Dateityp wird nicht unterstützt"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "Importing %lld of %lld …" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Importiere %1$lld von %2$lld …"
+          }
+        }
+      }
+    },
+    "Import Files …" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Dateien importieren …"
+          }
+        }
+      }
+    },
+    "Record a ride in the overview, or import FIT and GPX files." : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Nimm in der Übersicht eine Fahrt auf, oder importiere FIT- und GPX-Dateien."
+          }
+        }
+      }
+    },
+    "FIT and GPX files, several at once, also from iCloud Drive. Files you put into “On My iPhone › Wattspur › Import” in the Files app are imported when Wattspur opens; then they move to “Importiert”, or to “Fehler” if they cannot be read." : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "FIT- und GPX-Dateien, auch mehrere auf einmal und aus iCloud Drive. Dateien, die du in der Dateien-App unter „Auf meinem iPhone › Wattspur › Import“ ablegst, importiert Wattspur beim Öffnen; danach wandern sie nach „Importiert“, oder nach „Fehler“, wenn sie sich nicht lesen lassen."
           }
         }
       }

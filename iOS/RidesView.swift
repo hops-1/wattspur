@@ -6,6 +6,7 @@ import WattspurCore
 struct RidesView: View {
     @Environment(PhoneLibrary.self) private var library
     @Environment(\.isLandscape) private var isLandscape
+    @Environment(PhoneImport.self) private var phoneImport
     /// The ride shown beside the list in landscape (B-243); the newest until one is tapped.
     @State private var selection: UUID?
     /// Search and filters (B-222), kept by the app: the period tiles of the overview set them.
@@ -40,7 +41,8 @@ struct RidesView: View {
 
     private func filterBar(_ state: RideExchange.Library, months: [RideExchange.Library.Month]) -> some View {
         RideFilterBar(filter: $filter, compact: isLandscape, bikes: state.bikes.filter { !$0.isArchived || $0.id == filter.bike.bikeID },
-                      shown: months.reduce(0) { $0 + $1.rides.count }, total: state.rides.count)
+                      shown: months.reduce(0) { $0 + $1.rides.count }, total: state.rides.count,
+                      importFiles: { phoneImport.choosingFiles = true })
     }
 
     /// No rides at all, or none that pass the search and filters.
@@ -123,8 +125,13 @@ struct RidesView: View {
     }
 
     private var noRides: some View {
-        ContentUnavailableView("No Rides", systemImage: "bicycle",
-                               description: Text("Record a ride in the overview."))
+        ContentUnavailableView {
+            Label("No Rides", systemImage: "bicycle")
+        } description: {
+            Text("Record a ride in the overview, or import FIT and GPX files.")
+        } actions: {
+            Button("Import Files …") { phoneImport.choosingFiles = true }
+        }
     }
 
     private func list(_ state: RideExchange.Library) -> some View {

@@ -60,9 +60,48 @@ public final class ImportFlow {
     public var report: ImportReport?
     /// Duplicates of two FIT files: the old question for all of them at once (IMP-02).
     public var plainDuplicates: ImportReport? {
-        didSet { if plainDuplicates == nil { startWaitingIfIdle() } }
+        didSet {
+            // Closed without updating: the files were left out.
+            if plainDuplicates == nil, let oldValue, !updatingPlainDuplicates { summary.duplicates += oldValue.duplicates.count }
+            if plainDuplicates == nil { startWaitingIfIdle() }
+        }
     }
+    private var updatingPlainDuplicates = false
     public var attached: Attached?
+
+    /// How far a run of many files is (B-300); `nil` when none is running.
+    public struct Progress: Equatable, Sendable {
+        public var done: Int
+        public var total: Int
+    }
+
+    /// What the imports did since the last `takeSummary()`, once every question is answered (B-300):
+    /// “12 new, 3 added, 1 duplicate”. The apps word it.
+    public struct Summary: Equatable, Sendable {
+        /// Rides the imports added.
+        public var newRides = 0
+        /// Rides that were there and got more from a file: a GPX attached to a Bosch ride, the Bosch
+        /// values for a GPX recording (B-273), an update from a newer file.
+        public var completed = 0
+        /// Files of rides that were there and were left out.
+        public var duplicates = 0
+        /// Files that could not be read, and updates that failed.
+        public var failedFileNames: [String] = []
+        /// Files of a type Wattspur does not read.
+        public var unsupportedFileNames: [String] = []
+
+        public init() {}
+
+        public var isEmpty: Bool {
+            newRides == 0 && completed == 0 && duplicates == 0 && failedFileNames.isEmpty && unsupportedFileNames.isEmpty
+        }
+    }
+
+    public private(set) var progress: Progress?
+    public private(set) var summary = Summary()
+    /// Imports file by file and lets the screen draw in between, with `progress` (B-300). Off on the
+    /// Mac, where the import stays as it was.
+    public var stepsThroughFiles = false
     /// Called with the rides a run added, e.g. to select the last one and look for merge suggestions.
     public var onImported: ([UUID]) -> Void = { _ in }
     /// Called to show a ride; `nil` where the view cannot.
@@ -79,6 +118,15 @@ public final class ImportFlow {
     /// A question of an import is open.
     public var isAsking: Bool { bikeQuestion != nil || !comparisons.isEmpty || plainDuplicates != nil }
 
+    /// Something is still running, asking or waiting; the summary is complete once this is `false`.
+    public var isBusy: Bool { isAsking || progress != nil || !waiting.isEmpty }
+
+    /// The summary so far, and a fresh one for the next imports.
+    public func takeSummary() -> Summary {
+        defer { summary = Summary() }
+        return summary
+    }
+
     public init() {}
 
     nonisolated public static func isGPX(_ url: URL) -> Bool { url.pathExtension.lowercased() == "gpx" }
@@ -89,7 +137,7 @@ public final class ImportFlow {
     /// two or more bikes.
     public func start(_ urls: [URL], library: RideLibrary, record: @escaping ImportRecorder) {
         guard !urls.isEmpty else { return }
-        guard !isAsking else {
+        guard !isAsking, progress == nil else {
             waiting.append { [weak self] in self?.start(urls, library: library, record: record) }
             return
         }
@@ -121,15 +169,43 @@ public final class ImportFlow {
         startWaitingIfIdle()
     }
 
-    private func run(_ urls: [URL], gpxBike: Bike?, library: RideLibrary, record: ImportRecorder) {
+    private func run(_ urls: [URL], gpxBike: Bike?, library: RideLibrary, record: @escaping ImportRecorder) {
         bikeID = gpxBike?.id
-        let entries = urls.map { url -> ImportReport.Entry in
+        let importOne = { [self] (url: URL) -> ImportReport.Entry in
             let result = Self.isGPX(url) ? library.importFile(at: url, bike: gpxBike) : library.importFile(at: url)
             record(result, url)
             library.record(result, source: .manual)
+            count(result)
             return ImportReport.Entry(url: url, result: result)
         }
-        finish(entries, library: library)
+        guard stepsThroughFiles else {
+            finish(urls.map(importOne), library: library)
+            return
+        }
+        progress = Progress(done: 0, total: urls.count)
+        Task { [self] in
+            var entries: [ImportReport.Entry] = []
+            for url in urls {
+                entries.append(importOne(url))
+                progress?.done += 1
+                // Lets the screen draw the progress between two files.
+                await Task.yield()
+            }
+            progress = nil
+            finish(entries, library: library)
+            startWaitingIfIdle()
+        }
+    }
+
+    /// Counts a file for the summary; duplicates are counted once they are decided.
+    private func count(_ result: ImportResult) {
+        switch result.outcome {
+        case .imported: summary.newRides += 1
+        case .attached: summary.completed += 1
+        case .unsupported: summary.unsupportedFileNames.append(result.fileName)
+        case .failed: summary.failedFileNames.append(result.fileName)
+        case .duplicate, .fitForGPX: break
+        }
     }
 
     private func finish(_ entries: [ImportReport.Entry], library: RideLibrary) {
@@ -186,6 +262,7 @@ public final class ImportFlow {
 
     /// Leave the file out; the log keeps the line "duplicate".
     public func skip() {
+        summary.duplicates += 1
         advance()
     }
 
@@ -195,8 +272,10 @@ public final class ImportFlow {
             do {
                 try library.update(ride, withFileAt: comparison.entry.url)
                 library.recordUpdate(of: ride.id, fileName: comparison.entry.result.fileName, source: .manual)
+                summary.completed += 1
             } catch {
                 failedUpdates.append(comparison.entry.result.fileName)
+                summary.failedFileNames.append(comparison.entry.result.fileName)
             }
         }
         advance()
@@ -208,6 +287,7 @@ public final class ImportFlow {
         let result = library.importFile(at: comparison.entry.url, bike: bike, detectDuplicates: false)
         record(result, comparison.entry.url)
         library.record(result, source: .manual)
+        count(result)
         if case .imported(let id) = result.outcome { onImported([id]) }
         advance()
     }
@@ -227,7 +307,7 @@ public final class ImportFlow {
 
     /// Starts the next waiting import once no question is open.
     private func startWaitingIfIdle() {
-        guard !isAsking, !waiting.isEmpty else { return }
+        guard !isAsking, progress == nil, !waiting.isEmpty else { return }
         waiting.removeFirst()()
     }
 
@@ -239,11 +319,15 @@ public final class ImportFlow {
             do {
                 try library.update(ride, withFileAt: entry.url)
                 library.recordUpdate(of: id, fileName: entry.result.fileName, source: .manual)
+                summary.completed += 1
             } catch {
                 failed.append(entry.result.fileName)
+                summary.failedFileNames.append(entry.result.fileName)
             }
         }
+        updatingPlainDuplicates = true
         plainDuplicates = nil
+        updatingPlainDuplicates = false
         if !failed.isEmpty {
             self.report = ImportReport(entries: [], failedUpdates: failed)
         }

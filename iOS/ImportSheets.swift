@@ -3,8 +3,9 @@ import WattspurCore
 import WattspurKit
 
 extension View {
-    /// The questions and messages of a file opened with Wattspur (B-071): the iPhone's own sheets
-    /// for the decisions of the shared import (`ImportFlow`, B-188).
+    /// The questions and messages of the import (B-071, B-300): the iPhone's own sheets for the
+    /// decisions of the shared import (`ImportFlow`, B-188), the file picker, the progress of many
+    /// files and the summary at the end.
     func phoneImport(_ phoneImport: PhoneImport) -> some View {
         modifier(ImportSheets(phoneImport: phoneImport))
     }
@@ -59,18 +60,33 @@ private struct ImportSheets: ViewModifier {
             } message: { report in
                 Text(report.duplicateQuestion)
             }
-            .alert("Import Finished", isPresented: Binding(get: { flow.report != nil }, set: { if !$0 { flow.report = nil } }),
-                   presenting: flow.report) { _ in
+            // One summary once every file is read and every question answered (B-300); it takes
+            // the place of the flow's own report and notice.
+            .alert("Import Finished", isPresented: Binding(get: { phoneImport.summary != nil && !flow.isBusy },
+                                                           set: { if !$0 { phoneImport.summary = nil } }),
+                   presenting: phoneImport.summary) { _ in
                 Button("OK") {}
-            } message: { report in
-                Text(report.message)
+            } message: { summary in
+                Text(summary.message)
             }
-            .alert("GPX Attached", isPresented: Binding(get: { flow.attached != nil }, set: { if !$0 { flow.attached = nil } }),
-                   presenting: flow.attached) { _ in
-                Button("OK") {}
-            } message: { attached in
-                Text("The file was attached to “\(attached.rideName)”. The Bosch values stay as they are.")
+            .onChange(of: flow.isBusy) { _, busy in
+                if !busy { phoneImport.finishIfDone(library: library) }
             }
+            .fileImporter(isPresented: $phoneImport.choosingFiles, allowedContentTypes: PhoneImport.contentTypes,
+                          allowsMultipleSelection: true) { result in
+                switch result {
+                case .success(let urls): phoneImport.importFiles(urls, library: library)
+                case .failure(let error):
+                    phoneImport.notice = .init(title: String(localized: "Import Failed"), message: error.localizedDescription)
+                }
+            }
+            .overlay(alignment: .top) {
+                if let progress = flow.progress, progress.total > 1 {
+                    ImportProgressBadge(progress: progress)
+                        .transition(.move(edge: .top).combined(with: .opacity))
+                }
+            }
+            .animation(.default, value: flow.progress == nil)
             .alert(phoneImport.notice?.title ?? "", isPresented: Binding(get: { phoneImport.notice != nil },
                                                                          set: { if !$0 { phoneImport.notice = nil } }),
                    presenting: phoneImport.notice) { _ in
@@ -131,5 +147,25 @@ private struct BikeQuestionSheet: View {
             }
         }
         .presentationDetents([.medium])
+    }
+}
+
+/// “Importing 3 of 12 …” at the top while many files are read (B-300).
+private struct ImportProgressBadge: View {
+    let progress: ImportFlow.Progress
+
+    var body: some View {
+        HStack(spacing: 10) {
+            ProgressView(value: Double(progress.done), total: Double(max(progress.total, 1)))
+                .frame(width: 80)
+            Text("Importing \(progress.done) of \(progress.total) …")
+                .font(.subheadline)
+                .monospacedDigit()
+        }
+        .padding(.horizontal, 16)
+        .padding(.vertical, 10)
+        .glassEffect(.regular, in: .capsule)
+        .padding(.top, 8)
+        .accessibilityElement(children: .combine)
     }
 }

@@ -74,6 +74,13 @@ Die Bosch-Datei einer Fahrt hat mehr Werte als eine GPS-Aufnahme, z. B. Leistung
 
 **Ohne iCloud** wird daraus nur eine Fahrt auf dem iPhone.
 
+## FIT und GPX aus der Dateien-App
+Ab 0.6.2 holt Wattspur auch Dateien, die schon in der Dateien-App liegen, ganz ohne Mac:
+- **Dateien auswählen:** in **Fahrten** der Knopf **+** neben der Suche, oder **Mehr › iCloud & Bibliothek › Dateien importieren …**. Du kannst mehrere FIT- und GPX-Dateien auf einmal wählen, auch aus iCloud Drive und von anderen Anbietern.
+- **Ordner „Import“:** Lege Dateien in der Dateien-App unter **Auf meinem iPhone › Wattspur › Import** ab. Wattspur liest sie beim nächsten Öffnen. Danach liegen sie in **Importiert**, oder in **Fehler**, wenn sich eine Datei nicht lesen lässt.
+
+Es gelten dieselben Fragen wie oben: welches Bike, was mit einer Fahrt geschieht, die schon da ist, und eine Bosch-Datei ergänzt deine Aufnahme um Leistung, Trittfrequenz und Puls. Bei vielen Dateien zeigt Wattspur oben, wie weit es ist, und am Ende eine Zusammenfassung, zum Beispiel „12 neu, 3 ergänzt, 1 doppelt“.
+
 ## Höhe beim Aufnehmen
 Wattspur misst die Höhe beim Aufnehmen mit dem **Barometer** des iPhones, also über den Luftdruck. Das ist viel ruhiger als die GPS-Höhe allein, deshalb liegt der Anstieg näher an dem von Bosch. Die Höhe über dem Meer kommt weiter vom GPS: Wattspur gleicht beide laufend ab. So stört auch eine Wetteränderung während der Fahrt nicht.
 
