@@ -54,6 +54,8 @@ public struct DiagnosticReport: Sendable {
     public var createdAt: Date
     /// Why the library did not open (B-264); `nil` when it opened. The home folder is replaced by `~`.
     public var libraryError: String?
+    /// Rides met since the app started whose stored time series cannot be read (B-268).
+    public var damagedTimeSeries: Int
 
     public init(appVersion: String, build: String, commit: String,
                 parserVersion: Int = FITRideImporter.parserVersion,
@@ -62,7 +64,8 @@ public struct DiagnosticReport: Sendable {
                 locale: String = Locale.current.identifier,
                 rideCount: Int, trashedRideCount: Int, ridesByParserVersion: [Int: Int],
                 gpxRidesByParserVersion: [Int: Int] = [:],
-                importLog: [ImportLogEntry], createdAt: Date = .now, libraryError: String? = nil) {
+                importLog: [ImportLogEntry], createdAt: Date = .now, libraryError: String? = nil,
+                damagedTimeSeries: Int = 0) {
         self.appVersion = appVersion
         self.build = build
         self.commit = commit
@@ -77,6 +80,7 @@ public struct DiagnosticReport: Sendable {
         self.importLog = importLog
         self.createdAt = createdAt
         self.libraryError = libraryError.map { Self.withoutHome($0) }
+        self.damagedTimeSeries = damagedTimeSeries
     }
 
     /// The text of an error without the user's home folder, which holds the account name.
@@ -105,6 +109,7 @@ public struct DiagnosticReport: Sendable {
             "",
             libraryLine,
             "Rides: \(rideCount) (in trash: \(trashedRideCount))",
+            "Rides with an unreadable time series (met since launch): \(damagedTimeSeries)",
             "Rides by parser version: " + (ridesByParserVersion.isEmpty ? "–" :
                 ridesByParserVersion.keys.sorted().map { "v\($0): \(ridesByParserVersion[$0] ?? 0)" }.joined(separator: ", ")),
             "GPX rides by parser version: " + (gpxRidesByParserVersion.isEmpty ? "–" :

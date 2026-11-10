@@ -26,7 +26,8 @@ struct DiagnosticsView: View {
             trashedRideCount: rides.filter(\.isInTrash).count,
             ridesByParserVersion: byParser,
             gpxRidesByParserVersion: gpxByParser,
-            importLog: records.prefix(200).reversed().map(\.logEntry)
+            importLog: records.prefix(200).reversed().map(\.logEntry),
+            damagedTimeSeries: TimeSeriesDamage.count
         )
     }
 

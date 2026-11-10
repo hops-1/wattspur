@@ -239,11 +239,23 @@ extension Ride {
     /// The parts of a merged ride, oldest first.
     public var sortedParts: [Ride] { (parts ?? []).sorted { $0.startDate < $1.startDate } }
 
-    /// Decoded time series; empty if none is stored.
-    public var samples: [RideSample] {
-        guard let samplesData else { return [] }
-        return (try? PropertyListDecoder().decode([RideSample].self, from: samplesData)) ?? []
+    /// Decoded time series; empty if none is stored, and empty too if it cannot be read
+    /// (`readableSamples` tells the two apart, B-268).
+    public var samples: [RideSample] { readableSamples ?? [] }
+
+    /// The time series, or `nil` when one is stored but cannot be read (B-268, R-32). The damage
+    /// is logged and counted for the diagnostic report (`TimeSeriesDamage`).
+    public var readableSamples: [RideSample]? {
+        switch TimeSeriesDamage.decode(samplesData) {
+        case .success(let samples): return samples
+        case .failure(let error):
+            TimeSeriesDamage.note(id, error: error)
+            return nil
+        }
     }
+
+    /// `true` when a time series is stored but cannot be read.
+    public var hasDamagedSamples: Bool { readableSamples == nil }
 
     /// Copies all values from a parsed ride (used on import and on "update").
     /// Local edits such as the name are not touched.
@@ -322,7 +334,8 @@ extension Ride {
     /// current value get one first.
     func updatePeakPowerFromParts() {
         let values = sortedParts.map { part -> Int? in
-            if part.needsPeakPower { part.setPeakPower(PeakPower.bestAverage(of: part.samples)) }
+            // A part whose time series cannot be read keeps the value it has (B-268).
+            if part.needsPeakPower, let samples = part.readableSamples { part.setPeakPower(PeakPower.bestAverage(of: samples)) }
             return part.bestPower1Min
         }
         setPeakPower(values.compactMap { $0 }.max())
@@ -331,12 +344,19 @@ extension Ride {
     /// A merged ride's route: its parts' routes one after another (B-095), so the
     /// map draws no line across the gap. Parts without a current route get one first.
     func updateOverviewRouteFromParts() {
+        var damaged = false
         let routes = sortedParts.map { part in
             if let route = part.overviewRoute { return route }
-            let route = OverviewRoute(samplesData: part.samplesData)
+            guard let samples = part.readableSamples else {
+                damaged = true
+                return OverviewRoute(segments: [])
+            }
+            let route = OverviewRoute(samples: samples)
             part.setOverviewRoute(route)
             return route
         }
+        // Without one part the route would have a hole: the merged ride keeps the one it has (B-268).
+        guard !damaged else { return }
         setOverviewRoute(OverviewRoute(joining: routes))
     }
 }

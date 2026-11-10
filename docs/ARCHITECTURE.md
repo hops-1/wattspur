@@ -119,6 +119,7 @@ Die App legt bei jeder Änderung einen `WeekSnapshot` (Core) in die App Group `g
 | `Store/RideLibrary.swift` | Die eine Tür für beide Apps; reicht an die Dienste weiter (siehe „Entscheidungen“) |
 | `Store/Services/` | `ImportService`, `RideService`, `MergeService`, `BikeService`, `ImportLogService`, `GoalService`, `RouteGroupService`, `SyncMergeService`, dazu `LibraryService` (gemeinsame Umgebung und Rückgängig) |
 | `Store/LibrarySave.swift` | Speichern an einer Stelle, mit Meldung bei Fehlern |
+| `Store/TimeSeriesDamage.swift` | Zeitreihen, die sich nicht lesen lassen: ins Protokoll und in den Diagnosebericht; das Nachrechnen lässt deren gespeicherte Werte stehen (B-268) |
 | `Store/LibrarySync*.swift` | Konfiguration mit oder ohne CloudKit; Schema anlegen und Speicher messen (nur Debug) |
 | `Store/SyncMergeWatcher.swift`, `SyncMonitor.swift` | Wann Doppel zusammengeführt werden; Stand und Probleme des Sync |
 | `Store/PhoneDatabase.swift` | Die Bibliothek des iPhones: liefert `RideExchange`-Werte, speichert Aufnahmen, bearbeitet und löscht |
