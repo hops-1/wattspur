@@ -252,6 +252,29 @@ struct PhoneDatabaseTests {
         database.purgeTrash(now: now)
         #expect(database.trash().map(\.id) == [recent])
     }
+
+    @Test("The head of More shows the oldest rider with name and body data, and reading makes none")
+    func riderDetails() throws {
+        for rider in try container.mainContext.fetch(FetchDescriptor<Rider>()) { container.mainContext.delete(rider) }
+        #expect(database.riderDetails() == nil)
+        #expect(try container.mainContext.fetch(FetchDescriptor<Rider>()).isEmpty)
+
+        let newer = Rider(name: "iPhone")
+        newer.createdAt = Date(timeIntervalSince1970: 2_000)
+        let older = Rider(name: "Nils")
+        older.createdAt = Date(timeIntervalSince1970: 1_000)
+        older.weightKg = 80
+        older.birthYear = 1970
+        older.sex = .male
+        container.mainContext.insert(newer)
+        container.mainContext.insert(older)
+
+        let details = try #require(database.riderDetails())
+        #expect(details.name == "Nils")
+        #expect(details.initial == "N")
+        #expect(details.body == BodyProfile(weightKg: 80, birthYear: 1970, sex: .male))
+        #expect(RiderDetails(name: "  ").initial == nil)
+    }
 }
 
 /// The map of all rides on the iPhone (B-227).
@@ -308,4 +331,5 @@ struct PhoneSyncChoiceTests {
         _ = database.library.importSample(data: try Fixture.data("reinheim-rundfahrt"), name: "Beispielfahrt")
         #expect(try database.snapshot(generator: "t").rides.isEmpty)
     }
+
 }

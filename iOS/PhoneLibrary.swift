@@ -27,6 +27,8 @@ final class PhoneLibrary {
     private(set) var syncMonitor: SyncMonitor?
     /// The trash of the store (B-217), newest first.
     private(set) var trash: [PhoneDatabase.TrashedRide] = []
+    /// The rider for the head of “More” (B-298); `nil` before there is one.
+    private(set) var rider: RiderDetails?
 
     init(database: PhoneDatabase?, mode: PhoneDatabase.Mode = .local) {
         self.database = database
@@ -70,6 +72,7 @@ final class PhoneLibrary {
             problem = error.localizedDescription
         }
         trash = database.trash()
+        rider = database.riderDetails()
     }
 
     /// The pending reload after changes from iCloud.

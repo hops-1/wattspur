@@ -220,6 +220,14 @@ public final class PhoneDatabase {
         LibrarySave.save(context)
     }
 
+    /// The rider for the head of “More” (B-298); `nil` before there is one. Reads only: it does not
+    /// make a rider the way `RideLibrary.defaultRider()` does. With two riders before the sync
+    /// merged them, the oldest, the one that stays (as `SyncMergeService` decides).
+    public func riderDetails() -> RiderDetails? {
+        let riders = (try? context.fetch(FetchDescriptor<Rider>())) ?? []
+        return riders.min { ($0.createdAt, $0.id.uuidString) < ($1.createdAt, $1.id.uuidString) }?.details
+    }
+
     /// The trash, last trashed first. Merged rides' parts and the sample ride are not in it.
     public func trash() -> [TrashedRide] {
         let descriptor = FetchDescriptor<Ride>(predicate: #Predicate { $0.deletedAt != nil && $0.mergedInto == nil })

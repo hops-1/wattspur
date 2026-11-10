@@ -10,7 +10,7 @@ From Wattspur 1.8.4 on, Wattspur also runs on the iPhone, first for testers on T
 ## Turning sync on
 **On the Mac:** **Wattspur › Settings › iCloud › Sync with iCloud**. Each time, Wattspur first saves a backup of your library beside it. Sync starts the next time you open Wattspur. The first upload takes a few minutes, depending on how much there is.
 
-**On the iPhone:** **More › Sync with iCloud** is already on in a new installation. After the first sync your rides from the Mac are there.
+**On the iPhone:** **More › iCloud & Library › Sync with iCloud** is already on in a new installation. After the first sync your rides from the Mac are there.
 
 The Mac and the iPhone have to be signed in to iCloud with the same Apple Account.
 
@@ -18,12 +18,25 @@ The Mac and the iPhone have to be signed in to iCloud with the same Apple Accoun
 
 **How fast:** a change reaches the other device after 30 seconds to about a minute. Without a network the iPhone records as usual. The ride reaches the Mac once there is a network again.
 
+## The tab “More”
+From 0.6.2 on, **More** is a list like the iOS Settings. Each row opens a page of its own:
+- **Profile** (at the top, with photo and name): your data for the calories. You set it on the Mac under **Profile**; with iCloud it comes to the iPhone. Editing it on the iPhone comes with a later version.
+- **Recording:** the vehicle, e-bike or motorcycle.
+- **Maps:** the map style for every map.
+- **iCloud & Library:** sync on or off, when it last synced, hints when something is wrong.
+- **Trash:** deleted rides, for 30 days.
+- **Help & Handbook:** this handbook and what is new in each version.
+- **About Wattspur:** version, map sources and privacy.
+- **Test Tools:** only in builds from TestFlight.
+
+In landscape the list is on the left and the chosen page on the right.
+
 ## The same rider and bike twice
 A new iPhone first makes its own rider and its own “My eBike”. After the first sync, Wattspur merges them with those of the Mac, on both devices. The older one always stays, usually the Mac's. The same holds for goals and for a file you imported on both devices.
 
 ## Is everything synced?
 - **On the Mac:** **Settings › iCloud** shows “On. Last synced … ago.”
-- **On the iPhone:** **More › iCloud › Last synced**.
+- **On the iPhone:** **More › iCloud & Library › Last synced**.
 
 Short delays are normal and get no message. You see a hint when:
 - the device is not signed in to iCloud, or iCloud is off for Wattspur,
@@ -36,7 +49,7 @@ On the iPhone a warning also shows while changes still wait for the upload.
 If you turn iCloud off for Wattspur on the iPhone (**Settings › your name › iCloud**) or sign out of iCloud, iOS deletes the copy on the iPhone. Your rides stay in iCloud and on the Mac and come back once it is on again. A ride that was not uploaded yet may be lost, though. So turn it off only when **Last synced** shows no warning.
 
 ## Without iCloud
-If you do not want to use iCloud, or your storage is full and you do not want a larger plan, turn off **More › Sync with iCloud** on the iPhone. It takes effect the next time Wattspur opens. The rides then stay on the iPhone, and new recordings too. To get a ride to the Mac, send it with **Share GPX**, e.g. by AirDrop, and import it there like any other file.
+If you do not want to use iCloud, or your storage is full and you do not want a larger plan, turn off **More › iCloud & Library › Sync with iCloud** on the iPhone. It takes effect the next time Wattspur opens. The rides then stay on the iPhone, and new recordings too. To get a ride to the Mac, send it with **Share GPX**, e.g. by AirDrop, and import it there like any other file.
 
 **The folder exchange has ended:** up to the iPhone app 0.5 and Wattspur 1.8.9, the iPhone could also show the rides the Mac wrote into the folder “Wattspur Import”. With the iPhone app 0.6 and Wattspur 1.8.10 this way is gone. If you used it, the iPhone tells you once; turn on sync with iCloud on both, and your rides from the Mac come to the iPhone. A subfolder “iPhone” left in the import folder is no longer used; you can delete it.
 
@@ -69,7 +82,7 @@ The first time you record, the iPhone asks once for **Motion & Fitness**. If you
 ## Lean angle, acceleration and surface
 From 0.5.1 on, the iPhone also reads its motion sensors while recording, with the same permission **Motion & Fitness** as the barometer. The ride detail then has tiles for the strongest lean to the left and right, the strongest acceleration and braking, the best time from a standstill and the share of uneven surface. The carousel has the page **Lean Angle**. The map colours the track by lean angle; the switch at the top of the map changes to **Surface**. How the values come about is under [Metrics](05-metrics.md). The Mac shows the same values in the ride detail.
 
-For tests, **More › Test** has the switch **Record Raw Motion**. When it is on, every recording also puts a file into the Files app (**On My iPhone › Wattspur › Bewegung**), about 20 MB per hour. Normally it stays off.
+For tests, **More › Test Tools** has the switch **Record Raw Motion**. When it is on, every recording also puts a file into the Files app (**On My iPhone › Wattspur › Bewegung**), about 20 MB per hour. Normally it stays off. The test tools are only in builds from TestFlight.
 
 ## On the road: direction, elevation and profile
 - **Map in the direction of travel:** the button at the bottom right of the recording map switches between **north up** and **direction of travel up**, like a navigation app. The direction comes from the GPS movement, not from the compass, which is wrong in a pocket. Standing still and below about 7 km/h the map does not turn.
@@ -79,7 +92,7 @@ For tests, **More › Test** has the switch **Record Raw Motion**. When it is on
 Wattspur remembers all three settings.
 
 ## Map styles
-From 0.6 on, the iPhone has the map styles of the Mac: Apple's **Standard**, **Satellite** and **Hybrid**, and **OpenStreetMap**, **CyclOSM** (for cyclists, with cycle paths in blue) and **OpenTopoMap** (contour lines and hill shading). Choose the style with the layers button at the top right of a ride's map and of the recording map, or under **More › Map › Map Style**. It counts for every map, including the recording, and Wattspur remembers it.
+From 0.6 on, the iPhone has the map styles of the Mac: Apple's **Standard**, **Satellite** and **Hybrid**, and **OpenStreetMap**, **CyclOSM** (for cyclists, with cycle paths in blue) and **OpenTopoMap** (contour lines and hill shading). Choose the style with the layers button at the top right of a ride's map and of the recording map, or under **More › Maps › Map Style**. It counts for every map, including the recording, and Wattspur remembers it.
 
 The OpenStreetMap styles come from servers run by volunteers. Wattspur loads only the tiles on screen and keeps them for a while, so areas you have seen also show without a network. In an area you have not seen, the route shows on a plain ground. The **credit** of the map stays at the bottom right; in the ride's map, tap it to read the licence.
 

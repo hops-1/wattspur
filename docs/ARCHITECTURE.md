@@ -105,10 +105,10 @@ Die App legt bei jeder Änderung einen `WeekSnapshot` (Core) in die App Group `g
 | `Ride/` | `ParsedRide`, Samples, Zusammenführen und Vorschläge, Zeitachse über Teile und Tage (`PartTimeline`), Reihen für Diagramme, GPX-Schreiber, Kalorienmodell, Routen und Routenähnlichkeit, gespeicherte Strecken, beste Minute, Steigung (`RideTrack`), Bewegungswerte einer Fahrt (`RideMotion`), Radumfang (`WheelCheck`) |
 | `Recording/` | Rechnung der Aufnahme ohne Sensoren: `RideRecording` (Punkte, Pausen, Strecke, Anstieg), `AltitudeFusion` (Barometer an GPS-Höhe, grobe GPS-Höhe ohne Barometer), `MotionFusion` (Schräglage, Beschleunigung, Rütteln), `MotionRawLog` (CSV für den Test V-16) |
 | `Analysis/` | Summen und Trends, Rekorde, Vergleich, Karte (Filter, Dichte), neue Wege, Verlauf einer Strecke, Kurvigkeit, `TrackFigures` |
-| `Library/` | Filter, Quellen, Bike-Statistik und -Profil, Duplikat-Fakten, Tagesfilter, Summen für Woche und Monat, `WeekSnapshot` für das Widget |
+| `Library/` | Filter, Quellen, Bike-Statistik und -Profil, Fahrer für „Mehr“ am iPhone (`RiderDetails`), Duplikat-Fakten, Tagesfilter, Summen für Woche und Monat, `WeekSnapshot` für das Widget |
 | `Exchange/` | `RideExchange`: das Austauschformat (JSON) und die Werte, die die iPhone-Views zeigen, aus beiden Quellen |
 | `Map/` | Kachelserver und Kachel-Rechnung (Web Mercator); kurvige Straßen von roadcurvature.com mit eigenem Dateiformat und KMZ-Leser |
-| `Support/` | Diagnosebericht, Versionen (`AppVersion`), Version und Commit der laufenden App (`AppInfo`) |
+| `Support/` | Diagnosebericht, Versionen (`AppVersion`), Version und Commit der laufenden App (`AppInfo`), Links ins Handbuch für beide Apps (`HelpLinks`) |
 
 ## WattspurKit (Store)
 
