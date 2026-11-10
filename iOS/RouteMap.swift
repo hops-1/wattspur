@@ -57,13 +57,10 @@ struct RouteMap: View {
                 Color.clear.contentShape(.rect)
             }
         }
-        .overlay(alignment: .bottomLeading) {
-            switch shown {
-            case .lean: LeanLegend().padding(8)
-            case .surface: SurfaceLegend().padding(8)
-            case .elevation: elevation.map { ElevationLegend(scale: $0.scale).padding(8) }
-            case nil, .plain?: EmptyView()
-            }
+        .overlay(alignment: .topLeading) {
+            // The legend at the top left, so the credit at the bottom stays free; on the detail's map
+            // below the colouring.
+            if !interactive { legend.padding(8) }
         }
         .overlay(alignment: .topTrailing) {
             // The map style on the detail map (B-226); the same choice as under More.
@@ -73,15 +70,16 @@ struct RouteMap: View {
             }
         }
         .overlay(alignment: .topLeading) {
-            // A switch on the detail map between the colourings the ride has (B-248, B-283).
-            if interactive, !available.isEmpty {
-                Picker("Track Colour", selection: Binding(get: { shown ?? .plain }, set: { colouring = $0 })) {
-                    ForEach(available + [.plain], id: \.self) { option in
-                        Text(option.name).tag(option)
+            // The colourings the ride has (B-248, B-283), as one button with a menu: four segments
+            // were too wide for a small iPhone and covered the style button.
+            if interactive {
+                VStack(alignment: .leading, spacing: 8) {
+                    if !available.isEmpty {
+                        TrackColouringMenu(options: available + [.plain],
+                                           selection: Binding(get: { shown ?? .plain }, set: { colouring = $0 }))
                     }
+                    legend
                 }
-                .pickerStyle(.segmented)
-                .fixedSize()
                 .padding(8)
             }
         }
@@ -89,6 +87,15 @@ struct RouteMap: View {
             elevation = RouteElevation.stretches(route)
         }
         .accessibilityHidden(!interactive)
+    }
+
+    @ViewBuilder private var legend: some View {
+        switch shown {
+        case .lean: LeanLegend()
+        case .surface: SurfaceLegend()
+        case .elevation: elevation.map { ElevationLegend(scale: $0.scale) }
+        case nil, .plain?: EmptyView()
+        }
     }
 
     private var segments: [[CLLocationCoordinate2D]] {
@@ -110,12 +117,16 @@ struct RouteMap: View {
     }
 }
 
-/// Chooses the map style (B-226): Apple's three and the OpenStreetMap styles, as on the Mac.
-struct MapTypeMenu: View {
+/// Chooses the map style (B-226): Apple's three and the OpenStreetMap styles, as on the Mac. `extra`
+/// adds choices above the styles, e.g. lines or heat map on the map of all rides.
+struct MapTypeMenu<Extra: View>: View {
     @Binding var mapType: RideMapType
+    var size: CGFloat = 36
+    @ViewBuilder var extra: Extra
 
     var body: some View {
         Menu {
+            extra
             Picker("Map Style", selection: $mapType) {
                 Section("Apple") {
                     ForEach(RideMapType.apple) { Text($0.label).tag($0) }
@@ -126,12 +137,46 @@ struct MapTypeMenu: View {
             }
         } label: {
             Image(systemName: "square.3.layers.3d")
-                .font(.body)
-                .frame(width: 36, height: 36)
+                .font(size > 40 ? .title3 : .body)
+                .frame(width: size, height: size)
         }
         .buttonStyle(.glass)
         .buttonBorderShape(.circle)
+        .tint(Color.track)
         .accessibilityLabel(Text("Map Style"))
+    }
+}
+
+extension MapTypeMenu where Extra == EmptyView {
+    init(mapType: Binding<RideMapType>, size: CGFloat = 36) {
+        self.init(mapType: mapType, size: size) { EmptyView() }
+    }
+}
+
+/// The colouring of the track on the detail map (B-248, B-283): a button in the track colour with the
+/// chosen one, the others in its menu. Fits a small iPhone, also in landscape.
+struct TrackColouringMenu: View {
+    let options: [TrackColouring]
+    @Binding var selection: TrackColouring
+
+    var body: some View {
+        Menu {
+            Picker("Track Colour", selection: $selection) {
+                ForEach(options, id: \.self) { option in
+                    Label(option.name, systemImage: option.symbol).tag(option)
+                }
+            }
+        } label: {
+            Label(selection.name, systemImage: selection.symbol)
+                .font(.subheadline.weight(.medium))
+                .lineLimit(1)
+                .padding(.horizontal, 12)
+                .frame(height: 36)
+        }
+        .buttonStyle(.glass)
+        .tint(Color.track)
+        .accessibilityLabel(Text("Track Colour"))
+        .accessibilityValue(Text(selection.name))
     }
 }
 
@@ -147,6 +192,15 @@ enum TrackColouring: String {
         case .surface: "Surface"
         case .elevation: "Route Elevation"
         case .plain: "Plain"
+        }
+    }
+
+    var symbol: String {
+        switch self {
+        case .lean: "angle"
+        case .surface: "road.lanes"
+        case .elevation: "mountain.2"
+        case .plain: "scribble"
         }
     }
 }

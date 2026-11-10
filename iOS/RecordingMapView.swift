@@ -20,11 +20,12 @@ struct RecordingMapView: View {
     var body: some View {
         RecordingMapRepresentable(mapType: mapType, segments: segments, colouring: colouring,
                                   heading: heading, center: center, dark: colorScheme == .dark)
-            .overlay(alignment: .topLeading) {
-                // At the top: below are the buttons and the legend.
+            .overlay(alignment: .bottomTrailing) {
+                // At the bottom right as on every other map; the buttons and the legend leave room for it.
                 if let source = mapType.tileSource {
                     TileAttribution(source: source)
-                        .padding(8)
+                        .padding(.trailing, 6)
+                        .padding(.bottom, 4)
                 }
             }
     }

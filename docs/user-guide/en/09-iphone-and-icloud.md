@@ -73,20 +73,20 @@ For tests, **More › Test** has the switch **Record Raw Motion**. When it is on
 
 ## On the road: direction, elevation and profile
 - **Map in the direction of travel:** the button at the bottom right of the recording map switches between **north up** and **direction of travel up**, like a navigation app. The direction comes from the GPS movement, not from the compass, which is wrong in a pocket. Standing still and below about 7 km/h the map does not turn.
-- **Track by elevation:** the mountain button above it colours the track so far from blue (low) to red (high); the scale grows with the heights you have ridden. In the ride detail, choose above the map between **Lean Angle**, **Surface**, **Elevation** and **Plain**, depending on what the ride has.
+- **Track by elevation:** the mountain button above it colours the track so far from blue (low) to red (high); the scale grows with the heights you have ridden. In the ride detail, the pink button at the top left of the map chooses between **Lean Angle**, **Surface**, **Elevation** and **Plain**, depending on what the ride has; the legend sits below it.
 - **Profile while riding:** swipe the figures below the map aside (in landscape, the figures in the bar on the left). The profile of the ride so far grows there; choose **Altitude** or **Speed** at the top.
 
 Wattspur remembers all three settings.
 
 ## Map styles
-From 0.6 on, the iPhone has the map styles of the Mac: Apple's **Standard**, **Satellite** and **Hybrid**, and **OpenStreetMap**, **CyclOSM** (for cyclists, with cycle paths in blue) and **OpenTopoMap** (contour lines and hill shading). Choose the style with the layers button at the top right of a ride's map or under **More › Map › Map Style**. It counts for every map, including the recording, and Wattspur remembers it.
+From 0.6 on, the iPhone has the map styles of the Mac: Apple's **Standard**, **Satellite** and **Hybrid**, and **OpenStreetMap**, **CyclOSM** (for cyclists, with cycle paths in blue) and **OpenTopoMap** (contour lines and hill shading). Choose the style with the layers button at the top right of a ride's map, at the top left of the recording map, or under **More › Map › Map Style**. It counts for every map, including the recording, and Wattspur remembers it.
 
-The OpenStreetMap styles come from servers run by volunteers. Wattspur loads only the tiles on screen and keeps them for a while, so areas you have seen also show without a network. In an area you have not seen, the route shows on a plain ground. The **credit** of the map stays in a corner; in the ride's map, tap it to read the licence.
+The OpenStreetMap styles come from servers run by volunteers. Wattspur loads only the tiles on screen and keeps them for a while, so areas you have seen also show without a network. In an area you have not seen, the route shows on a plain ground. The **credit** of the map stays at the bottom right; in the ride's map, tap it to read the licence.
 
 ## Map of all rides
 The tab **Map** shows all your rides on one map.
-- **Lines** or **Heat Map:** the heat map colours each area by how many rides pass there, from blue (one ride) to red (20 and more).
-- **Period** (calendar button) and **Bike** (only from two bikes on) choose which rides show. Next to them is the map style.
+- **Lines** or **Heat Map** (in the layers button, above the map styles): the heat map colours each area by how many rides pass there, from blue (one ride) to red (20 and more).
+- **Period** (calendar button) and **Bike** (only from two bikes on) choose which rides show. At the top right, the layers button chooses the map style.
 - Below the buttons you see how many rides it is and how far, for example “84 rides · 1,520 km”.
 - **Tap a route:** a list shows the rides there, and they stand out on the map. Tap one to open it.
 
