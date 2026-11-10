@@ -7,9 +7,23 @@ Every DMG handed out to testers corresponds to one entry below.
 
 ## [Unreleased]
 
+## [1.8.11] – 2026-11-11
+
+Tidying up: “More” on the iPhone as a list like the iOS Settings, FIT and GPX from the Files app on the iPhone without a Mac, and two small fixes from the review. Together with the iPhone app 0.6.2 (18).
+
+### Added
+
+- **iPhone: FIT and GPX from the Files app.** The “+” beside the search in Rides, or More › iCloud & Library › Import Files …, opens the file picker: several FIT and GPX files at once, also from iCloud Drive. Files put into “On My iPhone › Wattspur › Import” are imported when Wattspur opens and then move to “Importiert”, or to “Fehler” if they cannot be read. The questions are the same as for a shared file (bike, ride already there, Bosch values for a recording); many files show a progress and one summary at the end, for example “12 new, 3 completed, 1 duplicate” (B-300).
+
 ### Changed
 
+- **iPhone app 0.6.2: “More” as a list.** A profile head with photo, name, rides and distance, then Recording, Maps, iCloud & Library, Trash, Help & Handbook, About Wattspur, and Test Tools in TestFlight builds only. Each opens a page of its own; in landscape the list is on the left and the page on the right. All settings stay as they were (B-298).
 - **iPhone app 0.6.1: map controls, from the first tests of 0.6.0.** The recording map now has the map style button too, at the top right as on every map, with the buttons for the position and the compass below it. On the ride's map, the colouring (lean angle, surface, elevation, plain) is one pink button with a menu instead of four white segments, which were hard to read and covered the style button on smaller iPhones. The legend is one small line at the bottom left, above the credit; a tap folds it to its colours (remembered). On the map of all rides, lines or heat map is chosen in the layers button. The credit of an OpenStreetMap style is at the bottom right on every map, also while recording. The Mac is unchanged: there the colourings are four small buttons with icons.
+
+### Fixed
+
+- **A damaged time series no longer passes for an empty one.** If the stored points of a ride cannot be read, the diagnostic report (Help › Create Diagnostics…) now counts it, and the background work no longer replaces the ride's stored route for the map of all rides, best minute and steepest climb with empty values (B-268).
+- **GPX: a wrong first point no longer costs the start of the ride.** When the first point of a track was a GPS outlier, the next 30 seconds were dropped as jumps; now only that point goes. GPX rides are read again once after the update (B-269).
 
 ## [1.8.10] – 2026-11-09
 
