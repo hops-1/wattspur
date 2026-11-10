@@ -215,6 +215,35 @@ struct GPXRideImporterTests {
         #expect(fastest < 100, "a kept step of \(fastest) m/s is a jump")
     }
 
+    @Test("A wrong first point costs only itself, not the next 30 s (B-269); a short glitch after a good start stays a glitch")
+    func wrongFirstPoint() throws {
+        // A real ride (anonymised, `pair-tour1-bosch-flow`) whose first point is moved 5 km north.
+        let original = try GPXFixture.data("pair-tour1-bosch-flow")
+        var text = try #require(String(data: original, encoding: .utf8))
+        let latRange = try #require(text.range(of: #"<trkpt lat="([0-9.]+)""#, options: .regularExpression))
+        let tag = String(text[latRange])
+        let lat = try #require(Double(tag.dropFirst(#"<trkpt lat=""#.count).dropLast()))
+        text.replaceSubrange(latRange, with: #"<trkpt lat="\#(String(format: "%.6f", lat + 0.05))""#)
+
+        let clean = try importer.parseTrack(original)
+        let wrong = try importer.parseTrack(Data(text.utf8))
+        let cleanSamples = clean.parts.flatMap(\.samples)
+        let wrongSamples = wrong.parts.flatMap(\.samples)
+        #expect(wrong.discarded.jumps == clean.discarded.jumps + 1)
+        #expect(wrongSamples.count == cleanSamples.count - 1)
+        // The ride starts at the second point; the distance is the same but for the first step.
+        let firstStep = try #require(cleanSamples.dropFirst().first?.distance)
+        let cleanDistance = clean.parts.reduce(0) { $0 + $1.distance }
+        let wrongDistance = wrong.parts.reduce(0) { $0 + $1.distance }
+        #expect(abs((wrongDistance + firstStep) - cleanDistance) < 1)
+        #expect(wrong.parts.first?.startDate == clean.parts.first.map { $0.startDate.addingTimeInterval(cleanSamples[1].time) })
+
+        // The motorcycle with a glitch of 6 points in the middle keeps its first point.
+        let glitch = try importer.parseTrack(GPXFixture.data("bmw-motorrad-excerpt-glitch"))
+        #expect(glitch.parts[0].samples.count == 90)
+        #expect(GPXRideImporter.parserVersion == 4)
+    }
+
     @Test("Gaps of 30 s and more and new segments split the track; no time and no distance count across")
     func parts() throws {
         let day = Doc.base

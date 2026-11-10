@@ -114,7 +114,8 @@ public struct GPXRideImporter: RideImporter {
     /// Bump whenever parsing changes so stored rides are re-parsed (NFR-17).
     /// 2 (3.11.2026): ascent from 2 m instead of 3 m (B-234).
     /// 3 (7.11.2026): parts on a later day measured from the previous part, not the first (R-18).
-    public static let parserVersion = 3
+    /// 4 (11.11.2026): a wrong first point of a segment is dropped instead of the 30 s after it (B-269, R-22).
+    public static let parserVersion = 4
     /// A gap this long (or a new segment) starts a new part: no ride time, no distance (confirmed 25.10.2026).
     public static let pauseGap: TimeInterval = 30
     /// A point further from the last kept one than this speed allows is a GPS jump (unless the ride was
@@ -130,6 +131,28 @@ public struct GPXRideImporter: RideImporter {
     public static let maxBackwardShare = 0.10
 
     public let fileExtensions: Set<String> = ["gpx"]
+
+    /// `true` when the points from `index` on form a ride of their own for `pauseGap`: each step at
+    /// a possible speed, and all of them too far from `first` to reach. Then `first` is the jump,
+    /// not they (B-269). A short GPS glitch right after a good first point comes back near it and so
+    /// does not count.
+    private static func goesOn(from index: Int, in points: [RawPoint], awayFrom first: RawPoint) -> Bool {
+        let start = points[index].time!
+        var previous = points[index]
+        var checked = 0
+        for next in points[(index + 1)...] {
+            let elapsed = next.time!.timeIntervalSince(start)
+            if elapsed > pauseGap { break }
+            let dt = next.time!.timeIntervalSince(previous.time!)
+            guard dt > 0 else { continue }
+            if previous.distance(to: next) / dt > maxSpeed { return false }
+            if first.distance(to: next) / next.time!.timeIntervalSince(first.time!) <= maxSpeed { return false }
+            previous = next
+            checked += 1
+        }
+        // At least a few points must agree; one more point alone is no proof.
+        return checked >= 3
+    }
     public var parserVersion: Int { Self.parserVersion }
     /// The time zone that decides whether two parts lie on the same day.
     public let timeZone: TimeZone
@@ -226,14 +249,23 @@ public struct GPXRideImporter: RideImporter {
             var points: [RawPoint] = []
             points.reserveCapacity(sorted.count)
             var stepSpeed = 0.0
-            for point in sorted {
+            for (index, point) in sorted.enumerated() {
                 if let last = points.last {
                     let dt = point.time!.timeIntervalSince(last.time!)
                     if dt == 0 { discarded.duplicateTime += 1; continue }
                     let speed = last.distance(to: point) / dt
                     // A jump is faster than a bike can go and far faster than the ride before it,
                     // so a motorcycle at a steady 160 km/h is no row of jumps.
-                    if dt < pauseGap, speed > maxSpeed, speed > 3 * stepSpeed { discarded.jumps += 1; continue }
+                    if dt < pauseGap, speed > maxSpeed, speed > 3 * stepSpeed {
+                        // The first point of a segment may itself be the wrong one (B-269): then the
+                        // ride goes on from here, and dropping it would cost the next 30 s.
+                        if points.count == 1, Self.goesOn(from: index, in: sorted, awayFrom: last) {
+                            points[0] = point
+                            stepSpeed = 0
+                        }
+                        discarded.jumps += 1
+                        continue
+                    }
                     stepSpeed = speed
                 }
                 points.append(point)
