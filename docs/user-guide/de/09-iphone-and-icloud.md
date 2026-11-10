@@ -73,20 +73,20 @@ Für Tests gibt es unter **Mehr › Test** den Schalter **Rohdaten der Bewegung 
 
 ## Unterwegs: Fahrtrichtung, Höhe und Profil
 - **Karte in Fahrtrichtung:** Der Knopf unten rechts auf der Karte der Aufnahme wechselt zwischen **Norden oben** und **Fahrtrichtung oben**, wie in einer Navi-App. Die Richtung kommt aus der GPS-Bewegung, nicht vom Kompass, der in der Tasche falsch zeigt. Im Stand und unter etwa 7 km/h dreht sich die Karte nicht.
-- **Spur nach Höhe:** Der Knopf mit dem Berg darüber färbt die bisher gefahrene Spur von Blau (tief) bis Rot (hoch); die Skala wächst mit den Höhen, die du schon gefahren bist. Im Tour-Detail wählst du über der Karte zwischen **Schräglage**, **Belag**, **Höhe** und **Einfarbig**, je nachdem, was die Fahrt hat.
+- **Spur nach Höhe:** Der Knopf mit dem Berg darüber färbt die bisher gefahrene Spur von Blau (tief) bis Rot (hoch); die Skala wächst mit den Höhen, die du schon gefahren bist. Im Tour-Detail wählt der rosa Knopf oben links auf der Karte zwischen **Schräglage**, **Belag**, **Höhe** und **Einfarbig**, je nachdem, was die Fahrt hat; die Legende steht darunter.
 - **Profil während der Fahrt:** Wische die Werte unter der Karte zur Seite (im Querformat die Werte in der Leiste links). Dort wächst das Profil der bisherigen Fahrt mit; oben wählst du **Höhe** oder **Tempo**.
 
 Wattspur merkt sich alle drei Einstellungen.
 
 ## Kartenstile
-Ab 0.6 hat das iPhone die Kartenstile des Mac: von Apple **Standard**, **Satellit** und **Hybrid**, dazu **OpenStreetMap**, **CyclOSM** (für Radfahrer, mit Radwegen in Blau) und **OpenTopoMap** (Höhenlinien und Schattierung). Den Stil wählst du mit dem Knopf mit den Ebenen oben rechts auf der Karte einer Fahrt oder unter **Mehr › Karte › Kartenstil**. Er gilt für jede Karte, auch für die Aufnahme, und Wattspur merkt ihn sich.
+Ab 0.6 hat das iPhone die Kartenstile des Mac: von Apple **Standard**, **Satellit** und **Hybrid**, dazu **OpenStreetMap**, **CyclOSM** (für Radfahrer, mit Radwegen in Blau) und **OpenTopoMap** (Höhenlinien und Schattierung). Den Stil wählst du mit dem Knopf mit den Ebenen oben rechts auf der Karte einer Fahrt, oben links auf der Karte der Aufnahme oder unter **Mehr › Karte › Kartenstil**. Er gilt für jede Karte, auch für die Aufnahme, und Wattspur merkt ihn sich.
 
-Die OpenStreetMap-Stile kommen von Servern, die Freiwillige betreiben. Wattspur lädt nur die Kacheln, die du siehst, und behält sie eine Weile. So erscheinen Gegenden, die du schon gesehen hast, auch ohne Netz. In einer Gegend, die du noch nicht gesehen hast, steht die Route auf einem leeren Grund. Die **Quellenangabe** der Karte bleibt in einer Ecke; auf der Karte einer Fahrt öffnet ein Tipp darauf die Lizenz.
+Die OpenStreetMap-Stile kommen von Servern, die Freiwillige betreiben. Wattspur lädt nur die Kacheln, die du siehst, und behält sie eine Weile. So erscheinen Gegenden, die du schon gesehen hast, auch ohne Netz. In einer Gegend, die du noch nicht gesehen hast, steht die Route auf einem leeren Grund. Die **Quellenangabe** der Karte bleibt unten rechts; auf der Karte einer Fahrt öffnet ein Tipp darauf die Lizenz.
 
 ## Karte aller Fahrten
 Der Tab **Karte** zeigt alle deine Fahrten auf einer Karte.
-- **Linien** oder **Wärmekarte:** Die Wärmekarte färbt jede Fläche danach, wie viele Fahrten dort entlangführen, von Blau (eine Fahrt) bis Rot (20 und mehr).
-- **Zeitraum** (Knopf mit dem Kalender) und **Bike** (erst ab zwei Bikes) wählen, welche Fahrten erscheinen. Daneben ist der Kartenstil.
+- **Linien** oder **Wärmekarte** (im Knopf mit den Ebenen, über den Kartenstilen): Die Wärmekarte färbt jede Fläche danach, wie viele Fahrten dort entlangführen, von Blau (eine Fahrt) bis Rot (20 und mehr).
+- **Zeitraum** (Knopf mit dem Kalender) und **Bike** (erst ab zwei Bikes) wählen, welche Fahrten erscheinen. Oben rechts wählt der Knopf mit den Ebenen den Kartenstil.
 - Unter den Knöpfen steht, wie viele Fahrten es sind und wie weit, zum Beispiel „84 Fahrten · 1.520 km“.
 - **Tippe auf eine Strecke:** Eine Liste zeigt die Fahrten dort, und sie heben sich auf der Karte ab. Ein Tipp auf eine öffnet sie.
 

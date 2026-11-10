@@ -175,6 +175,7 @@ struct RecordingView: View {
             .accessibilityAddTraits(.isToggle)
             }
             .padding(12)
+            .padding(.bottom, creditRoom)
         }
         .overlay(alignment: .bottomLeading) {
             if byElevation, let route = recorder.recording?.route, let elevation = RouteElevation.stretches(route) {
@@ -182,10 +183,19 @@ struct RecordingView: View {
                     .padding(isLandscape ? 0 : 8)
                     // In landscape the bar with the figures covers the left side.
                     .padding(.leading, isLandscape ? 270 : 0)
-                    .padding(.bottom, isLandscape ? 12 : 0)
+                    .padding(.bottom, (isLandscape ? 12 : 0) + creditRoom)
             }
         }
+        .overlay(alignment: .topLeading) {
+            // The map style while riding (B-226), the same choice as in the detail and under More.
+            MapTypeMenu(mapType: $mapType, size: 44)
+                .padding(12)
+                .padding(.leading, isLandscape ? 290 : 0)
+        }
     }
+
+    /// Points at the bottom kept free for the credit of an OpenStreetMap style.
+    private var creditRoom: CGFloat { mapType.tileSource == nil ? 0 : 30 }
 
     /// The track so far, one line per segment.
     private var trackSegments: [[CLLocationCoordinate2D]] {

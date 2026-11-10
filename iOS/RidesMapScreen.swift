@@ -66,6 +66,8 @@ struct RidesMapScreen: View {
             if mode == .heat, !overview.rides.isEmpty {
                 HeatLegend()
                     .padding(8)
+                    // Above the credit of an OpenStreetMap style, which takes the bottom.
+                    .padding(.bottom, mapType.tileSource == nil ? 0 : 30)
                     .padding(.leading, isLandscape ? LandscapeTabBar.height * 4 : 0)
             }
         }
@@ -161,22 +163,25 @@ struct RidesMapScreen: View {
                     .buttonStyle(.glass)
                 }
                 Spacer(minLength: 0)
-                MapTypeMenu(mapType: $mapType)
+                // Lines or heat map together with the style, as “Customize Map” on the Mac: the white
+                // segments were hard to read on the map.
+                MapTypeMenu(mapType: $mapType) {
+                    Section("Display") {
+                    Picker("Display", selection: $mode) {
+                        Label("Lines", systemImage: "point.topleft.down.to.point.bottomright.curvepath").tag(RidesMapStyle.Mode.lines)
+                        Label("Heat Map", systemImage: "flame").tag(RidesMapStyle.Mode.heat)
+                    }
+                    }
+                }
             }
             HStack {
-                Picker("Display", selection: $mode) {
-                    Text("Lines").tag(RidesMapStyle.Mode.lines)
-                    Text("Heat Map").tag(RidesMapStyle.Mode.heat)
-                }
-                .pickerStyle(.segmented)
-                .fixedSize()
-                Spacer(minLength: 0)
                 Text(summary)
                     .font(.caption)
                     .foregroundStyle(.secondary)
                     .padding(.horizontal, 8)
                     .padding(.vertical, 4)
                     .glassEffect(.regular, in: .capsule)
+                Spacer(minLength: 0)
             }
         }
         .padding(.horizontal, 12)

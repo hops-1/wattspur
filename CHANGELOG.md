@@ -7,6 +7,10 @@ Every DMG handed out to testers corresponds to one entry below.
 
 ## [Unreleased]
 
+### Changed
+
+- **iPhone app 0.6.1: map controls, from the first tests of 0.6.0.** The recording map now has the map style button too (top left). On the ride's map, the colouring (lean angle, surface, elevation, plain) is one pink button with a menu instead of four white segments, which were hard to read and covered the style button on smaller iPhones; the legend sits below it. On the map of all rides, lines or heat map is chosen in the layers button. The credit of an OpenStreetMap style is at the bottom right on every map, also while recording. The Mac is unchanged: there the colourings are four small buttons with icons.
+
 ## [1.8.10] – 2026-11-09
 
 Maps on the iPhone: the map styles of the Mac, also while recording, and a map of all rides with a heat map. The folder exchange with the iPhone has ended; Mac and iPhone share the library over iCloud. Plus the fix for Bosch parts of one recording. Together with the iPhone app 0.6.0 (14).
