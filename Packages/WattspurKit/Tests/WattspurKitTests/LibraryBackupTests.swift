@@ -181,6 +181,65 @@ struct LibraryBackupTests {
         #expect(try count(storeURL) == 1)
     }
 
+    // MARK: Missing ride data (11.11.2026)
+
+    /// The blob files of a backup's library, and the folder they are in.
+    private func blobs(of folder: URL) throws -> (names: Set<String>, folder: URL) {
+        let store = folder.appending(path: "default.store")
+        return (try LibraryBackup.externalDataNames(storeURL: store), folder.appending(path: ".default_SUPPORT/_EXTERNAL_DATA"))
+    }
+
+    @Test("The check finds every blob the library refers to, and a whole backup passes")
+    func blobsAreFound() throws {
+        defer { try? FileManager.default.removeItem(at: root) }
+        _ = try fill(storeURL, importing: 2)
+        let folder = try backup()
+        let (names, blobFolder) = try blobs(of: folder)
+        #expect(!names.isEmpty)
+        for name in names { #expect(FileManager.default.fileExists(atPath: blobFolder.appending(path: name).path)) }
+        _ = try LibraryBackup.inspect(folder, storeName: "default.store")
+    }
+
+    @Test("A backup missing ride data is refused before anything is staged or written")
+    func backupWithMissingBlobIsRefused() throws {
+        defer { try? FileManager.default.removeItem(at: root) }
+        _ = try fill(storeURL, importing: 2)
+        let folder = try backup()
+        let (names, blobFolder) = try blobs(of: folder)
+        let gone = try #require(names.first)
+        try FileManager.default.removeItem(at: blobFolder.appending(path: gone))
+
+        #expect(throws: LibraryBackup.Failure.incomplete(missing: 1)) {
+            _ = try LibraryBackup.inspect(folder, storeName: "default.store")
+        }
+        #expect(throws: LibraryBackup.Failure.incomplete(missing: 1)) {
+            try LibraryBackup.stageRestore(from: folder, storeURL: storeURL)
+        }
+        #expect(!LibraryBackup.hasPendingRestore(storeURL: storeURL))
+    }
+
+    @Test("A staged backup that lost ride data is dropped at the start and the library stays as it was")
+    func stagedBackupWithMissingBlobIsDropped() throws {
+        defer { try? FileManager.default.removeItem(at: root) }
+        _ = try fill(storeURL, importing: 2)
+        let folder = try backup()
+        #expect(try fill(storeURL, importing: 1) == 3)
+        let before = try rides(storeURL)
+        let liveBlobs = try LibraryBackup.externalDataNames(storeURL: storeURL)
+
+        try LibraryBackup.stageRestore(from: folder, storeURL: storeURL)
+        let pending = LibraryBackup.pendingFolder(for: storeURL)
+        let (names, blobFolder) = try blobs(of: pending)
+        try FileManager.default.removeItem(at: blobFolder.appending(path: try #require(names.first)))
+
+        #expect(throws: LibraryBackup.Failure.incomplete(missing: 1)) {
+            _ = try LibraryBackup.applyPendingRestore(storeURL: storeURL)
+        }
+        #expect(!LibraryBackup.hasPendingRestore(storeURL: storeURL))
+        #expect(try rides(storeURL) == before)
+        #expect(try LibraryBackup.externalDataNames(storeURL: storeURL) == liveBlobs)
+    }
+
     // MARK: Restore with iCloud sync (B-265)
 
     /// Opens the store with the app's schema, runs `body` and saves.

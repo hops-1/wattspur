@@ -90,10 +90,10 @@ Diese Apps sind getestet:
 
 | App | Was du teilst | Ergebnis |
 |---|---|---|
-| Bosch eBike Flow | Fahrt als FIT-Datei | wird mit 0.7.0 geprüft |
-| komoot | gefahrene Tour als GPX-Datei | wird mit 0.7.0 geprüft |
-| Strava | Aktivität als GPX-Datei | wird mit 0.7.0 geprüft |
-| Garmin Connect | Aktivität als GPX- oder FIT-Datei | wird mit 0.7.0 geprüft |
+| Bosch eBike Flow | Fahrt als FIT-Datei | geht (geprüft mit 0.7.0); Wattspur öffnet sich und importiert |
+| komoot | gefahrene Tour als GPX-Datei | geht (geprüft mit 0.7.0); eine geplante Tour und ein Link geben den Hinweis |
+| Strava | Aktivität als GPX-Datei | noch nicht geprüft |
+| Garmin Connect | Aktivität als GPX- oder FIT-Datei | noch nicht geprüft |
 
 ## FIT und GPX aus der Dateien-App
 Ab 0.6.2 holt Wattspur auch Dateien, die schon in der Dateien-App liegen, ganz ohne Mac:

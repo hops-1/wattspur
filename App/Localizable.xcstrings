@@ -9786,6 +9786,26 @@
           }
         }
       }
+    },
+    "%lld files of this backup are still in iCloud Drive and not on this device yet. Wattspur has started to download them. Wait a few minutes, then choose the backup again. Nothing was changed." : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%lld Dateien dieser Sicherung liegen noch in iCloud Drive und sind noch nicht auf diesem Gerät. Wattspur lädt sie jetzt. Warte ein paar Minuten und wähle die Sicherung dann noch einmal. Es wurde nichts geändert."
+          }
+        }
+      }
+    },
+    "This backup is not complete: %lld files of ride data are missing in it. Wattspur does not restore it, so no ride loses its data. Nothing was changed." : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Diese Sicherung ist nicht vollständig: Ihr fehlen %lld Dateien mit Fahrtdaten. Wattspur holt sie nicht zurück, damit keine Fahrt ihre Daten verliert. Es wurde nichts geändert."
+          }
+        }
+      }
     }
   },
   "version" : "1.0"

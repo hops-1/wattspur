@@ -7,8 +7,14 @@ Every DMG handed out to testers corresponds to one entry below.
 
 ## [Unreleased]
 
+## [1.8.13] – 2026-11-11
+
+Fixes from testing 1.8.12 and iPhone 0.7.0. Together with the iPhone app 0.7.0 (22).
+
 ### Fixed
 
+- **Restoring a backup never leaves rides without their data.** Restoring a backup from iCloud Drive whose files were not all downloaded yet waited for ever on the Mac, and when it went on, the rides whose data files were missing lost their time series and track, on every device through iCloud. Now Wattspur checks every data file the backup's library refers to before it restores: files still in iCloud are downloaded and the restore says so (“N files are still in iCloud Drive … Nothing was changed”); a backup with missing files is refused; and a staged restore is checked again at the start and dropped if anything is missing (B-306).
+- **iPhone: Back Up Library and Restore Backup did nothing after choosing the folder.** The app forgot what the folder was for before it read the choice; now both work (B-302, iPhone 0.7.0 (21)).
 - **One Bosch ride over several iPhone recordings is split** (in the iPhone app from 0.7.0 (20)). When the Flow app saved the way to work and the way home as one ride and the iPhone recorded them as two, the three stayed apart. Now the Bosch ride is split along the recordings: each becomes one ride with the Bosch values of its time and the recording's name, bike, heart rate and lean angle; the recordings go to the trash. Sharing the FIT file once more fixes rides imported before (B-305).
 
 ## [1.8.12] – 2026-11-11
