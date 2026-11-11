@@ -63,3 +63,5 @@ Hier eintragen oder an Claude schicken. Ein ✗ wird ein eigener Backlog-Punkt; 
 **D (Nils, 11.11.2026, Mac 1.8.14):** ✓
 
 **B2 (Nils, 11.11.2026, Mac 1.8.14 + iPhone 0.7.0 (24)):** ✓ – kaum noch Wartezeit.
+
+**C (11.11.2026):** übersprungen (Entscheidung Nils). Kein Probelauf mit zwei Geräten im Development-Container; den Ablauf decken die Kit-Tests ohne echtes CloudKit ab. Mit Sync an lief B2 mit der echten Bibliothek ohne Fehler (Mac 1.8.14, iPhone 0.7.0 (24)).
