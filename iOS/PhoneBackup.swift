@@ -190,6 +190,10 @@ final class PhoneBackup {
         case .noLibrary: String(localized: "There is no library to back up yet.")
         case .notABackup: String(localized: "This folder is not a Wattspur backup.")
         case .unsupportedFormat: String(localized: "This backup was made by a newer version of Wattspur. Update Wattspur to restore it.")
+        case .notDownloaded(let missing):
+            String(localized: "\(missing) files of this backup are still in iCloud Drive and not on this device yet. Wattspur has started to download them. Wait a few minutes, then choose the backup again. Nothing was changed.")
+        case .incomplete(let missing):
+            String(localized: "This backup is not complete: \(missing) files of ride data are missing in it. Wattspur does not restore it, so no ride loses its data. Nothing was changed.")
         case .database(_, let detail): String(localized: "The library file could not be read: \(detail)")
         case .restoreFailed(let kept, true, let detail):
             String(localized: "The backup could not be restored: \(detail). Your library is as it was before, and a copy of it is in the folder “\(kept.lastPathComponent)”. Choose the backup again to try once more.")

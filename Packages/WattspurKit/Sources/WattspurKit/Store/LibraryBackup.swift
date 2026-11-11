@@ -48,6 +48,12 @@ public enum LibraryBackup {
         /// Writing the backup into the library failed (B-265). `kept` holds the library as it was before;
         /// `putBack` says whether it is in place again. The staged backup is dropped.
         case restoreFailed(kept: URL, putBack: Bool, detail: String)
+        /// Files of the backup are still in iCloud Drive, not on this device (B-302): `missing` of them. Their
+        /// download has been started; the restore can be tried again in a moment.
+        case notDownloaded(missing: Int)
+        /// The library file refers to ride data that is not in the backup's blob folder: `missing` files. Such a
+        /// backup is never written into the library, it would leave rides without their data (11.11.2026).
+        case incomplete(missing: Int)
     }
 
     static let manifestName = "manifest.json"
@@ -111,8 +117,50 @@ public enum LibraryBackup {
               fm.fileExists(atPath: backup.appending(path: storeName).path)
         else { throw Failure.notABackup }
         guard manifest.format <= Manifest.currentFormat else { throw Failure.unsupportedFormat(manifest.format) }
-        try checkDatabase(at: backup.appending(path: storeName))
+        let store = backup.appending(path: storeName)
+        if isNotDownloaded(store) {
+            startDownloading([store])
+            throw Failure.notDownloaded(missing: 1)
+        }
+        try checkDatabase(at: store)
+        try checkExternalData(storeURL: store)
         return manifest
+    }
+
+    /// Throws unless every blob the library file refers to is there and, in iCloud Drive, downloaded. Starts the
+    /// download of the files that are only in iCloud. On 11.11.2026 a backup made on the iPhone was restored on the
+    /// Mac while 189 of its 332 blobs were still in iCloud: the copy waited, and the rides of the missing blobs lost
+    /// their data.
+    static func checkExternalData(storeURL: URL) throws {
+        let folder = supportFolder(for: storeURL).appending(path: "_EXTERNAL_DATA")
+        let fm = FileManager.default
+        var absent = 0
+        var inCloud: [URL] = []
+        for name in try externalDataNames(storeURL: storeURL) {
+            let file = folder.appending(path: name)
+            if !fm.fileExists(atPath: file.path) {
+                absent += 1
+            } else if isNotDownloaded(file) {
+                inCloud.append(file)
+            }
+        }
+        if absent > 0 { throw Failure.incomplete(missing: absent) }
+        if !inCloud.isEmpty {
+            startDownloading(inCloud)
+            throw Failure.notDownloaded(missing: inCloud.count)
+        }
+    }
+
+    /// A file in iCloud Drive whose content is not on this device yet.
+    private static func isNotDownloaded(_ url: URL) -> Bool {
+        guard let values = try? url.resourceValues(forKeys: [.isUbiquitousItemKey, .ubiquitousItemDownloadingStatusKey]),
+              values.isUbiquitousItem == true, let status = values.ubiquitousItemDownloadingStatus
+        else { return false }
+        return status != .current
+    }
+
+    private static func startDownloading(_ urls: [URL]) {
+        for url in urls { try? FileManager.default.startDownloadingUbiquitousItem(at: url) }
     }
 
     // MARK: Restore
@@ -133,6 +181,8 @@ public enum LibraryBackup {
             }
             // Stays in the pending folder, so the start after the restore can say which backup came back.
             try fm.copyItem(at: backup.appending(path: manifestName), to: pending.appending(path: manifestName))
+            // The copy must hold every blob, whatever the copy did with files still in iCloud.
+            try checkExternalData(storeURL: pending.appending(path: storeURL.lastPathComponent))
         } catch {
             try? fm.removeItem(at: pending)
             throw error
@@ -164,6 +214,16 @@ public enum LibraryBackup {
     @discardableResult
     public static func applyPendingRestore(storeURL: URL, now: Date = .now) throws -> URL? {
         guard hasPendingRestore(storeURL: storeURL) else { return nil }
+        // A staged backup without all its blobs is dropped, never written in: it would empty rides (11.11.2026).
+        // A file that does not read at all goes the usual way below and fails there.
+        do {
+            try checkExternalData(storeURL: pendingFolder(for: storeURL).appending(path: storeURL.lastPathComponent))
+        } catch let failure as Failure {
+            if case .incomplete = failure {
+                cancelPendingRestore(storeURL: storeURL)
+                throw failure
+            }
+        }
         if FileManager.default.fileExists(atPath: storeURL.path) {
             return try rewritePendingRestore(storeURL: storeURL, now: now)
         }
@@ -307,6 +367,45 @@ public enum LibraryBackup {
         guard sqlite3_step(statement) == SQLITE_ROW, let text = sqlite3_column_text(statement, 0),
               String(cString: text) == "ok"
         else { throw Failure.notABackup }
+    }
+
+    /// The names of the blob files the library file refers to. SwiftData (Core Data) keeps a large value of an
+    /// `externalStorage` attribute as a file in `_EXTERNAL_DATA` and writes `0x02` and the file's UUID into the
+    /// column; a small one stays in the column after `0x01`.
+    static func externalDataNames(storeURL: URL) throws -> Set<String> {
+        var db: OpaquePointer?
+        defer { sqlite3_close(db) }
+        let uri = storeURL.absoluteString + "?immutable=1"
+        guard sqlite3_open_v2(uri, &db, SQLITE_OPEN_READONLY | SQLITE_OPEN_URI, nil) == SQLITE_OK else { throw failure(db) }
+
+        func rows(_ sql: String) throws -> [[String]] {
+            var statement: OpaquePointer?
+            defer { sqlite3_finalize(statement) }
+            guard sqlite3_prepare_v2(db, sql, -1, &statement, nil) == SQLITE_OK else { throw failure(db) }
+            var result: [[String]] = []
+            while sqlite3_step(statement) == SQLITE_ROW {
+                result.append((0..<sqlite3_column_count(statement)).map { column in
+                    sqlite3_column_text(statement, column).map { String(cString: $0) } ?? ""
+                })
+            }
+            return result
+        }
+
+        // The app's own tables (Z…), not Core Data's (Z_…) or the iCloud mirror's (ANSCK…).
+        let columns = try rows("""
+            SELECT m.name, p.name FROM sqlite_master m JOIN pragma_table_info(m.name) p
+            WHERE m.type = 'table' AND m.name LIKE 'Z%' AND m.name NOT LIKE 'Z\\_%' ESCAPE '\\' AND p.type = 'BLOB'
+            """)
+        var names: Set<String> = []
+        for column in columns where column.count == 2 {
+            let table = column[0].replacingOccurrences(of: "\"", with: "\"\"")
+            let name = column[1].replacingOccurrences(of: "\"", with: "\"\"")
+            let sql = "SELECT CAST(substr(\"\(name)\", 2) AS TEXT) FROM \"\(table)\" WHERE substr(\"\(name)\", 1, 1) = x'02'"
+            for row in try rows(sql) {
+                if let value = row.first, UUID(uuidString: value) != nil { names.insert(value) }
+            }
+        }
+        return names
     }
 
     private static func failure(_ db: OpaquePointer?) -> Failure {
