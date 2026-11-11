@@ -261,6 +261,7 @@ struct ContentView: View {
             .task(id: restoreNotice.current?.id) {
                 guard let notice = restoreNotice.current else { return }
                 AccessibilityNotification.Announcement(notice.text).post()
+                guard !notice.isFailure else { return } // stays until closed
                 try? await Task.sleep(for: .seconds(12))
                 if restoreNotice.current?.id == notice.id { restoreNotice.hide() }
             }

@@ -37,7 +37,7 @@ struct WattspurApp: App {
     @Environment(\.openWindow) private var openWindow
 
     init() {
-        // A restore from a backup is swapped in here, before the library opens (P-22). If it fails, the library stays as it was.
+        // A restore from a backup is put in place here, before the library opens (P-22). If it fails, the library stays as it was.
         #if DEBUG
         // `-WattspurInitCloudKitSchema YES`: complete the schema in Development before the deploy, then quit (B-219).
         if UserDefaults.standard.bool(forKey: "WattspurInitCloudKitSchema") {
@@ -76,17 +76,23 @@ struct WattspurApp: App {
         #else
         let usesDemo = false
         #endif
+        let sync = ICloudSync()
+        _iCloudSync = State(initialValue: sync)
         let notice = LibraryRestoreNotice()
         if !usesDemo {
+            // Written into the library as changes; with sync, iCloud then passes them on (B-265).
             let storeURL = LibraryLocation.storeURL
             let manifest = LibraryBackup.pendingManifest(storeURL: storeURL)
-            if (try? LibraryBackup.applyPendingRestore(storeURL: storeURL)) != nil, let manifest {
-                notice.show(backupDate: manifest.createdAt)
+            do {
+                if try LibraryBackup.applyPendingRestore(storeURL: storeURL) != nil, let manifest {
+                    notice.show(backupDate: manifest.createdAt, synced: sync.isActive)
+                }
+            } catch {
+                LibraryBackup.cancelPendingRestore(storeURL: storeURL)
+                notice.showFailure(LibraryBackupCenter.message(for: error))
             }
         }
         _restoreNotice = State(initialValue: notice)
-        let sync = ICloudSync()
-        _iCloudSync = State(initialValue: sync)
         var configuration = sync.configuration
         #if DEBUG
         if LibraryLocation.isBrokenLibraryTest { configuration = LibraryLocation.prepareBrokenLibraryTest() }

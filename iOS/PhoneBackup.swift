@@ -6,9 +6,8 @@ import WattspurKit
 /// a folder “Wattspur Backup …” with the database, its larger blobs and `manifest.json`. A backup made
 /// here restores on the Mac and the other way round (`LibraryBackup` in the Kit).
 ///
-/// Restoring only works with iCloud sync off: with sync on, iCloud would play back what changed since
-/// the backup (R-29; the way with sync on is B-265). The backup is staged now and swapped in at the next
-/// start, before the store opens (`applyAtLaunch`).
+/// The backup is staged now and written into the library at the next start, before the store opens
+/// (`applyAtLaunch`). With iCloud sync on, iCloud then gives the other devices the backup's state (B-265).
 @MainActor @Observable
 final class PhoneBackup {
     enum State: Equatable {
@@ -30,9 +29,10 @@ final class PhoneBackup {
 
     /// What happened to a staged restore at the start.
     enum LaunchResult: Equatable {
-        case restored(backupDate: Date)
-        /// Sync was switched on in between: the library stays as it is, the staged backup is dropped.
-        case skippedSyncOn
+        /// `synced`: the library opens with iCloud, which passes the backup on to the other devices.
+        case restored(backupDate: Date, synced: Bool)
+        /// The backup could not be written; the message says where the library is and what to do.
+        case failed(String)
     }
 
     private(set) var state: State = .idle
@@ -170,18 +170,19 @@ final class PhoneBackup {
         state = .idle
     }
 
-    /// Swaps a staged backup in. Call it at the start, before the store opens. `syncOn`: the store opens
-    /// with iCloud; then the backup is not swapped in (R-29).
+    /// Puts a staged backup in place. Call it at the start, before the store opens. `syncOn`: the store
+    /// opens with iCloud, which then sends the backup's state to the other devices (B-265).
     static func applyAtLaunch(syncOn: Bool) -> LaunchResult? {
         let storeURL = Self.storeURL
         guard LibraryBackup.hasPendingRestore(storeURL: storeURL) else { return nil }
-        if syncOn {
-            LibraryBackup.cancelPendingRestore(storeURL: storeURL)
-            return .skippedSyncOn
-        }
         let manifest = LibraryBackup.pendingManifest(storeURL: storeURL)
-        guard (try? LibraryBackup.applyPendingRestore(storeURL: storeURL)) != nil, let manifest else { return nil }
-        return .restored(backupDate: manifest.createdAt)
+        do {
+            guard try LibraryBackup.applyPendingRestore(storeURL: storeURL) != nil, let manifest else { return nil }
+            return .restored(backupDate: manifest.createdAt, synced: syncOn)
+        } catch {
+            LibraryBackup.cancelPendingRestore(storeURL: storeURL)
+            return .failed(message(for: error))
+        }
     }
 
     static func message(for error: Error) -> String {
@@ -190,6 +191,10 @@ final class PhoneBackup {
         case .notABackup: String(localized: "This folder is not a Wattspur backup.")
         case .unsupportedFormat: String(localized: "This backup was made by a newer version of Wattspur. Update Wattspur to restore it.")
         case .database(_, let detail): String(localized: "The library file could not be read: \(detail)")
+        case .restoreFailed(let kept, true, let detail):
+            String(localized: "The backup could not be restored: \(detail). Your library is as it was before, and a copy of it is in the folder “\(kept.lastPathComponent)”. Choose the backup again to try once more.")
+        case .restoreFailed(let kept, false, let detail):
+            String(localized: "The backup could not be restored: \(detail). Your library as it was before is in the folder “\(kept.lastPathComponent)” in the app's files. Do not delete it; write to the developer to get it back.")
         case nil: error.localizedDescription
         }
     }

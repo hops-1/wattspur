@@ -243,15 +243,17 @@ struct WattspurApp: App {
 
 extension WattspurApp {
     private var launchRestoreTitle: LocalizedStringKey {
-        launchRestore == .skippedSyncOn ? "Backup Not Restored" : "Backup Restored"
+        if case .failed = launchRestore { return "Backup Not Restored" }
+        return "Backup Restored"
     }
 
     private var launchRestoreMessage: String {
         switch launchRestore {
-        case .restored(let date):
+        case .restored(let date, let synced):
             String(localized: "The library is now the backup from \(date.formatted(date: .long, time: .shortened)). The library before it is kept in a folder “Library Before Restore …”.")
-        case .skippedSyncOn:
-            String(localized: "Sync with iCloud was turned on before Wattspur opened again, so the library stays as it was. Turn off sync and choose the backup again.")
+                + (synced ? " " + String(localized: "iCloud now brings your other devices to the same state; give it a few minutes.") : "")
+        case .failed(let message):
+            message
         case nil:
             ""
         }

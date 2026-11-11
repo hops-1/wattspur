@@ -1,3 +1,4 @@
+import CoreData
 import Foundation
 import SwiftData
 import Testing
@@ -170,10 +171,135 @@ struct LibraryBackupTests {
         let folder = try backup()
         #expect(try Data(contentsOf: folder.appending(path: ".default_SUPPORT/_EXTERNAL_DATA/blob")) == Data("first".utf8))
 
-        try Data("second".utf8).write(to: blobs.appending(path: "blob"))
+        // Without a library (a new install) the backup's files are moved in as they are.
         try LibraryBackup.stageRestore(from: folder, storeURL: storeURL)
+        for name in LibraryBackup.libraryFileNames(for: storeURL) {
+            try? FileManager.default.removeItem(at: storeURL.deletingLastPathComponent().appending(path: name))
+        }
         _ = try LibraryBackup.applyPendingRestore(storeURL: storeURL)
         #expect(try Data(contentsOf: blobs.appending(path: "blob")) == Data("first".utf8))
+        #expect(try count(storeURL) == 1)
+    }
+
+    // MARK: Restore with iCloud sync (B-265)
+
+    /// Opens the store with the app's schema, runs `body` and saves.
+    private func edit(_ url: URL, _ body: (ModelContext) throws -> Void) throws {
+        let container = try ModelContainer(for: Schema(WattspurSchema.models), configurations: ModelConfiguration(url: url))
+        let context = container.mainContext
+        context.autosaveEnabled = false
+        try body(context)
+        try context.save()
+    }
+
+    private func rides(_ url: URL) throws -> [UUID: String] {
+        let container = try ModelContainer(for: Schema(WattspurSchema.models), configurations: ModelConfiguration(url: url))
+        container.mainContext.autosaveEnabled = false
+        let rides = try container.mainContext.fetch(FetchDescriptor<Ride>())
+        return Dictionary(rides.map { ($0.id, $0.name) }, uniquingKeysWith: { first, _ in first })
+    }
+
+    /// The SQLite row of each ride by its `id`: the same row means the object was not replaced.
+    private func rows(_ url: URL) throws -> [UUID: Int64] {
+        let model = try #require(NSManagedObjectModel.makeManagedObjectModel(for: WattspurSchema.models))
+        let coordinator = NSPersistentStoreCoordinator(managedObjectModel: model)
+        let store = try coordinator.addPersistentStore(type: .sqlite, at: url, options: [NSPersistentHistoryTrackingKey: true as NSNumber])
+        defer { try? coordinator.remove(store) }
+        let context = NSManagedObjectContext(concurrencyType: .privateQueueConcurrencyType)
+        context.persistentStoreCoordinator = coordinator
+        return try context.performAndWait {
+            var result: [UUID: Int64] = [:]
+            for object in try context.fetch(NSFetchRequest<NSManagedObject>(entityName: "Ride")) {
+                let id = try #require(object.value(forKey: "id") as? UUID)
+                let pk = object.objectID.uriRepresentation().lastPathComponent.dropFirst()
+                result[id] = Int64(pk)
+            }
+            return result
+        }
+    }
+
+    @Test("A restore into a library writes the backup's state: deleted rides come back, new ones go, changes are undone")
+    func restoreRewritesLibrary() throws {
+        defer { try? FileManager.default.removeItem(at: root) }
+        #expect(try fill(storeURL, importing: 3) == 3)
+        let backedUp = try rides(storeURL)
+        let folder = try backup()
+
+        // After the backup: one ride deleted, one renamed, two new.
+        let ids = backedUp.keys.sorted { $0.uuidString < $1.uuidString }
+        try edit(storeURL) { context in
+            for ride in try context.fetch(FetchDescriptor<Ride>()) {
+                if ride.id == ids[0] { context.delete(ride) }
+                if ride.id == ids[1] { ride.name = "Renamed after the backup" }
+            }
+        }
+        #expect(try fill(storeURL, importing: 2) == 4)
+        // The bike goes too; its rides lose it.
+        try edit(storeURL) { context in
+            for bike in try context.fetch(FetchDescriptor<Bike>()) { context.delete(bike) }
+        }
+        let untouchedRow = try #require(try rows(storeURL)[ids[2]])
+
+        try LibraryBackup.stageRestore(from: folder, storeURL: storeURL)
+        let kept = try #require(try LibraryBackup.applyPendingRestore(storeURL: storeURL))
+        #expect(!LibraryBackup.hasPendingRestore(storeURL: storeURL))
+        #expect(try rides(storeURL) == backedUp)
+        #expect(try count(kept.appending(path: "default.store")) == 4)
+        // The bike is back, and the rides point to it again.
+        try edit(storeURL) { context in
+            let bikes = try context.fetch(FetchDescriptor<Bike>())
+            #expect(bikes.count == 1)
+            for ride in try context.fetch(FetchDescriptor<Ride>()) { #expect(ride.bike?.id == bikes.first?.id) }
+        }
+        // The ride nobody touched is still the same object: the iCloud mirror has nothing to send for it.
+        #expect(try rows(storeURL)[ids[2]] == untouchedRow)
+    }
+
+    @Test("A restore with sync on is written as history, so the iCloud mirror sends it to the other devices")
+    func restoreIsRecordedInHistory() throws {
+        defer { try? FileManager.default.removeItem(at: root) }
+        #expect(try fill(storeURL, importing: 1) == 1)
+        let folder = try backup()
+        #expect(try fill(storeURL, importing: 1) == 2)
+        let before = try historyCount(storeURL)
+
+        try LibraryBackup.stageRestore(from: folder, storeURL: storeURL)
+        _ = try LibraryBackup.applyPendingRestore(storeURL: storeURL)
+        #expect(try count(storeURL) == 1)
+        #expect(try historyCount(storeURL) > before)
+    }
+
+    private func historyCount(_ url: URL) throws -> Int {
+        let model = try #require(NSManagedObjectModel.makeManagedObjectModel(for: WattspurSchema.models))
+        let coordinator = NSPersistentStoreCoordinator(managedObjectModel: model)
+        let store = try coordinator.addPersistentStore(type: .sqlite, at: url, options: [NSPersistentHistoryTrackingKey: true as NSNumber])
+        defer { try? coordinator.remove(store) }
+        let context = NSManagedObjectContext(concurrencyType: .privateQueueConcurrencyType)
+        context.persistentStoreCoordinator = coordinator
+        return try context.performAndWait {
+            let result = try context.execute(NSPersistentHistoryChangeRequest.fetchHistory(after: .distantPast)) as? NSPersistentHistoryResult
+            return (result?.result as? [NSPersistentHistoryTransaction])?.count ?? 0
+        }
+    }
+
+    @Test("If writing the backup fails, the library is put back as it was and the staged backup is dropped")
+    func failedRewritePutsLibraryBack() throws {
+        defer { try? FileManager.default.removeItem(at: root) }
+        #expect(try fill(storeURL, importing: 1) == 1)
+        let folder = try backup()
+        #expect(try fill(storeURL, importing: 2) == 3)
+        try LibraryBackup.stageRestore(from: folder, storeURL: storeURL)
+        // The staged copy breaks before the start.
+        try Data("not a database".utf8).write(to: LibraryBackup.pendingFolder(for: storeURL).appending(path: "default.store"))
+
+        #expect {
+            try LibraryBackup.applyPendingRestore(storeURL: storeURL)
+        } throws: { error in
+            guard case .restoreFailed(let kept, let putBack, _) = error as? LibraryBackup.Failure else { return false }
+            return putBack && kept.lastPathComponent.hasPrefix("Library Before Restore")
+        }
+        #expect(try count(storeURL) == 3)
+        #expect(!LibraryBackup.hasPendingRestore(storeURL: storeURL))
     }
 
     // MARK: iPhone and Mac (B-302)
