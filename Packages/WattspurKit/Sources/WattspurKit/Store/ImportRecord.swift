@@ -32,6 +32,11 @@ public final class ImportRecord {
     public var detail: String = ""
     /// `detail` of a duplicate that came back from the trash (R-44).
     public static let restoredFromTrashDetail = "restoredFromTrash"
+    /// A failure because the GPX file is a planned route, not a ride (B-301); read from `detail`,
+    /// which holds the error as `"\(error)"`.
+    public var isPlannedRoute: Bool {
+        outcome == .failed && (detail.contains("onlyRoutesOrWaypoints") || detail.contains("noTimestamps"))
+    }
     public var rideID: UUID?
     /// Where the file is now, relative to the watched folder, e.g. "Failed/x.fit".
     public var movedTo: String?

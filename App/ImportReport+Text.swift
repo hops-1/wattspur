@@ -31,6 +31,11 @@ extension ImportReport {
         lines += unreadable.prefix(Self.maxListedNames).map { String(localized: "\($0): file could not be read") }
         let rest = unreadable.count - Self.maxListedNames
         if rest > 0 { lines.append(String(localized: "\(rest) more files could not be read")) }
+        // A tour from komoot before it was ridden (B-301): not broken, just not a ride.
+        lines += plannedRouteFileNames.prefix(Self.maxListedNames).map { String(localized: "\($0): this is a planned route, not a ride") }
+        if !plannedRouteFileNames.isEmpty {
+            lines.append(String(localized: "Export the tour again after you have ridden it, then it has times and becomes a ride."))
+        }
         return lines
     }
 }

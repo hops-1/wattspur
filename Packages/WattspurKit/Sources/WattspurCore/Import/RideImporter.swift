@@ -7,6 +7,11 @@ public enum RideImportError: Error, Equatable, Sendable {
     /// The file could not be read at all (no access, not downloaded, gone), with the system's reason;
     /// not a fault of the reader (R-47).
     case unreadable(String)
+
+    /// The file is a planned route, not a ride (B-301); the apps say so instead of “could not be read”.
+    public var isPlannedRoute: Bool {
+        if case .gpx(let error) = self { error.isPlannedRoute } else { false }
+    }
 }
 
 /// A source format that can be turned into a `ParsedRide` (Requirements chapter 7).

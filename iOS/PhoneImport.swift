@@ -6,8 +6,10 @@ import WattspurKit
 
 /// FIT and GPX files on the iPhone, all through the same import as on the Mac (`ImportFlow`, B-188):
 /// duplicates, a Bosch FIT for a GPS recording (B-273), several Bosch parts of one tour (B-274),
-/// the bike of a GPX file. They come three ways:
+/// the bike of a GPX file. They come four ways:
 /// - opened with Wattspur or shared to it, one at a time (B-071);
+/// - shared with “Share to Wattspur”, several at once, also as data (B-301): the share extension
+///   leaves them in the App Group, and they join the folder “Import” below;
 /// - chosen in the file picker, several at once, also from iCloud Drive (B-300);
 /// - put into “On My iPhone › Wattspur › Import”, read when the app opens (B-300); afterwards each
 ///   file moves to “Importiert” or “Fehler”.
@@ -64,9 +66,11 @@ final class PhoneImport {
         start(copied, library: library)
     }
 
-    /// The files waiting in “On My iPhone › Wattspur › Import”, when the app opens (B-300).
+    /// The files waiting in “On My iPhone › Wattspur › Import”, when the app opens (B-300), with
+    /// those shared to Wattspur from another app first moved there (B-301).
     func importWaitingFiles(library: PhoneLibrary) {
         let inbox = Self.inbox
+        if let shared = SharedImports.folder { inbox.collectShared(from: shared) }
         let waiting = inbox.waitingFiles().filter { original in !inboxFiles.values.contains(original) }
         guard !waiting.isEmpty, library.database != nil else { return }
         var copied: [URL] = []

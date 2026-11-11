@@ -1,0 +1,136 @@
+{
+  "sourceLanguage" : "en",
+  "strings" : {
+    "Done" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Fertig"
+          }
+        }
+      }
+    },
+    "Sending to Wattspur …" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Wird an Wattspur geschickt …"
+          }
+        }
+      }
+    },
+    "Sent to Wattspur: %lld" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "An Wattspur geschickt: %lld"
+          }
+        }
+      }
+    },
+    "Wattspur needs the file, not the link" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Wattspur braucht die Datei, nicht den Link"
+          }
+        }
+      }
+    },
+    "No FIT or GPX file was shared" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Es wurde keine FIT- oder GPX-Datei geteilt"
+          }
+        }
+      }
+    },
+    "The files could not be passed on" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Die Dateien konnten nicht weitergegeben werden"
+          }
+        }
+      }
+    },
+    "Wattspur opens and imports them." : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Wattspur öffnet sich und importiert sie."
+          }
+        }
+      }
+    },
+    "Open Wattspur to import them." : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Öffne Wattspur, um sie zu importieren."
+          }
+        }
+      }
+    },
+    "In komoot, open the tour you have ridden, export it as a GPX file and share that file to Wattspur. A planned tour has no times and is not a ride." : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Öffne in komoot die Tour, die du gefahren bist, exportiere sie als GPX-Datei und teile diese Datei an Wattspur. Eine geplante Tour hat keine Zeiten und ist keine Fahrt."
+          }
+        }
+      }
+    },
+    "In Strava on the web, open the activity and export it as GPX, then share the file to Wattspur." : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Öffne in Strava im Browser die Aktivität und exportiere sie als GPX. Teile dann die Datei an Wattspur."
+          }
+        }
+      }
+    },
+    "In Garmin Connect, open the activity and export it as GPX or as the original FIT file, then share the file to Wattspur." : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Öffne in Garmin Connect die Aktivität und exportiere sie als GPX oder als Originaldatei (FIT). Teile dann die Datei an Wattspur."
+          }
+        }
+      }
+    },
+    "Wattspur does not load links. Export the ride as a FIT or GPX file in that app and share the file to Wattspur." : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Wattspur lädt keine Links. Exportiere die Fahrt in der anderen App als FIT- oder GPX-Datei und teile die Datei an Wattspur."
+          }
+        }
+      }
+    },
+    "Wattspur reads rides as FIT or GPX files. Share the file of a ride, not a picture or a text." : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Wattspur liest Fahrten als FIT- oder GPX-Dateien. Teile die Datei einer Fahrt, kein Bild und keinen Text."
+          }
+        }
+      }
+    }
+  },
+  "version" : "1.0"
+}

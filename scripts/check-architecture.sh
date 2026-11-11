@@ -50,22 +50,23 @@ if grep -rnE 'String\(localized|LocalizedStringKey|LocalizedStringResource' Pack
     echo "architecture: the package must not hold texts for the user; word them in the app (see docs/ARCHITECTURE.md, rule 8)" >&2
     exit 1
 fi
-IOS="iOS iOSShared iOSWidgets"
+IOS="iOS iOSShared iOSWidgets iOSShare"
 if grep -rnE "$(import_of AppKit)" $IOS; then
     echo "architecture: the iPhone app must not import AppKit (see docs/ARCHITECTURE.md)" >&2
     exit 1
 fi
-# The widget extension reads the snapshot the app writes, never the library itself (R-06).
-if grep -rnE "$(import_of SwiftData)" iOSWidgets iOSShared; then
-    echo "architecture: the widgets and the code shared with them must not import SwiftData (see docs/ARCHITECTURE.md)" >&2
+# The extensions read what the app writes, never the library itself (R-06): the widgets the
+# snapshot, the share extension nothing; it only hands files to the app (B-301).
+if grep -rnE "$(import_of SwiftData)" iOSWidgets iOSShared iOSShare; then
+    echo "architecture: the extensions and the code shared with them must not import SwiftData (see docs/ARCHITECTURE.md)" >&2
     exit 1
 fi
 
-# Sources of the targets "Wattspur iOS" and "Wattspur Widgets" in project.yml: from App/ only single
+# Sources of the targets "Wattspur iOS", "Wattspur Widgets" and "Wattspur Share" in project.yml: from App/ only single
 # resource files (sample ride, icon), never Swift files or the whole folder; in both forms,
 # "- path: App/..." and the short "- App/..." (R-06). Shared code belongs in the package.
 APP_PATHS=$(awk '
-    /^  (Wattspur iOS|Wattspur Widgets):/ { inside = 1; next }
+    /^  (Wattspur iOS|Wattspur Widgets|Wattspur Share):/ { inside = 1; next }
     inside && /^  [^ ]/ { inside = 0 }
     inside && /^[^ ]/ { inside = 0 }
     inside && /^[[:space:]]*- (path: )?App(\/|[[:space:]]*$)/ { sub(/^[[:space:]]*- (path: )?/, ""); print }
@@ -81,7 +82,7 @@ done
 
 # Rule 4: the apps change the library only through RideLibrary, never through a model context of
 # their own. DemoMode.swift fills a separate demo library for screenshots and may (B-259).
-if grep -rnE '([Cc]ontext|mainContext)\.(save|insert|delete)\(|modelContext' App iOS iOSShared iOSWidgets \
+if grep -rnE '([Cc]ontext|mainContext)\.(save|insert|delete)\(|modelContext' App iOS iOSShared iOSWidgets iOSShare \
         | grep -v '^App/DemoMode\.swift:'; then
     echo "architecture: the apps write the library only through RideLibrary (see docs/ARCHITECTURE.md, rule 4)" >&2
     exit 1

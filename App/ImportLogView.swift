@@ -327,6 +327,9 @@ private struct LogEntryRow: View {
             if ext.hasPrefix("fit ") {
                 return String(localized: "Extension “\(ext)” – probably a Finder copy. Rename it to “.fit” and add it again.")
             }
+            if record.isPlannedRoute {
+                return String(localized: "This is a planned route, not a ride. Export the tour again after you have ridden it.")
+            }
             return record.source == .folder
                 ? String(localized: "The file could not be read. Moved to “\(String(localized: "folder.failed", defaultValue: "Failed"))”.")
                 : String(localized: "The file could not be read.")

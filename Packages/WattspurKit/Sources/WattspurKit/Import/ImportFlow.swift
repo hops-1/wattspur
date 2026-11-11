@@ -89,11 +89,14 @@ public final class ImportFlow {
         public var failedFileNames: [String] = []
         /// Files of a type Wattspur does not read.
         public var unsupportedFileNames: [String] = []
+        /// GPX files of a planned route, not a ride (B-301): komoot before the tour is ridden.
+        public var plannedRouteFileNames: [String] = []
 
         public init() {}
 
         public var isEmpty: Bool {
             newRides == 0 && completed == 0 && duplicates == 0 && failedFileNames.isEmpty && unsupportedFileNames.isEmpty
+                && plannedRouteFileNames.isEmpty
         }
     }
 
@@ -203,6 +206,7 @@ public final class ImportFlow {
         case .imported: summary.newRides += 1
         case .attached: summary.completed += 1
         case .unsupported: summary.unsupportedFileNames.append(result.fileName)
+        case .failed(let error) where error.isPlannedRoute: summary.plannedRouteFileNames.append(result.fileName)
         case .failed: summary.failedFileNames.append(result.fileName)
         case .duplicate, .fitForGPX: break
         }

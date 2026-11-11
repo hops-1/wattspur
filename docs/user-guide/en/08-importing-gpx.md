@@ -7,7 +7,7 @@ A GPX file holds positions, altitude and time, sometimes also power, cadence, he
 ## What Wattspur reads
 - **GPX 1.0 and 1.1** with a **track** (`trk`) that has a time for its points. Several tracks or segments in one file become **one ride**; a gap of 30 seconds or more splits the ride into parts with a pause between them.
 - **Power, cadence, heart rate and temperature** when the file has them, in the extensions that Garmin, Strava and komoot use. Power and cadence show in the charts. Heart rate and temperature are stored, but not shown yet.
-- **Not imported:** routes (`rte`) and waypoints (`wpt`), because they hold no recording. A file without times says so in the import log.
+- **Not imported:** routes (`rte`), waypoints (`wpt`) and tracks without times, because they hold no recording. This is how komoot exports a **planned** tour. Wattspur then says: “this is a planned route, not a ride”. Export the tour again after you have ridden it; then it has times and becomes a ride.
 - A **GPX you exported from Wattspur** comes back as it went out.
 - Very large files (over 200 MB or 5 million points) are refused, and so are files that are cut off or whose times run backwards.
 

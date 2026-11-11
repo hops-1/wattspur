@@ -74,6 +74,26 @@ The Bosch file of a ride has more values than a GPS recording, such as power and
 
 **Without iCloud** it becomes a ride on the iPhone only.
 
+## Sharing to Wattspur from other apps
+From 0.7.0 on, **Wattspur** is in the row of apps in the share menu, also for apps that share a ride as data rather than as a file. This is how:
+1. In the other app, share the ride as a **FIT** or **GPX** file. You can also share several files at once.
+2. Tap **Wattspur**. Wattspur opens and imports the files. With several files a summary comes at the end.
+
+If Wattspur does not open by itself, open the app. It then picks up the shared files.
+
+- **Heart rate, cadence and power** are read from GPX files of other trackers too, when the file has them (Garmin, Wahoo, Strava).
+- **A planned tour from komoot** has no times. Wattspur then says: “this is a planned route, not a ride”. Export the tour again after you have ridden it.
+- **A link** (for example komoot.com/tour/…) is not a ride. Wattspur does not load links, but tells you how to export the GPX file in that app.
+
+These apps are tested:
+
+| App | What you share | Result |
+|---|---|---|
+| Bosch eBike Flow | ride as a FIT file | to be checked with 0.7.0 |
+| komoot | ridden tour as a GPX file | to be checked with 0.7.0 |
+| Strava | activity as a GPX file | to be checked with 0.7.0 |
+| Garmin Connect | activity as a GPX or FIT file | to be checked with 0.7.0 |
+
 ## FIT and GPX from the Files app
 From 0.6.2 on, Wattspur also takes files that are already in the Files app, without a Mac:
 - **Choose files:** in **Rides** the **+** button beside the search, or **More › iCloud & Library › Import Files …**. You can choose several FIT and GPX files at once, also from iCloud Drive and other providers.

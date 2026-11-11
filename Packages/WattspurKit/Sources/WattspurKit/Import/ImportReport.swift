@@ -62,9 +62,19 @@ public struct ImportReport: Identifiable {
         Set(unsupportedFileNames.map { ($0 as NSString).pathExtension.lowercased() }).sorted()
     }
 
-    /// Files that could not be read or imported, then those whose update failed.
+    /// Files that could not be read or imported, then those whose update failed. Planned routes are
+    /// apart (`plannedRouteFileNames`).
     public var unreadableFileNames: [String] {
-        entries.compactMap { if case .failed = $0.result.outcome { $0.result.fileName } else { nil } } + failedUpdates
+        entries.compactMap {
+            if case .failed(let error) = $0.result.outcome, !error.isPlannedRoute { $0.result.fileName } else { nil }
+        } + failedUpdates
+    }
+
+    /// GPX files of a planned route, not a ride (B-301).
+    public var plannedRouteFileNames: [String] {
+        entries.compactMap {
+            if case .failed(let error) = $0.result.outcome, error.isPlannedRoute { $0.result.fileName } else { nil }
+        }
     }
 
     /// The titles of the plain duplicates, for the question about them.

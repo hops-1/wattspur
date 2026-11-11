@@ -24,6 +24,10 @@ public enum GPXImportError: Error, Equatable, Sendable {
     case unorderedTimes
     /// The points are there, but no stretch of at least two points is left after cleaning.
     case noUsablePoints
+
+    /// A planned route rather than a ride (B-301): only `rte`/`wpt`, or a track without any time, as
+    /// komoot and route planners export a tour before it is ridden.
+    public var isPlannedRoute: Bool { self == .onlyRoutesOrWaypoints || self == .noTimestamps }
 }
 
 /// A recorded track read from a GPX file, before it is turned into a ride.

@@ -129,9 +129,14 @@ struct WattspurApp: App {
             LandscapeTabBar(tab: $tab)
         }
         .tint(.track)
-        // A FIT from the Flow app or a GPX from the Files app, shared to or opened with Wattspur.
+        // A FIT from the Flow app or a GPX from the Files app, shared to or opened with Wattspur; or
+        // `wattspur://import` from the share extension, whose files wait in the App Group (B-301).
         .onOpenURL { url in
-            phoneImport.open(url, library: library)
+            if SharedImports.isOpenURL(url) {
+                if !recorder.isRecording { phoneImport.importWaitingFiles(library: library) }
+            } else {
+                phoneImport.open(url, library: library)
+            }
             tab = .rides
         }
         .phoneImport(phoneImport)
