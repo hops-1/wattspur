@@ -61,3 +61,5 @@ Hier eintragen oder an Claude schicken. Ein ✗ wird ein eigener Backlog-Punkt; 
 **B2 (Nils, 11.11.2026, Mac 1.8.13 + Build 23):** Die Meldung „N Dateien liegen noch in iCloud Drive“ kam richtig. Danach wartete die Vorbereitung noch lange auf 87 alte, nicht gebrauchte Dateien; behoben in Mac 1.8.14 und iPhone 0.7.0 (24).
 
 **D (Nils, 11.11.2026, Mac 1.8.14):** ✓
+
+**B2 (Nils, 11.11.2026, Mac 1.8.14 + iPhone 0.7.0 (24)):** ✓ – kaum noch Wartezeit.
