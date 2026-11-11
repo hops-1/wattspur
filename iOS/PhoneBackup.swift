@@ -47,8 +47,12 @@ final class PhoneBackup {
         state = LibraryBackup.hasPendingRestore(storeURL: Self.storeURL) ? .restoreStaged : .idle
     }
 
-    /// Where SwiftData keeps the iPhone's store (`ModelConfiguration` without a URL), with or without iCloud.
-    static var storeURL: URL { URL.applicationSupportDirectory.appending(path: "default.store") }
+    /// Where SwiftData keeps the iPhone's store, with or without iCloud: the URL of the very configuration the
+    /// library opens with. Since the widget (B-224, 5.11.2026) the app has an App Group, and SwiftData then keeps
+    /// the default store in the group's container, not in the app's Application Support. Until 0.7.0 (23) the
+    /// backup named the old place, where a store from before the widget was left: backups held that old state,
+    /// and restoring one took the rides since away (B-308, 11.11.2026).
+    static var storeURL: URL { LibrarySync.configuration(requested: false, available: false).url }
 
     var isWorking: Bool {
         if case .working = state { return true }
