@@ -172,7 +172,7 @@ Gelöschte Fahrten bleiben 30 Tage im Papierkorb. **Wiederherstellen** holt eine
 ## Hilfe
 - **Hilfe › Wattspur-Handbuch** (⌘?) öffnet dieses Handbuch online, in der Sprache der App. Dasselbe Menü öffnet die Kapitel **Fahrten importieren** und **Fragen und Fehlerbehebung** und die **Versionshinweise** auf GitHub. Die leere Fahrtenliste verweist auf die Export-Anleitung.
 - **Ablage › Mediathek-Backup …** sichert deine ganze Mediathek (Fahrten, Bikes, Ziele, Notizen) als Ordner und stellt sie aus einem Ordner wieder her, siehe [Fragen](06-faq.md#wie-sichere-ich-meine-fahrten-oder-ziehe-auf-einen-neuen-mac-um).
-- **Hilfe › Diagnose erstellen …** speichert eine Textdatei mit dem Import-Protokoll und den Versionen von Wattspur und macOS, auf Wunsch zusammen mit einer Datei, deren Import fehlgeschlagen ist. Es wird nichts gesendet; du entscheidest, wem du die Datei gibst.
+- **Hilfe › Diagnose erstellen …** speichert eine Textdatei mit dem Import-Protokoll, den Versionen von Wattspur und macOS und ab 1.8.11 der Zahl der Fahrten, deren gespeicherte Punkte sich nicht lesen lassen, auf Wunsch zusammen mit einer Datei, deren Import fehlgeschlagen ist. Es wird nichts gesendet; du entscheidest, wem du die Datei gibst.
 - **Wattspur › Über Wattspur** zeigt Version, Build und Lizenz.
 
 ---

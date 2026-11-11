@@ -172,7 +172,7 @@ Rides you delete stay in the trash for 30 days. **Restore** puts a ride back int
 ## Help
 - **Help › Wattspur Handbook** (⌘?) opens this handbook online, in the language of the app. The same menu opens the chapters **Importing Rides** and **Questions and Troubleshooting** and the **Release Notes** on GitHub. The empty ride list links to the export guide.
 - **File › Library Backup…** saves your whole library (rides, bikes, goals, notes) as a folder and restores it from one, see [Questions](06-faq.md#how-do-i-back-up-my-rides-or-move-them-to-a-new-mac).
-- **Help › Create Diagnostics…** saves a text file with the import log and the versions of Wattspur and macOS, and optionally a file that failed to import. Nothing is sent anywhere; you decide whom to give the file.
+- **Help › Create Diagnostics…** saves a text file with the import log, the versions of Wattspur and macOS and, from 1.8.11 on, how many rides have stored points that cannot be read, and optionally a file that failed to import. Nothing is sent anywhere; you decide whom to give the file.
 - **Wattspur › About Wattspur** shows the version, the build and the licence.
 
 ---
