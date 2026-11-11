@@ -21,13 +21,18 @@ public enum LibraryBackup {
         public var build: String
         /// Rides in the library when the backup was made, for the confirmation before a restore.
         public var rideCount: Int?
+        /// Made by the automatic backup on the iPhone (B-302), which only ever deletes its own backups.
+        /// Absent in other backups; older versions ignore it, so the format stays 1.
+        public var automatic: Bool?
 
-        public init(format: Int = Manifest.currentFormat, createdAt: Date, appVersion: String, build: String, rideCount: Int?) {
+        public init(format: Int = Manifest.currentFormat, createdAt: Date, appVersion: String, build: String, rideCount: Int?,
+                    automatic: Bool? = nil) {
             self.format = format
             self.createdAt = createdAt
             self.appVersion = appVersion
             self.build = build
             self.rideCount = rideCount
+            self.automatic = automatic
         }
     }
 
@@ -47,10 +52,12 @@ public enum LibraryBackup {
 
     // MARK: Back up
 
-    /// Writes a backup folder into `destination` and returns it.
+    /// Writes a backup folder into `destination` and returns it. `automatic` marks a backup of the iPhone's
+    /// automatic backup (B-302), so `Automatic.prune` may delete it later.
     @discardableResult
     public static func create(
-        storeURL: URL, in destination: URL, appVersion: String, build: String, rideCount: Int?, now: Date = .now
+        storeURL: URL, in destination: URL, appVersion: String, build: String, rideCount: Int?, automatic: Bool = false,
+        now: Date = .now
     ) throws -> URL {
         let fm = FileManager.default
         guard fm.fileExists(atPath: storeURL.path) else { throw Failure.noLibrary }
@@ -62,7 +69,8 @@ public enum LibraryBackup {
             if fm.fileExists(atPath: support.path) {
                 try fm.copyItem(at: support, to: folder.appending(path: support.lastPathComponent))
             }
-            let manifest = Manifest(createdAt: now, appVersion: appVersion, build: build, rideCount: rideCount)
+            let manifest = Manifest(createdAt: now, appVersion: appVersion, build: build, rideCount: rideCount,
+                                    automatic: automatic ? true : nil)
             try encoder.encode(manifest).write(to: folder.appending(path: manifestName))
         } catch {
             try? fm.removeItem(at: folder) // no half backup
@@ -219,7 +227,7 @@ public enum LibraryBackup {
         return encoder
     }
 
-    private static var decoder: JSONDecoder {
+    static var decoder: JSONDecoder {
         let decoder = JSONDecoder()
         decoder.dateDecodingStrategy = .iso8601
         return decoder

@@ -3,7 +3,7 @@
 How to get your rides out of Wattspur and read them with other tools (B-177). There are two ways:
 
 - **GPX export** of a single ride: a standard format that komoot, Strava, Garmin and most map tools read. **Stable.**
-- **Backup folder** of the whole library (**File › Library Backup…**): everything Wattspur stores. Its manifest and the original files are stable; the database inside is Wattspur's internal storage and **may change with any version**.
+- **Backup folder** of the whole library (**File › Library Backup…** on the Mac, **More › iCloud & Library › Back Up Library …** on the iPhone since 0.7.0): everything Wattspur stores. Its manifest and the original files are stable; the database inside is Wattspur's internal storage and **may change with any version**.
 
 To read all rides at once, use the backup and the example script below. Between the Mac and the iPhone the rides go over iCloud (Settings › iCloud), not through files.
 
@@ -45,7 +45,7 @@ What stays:
 
 ## Backup folder
 
-**File › Library Backup… › Back Up…** creates a folder named `Wattspur Backup 2026-10-27 1230`:
+**File › Library Backup… › Back Up…** on the Mac, or **More › iCloud & Library › Back Up Library …** on the iPhone, creates a folder named `Wattspur Backup 2026-10-27 1230`. Both write the same format: a backup from the iPhone restores on the Mac and the other way round (`LibraryBackupTests` checks it):
 
 ```text
 Wattspur Backup 2026-10-27 1230/
@@ -77,6 +77,7 @@ The folder starting with a dot is hidden in Finder; press ⇧⌘. to show it.
 | `createdAt` | When the backup was made, ISO 8601 in UTC |
 | `appVersion`, `build` | The Wattspur version that made it |
 | `rideCount` | Rides in the library at that time, for the confirmation before a restore. May be missing |
+| `automatic` | `true` for a backup of the iPhone's automatic backup (since 0.7.0), which keeps the newest three of its own and deletes older ones. Missing in all other backups; older versions ignore it, so the format stays `1` |
 
 ### `default.store` (internal)
 

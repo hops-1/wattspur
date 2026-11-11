@@ -3213,6 +3213,328 @@
           }
         }
       }
+    },
+    "A backup is a folder with all your rides, bikes, goals and notes, the same as on the Mac. Choose iCloud Drive, On My iPhone or a USB stick. A backup from this iPhone restores on the Mac, and the other way round." : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Eine Sicherung ist ein Ordner mit allen Fahrten, Bikes, Zielen und Notizen, wie am Mac. Wähle iCloud Drive, „Auf meinem iPhone“ oder einen USB-Stick. Eine Sicherung von diesem iPhone lässt sich am Mac zurückholen und umgekehrt."
+          }
+        }
+      }
+    },
+    "Back Up Automatically" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Automatisch sichern"
+          }
+        }
+      }
+    },
+    "Back Up Library …" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Bibliothek sichern …"
+          }
+        }
+      }
+    },
+    "Back up once by hand to choose the folder. After that Wattspur backs up there when it opens and the last backup is older than a week, and keeps the newest three automatic backups." : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sichere einmal von Hand, um den Ordner zu wählen. Danach sichert Wattspur dorthin, wenn es öffnet und die letzte Sicherung älter als eine Woche ist, und behält die drei neuesten automatischen Sicherungen."
+          }
+        }
+      }
+    },
+    "Backed Up" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Gesichert"
+          }
+        }
+      }
+    },
+    "Backing up automatically …" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Automatische Sicherung läuft …"
+          }
+        }
+      }
+    },
+    "Backing up the library …" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Bibliothek wird gesichert …"
+          }
+        }
+      }
+    },
+    "Backup" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sicherung"
+          }
+        }
+      }
+    },
+    "Backup Not Restored" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sicherung nicht zurückgeholt"
+          }
+        }
+      }
+    },
+    "Backup Restored" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sicherung zurückgeholt"
+          }
+        }
+      }
+    },
+    "Cancel Restore" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Zurückholen abbrechen"
+          }
+        }
+      }
+    },
+    "Close Wattspur in the app switcher and open it again. It then replaces the library with the backup." : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Schließe Wattspur im App-Umschalter und öffne es wieder. Dann ersetzt es die Bibliothek durch die Sicherung."
+          }
+        }
+      }
+    },
+    "It holds %lld rides." : {
+      "localizations" : {
+        "de" : {
+          "variations" : {
+            "plural" : {
+              "one" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "Sie enthält %lld Fahrt."
+                }
+              },
+              "other" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "Sie enthält %lld Fahrten."
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "Last backup: %@" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Letzte Sicherung: %@"
+          }
+        }
+      }
+    },
+    "Preparing the restore …" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Zurückholen wird vorbereitet …"
+          }
+        }
+      }
+    },
+    "Ready to Restore" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Bereit zum Zurückholen"
+          }
+        }
+      }
+    },
+    "Restore Backup …" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sicherung zurückholen …"
+          }
+        }
+      }
+    },
+    "Restore This Backup?" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Diese Sicherung zurückholen?"
+          }
+        }
+      }
+    },
+    "Sync with iCloud was turned on before Wattspur opened again, so the library stays as it was. Turn off sync and choose the backup again." : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "„Mit iCloud synchronisieren“ wurde eingeschaltet, bevor Wattspur wieder geöffnet wurde. Darum bleibt die Bibliothek, wie sie war. Schalte den Sync aus und wähle die Sicherung noch einmal."
+          }
+        }
+      }
+    },
+    "The backup is from %@ (Wattspur %@)." : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Die Sicherung ist vom %1$@ (Wattspur %2$@)."
+          }
+        }
+      }
+    },
+    "The folder for the automatic backup is no longer there. Back up once by hand to choose a new one." : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Den Ordner für die automatische Sicherung gibt es nicht mehr. Sichere einmal von Hand, um einen neuen zu wählen."
+          }
+        }
+      }
+    },
+    "The library file could not be read: %@" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Die Datei der Bibliothek konnte nicht gelesen werden: %@"
+          }
+        }
+      }
+    },
+    "The library is now the backup from %@. The library before it is kept in a folder “Library Before Restore …”." : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Die Bibliothek ist jetzt die Sicherung vom %@. Die Bibliothek davor bleibt im Ordner „Library Before Restore …“."
+          }
+        }
+      }
+    },
+    "The library on this iPhone is replaced with the backup the next time Wattspur opens. Rides and changes since the backup are not in it. The current library is kept in a folder beside it." : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Beim nächsten Öffnen ersetzt Wattspur die Bibliothek auf diesem iPhone durch die Sicherung. Fahrten und Änderungen seit der Sicherung sind nicht darin. Die jetzige Bibliothek bleibt in einem Ordner daneben."
+          }
+        }
+      }
+    },
+    "There is no library to back up yet." : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Es gibt noch keine Bibliothek zum Sichern."
+          }
+        }
+      }
+    },
+    "This backup was made by a newer version of Wattspur. Update Wattspur before you restore it." : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Diese Sicherung stammt von einer neueren Version von Wattspur. Aktualisiere Wattspur, bevor du sie zurückholst."
+          }
+        }
+      }
+    },
+    "This backup was made by a newer version of Wattspur. Update Wattspur to restore it." : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Diese Sicherung stammt von einer neueren Version von Wattspur. Aktualisiere Wattspur, um sie zurückzuholen."
+          }
+        }
+      }
+    },
+    "This folder is not a Wattspur backup." : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Dieser Ordner ist keine Wattspur-Sicherung."
+          }
+        }
+      }
+    },
+    "To restore a backup, turn off Sync with iCloud first. Otherwise iCloud would bring back what changed since the backup." : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Um eine Sicherung zurückzuholen, schalte zuerst „Mit iCloud synchronisieren“ aus. Sonst bringt iCloud zurück, was sich seit der Sicherung geändert hat."
+          }
+        }
+      }
+    },
+    "When Wattspur opens and the last backup is older than a week, it backs up into the folder you chose last. It keeps the newest three automatic backups there and deletes only its own." : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Öffnet Wattspur und ist die letzte Sicherung älter als eine Woche, sichert es in den zuletzt gewählten Ordner. Dort behält es die drei neuesten automatischen Sicherungen und löscht nur eigene."
+          }
+        }
+      }
+    },
+    "“%@” in “%@”" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "„%1$@“ in „%2$@“"
+          }
+        }
+      }
     }
   },
   "version" : "1.1"

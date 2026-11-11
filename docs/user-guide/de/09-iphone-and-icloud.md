@@ -81,6 +81,14 @@ Ab 0.6.2 holt Wattspur auch Dateien, die schon in der Dateien-App liegen, ganz o
 
 Es gelten dieselben Fragen wie oben: welches Bike, was mit einer Fahrt geschieht, die schon da ist, und eine Bosch-Datei ergänzt deine Aufnahme um Leistung, Trittfrequenz und Puls. Bei vielen Dateien zeigt Wattspur oben, wie weit es ist, und am Ende eine Zusammenfassung, zum Beispiel „12 neu, 3 ergänzt, 1 doppelt“.
 
+## Die Bibliothek sichern
+Ab 0.7.0 sichert auch das iPhone die ganze Bibliothek, im selben Format wie der Mac (**Ablage › Mediathek-Backup …**). Du findest es unter **Mehr › iCloud & Bibliothek › Sicherung**.
+- **Bibliothek sichern …:** Wähle einen Ordner, zum Beispiel in iCloud Drive, unter **Auf meinem iPhone** oder auf einem USB-Stick. Wattspur legt dort einen Ordner „Wattspur Backup …“ an und meldet „Gesichert“ mit dem Ort.
+- **Sicherung zurückholen …:** Wähle einen Sicherungsordner. Wattspur zeigt Datum, Version und Zahl der Fahrten und fragt nach. Schließe danach Wattspur im App-Umschalter und öffne es wieder: Dann ersetzt die Sicherung die Bibliothek. Die alte Bibliothek bleibt in einem Ordner „Library Before Restore …“. Das geht nur, wenn **Mit iCloud synchronisieren** aus ist, sonst brächte iCloud die Änderungen seit der Sicherung zurück.
+- **Automatisch sichern:** Ist der Schalter an, sichert Wattspur beim Öffnen, wenn die letzte Sicherung älter als eine Woche ist und gerade nichts aufgenommen wird. Die Sicherung kommt in den Ordner, den du zuletzt gewählt hast; sichere also einmal von Hand. Wattspur behält dort die drei neuesten automatischen Sicherungen und löscht nur eigene. Gibt es den Ordner nicht mehr, steht ein Hinweis unter dem Schalter.
+
+Eine Sicherung vom iPhone lässt sich am Mac zurückholen und umgekehrt. Was in einer Sicherung steckt, steht auf der Seite [Data exchange](../../reference/data-exchange.md) (englisch).
+
 ## Höhe beim Aufnehmen
 Wattspur misst die Höhe beim Aufnehmen mit dem **Barometer** des iPhones, also über den Luftdruck. Das ist viel ruhiger als die GPS-Höhe allein, deshalb liegt der Anstieg näher an dem von Bosch. Die Höhe über dem Meer kommt weiter vom GPS: Wattspur gleicht beide laufend ab. So stört auch eine Wetteränderung während der Fahrt nicht.
 

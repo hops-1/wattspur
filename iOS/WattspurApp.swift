@@ -26,6 +26,10 @@ struct WattspurApp: App {
     @State private var unfinishedProblem: String?
     /// FIT and GPX files opened with Wattspur (B-071), chosen in the file picker or put into the folder “Import” (B-300).
     @State private var phoneImport = PhoneImport()
+    /// Back up and restore (B-302).
+    @State private var backup = PhoneBackup()
+    /// What happened to a backup staged for this start (B-302).
+    @State private var launchRestore: PhoneBackup.LaunchResult?
 
     init() {
         // Siri and the shortcuts (B-225) reach the recorder and the app through these two.
@@ -40,6 +44,8 @@ struct WattspurApp: App {
         let buildMode = PhoneDatabase.Mode(infoValue: Bundle.main.object(forInfoDictionaryKey: "WattspurDatabase") as? String)
         let sync = PhoneSync(buildMode: buildMode, hadFolder: PhoneSync.hadFolder(), hadStore: PhoneSync.storeExists)
         _sync = State(initialValue: sync)
+        // A backup chosen under More is swapped in now, before the store opens (B-302).
+        _launchRestore = State(initialValue: PhoneBackup.applyAtLaunch(syncOn: sync.mode == .iCloud))
         let library = sync.makeLibrary()
         #if DEBUG
         if UserDefaults.standard.bool(forKey: PhoneSettingsKey.demoRide) { library.importSampleRideForTesting() }
@@ -130,6 +136,7 @@ struct WattspurApp: App {
         }
         .phoneImport(phoneImport)
         .environment(phoneImport)
+        .environment(backup)
         .environment(sync)
         .environment(\.switchSync, SwitchSyncAction(switchSync))
         .reportsSaveFailures()
@@ -155,6 +162,13 @@ struct WattspurApp: App {
             }
         } message: {
             Text("Wattspur on the iPhone no longer reads rides from a folder. Your rides are on your Mac: turn on Sync with iCloud, here under More and on the Mac under Wattspur › Settings › iCloud, and they come to this iPhone. Rides recorded here stay on this iPhone until then; “Share GPX” takes one to the Mac.")
+        }
+        // The start after “Restore Backup …” (B-302).
+        .alert(launchRestoreTitle, isPresented: Binding(get: { launchRestore != nil && !recorder.isRecording },
+                                                        set: { if !$0 { launchRestore = nil } })) {
+            Button("OK", role: .cancel) { launchRestore = nil }
+        } message: {
+            Text(launchRestoreMessage)
         }
         // A recording the app could not finish (crash, killed): go on or end it.
         .alert("Unfinished Ride", isPresented: Binding(get: { recorder.unfinished != nil && !recorder.isRecording
@@ -218,7 +232,28 @@ struct WattspurApp: App {
                 Task { await library.refresh() }
                 // Files put into “On My iPhone › Wattspur › Import” meanwhile (B-300); not while recording.
                 if !recorder.isRecording { phoneImport.importWaitingFiles(library: library) }
+                // The weekly backup, when switched on (B-302); not while recording or with a damaged library.
+                if !recorder.isRecording, sync.libraryFailure == nil {
+                    backup.backUpAutomaticallyIfDue(rideCount: library.state?.rides.count)
+                }
             }
+        }
+    }
+}
+
+extension WattspurApp {
+    private var launchRestoreTitle: LocalizedStringKey {
+        launchRestore == .skippedSyncOn ? "Backup Not Restored" : "Backup Restored"
+    }
+
+    private var launchRestoreMessage: String {
+        switch launchRestore {
+        case .restored(let date):
+            String(localized: "The library is now the backup from \(date.formatted(date: .long, time: .shortened)). The library before it is kept in a folder “Library Before Restore …”.")
+        case .skippedSyncOn:
+            String(localized: "Sync with iCloud was turned on before Wattspur opened again, so the library stays as it was. Turn off sync and choose the backup again.")
+        case nil:
+            ""
         }
     }
 }

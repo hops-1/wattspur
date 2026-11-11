@@ -175,4 +175,74 @@ struct LibraryBackupTests {
         _ = try LibraryBackup.applyPendingRestore(storeURL: storeURL)
         #expect(try Data(contentsOf: blobs.appending(path: "blob")) == Data("first".utf8))
     }
+
+    // MARK: iPhone and Mac (B-302)
+
+    @Test("A backup from one device restores on the other: same format on iPhone and Mac")
+    func exchangeBetweenDevices() throws {
+        defer { try? FileManager.default.removeItem(at: root) }
+        // The iPhone's library, backed up by the iPhone.
+        #expect(try fill(storeURL, importing: 2) == 2)
+        let folder = try backup()
+
+        // The Mac's library lives elsewhere but has the same file name; it holds other rides.
+        let macFolder = root.appending(path: "Mac/Application Support")
+        try FileManager.default.createDirectory(at: macFolder, withIntermediateDirectories: true)
+        let macStore = macFolder.appending(path: "default.store")
+        #expect(try fill(macStore, importing: 4) == 4)
+
+        let manifest = try LibraryBackup.inspect(folder, storeName: macStore.lastPathComponent)
+        #expect(manifest.format == LibraryBackup.Manifest.currentFormat)
+        try LibraryBackup.stageRestore(from: folder, storeURL: macStore)
+        let kept = try #require(try LibraryBackup.applyPendingRestore(storeURL: macStore))
+        #expect(try count(macStore) == 2)
+        #expect(try count(kept.appending(path: "default.store")) == 4)
+
+        // And back: the Mac's backup restores on the iPhone.
+        let macBackup = try LibraryBackup.create(storeURL: macStore, in: root, appVersion: "1.8.12", build: "700", rideCount: 2)
+        try LibraryBackup.stageRestore(from: macBackup, storeURL: storeURL)
+        _ = try LibraryBackup.applyPendingRestore(storeURL: storeURL)
+        #expect(try count(storeURL) == 2)
+    }
+
+    @Test("A manifest of the Mac without the automatic flag still reads, and the flag stays out of it")
+    func manifestWithoutAutomaticFlag() throws {
+        defer { try? FileManager.default.removeItem(at: root) }
+        _ = try fill(storeURL, importing: 1)
+        let folder = try backup()
+        let json = try String(contentsOf: folder.appending(path: "manifest.json"), encoding: .utf8)
+        #expect(!json.contains("automatic"))
+        #expect(try LibraryBackup.inspect(folder, storeName: "default.store").automatic == nil)
+    }
+
+    @Test("An automatic backup is due after a week, or when there was none")
+    func automaticIsDue() {
+        let now = Date(timeIntervalSince1970: 2_000_000_000)
+        #expect(LibraryBackup.Automatic.isDue(lastBackup: nil, now: now))
+        #expect(!LibraryBackup.Automatic.isDue(lastBackup: now.addingTimeInterval(-6 * 24 * 3600), now: now))
+        #expect(LibraryBackup.Automatic.isDue(lastBackup: now.addingTimeInterval(-7 * 24 * 3600), now: now))
+    }
+
+    @Test("Pruning keeps the newest three automatic backups and never touches other backups")
+    func automaticPrune() throws {
+        defer { try? FileManager.default.removeItem(at: root) }
+        _ = try fill(storeURL, importing: 1)
+        let destination = root.appending(path: "Backups")
+        try FileManager.default.createDirectory(at: destination, withIntermediateDirectories: true)
+        let start = Date(timeIntervalSince1970: 2_000_000_000)
+        var automatic: [URL] = []
+        for day in 0..<5 {
+            automatic.append(try LibraryBackup.create(storeURL: storeURL, in: destination, appVersion: "0.7.0", build: "19",
+                                                      rideCount: 1, automatic: true, now: start.addingTimeInterval(Double(day) * 86_400)))
+        }
+        let byHand = try LibraryBackup.create(storeURL: storeURL, in: destination, appVersion: "0.7.0", build: "19", rideCount: 1,
+                                              now: start.addingTimeInterval(-86_400))
+        let other = destination.appending(path: "Holiday photos")
+        try FileManager.default.createDirectory(at: other, withIntermediateDirectories: false)
+
+        let deleted = LibraryBackup.Automatic.prune(in: destination)
+        #expect(Set(deleted.map(\.lastPathComponent)) == Set(automatic.prefix(2).map(\.lastPathComponent)))
+        let left = try FileManager.default.contentsOfDirectory(at: destination, includingPropertiesForKeys: nil).map(\.lastPathComponent)
+        #expect(Set(left) == Set(automatic.suffix(3).map(\.lastPathComponent) + [byHand.lastPathComponent, "Holiday photos"]))
+    }
 }

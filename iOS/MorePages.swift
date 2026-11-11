@@ -1,4 +1,5 @@
 import SwiftUI
+import UniformTypeIdentifiers
 import WattspurCore
 import WattspurKit
 import WattspurMap
@@ -170,6 +171,7 @@ private struct LibraryPage: View {
             } footer: {
                 Text("FIT and GPX files, several at once, also from iCloud Drive. Files you put into “On My iPhone › Wattspur › Import” in the Files app are imported when Wattspur opens; then they move to “Importiert”, or to “Fehler” if they cannot be read.")
             }
+            BackupSection()
             Section {
                 LabeledContent("Rides") { Text((library.state?.rides.count ?? 0).formatted()) }
             } header: {
@@ -182,6 +184,132 @@ private struct LibraryPage: View {
                 }
             }
         }
+    }
+}
+
+/// Back up the library into a folder of the rider's choice and bring a backup back (B-302), in the
+/// format of the Mac.
+private struct BackupSection: View {
+    enum Picking { case destination, backup }
+
+    @Environment(PhoneLibrary.self) private var library
+    @Environment(PhoneSync.self) private var sync
+    @Environment(PhoneBackup.self) private var backup
+    @Environment(Recorder.self) private var recorder
+    @AppStorage(PhoneSettingsKey.autoBackup) private var automatic = false
+    @State private var picking: Picking?
+
+    /// Restoring needs sync off, now and for the next start (R-29; with sync on comes with B-265).
+    private var syncBlocksRestore: Bool { sync.isOn || library.mode == .iCloud }
+
+    var body: some View {
+        @Bindable var backup = backup
+        Section {
+            Button {
+                picking = .destination
+            } label: {
+                Label("Back Up Library …", systemImage: "externaldrive.badge.plus")
+            }
+            .disabled(backup.isWorking || backup.state == .restoreStaged)
+            Button {
+                picking = .backup
+            } label: {
+                Label("Restore Backup …", systemImage: "arrow.counterclockwise")
+            }
+            .disabled(backup.isWorking || backup.state == .restoreStaged || syncBlocksRestore || recorder.isRecording)
+            Toggle("Back Up Automatically", isOn: $automatic)
+            status
+        } header: {
+            Text("Backup")
+        } footer: {
+            VStack(alignment: .leading, spacing: 4) {
+                Text("A backup is a folder with all your rides, bikes, goals and notes, the same as on the Mac. Choose iCloud Drive, On My iPhone or a USB stick. A backup from this iPhone restores on the Mac, and the other way round.")
+                if syncBlocksRestore {
+                    Text("To restore a backup, turn off Sync with iCloud first. Otherwise iCloud would bring back what changed since the backup.")
+                }
+                if automatic {
+                    if backup.automaticFolderMissing {
+                        Text("The folder for the automatic backup is no longer there. Back up once by hand to choose a new one.")
+                            .foregroundStyle(.orange)
+                    } else if !backup.hasFolder {
+                        Text("Back up once by hand to choose the folder. After that Wattspur backs up there when it opens and the last backup is older than a week, and keeps the newest three automatic backups.")
+                    } else {
+                        Text("When Wattspur opens and the last backup is older than a week, it backs up into the folder you chose last. It keeps the newest three automatic backups there and deletes only its own.")
+                    }
+                }
+                if let last = backup.lastBackup {
+                    Text("Last backup: \(last.formatted(date: .abbreviated, time: .shortened))")
+                }
+            }
+        }
+        .fileImporter(isPresented: Binding(get: { picking != nil }, set: { if !$0 { picking = nil } }),
+                      allowedContentTypes: [.folder]) { result in
+            let purpose = picking
+            picking = nil
+            guard case .success(let folder) = result else { return }
+            switch purpose {
+            case .destination: backup.backUp(to: folder, rideCount: library.state?.rides.count)
+            case .backup: backup.choose(folder)
+            case nil: break
+            }
+        }
+        .alert("Restore This Backup?", isPresented: Binding(get: { backup.candidate != nil },
+                                                            set: { if !$0 { backup.candidate = nil } }),
+               presenting: backup.candidate) { candidate in
+            Button("Restore", role: .destructive) { backup.restore(candidate) }
+            Button("Cancel", role: .cancel) { backup.candidate = nil }
+        } message: { candidate in
+            Text(confirmation(for: candidate.manifest))
+        }
+    }
+
+    @ViewBuilder private var status: some View {
+        switch backup.state {
+        case .idle:
+            EmptyView()
+        case .working(let text):
+            HStack(spacing: 8) {
+                ProgressView()
+                Text(text)
+            }
+        case .saved(let name, let place):
+            Label {
+                VStack(alignment: .leading, spacing: 2) {
+                    Text("Backed Up")
+                    Text("“\(name)” in “\(place)”")
+                        .font(.footnote)
+                        .foregroundStyle(.secondary)
+                }
+            } icon: {
+                Image(systemName: "checkmark.circle.fill").foregroundStyle(.green)
+            }
+        case .restoreStaged:
+            VStack(alignment: .leading, spacing: 8) {
+                Label("Ready to Restore", systemImage: "arrow.triangle.2.circlepath")
+                Text("Close Wattspur in the app switcher and open it again. It then replaces the library with the backup.")
+                    .font(.footnote)
+                    .foregroundStyle(.secondary)
+                Button("Cancel Restore", role: .destructive) { backup.cancelRestore() }
+            }
+        case .failed(let text):
+            Label {
+                Text(text)
+            } icon: {
+                Image(systemName: "exclamationmark.triangle.fill").foregroundStyle(.orange)
+            }
+        }
+    }
+
+    private func confirmation(for manifest: LibraryBackup.Manifest) -> String {
+        var text = String(localized: "The backup is from \(manifest.createdAt.formatted(date: .long, time: .shortened)) (Wattspur \(manifest.appVersion)).")
+        if let count = manifest.rideCount {
+            text += " " + String(localized: "It holds \(count) rides.")
+        }
+        text += "\n\n" + String(localized: "The library on this iPhone is replaced with the backup the next time Wattspur opens. Rides and changes since the backup are not in it. The current library is kept in a folder beside it.")
+        if manifest.build.compare(AppInfo.build, options: .numeric) == .orderedDescending {
+            text += "\n\n" + String(localized: "This backup was made by a newer version of Wattspur. Update Wattspur before you restore it.")
+        }
+        return text
     }
 }
 
