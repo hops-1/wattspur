@@ -73,11 +73,9 @@ public enum LibraryBackup {
         let folder = uniqueFolder(named: "Wattspur Backup \(timestamp(now))", in: destination)
         try fm.createDirectory(at: folder, withIntermediateDirectories: false)
         do {
-            try copyDatabase(from: storeURL, to: folder.appending(path: storeURL.lastPathComponent))
-            let support = supportFolder(for: storeURL)
-            if fm.fileExists(atPath: support.path) {
-                try fm.copyItem(at: support, to: folder.appending(path: support.lastPathComponent))
-            }
+            let copy = folder.appending(path: storeURL.lastPathComponent)
+            try copyDatabase(from: storeURL, to: copy)
+            try copySupport(of: copy, from: supportFolder(for: storeURL), to: supportFolder(for: copy))
             let manifest = Manifest(createdAt: now, appVersion: appVersion, build: build, rideCount: rideCount,
                                     automatic: automatic ? true : nil)
             try encoder.encode(manifest).write(to: folder.appending(path: manifestName))
@@ -151,6 +149,28 @@ public enum LibraryBackup {
         }
     }
 
+    /// Copies the blob folder of a library for the library file `store` (already copied): only the blobs that file
+    /// refers to, and whatever else the folder holds besides `_EXTERNAL_DATA`. SwiftData leaves blobs of old values
+    /// behind; on 11.11.2026 a backup held 346 blobs, its library needed 259, and the restore waited for the 87 others
+    /// to come down from iCloud Drive.
+    static func copySupport(of store: URL, from source: URL, to destination: URL) throws {
+        let fm = FileManager.default
+        guard fm.fileExists(atPath: source.path) else { return }
+        try fm.createDirectory(at: destination, withIntermediateDirectories: true)
+        for item in try fm.contentsOfDirectory(at: source, includingPropertiesForKeys: nil) where item.lastPathComponent != "_EXTERNAL_DATA" {
+            try fm.copyItem(at: item, to: destination.appending(path: item.lastPathComponent))
+        }
+        let names = try externalDataNames(storeURL: store)
+        guard !names.isEmpty else { return }
+        let blobs = source.appending(path: "_EXTERNAL_DATA")
+        let target = destination.appending(path: "_EXTERNAL_DATA")
+        try fm.createDirectory(at: target, withIntermediateDirectories: true)
+        // A blob that is missing here is left out; `checkExternalData` then says what is missing.
+        for name in names.sorted() where fm.fileExists(atPath: blobs.appending(path: name).path) {
+            try fm.copyItem(at: blobs.appending(path: name), to: target.appending(path: name))
+        }
+    }
+
     /// A file in iCloud Drive whose content is not on this device yet.
     private static func isNotDownloaded(_ url: URL) -> Bool {
         guard let values = try? url.resourceValues(forKeys: [.isUbiquitousItemKey, .ubiquitousItemDownloadingStatusKey]),
@@ -173,12 +193,10 @@ public enum LibraryBackup {
         try? fm.removeItem(at: pending)
         try fm.createDirectory(at: pending, withIntermediateDirectories: true)
         do {
-            try fm.copyItem(at: backup.appending(path: storeURL.lastPathComponent), to: pending.appending(path: storeURL.lastPathComponent))
-            let support = supportFolder(for: storeURL)
-            let source = backup.appending(path: support.lastPathComponent)
-            if fm.fileExists(atPath: source.path) {
-                try fm.copyItem(at: source, to: pending.appending(path: support.lastPathComponent))
-            }
+            let staged = pending.appending(path: storeURL.lastPathComponent)
+            try fm.copyItem(at: backup.appending(path: storeURL.lastPathComponent), to: staged)
+            try copySupport(of: staged, from: supportFolder(for: backup.appending(path: storeURL.lastPathComponent)),
+                            to: supportFolder(for: staged))
             // Stays in the pending folder, so the start after the restore can say which backup came back.
             try fm.copyItem(at: backup.appending(path: manifestName), to: pending.appending(path: manifestName))
             // The copy must hold every blob, whatever the copy did with files still in iCloud.

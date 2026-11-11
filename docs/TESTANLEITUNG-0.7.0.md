@@ -57,3 +57,5 @@ Hier eintragen oder an Claude schicken. Ein ✗ wird ein eigener Backlog-Punkt; 
 **B (Nils, 11.11.2026, Build 21):** B1 ✓. B2 ✗ – die Sicherung lag noch nicht ganz in iCloud Drive am Mac; das Zurückholen hing und setzte dann eine unvollständige Sicherung ein (B-306, behoben in Mac 1.8.13 und iPhone 0.7.0 (22)). B3 beobachtet Nils in den nächsten Tagen. **B2 nur noch mit einer Test-Bibliothek wiederholen, nicht mit der echten.**
 
 **Nachtrag (11.11.2026, 23 Uhr):** Die iPhone-Sicherungen aus 0.7.0 (19) bis (22) enthalten einen alten Stand vom 5.11. (B-308). Sie nicht zurückholen. Mit Build 23 neu sichern; B1 und B2 mit Build 23 und einer Test-Bibliothek wiederholen.
+
+**B2 (Nils, 11.11.2026, Mac 1.8.13 + Build 23):** Die Meldung „N Dateien liegen noch in iCloud Drive“ kam richtig. Danach wartete die Vorbereitung noch lange auf 87 alte, nicht gebrauchte Dateien; behoben in Mac 1.8.14 und iPhone 0.7.0 (24).
