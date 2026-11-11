@@ -36,6 +36,11 @@ enum PhoneSettingsKey {
     static let mapLegendFolded = "mapLegendFolded"
     /// Height or speed in the profile while recording (B-277).
     static let recordingProfileKind = "recordingProfileKind"
+    /// The backup on the iPhone (B-302): whether it runs by itself once a week, the folder chosen last
+    /// (a bookmark, for the automatic backup) and when the last backup was made.
+    static let autoBackup = "autoBackup"
+    static let backupFolderBookmark = "backupFolderBookmark"
+    static let lastBackupDate = "lastBackupDate"
     /// Set by UI tests and screenshots: import the sample ride at launch.
     static let demoRide = "WattspurDemoRide"
 }

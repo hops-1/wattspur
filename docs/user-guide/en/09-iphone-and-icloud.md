@@ -81,6 +81,14 @@ From 0.6.2 on, Wattspur also takes files that are already in the Files app, with
 
 The same questions as above apply: which bike, what happens to a ride that is already there, and a Bosch file completes your recording with power, cadence and heart rate. With many files Wattspur shows at the top how far it is, and a summary at the end, for example “12 new, 3 completed, 1 duplicate”.
 
+## Backing up the library
+From 0.7.0 on, the iPhone backs up the whole library too, in the same format as the Mac (**File › Library Backup…**). You find it under **More › iCloud & Library › Backup**.
+- **Back Up Library …:** choose a folder, for example in iCloud Drive, under **On My iPhone** or on a USB stick. Wattspur creates a folder “Wattspur Backup …” there and says “Backed Up” with the place.
+- **Restore Backup …:** choose a backup folder. Wattspur shows the date, the version and the number of rides and asks you to confirm. Then close Wattspur in the app switcher and open it again: the backup replaces the library. The old library stays in a folder “Library Before Restore …”. This works only while **Sync with iCloud** is off; otherwise iCloud would bring back the changes since the backup.
+- **Back Up Automatically:** with the switch on, Wattspur backs up when it opens, if the last backup is older than a week and nothing is being recorded. The backup goes into the folder you chose last, so back up once by hand. Wattspur keeps the newest three automatic backups there and deletes only its own. If the folder is gone, a notice shows below the switch.
+
+A backup from the iPhone restores on the Mac, and the other way round. What a backup holds is described in [Data exchange](../../reference/data-exchange.md).
+
 ## Height while recording
 While recording, Wattspur measures the height with the iPhone's **barometer**, from the air pressure. That is much calmer than the GPS height alone, so the ascent comes closer to Bosch. The height above sea level still comes from the GPS: Wattspur keeps matching the two. So a change in the weather during the ride does not get in the way either.
 
