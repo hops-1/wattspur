@@ -7,6 +7,10 @@ Every DMG handed out to testers corresponds to one entry below.
 
 ## [Unreleased]
 
+### Fixed
+
+- **iPhone: the backup saved an old library.** Since the widget (5.11.2026) the iPhone keeps its library in the App Group's container, but Back Up Library and Restore Backup still used the old place, where a library from before the widget was left. A backup therefore held the state of 5.11., and restoring it, on the Mac too, took every ride since away and brought back rides deleted since. Now both use the library the app really opens (B-308, iPhone 0.7.0 (23)). Backups made with iPhone 0.7.0 (19) to (22) hold the old state: do not restore them.
+
 ## [1.8.13] – 2026-11-11
 
 Fixes from testing 1.8.12 and iPhone 0.7.0. Together with the iPhone app 0.7.0 (22).
