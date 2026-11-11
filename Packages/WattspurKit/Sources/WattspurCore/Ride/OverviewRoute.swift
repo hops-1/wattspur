@@ -6,7 +6,8 @@ import Foundation
 public struct OverviewRoute: Sendable, Equatable {
     /// Raise when the simplification or the encoding changes; stored routes with
     /// an older version are computed again on the next launch.
-    public static let version = 1
+    /// 2 (11.11.2026): a new segment at every gap in the track (B-309).
+    public static let version = 2
     /// Douglas-Peucker tolerance in metres (decided 22.10.2026, Requirements 10.11).
     public static let tolerance = 5.0
 
@@ -16,13 +17,14 @@ public struct OverviewRoute: Sendable, Equatable {
         self.segments = segments.filter { !$0.isEmpty }
     }
 
-    /// Simplifies the GPS positions of a ride's time series into one segment.
+    /// Simplifies the GPS positions of a ride's time series: one segment, or one per stretch
+    /// between gaps (B-309), so the map draws no line across a train ride.
     public init(samples: [RideSample], tolerance: Double = Self.tolerance) {
         let points = samples.compactMap { s -> RoutePoint? in
             guard let lat = s.latitude, let lon = s.longitude else { return nil }
             return RoutePoint(latitude: lat, longitude: lon)
         }
-        self.init(segments: [RouteSimplifier.simplify(points, tolerance: tolerance)])
+        self.init(segments: TrackGap.split(points).map { RouteSimplifier.simplify($0, tolerance: tolerance) })
     }
 
     /// Simplifies an encoded time series (`Ride.samplesData`); empty without data.

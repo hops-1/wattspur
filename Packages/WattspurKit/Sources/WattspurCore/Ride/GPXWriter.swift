@@ -62,12 +62,14 @@ public enum GPXWriter {
         xml += "    <type>cycling</type>\n"
         for segment in segments {
             let points = segment.samples.filter { $0.latitude != nil && $0.longitude != nil }
-            guard !points.isEmpty else { continue }
-            xml += "    <trkseg>\n"
-            for sample in points {
-                xml += trackPoint(sample, start: segment.startDate)
+            // A new segment at every gap in the track, so other programs draw no line across it (B-309).
+            for stretch in TrackGap.split(points) {
+                xml += "    <trkseg>\n"
+                for sample in stretch {
+                    xml += trackPoint(sample, start: segment.startDate)
+                }
+                xml += "    </trkseg>\n"
             }
-            xml += "    </trkseg>\n"
         }
         xml += "  </trk>\n</gpx>\n"
         return Data(xml.utf8)

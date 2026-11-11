@@ -11,6 +11,8 @@ import Foundation
 ///   5.11.2026). After `startTimeout` the normal limit is enough, so a recording still begins.
 /// - A position that would mean more than the vehicle's top speed since the last one is a jump and
 ///   is dropped: `maxSpeed` for an e-bike, more for a motorcycle (`RecordingVehicle`).
+/// - A position more than `TrackGap.distance` away after more than `maxGap` without one starts a
+///   new segment, like a pause: the train ride between two stations adds no distance (B-309).
 /// - Distance only grows once the position is `minStep` away from where it last grew, so the GPS
 ///   wandering around a standing bike adds nothing.
 /// - Moving time counts the time between two such steps when it was faster than `minMovingSpeed`
@@ -102,6 +104,14 @@ public struct RideRecording: Codable, Sendable, Equatable {
         let seconds = fix.date.timeIntervalSince(last.fix.date)
         guard seconds > 0 else { return false }
         let step = GPXGeo.distance(last.fix.latitude, last.fix.longitude, fix.latitude, fix.longitude)
+        // Far away after a while without positions, e.g. off the train (B-309): a new stretch, as
+        // after a pause, so the distance does not jump and later positions are no GPS jumps.
+        if seconds > Self.maxGap, step > TrackGap.distance {
+            startStretch()
+            segments[segments.count - 1].append(Point(fix: fix, distance: distance))
+            anchor = fix
+            return true
+        }
         guard step / seconds <= vehicle.maxSpeed else { return false }
 
         if let anchor {
@@ -130,6 +140,11 @@ public struct RideRecording: Codable, Sendable, Equatable {
     public mutating func resume() {
         guard isPaused else { return }
         isPaused = false
+        startStretch()
+    }
+
+    /// Ends the current stretch (if it has positions) and starts an empty one.
+    private mutating func startStretch() {
         if !(segments.last ?? []).isEmpty { segments.append([]) }
         anchor = nil
         // Everything but the new, empty stretch is finished now.
