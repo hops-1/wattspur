@@ -215,10 +215,16 @@ struct ImportService: LibraryService {
         for start in stride(from: 0, to: single.count, by: max(1, batchSize)) {
             let batch = Array(single[start..<min(start + max(1, batchSize), single.count)])
             let inputs = batch.map(\.samplesData)
-            let routes = await Task.detached(priority: .utility) { inputs.map(OverviewRoute.init(samplesData:)) }.value
+            let routes = await Task.detached(priority: .utility) {
+                inputs.map { data in TimeSeriesDamage.decode(data).map { OverviewRoute(samples: $0) } }
+            }.value
             // The ride may have been deleted or updated meanwhile.
             for (ride, route) in zip(batch, routes) where !ride.isDeleted && ride.needsOverviewRoute {
-                ride.setOverviewRoute(route)
+                switch route {
+                case .success(let route): ride.setOverviewRoute(route)
+                // An unreadable time series keeps the stored route (B-268).
+                case .failure(let error): TimeSeriesDamage.note(ride.id, error: error)
+                }
             }
             LibrarySave.save(context)
             done += batch.count
@@ -250,14 +256,15 @@ struct ImportService: LibraryService {
             let batch = Array(single[start..<min(start + max(1, batchSize), single.count)])
             let inputs = batch.map(\.samplesData)
             let values = await Task.detached(priority: .utility) {
-                inputs.map { data -> Int? in
-                    guard let data, let samples = try? PropertyListDecoder().decode([RideSample].self, from: data) else { return nil }
-                    return PeakPower.bestAverage(of: samples)
-                }
+                inputs.map { data in TimeSeriesDamage.decode(data).map { PeakPower.bestAverage(of: $0) } }
             }.value
             // The ride may have been deleted or updated meanwhile.
             for (ride, value) in zip(batch, values) where !ride.isDeleted && ride.needsPeakPower {
-                ride.setPeakPower(value)
+                switch value {
+                case .success(let value): ride.setPeakPower(value)
+                // An unreadable time series keeps the stored value (B-268).
+                case .failure(let error): TimeSeriesDamage.note(ride.id, error: error)
+                }
             }
             LibrarySave.save(context)
             done += batch.count
@@ -287,14 +294,15 @@ struct ImportService: LibraryService {
             let batch = Array(outdated[start..<min(start + max(1, batchSize), outdated.count)])
             let inputs = batch.map(\.samplesData)
             let values = await Task.detached(priority: .utility) {
-                inputs.map { data -> TrackFigures in
-                    guard let data, let samples = try? PropertyListDecoder().decode([RideSample].self, from: data) else { return TrackFigures() }
-                    return TrackFigures(samples: samples)
-                }
+                inputs.map { data in TimeSeriesDamage.decode(data).map { TrackFigures(samples: $0) } }
             }.value
             // The ride may have been deleted or updated meanwhile.
             for (ride, value) in zip(batch, values) where !ride.isDeleted && ride.needsTrackFigures {
-                ride.setTrackFigures(value)
+                switch value {
+                case .success(let value): ride.setTrackFigures(value)
+                // An unreadable time series keeps the stored values (B-268).
+                case .failure(let error): TimeSeriesDamage.note(ride.id, error: error)
+                }
             }
             LibrarySave.save(context)
             done += batch.count
