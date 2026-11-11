@@ -71,6 +71,7 @@ The Bosch file of a ride has more values than a GPS recording, such as power and
 - **Already in the library:** if you recorded the ride with the iPhone too, you can choose **Use the Bosch Values**, **Keep Both** or **Skip**. Wattspur shows the start, distance and time of both.
 - A GPX file for a Bosch ride is attached to the ride. The Bosch values stay.
 - **One tour in several Bosch parts:** the Flow app splits a tour with long pauses into several rides, the iPhone records it as one. When the Bosch rides lie wholly inside the time of your recording and add up to its distance, Wattspur merges them into one ride. It gets the recording's name and bike and its heart rate, lean angle and surface. The recording itself goes to the trash, where you can restore it. It does not matter which file comes last. If you imported the parts earlier, drop one of their FIT files once more.
+- **One Bosch ride over several recordings:** sometimes the Flow app saves the way there and back of one day as one ride, the iPhone as two recordings. When the recordings lie wholly inside the time of the Bosch ride and add up to its distance, Wattspur splits the Bosch ride: each recording becomes a ride with the Bosch values of its time and the recording's name, bike, heart rate, lean angle and surface. The recordings go to the trash. If the Bosch ride is there already, share its FIT file to Wattspur once more.
 
 **Without iCloud** it becomes a ride on the iPhone only.
 

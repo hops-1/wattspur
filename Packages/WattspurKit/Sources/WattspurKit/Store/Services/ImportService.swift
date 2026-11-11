@@ -55,8 +55,13 @@ struct ImportService: LibraryService {
                 RideService(env).restore(trashed)
                 result.restoredFromTrash = true
             }
-            // A Bosch part imported before B-274 joins its recording when its file comes again.
-            RecordingPartsService(env).joinParts(around: existing)
+            // A Bosch part imported before B-274 joins its recording when its file comes again; a Bosch
+            // ride over several recordings is split among them.
+            let parts = RecordingPartsService(env)
+            if parts.joinParts(around: existing) == nil, let pieces = parts.splitAcrossRecordings(existing),
+               let first = pieces.first {
+                return ImportResult(fileName: fileName, outcome: .attached(rideID: first.id))
+            }
             return result
         }
         // A recording of the iPhone app names its bike (B-213); it wins over the bike asked for.
@@ -95,6 +100,14 @@ struct ImportService: LibraryService {
         let parts = RecordingPartsService(env)
         if let merged = ride.source == .fit ? parts.joinParts(around: ride) : parts.joinParts(of: ride) {
             return ImportResult(fileName: fileName, outcome: .imported(rideID: merged.id))
+        }
+        // One Bosch ride over several recordings is split among them; the recordings get the Bosch values.
+        // The new ride is gone afterwards (the Bosch ride is deleted, a recording is in the trash), so
+        // what is needed of it is read before.
+        let isBosch = ride.source == .fit
+        if let pieces = isBosch ? parts.splitAcrossRecordings(ride) : parts.splitBoschRide(around: ride),
+           let piece = pieces.first(where: { isBosch || $0.attachedSourceName == fileName }) ?? pieces.first {
+            return ImportResult(fileName: fileName, outcome: .attached(rideID: piece.id))
         }
         return ImportResult(fileName: fileName, outcome: .imported(rideID: ride.id))
     }
