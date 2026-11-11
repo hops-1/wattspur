@@ -55,11 +55,14 @@ Für Rasterkacheln ist der Wert etwa 20 KB je Kachel geschätzt; auf dem Land si
 
 - Freie Vektorkacheln ohne Schlüssel. Die Bedingungen sagen nichts über Offline-Nutzung oder Herunterladen. Ohne eine Antwort des Betreibers ist das zu unsicher. Es gibt die Daten auch als Datei für den eigenen Server, aber die ist größer und schwerer zu betreiben als PMTiles.
 
+## Entscheidung
+
+Nils, 11.11.2026: Offline-Karten werden eine Bezahl-Funktion, ein **Einmalkauf** (B-304). Ein Einmalkauf verträgt keine Kosten je Nutzer und Monat. Darum gilt **Möglichkeit A** (Protomaps auf eigenem Speicher). Ein Gebiet bis 50 km ist ohne Kauf frei, also etwa 30 MB je Nutzer.
+
 ## Offene Fragen an Nils
 
-1. Gehst du A (eigener Speicher, mehr Bauen, sehr günstig) oder B (Thunderforest, weniger Bauen, monatliche Kosten, nur bis etwa 100 km)?
-2. Bei A: Legst du ein Konto bei einem Speicher-Anbieter an, zum Beispiel Cloudflare R2? Die Zugangsdaten bleiben bei dir.
-3. Bei A: Reicht ein Auszug für Europa? Er ist kleiner und billiger, deckt aber Reisen außerhalb Europas nicht ab.
+1. Legst du ein Konto bei einem Speicher-Anbieter an, zum Beispiel Cloudflare R2? Die Zugangsdaten bleiben bei dir.
+2. Reicht ein Auszug für Europa? Er ist kleiner und billiger, deckt aber Reisen außerhalb Europas nicht ab.
 
 ## Quellen
 
