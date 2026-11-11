@@ -59,6 +59,8 @@ Wattspur Backup 2026-10-27 1230/
 
 The folder starting with a dot is hidden in Finder; press ⇧⌘. to show it.
 
+**Restoring** (P-22, B-265) does not swap the file. At the next start, before the library opens, Wattspur copies the library into a folder `Library Before Restore 2026-11-11 0902` beside it and then writes the backup into the library as ordinary changes: objects are matched by their `id`, what the backup lacks is deleted, what only the backup has is added, and differing values take the backup's. Unchanged objects stay as they are. The library keeps its own iCloud sync state, so with **Sync with iCloud** on, iCloud passes these changes to every other device; a swapped file would bring the sync state of back then and let iCloud play in everything since. If writing fails, the copy is put back. Only on a new install without a library are the backup's files moved in as they are.
+
 ### `manifest.json` (stable)
 
 ```json

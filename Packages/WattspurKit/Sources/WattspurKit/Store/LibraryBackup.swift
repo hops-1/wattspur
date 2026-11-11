@@ -45,6 +45,9 @@ public enum LibraryBackup {
         case unsupportedFormat(Int)
         /// SQLite refused (code and message), e.g. a damaged file.
         case database(Int32, String)
+        /// Writing the backup into the library failed (B-265). `kept` holds the library as it was before;
+        /// `putBack` says whether it is in place again. The staged backup is dropped.
+        case restoreFailed(kept: URL, putBack: Bool, detail: String)
     }
 
     static let manifestName = "manifest.json"
@@ -150,11 +153,47 @@ public enum LibraryBackup {
         try? FileManager.default.removeItem(at: pendingFolder(for: storeURL))
     }
 
-    /// Swaps a staged restore in. Call it before the container opens. Returns the folder that now holds
-    /// the replaced library, or `nil` if nothing was staged. If anything fails, the library stays as it was.
+    /// Puts a staged restore in place. Call it before the container opens. Returns the folder that now
+    /// holds the library as it was before, or `nil` if nothing was staged.
+    ///
+    /// With a library in place, the backup is written into it as changes (`rewrite`, B-265), with or
+    /// without iCloud sync: the library keeps its own sync state, and iCloud then gives every device the
+    /// backup's state. A copy of the library goes into “Library Before Restore …” first; if writing fails,
+    /// that copy is put back and `Failure.restoreFailed` says so. Without a library (a new install) the
+    /// backup's files are moved in.
     @discardableResult
     public static func applyPendingRestore(storeURL: URL, now: Date = .now) throws -> URL? {
         guard hasPendingRestore(storeURL: storeURL) else { return nil }
+        if FileManager.default.fileExists(atPath: storeURL.path) {
+            return try rewritePendingRestore(storeURL: storeURL, now: now)
+        }
+        return try swapPendingRestore(storeURL: storeURL, now: now)
+    }
+
+    private static func rewritePendingRestore(storeURL: URL, now: Date) throws -> URL {
+        let fm = FileManager.default
+        let pending = pendingFolder(for: storeURL)
+        let parent = storeURL.deletingLastPathComponent()
+        let old = uniqueFolder(named: "Library Before Restore \(timestamp(now))", in: parent)
+        let oldStore = old.appending(path: storeURL.lastPathComponent)
+        try copyLibrary(from: storeURL, to: oldStore)
+        do {
+            try rewrite(storeURL: storeURL, from: pending.appending(path: storeURL.lastPathComponent))
+        } catch {
+            // Never a half library: the copy goes back in place.
+            let detail = (error as NSError).localizedDescription
+            cancelPendingRestore(storeURL: storeURL)
+            for name in libraryFileNames(for: storeURL) {
+                try? fm.removeItem(at: parent.appending(path: name))
+            }
+            let putBack = (try? copyLibrary(from: oldStore, to: storeURL)) != nil
+            throw Failure.restoreFailed(kept: old, putBack: putBack, detail: detail)
+        }
+        try? fm.removeItem(at: pending)
+        return old
+    }
+
+    private static func swapPendingRestore(storeURL: URL, now: Date) throws -> URL {
         let fm = FileManager.default
         let pending = pendingFolder(for: storeURL)
         let parent = storeURL.deletingLastPathComponent()

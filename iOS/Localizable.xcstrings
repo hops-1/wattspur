@@ -3406,16 +3406,6 @@
         }
       }
     },
-    "Sync with iCloud was turned on before Wattspur opened again, so the library stays as it was. Turn off sync and choose the backup again." : {
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "„Mit iCloud synchronisieren“ wurde eingeschaltet, bevor Wattspur wieder geöffnet wurde. Darum bleibt die Bibliothek, wie sie war. Schalte den Sync aus und wähle die Sicherung noch einmal."
-          }
-        }
-      }
-    },
     "The backup is from %@ (Wattspur %@)." : {
       "localizations" : {
         "de" : {
@@ -3506,16 +3496,6 @@
         }
       }
     },
-    "To restore a backup, turn off Sync with iCloud first. Otherwise iCloud would bring back what changed since the backup." : {
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Um eine Sicherung zurückzuholen, schalte zuerst „Mit iCloud synchronisieren“ aus. Sonst bringt iCloud zurück, was sich seit der Sicherung geändert hat."
-          }
-        }
-      }
-    },
     "When Wattspur opens and the last backup is older than a week, it backs up into the folder you chose last. It keeps the newest three automatic backups there and deletes only its own." : {
       "localizations" : {
         "de" : {
@@ -3532,6 +3512,46 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "„%1$@“ in „%2$@“"
+          }
+        }
+      }
+    },
+    "The backup could not be restored: %@. Your library is as it was before, and a copy of it is in the folder “%@”. Choose the backup again to try once more." : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Die Sicherung konnte nicht zurückgeholt werden: %1$@. Deine Bibliothek ist wie vorher, und eine Kopie davon liegt im Ordner „%2$@“. Wähle die Sicherung noch einmal, um es erneut zu versuchen."
+          }
+        }
+      }
+    },
+    "The backup could not be restored: %@. Your library as it was before is in the folder “%@” in the app's files. Do not delete it; write to the developer to get it back." : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Die Sicherung konnte nicht zurückgeholt werden: %1$@. Deine Bibliothek von vorher liegt im Ordner „%2$@“ in den Dateien der App. Lösche ihn nicht; schreib dem Entwickler, um sie zurückzubekommen."
+          }
+        }
+      }
+    },
+    "Sync with iCloud is on: the rides in iCloud and on all your devices are then replaced with the backup too." : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Der Sync mit iCloud ist an: Die Fahrten in iCloud und auf allen deinen Geräten werden dann auch durch die Sicherung ersetzt."
+          }
+        }
+      }
+    },
+    "iCloud now brings your other devices to the same state; give it a few minutes." : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "iCloud bringt jetzt deine anderen Geräte auf denselben Stand; das dauert ein paar Minuten."
           }
         }
       }

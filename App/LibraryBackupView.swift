@@ -132,9 +132,9 @@ final class LibraryBackupCenter {
             text += " " + String(localized: "It holds \(count) rides.")
         }
         text += "\n\n" + String(localized: "Wattspur quits and replaces the library with the backup the next time you open it. Rides and changes since the backup are not in it. The current library is kept in a folder beside it.")
-        // The backup brings the sync state of back then; iCloud then plays in what changed since (R-29).
+        // With sync, the restore reaches iCloud and every other device too (B-265).
         if UserDefaults.standard.bool(forKey: SettingsKey.iCloudSyncEnabled) {
-            text += "\n\n" + String(localized: "Sync with iCloud is on. After the restore, iCloud brings back what changed since the backup: rides deleted since then can disappear again, and changes from the iPhone can replace restored values. To get the backup as it is, turn sync off first.")
+            text += "\n\n" + String(localized: "Sync with iCloud is on: the rides in iCloud and on all your devices are then replaced with the backup too.")
         }
         if manifest.build.compare(AppInfo.build, options: .numeric) == .orderedDescending {
             text += "\n\n" + String(localized: "This backup was made by a newer version of Wattspur. Update Wattspur before you restore it.")
@@ -146,32 +146,41 @@ final class LibraryBackupCenter {
         return alert.runModal() == .alertFirstButtonReturn
     }
 
-    private static func message(for error: Error) -> String {
+    static func message(for error: Error) -> String {
         switch error as? LibraryBackup.Failure {
         case .noLibrary: String(localized: "There is no library to back up yet.")
         case .notABackup: String(localized: "This folder is not a Wattspur backup.")
         case .unsupportedFormat: String(localized: "This backup was made by a newer version of Wattspur. Update Wattspur to restore it.")
         case .database(_, let detail): String(localized: "The library file could not be read: \(detail)")
+        case .restoreFailed(let kept, true, let detail):
+            String(localized: "The backup could not be restored: \(detail). Your library is as it was before, and a copy of it is in the folder “\(kept.lastPathComponent)” beside it. Choose the backup again to try once more.")
+        case .restoreFailed(let kept, false, let detail):
+            String(localized: "The backup could not be restored: \(detail). Your library as it was before is in the folder “\(kept.lastPathComponent)” beside it. Quit Wattspur, and put the files from that folder back in place of the library.")
         case nil: error.localizedDescription
         }
     }
 }
 
-/// "Backup from 26.10.2026 restored" after the start that swapped the library (P-22).
+/// "Backup from 26.10.2026 restored" after the start that put the backup in place (P-22), or why it
+/// failed (B-265). A failure stays until it is closed.
 @MainActor
 @Observable
 final class LibraryRestoreNotice {
     struct Notice: Equatable {
         let id = UUID()
-        let backupDate: Date
-        var text: String {
-            String(localized: "Backup from \(backupDate.formatted(date: .numeric, time: .omitted)) restored successfully.")
-        }
+        let text: String
+        let isFailure: Bool
     }
 
     private(set) var current: Notice?
 
-    func show(backupDate: Date) { current = Notice(backupDate: backupDate) }
+    func show(backupDate: Date, synced: Bool) {
+        var text = String(localized: "Backup from \(backupDate.formatted(date: .numeric, time: .omitted)) restored successfully.")
+        if synced { text += " " + String(localized: "iCloud now brings your other devices to the same state.") }
+        current = Notice(text: text, isFailure: false)
+    }
+
+    func showFailure(_ text: String) { current = Notice(text: text, isFailure: true) }
     func hide() { current = nil }
 }
 
@@ -181,8 +190,14 @@ struct LibraryRestoreNoticeView: View {
 
     var body: some View {
         HStack(spacing: 12) {
-            Image(systemName: "checkmark.circle.fill").foregroundStyle(.green)
+            if notice.isFailure {
+                Image(systemName: "exclamationmark.triangle.fill").foregroundStyle(.orange)
+            } else {
+                Image(systemName: "checkmark.circle.fill").foregroundStyle(.green)
+            }
             Text(verbatim: notice.text).font(.callout)
+                .frame(maxWidth: 520, alignment: .leading)
+                .fixedSize(horizontal: false, vertical: true)
             Button(action: onClose) { Image(systemName: "xmark").font(.caption.weight(.bold)) }
                 .buttonStyle(.plain)
                 .foregroundStyle(.secondary)
@@ -190,8 +205,8 @@ struct LibraryRestoreNoticeView: View {
         }
         .padding(.horizontal, 16)
         .padding(.vertical, 10)
-        .background(.regularMaterial, in: Capsule())
-        .overlay(Capsule().strokeBorder(.separator.opacity(0.6)))
+        .background(.regularMaterial, in: RoundedRectangle(cornerRadius: 20, style: .continuous))
+        .overlay(RoundedRectangle(cornerRadius: 20, style: .continuous).strokeBorder(.separator.opacity(0.6)))
         .shadow(color: .black.opacity(0.15), radius: 10, y: 3)
         .accessibilityElement(children: .combine)
     }

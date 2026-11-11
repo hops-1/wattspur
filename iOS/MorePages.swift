@@ -199,8 +199,8 @@ private struct BackupSection: View {
     @AppStorage(PhoneSettingsKey.autoBackup) private var automatic = false
     @State private var picking: Picking?
 
-    /// Restoring needs sync off, now and for the next start (R-29; with sync on comes with B-265).
-    private var syncBlocksRestore: Bool { sync.isOn || library.mode == .iCloud }
+    /// With sync on, the restore reaches the other devices too (B-265); the confirmation says so.
+    private var syncs: Bool { sync.isOn || library.mode == .iCloud }
 
     var body: some View {
         @Bindable var backup = backup
@@ -216,7 +216,7 @@ private struct BackupSection: View {
             } label: {
                 Label("Restore Backup …", systemImage: "arrow.counterclockwise")
             }
-            .disabled(backup.isWorking || backup.state == .restoreStaged || syncBlocksRestore || recorder.isRecording)
+            .disabled(backup.isWorking || backup.state == .restoreStaged || recorder.isRecording)
             Toggle("Back Up Automatically", isOn: $automatic)
             status
         } header: {
@@ -224,9 +224,6 @@ private struct BackupSection: View {
         } footer: {
             VStack(alignment: .leading, spacing: 4) {
                 Text("A backup is a folder with all your rides, bikes, goals and notes, the same as on the Mac. Choose iCloud Drive, On My iPhone or a USB stick. A backup from this iPhone restores on the Mac, and the other way round.")
-                if syncBlocksRestore {
-                    Text("To restore a backup, turn off Sync with iCloud first. Otherwise iCloud would bring back what changed since the backup.")
-                }
                 if automatic {
                     if backup.automaticFolderMissing {
                         Text("The folder for the automatic backup is no longer there. Back up once by hand to choose a new one.")
@@ -306,6 +303,9 @@ private struct BackupSection: View {
             text += " " + String(localized: "It holds \(count) rides.")
         }
         text += "\n\n" + String(localized: "The library on this iPhone is replaced with the backup the next time Wattspur opens. Rides and changes since the backup are not in it. The current library is kept in a folder beside it.")
+        if syncs {
+            text += "\n\n" + String(localized: "Sync with iCloud is on: the rides in iCloud and on all your devices are then replaced with the backup too.")
+        }
         if manifest.build.compare(AppInfo.build, options: .numeric) == .orderedDescending {
             text += "\n\n" + String(localized: "This backup was made by a newer version of Wattspur. Update Wattspur before you restore it.")
         }

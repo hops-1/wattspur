@@ -272,16 +272,6 @@
         }
       }
     },
-    "Sync with iCloud is on. After the restore, iCloud brings back what changed since the backup: rides deleted since then can disappear again, and changes from the iPhone can replace restored values. To get the backup as it is, turn sync off first." : {
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Der Sync mit iCloud ist an. Nach dem Wiederherstellen spielt iCloud wieder ein, was sich seit der Sicherung geändert hat: Seitdem gelöschte Fahrten können wieder verschwinden, und Änderungen vom iPhone können wiederhergestellte Werte ersetzen. Willst du die Sicherung genau so, schalte den Sync vorher aus."
-          }
-        }
-      }
-    },
     "The Library Could Not Be Opened" : {
       "localizations" : {
         "de" : {
@@ -9723,6 +9713,46 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Nicht beim Motorrad"
+          }
+        }
+      }
+    },
+    "The backup could not be restored: %@. Your library is as it was before, and a copy of it is in the folder “%@” beside it. Choose the backup again to try once more." : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Das Backup konnte nicht wiederhergestellt werden: %1$@. Deine Mediathek ist wie vorher, und eine Kopie davon liegt im Ordner „%2$@“ daneben. Wähle das Backup noch einmal, um es erneut zu versuchen."
+          }
+        }
+      }
+    },
+    "The backup could not be restored: %@. Your library as it was before is in the folder “%@” beside it. Quit Wattspur, and put the files from that folder back in place of the library." : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Das Backup konnte nicht wiederhergestellt werden: %1$@. Deine Mediathek von vorher liegt im Ordner „%2$@“ daneben. Beende Wattspur und lege die Dateien aus diesem Ordner wieder an die Stelle der Mediathek."
+          }
+        }
+      }
+    },
+    "Sync with iCloud is on: the rides in iCloud and on all your devices are then replaced with the backup too." : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Der Sync mit iCloud ist an: Die Fahrten in iCloud und auf allen deinen Geräten werden dann auch durch das Backup ersetzt."
+          }
+        }
+      }
+    },
+    "iCloud now brings your other devices to the same state." : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "iCloud bringt jetzt deine anderen Geräte auf denselben Stand."
           }
         }
       }
