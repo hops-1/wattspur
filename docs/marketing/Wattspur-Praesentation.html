@@ -1,0 +1,241 @@
+<!doctype html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<title>Wattspur – Präsentation</title>
+<!--
+  Quelle der PDF-Präsentation (2 Folien, 16:9).
+  PDF neu erzeugen (aus docs/marketing):
+    "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome" --headless=new --no-pdf-header-footer \
+      --print-to-pdf=Wattspur-Praesentation.pdf Wattspur-Praesentation.html
+  Bilder: images/ (Demo-Modus mit der anonymisierten Beispielfahrt, keine echten Fahrten).
+-->
+<style>
+  @page { size: 1600px 900px; margin: 0; }
+  :root {
+    --ink: #1b1d22;
+    --muted: #5f6470;
+    --line: #e4e2e6;
+    --paper: #fbfaf8;
+    --track: #c8177d;
+    --track-soft: #fbe6f1;
+    --go: #ff3b30;
+    --blue: #2f6fe4;
+    --green: #1f9d63;
+    --amber: #d9861c;
+    --violet: #7a4fd6;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body { background: var(--paper); }
+  body {
+    font-family: -apple-system, "SF Pro Display", "Helvetica Neue", Arial, sans-serif;
+    color: var(--ink);
+    -webkit-print-color-adjust: exact; print-color-adjust: exact;
+  }
+  .slide {
+    width: 1600px; height: 900px; position: relative; overflow: hidden;
+    page-break-after: always; break-after: page;
+    background: var(--paper);
+  }
+  .slide:last-child { page-break-after: auto; break-after: auto; }
+
+  /* ---------- Folie 1 ---------- */
+  .s1 { display: grid; grid-template-columns: 640px 1fr; }
+  .s1 .left { padding: 56px 40px 40px 80px; display: flex; flex-direction: column; }
+  .brand { display: flex; align-items: center; gap: 14px; font-weight: 700; font-size: 26px; letter-spacing: -0.3px; }
+  .brand .dot { width: 40px; height: 40px; border-radius: 11px; background: linear-gradient(140deg, #e0369a, #9c0f5e);
+    display: grid; place-items: center; color: #fff; font-size: 22px; }
+  .brand small { font-weight: 500; color: var(--muted); font-size: 18px; margin-left: 6px; }
+  h1 { font-size: 54px; line-height: 1.04; letter-spacing: -1.5px; margin-top: 34px; font-weight: 800; }
+  h1 em { font-style: normal; color: var(--track); }
+  .lead { font-size: 20px; line-height: 1.4; color: var(--muted); margin-top: 16px; max-width: 500px; }
+  .benefits { list-style: none; margin-top: 26px; display: grid; gap: 14px; }
+  .benefits li { display: grid; grid-template-columns: 44px 1fr; gap: 14px; align-items: start; }
+  .benefits .ic { width: 44px; height: 44px; border-radius: 12px; display: grid; place-items: center; }
+  .benefits .ic svg { width: 24px; height: 24px; }
+  .benefits b { display: block; font-size: 19px; letter-spacing: -0.2px; }
+  .benefits span { display: block; font-size: 15.5px; line-height: 1.38; color: var(--muted); margin-top: 2px; }
+  .foot { margin-top: auto; font-size: 14px; color: var(--muted); }
+
+  .s1 .right { position: relative; background: #f3eef0; }
+  .mac { position: absolute; left: 40px; top: 64px; width: 880px; border-radius: 12px; overflow: hidden;
+    border: 1px solid #d9d3d8; background: #fff; }
+  .mac img { display: block; width: 100%; }
+  .phones { position: absolute; left: 150px; bottom: 30px; display: flex; gap: 22px; align-items: flex-end; }
+  .phone { width: 220px; border-radius: 36px; padding: 7px; background: #15161a; }
+  .phone img { display: block; width: 100%; border-radius: 31px; }
+  .phone.big { width: 240px; }
+  .cap { position: absolute; font-size: 13px; color: var(--muted); font-weight: 600; letter-spacing: .3px; text-transform: uppercase; }
+
+  /* ---------- Folie 2 ---------- */
+  .s2 { padding: 64px 72px 48px; display: flex; flex-direction: column; }
+  .s2 header { display: flex; align-items: flex-end; justify-content: space-between; }
+  .s2 h2 { font-size: 50px; letter-spacing: -1.2px; font-weight: 800; line-height: 1.05; }
+  .s2 h2 em { font-style: normal; color: var(--track); }
+  .s2 .sub { font-size: 20px; color: var(--muted); margin-top: 10px; }
+  .now { text-align: right; font-size: 15px; color: var(--muted); line-height: 1.5; }
+  .now b { color: var(--ink); }
+
+  .rail { position: relative; margin-top: 40px; height: 34px; }
+  .rail::before { content: ""; position: absolute; left: 10px; right: 10px; top: 16px; height: 3px;
+    background: linear-gradient(90deg, var(--track), var(--blue) 40%, var(--violet) 70%, #b9b6bf); border-radius: 2px; }
+  .rail .node { position: absolute; top: 7px; width: 21px; height: 21px; border-radius: 50%; background: #fff; border: 4px solid var(--c); }
+  .rail .node.first { background: var(--c); box-shadow: 0 0 0 6px rgba(200,23,125,.15); }
+
+  .cols { display: grid; grid-template-columns: repeat(5, 1fr); gap: 20px; margin-top: 8px; flex: 1; }
+  .card { background: #fff; border-radius: 18px; padding: 22px 20px 20px; border: 1px solid var(--line);
+    border-top: 6px solid var(--c); display: flex; flex-direction: column; }
+  .tag { font-size: 13px; font-weight: 700; letter-spacing: .6px; text-transform: uppercase; color: var(--c); }
+  .ver { font-size: 14px; color: var(--muted); margin-top: 6px; font-weight: 600; }
+  .card h3 { font-size: 27px; letter-spacing: -0.4px; line-height: 1.12; margin-top: 8px; }
+  .card ul { list-style: none; margin-top: 18px; display: grid; gap: 14px; }
+  .card li { font-size: 17px; line-height: 1.38; padding-left: 18px; position: relative; color: #30333a; }
+  .card li::before { content: ""; position: absolute; left: 2px; top: 8px; width: 7px; height: 7px; border-radius: 50%; background: var(--c); }
+  .card li b { color: var(--ink); }
+  .card .split { margin-top: 14px; padding-top: 12px; border-top: 1px dashed var(--line); }
+  .card .split .tag { font-size: 12px; }
+  .card.later { background: #f5f3f6; border-style: dashed; border-top-style: solid; }
+  .s2 footer { margin-top: 22px; display: flex; justify-content: space-between; font-size: 14px; color: var(--muted); }
+</style>
+</head>
+<body>
+
+<!-- ======================= Folie 1: Marketing ======================= -->
+<section class="slide s1">
+  <div class="left">
+    <div class="brand"><div class="dot">W</div>Wattspur <small>für Mac und iPhone</small></div>
+
+    <h1>Jede Tour.<br>Jeder Meter.<br><em>Deine Spur.</em></h1>
+    <p class="lead">Die App für E-Bike- und Radtouren: unterwegs am iPhone aufnehmen, Fahrten vom Bosch-Bike einlesen und am Mac in Ruhe auswerten.</p>
+
+    <ul class="benefits">
+      <li>
+        <div class="ic" style="background:#ffe5e3;color:var(--go)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><circle cx="12" cy="12" r="8.5"/><circle cx="12" cy="12" r="3.5" fill="currentColor"/></svg></div>
+        <div><b>Aufnehmen am iPhone</b><span>GPS-Aufnahme mit Karte und Live-Aktivität auf dem Sperrbildschirm.</span></div>
+      </li>
+      <li>
+        <div class="ic" style="background:#e3ecfd;color:var(--blue)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v12M7 10l5 5 5-5M4 20h16"/></svg></div>
+        <div><b>Bosch Flow und GPX</b><span>FIT aus der Bosch-Flow-App und GPX von anderen Geräten, mit Leistung und Trittfrequenz.</span></div>
+      </li>
+      <li>
+        <div class="ic" style="background:var(--track-soft);color:var(--track)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6l6-2 6 2 6-2v14l-6 2-6-2-6 2z"/><path d="M9 4v14M15 6v14"/></svg></div>
+        <div><b>Karten, die mehr zeigen</b><span>Route nach Höhe oder Kurven gefärbt, Schräglage und Belag aus den Bewegungssensoren.</span></div>
+      </li>
+      <li>
+        <div class="ic" style="background:#fdf0dc;color:var(--amber)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M8 21h8M12 17v4M7 4h10v5a5 5 0 0 1-10 0z"/><path d="M17 5h3v2a3 3 0 0 1-3 3M7 5H4v2a3 3 0 0 0 3 3"/></svg></div>
+        <div><b>Auswerten und vergleichen</b><span>Analysen, Highlights, Rekorde und Ziele. Ähnliche Strecken im Vergleich.</span></div>
+      </li>
+      <li>
+        <div class="ic" style="background:#dff3ea;color:var(--green)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 18a4.5 4.5 0 0 1-.6-8.96A6 6 0 0 1 18 8.5a4 4 0 0 1-.5 9.5z"/><rect x="9.5" y="11.5" width="5" height="4" rx="1"/><path d="M10.5 11.5v-1a1.5 1.5 0 0 1 3 0v1"/></svg></div>
+        <div><b>Deine Daten bleiben bei dir</b><span>Sync zwischen Mac und iPhone über dein eigenes iCloud. Kein fremder Server.</span></div>
+      </li>
+    </ul>
+
+    <div class="foot">Mac ab macOS 26 · iPhone ab iOS 26 (TestFlight) · Bilder: Demo-Fahrt</div>
+  </div>
+
+  <div class="right">
+    <div class="cap" style="left:38px;top:34px">Mac</div>
+    <div class="mac"><img src="images/mac-detail.png" alt="Wattspur am Mac: Fahrtenliste und Tour-Detail mit Karte"></div>
+    <div class="phones">
+      <div class="phone"><img src="images/iphone-overview.png" alt="iPhone: Übersicht"></div>
+      <div class="phone big"><img src="images/iphone-detail.png" alt="iPhone: Tour-Detail mit Karte"></div>
+      <div class="phone"><img src="images/iphone-recording.png" alt="iPhone: Aufnahme"></div>
+    </div>
+  </div>
+</section>
+
+<!-- ======================= Folie 2: Roadmap ======================= -->
+<section class="slide s2">
+  <header>
+    <div>
+      <h2>Was als Nächstes <em>kommt</em></h2>
+      <p class="sub">Die nächsten Versionen von Wattspur für iPhone, Mac und iPad.</p>
+    </div>
+    <div class="now">Heute: <b>Mac 1.8.10</b> · <b>iPhone 0.6.1</b><br>Hobbyprojekt, ohne feste Termine</div>
+  </header>
+
+  <div class="rail">
+    <div class="node first" style="--c:var(--track);left:calc(10% - 10px)"></div>
+    <div class="node" style="--c:var(--blue);left:calc(30% - 10px)"></div>
+    <div class="node" style="--c:#4b8bf0;left:calc(50% - 10px)"></div>
+    <div class="node" style="--c:var(--violet);left:calc(70% - 10px)"></div>
+    <div class="node" style="--c:#9a97a3;left:calc(90% - 10px)"></div>
+  </div>
+
+  <div class="cols">
+    <div class="card" style="--c:var(--track)">
+      <div class="tag">Als Nächstes</div>
+      <div class="ver">iPhone 0.6.2 · Mac 1.8.11</div>
+      <h3>Aufräumen</h3>
+      <ul>
+        <li><b>Einstellungen am iPhone</b> als übersichtliche Liste mit Rubriken</li>
+        <li><b>Dateien-App:</b> FIT- und GPX-Dateien direkt importieren, mehrere auf einmal</li>
+        <li><b>Saubere Daten:</b> fehlerhafte Zeitdaten erkennen, GPS-Ausreißer bei GPX glätten</li>
+        <li><b>TestFlight für Freunde:</b> Einladung einfach per Link</li>
+      </ul>
+    </div>
+
+    <div class="card" style="--c:var(--blue)">
+      <div class="tag">Sportarten · Teil 1</div>
+      <div class="ver">iPhone 0.7 · Mac 1.9</div>
+      <h3>Geräte und Auto</h3>
+      <ul>
+        <li><b>Mehr als Fahrräder:</b> Autos und Motorräder als eigene Geräte</li>
+        <li><b>Auto:</b> Querbeschleunigung in g statt Schräglage, Sprint 0 auf 100</li>
+        <li><b>Gerät beim Start</b> mit einem Tipp wählen</li>
+        <li><b>Profil und Geräte</b> jetzt auch am iPhone</li>
+        <li>Fahrten mit dem Auto zählen nicht zu den Rad-Summen</li>
+      </ul>
+    </div>
+
+    <div class="card" style="--c:#4b8bf0">
+      <div class="tag">Sportarten · Teil 2</div>
+      <div class="ver">iPhone 0.7.1 · Mac 1.9.1</div>
+      <h3>Rubriken je Sportart</h3>
+      <ul>
+        <li><b>Mac:</b> Umschalter Rad · Fahrzeuge · Laufen oben in der Seitenleiste</li>
+        <li><b>iPhone:</b> Sportart-Menü in Übersicht, Fahrten und Karte</li>
+        <li>Eigene Kennzahlen, Rekorde und Begriffe je Sportart</li>
+        <li>Aufnahme, Live-Aktivität und Widget passend zur Sportart</li>
+      </ul>
+    </div>
+
+    <div class="card" style="--c:var(--violet)">
+      <div class="tag">iPad</div>
+      <div class="ver">Stufe 1</div>
+      <h3>Wattspur auf dem iPad</h3>
+      <ul>
+        <li>Seitenleiste wie am Mac, Liste und Detail nebeneinander</li>
+        <li><b>GPS-Aufnahme</b> mit großer Karte, z.&nbsp;B. im Camper</li>
+      </ul>
+      <div class="split">
+        <div class="ver" style="margin-top:0">Stufe 2</div>
+        <ul style="margin-top:10px">
+          <li><b>Funktionen wie am Mac:</b> Analyse, Highlights und Vergleich</li>
+          <li>Import, Papierkorb und Export</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="card later" style="--c:#8f8c99">
+      <div class="tag">Später</div>
+      <div class="ver">Reihenfolge noch offen</div>
+      <h3>Ideen für danach</h3>
+      <ul>
+        <li><b>Laufen:</b> Pace, Schritte, Laufschuhe mit Kilometerstand</li>
+        <li><b>Apple Health und Apple Watch:</b> Puls und Kalorien</li>
+        <li><b>Teilen an Wattspur</b> aus Komoot, Flow und anderen Apps</li>
+        <li><b>Bosch-Daten:</b> Bike, Akku und Wartung über das eigene Bosch-Konto</li>
+      </ul>
+    </div>
+  </div>
+
+  <footer>
+    <span>Wattspur · Stand November 2026</span>
+    <span>Reihenfolge kann sich ändern</span>
+  </footer>
+</section>
+
+</body>
+</html>
