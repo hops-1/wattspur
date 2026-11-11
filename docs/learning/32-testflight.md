@@ -37,17 +37,17 @@ Ohne Xcode-Oberfläche geht dasselbe mit `xcodebuild archive` und `xcodebuild -e
 - **Extern (Freunde):** TestFlight › Externe Tests › `+` Gruppe „Freunde“ › Build hinzufügen › „Zur Prüfung einreichen“. Danach Tester per E-Mail einladen oder einen **öffentlichen Link** erzeugen und weitergeben.
 - Die Kabel-Installation aus Kapitel 30 braucht es dann nicht mehr. Sie geht weiter, kollidiert aber mit der TestFlight-Version, weil beide dieselbe Bundle-ID haben: Erst die eine löschen, dann die andere installieren. Die Fahrten liegen ab iOS 0.3 in iCloud und kommen nach dem Wechsel zurück.
 
-## Schritt für Schritt: externe Gruppe „Freunde“ (B-219, mit iPhone 0.6.2)
+## Schritt für Schritt: externe Gruppe „Freunde“ (B-219, mit iPhone 0.7.0)
 Das macht Nils in App Store Connect (appstoreconnect.apple.com), am Mac im Browser. Dauer: etwa 15 Minuten, dazu ein Tag Warten auf Apple.
 
-1. **Build abwarten:** Unter *Apps › Wattspur › TestFlight* muss der Build **0.6.2** stehen, nicht mehr „Wird verarbeitet“. Bei „Fehlende Exportvorschriften“ nichts tun, die Frage beantwortet die Build-Einstellung.
+1. **Build abwarten:** Unter *Apps › Wattspur › TestFlight* muss der Build **0.7.0** stehen, nicht mehr „Wird verarbeitet“. Bei „Fehlende Exportvorschriften“ nichts tun, die Frage beantwortet die Build-Einstellung.
 2. **Testinformationen prüfen:** links *Testinformationen*. Beschreibung, Feedback-E-Mail, Datenschutz-URL und „Hinweise für die Prüfung“ müssen ausgefüllt sein (Texte unten). Fehlt etwas, lässt Apple das Einreichen nicht zu.
 3. **Gruppe anlegen:** links bei *Externe Tests* auf `+`, Name **Freunde**, *Erstellen*.
-4. **Build hinzufügen:** in der Gruppe *Builds › +*, Build 0.6.2 wählen. Bei „Was zu testen ist“ den Text unten einfügen. *Zur Prüfung einreichen*.
+4. **Build hinzufügen:** in der Gruppe *Builds › +*, Build 0.7.0 wählen. Bei „Was zu testen ist“ den Text unten einfügen. *Zur Prüfung einreichen*.
 5. **Warten:** Status „Warten auf Prüfung“, dann „In Prüfung“. Meist ist Apple nach einigen Stunden bis einem Tag fertig; dann kommt eine E-Mail.
 6. **Einladen:** in der Gruppe *Tester › +*: E-Mail-Adressen eintragen, **oder** *Öffentlichen Link aktivieren* und den Link weitergeben (zum Beispiel per Nachricht). Beim Link kann Nils eine Höchstzahl setzen, etwa 10.
-7. **Was Freunde tun:** die App *TestFlight* aus dem App Store laden, den Link oder die E-Mail öffnen, *Installieren*. Für den Sync mit einem eigenen Mac braucht es dort Wattspur 1.8.11 (DMG aus den GitHub-Releases); ohne Mac geht alles auf dem iPhone, Fahrten kommen dann mit „Dateien importieren …“ dazu.
-8. **Spätere Builds:** Neue Builds derselben Version (0.6.2 mit höherer Build-Nummer) brauchen meist keine neue Prüfung. Bei 0.7 prüft Apple wieder; dafür in der Gruppe den neuen Build hinzufügen und einreichen.
+7. **Was Freunde tun:** die App *TestFlight* aus dem App Store laden, den Link oder die E-Mail öffnen, *Installieren*. Für den Sync mit einem eigenen Mac braucht es dort Wattspur 1.8.12 (DMG aus den GitHub-Releases); ohne Mac geht alles auf dem iPhone, Fahrten kommen dann mit „Dateien importieren …“ dazu.
+8. **Spätere Builds:** Neue Builds derselben Version (0.7.0 mit höherer Build-Nummer) brauchen meist keine neue Prüfung. Bei 0.8 prüft Apple wieder; dafür in der Gruppe den neuen Build hinzufügen und einreichen.
 
 Wenn Apple ablehnt: Die Begründung steht in App Store Connect unter *Nachrichten* (Resolution Center). Meist fehlt ein Text oder die Prüfer finden nichts zum Ausprobieren; die Hinweise unten nennen deshalb die Beispielfahrt und den Import aus der Dateien-App.
 
@@ -82,10 +82,10 @@ Fitnessdaten aus Apple Health liest Wattspur noch nicht (B-075). Kommt das, brau
 > Wattspur zeigt deine E-Bike-Fahrten auf dem iPhone: Übersicht der Woche, alle Fahrten mit Karte und Höhenprofil, und eine eigene GPS-Aufnahme. Mit der Mac-App teilt sie eine Datenbank in deinem eigenen iCloud-Konto: Fahrten, die du am Mac importierst, erscheinen auf dem iPhone und umgekehrt. Es gibt keinen Wattspur-Server und kein Konto.
 
 ### Was zu testen ist
-> Bitte probiere: eine Fahrt aufnehmen (auch mit gesperrtem Bildschirm), sie danach in der Liste und am Mac wiederfinden, eine Fahrt löschen und wiederherstellen. Neu in 0.6.2: „Mehr“ als Liste wie die Einstellungen, und FIT- oder GPX-Dateien aus der Dateien-App importieren („+“ in „Fahrten“ oder der Ordner „Wattspur › Import“). Für den Sync musst du am iPhone und am Mac mit derselben Apple-ID in iCloud angemeldet sein. Feedback gern über „Feedback senden“ in TestFlight oder einen Screenshot.
+> Bitte probiere: eine Fahrt aufnehmen (auch mit gesperrtem Bildschirm), sie danach in der Liste und am Mac wiederfinden, eine Fahrt löschen und wiederherstellen. Neu in 0.7.0: die Bibliothek sichern und zurückholen („Mehr › iCloud & Bibliothek › Sicherung“), auch mit Sync, und eine FIT- oder GPX-Datei aus einer anderen App mit „Teilen › Wattspur“ importieren. Aus 0.6.2: FIT- oder GPX-Dateien aus der Dateien-App importieren („+“ in „Fahrten“). Für den Sync musst du am iPhone und am Mac mit derselben Apple-ID in iCloud angemeldet sein. Feedback gern über „Feedback senden“ in TestFlight oder einen Screenshot.
 
 ### Für die Beta-App-Prüfung (Hinweise an Apple)
-> No sign-in required. The app works without any data: without rides the overview shows an anonymized sample ride. GPS recording starts with the button "Start Ride" on the overview. FIT and GPX files can be imported with the "+" button in "Rides" (any GPX file with a track works). Sync uses the user's private CloudKit database only; there is no server of our own.
+> No sign-in required. The app works without any data: without rides the overview shows an anonymized sample ride. GPS recording starts with the button "Start Ride" on the overview. FIT and GPX files can be imported with the "+" button in "Rides" or shared to Wattspur from other apps (any GPX file with a track works). Sync uses the user's private CloudKit database only; there is no server of our own.
 
 ## Warum so
 - **TestFlight statt Ad-hoc-Verteilung:** Ad hoc müsste Nils jede UDID der Freunde eintragen (höchstens 100 Geräte im Jahr) und neue Profile verteilen. TestFlight braucht nur eine E-Mail-Adresse oder einen Link.
