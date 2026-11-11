@@ -71,6 +71,7 @@ Die Bosch-Datei einer Fahrt hat mehr Werte als eine GPS-Aufnahme, z. B. Leistung
 - **Schon in der Bibliothek:** Hast du die Fahrt auch mit dem iPhone aufgenommen, kannst du **Bosch-Werte übernehmen**, **Beide behalten** oder **Überspringen**. Wattspur zeigt dazu Start, Strecke und Zeit von beiden.
 - Eine GPX-Datei zu einer Bosch-Fahrt hängt Wattspur an die Fahrt an. Die Bosch-Werte bleiben.
 - **Eine Tour in mehreren Bosch-Teilen:** Die Flow-App teilt eine Tour mit langen Pausen in mehrere Fahrten, das iPhone nimmt sie als eine auf. Liegen die Bosch-Fahrten ganz in der Zeit deiner Aufnahme und ergeben zusammen ihre Strecke, fügt Wattspur sie zu einer Fahrt zusammen. Sie bekommt Name und Bike der Aufnahme und deren Puls, Schräglage und Belag. Die Aufnahme selbst kommt in den Papierkorb, dort kannst du sie wiederherstellen. Es ist egal, welche Datei zuletzt kommt. Hast du die Teile schon früher importiert, lege eine ihrer FIT-Dateien noch einmal ab.
+- **Eine Bosch-Fahrt über mehrere Aufnahmen:** Manchmal speichert die Flow-App den Hin- und den Rückweg eines Tages als eine Fahrt, das iPhone als zwei Aufnahmen. Liegen die Aufnahmen ganz in der Zeit der Bosch-Fahrt und ergeben zusammen ihre Strecke, teilt Wattspur die Bosch-Fahrt: Jede Aufnahme wird eine Fahrt mit den Bosch-Werten ihrer Zeit, mit Name, Bike, Puls, Schräglage und Belag der Aufnahme. Die Aufnahmen kommen in den Papierkorb. Ist die Bosch-Fahrt schon da, teile ihre FIT-Datei noch einmal an Wattspur.
 
 **Ohne iCloud** wird daraus nur eine Fahrt auf dem iPhone.
 

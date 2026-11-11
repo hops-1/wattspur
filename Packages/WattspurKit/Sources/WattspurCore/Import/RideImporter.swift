@@ -159,7 +159,7 @@ public struct FITRideImporter: RideImporter {
     }
 
     /// Fallback for files without a `session` message.
-    static func summary(estimatedFrom samples: [RideSample]) -> RideSummary {
+    public static func summary(estimatedFrom samples: [RideSample]) -> RideSummary {
         let duration = samples.last?.time ?? 0
         let distance = samples.last(where: { $0.distance != nil })?.distance ?? 0
         let powers = samples.compactMap(\.power).filter { $0 > 0 }

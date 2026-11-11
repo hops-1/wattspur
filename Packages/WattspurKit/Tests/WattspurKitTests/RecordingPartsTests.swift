@@ -141,4 +141,103 @@ struct RecordingPartsTests {
         #expect(merged.samples.contains { $0.lean == 12 })
         #expect(library.ride(withID: recordingID)?.deletedAt != nil)
     }
+
+    // MARK: One Bosch ride over several recordings (11.11.2026)
+
+    /// A recording of one leg north at 6 m/s from `offset` for `seconds`, with a lean angle of 12°.
+    private func recording(at offset: Int, seconds: Int, name: String) -> Data {
+        var recording = RideRecording(startDate: start.addingTimeInterval(Double(offset)))
+        for second in 0...seconds {
+            recording.add(RideRecording.Fix(date: start.addingTimeInterval(Double(offset + second)),
+                                            latitude: 49.8 + Double(second) * 6 / 111_195, longitude: 8.8, altitude: 150,
+                                            horizontalAccuracy: 5, speed: 6,
+                                            motion: MotionValues(lean: 12, acceleration: 0, roughness: 0.1)))
+        }
+        return GPXWriter.document(name: name, segments: recording.gpxSegments, creator: GPXWriter.iPhoneCreator)
+    }
+
+    /// One Bosch ride over the `legs` (start and length in seconds), with the wheel distance in its
+    /// points, 5 % longer than the GPS, as Bosch Flow saved the way to work and home on 11.11.2026.
+    @discardableResult
+    private func boschDay(legs: [(start: Int, seconds: Int)], name: String = "Reinheim Rundfahrt") -> Ride {
+        var samples: [RideSample] = []
+        var metres = 0.0
+        for leg in legs {
+            for second in leg.start...(leg.start + leg.seconds) {
+                samples.append(RideSample(time: Double(second), latitude: 49.8, longitude: 8.8, distance: metres, power: 150))
+                metres += 6 * 1.05
+            }
+        }
+        let ride = Ride(name: name, startDate: start)
+        ride.sourceFormat = RideSource.fit.rawValue
+        ride.sourceIdentifier = "5e1f0c2a-7b3d-4c8e-9a61-2f4d8b0c3e57"
+        ride.elapsedTime = samples.last?.time ?? 0
+        ride.timerTime = Double(samples.count)
+        ride.distance = metres
+        ride.averagePower = 150
+        ride.setSamples(samples)
+        ride.sourceFile = SourceFile(fileName: "\(name)-5e1f0c2a-7b3d-4c8e-9a61-2f4d8b0c3e57.fit", data: Data([1, 2, 3]))
+        container.mainContext.insert(ride)
+        return ride
+    }
+
+    private var day: [(start: Int, seconds: Int)] { [(30, 1900), (33_000, 1800)] }
+
+    private func importDayRecordings() throws -> (UUID, UUID) {
+        let morning = try #require(id(library.importFile(data: recording(at: 0, seconds: 1960, name: "ZEISS Pendelstrecke"),
+                                                         fileName: "Morgen.gpx")))
+        let evening = try #require(id(library.importFile(data: recording(at: 32_980, seconds: 1840, name: "Zeiss"),
+                                                         fileName: "Abend.gpx")))
+        return (morning, evening)
+    }
+
+    @Test("A Bosch ride over two recordings becomes two rides with the Bosch values, the names and the lean angle")
+    func splits() throws {
+        let (morningID, eveningID) = try importDayRecordings()
+        let bosch = boschDay(legs: day)
+        let boschID = bosch.id
+
+        let pieces = try #require(parts.splitAcrossRecordings(bosch))
+        #expect(pieces.map(\.name) == ["ZEISS Pendelstrecke", "Zeiss"])
+        #expect(pieces.allSatisfy { $0.source == .fit && $0.attachedSourceFormat == RideSource.gpx.rawValue })
+        #expect(pieces.allSatisfy { $0.samples.contains { $0.lean == 12 } && $0.samples.allSatisfy { $0.power == 150 } })
+        #expect(abs(pieces[0].distance - 1900 * 6 * 1.05) < 10)
+        #expect(abs(pieces[1].distance - 1800 * 6 * 1.05) < 10)
+        #expect(abs(pieces[1].startDate.timeIntervalSince(start) - 33_000) < 1)
+        #expect(pieces.allSatisfy { $0.sourceFile?.fileName.hasSuffix(".fit") == true })
+        #expect(library.ride(withID: morningID)?.deletedAt != nil)
+        #expect(library.ride(withID: eveningID)?.deletedAt != nil)
+        #expect(library.ride(withID: boschID) == nil)
+    }
+
+    @Test("When the second recording comes last, its import splits the Bosch ride already there")
+    func splitsWhenRecordingLast() throws {
+        _ = try #require(id(library.importFile(data: recording(at: 0, seconds: 1960, name: "ZEISS Pendelstrecke"),
+                                               fileName: "Morgen.gpx")))
+        let bosch = boschDay(legs: day)
+        let boschID = bosch.id
+        let result = library.importFile(data: recording(at: 32_980, seconds: 1840, name: "Zeiss"), fileName: "Abend.gpx")
+        guard case .attached(let pieceID) = result.outcome else {
+            Issue.record("expected the evening recording to get the Bosch values, got \(result.outcome)")
+            return
+        }
+        #expect(library.ride(withID: pieceID)?.name == "Zeiss")
+        #expect(library.ride(withID: boschID) == nil)
+    }
+
+    @Test("A Bosch ride far longer than the recordings stays whole")
+    func noSplitWhenDistanceDiffers() throws {
+        _ = try importDayRecordings()
+        let bosch = boschDay(legs: [(30, 1900), (10_000, 3000), (33_000, 1800)])
+        #expect(parts.splitAcrossRecordings(bosch) == nil)
+        #expect(bosch.deletedAt == nil)
+    }
+
+    @Test("A Bosch ride over one recording is not split")
+    func noSplitForOneRecording() throws {
+        _ = try #require(id(library.importFile(data: recording(at: 0, seconds: 1960, name: "ZEISS Pendelstrecke"),
+                                               fileName: "Morgen.gpx")))
+        let bosch = boschDay(legs: [(30, 1900)])
+        #expect(parts.splitAcrossRecordings(bosch) == nil)
+    }
 }
