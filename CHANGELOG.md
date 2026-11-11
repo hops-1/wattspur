@@ -7,6 +7,20 @@ Every DMG handed out to testers corresponds to one entry below.
 
 ## [Unreleased]
 
+## [1.8.12] – 2026-11-11
+
+Back up and share: a backup on the iPhone, restoring a backup also with iCloud sync on, and “Share to Wattspur” from other apps. Together with the iPhone app 0.7.0 (19).
+
+### Added
+
+- **iPhone: back up the library.** More › iCloud & Library › Backup saves the library into a folder you choose (iCloud Drive, On My iPhone, a USB stick), in the same format as File › Back Up Library… on the Mac; a backup made on one restores on the other. Optionally the iPhone backs up by itself once a week when the app opens and keeps its newest three automatic backups (B-302).
+- **iPhone: Share to Wattspur.** Wattspur is in the app row of the share sheet for FIT and GPX files, also when an app shares the ride as data instead of a file, and several files go at once with one summary. A shared link (komoot, Strava, Garmin Connect) is not loaded; Wattspur says how to export the file in that app (B-301).
+
+### Changed
+
+- **Restore a backup also with iCloud sync on, on the Mac and the iPhone.** The backup is no longer put in place as a file but written into the library as ordinary changes at the next start, so iCloud passes the backup's state on to every device. Before, the restore was blocked with sync on (R-29). A copy of the library as it was goes to “Library Before Restore …” first; if writing fails, that copy is put back and the app says so (B-265).
+- **A planned route is not “unreadable”.** A GPX file with only a route or waypoints, or a track without times, as komoot exports a tour before it is ridden, now says “this is a planned route, not a ride” in the import summary and the import log, with the hint to export the tour again after riding it (B-301).
+
 ## [1.8.11] – 2026-11-11
 
 Tidying up: “More” on the iPhone as a list like the iOS Settings, FIT and GPX from the Files app on the iPhone without a Mac, and two small fixes from the review. Together with the iPhone app 0.6.2 (18).
