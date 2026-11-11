@@ -9,7 +9,7 @@ Every DMG handed out to testers corresponds to one entry below.
 
 ### Fixed
 
-- **One Bosch ride over several iPhone recordings is split.** When the Flow app saved the way to work and the way home as one ride and the iPhone recorded them as two, the three stayed apart. Now the Bosch ride is split along the recordings: each becomes one ride with the Bosch values of its time and the recording's name, bike, heart rate and lean angle; the recordings go to the trash. Sharing the FIT file once more fixes rides imported before (B-305).
+- **One Bosch ride over several iPhone recordings is split** (in the iPhone app from 0.7.0 (20)). When the Flow app saved the way to work and the way home as one ride and the iPhone recorded them as two, the three stayed apart. Now the Bosch ride is split along the recordings: each becomes one ride with the Bosch values of its time and the recording's name, bike, heart rate and lean angle; the recordings go to the trash. Sharing the FIT file once more fixes rides imported before (B-305).
 
 ## [1.8.12] – 2026-11-11
 
