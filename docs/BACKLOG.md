@@ -65,7 +65,7 @@ Status: ☐ offen · ◐ in Arbeit · ☑ erledigt · ✗ nicht nötig
 1. ~~**iOS 0.5.2 + Mac 1.8.7 – Review**~~ erschienen am 9.11.2026.
 2. ~~**iOS 0.5.3 + Mac 1.8.8 – Unterwegs besser**~~ erschienen am 9.11.2026 (Mac 1.8.8 (636)); Fehler-Update 0.5.4 / 1.8.9 für die Höhen-Einfärbung (Entscheidung Nils 9.11.2026): kleines Zwischen-Release mit Wünschen aus den Fahrten und zwei Sicherheitsstücken aus dem Review (Abschnitt unten).
 3. ~~**iOS 0.6 + Mac 1.8.10 – Karten**~~ erschienen am 9.11.2026 (Mac 1.8.10 (655), iPhone 0.6.0 (14)); danach iPhone 0.6.1 (15 bis 17) nach Nils' Test am iPhone 13: Kartenstil auch bei der Aufnahme, Knöpfe als Menü, Quellenangaben unten, kleine Legende (PR #173 bis #175). B-228 und B-249 sind ohne Version zurück.
-4. **iOS 0.6.2 + Mac 1.8.11 – Aufräumen** (Entscheidung Nils 10.11.2026): B-298, B-300, B-268, B-269, B-219 → Release.
+4. **iOS 0.6.2 + Mac 1.8.11 – Aufräumen** (Entscheidung Nils 10.11.2026): B-298, B-300, B-268, B-269, B-219 → Release. **Erschienen 11.11.2026** (B-219 wartet auf die Gruppe „Freunde“).
 5. **iOS 0.7 + Mac 1.9 – Sportarten, Teil 1: Geräte und Auto:** B-284 → B-286, B-287, B-290, B-299 → Release.
 6. **iOS 0.7.1 + Mac 1.9.1 – Sportarten, Teil 2: Rubriken:** B-288, B-289 → Release.
 7. **iPad 1, danach iPad 2** (B-291 bis B-293, dann B-294 bis B-297 mit B-228); Versionen legt Nils fest.
@@ -819,7 +819,7 @@ Reihenfolge nach 0.5 bestätigt (Nils 5.11.2026); 0.5.1 bis 0.5.4 kamen davor. D
 | B-268 | **Kaputte Zeitreihe erkennen** (R-32; Zeile unter „Aus dem Review 0.5.2“). **Erledigt (11.11.2026):** `Ride.readableSamples` unterscheidet „keine“ von „unlesbar“, `TimeSeriesDamage` protokolliert und zählt, der Diagnosebericht nennt die Zahl; das Nachrechnen lässt gespeicherte Werte einer kaputten Zeitreihe stehen | S | ☑ |
 | B-269 | **GPX: Ausreißer am Anfang eines Abschnitts** (R-22; Zeile unter „Aus dem Review 0.5.2“). **Erledigt (11.11.2026):** Passen die Punkte nach einem „Sprung“ 30 s lang zueinander und alle nicht zum ersten Punkt, fällt der erste Punkt weg statt der 30 s danach; ein kurzer Ausreißer nach einem guten Start bleibt ein Ausreißer. Test mit der anonymisierten echten Fahrt `pair-tour1-bosch-flow.gpx`, deren erster Punkt 5 km verschoben ist; GPX-Parser-Version 4 (GPX-Fahrten werden beim Start neu gelesen) | S | ☑ |
 | B-219 | **Externe TestFlight-Gruppe „Freunde“** (Rest aus 0.3; Zeile unter „iOS 0.4“): Gruppe in App Store Connect, Beta-App-Prüfung durch Apple, Einladung per Link; Anleitung für Nils. **Stand 11.11.2026:** Anleitung Schritt für Schritt in `docs/learning/32-testflight.md` („externe Gruppe „Freunde““), Texte für 0.6.2 angepasst; offen: Nils legt die Gruppe an und reicht 0.6.2 zur Prüfung ein | S | ◐ |
-| – | **Release iOS 0.6.2 + Mac 1.8.11:** Versionen, Changelog, Handbuch EN/DE (Kapitel 9: „Mehr“, Import aus der Dateien-App), notarisiertes DMG, Tag, Build auf TestFlight. **Release-PR (11.11.2026):** Mac 1.8.11, iPhone 0.6.2 (18), Changelog [1.8.11], Handbuch EN/DE (Kapitel 9, Diagnose in Kapitel 4); offen nach dem Merge: DMG, Tag, GitHub-Release, TestFlight | S | ◐ |
+| – | **Release iOS 0.6.2 + Mac 1.8.11:** Versionen, Changelog, Handbuch EN/DE (Kapitel 9: „Mehr“, Import aus der Dateien-App), notarisiertes DMG, Tag, Build auf TestFlight. **Release-PR (11.11.2026):** Mac 1.8.11, iPhone 0.6.2 (18), Changelog [1.8.11], Handbuch EN/DE (Kapitel 9, Diagnose in Kapitel 4); DMG Wattspur-1.8.11-688 notarisiert, Tag und GitHub-Release v1.8.11, TestFlight 0.6.2 (18) hochgeladen, alles am 11.11.2026. **Erledigt (11.11.2026)** | S | ☑ |
 
 ### iOS später
 
