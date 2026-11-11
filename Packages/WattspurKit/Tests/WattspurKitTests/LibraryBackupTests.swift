@@ -160,24 +160,32 @@ struct LibraryBackupTests {
         #expect(try count(storeURL) == 1)
     }
 
-    @Test("The folder of larger blobs goes into the backup and comes back with a restore")
+    @Test("The blobs the library needs go into the backup and come back with a restore; left-over blobs stay out")
     func blobFolderTravels() throws {
         defer { try? FileManager.default.removeItem(at: root) }
         _ = try fill(storeURL, importing: 1)
         let blobs = storeURL.deletingLastPathComponent().appending(path: ".default_SUPPORT/_EXTERNAL_DATA")
-        try FileManager.default.createDirectory(at: blobs, withIntermediateDirectories: true)
-        try Data("first".utf8).write(to: blobs.appending(path: "blob"))
+        let needed = try LibraryBackup.externalDataNames(storeURL: storeURL)
+        #expect(!needed.isEmpty)
+        // A blob of an old value that SwiftData left behind.
+        try Data("left over".utf8).write(to: blobs.appending(path: "0D7E2C51-5C1B-4E39-9E7E-4B7C5E0A1F00"))
 
         let folder = try backup()
-        #expect(try Data(contentsOf: folder.appending(path: ".default_SUPPORT/_EXTERNAL_DATA/blob")) == Data("first".utf8))
+        let backedUp = folder.appending(path: ".default_SUPPORT/_EXTERNAL_DATA")
+        #expect(try Set(FileManager.default.contentsOfDirectory(atPath: backedUp.path)) == needed)
+
+        // A left-over blob in the backup (made by an older version) is not staged either.
+        try Data("left over".utf8).write(to: backedUp.appending(path: "0D7E2C51-5C1B-4E39-9E7E-4B7C5E0A1F01"))
+        try LibraryBackup.stageRestore(from: folder, storeURL: storeURL)
+        let staged = LibraryBackup.pendingFolder(for: storeURL).appending(path: ".default_SUPPORT/_EXTERNAL_DATA")
+        #expect(try Set(FileManager.default.contentsOfDirectory(atPath: staged.path)) == needed)
 
         // Without a library (a new install) the backup's files are moved in as they are.
-        try LibraryBackup.stageRestore(from: folder, storeURL: storeURL)
         for name in LibraryBackup.libraryFileNames(for: storeURL) {
             try? FileManager.default.removeItem(at: storeURL.deletingLastPathComponent().appending(path: name))
         }
         _ = try LibraryBackup.applyPendingRestore(storeURL: storeURL)
-        #expect(try Data(contentsOf: blobs.appending(path: "blob")) == Data("first".utf8))
+        #expect(try Set(FileManager.default.contentsOfDirectory(atPath: blobs.path)) == needed)
         #expect(try count(storeURL) == 1)
     }
 
