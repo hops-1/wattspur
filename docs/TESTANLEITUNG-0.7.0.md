@@ -59,3 +59,9 @@ Hier eintragen oder an Claude schicken. Ein ✗ wird ein eigener Backlog-Punkt; 
 **Nachtrag (11.11.2026, 23 Uhr):** Die iPhone-Sicherungen aus 0.7.0 (19) bis (22) enthalten einen alten Stand vom 5.11. (B-308). Sie nicht zurückholen. Mit Build 23 neu sichern; B1 und B2 mit Build 23 und einer Test-Bibliothek wiederholen.
 
 **B2 (Nils, 11.11.2026, Mac 1.8.13 + Build 23):** Die Meldung „N Dateien liegen noch in iCloud Drive“ kam richtig. Danach wartete die Vorbereitung noch lange auf 87 alte, nicht gebrauchte Dateien; behoben in Mac 1.8.14 und iPhone 0.7.0 (24).
+
+**D (Nils, 11.11.2026, Mac 1.8.14):** ✓
+
+**B2 (Nils, 11.11.2026, Mac 1.8.14 + iPhone 0.7.0 (24)):** ✓ – kaum noch Wartezeit.
+
+**C (11.11.2026):** übersprungen (Entscheidung Nils). Kein Probelauf mit zwei Geräten im Development-Container; den Ablauf decken die Kit-Tests ohne echtes CloudKit ab. Mit Sync an lief B2 mit der echten Bibliothek ohne Fehler (Mac 1.8.14, iPhone 0.7.0 (24)).
