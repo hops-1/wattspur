@@ -10,7 +10,7 @@ Ab Wattspur 1.8.4 gibt es Wattspur auch auf dem iPhone, zuerst für Tester über
 ## Sync einschalten
 **Am Mac:** **Wattspur › Einstellungen › iCloud › Mit iCloud synchronisieren**. Jedes Mal legt Wattspur vorher eine Sicherung deiner Mediathek daneben an. Der Sync beginnt beim nächsten Start von Wattspur. Das erste Hochladen dauert je nach Menge ein paar Minuten.
 
-**Am iPhone:** **Mehr › Mit iCloud synchronisieren** ist bei einer neuen Installation schon an. Nach dem ersten Abgleich sind deine Fahrten vom Mac da.
+**Am iPhone:** **Mehr › iCloud & Bibliothek › Mit iCloud synchronisieren** ist bei einer neuen Installation schon an. Nach dem ersten Abgleich sind deine Fahrten vom Mac da.
 
 Mac und iPhone müssen mit demselben Apple Account bei iCloud angemeldet sein.
 
@@ -18,12 +18,25 @@ Mac und iPhone müssen mit demselben Apple Account bei iCloud angemeldet sein.
 
 **Wie schnell:** Eine Änderung ist nach 30 Sekunden bis etwa einer Minute auf dem anderen Gerät. Ohne Netz nimmt das iPhone normal auf. Die Fahrt kommt an den Mac, sobald wieder Netz da ist.
 
+## Der Bereich „Mehr“
+Ab 0.6.2 ist **Mehr** eine Liste wie die Einstellungen von iOS. Jede Zeile öffnet eine eigene Seite:
+- **Profil** (oben, mit Foto und Name): deine Angaben für die Kalorien. Du machst sie am Mac unter **Profil**; mit iCloud kommen sie aufs iPhone. Bearbeiten am iPhone kommt mit einer späteren Version.
+- **Aufnahme:** das Fahrzeug, E-Bike oder Motorrad.
+- **Karten:** der Kartenstil für alle Karten.
+- **iCloud & Bibliothek:** Sync an oder aus, wann zuletzt synchronisiert wurde, Hinweise bei Problemen.
+- **Papierkorb:** gelöschte Fahrten, 30 Tage lang.
+- **Hilfe & Handbuch:** dieses Handbuch und die Neuigkeiten jeder Version.
+- **Über Wattspur:** Version, Quellen der Karten und Datenschutz.
+- **Test-Werkzeuge:** nur in Builds über TestFlight.
+
+Im Querformat steht die Liste links und die gewählte Seite rechts.
+
 ## Doppelte Fahrer und Bikes
 Ein neues iPhone legt zuerst seinen eigenen Fahrer und sein eigenes „Mein eBike“ an. Nach dem ersten Abgleich führt Wattspur sie mit denen vom Mac zusammen, auf beiden Geräten. Es bleibt immer der ältere Eintrag, also meist der vom Mac. Dasselbe gilt für Ziele und für eine Datei, die du an beiden Geräten importiert hast.
 
 ## Ist alles synchronisiert?
 - **Am Mac:** **Einstellungen › iCloud** zeigt „An. Zuletzt synchronisiert vor …“.
-- **Am iPhone:** **Mehr › iCloud › Zuletzt synchronisiert**.
+- **Am iPhone:** **Mehr › iCloud & Bibliothek › Zuletzt synchronisiert**.
 
 Kurze Verzögerungen sind normal und bekommen keine Meldung. Einen Hinweis siehst du, wenn:
 - das Gerät nicht bei iCloud angemeldet ist oder iCloud für Wattspur aus ist,
@@ -36,7 +49,7 @@ Am iPhone steht zusätzlich eine Warnung, solange Änderungen noch auf den Uploa
 Schaltest du am iPhone iCloud für Wattspur aus (**Einstellungen › dein Name › iCloud**) oder meldest dich von iCloud ab, löscht iOS die Kopie auf dem iPhone. Deine Fahrten bleiben in iCloud und am Mac und kommen nach dem Einschalten zurück. Eine Fahrt, die noch nicht hochgeladen war, kann dabei aber verloren gehen. Schalte deshalb erst aus, wenn bei **Zuletzt synchronisiert** keine Warnung steht.
 
 ## Ohne iCloud
-Wenn du iCloud nicht nutzen willst, oder dein Speicher voll ist und du kein größeres Abo möchtest, schalte am iPhone **Mehr › Mit iCloud synchronisieren** aus. Das gilt ab dem nächsten Öffnen von Wattspur. Die Fahrten bleiben dann auf dem iPhone, neue Aufnahmen auch. Eine Fahrt schickst du mit **GPX teilen** an den Mac, z. B. per AirDrop, und importierst sie dort wie jede andere Datei.
+Wenn du iCloud nicht nutzen willst, oder dein Speicher voll ist und du kein größeres Abo möchtest, schalte am iPhone **Mehr › iCloud & Bibliothek › Mit iCloud synchronisieren** aus. Das gilt ab dem nächsten Öffnen von Wattspur. Die Fahrten bleiben dann auf dem iPhone, neue Aufnahmen auch. Eine Fahrt schickst du mit **GPX teilen** an den Mac, z. B. per AirDrop, und importierst sie dort wie jede andere Datei.
 
 **Der Ordner-Austausch ist beendet:** Bis zur iPhone-App 0.5 und Wattspur 1.8.9 konnte das iPhone auch die Fahrten zeigen, die der Mac in den Ordner „Wattspur Import“ schrieb. Mit der iPhone-App 0.6 und Wattspur 1.8.10 gibt es diesen Weg nicht mehr. Hast du ihn genutzt, sagt dir das iPhone das einmal. Schalte an beiden den Sync mit iCloud ein, dann kommen deine Fahrten vom Mac auf das iPhone. Einen Unterordner „iPhone“ im Import-Ordner braucht Wattspur nicht mehr; du kannst ihn löschen.
 
@@ -69,7 +82,7 @@ Beim ersten Aufnehmen fragt das iPhone einmal nach **Bewegung & Fitness**. Erlau
 ## Schräglage, Beschleunigung und Belag
 Ab 0.5.1 liest das iPhone beim Aufnehmen auch seine Bewegungssensoren, mit derselben Freigabe **Bewegung & Fitness** wie das Barometer. Im Tour-Detail stehen dann Kacheln für die größte Schräglage links und rechts, die stärkste Beschleunigung und Bremsung, die beste Zeit aus dem Stand und den Anteil unebenen Belags. Im Karussell gibt es die Seite **Schräglage**. Die Karte färbt die Spur nach Schräglage; mit dem Umschalter oben auf der Karte wechselst du zu **Belag**. Wie die Werte entstehen, steht unter [Kennzahlen](05-metrics.md). Am Mac siehst du dieselben Werte im Tour-Detail.
 
-Für Tests gibt es unter **Mehr › Test** den Schalter **Rohdaten der Bewegung mitschreiben**. Ist er an, legt jede Aufnahme zusätzlich eine Datei in der Dateien-App ab (**Auf meinem iPhone › Wattspur › Bewegung**), etwa 20 MB pro Stunde. Normalerweise bleibt er aus.
+Für Tests gibt es unter **Mehr › Test-Werkzeuge** den Schalter **Rohdaten der Bewegung mitschreiben**. Ist er an, legt jede Aufnahme zusätzlich eine Datei in der Dateien-App ab (**Auf meinem iPhone › Wattspur › Bewegung**), etwa 20 MB pro Stunde. Normalerweise bleibt er aus. Die Test-Werkzeuge gibt es nur in Builds über TestFlight.
 
 ## Unterwegs: Fahrtrichtung, Höhe und Profil
 - **Karte in Fahrtrichtung:** Der Knopf unten rechts auf der Karte der Aufnahme wechselt zwischen **Norden oben** und **Fahrtrichtung oben**, wie in einer Navi-App. Die Richtung kommt aus der GPS-Bewegung, nicht vom Kompass, der in der Tasche falsch zeigt. Im Stand und unter etwa 7 km/h dreht sich die Karte nicht.
@@ -79,7 +92,7 @@ Für Tests gibt es unter **Mehr › Test** den Schalter **Rohdaten der Bewegung 
 Wattspur merkt sich alle drei Einstellungen.
 
 ## Kartenstile
-Ab 0.6 hat das iPhone die Kartenstile des Mac: von Apple **Standard**, **Satellit** und **Hybrid**, dazu **OpenStreetMap**, **CyclOSM** (für Radfahrer, mit Radwegen in Blau) und **OpenTopoMap** (Höhenlinien und Schattierung). Den Stil wählst du mit dem Knopf mit den Ebenen oben rechts auf der Karte einer Fahrt und der Aufnahme oder unter **Mehr › Karte › Kartenstil**. Er gilt für jede Karte, auch für die Aufnahme, und Wattspur merkt ihn sich.
+Ab 0.6 hat das iPhone die Kartenstile des Mac: von Apple **Standard**, **Satellit** und **Hybrid**, dazu **OpenStreetMap**, **CyclOSM** (für Radfahrer, mit Radwegen in Blau) und **OpenTopoMap** (Höhenlinien und Schattierung). Den Stil wählst du mit dem Knopf mit den Ebenen oben rechts auf der Karte einer Fahrt und der Aufnahme oder unter **Mehr › Karten › Kartenstil**. Er gilt für jede Karte, auch für die Aufnahme, und Wattspur merkt ihn sich.
 
 Die OpenStreetMap-Stile kommen von Servern, die Freiwillige betreiben. Wattspur lädt nur die Kacheln, die du siehst, und behält sie eine Weile. So erscheinen Gegenden, die du schon gesehen hast, auch ohne Netz. In einer Gegend, die du noch nicht gesehen hast, steht die Route auf einem leeren Grund. Die **Quellenangabe** der Karte bleibt unten rechts; auf der Karte einer Fahrt öffnet ein Tipp darauf die Lizenz.
 

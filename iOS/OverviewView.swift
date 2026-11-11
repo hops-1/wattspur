@@ -314,13 +314,3 @@ struct Figure: View {
         .accessibilityElement(children: .combine)
     }
 }
-
-/// Version and commit, as in the About window on the Mac; in the tab “More”.
-struct VersionFooter: View {
-    var body: some View {
-        Text("Wattspur \(AppInfo.version) (\(AppInfo.build), \(AppInfo.commit))")
-            .font(.caption)
-            .foregroundStyle(.secondary)
-            .textSelection(.enabled)
-    }
-}

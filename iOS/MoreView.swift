@@ -1,182 +1,270 @@
+import StoreKit
 import SwiftUI
 import WattspurCore
 import WattspurKit
 import WattspurMap
 
-/// The tab “More” (design C): iCloud, the trash (B-217), the recording and the version.
+/// The tab “More” (B-298): a list of sections like the iOS Settings, each opening a page of its own,
+/// instead of one long form. The profile sits at the top. In landscape the list is on the left and
+/// the chosen page on the right, like the rides (B-243). Every setting keeps its key.
 struct MoreView: View {
     @Environment(PhoneLibrary.self) private var library
-    @Environment(PhoneSync.self) private var sync
-    @Environment(\.switchSync) private var switchSync
-    @State private var confirmingOff = false
-    @AppStorage(Recorder.vehicleKey) private var vehicle = RecordingVehicle.eBike
-    @AppStorage(MotionRecorder.rawLogKey) private var recordsRawMotion = false
-    /// The style of every map (B-226), the same choice as on the detail map.
-    @AppStorage(PhoneSettingsKey.mapType) private var mapType: RideMapType = .standard
     @Environment(\.isLandscape) private var isLandscape
+    /// The page beside the list in landscape; the profile until another one is tapped.
+    @State private var selection: MorePage = .profile
+    /// Only in Debug and TestFlight builds (`BuildChannel`).
+    @State private var showsTestTools = BuildChannel.isDebug
 
     var body: some View {
         Group {
             if isLandscape {
-                // Two columns in landscape (B-243): library on the left, recording and version on the right.
-                HStack(spacing: 0) {
-                    Form { librarySections }
-                        .tabBarRoomInLandscape()
-                    Form { recordingSections }
-                }
+                split
             } else {
-                Form {
-                    librarySections
-                    recordingSections
-                }
+                list
             }
         }
         .navigationTitle("More")
+        .task { showsTestTools = await BuildChannel.showsTestTools() }
     }
 
-    /// iCloud, the trash and the sync status.
-    @ViewBuilder private var librarySections: some View {
-        if sync.canChoose {
+    private var pages: [[MorePage]] {
+        var groups: [[MorePage]] = [[.recording, .maps], [.library, .trash], [.help, .about]]
+        if showsTestTools { groups.append([.testTools]) }
+        return groups
+    }
+
+    // MARK: - Portrait
+
+    private var list: some View {
+        List {
             Section {
-                Toggle("Sync with iCloud", isOn: Binding(
-                    get: { sync.isOn },
-                    set: { if $0 { switchSync(true) } else { confirmingOff = true } }))
-            } footer: {
-                VStack(alignment: .leading, spacing: 4) {
-                    if sync.isOn {
-                        Text("One library on this iPhone and your Mac, in your own iCloud account.")
-                    } else {
-                        Text("Without iCloud, the rides stay on this iPhone. They reach the Mac with “Share GPX”, e.g. by AirDrop.")
-                    }
-                    if sync.needsRestart {
-                        Text("Takes effect the next time Wattspur opens: close it in the app switcher.")
-                            .foregroundStyle(.orange)
+                NavigationLink(value: MorePage.profile) { ProfileHeader() }
+            }
+            ForEach(pages, id: \.self) { group in
+                Section {
+                    ForEach(group) { page in
+                        NavigationLink(value: page) { MoreRow(page: page) }
                     }
                 }
             }
-            .confirmationDialog("Stop syncing with iCloud?", isPresented: $confirmingOff, titleVisibility: .visible) {
-                Button("Turn Off") { switchSync(false) }
-            } message: {
-                Text("The rides stay in iCloud, on your Mac and on this iPhone. New rides then stay on this iPhone.")
-            }
         }
-        Section {
-            NavigationLink {
-                TrashView()
-                    .hidesTabBarInLandscape()
-            } label: {
-                LabeledContent {
-                    Text(library.trash.count.formatted())
-                } label: {
-                    Label("Trash", systemImage: "trash")
-                }
-            }
-        } header: {
-            Text("Library")
-        } footer: {
-            if library.mode == .iCloud {
-                Text("Your rides are on this iPhone and in your own iCloud account, the same as on your Mac.")
-            } else {
-                Text("Your rides are on this iPhone. Sync with the Mac comes with iCloud.")
-            }
-        }
-        if let monitor = library.syncMonitor {
-            SyncSection(monitor: monitor)
+        .listStyle(.insetGrouped)
+        .navigationDestination(for: MorePage.self) { page in
+            MorePageView(page: page)
+                .navigationTitle(page.title)
+                .navigationBarTitleDisplayMode(.inline)
+                .hidesTabBarInLandscape()
         }
     }
 
-    /// The map style, the vehicle for the recording and the version.
-    @ViewBuilder private var recordingSections: some View {
-        Section {
-            Picker("Map Style", selection: $mapType) {
-                Section("Apple") {
-                    ForEach(RideMapType.apple) { Text($0.label).tag($0) }
+    // MARK: - Landscape
+
+    private var split: some View {
+        HStack(spacing: 0) {
+            List {
+                Section {
+                    row(.profile) { ProfileHeader() }
                 }
-                Section("OpenStreetMap") {
-                    ForEach(RideMapType.openStreetMapStyles) { Text($0.label).tag($0) }
+                ForEach(pages, id: \.self) { group in
+                    Section {
+                        ForEach(group) { page in
+                            row(page) { MoreRow(page: page) }
+                        }
+                    }
                 }
             }
-        } header: {
-            Text("Map")
-        } footer: {
-            Text("The OpenStreetMap styles come from volunteer servers; Wattspur loads only the tiles on screen and keeps them for a while. Without a connection the route shows on a plain ground.")
-        }
-
-        Section {
-            Picker("Vehicle", selection: $vehicle) {
-                Text("E-Bike").tag(RecordingVehicle.eBike)
-                Text("Motorcycle").tag(RecordingVehicle.motorcycle)
+            .listStyle(.insetGrouped)
+            .tabBarRoomInLandscape()
+            .frame(width: 320)
+            Divider()
+            VStack(alignment: .leading, spacing: 0) {
+                Text(selection.title)
+                    .font(.title2.bold())
+                    .padding(.horizontal, 20)
+                    .padding(.top, 12)
+                MorePageView(page: selection, embedded: true)
             }
-        } header: {
-            Text("Recording")
-        } footer: {
-            Text("GPS jumps look like impossible speeds and are left out. For an e-bike that is above 100 km/h, for a motorcycle above 300 km/h.")
+            .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topLeading)
+            .background(Color(.systemGroupedBackground))
+            .id(selection)
         }
+        // A page that is gone (test tools in a build without them) falls back to the profile.
+        .onChange(of: showsTestTools) { if !showsTestTools && selection == .testTools { selection = .profile } }
+    }
 
-        // Spike V-16; goes again once acceleration and lean angle are part of the recording.
-        Section {
-            Toggle("Record Raw Motion", isOn: $recordsRawMotion)
-        } header: {
-            Text("Test")
-        } footer: {
-            Text("For a test of acceleration and lean angle: each recording also writes the motion sensors and GPS into a file. You find it in the Files app under “On My iPhone › Wattspur › Bewegung”. About 20 MB per hour.")
+    private func row(_ page: MorePage, @ViewBuilder label: () -> some View) -> some View {
+        Button {
+            selection = page
+        } label: {
+            label()
+                .contentShape(.rect)
         }
+        .buttonStyle(.plain)
+        .listRowBackground(page == selection ? Color.track.opacity(0.14) : nil)
+        .accessibilityAddTraits(page == selection ? .isSelected : [])
+    }
+}
 
-        Section {
-            VersionFooter()
+/// The pages of “More”, in the order of the list.
+enum MorePage: String, Hashable, CaseIterable, Identifiable {
+    case profile, recording, maps, library, trash, help, about, testTools
+
+    var id: Self { self }
+
+    var title: LocalizedStringKey {
+        switch self {
+        case .profile: "Profile"
+        case .recording: "Recording"
+        case .maps: "Maps"
+        case .library: "iCloud & Library"
+        case .trash: "Trash"
+        case .help: "Help & Handbook"
+        case .about: "About Wattspur"
+        case .testTools: "Test Tools"
+        }
+    }
+
+    var systemImage: String {
+        switch self {
+        case .profile: "person.crop.circle"
+        case .recording: "record.circle"
+        case .maps: "map"
+        case .library: "icloud"
+        case .trash: "trash"
+        case .help: "book"
+        case .about: "info.circle"
+        case .testTools: "hammer"
+        }
+    }
+
+    /// The colour of the small square behind the symbol, as in the iOS Settings.
+    var tint: Color {
+        switch self {
+        case .profile: .track
+        case .recording: .red
+        case .maps: .green
+        case .library: .blue
+        case .trash: .gray
+        case .help: .orange
+        case .about: .gray
+        case .testTools: .purple
         }
     }
 }
 
-/// "Last synced …" and what keeps the sync from working (B-220). Short delays get no message.
-private struct SyncSection: View {
-    let monitor: SyncMonitor
+/// One row of the list: the symbol in a coloured square, the title and what is set now.
+private struct MoreRow: View {
+    let page: MorePage
+    @Environment(PhoneLibrary.self) private var library
+    @Environment(PhoneSync.self) private var sync
+    @AppStorage(Recorder.vehicleKey) private var vehicle = RecordingVehicle.eBike
+    @AppStorage(PhoneSettingsKey.mapType) private var mapType: RideMapType = .standard
 
     var body: some View {
-        Section {
-            // The problem depends on how long a failure has lasted, so the rows look again now and then.
-            TimelineView(.periodic(from: .now, by: 15)) { context in
-                VStack(alignment: .leading, spacing: 8) {
-                    if let problem = monitor.problem(now: context.date) {
-                        Label(text(for: problem), systemImage: "exclamationmark.triangle.fill")
-                            .foregroundStyle(.orange)
-                        if monitor.hasPendingChanges {
-                            Text("Some changes from this iPhone are not in iCloud yet. Keep iCloud on for Wattspur until they are, or they may be lost.")
-                                .font(.footnote)
-                                .foregroundStyle(.secondary)
-                        }
-                    }
-                    LabeledContent("Last synced") {
-                        if monitor.isSyncing {
-                            HStack(spacing: 6) {
-                                ProgressView()
-                                Text("Syncing …")
-                            }
-                        } else if let lastSync = monitor.lastSync {
-                            Text(lastSync, format: .relative(presentation: .named))
-                        } else {
-                            Text("Not yet")
-                        }
-                    }
-                }
+        LabeledContent {
+            value
+        } label: {
+            Label {
+                Text(page.title)
+            } icon: {
+                Image(systemName: page.systemImage)
+                    .font(.footnote.weight(.semibold))
+                    .foregroundStyle(.white)
+                    .frame(width: 28, height: 28)
+                    .background(page.tint.gradient, in: .rect(cornerRadius: 7))
             }
-        } header: {
-            Text("iCloud")
         }
     }
 
-    private func text(for problem: SyncProblem) -> String {
-        switch problem {
-        case .noAccount:
-            String(localized: "This iPhone is not signed in to iCloud, or iCloud is off for Wattspur. New rides stay only on this iPhone.")
-        case .restricted:
-            String(localized: "iCloud is restricted on this iPhone. New rides stay only on this iPhone.")
-        case .quotaExceeded:
-            String(localized: "Your iCloud storage is full. New rides stay on this iPhone until there is room again.")
-        case .offline:
-            String(localized: "No connection to iCloud. Wattspur syncs as soon as there is one again.")
-        case .other(let reason):
-            String(localized: "Sync is not working at the moment: \(reason)")
+    private var value: Text? {
+        switch page {
+        case .recording: Text(vehicle.label)
+        case .maps: Text(mapType.label)
+        case .library: library.mode == .iCloud ? Text("iCloud") : Text("This iPhone")
+        case .trash: library.trash.isEmpty ? nil : Text(library.trash.count.formatted())
+        default: nil
         }
+    }
+}
+
+/// The head of the list: photo, name and how much was ridden; opens the profile (B-299 makes it editable).
+private struct ProfileHeader: View {
+    @Environment(PhoneLibrary.self) private var library
+
+    var body: some View {
+        HStack(spacing: 14) {
+            RiderAvatar(rider: library.rider, size: 56)
+            VStack(alignment: .leading, spacing: 2) {
+                Text(name)
+                    .font(.title3.weight(.semibold))
+                Text(summary)
+                    .font(.subheadline)
+                    .foregroundStyle(.secondary)
+                    .monospacedDigit()
+            }
+        }
+        .padding(.vertical, 4)
+        .accessibilityElement(children: .combine)
+    }
+
+    private var name: String {
+        let name = library.rider?.name.trimmingCharacters(in: .whitespacesAndNewlines) ?? ""
+        return name.isEmpty ? String(localized: "Profile") : name
+    }
+
+    /// For example “84 rides · 1,520 km”.
+    private var summary: String {
+        let rides = library.state?.rides ?? []
+        let distance = rides.reduce(0) { $0 + $1.distance }
+        return String(localized: "\(rides.count) rides · \(RideFormat.distance(distance))")
+    }
+}
+
+/// The rider's photo in a circle, or the first letter of the name, or a person symbol.
+struct RiderAvatar: View {
+    let rider: RiderDetails?
+    let size: CGFloat
+
+    var body: some View {
+        Group {
+            if let data = rider?.photoData, let image = UIImage(data: data) {
+                Image(uiImage: image)
+                    .resizable()
+                    .scaledToFill()
+            } else if let initial = rider?.initial {
+                Text(initial)
+                    .font(.system(size: size * 0.45, weight: .semibold, design: .rounded))
+                    .foregroundStyle(.white)
+                    .frame(maxWidth: .infinity, maxHeight: .infinity)
+                    .background(Color.track.gradient)
+            } else {
+                Image(systemName: "person.fill")
+                    .font(.system(size: size * 0.45))
+                    .foregroundStyle(.white)
+                    .frame(maxWidth: .infinity, maxHeight: .infinity)
+                    .background(Color.gray.gradient)
+            }
+        }
+        .frame(width: size, height: size)
+        .clipShape(.circle)
+        .accessibilityHidden(true)
+    }
+}
+
+/// Whether the test tools show (B-298): in Debug builds and on TestFlight, not from the App Store.
+enum BuildChannel {
+    static var isDebug: Bool {
+        #if DEBUG
+        true
+        #else
+        false
+        #endif
+    }
+
+    static func showsTestTools() async -> Bool {
+        if isDebug { return true }
+        // TestFlight builds run in the sandbox environment; the App Store in production.
+        guard let transaction = try? await AppTransaction.shared else { return false }
+        return transaction.unsafePayloadValue.environment != .production
     }
 }

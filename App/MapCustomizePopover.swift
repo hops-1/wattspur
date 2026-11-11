@@ -1,4 +1,5 @@
 import SwiftUI
+import WattspurCore
 import WattspurMap
 
 /// The "Customize Map" button on a map and its window (B-061, after komoot): the map type as

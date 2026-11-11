@@ -6,6 +6,8 @@ import WattspurCore
 struct TrashView: View {
     @Environment(PhoneLibrary.self) private var library
     @State private var confirmingEmpty = false
+    /// Beside the list of “More” in landscape (B-298): no navigation bar, so “Empty” is in the list.
+    var embedded = false
 
     var body: some View {
         List {
@@ -32,8 +34,16 @@ struct TrashView: View {
                                        description: Text("Deleted rides stay here for 30 days."))
             }
         }
+        .safeAreaInset(edge: .bottom) {
+            if embedded && !library.trash.isEmpty {
+                Button("Empty Trash", role: .destructive) { confirmingEmpty = true }
+                    .buttonStyle(.glass)
+                    .tint(.red)
+                    .padding(.bottom, LandscapeTabBar.height + 12)
+            }
+        }
         .toolbar {
-            if !library.trash.isEmpty {
+            if !embedded && !library.trash.isEmpty {
                 Button("Empty") { confirmingEmpty = true }
             }
         }

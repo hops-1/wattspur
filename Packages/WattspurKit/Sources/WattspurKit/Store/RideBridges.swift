@@ -169,6 +169,13 @@ extension Rider {
     }
 }
 
+// From Library/RiderDetails.swift
+extension Rider {
+    public var details: RiderDetails {
+        RiderDetails(name: name, photoData: photoData, body: bodyProfile)
+    }
+}
+
 // From Analysis/MapOverview.swift
 extension MapOverview {
     /// Collects the filtered rides of the library.
