@@ -60,6 +60,8 @@ public enum MapRenderers {
 public final class ComparisonRoutesOverlay: NSObject, MKOverlay, @unchecked Sendable {
     public struct Line: Sendable {
         var points: [MKMapPoint]
+        /// `points` split at the gaps in the track, as drawn.
+        var stretches: [[MKMapPoint]]
         var color: CGColor
         var dash: [CGFloat]
 
@@ -67,6 +69,7 @@ public final class ComparisonRoutesOverlay: NSObject, MKOverlay, @unchecked Send
         public init?(coordinates: [CLLocationCoordinate2D], color: CGColor, dash: [CGFloat]) {
             guard coordinates.count > 1 else { return nil }
             points = coordinates.map(MKMapPoint.init)
+            stretches = TrackGap.split(coordinates).map { $0.map(MKMapPoint.init) }
             self.color = color
             self.dash = dash
         }
@@ -97,8 +100,11 @@ public final class ComparisonRoutesRenderer: MKOverlayRenderer {
         for line in overlay.lines {
             for (width, color, dash) in [(7, CGColor(gray: 1, alpha: 1), [] as [CGFloat]), (4, line.color, line.dash)] as [(CGFloat, CGColor, [CGFloat])] {
                 context.beginPath()
-                context.move(to: point(for: line.points[0]))
-                for p in line.points.dropFirst() { context.addLine(to: point(for: p)) }
+                // No line across a gap in the track (B-309).
+                for stretch in line.stretches {
+                    context.move(to: point(for: stretch[0]))
+                    for p in stretch.dropFirst() { context.addLine(to: point(for: p)) }
+                }
                 context.setLineWidth(width * scale)
                 context.setLineDash(phase: 0, lengths: dash.map { $0 * scale })
                 context.setStrokeColor(color)
@@ -163,5 +169,12 @@ public struct TileMosaic: Sendable {
         MutedTileRenderer.mute(CGRect(x: 0, y: 0, width: pixelWidth, height: pixelHeight), in: context)
         guard let image = context.makeImage() else { return nil }
         return TileMosaic(image: image, area: area)
+    }
+}
+
+extension TrackGap {
+    /// The coordinates split at every gap in the track (B-309), for lines on a map.
+    public static func split(_ coordinates: [CLLocationCoordinate2D]) -> [[CLLocationCoordinate2D]] {
+        split(coordinates) { ($0.latitude, $0.longitude) }
     }
 }

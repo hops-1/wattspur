@@ -37,6 +37,9 @@ Wattspur zeigt die Startzeit in der Zeitzone des Startorts. Die Zeitzone wird ei
 ### Warum fehlt die Route auf den ersten und letzten paar hundert Metern?
 Nur bei der **Beispielfahrt**: Start und Ziel sind entfernt, damit niemand den Ort findet, an dem die echte Fahrt begann. Deine eigenen Fahrten werden vollständig gezeigt.
 
+### Warum hört die Route auf und beginnt woanders neu?
+Liegen zwei Positionen nacheinander mehr als 2 km auseinander, ist dazwischen niemand gefahren: Du bist zum Beispiel mit dem Rad Zug gefahren, und die Aufnahme war pausiert oder hatte kein GPS. Wattspur zieht über so eine Lücke keine Linie, auf allen Karten, im PDF und in einer exportierten GPX-Datei (ein neuer Abschnitt). Die Lücke zählt nicht zur Strecke und nicht zur Fahrzeit. Läuft am iPhone die Aufnahme im Zug weiter, geht sie nach dem Aussteigen in einem neuen Abschnitt weiter. Fahrten von vor Mac 1.8.15 und iPhone 0.7.1 erscheinen nach dem Update ebenso.
+
 ### Warum ist diese Fahrt (nicht) ähnlich?
 Wattspur vergleicht die Routen: Eine Fahrt ist ähnlich, wenn mindestens so viel ihrer Strecke wie am Regler eingestellt (Standard 90 %) höchstens 50 m neben der anderen Strecke liegt, in beide Richtungen geprüft. Fehlt eine erwartete Fahrt, probiere Folgendes:
 - **Regler senken**, etwa auf 85 %: Ein Umweg oder ein ungenauer GPS-Track kostet schnell ein paar Prozent.

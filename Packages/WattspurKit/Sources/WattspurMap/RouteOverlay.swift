@@ -113,10 +113,13 @@ public final class RideRouteOverlay: NSObject, MKOverlay, @unchecked Sendable {
     /// The route as one line per recording (the iPhone's `RideExchange.Route`).
     public init(segments: [[CLLocationCoordinate2D]], newStretches: [[RoutePoint]] = [], colouring: RouteColouring,
                 ticks: [JoinTick] = [], dark: Bool, colors: RouteColors) {
-        route = segments.map { $0.map(MKMapPoint.init) }
+        // No line across a gap in the track, e.g. a train ride without recording (B-309).
+        route = segments.flatMap(TrackGap.split).map { $0.map(MKMapPoint.init) }
         stretches = newStretches.map { $0.map { MKMapPoint(CLLocationCoordinate2D(latitude: $0.latitude, longitude: $0.longitude)) } }
         self.ticks = ticks.map { (MKMapPoint($0.coordinate), $0.across) }
-        pieces = colouring.pieces(dark: dark, colors: colors).map { ($0.color, $0.coordinates.map(MKMapPoint.init)) }
+        pieces = colouring.pieces(dark: dark, colors: colors).flatMap { piece in
+            TrackGap.split(piece.coordinates).map { (piece.color, $0.map(MKMapPoint.init)) }
+        }
         routeColor = colors.accent
         newColor = MapPalette.newPaths.cgColor(dark: dark)
         let rect = MKMapRect(covering: Array(route.joined()) + Array(stretches.joined()))

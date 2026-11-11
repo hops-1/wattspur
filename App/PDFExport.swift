@@ -91,9 +91,12 @@ enum PDFExport {
                 let path = NSBezierPath()
                 path.lineCapStyle = .round
                 path.lineJoinStyle = .round
-                for (i, coordinate) in line.coordinates.enumerated() {
-                    let point = backdrop.point(for: coordinate)
-                    if i == 0 { path.move(to: point) } else { path.line(to: point) }
+                // No line across a gap in the track (B-309).
+                for stretch in TrackGap.split(line.coordinates) {
+                    for (i, coordinate) in stretch.enumerated() {
+                        let point = backdrop.point(for: coordinate)
+                        if i == 0 { path.move(to: point) } else { path.line(to: point) }
+                    }
                 }
                 path.lineWidth = 7
                 NSColor.white.setStroke()

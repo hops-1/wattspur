@@ -7,6 +7,11 @@ Every DMG handed out to testers corresponds to one entry below.
 
 ## [Unreleased]
 
+### Fixed
+
+- **No line across a gap in the track.** By bike to the station, by train without recording, by bike home: the maps drew a straight line from one station to the other. Now where two positions in a row are more than 2 km apart, the line stops and starts again, on every map, in the PDF and in an exported GPX (a new segment). Older rides are drawn again once after the update (B-309, issue #164).
+- **iPhone: a recording that runs on in the train no longer counts the train.** Off the train, more than 2 km further after more than 30 s without a position, the recording goes on in a new stretch: the distance does not jump, and the positions after it are no longer dropped as GPS jumps (B-309).
+
 ## [1.8.14] – 2026-11-11
 
 Together with the iPhone app 0.7.0 (24).

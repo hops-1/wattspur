@@ -37,6 +37,9 @@ Wattspur shows the start time in the time zone of the start location. It looks t
 ### Why is there no route for the first and last few hundred metres?
 Only for the **sample ride**: its start and finish are removed so that nobody can find the place where the original ride began. Your own rides are shown completely.
 
+### Why does the route stop and start again somewhere else?
+Where two positions in a row are more than 2 km apart, nobody rode between them: you took the train with the bike, say, and the recording paused or had no GPS. Wattspur draws no line across such a gap, on every map, in the PDF and in an exported GPX (a new segment). The gap adds nothing to the distance or the ride time. On the iPhone a recording that runs on in the train goes on in a new stretch once you are off it. Rides from before Mac 1.8.15 and iPhone 0.7.1 are drawn this way after the update, too.
+
 ### Why is this ride (not) similar?
 Wattspur compares the routes: a ride is similar if at least as much of its route as the slider says (default 90 %) lies within 50 m of the other route, checked both ways. If a ride you expect is missing, try this:
 - **Lower the slider**, for example to 85 %: a detour or an inaccurate GPS track quickly costs a few per cent.
