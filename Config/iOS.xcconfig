@@ -5,7 +5,7 @@
 // Connect rejects an upload whose extension differs from the app (R-04). The build number must be
 // higher than the last TestFlight upload (0.5.1 build 7).
 MARKETING_VERSION = 0.7.0
-CURRENT_PROJECT_VERSION = 19
+CURRENT_PROJECT_VERSION = 20
 
 CODE_SIGN_STYLE = Automatic
 CODE_SIGN_IDENTITY = Apple Development
