@@ -127,6 +127,7 @@ private struct MapsPage: View {
 /// iCloud on or off, where the rides are and the state of the sync.
 private struct LibraryPage: View {
     @Environment(PhoneLibrary.self) private var library
+    @Environment(PhoneImport.self) private var phoneImport
     @Environment(PhoneSync.self) private var sync
     @Environment(\.switchSync) private var switchSync
     @State private var confirmingOff = false
@@ -159,6 +160,15 @@ private struct LibraryPage: View {
             }
             if let monitor = library.syncMonitor {
                 SyncSection(monitor: monitor)
+            }
+            Section {
+                Button {
+                    phoneImport.choosingFiles = true
+                } label: {
+                    Label("Import Files …", systemImage: "square.and.arrow.down")
+                }
+            } footer: {
+                Text("FIT and GPX files, several at once, also from iCloud Drive. Files you put into “On My iPhone › Wattspur › Import” in the Files app are imported when Wattspur opens; then they move to “Importiert”, or to “Fehler” if they cannot be read.")
             }
             Section {
                 LabeledContent("Rides") { Text((library.state?.rides.count ?? 0).formatted()) }

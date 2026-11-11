@@ -74,6 +74,13 @@ The Bosch file of a ride has more values than a GPS recording, such as power and
 
 **Without iCloud** it becomes a ride on the iPhone only.
 
+## FIT and GPX from the Files app
+From 0.6.2 on, Wattspur also takes files that are already in the Files app, without a Mac:
+- **Choose files:** in **Rides** the **+** button beside the search, or **More › iCloud & Library › Import Files …**. You can choose several FIT and GPX files at once, also from iCloud Drive and other providers.
+- **Folder “Import”:** put files into **On My iPhone › Wattspur › Import** in the Files app. Wattspur reads them the next time it opens. Afterwards they are in **Importiert**, or in **Fehler** if a file cannot be read.
+
+The same questions as above apply: which bike, what happens to a ride that is already there, and a Bosch file completes your recording with power, cadence and heart rate. With many files Wattspur shows at the top how far it is, and a summary at the end, for example “12 new, 3 completed, 1 duplicate”.
+
 ## Height while recording
 While recording, Wattspur measures the height with the iPhone's **barometer**, from the air pressure. That is much calmer than the GPS height alone, so the ascent comes closer to Bosch. The height above sea level still comes from the GPS: Wattspur keeps matching the two. So a change in the weather during the ride does not get in the way either.
 

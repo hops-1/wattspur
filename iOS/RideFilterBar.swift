@@ -11,10 +11,25 @@ struct RideFilterBar: View {
     var bikes: [RideExchange.Bike]
     var shown: Int
     var total: Int
+    /// The “+” beside the search: FIT and GPX files from the Files app (B-300).
+    var importFiles: (() -> Void)?
 
     var body: some View {
         VStack(alignment: .leading, spacing: compact ? 6 : 8) {
-            searchField
+            HStack(spacing: 8) {
+                searchField
+                if let importFiles {
+                    Button(action: importFiles) {
+                        Image(systemName: "plus")
+                            .font(.body.weight(.semibold))
+                            .frame(width: compact ? 32 : 36, height: compact ? 32 : 36)
+                            .background(Color.secondary.opacity(0.12), in: .circle)
+                            .contentShape(.circle)
+                    }
+                    .buttonStyle(.plain)
+                    .accessibilityLabel(Text("Import Files …"))
+                }
+            }
             ScrollView(.horizontal) {
                 HStack(spacing: 8) {
                     periodMenu

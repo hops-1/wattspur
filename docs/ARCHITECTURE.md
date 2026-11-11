@@ -50,12 +50,13 @@ Die Regeln mit ✓ prüft `scripts/check-architecture.sh` (lokal in `scripts/ci-
 ```
 Datei (FIT/GPX) ──► ImportFlow ──► RideLibrary.importFile ──► ImportService ──► FIT-/GPXRideImporter (Core)
   Ziehen, Öffnen,    Fragen: Bike,                              Duplikat?       ParsedRide
-  Teilen am iPhone   Doppel, GPX anhängen                       anhängen?        │
+  Teilen, Dateien    Doppel, GPX anhängen                       anhängen?        │
                        │                                                         ▼
                        └── ImportReport (Fakten) ──► App formuliert          Ride + SourceFile
 ```
 
 - `ImportFlow` (Kit) hält nur die Entscheidungen und eine **Warteschlange**: Ein zweiter Import wartet, bis der erste fertig ist (R-46). Jede App zeichnet ihre eigenen Fragen.
+- Am iPhone kommen Dateien über „Öffnen mit“, die Dateiauswahl und den Ordner „Import“ (B-300, `PhoneImport`, `ImportInbox`). `ImportFlow.stepsThroughFiles` liest dort Datei für Datei, damit die Oberfläche nicht hängt, und `ImportFlow.Summary` zählt für die Zusammenfassung am Ende.
 - Der **überwachte Ordner** am Mac (`FolderWatcher` → `FolderImport`) fragt niemanden. Er nimmt eine Datei erst, wenn sie ein paar Sekunden unverändert ist, und liest sie mit `NSFileCoordinator` (R-45).
 - Eine Datei zu einer Fahrt im Papierkorb holt die Fahrt zurück und sagt es (R-44).
 
@@ -126,7 +127,7 @@ Die App legt bei jeder Änderung einen `WeekSnapshot` (Core) in die App Group `g
 | `Store/LibraryMaintenance.swift` | Aufräumen nach dem ersten Fenster, Nachrechnen nach Version, in Paketen |
 | `Store/RideBridges.swift` | Modell → Werttypen |
 | `Store/CurvyRoadLibrary.swift` | Importierte Regionen als Dateien, nicht in SwiftData und nicht im Backup |
-| `Import/` | `FolderImport` (überwachter Ordner), `ImportFlow` (Fragen und Warteschlange), `ImportReport` (Fakten) |
+| `Import/` | `FolderImport` (überwachter Ordner), `ImportFlow` (Fragen, Warteschlange, am iPhone Datei für Datei mit Fortschritt und Zusammenfassung), `ImportReport` (Fakten), `ImportInbox` (Ordner „Import“ am iPhone) |
 
 **Dienste:** zustandslose Structs, gebaut aus einer `LibraryEnvironment` (Kontext, Importer, UndoManager, Standard-Bikename). Sie nutzen sich nur in eine Richtung: Import → Zusammenführen → Bikes. Die übrigen stehen für sich.
 

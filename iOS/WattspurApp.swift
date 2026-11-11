@@ -24,7 +24,7 @@ struct WattspurApp: App {
     @State private var openedRideID: UUID?
     /// Why “End and Save” of an unfinished ride failed; the recording and its log stay (R-51).
     @State private var unfinishedProblem: String?
-    /// FIT and GPX files opened with Wattspur (B-071).
+    /// FIT and GPX files opened with Wattspur (B-071), chosen in the file picker or put into the folder “Import” (B-300).
     @State private var phoneImport = PhoneImport()
 
     init() {
@@ -129,6 +129,7 @@ struct WattspurApp: App {
             tab = .rides
         }
         .phoneImport(phoneImport)
+        .environment(phoneImport)
         .environment(sync)
         .environment(\.switchSync, SwitchSyncAction(switchSync))
         .reportsSaveFailures()
@@ -215,6 +216,8 @@ struct WattspurApp: App {
         .onChange(of: scenePhase, initial: true) { _, phase in
             if phase == .active {
                 Task { await library.refresh() }
+                // Files put into “On My iPhone › Wattspur › Import” meanwhile (B-300); not while recording.
+                if !recorder.isRecording { phoneImport.importWaitingFiles(library: library) }
             }
         }
     }
