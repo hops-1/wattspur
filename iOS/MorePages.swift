@@ -197,7 +197,10 @@ private struct BackupSection: View {
     @Environment(PhoneBackup.self) private var backup
     @Environment(Recorder.self) private var recorder
     @AppStorage(PhoneSettingsKey.autoBackup) private var automatic = false
+    /// What the folder picker is for. Kept until the picker's result is handled: SwiftUI sets
+    /// `choosingFolder` back to false before it calls the result, so the purpose must not hang on it.
     @State private var picking: Picking?
+    @State private var choosingFolder = false
 
     /// With sync on, the restore reaches the other devices too (B-265); the confirmation says so.
     private var syncs: Bool { sync.isOn || library.mode == .iCloud }
@@ -207,12 +210,14 @@ private struct BackupSection: View {
         Section {
             Button {
                 picking = .destination
+                choosingFolder = true
             } label: {
                 Label("Back Up Library …", systemImage: "externaldrive.badge.plus")
             }
             .disabled(backup.isWorking || backup.state == .restoreStaged)
             Button {
                 picking = .backup
+                choosingFolder = true
             } label: {
                 Label("Restore Backup …", systemImage: "arrow.counterclockwise")
             }
@@ -239,8 +244,7 @@ private struct BackupSection: View {
                 }
             }
         }
-        .fileImporter(isPresented: Binding(get: { picking != nil }, set: { if !$0 { picking = nil } }),
-                      allowedContentTypes: [.folder]) { result in
+        .fileImporter(isPresented: $choosingFolder, allowedContentTypes: [.folder]) { result in
             let purpose = picking
             picking = nil
             guard case .success(let folder) = result else { return }

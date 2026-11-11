@@ -51,3 +51,5 @@ Mit einer Test-Bibliothek auf iPhone und Mac, beide mit Sync an.
 Hier eintragen oder an Claude schicken. Ein ✗ wird ein eigener Backlog-Punkt; B-265 und B-301 kommen auf ☑, wenn C und A durch sind.
 
 **A (Nils, 11.11.2026, iPhone 0.7.0 (20)):** A1 ✓, A2 ✓, A3 ✓, A4 ✓, A5 ✓, A6 nicht geprüft (kein Strava), A7 nicht geprüft (kein Garmin Connect), A8 ✓, A9 ✓. Dazu der Fehler B-305 (eine Bosch-Fahrt über zwei Aufnahmen), mit Build 20 behoben und geprüft.
+
+**B1 (Nils, 11.11.2026, Build 20):** ✗ – nach der Ordnerwahl passierte nichts. Behoben in Build 21 (auch „Sicherung zurückholen“ war betroffen); im Simulator geprüft: Sicherung angelegt, Rückfrage beim Zurückholen kommt.
