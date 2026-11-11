@@ -7,6 +7,10 @@ Every DMG handed out to testers corresponds to one entry below.
 
 ## [Unreleased]
 
+## [1.8.15] – 2026-11-11
+
+Gaps in the track: no line across a train ride without recording, from a tester's issue. Together with the iPhone app 0.7.1 (25).
+
 ### Fixed
 
 - **No line across a gap in the track.** By bike to the station, by train without recording, by bike home: the maps drew a straight line from one station to the other. Now where two positions in a row are more than 2 km apart, the line stops and starts again, on every map, in the PDF and in an exported GPX (a new segment). Older rides are drawn again once after the update (B-309, issue #164).

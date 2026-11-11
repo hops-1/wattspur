@@ -4,7 +4,7 @@
 // (template: Local.xcconfig.example, steps: docs/RELEASE.md).
 // The version of the Mac app; scripts/build-dmg.sh reads it from here (R-12). The build number
 // counts the commits and comes from the script.
-MARKETING_VERSION = 1.8.14
+MARKETING_VERSION = 1.8.15
 
 WATTSPUR_MAC_SIGN_STYLE = Manual
 WATTSPUR_MAC_SIGN_IDENTITY = -
