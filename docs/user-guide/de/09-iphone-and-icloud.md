@@ -74,6 +74,26 @@ Die Bosch-Datei einer Fahrt hat mehr Werte als eine GPS-Aufnahme, z. B. Leistung
 
 **Ohne iCloud** wird daraus nur eine Fahrt auf dem iPhone.
 
+## Teilen an Wattspur aus anderen Apps
+Ab 0.7.0 steht **Wattspur** in der Reihe der Apps im Teilen-Menü, auch bei Apps, die eine Fahrt als Daten statt als Datei teilen. So geht es:
+1. Teile in der anderen App die Fahrt als **FIT**- oder **GPX**-Datei. Du kannst auch mehrere Dateien auf einmal teilen.
+2. Tippe auf **Wattspur**. Wattspur öffnet sich und importiert die Dateien. Bei mehreren Dateien kommt am Ende eine Zusammenfassung.
+
+Öffnet sich Wattspur nicht von selbst, öffne die App. Sie holt die geteilten Dateien dann ab.
+
+- **Puls, Trittfrequenz und Leistung** liest Wattspur auch aus GPX-Dateien anderer Tracker, wenn die Datei sie hat (Garmin, Wahoo, Strava).
+- **Eine geplante Tour aus komoot** hat keine Zeiten. Wattspur sagt dann: „Das ist eine geplante Route, keine Fahrt.“ Exportiere die Tour noch einmal, nachdem du sie gefahren bist.
+- **Ein Link** (zum Beispiel komoot.com/tour/…) ist keine Fahrt. Wattspur lädt keine Links, sagt dir aber, wie du in dieser App die GPX-Datei exportierst.
+
+Diese Apps sind getestet:
+
+| App | Was du teilst | Ergebnis |
+|---|---|---|
+| Bosch eBike Flow | Fahrt als FIT-Datei | wird mit 0.7.0 geprüft |
+| komoot | gefahrene Tour als GPX-Datei | wird mit 0.7.0 geprüft |
+| Strava | Aktivität als GPX-Datei | wird mit 0.7.0 geprüft |
+| Garmin Connect | Aktivität als GPX- oder FIT-Datei | wird mit 0.7.0 geprüft |
+
 ## FIT und GPX aus der Dateien-App
 Ab 0.6.2 holt Wattspur auch Dateien, die schon in der Dateien-App liegen, ganz ohne Mac:
 - **Dateien auswählen:** in **Fahrten** der Knopf **+** neben der Suche, oder **Mehr › iCloud & Bibliothek › Dateien importieren …**. Du kannst mehrere FIT- und GPX-Dateien auf einmal wählen, auch aus iCloud Drive und von anderen Anbietern.

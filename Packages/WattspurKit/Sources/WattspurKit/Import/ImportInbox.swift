@@ -50,6 +50,33 @@ public struct ImportInbox: Sendable {
         return target
     }
 
+    /// Moves what the share extension left in `shared` (B-301) into the inbox, where the import
+    /// takes it as any other waiting file. The extension puts each share in its own folder there,
+    /// written under a hidden name first and renamed when complete, so a share still being written
+    /// is skipped. The folders go once they are empty. Returns how many files moved.
+    @discardableResult
+    public func collectShared(from shared: URL) -> Int {
+        let fileManager = FileManager.default
+        let folders = (try? fileManager.contentsOfDirectory(at: shared, includingPropertiesForKeys: [.isDirectoryKey],
+                                                            options: [.skipsHiddenFiles])) ?? []
+        guard !folders.isEmpty else { return 0 }
+        prepare()
+        var moved = 0
+        for folder in folders where (try? folder.resourceValues(forKeys: [.isDirectoryKey]).isDirectory) == true {
+            let files = (try? fileManager.contentsOfDirectory(at: folder, includingPropertiesForKeys: nil,
+                                                              options: [.skipsHiddenFiles])) ?? []
+            for file in files where Self.fileExtensions.contains(file.pathExtension.lowercased()) {
+                if (try? fileManager.moveItem(at: file, to: Self.freeName(for: file.lastPathComponent, in: inbox))) != nil {
+                    moved += 1
+                }
+            }
+            if ((try? fileManager.contentsOfDirectory(atPath: folder.path(percentEncoded: false))) ?? []).isEmpty {
+                try? fileManager.removeItem(at: folder)
+            }
+        }
+        return moved
+    }
+
     static func freeName(for name: String, in folder: URL) -> URL {
         let stem = (name as NSString).deletingPathExtension
         let ext = (name as NSString).pathExtension

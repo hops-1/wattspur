@@ -88,5 +88,17 @@
 			</dict>
 		</dict>
 	</array>
+	<!-- The scheme wattspur: the share extension opens the app to read what was shared (B-301) -->
+	<key>CFBundleURLTypes</key>
+	<array>
+		<dict>
+			<key>CFBundleURLName</key>
+			<string>io.github.hops-1.wattspur.ios</string>
+			<key>CFBundleURLSchemes</key>
+			<array>
+				<string>wattspur</string>
+			</array>
+		</dict>
+	</array>
 </dict>
 </plist>

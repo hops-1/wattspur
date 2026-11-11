@@ -91,6 +91,8 @@ targets:
         product: WattspurMap
       # Embedded in the app: Live Activity of a recording (B-223) and the widget “This Week” (B-224).
       - target: Wattspur Widgets
+      # Embedded in the app: “Share to Wattspur” from Flow, komoot and other trackers (B-301).
+      - target: Wattspur Share
     configFiles:
       Debug: Config/iOS.xcconfig
       Release: Config/iOS.xcconfig
@@ -158,6 +160,35 @@ targets:
         SKIP_INSTALL: YES
         # Only the App Group shared with the app (B-224), no iCloud.
         CODE_SIGN_ENTITLEMENTS: iOSWidgets/WattspurWidgets.entitlements
+  # Share extension of the iPhone app (B-301): takes FIT and GPX files from the share sheet, puts them
+  # into the App Group and opens the app, which imports them. Same version as the app (R-04).
+  Wattspur Share:
+    type: app-extension
+    platform: iOS
+    sources:
+      - path: iOSShare
+      - path: iOSShared
+    dependencies:
+      # Only the file and link checks (`SharedItem`); no SwiftData in the extension.
+      - package: WattspurKit
+        product: WattspurCore
+    configFiles:
+      Debug: Config/iOS.xcconfig
+      Release: Config/iOS.xcconfig
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: io.github.hops-1.wattspur.ios.share
+        PRODUCT_NAME: WattspurShare
+        TARGETED_DEVICE_FAMILY: "1"
+        GENERATE_INFOPLIST_FILE: YES
+        INFOPLIST_FILE: Config/iOS-Share-Info.plist
+        INFOPLIST_KEY_CFBundleDisplayName: Wattspur
+        INFOPLIST_KEY_NSHumanReadableCopyright: "© 2026 Nils Wiese"
+        LOCALIZATION_PREFERS_STRING_CATALOGS: YES
+        SWIFT_EMIT_LOC_STRINGS: YES
+        SKIP_INSTALL: YES
+        # Only the App Group shared with the app, no iCloud.
+        CODE_SIGN_ENTITLEMENTS: iOSShare/WattspurShare.entitlements
 schemes:
   Wattspur iOS:
     build:

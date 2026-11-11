@@ -334,6 +334,52 @@ struct GPXRideImporterTests {
         #expect(ride.summary.averagePower == 230)
     }
 
+    @Test("Garmin TrackPointExtension v2 with the power extension, as Garmin Connect and Wahoo export (B-301)")
+    func garminV2WithPower() throws {
+        let extras = """
+        <extensions><pwr:PowerInWatts xmlns:pwr="http://www.garmin.com/xmlschemas/PowerExtension/v1">205</pwr:PowerInWatts>\
+        <gpxtpx:TrackPointExtension xmlns:gpxtpx="http://www.garmin.com/xmlschemas/TrackPointExtension/v2">\
+        <gpxtpx:atemp>18.0</gpxtpx:atemp><gpxtpx:hr>132</gpxtpx:hr><gpxtpx:cad>81</gpxtpx:cad>\
+        <gpxtpx:speed>5.5</gpxtpx:speed><gpxtpx:course>12</gpxtpx:course></gpxtpx:TrackPointExtension></extensions>
+        """
+        let track = try importer.parseTrack(Doc.gpx([[Doc.point(0, extras: extras), Doc.point(1, extras: extras)]]))
+        let s = track.parts[0].samples[0]
+        #expect(s.power == 205)
+        #expect(s.heartRate == 132)
+        #expect(s.cadence == 81)
+        #expect(s.cadenceMeasured)
+        #expect(s.temperature == 18)
+    }
+
+    @Test("The cluetrust extension of older trackers: heart rate and cadence (B-301)")
+    func cluetrust() throws {
+        let extras = "<extensions><gpxdata:hr xmlns:gpxdata=\"http://www.cluetrust.com/XML/GPXDATA/1/0\">150</gpxdata:hr><gpxdata:cadence xmlns:gpxdata=\"http://www.cluetrust.com/XML/GPXDATA/1/0\">76</gpxdata:cadence></extensions>"
+        let track = try importer.parseTrack(Doc.gpx([[Doc.point(0, extras: extras), Doc.point(1, extras: extras)]]))
+        #expect(track.parts[0].samples[0].heartRate == 150)
+        #expect(track.parts[0].samples[0].cadence == 76)
+    }
+
+    @Test("A planned komoot tour (track without times) and a route are planned routes; a broken file is not (B-301)")
+    func plannedRoutes() throws {
+        let planned = Data("""
+        <?xml version="1.0" encoding="UTF-8"?>
+        <gpx version="1.1" creator="https://www.komoot.de" xmlns="http://www.topografix.com/GPX/1/1">
+        <metadata><name>Runde am See</name></metadata><trk><name>Runde am See</name><trkseg>
+        <trkpt lat="50.0" lon="9.0"><ele>300</ele></trkpt><trkpt lat="50.001" lon="9.0"><ele>301</ele></trkpt>
+        </trkseg></trk></gpx>
+        """.utf8)
+        do {
+            _ = try importer.parse(planned)
+            Issue.record("A planned tour must not import")
+        } catch {
+            #expect(error == .gpx(.noTimestamps))
+            #expect(error.isPlannedRoute)
+        }
+        #expect(RideImportError.gpx(.onlyRoutesOrWaypoints).isPlannedRoute)
+        #expect(!RideImportError.gpx(.truncated).isPlannedRoute)
+        #expect(!RideImportError.noRideData.isPlannedRoute)
+    }
+
     // MARK: - Real files
 
     @Test("Bosch Flow tour 1 (anonymized): ride time and distance along the GPS path")

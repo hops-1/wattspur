@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<!-- “Share to Wattspur” (B-301): Wattspur in the app row of the share sheet -->
+	<key>NSExtension</key>
+	<dict>
+		<key>NSExtensionPointIdentifier</key>
+		<string>com.apple.share-services</string>
+		<key>NSExtensionPrincipalClass</key>
+		<string>$(PRODUCT_MODULE_NAME).ShareViewController</string>
+		<key>NSExtensionAttributes</key>
+		<dict>
+			<!-- FIT and GPX as files or data, GPX also as plain XML, and links (komoot, Strava) for the
+			     hint how to export the file. Not any data, so Wattspur stays out of the row for photos. -->
+			<key>NSExtensionActivationRule</key>
+			<string>SUBQUERY (extensionItems, $item, SUBQUERY ($item.attachments, $attachment, ANY $attachment.registeredTypeIdentifiers UTI-CONFORMS-TO "com.garmin.fit" OR ANY $attachment.registeredTypeIdentifiers UTI-CONFORMS-TO "com.topografix.gpx" OR ANY $attachment.registeredTypeIdentifiers UTI-CONFORMS-TO "public.xml" OR ANY $attachment.registeredTypeIdentifiers UTI-CONFORMS-TO "public.url").@count &gt;= 1).@count &gt;= 1</string>
+		</dict>
+	</dict>
+	<!-- The same two types as the app declares (Config/iOS-Info.plist), so the rule knows them -->
+	<key>UTImportedTypeDeclarations</key>
+	<array>
+		<dict>
+			<key>UTTypeIdentifier</key>
+			<string>com.garmin.fit</string>
+			<key>UTTypeDescription</key>
+			<string>FIT Activity</string>
+			<key>UTTypeConformsTo</key>
+			<array>
+				<string>public.data</string>
+			</array>
+			<key>UTTypeTagSpecification</key>
+			<dict>
+				<key>public.filename-extension</key>
+				<array>
+					<string>fit</string>
+				</array>
+			</dict>
+		</dict>
+		<dict>
+			<key>UTTypeIdentifier</key>
+			<string>com.topografix.gpx</string>
+			<key>UTTypeDescription</key>
+			<string>GPX Track</string>
+			<key>UTTypeConformsTo</key>
+			<array>
+				<string>public.xml</string>
+			</array>
+			<key>UTTypeTagSpecification</key>
+			<dict>
+				<key>public.filename-extension</key>
+				<array>
+					<string>gpx</string>
+				</array>
+			</dict>
+		</dict>
+	</array>
+</dict>
+</plist>

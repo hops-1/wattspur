@@ -9756,6 +9756,36 @@
           }
         }
       }
+    },
+    "%@: this is a planned route, not a ride" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@: Das ist eine geplante Route, keine Fahrt"
+          }
+        }
+      }
+    },
+    "Export the tour again after you have ridden it, then it has times and becomes a ride." : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Exportiere die Tour noch einmal, nachdem du sie gefahren bist. Dann hat sie Zeiten und wird eine Fahrt."
+          }
+        }
+      }
+    },
+    "This is a planned route, not a ride. Export the tour again after you have ridden it." : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Das ist eine geplante Route, keine Fahrt. Exportiere die Tour noch einmal, nachdem du sie gefahren bist."
+          }
+        }
+      }
     }
   },
   "version" : "1.0"

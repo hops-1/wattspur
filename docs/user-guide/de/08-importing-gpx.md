@@ -7,7 +7,7 @@ Eine GPX-Datei enthält Positionen, Höhe und Zeit, manchmal auch Leistung, Trit
 ## Was Wattspur liest
 - **GPX 1.0 und 1.1** mit einem **Track** (`trk`), dessen Punkte eine Zeit haben. Mehrere Tracks oder Segmente in einer Datei werden **eine Fahrt**; eine Lücke ab 30 Sekunden teilt die Fahrt in Teile mit einer Pause dazwischen.
 - **Leistung, Trittfrequenz, Puls und Temperatur**, wenn die Datei sie hat, in den Erweiterungen, die Garmin, Strava und komoot benutzen. Leistung und Trittfrequenz erscheinen in den Diagrammen. Puls und Temperatur werden gespeichert, aber noch nicht angezeigt.
-- **Nicht importiert:** Routen (`rte`) und Wegpunkte (`wpt`), denn sie enthalten keine Aufzeichnung. Eine Datei ohne Zeiten sagt das im Import-Protokoll.
+- **Nicht importiert:** Routen (`rte`), Wegpunkte (`wpt`) und Strecken ohne Zeiten, denn sie enthalten keine Aufzeichnung. So exportiert komoot eine **geplante** Tour. Wattspur sagt dann: „Das ist eine geplante Route, keine Fahrt.“ Exportiere die Tour noch einmal, nachdem du sie gefahren bist; dann hat sie Zeiten und wird eine Fahrt.
 - Eine **GPX, die du aus Wattspur exportiert hast**, kommt so zurück, wie sie hinausging.
 - Sehr große Dateien (über 200 MB oder 5 Millionen Punkte) werden abgelehnt, ebenso abgeschnittene Dateien und solche, deren Zeiten rückwärts laufen.
 
