@@ -42,9 +42,9 @@ Der Weg in fünf Schritten:
 
 ### Im Code und in den Texten (Claude)
 
-1. **Privacy Manifest fehlt.** Es gibt keine `PrivacyInfo.xcprivacy`. Apple verlangt sie, wenn eine App bestimmte Schnittstellen nutzt („Required Reason APIs“). Wattspur nutzt `UserDefaults` (auch `@AppStorage`, in App, Widget und Teilen-Erweiterung, mit App Group) und liest Datei-Zeitstempel. Ohne Manifest schickt Apple beim Upload eine Warnung oder lehnt ab (ITMS-91053). Nötig: je eine Datei für App, Widgets und Teilen-Erweiterung, mit `NSPrivacyTracking = false`, leeren Listen für Tracking-Domains und erhobene Daten, und den Gründen (`CA92.1` bzw. `1C8F.1` für die App Group, `C617.1` oder `3B52.1` für Zeitstempel; genau prüfen, was der Code nutzt).
-2. **Datenschutzerklärung ist zu den Karten veraltet.** `docs/PRIVACY.md` sagt, die OSM-Kartenstile gibt es nur am Mac. Seit iPhone 0.6 (B-226) kann man sie auch am iPhone wählen. Der Satz muss für beide Geräte gelten. Inhaltlich ändert sich nichts an „Keine Daten erhoben“.
-3. **Support-URL.** App Store Connect verlangt eine Support-Seite. Vorschlag: eine kurze Seite `docs/SUPPORT.md` (DE/EN: Handbuch, Fragen, Kontakt über GitHub-Issues), oder einfach die Issues-Seite. Eine eigene Seite wirkt bei der Prüfung besser.
+1. ✓ **Privacy Manifest** (B-311): `PrivacyInfo.xcprivacy` in `iOS/`, `iOSWidgets/` und `iOSShare/`, XcodeGen nimmt sie als Ressource auf. Kein Tracking, keine erhobenen Daten. Gründe: App `UserDefaults` `CA92.1` und `1C8F.1` (App Group), Gerätelaufzeit `35F9.1` (Zeitstempel der Bewegungssensoren, `MotionRecorder`), Datei-Zeitstempel `3B52.1` (vom Benutzer gewählter Ordner, `FolderImport`); Widgets und Teilen-Erweiterung `UserDefaults` `1C8F.1`. Offen: nach dem nächsten Upload prüfen, ob Apple eine Warnmail (ITMS-91053) schickt.
+2. ✓ **Datenschutzerklärung:** `docs/PRIVACY.md` nennt die OSM-Kartenstile jetzt für Mac und iPhone (Stand 12.11.2026).
+3. ✓ **Support-Seite** `docs/SUPPORT.md` (DE/EN). URL für App Store Connect: `https://github.com/hops-1/wattspur/blob/main/docs/SUPPORT.md`
 4. **Texte für die Produktseite** DE und EN (Entwurf unten): Name, Untertitel, Werbetext, Beschreibung, Schlüsselwörter, Neuigkeiten.
 5. **Screenshots** (siehe unten).
 6. **Handbuch:** Kapitel 9 („iPhone und iCloud“) und die README nennen nur TestFlight. Nach der Freigabe: Link in den App Store.
@@ -145,7 +145,7 @@ Die Begründung des Hintergrund-Standorts ist wichtig: Apple prüft `UIBackgroun
 | 2.5.4 | Hintergrund-Standort ohne klaren Zweck | Nur während der Aufnahme, Live-Aktivität, Hinweis an Prüfer |
 | 5.1.1 | Datenschutz-URL fehlt, Berechtigungstexte unklar | URL da, Texte erklären den Zweck |
 | 5.1.2 | Datenangaben falsch | „Keine Daten erhoben“, stimmt solange kein eigener Dienst dazukommt |
-| ITMS-91053 | Privacy Manifest fehlt | **fehlt noch** (siehe oben) |
+| ITMS-91053 | Privacy Manifest fehlt | ✓ angelegt, nach dem Upload prüfen |
 
 ## Vorschlag für Backlog-Stories
 
