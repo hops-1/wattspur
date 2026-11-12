@@ -102,4 +102,5 @@ Danach lässt sich das Modell nur noch **erweitern** (neue Felder und Typen), ni
 
 - `docs/learning/08-icon-dmg.md`: wie das DMG aufgebaut ist.
 - `docs/learning/32-testflight.md`: die iPhone-App über TestFlight (B-219).
+- `docs/APPSTORE.md`: die iPhone-App von TestFlight in den App Store.
 - NFR-18 in `docs/REQUIREMENTS.md`: warum bis 1.8.2 ad hoc.
