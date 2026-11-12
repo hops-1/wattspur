@@ -78,8 +78,9 @@
 
   .rail { position: relative; margin-top: 40px; height: 34px; }
   .rail::before { content: ""; position: absolute; left: 10px; right: 10px; top: 16px; height: 3px;
-    background: linear-gradient(90deg, var(--track), var(--blue) 40%, var(--violet) 70%, #b9b6bf); border-radius: 2px; }
+    background: linear-gradient(90deg, var(--green), var(--track) 30%, var(--blue) 50%, var(--violet) 70%, #b9b6bf); border-radius: 2px; }
   .rail .node { position: absolute; top: 7px; width: 21px; height: 21px; border-radius: 50%; background: #fff; border: 4px solid var(--c); }
+  .rail .node.done { background: var(--c); }
   .rail .node.first { background: var(--c); box-shadow: 0 0 0 6px rgba(200,23,125,.15); }
 
   .cols { display: grid; grid-template-columns: repeat(5, 1fr); gap: 20px; margin-top: 8px; flex: 1; }
@@ -94,6 +95,7 @@
   .card li b { color: var(--ink); }
   .card .split { margin-top: 14px; padding-top: 12px; border-top: 1px dashed var(--line); }
   .card .split .tag { font-size: 12px; }
+  .card.done { background: #f2faf6; }
   .card.later { background: #f5f3f6; border-style: dashed; border-top-style: solid; }
   .s2 footer { margin-top: 22px; display: flex; justify-content: space-between; font-size: 14px; color: var(--muted); }
 </style>
@@ -115,7 +117,7 @@
       </li>
       <li>
         <div class="ic" style="background:#e3ecfd;color:var(--blue)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v12M7 10l5 5 5-5M4 20h16"/></svg></div>
-        <div><b>Bosch Flow und GPX</b><span>FIT aus der Bosch-Flow-App und GPX von anderen Geräten, mit Leistung und Trittfrequenz.</span></div>
+        <div><b>Bosch Flow und GPX</b><span>FIT aus der Bosch-Flow-App, GPX aus Komoot und anderen Trackern, direkt per Teilen.</span></div>
       </li>
       <li>
         <div class="ic" style="background:var(--track-soft);color:var(--track)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6l6-2 6 2 6-2v14l-6 2-6-2-6 2z"/><path d="M9 4v14M15 6v14"/></svg></div>
@@ -127,7 +129,7 @@
       </li>
       <li>
         <div class="ic" style="background:#dff3ea;color:var(--green)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 18a4.5 4.5 0 0 1-.6-8.96A6 6 0 0 1 18 8.5a4 4 0 0 1-.5 9.5z"/><rect x="9.5" y="11.5" width="5" height="4" rx="1"/><path d="M10.5 11.5v-1a1.5 1.5 0 0 1 3 0v1"/></svg></div>
-        <div><b>Deine Daten bleiben bei dir</b><span>Sync zwischen Mac und iPhone über dein eigenes iCloud. Kein fremder Server.</span></div>
+        <div><b>Deine Daten bleiben bei dir</b><span>Sync über dein eigenes iCloud, Sicherung auf Mac und iPhone. Kein fremder Server.</span></div>
       </li>
     </ul>
 
@@ -152,46 +154,47 @@
       <h2>Was als Nächstes <em>kommt</em></h2>
       <p class="sub">Die nächsten Versionen von Wattspur für iPhone, Mac und iPad.</p>
     </div>
-    <div class="now">Heute: <b>Mac 1.8.10</b> · <b>iPhone 0.6.1</b><br>Hobbyprojekt, ohne feste Termine</div>
+    <div class="now">Heute: <b>Mac 1.8.15</b> · <b>iPhone 0.7.1</b><br>Hobbyprojekt, ohne feste Termine</div>
   </header>
 
   <div class="rail">
-    <div class="node first" style="--c:var(--track);left:calc(10% - 10px)"></div>
-    <div class="node" style="--c:var(--blue);left:calc(30% - 10px)"></div>
-    <div class="node" style="--c:#4b8bf0;left:calc(50% - 10px)"></div>
+    <div class="node done" style="--c:var(--green);left:calc(10% - 10px)"></div>
+    <div class="node first" style="--c:var(--track);left:calc(30% - 10px)"></div>
+    <div class="node" style="--c:var(--blue);left:calc(50% - 10px)"></div>
     <div class="node" style="--c:var(--violet);left:calc(70% - 10px)"></div>
     <div class="node" style="--c:#9a97a3;left:calc(90% - 10px)"></div>
   </div>
 
   <div class="cols">
-    <div class="card" style="--c:var(--track)">
-      <div class="tag">Als Nächstes</div>
-      <div class="ver">iPhone 0.6.2 · Mac 1.8.11</div>
-      <h3>Aufräumen</h3>
+    <div class="card done" style="--c:var(--green)">
+      <div class="tag">✓ Gerade erschienen</div>
+      <div class="ver">bis iPhone 0.7.1 · Mac 1.8.15</div>
+      <h3>Importieren, Sichern, Teilen</h3>
       <ul>
-        <li><b>Einstellungen am iPhone</b> als übersichtliche Liste mit Rubriken</li>
-        <li><b>Dateien-App:</b> FIT- und GPX-Dateien direkt importieren, mehrere auf einmal</li>
-        <li><b>Saubere Daten:</b> fehlerhafte Zeitdaten erkennen, GPS-Ausreißer bei GPX glätten</li>
-        <li><b>TestFlight für Freunde:</b> Einladung einfach per Link</li>
+        <li><b>Dateien-App:</b> FIT und GPX direkt am iPhone importieren</li>
+        <li><b>Teilen an Wattspur</b> aus Flow, Komoot und anderen Trackern</li>
+        <li><b>Sicherung am iPhone,</b> Zurückholen auch mit iCloud-Sync</li>
+        <li><b>Lücken im Track:</b> keine Linie mehr über eine Strecke ohne Aufnahme</li>
+        <li>Einstellungen am iPhone als übersichtliche Liste</li>
       </ul>
     </div>
 
-    <div class="card" style="--c:var(--blue)">
-      <div class="tag">Sportarten · Teil 1</div>
-      <div class="ver">iPhone 0.7 · Mac 1.9</div>
+    <div class="card" style="--c:var(--track)">
+      <div class="tag">Als Nächstes · Sportarten 1</div>
+      <div class="ver">iPhone 0.8 · Mac 1.9</div>
       <h3>Geräte und Auto</h3>
       <ul>
         <li><b>Mehr als Fahrräder:</b> Autos und Motorräder als eigene Geräte</li>
         <li><b>Auto:</b> Querbeschleunigung in g statt Schräglage, Sprint 0 auf 100</li>
         <li><b>Gerät beim Start</b> mit einem Tipp wählen</li>
         <li><b>Profil und Geräte</b> jetzt auch am iPhone</li>
-        <li>Fahrten mit dem Auto zählen nicht zu den Rad-Summen</li>
+        <li>Autofahrten zählen nicht zu den Rad-Summen; die Sicherung kennt die Sportart</li>
       </ul>
     </div>
 
-    <div class="card" style="--c:#4b8bf0">
+    <div class="card" style="--c:var(--blue)">
       <div class="tag">Sportarten · Teil 2</div>
-      <div class="ver">iPhone 0.7.1 · Mac 1.9.1</div>
+      <div class="ver">iPhone 0.8.1 · Mac 1.9.1</div>
       <h3>Rubriken je Sportart</h3>
       <ul>
         <li><b>Mac:</b> Umschalter Rad · Fahrzeuge · Laufen oben in der Seitenleiste</li>
@@ -225,7 +228,7 @@
       <ul>
         <li><b>Laufen:</b> Pace, Schritte, Laufschuhe mit Kilometerstand</li>
         <li><b>Apple Health und Apple Watch:</b> Puls und Kalorien</li>
-        <li><b>Teilen an Wattspur</b> aus Komoot, Flow und anderen Apps</li>
+        <li><b>Offline-Karte</b> für Gegenden mit schlechtem Netz</li>
         <li><b>Bosch-Daten:</b> Bike, Akku und Wartung über das eigene Bosch-Konto</li>
       </ul>
     </div>
