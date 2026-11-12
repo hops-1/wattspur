@@ -1,6 +1,6 @@
 # Datenschutz · Privacy
 
-Stand: 2. November 2026 · Gilt für Wattspur für Mac und iPhone.
+Stand: 12. November 2026 · Gilt für Wattspur für Mac und iPhone.
 
 ## Deutsch
 
@@ -25,7 +25,7 @@ Für die Höhe der Aufnahme fragt das iPhone einmal nach „Bewegung & Fitness�
 Mit dem Schalter *Rohdaten der Bewegung mitschreiben* in „Mehr“ (aus als Standard) schreibt die Aufnahme zusätzlich Beschleunigung, Drehung und Lage des iPhones und die GPS-Punkte in eine Datei auf dem iPhone (Dateien-App, „Auf meinem iPhone › Wattspur › Bewegung“). Die Datei wird nicht synchronisiert und verlässt das iPhone nur, wenn du sie selbst teilst.
 
 **Verbindungen ins Internet**
-- Karten: Wattspur lädt Kartenkacheln von Apple (MapKit) und, am Mac je nach gewähltem Kartenstil, von OpenStreetMap, CyclOSM oder OpenTopoMap. Dabei gehen der Kartenausschnitt und deine IP-Adresse an den jeweiligen Server, keine Fahrten.
+- Karten: Wattspur lädt Kartenkacheln von Apple (MapKit) und, je nach gewähltem Kartenstil (Mac und iPhone), von OpenStreetMap, CyclOSM oder OpenTopoMap. Dabei gehen der Kartenausschnitt und deine IP-Adresse an den jeweiligen Server, keine Fahrten.
 - Updates (Mac): Einmal am Tag fragt Wattspur bei GitHub, ob es eine neue Version gibt, wenn du das nicht ausgeschaltet hast. Dabei wird nichts über dich oder deine Fahrten gesendet.
 - Bosch (Mac, ab Version 1.9, nur nach deiner Anmeldung): Abruf deiner Fahrten vom Bosch-Portal.
 
@@ -61,7 +61,7 @@ For the height of a recording the iPhone asks once for "Motion & Fitness": Watts
 With the switch *Record Raw Motion* in "More" (off by default) a recording also writes the iPhone's acceleration, rotation and attitude and the GPS points into a file on the iPhone (Files app, "On My iPhone › Wattspur › Bewegung"). The file is not synced and leaves the iPhone only if you share it yourself.
 
 **Connections to the internet**
-- Maps: Wattspur loads map tiles from Apple (MapKit) and, on the Mac depending on the map style, from OpenStreetMap, CyclOSM or OpenTopoMap. The server receives the map area and your IP address, no rides.
+- Maps: Wattspur loads map tiles from Apple (MapKit) and, depending on the map style (Mac and iPhone), from OpenStreetMap, CyclOSM or OpenTopoMap. The server receives the map area and your IP address, no rides.
 - Updates (Mac): once a day Wattspur asks GitHub whether a new version is out, unless you turned that off. Nothing about you or your rides is sent.
 - Bosch (Mac, from version 1.9, only after you sign in): fetching your rides from the Bosch portal.
 
