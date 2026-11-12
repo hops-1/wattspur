@@ -181,6 +181,23 @@ Say for example:
 
 On an iPhone set to German, the German sentences apply, for example „Starte eine Fahrt mit Wattspur“. You also find these four as actions in the **Shortcuts** app, for example for an automation when you connect to the bike's holder.
 
+## Start recording automatically
+With an automation in the **Shortcuts** app, recording starts by itself as soon as the iPhone connects to the car (CarPlay) or to a Bluetooth device, for example the hands-free kit or the headset on your motorcycle helmet. This needs iOS 17 or later.
+
+1. In Wattspur, choose your vehicle under **More › Recording › Vehicle**.
+2. Open **Shortcuts**, tap **Automation** at the bottom, then **+**.
+3. Choose **CarPlay** or **Bluetooth**, then **Connects**. For Bluetooth, pick your device.
+4. Choose **Run Immediately** and tap **Next**.
+5. Choose **New Blank Automation › Add Action**, search for **Wattspur** and choose **Start Ride**. Tap **Done**.
+
+For the end, add a second automation with **Disconnects** and **End Ride**. Wattspur then opens **Save Ride**.
+
+Good to know:
+- Recording starts when the iPhone connects, often when you start the engine. Time standing still does not count as riding time.
+- If the iPhone is locked, iOS may ask you to unlock it first.
+- If a ride is already being recorded, no second one starts.
+- Wattspur uses the vehicle from step 1. If you switch vehicles, change it first.
+
 ## Motorcycle
 While recording, Wattspur leaves out points that would mean an impossible speed. That removes GPS jumps. For an e-bike the limit is 100 km/h. If you record on a motorcycle, choose **More › Recording › Vehicle › Motorcycle**. The limit is then 300 km/h.
 
