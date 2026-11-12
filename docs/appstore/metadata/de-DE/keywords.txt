@@ -1,0 +1,1 @@
+ebike,fahrrad,pedelec,gps,tracker,fit,gpx,radtour,höhenprofil,schräglage,touren,fahrtenbuch,rad

@@ -45,7 +45,7 @@ Der Weg in fünf Schritten:
 1. ✓ **Privacy Manifest** (B-311): `PrivacyInfo.xcprivacy` in `iOS/`, `iOSWidgets/` und `iOSShare/`, XcodeGen nimmt sie als Ressource auf. Kein Tracking, keine erhobenen Daten. Gründe: App `UserDefaults` `CA92.1` und `1C8F.1` (App Group), Gerätelaufzeit `35F9.1` (Zeitstempel der Bewegungssensoren, `MotionRecorder`), Datei-Zeitstempel `3B52.1` (vom Benutzer gewählter Ordner, `FolderImport`); Widgets und Teilen-Erweiterung `UserDefaults` `1C8F.1`. Offen: nach dem nächsten Upload prüfen, ob Apple eine Warnmail (ITMS-91053) schickt.
 2. ✓ **Datenschutzerklärung:** `docs/PRIVACY.md` nennt die OSM-Kartenstile jetzt für Mac und iPhone (Stand 12.11.2026).
 3. ✓ **Support-Seite** `docs/SUPPORT.md` (DE/EN). URL für App Store Connect: `https://github.com/hops-1/wattspur/blob/main/docs/SUPPORT.md`
-4. **Texte für die Produktseite** DE und EN (Entwurf unten): Name, Untertitel, Werbetext, Beschreibung, Schlüsselwörter, Neuigkeiten.
+4. ✓ **Texte für die Produktseite** DE und EN in `docs/appstore/metadata/` (siehe unten).
 5. **Screenshots** (siehe unten).
 6. **Handbuch:** Kapitel 9 („iPhone und iCloud“) und die README nennen nur TestFlight. Nach der Freigabe: Link in den App Store.
 
@@ -79,7 +79,7 @@ Alles unter [appstoreconnect.apple.com](https://appstoreconnect.apple.com) › A
 1. **Verträge:** *Business* › Vereinbarungen: Die Vereinbarung für kostenlose Apps ist mit der Mitgliedschaft schon akzeptiert. Den Vertrag für kostenpflichtige Apps (mit Steuer und Bank) braucht es erst für den In-App-Kauf (B-304).
 2. **Händlerstatus** setzen (Punkt 8 oben).
 3. **App-Informationen** (links unter *Allgemein*):
-   - Name: Wattspur; Untertitel (bis 30 Zeichen) aus dem Entwurf.
+   - Name: Wattspur; Untertitel (bis 30 Zeichen) aus `docs/appstore/metadata/de-DE/subtitle.txt`.
    - Kategorie: primär **Gesundheit und Fitness**, sekundär **Navigation** (oder Sport).
    - Inhaltsrechte: „Ja, enthält Inhalte Dritter“ (Kartendaten von OpenStreetMap und Apple, mit Quellenangabe) und bestätigen, dass die Rechte vorliegen.
    - **Altersfreigabe:** Fragebogen ausfüllen, überall „Nein“/„Keine“ (keine Gewalt, keine Glücksspiele, kein offener Internetzugang, keine Chats, keine nutzergenerierten Inhalte für andere). Ergebnis: **4+**.
@@ -104,35 +104,18 @@ TestFlight läuft danach weiter: Neue Versionen gehen erst an Nils und Freunde, 
 1. **Privacy Manifest** für App, Widgets, Teilen-Erweiterung anlegen, in `project.yml` eintragen, mit `xcodebuild archive` prüfen, dass es im Bundle liegt. Nach dem Upload prüft Nils, ob Apple eine Warnmail schickt.
 2. **`docs/PRIVACY.md`** zu den Kartenstilen am iPhone korrigieren, Datum „Stand“ setzen; **Support-Seite** anlegen.
 3. **Kartenstile** nach Nils' Entscheidung (Punkt 7): bei B einen Schalter wie `BuildChannel` nutzen, der die OSM-Stile im Store-Build ausblendet; die Wahl eines Nutzers fällt dann auf Apple-Karten zurück.
-4. **Texte** DE/EN als Datei `docs/appstore/` (Entwürfe unten), Längen prüfen (Untertitel 30, Werbetext 170, Schlüsselwörter 100, Beschreibung 4000 Zeichen).
+4. ✓ **Texte** DE/EN in `docs/appstore/metadata/`, Längen prüft `scripts/check-appstore-texts.sh`.
 5. **Screenshots:** im Simulator „iPhone 17 Pro Max“ (6,9 Zoll, 1320 × 2868 Pixel, hochkant), mit der Beispielfahrt und Demo-Fahrten (`-WattspurDemoRide YES`, `-WattspurDemoRides`), Statusleiste sauber (`xcrun simctl status_bar … override --time 9:41 --batteryLevel 100`), je Sprache 5 bis 6 Bilder: Übersicht, Fahrtenliste, Tour-Detail mit Karte und Höhenprofil, Aufnahme, Karte aller Fahrten, Widget/Live-Aktivität. Keine echten Fahrten von Nils, keine Bosch-Bildschirme (NFR-12). Als Skript, damit es bei jeder Version gleich geht.
 6. **Handbuch** EN/DE und README: Installation aus dem App Store, TestFlight nur noch für Tester.
 7. **Release** wie gewohnt: Version in `Config/iOS.xcconfig`, Changelog, Archiv, Upload; danach Nils.
 
 Nichts davon reicht Claude selbst in App Store Connect ein.
 
-## Entwürfe
+## Texte für die Produktseite
 
-### Untertitel (bis 30 Zeichen)
-- DE: `Deine E-Bike-Fahrten` (20)
-- EN: `Your e-bike rides` (17)
+Die fertigen Texte DE/EN stehen in `docs/appstore/metadata/`, eine Datei pro Feld (B-314). Was wohin gehört, steht in `docs/appstore/README.md`. Nach jeder Änderung `scripts/check-appstore-texts.sh` laufen lassen: Es prüft die Längen und Namen anderer Marken in den Schlüsselwörtern (Richtlinie 2.3.7).
 
-### Werbetext (bis 170 Zeichen)
-- DE: Zeichne deine Fahrten per GPS auf oder importiere FIT und GPX. Karte, Höhenprofil und Wochenziel – ohne Konto, ohne Werbung, alles in deinem eigenen iCloud.
-- EN: Record rides with GPS or import FIT and GPX. Map, elevation profile and weekly goal – no account, no ads, everything in your own iCloud.
-
-### Beschreibung (Anfang)
-- DE: Wattspur zeigt deine E-Bike-Fahrten übersichtlich: Strecke, Zeit, Höhenmeter, Tempo und, wenn vorhanden, Leistung, Puls und Trittfrequenz. Fahrten kommen aus der eigenen GPS-Aufnahme (auch bei gesperrtem Bildschirm, mit Live-Aktivität), aus FIT- und GPX-Dateien oder per „Teilen“ aus anderen Apps. Mit der Mac-App teilt Wattspur eine Bibliothek in deinem privaten iCloud-Konto. Es gibt kein Konto bei Wattspur, keinen Server, keine Werbung und kein Tracking.
-- EN: Wattspur shows your e-bike rides at a glance: distance, time, climb, speed and, if recorded, power, heart rate and cadence. Rides come from the built-in GPS recording (also with the screen locked, with a Live Activity), from FIT and GPX files, or shared from other apps. With the Mac app, Wattspur shares one library in your private iCloud account. No Wattspur account, no server, no ads, no tracking.
-
-### Schlüsselwörter (bis 100 Zeichen, mit Komma, ohne Leerzeichen)
-- DE: `ebike,fahrrad,pedelec,gps,tracker,fit,gpx,radtour,höhenprofil,strava,flow,bosch,touren`
-- EN: `ebike,bike,cycling,gps,tracker,fit,gpx,ride,elevation,route,pedelec,commute`
-
-Markennamen anderer (Bosch, Strava, Flow) nur, wenn Wattspur sie wirklich unterstützt; sonst lehnt Apple ab (Richtlinie 2.3.7). Vor dem Einreichen prüfen.
-
-### Hinweise für die App-Prüfung (Englisch)
-> No sign-in required. Without any data the overview shows an anonymized sample ride. GPS recording starts with "Start Ride" on the overview. The app uses location in the background only while a recording runs, so the ride keeps recording with the screen locked; it shows a Live Activity during that time and stops with "Stop". Location permission is "While Using the App". Motion & Fitness is used for the barometer height of a recording. FIT and GPX files can be imported with "+" in "Rides" or shared to Wattspur from other apps (any GPX file with a track works). Sync uses the user's private CloudKit database only; there is no server of our own and no data is collected.
+Die Hinweise für die App-Prüfung (Englisch) stehen in `docs/appstore/metadata/review_information/notes.txt`.
 
 Die Begründung des Hintergrund-Standorts ist wichtig: Apple prüft `UIBackgroundModes = location` genau (Richtlinie 2.5.4). Wattspur fragt nur „beim Verwenden“ und nimmt nur zwischen Start und Stopp auf; das passt.
 
