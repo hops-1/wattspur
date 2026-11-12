@@ -1,0 +1,87 @@
+<!doctype html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<title>Wattspur – Aufnahme automatisch starten</title>
+<!--
+  Quelle der Kurzanleitung (1 Seite A4) für Tester.
+  PDF neu erzeugen (aus docs/marketing):
+    "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome" --headless=new --no-pdf-header-footer \
+      --print-to-pdf=Anleitung-Autostart.pdf Anleitung-Autostart.html
+  Gleicher Inhalt wie im Handbuch, Kapitel 9 „Aufnahme automatisch starten“.
+-->
+<style>
+  @page { size: A4; margin: 0; }
+  :root {
+    --ink: #1b1d22;
+    --muted: #5f6470;
+    --line: #e4e2e6;
+    --paper: #fbfaf8;
+    --track: #c8177d;
+    --track-soft: #fbe6f1;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body { background: var(--paper); }
+  body {
+    font-family: -apple-system, "SF Pro Text", "Helvetica Neue", Arial, sans-serif;
+    color: var(--ink);
+    font-size: 11.5pt;
+    line-height: 1.45;
+  }
+  .page { width: 210mm; height: 297mm; padding: 20mm 20mm 16mm; display: flex; flex-direction: column; }
+  .brand { color: var(--track); font-weight: 700; letter-spacing: .04em; font-size: 10pt; text-transform: uppercase; }
+  h1 { font-size: 24pt; line-height: 1.15; margin: 4mm 0 3mm; }
+  .lead { color: var(--muted); font-size: 12pt; margin-bottom: 7mm; }
+  h2 { font-size: 13.5pt; margin: 6mm 0 3mm; display: flex; align-items: center; gap: 3mm; }
+  h2 .n { width: 7mm; height: 7mm; border-radius: 50%; background: var(--track); color: #fff;
+          font-size: 10.5pt; display: inline-flex; align-items: center; justify-content: center; }
+  ol { margin-left: 6mm; }
+  ol li { margin: 1.6mm 0; padding-left: 1mm; }
+  b { font-weight: 650; }
+  .box { background: var(--track-soft); border-radius: 3mm; padding: 4mm 5mm; margin-top: 7mm; }
+  .box h3 { font-size: 11.5pt; margin-bottom: 2mm; color: var(--track); }
+  .box ul { margin-left: 5mm; }
+  .box li { margin: 1.2mm 0; }
+  .soon { margin-top: 6mm; color: var(--muted); font-size: 10.5pt; }
+  footer { margin-top: auto; border-top: 1px solid var(--line); padding-top: 3mm; color: var(--muted); font-size: 9pt;
+           display: flex; justify-content: space-between; }
+</style>
+</head>
+<body>
+<div class="page">
+  <div class="brand">Wattspur · Kurzanleitung</div>
+  <h1>Aufnahme automatisch starten</h1>
+  <p class="lead">Mit einer Automation in der App Kurzbefehle startet Wattspur die Aufnahme von selbst, sobald sich das iPhone mit dem Auto (CarPlay) oder einem Bluetooth-Gerät verbindet, z.&nbsp;B. der Freisprechanlage oder dem Headset am Motorradhelm. Du brauchst Wattspur ab 0.7.1 und iOS 17 oder neuer.</p>
+
+  <h2><span class="n">1</span>Fahrzeug einstellen</h2>
+  <p>In Wattspur unter <b>Mehr › Aufnahme › Fahrzeug</b> wählst du <b>E-Bike</b> oder <b>Motorrad</b>. Für das Auto nimmst du bis Wattspur 0.8 „Motorrad“, damit die Grenze für GPS-Sprünge passt.</p>
+
+  <h2><span class="n">2</span>Automation „Start“ anlegen</h2>
+  <ol>
+    <li>Öffne die App <b>Kurzbefehle</b> und tippe unten auf <b>Automation</b>, dann auf <b>+</b>.</li>
+    <li>Wähle <b>CarPlay</b> oder <b>Bluetooth</b>, dann <b>Verbindet</b>. Bei Bluetooth wählst du dein Gerät aus.</li>
+    <li>Wähle <b>Sofort ausführen</b> und tippe auf <b>Weiter</b>.</li>
+    <li>Wähle <b>Neue leere Automation › Aktion hinzufügen</b>, suche <b>Wattspur</b> und wähle <b>Fahrt starten</b>.</li>
+    <li>Tippe auf <b>Fertig</b>.</li>
+  </ol>
+
+  <h2><span class="n">3</span>Automation „Ende“ anlegen (optional)</h2>
+  <p>Genauso, aber mit <b>Trennt</b> und der Aktion <b>Fahrt beenden</b>. Wattspur öffnet dann <b>Fahrt speichern</b>: Name eingeben, sichern.</p>
+
+  <div class="box">
+    <h3>Gut zu wissen</h3>
+    <ul>
+      <li>Die Aufnahme beginnt schon beim Verbinden, oft beim Motorstart. Die Zeit im Stand zählt nicht zur Fahrzeit.</li>
+      <li>Ist das iPhone gesperrt, fragt iOS manchmal erst nach dem Entsperren.</li>
+      <li>Läuft schon eine Aufnahme, startet keine zweite. Gibt es eine unfertige Fahrt, fragt Wattspur erst nach.</li>
+      <li>Wattspur nimmt das Fahrzeug aus Schritt 1. Wechselst du zwischen Fahrzeugen, stelle es vorher um.</li>
+      <li>Auch per Siri: „Fahrt starten mit Wattspur“, „Fahrt beenden mit Wattspur“.</li>
+    </ul>
+  </div>
+
+  <p class="soon"><b>Später:</b> Die Aufnahme wartet dann „Bereit“ und beginnt erst bei der Abfahrt. Wattspur erkennt das Fahrzeug an der Verbindung und sichert die Fahrt von selbst.</p>
+
+  <footer><span>Wattspur · Handbuch, Kapitel 9 „Aufnahme automatisch starten“</span><span>Stand 12.11.2026</span></footer>
+</div>
+</body>
+</html>

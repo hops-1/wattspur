@@ -181,6 +181,23 @@ Sag zum Beispiel:
 
 Du findest die vier auch als Aktionen in der App **Kurzbefehle**, zum Beispiel für eine Automation, wenn sich das iPhone mit der Halterung verbindet.
 
+## Aufnahme automatisch starten
+Mit einer Automation in der App **Kurzbefehle** startet die Aufnahme von selbst, sobald sich das iPhone mit dem Auto (CarPlay) oder einem Bluetooth-Gerät verbindet, zum Beispiel der Freisprechanlage oder dem Headset am Motorradhelm. Das geht ab iOS 17.
+
+1. Stelle in Wattspur unter **Mehr › Aufnahme › Fahrzeug** dein Fahrzeug ein.
+2. Öffne **Kurzbefehle**, tippe unten auf **Automation** und dann auf **+**.
+3. Wähle **CarPlay** oder **Bluetooth**, dann **Verbindet**. Bei Bluetooth wählst du dein Gerät aus.
+4. Wähle **Sofort ausführen** und tippe auf **Weiter**.
+5. Wähle **Neue leere Automation › Aktion hinzufügen**, suche **Wattspur** und wähle **Fahrt starten**. Tippe auf **Fertig**.
+
+Für das Ende legst du eine zweite Automation mit **Trennt** und **Fahrt beenden** an. Wattspur öffnet dann **Fahrt speichern**.
+
+Gut zu wissen:
+- Die Aufnahme beginnt schon beim Verbinden, oft beim Motorstart. Die Zeit im Stand zählt nicht zur Fahrzeit.
+- Ist das iPhone gesperrt, fragt iOS manchmal erst nach dem Entsperren.
+- Läuft schon eine Aufnahme, startet keine zweite.
+- Wattspur nimmt das Fahrzeug aus Schritt 1. Wechselst du zwischen Fahrzeugen, stelle es vorher um.
+
 ## Motorrad
 Beim Aufnehmen lässt Wattspur Punkte weg, die eine unmögliche Geschwindigkeit ergeben würden. So fallen GPS-Sprünge heraus. Beim E-Bike liegt die Grenze bei 100 km/h. Wer mit dem Motorrad aufnimmt, stellt **Mehr › Aufnahme › Fahrzeug › Motorrad** ein. Dann gilt eine Grenze von 300 km/h.
 
