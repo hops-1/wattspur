@@ -1,0 +1,29 @@
+Wattspur zeigt deine Fahrten mit E-Bike, Fahrrad und Motorrad: Strecke, Zeit, Höhenmeter, Tempo und, wenn vorhanden, Leistung, Puls und Trittfrequenz. Ohne Konto, ohne Werbung, ohne Tracking.
+
+AUFNEHMEN
+• GPS-Aufnahme mit einem Tipp, auch bei gesperrtem Bildschirm.
+• Live-Aktivität auf dem Sperrbildschirm und in der Dynamic Island, mit Pause.
+• Höhe über das Barometer, viel ruhiger als die GPS-Höhe allein.
+• Schräglage, Beschleunigung und Belag aus den Bewegungssensoren.
+• Karte in Fahrtrichtung, Spur nach Höhe gefärbt, Profil wächst mit.
+• Hoch- und Querformat für die Halterung am Lenker.
+
+IMPORTIEREN
+• FIT- und GPX-Dateien aus der Dateien-App, auch mehrere auf einmal.
+• „Teilen an Wattspur“ aus anderen Apps und Trackern.
+• Puls, Trittfrequenz und Leistung aus der Datei, wenn sie sie hat.
+• Doppelte Fahrten erkennt Wattspur und fragt nach.
+
+ANSEHEN
+• Jede Fahrt mit Karte, Höhenprofil und einer Seite pro Messgröße.
+• Finger auf dem Diagramm: Wert und Ort an jeder Stelle.
+• Karte aller Fahrten als Linien oder Wärmekarte.
+• Widget „Diese Woche“ mit Strecke, Fahrten und der letzten Fahrt.
+• Mehrere Bikes, jedes mit eigener Farbe.
+
+DEINE DATEN BLEIBEN BEI DIR
+Deine Fahrten liegen auf deinem iPhone. Wenn du willst, synchronisiert Wattspur sie über dein eigenes iCloud mit der Mac-App. Es gibt keinen Server von Wattspur und kein Konto. Wattspur erhebt keine Daten.
+
+Sichern und Zurückholen der Bibliothek in einen Ordner deiner Wahl, auch automatisch einmal pro Woche.
+
+Das Handbuch, die Datenschutzerklärung und Kontakt: github.com/hops-1/wattspur

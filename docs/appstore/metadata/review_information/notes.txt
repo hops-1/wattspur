@@ -1,0 +1,9 @@
+No sign-in required. Without any data the overview shows an anonymized sample ride.
+
+GPS recording starts with "Start Ride" on the overview. The app uses location in the background only while a recording runs, so the ride keeps recording with the screen locked; it shows a Live Activity during that time and stops with "Stop". Location permission is "While Using the App".
+
+Motion & Fitness is used for the barometer altitude and for lean angle and road surface of a recording.
+
+FIT and GPX files can be imported with "+" in "Rides" or shared to Wattspur from other apps (any GPX file with a track works).
+
+Sync uses the user's private CloudKit database only; there is no server of our own and no data is collected.

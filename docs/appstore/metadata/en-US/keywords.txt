@@ -1,0 +1,1 @@
+ebike,bike,cycling,gps,tracker,fit,gpx,ride,elevation,route,pedelec,commute,altimeter,lean

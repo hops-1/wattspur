@@ -1,0 +1,29 @@
+Wattspur shows your rides by e-bike, bike and motorcycle: distance, time, climb, speed and, if recorded, power, heart rate and cadence. No account, no ads, no tracking.
+
+RECORD
+• GPS recording with one tap, also with the screen locked.
+• Live Activity on the Lock Screen and in the Dynamic Island, with pause.
+• Altitude from the barometer, much steadier than GPS altitude alone.
+• Lean angle, acceleration and road surface from the motion sensors.
+• Map in the direction of travel, track colored by altitude, profile grows as you ride.
+• Portrait and landscape for a handlebar mount.
+
+IMPORT
+• FIT and GPX files from the Files app, several at once.
+• "Share to Wattspur" from other apps and trackers.
+• Heart rate, cadence and power from the file, if it has them.
+• Wattspur spots duplicate rides and asks what to do.
+
+VIEW
+• Every ride with map, elevation profile and one page per metric.
+• Touch the chart: value and place at any point.
+• Map of all rides as lines or a heat map.
+• "This Week" widget with distance, rides and the last ride.
+• Several bikes, each with its own color.
+
+YOUR DATA STAYS WITH YOU
+Your rides are on your iPhone. If you like, Wattspur syncs them with the Mac app through your own iCloud. There is no Wattspur server and no account. Wattspur collects no data.
+
+Back up and restore the library to a folder you choose, also automatically once a week.
+
+User guide, privacy policy and contact: github.com/hops-1/wattspur
