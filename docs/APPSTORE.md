@@ -51,11 +51,7 @@ Der Weg in fünf Schritten:
 
 ### Zu klären (Recherche)
 
-7. **Kartenkacheln im App Store.** Die Recherche V-04 (`docs/RECHERCHE-KARTEN.md`) sagt: für Freunde unkritisch, **für den App Store neu prüfen**. Die Regeln der OpenStreetMap-Server erlauben keine starke Nutzung durch eine verbreitete App ohne Erlaubnis der Betreiber (Operations Working Group). CyclOSM (OSM France) und OpenTopoMap sind kleine Projekte mit ähnlichen Regeln. Apple-Karten (Standard) sind Voreinstellung, die OSM-Stile muss man selbst wählen; das hilft, löst es aber nicht ganz. Möglichkeiten:
-   - A: Betreiber anschreiben und fragen (kostenlos, dauert).
-   - B: OSM-Stile im App-Store-Build ausblenden, nur Apple-Karten (einfach, sicher).
-   - C: kommerzieller Anbieter (MapTiler, Thunderforest; kostet monatlich, passt zu V-17).
-   Vorschlag: B für die erste Store-Version, A parallel. Die genauen Regeln vor der Entscheidung noch einmal nachlesen (https://operations.osmfoundation.org/policies/tiles/).
+7. ✓ **Kartenkacheln im App Store** (V-18): **Entscheidung Nils 12.11.2026: Weg A, die Betreiber fragen.** Die OSM-Stile bleiben, Apple-Karten bleiben Voreinstellung. Neu gelesen: Die heutigen Regeln von OpenStreetMap erlauben Store-Apps mit eigenem User-Agent, OpenTopoMap erlaubt Apps und freut sich über eine Info, CyclOSM gilt „fair use“. Wattspur hält die Regeln ein. Briefe und Kontakte: `docs/appstore/KARTEN-ANFRAGE.md`. Die Einreichung wartet nicht auf die Antworten; sagt ein Betreiber Nein, wird nur dieser Stil im Store-Build ausgeblendet (B-313).
 
 ### In App Store Connect (Nils)
 
@@ -68,7 +64,7 @@ Der Weg in fünf Schritten:
 ### Entscheidungen für Nils
 
 - **Versionsnummer:** Der Store nimmt auch 0.7.1. Vorschlag: Die erste Store-Version ist ein eigenes kleines Release mit den Lücken von oben, als **iPhone 1.0** (zeigt „fertig“), danach geht es normal weiter. Alternative: mit der nächsten geplanten Version (0.8, Sportarten) in den Store. Die Mac-Nummer (1.8.x) bleibt davon unberührt.
-- **Kartenstile im Store:** A, B oder C (Punkt 7).
+- ✓ **Kartenstile im Store:** A, Betreiber fragen (Punkt 7).
 - **Händler oder nicht** (Punkt 8).
 - **Länder:** alle oder erst Deutschland, Österreich, Schweiz. Die Texte gibt es DE und EN, die App ist DE und EN lokalisiert; Vorschlag: alle Länder.
 
@@ -139,7 +135,7 @@ Höchste Nummern am 12.11.2026: B-310 und V-17. Die Nummern unten sind nur ein V
 | B-311 | **Privacy Manifest** für App, Widgets, Teilen-Erweiterung. Fertig, wenn: die drei `PrivacyInfo.xcprivacy` im Archiv liegen und ein Upload ohne Warnmail von Apple durchgeht | S | Claude |
 | B-312 | **Datenschutz und Support:** `PRIVACY.md` zu den Kartenstilen am iPhone, Support-Seite DE/EN. Fertig, wenn: beide URLs in App Store Connect funktionieren | S | Claude |
 | V-18 | **Kartenkacheln im App Store:** Regeln von OSM, CyclOSM, OpenTopoMap für eine Store-App nachlesen, Entscheidung A/B/C mit Nils (Ergebnis in `RECHERCHE-KARTEN.md`) | S | Claude + Nils |
-| B-313 | **Kartenstile im Store-Build** nach V-18 (bei B: OSM-Stile ausblenden, Rückfall auf Apple-Karten) | S | Claude |
+| B-313 | **Kartenstile im Store-Build** nach V-18: nur nötig, wenn ein Betreiber Nein sagt; dann diesen Stil im Store-Build ausblenden, Rückfall auf Apple-Karten | S | Claude |
 | B-314 | **Produktseite DE/EN:** Untertitel, Werbetext, Beschreibung, Schlüsselwörter, Neuigkeiten, Prüfhinweise. Fertig, wenn: die Texte in `docs/appstore/` stehen und die Längen passen | S | Claude |
 | B-315 | **Screenshots 6,9 Zoll DE/EN** per Skript aus dem Simulator mit Demo-Daten | M | Claude |
 | B-316 | **Erste Einreichung im App Store:** Händlerstatus, App-Informationen, Altersfreigabe, Preis, Version, Einreichen, manuelle Freigabe; Handbuch und README mit Link in den Store. Fertig, wenn: Wattspur im App Store zu finden ist | S | Nils (+ Claude fürs Handbuch) |

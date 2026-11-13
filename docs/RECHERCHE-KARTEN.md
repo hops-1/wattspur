@@ -8,7 +8,7 @@ Stand der Recherche: 27.10.2026, aus den öffentlichen Nutzungsbedingungen der A
 - **Ja, Wattspur darf OpenStreetMap, CyclOSM und OpenTopoMap nutzen.** Alle drei erlauben Apps das interaktive Ansehen ihrer Kacheln ohne Schlüssel und ohne Gebühr, wenn die App sich an ein paar Regeln hält.
 - **Höhenlinien und Schummerung gibt es nur bei OpenTopoMap.** OpenStreetMap Standard hat kein Relief. Apple MapKit bietet über die Schnittstelle keinen Stil mit Höhenlinien.
 - **Pflichten für die App:** eigener User-Agent, sichtbare Quellenangabe auf der Karte (und im PDF), Cache nach den HTTP-Headern, **kein** Vorabladen und keine Offline-Pakete.
-- **Grenzen:** keine Verfügbarkeitsgarantie, die Server können Apps sperren, die sich nicht an die Regeln halten oder zu viel laden. Für einen kleinen Kreis von Nutzern ist das unkritisch; für den App Store mit vielen Nutzern wäre ein kommerzieller Anbieter (z. B. MapTiler, Thunderforest) neu zu prüfen.
+- **Grenzen:** keine Verfügbarkeitsgarantie, die Server können Apps sperren, die sich nicht an die Regeln halten oder zu viel laden. Für einen kleinen Kreis von Nutzern ist das unkritisch; für den App Store mit vielen Nutzern wäre ein kommerzieller Anbieter (z. B. MapTiler, Thunderforest) neu zu prüfen. Neu geprüft am 12.11.2026 (V-18): Die heutigen Regeln erlauben auch eine Store-App; Nils fragt die Betreiber trotzdem (`docs/appstore/KARTEN-ANFRAGE.md`).
 
 ## Die Anbieter im Einzelnen
 
