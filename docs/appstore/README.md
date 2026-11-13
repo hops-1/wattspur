@@ -28,3 +28,12 @@ Regeln für die Texte:
 - Nur nennen, was der Build wirklich kann. Kein „bald“, keine Preise, keine anderen Plattformen außer dem eigenen Mac.
 - Die OSM-Kartenstile nicht nennen, solange V-18 (Karten im Store) nicht entschieden ist.
 - Wörter aus Name und Untertitel nicht in den Schlüsselwörtern wiederholen; Apple findet sie ohnehin.
+
+## Screenshots
+
+```bash
+scripts/appstore-screenshots.sh            # de-DE und en-US
+scripts/appstore-screenshots.sh de-DE      # eine Sprache
+```
+
+Ergebnis in `dist/appstore-screenshots/<Sprache>/` (nicht im Repository), 1320 × 2868 Pixel, das ist die Größe 6,9 Zoll, die App Store Connect verlangt; kleinere iPhones nimmt Apple daraus. Nur Demo-Daten aus der anonymisierten Beispielfahrt, keine echten Fahrten (NFR-12). In App Store Connect in dieser Reihenfolge hochladen: 01 bis 05.
