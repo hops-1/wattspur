@@ -46,7 +46,7 @@ Der Weg in fünf Schritten:
 2. ✓ **Datenschutzerklärung:** `docs/PRIVACY.md` nennt die OSM-Kartenstile jetzt für Mac und iPhone (Stand 12.11.2026).
 3. ✓ **Support-Seite** `docs/SUPPORT.md` (DE/EN). URL für App Store Connect: `https://github.com/hops-1/wattspur/blob/main/docs/SUPPORT.md`
 4. ✓ **Texte für die Produktseite** DE und EN in `docs/appstore/metadata/` (siehe unten).
-5. **Screenshots** (siehe unten).
+5. ✓ **Screenshots** DE/EN mit `scripts/appstore-screenshots.sh` (B-315, siehe unten).
 6. **Handbuch:** Kapitel 9 („iPhone und iCloud“) und die README nennen nur TestFlight. Nach der Freigabe: Link in den App Store.
 
 ### Zu klären (Recherche)
@@ -101,7 +101,7 @@ TestFlight läuft danach weiter: Neue Versionen gehen erst an Nils und Freunde, 
 2. **`docs/PRIVACY.md`** zu den Kartenstilen am iPhone korrigieren, Datum „Stand“ setzen; **Support-Seite** anlegen.
 3. **Kartenstile** nach Nils' Entscheidung (Punkt 7): bei B einen Schalter wie `BuildChannel` nutzen, der die OSM-Stile im Store-Build ausblendet; die Wahl eines Nutzers fällt dann auf Apple-Karten zurück.
 4. ✓ **Texte** DE/EN in `docs/appstore/metadata/`, Längen prüft `scripts/check-appstore-texts.sh`.
-5. **Screenshots:** im Simulator „iPhone 17 Pro Max“ (6,9 Zoll, 1320 × 2868 Pixel, hochkant), mit der Beispielfahrt und Demo-Fahrten (`-WattspurDemoRide YES`, `-WattspurDemoRides`), Statusleiste sauber (`xcrun simctl status_bar … override --time 9:41 --batteryLevel 100`), je Sprache 5 bis 6 Bilder: Übersicht, Fahrtenliste, Tour-Detail mit Karte und Höhenprofil, Aufnahme, Karte aller Fahrten, Widget/Live-Aktivität. Keine echten Fahrten von Nils, keine Bosch-Bildschirme (NFR-12). Als Skript, damit es bei jeder Version gleich geht.
+5. ✓ **Screenshots:** `scripts/appstore-screenshots.sh` baut Debug, legt einen eigenen Simulator „Wattspur Screenshots“ (iPhone 17 Pro Max, 6,9 Zoll, 1320 × 2868) an, löscht ihn vor jeder Sprache und macht je Sprache fünf Bilder nach `dist/appstore-screenshots/<Sprache>/`: Übersicht, Tour-Detail, Karte aller Fahrten, Fahrtenliste, Aufnahme. Daten: 14 Kopien der anonymisierten Beispielfahrt bis heute (`-WattspurDemoRecent`), mit erfundenen Namen; die Aufnahme fährt eine simulierte Strecke in Berlin. Statusleiste 9:41, metrische Einheiten in beiden Sprachen. Die Bilder kommen nicht ins Repository; das Skript macht sie bei jeder Version neu (Dauer etwa 10 Minuten). Widget und Live-Aktivität auf dem Sperrbildschirm fehlen noch; die gehen nicht per Skript.
 6. **Handbuch** EN/DE und README: Installation aus dem App Store, TestFlight nur noch für Tester.
 7. **Release** wie gewohnt: Version in `Config/iOS.xcconfig`, Changelog, Archiv, Upload; danach Nils.
 

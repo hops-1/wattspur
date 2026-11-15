@@ -50,6 +50,17 @@ struct WattspurApp: App {
         #if DEBUG
         if UserDefaults.standard.bool(forKey: PhoneSettingsKey.demoRide) { library.importSampleRideForTesting() }
         library.importDemoCopiesForTesting(UserDefaults.standard.integer(forKey: "WattspurDemoRides"))
+        // For the App Store screenshots (B-315, scripts/appstore-screenshots.sh): recent rides, a tab,
+        // the newest ride open, or a recording running from the start.
+        library.importRecentDemoRidesForTesting(UserDefaults.standard.integer(forKey: "WattspurDemoRecent"))
+        switch UserDefaults.standard.string(forKey: "WattspurDemoTab") {
+        case "rides": _tab = State(initialValue: .rides)
+        case "map": _tab = State(initialValue: .map)
+        case "more": _tab = State(initialValue: .more)
+        default: break
+        }
+        if UserDefaults.standard.bool(forKey: "WattspurDemoOpenLast") { intents.request = .lastRide }
+        if UserDefaults.standard.bool(forKey: "WattspurDemoRecord") { Task { @MainActor in recorder.start() } }
         // `-WattspurOfflineTiles YES`: the OpenStreetMap tiles fail as without a network (B-226).
         if UserDefaults.standard.bool(forKey: "WattspurOfflineTiles") { TileLoader.simulatesOffline = true }
         #endif

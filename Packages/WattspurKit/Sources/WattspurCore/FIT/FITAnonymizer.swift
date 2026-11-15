@@ -8,7 +8,7 @@ import Foundation
 /// - positions within `trimDistance` of the start and the end are removed, so
 ///   neither the start nor the finish (often the front door) can be found,
 /// - positions in summary messages (session, lap, bounding boxes) are removed,
-/// - all times move by whole weeks (weekday and time of day stay),
+/// - all times move by whole weeks and days (the time of day stays),
 /// - serial numbers and developer fields are cleared,
 /// - the file checksum is recomputed.
 ///
@@ -21,12 +21,15 @@ public struct FITAnonymizer: Sendable {
     public var trimDistance: Double
     /// Whole weeks added to every time (negative = earlier).
     public var weeks: Int
+    /// Whole days added on top of `weeks`, e.g. for demo rides on other weekdays (B-315).
+    public var days: Int
 
-    public init(latitudeOffset: Double, longitudeOffset: Double, trimDistance: Double = 500, weeks: Int = 0) {
+    public init(latitudeOffset: Double, longitudeOffset: Double, trimDistance: Double = 500, weeks: Int = 0, days: Int = 0) {
         self.latitudeOffset = latitudeOffset
         self.longitudeOffset = longitudeOffset
         self.trimDistance = trimDistance
         self.weeks = weeks
+        self.days = days
     }
 
     public func anonymize(_ data: Data) throws(FITDecodingError) -> Data {
@@ -42,8 +45,8 @@ public struct FITAnonymizer: Sendable {
         let totalDistance = Double(distances.max() ?? 0) / 100
         let latShift = Self.semicircles(fromDegrees: latitudeOffset)
         let longShift = Self.semicircles(fromDegrees: longitudeOffset)
-        // A multiple of 32 s, so compressed timestamp headers stay valid.
-        let timeShift = Int64(weeks) * 7 * 86_400
+        // A multiple of 32 s (a day is 2700 × 32 s), so compressed timestamp headers stay valid.
+        let timeShift = (Int64(weeks) * 7 + Int64(days)) * 86_400
 
         // Bosch writes GPS and sensor values as separate records; a GPS record has
         // no distance of its own, so it takes the last one measured before it.

@@ -64,6 +64,16 @@ struct FITAnonymizerTests {
         #expect(anonymized.deviceSerialNumber == nil)
     }
 
+    @Test("Days move on top of weeks, the file stays valid (B-315)")
+    func days() throws {
+        let data = try Fixture.data("reinheim-rundfahrt")
+        let shifted = try FITRideImporter().parse(
+            FITAnonymizer(latitudeOffset: 0, longitudeOffset: 0, weeks: -1, days: 2).anonymize(data))
+        #expect(shifted.startDate == original.startDate.addingTimeInterval(-5 * 86_400))
+        #expect(shifted.summary.distance == original.summary.distance)
+        #expect(shifted.samples.count == original.samples.count)
+    }
+
     @Test("A broken file is rejected instead of patched")
     func brokenFile() {
         #expect(throws: FITDecodingError.self) { try anonymizer.anonymize(Data([1, 2, 3])) }

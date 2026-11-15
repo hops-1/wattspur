@@ -216,6 +216,29 @@ final class PhoneLibrary {
         }
         reload()
     }
+
+    /// For the App Store screenshots (B-315): `-WattspurDemoRecent 12` adds that many copies of the
+    /// sample ride up to today, three days apart and shifted a little, so the overview, the widget and
+    /// the map show recent rides. Debug builds only; copies already there are skipped as duplicates.
+    func importRecentDemoRidesForTesting(_ count: Int) {
+        guard count > 0, let database, let url = Bundle.main.url(forResource: "SampleRide", withExtension: "fit"),
+              let data = try? Data(contentsOf: url), let sample = SampleRide.load() else { return }
+        // Whole days from the sample ride to now: the newest copy ended before now (rides are
+        // shorter than four hours) and started at most a day and four hours ago.
+        let daysBack = Int((Date.now.timeIntervalSince(sample.ride.startDate) - 4 * 3600) / 86_400)
+        // Names a rider would give, in the language of the screenshot; the file name becomes the name.
+        let names = Locale.preferredLanguages.first?.hasPrefix("de") == true
+            ? ["Feierabendrunde", "Zum Stausee", "Waldrunde", "Über den Pass", "Sonntagstour", "Zur Arbeit", "Bäckerrunde"]
+            : ["After-Work Loop", "To the Lake", "Forest Loop", "Over the Pass", "Sunday Ride", "Commute", "Bakery Run"]
+        for index in 0..<count {
+            // A few metres apart, as when the same loop is ridden again.
+            guard let copy = try? FITAnonymizer(latitudeOffset: Double(index % 7) * 0.00015,
+                                                longitudeOffset: Double(index % 5) * 0.0002,
+                                                trimDistance: 0, days: daysBack - 3 * index).anonymize(data) else { continue }
+            database.library.importFile(data: copy, fileName: "\(names[index % names.count]).fit")
+        }
+        reload()
+    }
     #endif
 
     /// The rides for the map of all rides (B-227), filtered like on the Mac; empty without the store.
