@@ -476,6 +476,15 @@ struct KeyFiguresGrid: View {
     /// without a value stays with the dash.
     private var notInFile: String? { ride.source == .gpx ? String(localized: "Not in the file") : nil }
 
+    /// Why a ride saves no CO₂ (B-284).
+    private var noCO2Caption: String {
+        switch ride.deviceKind {
+        case .car: String(localized: "Not for a car")
+        case .runningShoe: String(localized: "Not for running")
+        default: String(localized: "Not for a motorcycle")
+        }
+    }
+
     private var co2: Double { ride.distance / 1000 * 0.159 }
 
     private static func g(_ value: Double) -> String { value.formatted(.number.precision(.fractionLength(2))) }
@@ -504,9 +513,9 @@ struct KeyFiguresGrid: View {
                 Figure("Calories", value: kilocalories.map { $0.formatted(.number.precision(.fractionLength(0))) } ?? "–", unit: "kcal",
                        estimated: kilocalories != nil, note: calories.note,
                        caption: kilocalories == nil && ride.source == .gpx ? String(localized: "Needs power data") : nil)
-                if ride.isMotorized {
-                    // A motorcycle saves nothing against a car.
-                    Figure("CO₂ saved", value: "–", unit: "kg", caption: String(localized: "Not for a motorcycle"))
+                if ride.sport != .cycling {
+                    // A vehicle saves nothing against a car; running is not counted (B-284).
+                    Figure("CO₂ saved", value: "–", unit: "kg", caption: noCO2Caption)
                 } else {
                     Figure("CO₂ saved", value: co2.formatted(.number.precision(.fractionLength(1))), unit: "kg", estimated: true,
                            note: String(localized: "Calculated from the distance"),

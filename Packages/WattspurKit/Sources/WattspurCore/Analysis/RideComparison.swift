@@ -29,8 +29,8 @@ public struct ComparisonFigures: Sendable, Equatable {
     /// Seconds with pedal power. `nil` derives it from the Bosch values (see `pedallingTime`);
     /// a merged ride passes the sum of its parts.
     public var pedallingTimeOverride: TimeInterval?
-    /// Ridden with an engine (`BikeKind.isMotorized`): no CO₂ saved.
-    public var isMotorized = false
+    /// The sport (B-284): only cycling saves CO₂.
+    public var sport: Sport = .cycling
 
     public init(timerTime: TimeInterval, elapsedTime: TimeInterval, distance: Double,
                 averageSpeed: Double? = nil, maxSpeed: Double? = nil,
@@ -39,8 +39,8 @@ public struct ComparisonFigures: Sendable, Equatable {
                 averagePower: Int? = nil, maxPower: Int? = nil,
                 averageCadence: Int? = nil, maxCadence: Int? = nil,
                 workKilojoules: Double = 0, pedallingTime: TimeInterval? = nil, startDate: Date? = nil,
-                isMotorized: Bool = false) {
-        self.isMotorized = isMotorized
+                sport: Sport = .cycling) {
+        self.sport = sport
         self.timerTime = timerTime
         self.elapsedTime = elapsedTime
         self.distance = distance
@@ -149,7 +149,7 @@ public enum ComparisonMetric: String, CaseIterable, Identifiable, Sendable {
         case .maxCadence: return ride.maxCadence.map(Double.init)
         case .work: return ride.hasPowerData ? ride.workKilojoules : nil
         case .calories: return ride.hasPowerData ? calories.kilocalories(for: ride) : nil
-        case .co2Saved: return ride.isMotorized ? nil : km * co2PerKilometre
+        case .co2Saved: return ride.sport == .cycling ? km * co2PerKilometre : nil
         case .caloriesPerKilometre: return km > 0 && ride.hasPowerData ? calories.kilocalories(for: ride) / km : nil
         case .ascentPerKilometre: return km > 0 ? ride.totalAscent.map { Double($0) / km } : nil
         case .workPerKilometre: return km > 0 && ride.hasPowerData ? ride.workKilojoules / km : nil

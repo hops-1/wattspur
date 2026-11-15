@@ -183,6 +183,10 @@ public final class Ride {
 
     public var rider: Rider?
     public var bike: Bike?
+    /// `BikeKind` raw value for a ride without a device, e.g. “car” or “motorcycle” when recorded
+    /// without choosing one (B-284). The device's kind wins; `nil` means a bicycle. The name says
+    /// sport because the sport follows from the kind (`BikeKind.sport`). Added for 1.1 / 1.9.
+    public var sportRawValue: String?
     @Relationship(deleteRule: .cascade, inverse: \SourceFile.ride)
     public var sourceFile: SourceFile?
 

@@ -10,6 +10,7 @@ Every DMG handed out to testers corresponds to one entry below.
 ### Added
 
 - **iPhone app 1.0 (26), the first build for the App Store.** Same features as 0.7.1, plus the privacy manifests Apple asks for (app, widgets, share extension) and a support page (B-313, B-314).
+- **Sports as the base, with cars as devices** (B-284; Mac 1.9 with iPhone 1.1). Besides bikes and motorcycles, the profile on the Mac now takes cars, as many as you like, with name, photo, starting mileage, manufacturer and model; the switch "E-bike", the drive unit and the battery belong to bicycles only. Rides in a car or on a motorcycle stay out of the cycling totals, records, goals, the iPhone tiles, the widget and the CO₂ saved, also when they have no device (new optional field on the ride). Older versions read a car as a bicycle, so all devices need the new versions.
 
 ## [1.8.15] – 2026-11-11
 

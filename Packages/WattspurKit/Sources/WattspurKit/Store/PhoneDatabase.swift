@@ -146,20 +146,20 @@ public final class PhoneDatabase {
         let samples = ride.samples
         var detail = Detail(chartPoints: RideSeries.chartPoints(from: samples, axis: .distance, bins: 300),
                             track: RideTrack(samples: samples))
-        if let figures = RideMotion(samples: samples, motorized: ride.bike?.kind.isMotorized == true) {
+        if let figures = RideMotion(samples: samples, motorized: ride.isMotorized) {
             detail.motion = (figures, RideMotion.leanStretches(samples), RideMotion.surfaceStretches(samples))
         }
         return detail
     }
 
     /// Lean, acceleration and the sprint of a ride, and its track by lean angle (B-246) and by road
-    /// surface (B-248); `nil` for a ride without lean angles. A motorcycle sprints to 100 km/h, any
-    /// other bike to 25.
+    /// surface (B-248); `nil` for a ride without lean angles. A vehicle sprints to 100 km/h, any
+    /// bike to 25.
     public func motion(forRideID id: UUID)
         -> (figures: RideMotion, lean: [RideMotion.LeanStretch], surface: [RideMotion.SurfaceStretch])? {
         guard let ride = library.ride(withID: id) else { return nil }
         let samples = ride.samples
-        guard let figures = RideMotion(samples: samples, motorized: ride.bike?.kind.isMotorized == true) else { return nil }
+        guard let figures = RideMotion(samples: samples, motorized: ride.isMotorized) else { return nil }
         return (figures, RideMotion.leanStretches(samples), RideMotion.surfaceStretches(samples))
     }
 

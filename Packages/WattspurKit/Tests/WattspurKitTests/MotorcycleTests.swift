@@ -64,6 +64,7 @@ struct MotorcycleTests {
                                            rides: [ride(ebike, km: 20), ride(moto, km: 100), ride(nil, km: 5)])
         #expect(library.countedRides.count == 2)
         #expect(library.totals(now: now).weekDistance == 25_000)
-        #expect(library.isMotorized(bikeID: moto.id) && !library.isMotorized(bikeID: ebike.id) && !library.isMotorized(bikeID: nil))
+        #expect(library.sport(of: ride(moto, km: 1)) == .vehicle && library.sport(of: ride(ebike, km: 1)) == .cycling)
+        #expect(library.sport(of: ride(nil, km: 1)) == .cycling)
     }
 }

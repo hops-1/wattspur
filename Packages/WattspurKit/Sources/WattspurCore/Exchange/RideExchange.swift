@@ -59,6 +59,9 @@ public enum RideExchange {
         /// Time zone of the start, e.g. “Europe/Berlin”, for showing the local start time.
         public var timeZone: String?
         public var bikeID: UUID?
+        /// `BikeKind` raw value for a ride without a device, e.g. “motorcycle” (B-284); the
+        /// device's kind wins. `nil` for a bicycle and in states written before.
+        public var kind: String?
         /// `RideSource` raw value: “fit” or “gpx”.
         public var source: String
         /// Figures estimated from GPS (GPX without a bike computer).
@@ -87,7 +90,7 @@ public enum RideExchange {
         /// changes when the route changes, so a reader may keep a route it has already loaded.
         public var routeFile: String?
 
-        public init(id: UUID, name: String, startDate: Date, timeZone: String? = nil, bikeID: UUID? = nil,
+        public init(id: UUID, name: String, startDate: Date, timeZone: String? = nil, bikeID: UUID? = nil, kind: String? = nil,
                     source: String, estimated: Bool = false,
                     timerTime: Double, elapsedTime: Double, distance: Double,
                     averageSpeed: Double? = nil, maxSpeed: Double? = nil,
@@ -100,6 +103,7 @@ public enum RideExchange {
             self.startDate = startDate
             self.timeZone = timeZone
             self.bikeID = bikeID
+            self.kind = kind
             self.source = source
             self.estimated = estimated
             self.timerTime = timerTime

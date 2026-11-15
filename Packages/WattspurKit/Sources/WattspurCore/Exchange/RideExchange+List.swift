@@ -36,19 +36,20 @@ extension RideExchange.Library {
         bikes.filter { !$0.isArchived || $0.id == id }
     }
 
-    /// The tiles “This Week” and “This Month”, without motorcycle rides (`BikeKind.isMotorized`).
+    /// The tiles “This Week” and “This Month”, cycling only (B-284).
     public func totals(now: Date = .now, calendar: Calendar = .current) -> RidePeriodTotals {
         RidePeriodTotals(rides: countedRides.map { (start: $0.startDate, distance: $0.distance) }, now: now, calendar: calendar)
     }
 
-    /// The rides that count towards totals: all but those on a motorcycle.
+    /// The rides that count towards the cycling totals: no vehicles, no running (B-284).
     public var countedRides: [RideExchange.Ride] {
-        rides.filter { !isMotorized(bikeID: $0.bikeID) }
+        rides.filter { sport(of: $0) == .cycling }
     }
 
-    /// Whether the bike with this id is a motorcycle (`BikeKind.isMotorized`).
-    public func isMotorized(bikeID: UUID?) -> Bool {
-        guard let kind = bike(withID: bikeID)?.kind else { return false }
-        return BikeKind(rawValue: kind)?.isMotorized == true
+    /// The kind of a ride: its device's, else its own (`RideExchange.Ride.kind`), else a bicycle.
+    public func kind(of ride: RideExchange.Ride) -> BikeKind {
+        BikeKind.of(device: bike(withID: ride.bikeID)?.kind, ride: ride.kind)
     }
+
+    public func sport(of ride: RideExchange.Ride) -> Sport { kind(of: ride).sport }
 }

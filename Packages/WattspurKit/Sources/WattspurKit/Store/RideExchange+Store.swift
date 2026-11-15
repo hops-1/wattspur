@@ -37,7 +37,7 @@ extension Ride {
 
     func exchangeRide(routeFile: String?) -> RideExchange.Ride {
         RideExchange.Ride(id: id, name: name, startDate: startDate, timeZone: timeZoneIdentifier,
-                          bikeID: bike?.id, source: sourceFormat, estimated: summaryEstimatedFromGPS,
+                          bikeID: bike?.id, kind: bike == nil ? sportRawValue : nil, source: sourceFormat, estimated: summaryEstimatedFromGPS,
                           timerTime: timerTime, elapsedTime: elapsedTime, distance: distance,
                           averageSpeed: averageSpeed, maxSpeed: maxSpeed,
                           averagePower: averagePower, maxPower: maxPower, averageCadence: averageCadence,

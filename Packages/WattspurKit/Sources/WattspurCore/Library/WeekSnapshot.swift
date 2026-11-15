@@ -31,7 +31,7 @@ public struct WeekSnapshot: Codable, Sendable, Equatable {
         }
     }
 
-    /// The rides that count for the totals (no motorcycle rides), from the start of the week of
+    /// The rides that count for the totals (cycling only, B-284), from the start of the week of
     /// the moment the snapshot was made; older rides are never needed by the widget.
     public var rides: [Ride]
     public var lastRide: LastRide?
