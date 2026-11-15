@@ -20,7 +20,7 @@ Der Weg in fünf Schritten:
 
 | Thema | Stand |
 |---|---|
-| Developer-Account, App „Wattspur“ in App Store Connect | ✓ angelegt (B-219). „Wattspur“ allein war im Store schon vergeben; Name im Store: „Wattspur - Touren-Tracking“ (DE) und „Wattspur - Ride Tracker“ (EN), Entscheidung Nils 15.11.2026 |
+| Developer-Account, App „Wattspur“ in App Store Connect | ✓ angelegt (B-219). „Wattspur“ allein war im Store schon vergeben; Name im Store: „Wattspur - Touren Tracking“ (DE) und „Wattspur - Ride Tracker“ (EN), Entscheidung Nils 15.11.2026 |
 | Bundle-IDs | ✓ App `io.github.hops-1.wattspur.ios`, Widgets `….ios.widgets`, Teilen `….ios.share` |
 | Version und Build | ✓ in `Config/iOS.xcconfig`, für alle drei Targets gleich |
 | Upload | ✓ Archiv und Export aus Xcode (Organizer) bzw. `xcodebuild archive` + `-exportArchive` (`method = app-store-connect`) |
