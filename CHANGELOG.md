@@ -9,7 +9,7 @@ Every DMG handed out to testers corresponds to one entry below.
 
 ### Added
 
-- **iPhone app 1.0 (26), the first build for the App Store.** Same features as 0.7.1, plus the privacy manifests Apple asks for (app, widgets, share extension) and a support page (B-311, B-312).
+- **iPhone app 1.0 (26), the first build for the App Store.** Same features as 0.7.1, plus the privacy manifests Apple asks for (app, widgets, share extension) and a support page (B-313, B-314).
 
 ## [1.8.15] – 2026-11-11
 

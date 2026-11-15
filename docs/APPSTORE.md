@@ -1,6 +1,6 @@
 # Wattspur im App Store
 
-Stand: 12.11.2026 (iPhone 0.7.1 (25) auf TestFlight). Diese Anleitung erklärt, wie die iPhone-App von TestFlight in den App Store kommt: was schon da ist, was fehlt, was Nils in App Store Connect macht und was Claude im Code vorbereitet.
+Stand: 15.11.2026 (iPhone 1.0 (26) hochgeladen und eingereicht, Prüfung läuft). Diese Anleitung erklärt, wie die iPhone-App von TestFlight in den App Store kommt: was schon da ist, was fehlt, was Nils in App Store Connect macht und was Claude im Code vorbereitet.
 
 Für TestFlight siehe `docs/learning/32-testflight.md`, für den Mac `docs/RELEASE.md`.
 
@@ -42,16 +42,16 @@ Der Weg in fünf Schritten:
 
 ### Im Code und in den Texten (Claude)
 
-1. ✓ **Privacy Manifest** (B-311): `PrivacyInfo.xcprivacy` in `iOS/`, `iOSWidgets/` und `iOSShare/`, XcodeGen nimmt sie als Ressource auf. Kein Tracking, keine erhobenen Daten. Gründe: App `UserDefaults` `CA92.1` und `1C8F.1` (App Group), Gerätelaufzeit `35F9.1` (Zeitstempel der Bewegungssensoren, `MotionRecorder`), Datei-Zeitstempel `3B52.1` (vom Benutzer gewählter Ordner, `FolderImport`); Widgets und Teilen-Erweiterung `UserDefaults` `1C8F.1`. Offen: nach dem nächsten Upload prüfen, ob Apple eine Warnmail (ITMS-91053) schickt.
+1. ✓ **Privacy Manifest** (B-313): `PrivacyInfo.xcprivacy` in `iOS/`, `iOSWidgets/` und `iOSShare/`, XcodeGen nimmt sie als Ressource auf. Kein Tracking, keine erhobenen Daten. Gründe: App `UserDefaults` `CA92.1` und `1C8F.1` (App Group), Gerätelaufzeit `35F9.1` (Zeitstempel der Bewegungssensoren, `MotionRecorder`), Datei-Zeitstempel `3B52.1` (vom Benutzer gewählter Ordner, `FolderImport`); Widgets und Teilen-Erweiterung `UserDefaults` `1C8F.1`. Offen: nach dem nächsten Upload prüfen, ob Apple eine Warnmail (ITMS-91053) schickt.
 2. ✓ **Datenschutzerklärung:** `docs/PRIVACY.md` nennt die OSM-Kartenstile jetzt für Mac und iPhone (Stand 12.11.2026).
 3. ✓ **Support-Seite** `docs/SUPPORT.md` (DE/EN). URL für App Store Connect: `https://github.com/hops-1/wattspur/blob/main/docs/SUPPORT.md`
 4. ✓ **Texte für die Produktseite** DE und EN in `docs/appstore/metadata/` (siehe unten).
-5. ✓ **Screenshots** DE/EN mit `scripts/appstore-screenshots.sh` (B-315, siehe unten).
+5. ✓ **Screenshots** DE/EN mit `scripts/appstore-screenshots.sh` (B-317, siehe unten).
 6. **Handbuch:** Kapitel 9 („iPhone und iCloud“) und die README nennen nur TestFlight. Nach der Freigabe: Link in den App Store.
 
 ### Zu klären (Recherche)
 
-7. ✓ **Kartenkacheln im App Store** (V-18): **Entscheidung Nils 12.11.2026: Weg A, die Betreiber fragen.** Die OSM-Stile bleiben, Apple-Karten bleiben Voreinstellung. Neu gelesen: Die heutigen Regeln von OpenStreetMap erlauben Store-Apps mit eigenem User-Agent, OpenTopoMap erlaubt Apps und freut sich über eine Info, CyclOSM gilt „fair use“. Wattspur hält die Regeln ein. Briefe und Kontakte: `docs/appstore/KARTEN-ANFRAGE.md`. Die Einreichung wartet nicht auf die Antworten; sagt ein Betreiber Nein, wird nur dieser Stil im Store-Build ausgeblendet (B-313).
+7. ✓ **Kartenkacheln im App Store** (V-19): **Entscheidung Nils 12.11.2026: Weg A, die Betreiber fragen.** Die OSM-Stile bleiben, Apple-Karten bleiben Voreinstellung. Neu gelesen: Die heutigen Regeln von OpenStreetMap erlauben Store-Apps mit eigenem User-Agent, OpenTopoMap erlaubt Apps und freut sich über eine Info, CyclOSM gilt „fair use“. Wattspur hält die Regeln ein. Briefe und Kontakte: `docs/appstore/KARTEN-ANFRAGE.md`. Die Einreichung wartet nicht auf die Antworten; sagt ein Betreiber Nein, wird nur dieser Stil im Store-Build ausgeblendet (B-315).
 
 ### In App Store Connect (Nils)
 
@@ -63,7 +63,7 @@ Der Weg in fünf Schritten:
 
 ### Entscheidungen für Nils
 
-- **Versionsnummer:** Der Store nimmt auch 0.7.1. Vorschlag: Die erste Store-Version ist ein eigenes kleines Release mit den Lücken von oben, als **iPhone 1.0** (zeigt „fertig“), danach geht es normal weiter. Alternative: mit der nächsten geplanten Version (0.8, Sportarten) in den Store. Die Mac-Nummer (1.8.x) bleibt davon unberührt.
+- ✓ **Versionsnummer:** Die erste Store-Version ist ein eigenes kleines Release, **iPhone 1.0** (Build 26, 15.11.2026). Danach geht es mit 1.1 (Sportarten, mit Mac 1.9) weiter, siehe `BACKLOG.md`; Fehler aus der Prüfung kommen als 1.0.x. Die Mac-Nummer (1.8.x) bleibt davon unberührt.
 - ✓ **Kartenstile im Store:** A, Betreiber fragen (Punkt 7).
 - **Händler oder nicht** (Punkt 8).
 - **Länder:** alle oder erst Deutschland, Österreich, Schweiz. Die Texte gibt es DE und EN, die App ist DE und EN lokalisiert; Vorschlag: alle Länder.
@@ -109,7 +109,7 @@ Nichts davon reicht Claude selbst in App Store Connect ein.
 
 ## Texte für die Produktseite
 
-Die fertigen Texte DE/EN stehen in `docs/appstore/metadata/`, eine Datei pro Feld (B-314). Was wohin gehört, steht in `docs/appstore/README.md`. Nach jeder Änderung `scripts/check-appstore-texts.sh` laufen lassen: Es prüft die Längen und Namen anderer Marken in den Schlüsselwörtern (Richtlinie 2.3.7).
+Die fertigen Texte DE/EN stehen in `docs/appstore/metadata/`, eine Datei pro Feld (B-316). Was wohin gehört, steht in `docs/appstore/README.md`. Nach jeder Änderung `scripts/check-appstore-texts.sh` laufen lassen: Es prüft die Längen und Namen anderer Marken in den Schlüsselwörtern (Richtlinie 2.3.7).
 
 Die Hinweise für die App-Prüfung (Englisch) stehen in `docs/appstore/metadata/review_information/notes.txt`.
 
@@ -126,21 +126,21 @@ Die Begründung des Hintergrund-Standorts ist wichtig: Apple prüft `UIBackgroun
 | 5.1.2 | Datenangaben falsch | „Keine Daten erhoben“, stimmt solange kein eigener Dienst dazukommt |
 | ITMS-91053 | Privacy Manifest fehlt | ✓ angelegt, nach dem Upload prüfen |
 
-## Vorschlag für Backlog-Stories
+## Stories im Backlog
 
-Höchste Nummern am 12.11.2026: B-310 und V-17. Die Nummern unten sind nur ein Vorschlag; vor dem Eintragen mit dem dann aktuellen Backlog abgleichen (die Planung für iPhone 0.8 kann neue Nummern vergeben).
+Die Stories stehen jetzt in `BACKLOG.md` unter „iOS 1.0 – App Store“. Hier standen sie zuerst als Vorschlag mit anderen Nummern; B-311, B-312 und V-18 waren dort schon für den Auto-Start vergeben. Neue Nummern (Nils 15.11.2026):
 
-| Vorschlag | Story | Größe | Wer |
+| Neu | Zuerst | Story | Stand |
 |---|---|---|---|
-| B-311 | **Privacy Manifest** für App, Widgets, Teilen-Erweiterung. Fertig, wenn: die drei `PrivacyInfo.xcprivacy` im Archiv liegen und ein Upload ohne Warnmail von Apple durchgeht | S | Claude |
-| B-312 | **Datenschutz und Support:** `PRIVACY.md` zu den Kartenstilen am iPhone, Support-Seite DE/EN. Fertig, wenn: beide URLs in App Store Connect funktionieren | S | Claude |
-| V-18 | **Kartenkacheln im App Store:** Regeln von OSM, CyclOSM, OpenTopoMap für eine Store-App nachlesen, Entscheidung A/B/C mit Nils (Ergebnis in `RECHERCHE-KARTEN.md`) | S | Claude + Nils |
-| B-313 | **Kartenstile im Store-Build** nach V-18: nur nötig, wenn ein Betreiber Nein sagt; dann diesen Stil im Store-Build ausblenden, Rückfall auf Apple-Karten | S | Claude |
-| B-314 | **Produktseite DE/EN:** Untertitel, Werbetext, Beschreibung, Schlüsselwörter, Neuigkeiten, Prüfhinweise. Fertig, wenn: die Texte in `docs/appstore/` stehen und die Längen passen | S | Claude |
-| B-315 | **Screenshots 6,9 Zoll DE/EN** per Skript aus dem Simulator mit Demo-Daten | M | Claude |
-| B-316 | **Erste Einreichung im App Store:** Händlerstatus, App-Informationen, Altersfreigabe, Preis, Version, Einreichen, manuelle Freigabe; Handbuch und README mit Link in den Store. Fertig, wenn: Wattspur im App Store zu finden ist | S | Nils (+ Claude fürs Handbuch) |
+| B-313 | B-311 | Privacy Manifest für App, Widgets, Teilen-Erweiterung | ☑ |
+| B-314 | B-312 | Datenschutz und Support-Seite | ☑ |
+| V-19 | V-18 | Kartenkacheln im App Store (Betreiber fragen) | ◐ |
+| B-315 | B-313 | Kartenstile im Store-Build, nur bei einem Nein aus V-19 | ☐ |
+| B-316 | B-314 | Produktseite DE/EN | ☑ |
+| B-317 | B-315 | Screenshots 6,9 Zoll DE/EN per Skript | ☑ |
+| B-318 | B-316 | Erste Einreichung im App Store, danach Link im Handbuch | ◐ |
 
-Vorschlag für die Reihenfolge: V-18 und B-311 zuerst (die einzigen echten Hürden), dann B-312 bis B-315, dann B-316 mit dem nächsten iPhone-Release. Der In-App-Kauf (B-304) ist für den Store **nicht** nötig und kann später kommen.
+In älteren PRs (#208 bis #211) und in Code-Kommentaren stehen noch die alten Nummern. Der In-App-Kauf (B-304) ist für den Store **nicht** nötig und kann später kommen.
 
 ## Warum so
 
