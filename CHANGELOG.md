@@ -7,6 +7,10 @@ Every DMG handed out to testers corresponds to one entry below.
 
 ## [Unreleased]
 
+### Added
+
+- **iPhone app 1.0 (26), the first build for the App Store.** Same features as 0.7.1, plus the privacy manifests Apple asks for (app, widgets, share extension) and a support page (B-311, B-312).
+
 ## [1.8.15] – 2026-11-11
 
 Gaps in the track: no line across a train ride without recording, from a tester's issue. Together with the iPhone app 0.7.1 (25).
