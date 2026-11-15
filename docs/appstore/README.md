@@ -36,4 +36,9 @@ scripts/appstore-screenshots.sh            # de-DE und en-US
 scripts/appstore-screenshots.sh de-DE      # eine Sprache
 ```
 
-Ergebnis in `dist/appstore-screenshots/<Sprache>/` (nicht im Repository), 1320 × 2868 Pixel, das ist die Größe 6,9 Zoll, die App Store Connect verlangt; kleinere iPhones nimmt Apple daraus. Nur Demo-Daten aus der anonymisierten Beispielfahrt, keine echten Fahrten (NFR-12). In App Store Connect in dieser Reihenfolge hochladen: 01 bis 05.
+Ergebnis (nicht im Repository):
+
+- `dist/appstore-screenshots/6.3/<Sprache>/`: 1206 × 2622 Pixel. **Diese hochladen.** App Store Connect verlangt seit Herbst 2026 unter *iPhone mit Dynamic Island (mittleres Display)* die Größe 6,1/6,3 Zoll und lehnt 6,9 Zoll dort ab („Dateiabmessungen ungültig“).
+- `dist/appstore-screenshots/<Sprache>/`: 1320 × 2868 Pixel (6,9 Zoll), falls Apple die große Größe wieder getrennt anbietet.
+
+ Nur Demo-Daten aus der anonymisierten Beispielfahrt, keine echten Fahrten (NFR-12). In App Store Connect in dieser Reihenfolge hochladen: 01 bis 05.

@@ -83,7 +83,7 @@ Alles unter [appstoreconnect.apple.com](https://appstoreconnect.apple.com) › A
 4. **App-Datenschutz:** steht schon („Keine Daten erhoben“). Datenschutz-URL prüfen. Optional: *Bedienungshilfen* („Accessibility Nutrition Labels“) für VoiceOver, Dynamische Schrift, Dunkelmodus angeben; nur, was wirklich getestet ist (B-170, Kapitel 7).
 5. **Preise und Verfügbarkeit:** Preis **kostenlos**, Länder wählen. Vorbestellung nein.
 6. **Version anlegen:** links *iOS-App* › `+ Version`, Nummer wie im Build (z. B. 1.0).
-   - Screenshots für **iPhone 6,9 Zoll** hochladen (von Claude). Kleinere Größen rechnet Apple selbst.
+   - Screenshots unter **iPhone mit Dynamic Island (mittleres Display)** hochladen, aus `dist/appstore-screenshots/6.3/<Sprache>/` (1206 × 2622). 6,9 Zoll lehnt dieses Feld ab. Andere Größen rechnet Apple selbst.
    - Werbetext, Beschreibung, Schlüsselwörter, Support-URL, Marketing-URL (optional: GitHub-Seite) auf Deutsch eintragen; oben rechts die Sprache **Englisch** hinzufügen und dort die englischen Texte.
    - Copyright: `2026 Nils Wiese`.
    - **Build** wählen: den neuesten TestFlight-Build dieser Version.
@@ -101,7 +101,7 @@ TestFlight läuft danach weiter: Neue Versionen gehen erst an Nils und Freunde, 
 2. **`docs/PRIVACY.md`** zu den Kartenstilen am iPhone korrigieren, Datum „Stand“ setzen; **Support-Seite** anlegen.
 3. **Kartenstile** nach Nils' Entscheidung (Punkt 7): bei B einen Schalter wie `BuildChannel` nutzen, der die OSM-Stile im Store-Build ausblendet; die Wahl eines Nutzers fällt dann auf Apple-Karten zurück.
 4. ✓ **Texte** DE/EN in `docs/appstore/metadata/`, Längen prüft `scripts/check-appstore-texts.sh`.
-5. ✓ **Screenshots:** `scripts/appstore-screenshots.sh` baut Debug, legt einen eigenen Simulator „Wattspur Screenshots“ (iPhone 17 Pro Max, 6,9 Zoll, 1320 × 2868) an, löscht ihn vor jeder Sprache und macht je Sprache fünf Bilder nach `dist/appstore-screenshots/<Sprache>/`: Übersicht, Tour-Detail, Karte aller Fahrten, Fahrtenliste, Aufnahme. Daten: 14 Kopien der anonymisierten Beispielfahrt bis heute (`-WattspurDemoRecent`), mit erfundenen Namen; die Aufnahme fährt eine simulierte Strecke in Berlin. Statusleiste 9:41, metrische Einheiten in beiden Sprachen. Die Bilder kommen nicht ins Repository; das Skript macht sie bei jeder Version neu (Dauer etwa 10 Minuten). Widget und Live-Aktivität auf dem Sperrbildschirm fehlen noch; die gehen nicht per Skript.
+5. ✓ **Screenshots:** `scripts/appstore-screenshots.sh` baut Debug, legt einen eigenen Simulator „Wattspur Screenshots“ (iPhone 17 Pro Max, 6,9 Zoll, 1320 × 2868) an, löscht ihn vor jeder Sprache und macht je Sprache fünf Bilder nach `dist/appstore-screenshots/<Sprache>/`, verkleinert auf 6,3 Zoll (1206 × 2622) nach `dist/appstore-screenshots/6.3/<Sprache>/`: Übersicht, Tour-Detail, Karte aller Fahrten, Fahrtenliste, Aufnahme. Daten: 14 Kopien der anonymisierten Beispielfahrt bis heute (`-WattspurDemoRecent`), mit erfundenen Namen; die Aufnahme fährt eine simulierte Strecke in Berlin. Statusleiste 9:41, metrische Einheiten in beiden Sprachen. Die Bilder kommen nicht ins Repository; das Skript macht sie bei jeder Version neu (Dauer etwa 10 Minuten). Widget und Live-Aktivität auf dem Sperrbildschirm fehlen noch; die gehen nicht per Skript.
 6. **Handbuch** EN/DE und README: Installation aus dem App Store, TestFlight nur noch für Tester.
 7. **Release** wie gewohnt: Version in `Config/iOS.xcconfig`, Changelog, Archiv, Upload; danach Nils.
 

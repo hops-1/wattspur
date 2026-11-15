@@ -85,9 +85,21 @@ done
 xcrun simctl status_bar "$DEVICE" clear || true
 xcrun simctl shutdown "$DEVICE" >/dev/null 2>&1 || true
 
-# Apple takes 1320 × 2868 for 6.9" (portrait).
-for f in "$OUT"/*/*.png; do
-    size=$(sips -g pixelWidth -g pixelHeight "$f" | awk '/pixel/ {printf "%s ", $2}')
-    [ "$size" = "1320 2868 " ] || { echo "wrong size: $f ($size)"; exit 1; }
+# App Store Connect (since autumn 2026) asks for the middle iPhone size with Dynamic Island,
+# 6.1"/6.3": 1206 × 2622. The ratio is the same as 6.9" to 0.1 %, so scaling down is enough.
+for LOCALE in $LOCALES; do
+    mkdir -p "$OUT/6.3/$LOCALE"
+    rm -f "$OUT/6.3/$LOCALE"/*.png
+    for f in "$OUT/$LOCALE"/*.png; do sips -z 2622 1206 "$f" --out "$OUT/6.3/$LOCALE/" >/dev/null; done
 done
-echo "Screenshots: $OUT"
+
+check() {
+    local want=$1; shift
+    for f in "$@"; do
+        size=$(sips -g pixelWidth -g pixelHeight "$f" | awk '/pixel/ {printf "%s ", $2}')
+        [ "$size" = "$want" ] || { echo "wrong size: $f ($size)"; exit 1; }
+    done
+}
+check "1320 2868 " "$OUT"/*-*/*.png
+check "1206 2622 " "$OUT"/6.3/*/*.png
+echo "Screenshots to upload: $OUT/6.3/<language> (6.3 inch); 6.9 inch in $OUT/<language>"
