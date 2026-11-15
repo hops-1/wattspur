@@ -20,7 +20,7 @@ Der Weg in fünf Schritten:
 
 | Thema | Stand |
 |---|---|
-| Developer-Account, App „Wattspur“ in App Store Connect | ✓ angelegt (B-219), Name damit reserviert |
+| Developer-Account, App „Wattspur“ in App Store Connect | ✓ angelegt (B-219). „Wattspur“ allein war im Store schon vergeben; Name im Store: „Wattspur - Touren-Tracking“ (DE) und „Wattspur - Ride Tracker“ (EN), Entscheidung Nils 15.11.2026 |
 | Bundle-IDs | ✓ App `io.github.hops-1.wattspur.ios`, Widgets `….ios.widgets`, Teilen `….ios.share` |
 | Version und Build | ✓ in `Config/iOS.xcconfig`, für alle drei Targets gleich |
 | Upload | ✓ Archiv und Export aus Xcode (Organizer) bzw. `xcodebuild archive` + `-exportArchive` (`method = app-store-connect`) |
@@ -75,7 +75,7 @@ Alles unter [appstoreconnect.apple.com](https://appstoreconnect.apple.com) › A
 1. **Verträge:** *Business* › Vereinbarungen: Die Vereinbarung für kostenlose Apps ist mit der Mitgliedschaft schon akzeptiert. Den Vertrag für kostenpflichtige Apps (mit Steuer und Bank) braucht es erst für den In-App-Kauf (B-304).
 2. **Händlerstatus** setzen (Punkt 8 oben).
 3. **App-Informationen** (links unter *Allgemein*):
-   - Name: Wattspur; Untertitel (bis 30 Zeichen) aus `docs/appstore/metadata/de-DE/subtitle.txt`.
+   - Name aus `docs/appstore/metadata/de-DE/name.txt`; Untertitel (bis 30 Zeichen) aus `docs/appstore/metadata/de-DE/subtitle.txt`.
    - Kategorie: primär **Gesundheit und Fitness**, sekundär **Navigation** (oder Sport).
    - Inhaltsrechte: „Ja, enthält Inhalte Dritter“ (Kartendaten von OpenStreetMap und Apple, mit Quellenangabe) und bestätigen, dass die Rechte vorliegen.
    - **Altersfreigabe:** Fragebogen ausfüllen, überall „Nein“/„Keine“ (keine Gewalt, keine Glücksspiele, kein offener Internetzugang, keine Chats, keine nutzergenerierten Inhalte für andere). Ergebnis: **4+**.
