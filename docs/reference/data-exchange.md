@@ -129,6 +129,7 @@ One row per ride, including parts of merged rides and rides in the trash.
 | `ZATTACHEDSOURCENAME`, `ZATTACHEDSOURCEFORMAT` | text | A second file attached to the ride, e.g. a GPX next to the FIT |
 | `ZSOURCEFILE` | → `ZSOURCEFILE` | The original file |
 | `ZBIKE` | → `ZBIKE` | The bike |
+| `ZSPORTRAWVALUE` | text | The kind of a ride without a bike, like `ZBIKE.ZKINDRAWVALUE`, e.g. `car` or `motorcycle`; empty for a bicycle. A bike's kind wins (from Mac 1.9 and iPhone 1.1) |
 | `ZRIDER` | → `ZRIDER` | The rider |
 | `ZMERGEDINTO` | → `ZRIDE` | For a part: the merged ride it belongs to |
 | `ZTIMERTIME` | s | Ride time (moving) |
@@ -166,7 +167,7 @@ The original file of each ride, unchanged.
 | `ZID` | UUID | Id; `ZRIDER.ZACTIVEBIKEID` points to it |
 | `ZNAME` | text | Name |
 | `ZCREATEDAT` | date | Added |
-| `ZKINDRAWVALUE` | text | `bike`, `mountain`, `road` or `gravel` |
+| `ZKINDRAWVALUE` | text | `bike`, `mountain`, `road`, `gravel`, `cargo`, `motorcycle`, `car` (from Mac 1.9 and iPhone 1.1) or `runningShoe` (later). Cars and motorcycles are vehicles, running shoes are running; only the others are cycling |
 | `ZISEBIKE` | bool | Has a motor |
 | `ZCOLORRAWVALUE` | text | Colour of its symbol: `blue`, `orange`, `teal`, `purple`, `pink`, `green` |
 | `ZMANUFACTURER`, `ZMODEL`, `ZDRIVEUNIT` | text | As entered |
