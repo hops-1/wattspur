@@ -103,7 +103,8 @@ public final class PhoneDatabase {
         guard let ride = library.ride(withID: id), route(forRideID: id) != nil else { return nil }
         let bikeName = ride.bike?.name.trimmingCharacters(in: .whitespacesAndNewlines) ?? ""
         let data = GPXWriter.document(name: ride.name, segments: ride.gpxSegments,
-                                      description: bikeName.isEmpty ? nil : note(bikeName), bikeID: ride.bike?.id)
+                                      description: bikeName.isEmpty ? nil : note(bikeName), bikeID: ride.bike?.id,
+                                      sport: ride.sport)
         return (GPXWriter.fileName(ride.name), data)
     }
 

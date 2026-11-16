@@ -22,6 +22,11 @@ import uuid
 
 # Dates are seconds since 1 January 2001, 00:00 UTC.
 REFERENCE_DATE = datetime.datetime(2001, 1, 1, tzinfo=datetime.timezone.utc)
+# The sport of each kind (B-284, B-310). A ride's kind is its bike's kind, else the ride's own
+# ZSPORTRAWVALUE (a ride without a bike, from Mac 1.9 and iPhone 1.1), else a bicycle. Unknown
+# kinds are a bicycle, as in Wattspur.
+SPORTS = {"bike": "cycling", "mountain": "cycling", "road": "cycling", "gravel": "cycling",
+          "cargo": "cycling", "motorcycle": "vehicle", "car": "vehicle", "runningShoe": "running"}
 SAMPLE_KEYS = ["time", "latitude", "longitude", "altitude", "distance", "speed",
                "power", "cadence", "cadenceMeasured", "heartRate", "temperature"]
 
@@ -53,13 +58,25 @@ def external(folder, value):
 
 
 def counted_rides(connection):
-    """Rides as Wattspur counts them: not in the trash, not the sample, not a part of a merged ride."""
-    return connection.execute("""
+    """Rides as Wattspur lists them: not in the trash, not the sample, not a part of a merged ride.
+    The totals count only those whose sport is cycling."""
+    columns = {row[1] for row in connection.execute("PRAGMA table_info(ZRIDE)")}
+    # A backup from before Mac 1.9 and iPhone 1.1 has no ZSPORTRAWVALUE: its rides without a bike are bicycles.
+    ride_kind = "r.ZSPORTRAWVALUE" if "ZSPORTRAWVALUE" in columns else "NULL"
+    return connection.execute(f"""
         SELECT r.Z_PK, r.ZID, r.ZNAME, r.ZSTARTDATE, r.ZTIMEZONEIDENTIFIER, r.ZDISTANCE, r.ZTIMERTIME,
-               r.ZTOTALASCENT, r.ZAVERAGEPOWER, r.ZSOURCEFORMAT, b.ZNAME
+               r.ZTOTALASCENT, r.ZAVERAGEPOWER, r.ZSOURCEFORMAT, b.ZNAME, b.ZKINDRAWVALUE, {ride_kind}
         FROM ZRIDE r LEFT JOIN ZBIKE b ON b.Z_PK = r.ZBIKE
         WHERE r.ZDELETEDAT IS NULL AND r.ZISSAMPLE = 0 AND r.ZMERGEDINTO IS NULL
         ORDER BY r.ZSTARTDATE""").fetchall()
+
+
+def kind(bike_kind, ride_kind):
+    """The kind that counts: the bike's, then the ride's, then a bicycle."""
+    for value in (bike_kind, ride_kind):
+        if value in SPORTS:
+            return value
+    return "bike"
 
 
 def find_ride(connection, prefix):
@@ -75,12 +92,14 @@ def find_ride(connection, prefix):
 def write_rides(connection, out):
     writer = csv.writer(out)
     writer.writerow(["id", "name", "start_utc", "time_zone", "distance_km", "ride_time_min",
-                     "ascent_m", "average_power_w", "source", "bike"])
-    for _, ride_id, name, start, zone, distance, timer, ascent, power, source, bike in counted_rides(connection):
+                     "ascent_m", "average_power_w", "source", "bike", "kind", "sport"])
+    for row in counted_rides(connection):
+        _, ride_id, name, start, zone, distance, timer, ascent, power, source, bike, bike_kind, ride_kind = row
+        ride_kind = kind(bike_kind, ride_kind)
         writer.writerow([uuid.UUID(bytes=ride_id), name, date(start).isoformat(), zone or "",
                          round((distance or 0) / 1000, 2), round((timer or 0) / 60, 1),
                          ascent if ascent is not None else "", power if power is not None else "",
-                         source, bike or ""])
+                         source, bike or "", ride_kind, SPORTS[ride_kind]])
 
 
 def write_samples(folder, connection, prefix, out):

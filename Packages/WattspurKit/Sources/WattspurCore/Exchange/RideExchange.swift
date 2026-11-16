@@ -8,7 +8,9 @@ import Foundation
 /// ISO 8601 dates.
 public enum RideExchange {
     /// Raise when a field is removed or changes its meaning (not when one is added).
-    public static let schemaVersion = 1
+    /// 2 (B-310): a ride without `bikeID` may be a car or motorcycle ride (`Ride.kind`); a reader of 1
+    /// would count it as cycling.
+    public static let schemaVersion = 2
     /// Distance between two route points in metres (B-178: “about one point per 20 m”).
     public static let routeSpacing = 20.0
 
