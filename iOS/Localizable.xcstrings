@@ -2924,16 +2924,6 @@
         }
       }
     },
-    "You set these on the Mac under Profile; with iCloud they come to this iPhone. Editing them here comes with a later version." : {
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Diese Angaben machst du am Mac unter „Profil“; mit iCloud kommen sie auf dieses iPhone. Bearbeiten lassen sie sich hier mit einer späteren Version."
-          }
-        }
-      }
-    },
     "Wattspur on the iPhone" : {
       "localizations" : {
         "de" : {
@@ -3642,6 +3632,266 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "GPS-Sprünge sehen aus wie unmögliche Geschwindigkeiten und werden weggelassen. Beim E-Bike ist das über 100 km/h, beim Motorrad oder Auto über 300 km/h. Im Auto zeigt die Aufnahme die Querbeschleunigung."
+          }
+        }
+      }
+    },
+    "With iCloud the Mac shows the same profile." : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Mit iCloud zeigt der Mac dasselbe Profil."
+          }
+        }
+      }
+    },
+    "Cycling" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Rad"
+          }
+        }
+      }
+    },
+    "Vehicles" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Fahrzeuge"
+          }
+        }
+      }
+    },
+    "Running" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Laufen"
+          }
+        }
+      }
+    },
+    "Bikes" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Bikes"
+          }
+        }
+      }
+    },
+    "Shoes" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Schuhe"
+          }
+        }
+      }
+    },
+    "Bicycle" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Fahrrad"
+          }
+        }
+      }
+    },
+    "Mountain bike" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Mountainbike"
+          }
+        }
+      }
+    },
+    "Road bike" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Rennrad"
+          }
+        }
+      }
+    },
+    "Gravel bike" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Gravelbike"
+          }
+        }
+      }
+    },
+    "Cargo bike" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Lastenrad"
+          }
+        }
+      }
+    },
+    "Running shoes" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Laufschuhe"
+          }
+        }
+      }
+    },
+    "Ride Time" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Fahrzeit"
+          }
+        }
+      }
+    },
+    "Longest Ride" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Längste Fahrt"
+          }
+        }
+      }
+    },
+    "Top Speed" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Höchsttempo"
+          }
+        }
+      }
+    },
+    "Archived" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Archiviert"
+          }
+        }
+      }
+    },
+    "Kind" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Art"
+          }
+        }
+      }
+    },
+    "Yes" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ja"
+          }
+        }
+      }
+    },
+    "No" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Nein"
+          }
+        }
+      }
+    },
+    "Status" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Status"
+          }
+        }
+      }
+    },
+    "You change devices on the Mac under Profile; with iCloud they come to this iPhone." : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Geräte änderst du am Mac unter Profil; mit iCloud kommen sie auf dieses iPhone."
+          }
+        }
+      }
+    },
+    "Choose Photo" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Foto wählen"
+          }
+        }
+      }
+    },
+    "Remove Photo" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Foto entfernen"
+          }
+        }
+      }
+    },
+    "kg" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "kg"
+          }
+        }
+      }
+    },
+    "cm" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "cm"
+          }
+        }
+      }
+    },
+    "Weight 20–300 kg, height 80–250 cm. Without them the calories come from the work alone." : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Gewicht 20–300 kg, Größe 80–250 cm. Ohne diese Angaben kommen die Kalorien nur aus der Arbeit."
           }
         }
       }

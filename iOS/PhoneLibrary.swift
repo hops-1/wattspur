@@ -62,6 +62,12 @@ final class PhoneLibrary {
 
     // MARK: - Database (B-216, B-217)
 
+    /// Saves the profile edited on the iPhone (B-299); iCloud brings it to the Mac.
+    func updateRider(_ details: RiderDetails) {
+        database?.updateRider(details)
+        reload()
+    }
+
     /// Reads the rides and the trash from the store again, after every change.
     private func reload() {
         guard let database else { return }

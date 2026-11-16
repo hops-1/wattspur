@@ -20,7 +20,10 @@ The Mac and the iPhone have to be signed in to iCloud with the same Apple Accoun
 
 ## The tab “More”
 From 0.6.2 on, **More** is a list like the iOS Settings. Each row opens a page of its own:
-- **Profile** (at the top, with photo and name): your data for the calories. You set it on the Mac under **Profile**; with iCloud it comes to the iPhone. Editing it on the iPhone comes with a later version.
+- **Profile** (at the top, with photo and name), from iPhone 1.1 in three parts:
+  - **For the Calories:** name, photo, weight, height, year of birth and sex. **Edit** at the top right changes them on the iPhone; with iCloud they apply on the Mac too, and what you change on the Mac comes to the iPhone. Values outside 20–300 kg and 80–250 cm are not saved.
+  - **Totals per sport:** distance, rides, ride time, longest ride and top speed, separately for cycling, vehicles and running. A car ride never counts for cycling.
+  - **Devices:** your bikes, vehicles and shoes with their kilometres; a tap opens one. For now you add and change devices on the Mac.
 - **Recording:** the vehicle, e-bike, motorcycle or car.
 - **Maps:** the map style for every map.
 - **iCloud & Library:** sync on or off, when it last synced, hints when something is wrong.

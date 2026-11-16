@@ -1,3 +1,4 @@
+import PhotosUI
 import SwiftUI
 import UniformTypeIdentifiers
 import WattspurCore
@@ -36,12 +37,17 @@ extension RecordingVehicle {
 
 // MARK: - Profile
 
-/// The rider's data (until B-299 brings the full profile): read here, edited on the Mac.
+/// The profile (B-299): the rider with the data for the calories, edited here or on the Mac (the
+/// same rider over iCloud); the totals and records of each sport; the devices by sport, each opens.
 private struct ProfilePage: View {
     @Environment(PhoneLibrary.self) private var library
+    @State private var editing = false
+
+    private var totals: [SportTotals] { library.state?.sportTotals() ?? [SportTotals(sport: .cycling, rides: [])] }
+    private var devices: [(sport: Sport, devices: [RideExchange.Bike])] { library.state?.devicesBySport() ?? [] }
 
     var body: some View {
-        Form {
+        List {
             Section {
                 VStack(spacing: 8) {
                     RiderAvatar(rider: library.rider, size: 88)
@@ -55,12 +61,41 @@ private struct ProfilePage: View {
                 LabeledContent("Weight") { value(library.rider?.body.weightKg.map { $0.formatted(.number.precision(.fractionLength(0...1))) + " kg" }) }
                 LabeledContent("Height") { value(library.rider?.body.heightCm.map { $0.formatted(.number.precision(.fractionLength(0))) + " cm" }) }
                 LabeledContent("Year of Birth") { value(library.rider?.body.birthYear.map { String($0) }) }
-                LabeledContent("Sex") { Text(sexLabel) }
+                LabeledContent("Sex") { Text(library.rider?.body.sex.label ?? RiderSex.unspecified.label) }
             } header: {
                 Text("For the Calories")
             } footer: {
-                Text("You set these on the Mac under Profile; with iCloud they come to this iPhone. Editing them here comes with a later version.")
+                Text("With iCloud the Mac shows the same profile.")
             }
+            ForEach(totals) { sport in
+                Section {
+                    SportTotalsGrid(totals: sport)
+                        .listRowInsets(EdgeInsets(top: 8, leading: 12, bottom: 8, trailing: 12))
+                } header: {
+                    Label { Text(sport.sport.totalsTitle) } icon: { Image(systemName: sport.sport.symbol) }
+                }
+            }
+            ForEach(devices, id: \.sport) { group in
+                Section {
+                    ForEach(group.devices) { device in
+                        NavigationLink {
+                            DevicePage(device: device)
+                        } label: {
+                            DeviceRow(device: device, usage: library.state?.usage(of: device.id) ?? (rides: 0, distance: 0))
+                        }
+                    }
+                } header: {
+                    Text(group.sport.devicesTitle)
+                }
+            }
+        }
+        .listStyle(.insetGrouped)
+        .toolbar {
+            Button("Edit") { editing = true }
+                .disabled(library.database == nil)
+        }
+        .sheet(isPresented: $editing) {
+            ProfileEditor(details: library.rider ?? RiderDetails()) { library.updateRider($0) }
         }
     }
 
@@ -72,12 +107,248 @@ private struct ProfilePage: View {
     private func value(_ text: String?) -> Text {
         text.map { Text($0) } ?? Text("Not set")
     }
+}
 
-    private var sexLabel: LocalizedStringKey {
-        switch library.rider?.body.sex ?? .unspecified {
+extension RiderSex {
+    var label: LocalizedStringKey {
+        switch self {
         case .male: "Male"
         case .female: "Female"
         case .unspecified: "Not specified"
+        }
+    }
+}
+
+extension Sport {
+    /// The title over the totals of the sport in the profile (B-299).
+    var totalsTitle: LocalizedStringKey {
+        switch self {
+        case .cycling: "Cycling"
+        case .vehicle: "Vehicles"
+        case .running: "Running"
+        }
+    }
+
+    /// The title over the devices of the sport.
+    var devicesTitle: LocalizedStringKey {
+        switch self {
+        case .cycling: "Bikes"
+        case .vehicle: "Vehicles"
+        case .running: "Shoes"
+        }
+    }
+
+    var symbol: String {
+        switch self {
+        case .cycling: "bicycle"
+        case .vehicle: "car"
+        case .running: "figure.run"
+        }
+    }
+}
+
+extension BikeKind {
+    /// The kind's name, as in the Mac's profile.
+    var label: LocalizedStringKey {
+        switch self {
+        case .bike: "Bicycle"
+        case .mountain: "Mountain bike"
+        case .road: "Road bike"
+        case .gravel: "Gravel bike"
+        case .cargo: "Cargo bike"
+        case .motorcycle: "Motorcycle"
+        case .car: "Car"
+        case .runningShoe: "Running shoes"
+        }
+    }
+}
+
+/// The totals and records of one sport as small tiles (B-299).
+private struct SportTotalsGrid: View {
+    var totals: SportTotals
+
+    var body: some View {
+        LazyVGrid(columns: [GridItem(.flexible(), spacing: 8), GridItem(.flexible(), spacing: 8)], spacing: 8) {
+            tile("Distance", RideFormat.distance(totals.distance), "road.lanes")
+            tile("Rides", totals.rides.formatted(), "number")
+            tile("Ride Time", RideFormat.duration(totals.rideTime), "clock")
+            tile("Longest Ride", totals.longest.map { RideFormat.distance($0.value) } ?? "–", "arrow.left.and.right")
+            tile("Top Speed", totals.fastest.map { RideFormat.speed($0.value) } ?? "–", "speedometer")
+        }
+    }
+
+    private func tile(_ title: LocalizedStringKey, _ value: String, _ symbol: String) -> some View {
+        VStack(alignment: .leading, spacing: 2) {
+            Label(title, systemImage: symbol)
+                .font(.caption)
+                .foregroundStyle(.secondary)
+            Text(verbatim: value)
+                .font(.headline)
+                .monospacedDigit()
+                .minimumScaleFactor(0.7)
+                .lineLimit(1)
+        }
+        .frame(maxWidth: .infinity, alignment: .leading)
+        .padding(10)
+        .background(.quaternary.opacity(0.5), in: .rect(cornerRadius: 12))
+        .accessibilityElement(children: .combine)
+    }
+}
+
+/// A device in the profile: symbol, name, kind and what was ridden on it.
+private struct DeviceRow: View {
+    var device: RideExchange.Bike
+    var usage: (rides: Int, distance: Double)
+
+    var body: some View {
+        HStack(spacing: 12) {
+            BikeBadge(bike: device)
+                .font(.title3)
+                .frame(width: 30)
+            VStack(alignment: .leading, spacing: 2) {
+                Text(device.name)
+                Text(kind.label)
+                    .font(.caption)
+                    .foregroundStyle(.secondary)
+            }
+            Spacer()
+            VStack(alignment: .trailing, spacing: 2) {
+                Text(verbatim: RideFormat.distance(usage.distance))
+                    .monospacedDigit()
+                if device.isArchived {
+                    Text("Archived").font(.caption).foregroundStyle(.secondary)
+                }
+            }
+        }
+        .accessibilityElement(children: .combine)
+    }
+
+    private var kind: BikeKind { BikeKind(rawValue: device.kind) ?? .bike }
+}
+
+/// One device, opened from the profile (B-299); editing on the iPhone comes with B-290.
+private struct DevicePage: View {
+    @Environment(PhoneLibrary.self) private var library
+    var device: RideExchange.Bike
+
+    private var kind: BikeKind { BikeKind(rawValue: device.kind) ?? .bike }
+
+    var body: some View {
+        let usage = library.state?.usage(of: device.id) ?? (rides: 0, distance: 0)
+        Form {
+            Section {
+                VStack(spacing: 8) {
+                    BikeBadge(bike: device)
+                        .font(.system(size: 44))
+                    Text(device.name)
+                        .font(.title2.weight(.semibold))
+                }
+                .frame(maxWidth: .infinity)
+                .listRowBackground(Color.clear)
+            }
+            Section {
+                LabeledContent("Kind") { Text(kind.label) }
+                if kind.sport == .cycling {
+                    LabeledContent("E-Bike") { Text(device.isEbike ? LocalizedStringKey("Yes") : LocalizedStringKey("No")) }
+                }
+                LabeledContent("Rides") { Text(usage.rides.formatted()) }
+                LabeledContent("Distance") { Text(verbatim: RideFormat.distance(usage.distance)) }
+                if device.isArchived {
+                    LabeledContent("Status") { Text("Archived") }
+                }
+            } footer: {
+                Text("You change devices on the Mac under Profile; with iCloud they come to this iPhone.")
+            }
+        }
+        .navigationTitle(device.name)
+        .navigationBarTitleDisplayMode(.inline)
+    }
+}
+
+/// Edits the rider (B-299): name, photo and the data for the calories. Numbers out of range are
+/// not saved, as on the Mac (`ProfileInput`).
+private struct ProfileEditor: View {
+    @Environment(\.dismiss) private var dismiss
+    @State private var details: RiderDetails
+    @State private var weight: Double?
+    @State private var height: Double?
+    @State private var photoItem: PhotosPickerItem?
+    let save: (RiderDetails) -> Void
+
+    init(details: RiderDetails, save: @escaping (RiderDetails) -> Void) {
+        _details = State(initialValue: details)
+        _weight = State(initialValue: details.body.weightKg)
+        _height = State(initialValue: details.body.heightCm)
+        self.save = save
+    }
+
+    /// Longer edge of the stored photo in pixels, as on the Mac.
+    static let photoEdge = 1000
+
+    var body: some View {
+        // The picker's label is a Sendable closure: it gets a copy, not the state.
+        let avatar = details
+        NavigationStack {
+            Form {
+                Section {
+                    HStack {
+                        Spacer()
+                        PhotosPicker(selection: $photoItem, matching: .images) {
+                            RiderAvatar(rider: avatar, size: 88)
+                                .overlay(alignment: .bottomTrailing) {
+                                    Image(systemName: "camera.circle.fill")
+                                        .font(.title2)
+                                        .symbolRenderingMode(.multicolor)
+                                }
+                        }
+                        .accessibilityLabel(Text("Choose Photo"))
+                        Spacer()
+                    }
+                    .listRowBackground(Color.clear)
+                    if details.photoData != nil {
+                        Button("Remove Photo", role: .destructive) { details.photoData = nil }
+                    }
+                    TextField("Name", text: $details.name)
+                        .textContentType(.name)
+                }
+                Section {
+                    TextField("Weight", value: $weight, format: .number.precision(.fractionLength(0...1)), prompt: Text("kg"))
+                        .keyboardType(.decimalPad)
+                    TextField("Height", value: $height, format: .number.precision(.fractionLength(0)), prompt: Text("cm"))
+                        .keyboardType(.numberPad)
+                    Picker("Year of Birth", selection: $details.body.birthYear) {
+                        Text("Not set").tag(Int?.none)
+                        ForEach(ProfileInput.birthYears().reversed(), id: \.self) { year in
+                            Text(verbatim: String(year)).tag(Int?.some(year))
+                        }
+                    }
+                    Picker("Sex", selection: $details.body.sex) {
+                        ForEach([RiderSex.unspecified, .female, .male], id: \.self) { Text($0.label).tag($0) }
+                    }
+                } header: {
+                    Text("For the Calories")
+                } footer: {
+                    Text("Weight 20–300 kg, height 80–250 cm. Without them the calories come from the work alone.")
+                }
+            }
+            .navigationTitle("Profile")
+            .navigationBarTitleDisplayMode(.inline)
+            .toolbar {
+                ToolbarItem(placement: .cancellationAction) { Button("Cancel") { dismiss() } }
+                ToolbarItem(placement: .confirmationAction) {
+                    Button("Save") {
+                        var saved = details
+                        saved.body.weightKg = ProfileInput.accepted(weight, in: ProfileInput.weightKg)
+                        saved.body.heightCm = ProfileInput.accepted(height, in: ProfileInput.heightCm)
+                        save(saved)
+                        dismiss()
+                    }
+                }
+            }
+            .task(id: photoItem) {
+                guard let photoItem, let data = try? await photoItem.loadTransferable(type: Data.self) else { return }
+                if let scaled = PhotoScaler.jpegData(from: data, maxEdge: Self.photoEdge) { details.photoData = scaled }
+            }
         }
     }
 }
