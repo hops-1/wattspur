@@ -3,19 +3,53 @@ import Foundation
 // Value types around the profile and the bikes (PROF-01, PROF-03, B-074).
 // Raw values are stored in the model, so they must not change.
 
-/// The kind of bike, as in komoot; it decides the symbol (B-133). The cargo bike (B-201)
-/// is only a name and a symbol: it changes no calculation.
+/// The sport of a ride (B-284, `DESIGN-SPORTARTEN.md`): each has its own totals and records.
+/// Vehicles and running never count towards the cycling totals, records or the CO₂ saved.
+public enum Sport: String, CaseIterable, Identifiable, Sendable {
+    case cycling, vehicle, running
+
+    public var id: Self { self }
+}
+
+/// The kind of device (in the model still “bike”), as in komoot; it decides the symbol (B-133)
+/// and the sport (B-284). The cargo bike (B-201) is only a name and a symbol: it changes no
+/// calculation.
+///
+/// Older versions (iPhone 1.0, Mac 1.8.x) read an unknown raw value as a bicycle, so a car counts
+/// as a bike there; the handbook names the minimum version.
 public enum BikeKind: String, CaseIterable, Identifiable, Sendable {
     case bike, mountain, road, gravel, cargo
-    /// Tracked with the iPhone, e.g. by a friend on a motorcycle. Its rides stay out of the totals,
-    /// records and the CO₂ saved, unless the filter shows only this bike. Older versions read it as
-    /// a bicycle.
+    /// Tracked with the iPhone, e.g. by a friend on a motorcycle. Its rides stay out of the cycling
+    /// totals, records and the CO₂ saved, unless the filter shows only this device.
     case motorcycle
+    /// A car (B-284), like a motorcycle a vehicle.
+    case car
+    /// A pair of running shoes (B-284). The sport running comes with B-285; until then the kind
+    /// is only known, not offered in the editor.
+    case runningShoe
 
     public var id: Self { self }
 
+    public var sport: Sport {
+        switch self {
+        case .bike, .mountain, .road, .gravel, .cargo: .cycling
+        case .motorcycle, .car: .vehicle
+        case .runningShoe: .running
+        }
+    }
+
     /// Ridden with an engine: no own effort, nothing saved against a car.
-    public var isMotorized: Bool { self == .motorcycle }
+    public var isMotorized: Bool { sport == .vehicle }
+
+    /// The kinds the editor offers. Running shoes join with the sport running (B-285).
+    public static var selectable: [BikeKind] { allCases.filter { $0 != .runningShoe } }
+
+    /// The kind of a ride: its device's kind, else the kind stored with the ride (a ride without a
+    /// device, e.g. recorded as “motorcycle”), else a bicycle. Unknown raw values from newer
+    /// versions count as a bicycle.
+    public static func of(device: String?, ride: String?) -> BikeKind {
+        device.flatMap(BikeKind.init(rawValue:)) ?? ride.flatMap(BikeKind.init(rawValue:)) ?? .bike
+    }
 }
 
 /// The colour of a bike's symbol. The shade for light and dark mode is the app's business.

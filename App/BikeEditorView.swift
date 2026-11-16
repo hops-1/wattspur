@@ -41,7 +41,8 @@ struct BikeDraft: Equatable {
         bike.name = name.trimmingCharacters(in: .whitespacesAndNewlines)
         bike.color = color
         bike.kind = kind
-        bike.isEbike = isEbike
+        // “E-bike” is a bicycle's switch only (B-284).
+        bike.isEbike = kind.sport == .cycling && isEbike
         bike.photoData = photoData
         bike.manufacturer = manufacturer.trimmingCharacters(in: .whitespacesAndNewlines)
         bike.model = model.trimmingCharacters(in: .whitespacesAndNewlines)
@@ -185,13 +186,15 @@ struct BikeEditorView: View {
                     LabeledField("Manufacturer") { text($draft.manufacturer, "Manufacturer") }
                     LabeledField("Model") { text($draft.model, "Model") }
                 }
-                GridRow {
-                    LabeledField("Drive unit") { text($draft.driveUnit, "Drive unit", prompt: "Bosch Performance Line CX") }
-                    LabeledField("Battery (Wh)") {
-                        TextField("Battery (Wh)", value: battery, format: .number.grouping(.never), prompt: Text("Wh"))
-                            .textFieldStyle(.roundedBorder)
-                            .labelsHidden()
-                            .monospacedDigit()
+                if draft.kind.sport == .cycling {
+                    GridRow {
+                        LabeledField("Drive unit") { text($draft.driveUnit, "Drive unit", prompt: "Bosch Performance Line CX") }
+                        LabeledField("Battery (Wh)") {
+                            TextField("Battery (Wh)", value: battery, format: .number.grouping(.never), prompt: Text("Wh"))
+                                .textFieldStyle(.roundedBorder)
+                                .labelsHidden()
+                                .monospacedDigit()
+                        }
                     }
                 }
                 GridRow(alignment: .top) {
@@ -260,7 +263,7 @@ struct BikeEditorView: View {
     private var kinds: some View {
         VStack(alignment: .leading, spacing: 2) {
             Text("Bike type").font(.caption).foregroundStyle(.secondary).padding(.bottom, 4)
-            ForEach(BikeKind.allCases) { kind in
+            ForEach(BikeKind.selectable + (draft.kind == .runningShoe ? [.runningShoe] : [])) { kind in
                 let selected = draft.kind == kind
                 Button { draft.kind = kind } label: {
                     HStack(spacing: 14) {
@@ -284,24 +287,26 @@ struct BikeEditorView: View {
                 .accessibilityElement(children: .combine)
                 .accessibilityAddTraits(selected ? .isSelected : [])
             }
-            HStack(spacing: 14) {
-                EbikeShape()
-                    .stroke(style: StrokeStyle(lineWidth: 1.6, lineCap: .round, lineJoin: .round))
-                    .foregroundStyle(.secondary)
-                    .frame(width: 26, height: 26)
-                    .frame(width: 42, height: 42)
-                    .background(.quaternary.opacity(0.7), in: RoundedRectangle(cornerRadius: 10))
-                    .accessibilityHidden(true)
-                VStack(alignment: .leading, spacing: 1) {
-                    Text("E-bike").font(.body.weight(.semibold))
-                    Text("With motor assistance (Bosch Smart System).").font(.caption).foregroundStyle(.secondary)
+            if draft.kind.sport == .cycling {
+                HStack(spacing: 14) {
+                    EbikeShape()
+                        .stroke(style: StrokeStyle(lineWidth: 1.6, lineCap: .round, lineJoin: .round))
+                        .foregroundStyle(.secondary)
+                        .frame(width: 26, height: 26)
+                        .frame(width: 42, height: 42)
+                        .background(.quaternary.opacity(0.7), in: RoundedRectangle(cornerRadius: 10))
+                        .accessibilityHidden(true)
+                    VStack(alignment: .leading, spacing: 1) {
+                        Text("E-bike").font(.body.weight(.semibold))
+                        Text("With motor assistance (Bosch Smart System).").font(.caption).foregroundStyle(.secondary)
+                    }
+                    Spacer()
+                    Toggle("E-bike", isOn: $draft.isEbike).toggleStyle(.switch).labelsHidden()
                 }
-                Spacer()
-                Toggle("E-bike", isOn: $draft.isEbike).toggleStyle(.switch).labelsHidden()
+                .padding(.horizontal, 10)
+                .padding(.vertical, 6)
+                .accessibilityElement(children: .combine)
             }
-            .padding(.horizontal, 10)
-            .padding(.vertical, 6)
-            .accessibilityElement(children: .combine)
         }
         .accessibilityElement(children: .contain)
         .accessibilityLabel(Text("Bike type"))

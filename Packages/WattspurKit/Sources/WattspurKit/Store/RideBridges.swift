@@ -25,7 +25,7 @@ extension Ride {
                     averagePower: averagePower, averageCadence: averageCadence,
                     maxSpeed: maxSpeed, maxPower: maxPower, maxCadence: maxCadence, bestPower1Min: bestPower1Min,
                     curvaturePerKm: curvaturePerKm, steepestClimb: steepestClimb, steepestDescent: steepestDescent,
-                    isMotorized: isMotorized)
+                    sport: sport)
     }
 }
 
@@ -47,7 +47,7 @@ extension Ride {
             averagePower: averagePower, maxPower: maxPower,
             averageCadence: averageCadence, maxCadence: maxCadence,
             workKilojoules: workKilojoules, pedallingTime: pedalling, startDate: startDate,
-            isMotorized: isMotorized
+            sport: sport
         )
     }
 
@@ -57,18 +57,25 @@ extension Ride {
         deletedAt == nil && !isSample && mergedInto == nil
     }
 
-    /// On a motorcycle (`BikeKind.isMotorized`).
-    public var isMotorized: Bool { bike?.kind.isMotorized == true }
+    /// The kind of device: the bike's, else the one stored with the ride, else a bicycle (B-284).
+    public var deviceKind: BikeKind { BikeKind.of(device: bike?.kindRawValue, ride: sportRawValue) }
 
-    /// Counts towards totals, records and the CO₂ saved: like `countsInStatistics`, but without
-    /// motorcycle rides. The map and the list still show them.
-    public var countsInTotals: Bool { countsInStatistics && !isMotorized }
+    /// Cycling, vehicle or running (B-284).
+    public var sport: Sport { deviceKind.sport }
 
-    /// The same where the user can filter by bike: a motorcycle ride counts once the filter shows
-    /// only that bike, so its own figures are there too.
+    /// In a car or on a motorcycle, also without a device.
+    public var isMotorized: Bool { sport == .vehicle }
+
+    /// Counts towards the cycling totals, records and the CO₂ saved: like `countsInStatistics`,
+    /// but only cycling (no vehicles, no running, also without a device). The map and the list
+    /// still show the others.
+    public var countsInTotals: Bool { countsInStatistics && sport == .cycling }
+
+    /// The same where the user can filter by bike: a vehicle's ride counts once the filter shows
+    /// only that device, so its own figures are there too.
     public func countsInTotals(bikeFilter: BikeFilter) -> Bool {
         guard countsInStatistics, isOnBike(bikeFilter) else { return false }
-        return !isMotorized || bikeFilter.bikeID != nil
+        return sport == .cycling || bikeFilter.bikeID != nil
     }
 }
 

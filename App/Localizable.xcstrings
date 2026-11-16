@@ -9806,6 +9806,66 @@
           }
         }
       }
+    },
+    "Car" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Auto"
+          }
+        }
+      }
+    },
+    "Running shoes" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Laufschuhe"
+          }
+        }
+      }
+    },
+    "Not for a car" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Nicht beim Auto"
+          }
+        }
+      }
+    },
+    "Not for running" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Nicht beim Laufen"
+          }
+        }
+      }
+    },
+    "Tracked with the iPhone; not in the cycling totals and the CO₂ saved" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Mit dem iPhone aufgezeichnet; zählt nicht zu Rad-Summen und CO₂-Einsparung"
+          }
+        }
+      }
+    },
+    "Kilometres per pair" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Kilometer je Paar"
+          }
+        }
+      }
     }
   },
   "version" : "1.0"

@@ -7,10 +7,20 @@ struct BikeBadge: View {
     var bike: RideExchange.Bike
 
     var body: some View {
-        Image(systemName: BikeKind(rawValue: bike.kind) == .motorcycle ? "motorcycle" : "bicycle")
+        Image(systemName: Self.symbol(BikeKind(rawValue: bike.kind) ?? .bike))
             .font(.footnote.weight(.semibold))
             .foregroundStyle(color)
             .accessibilityLabel(bike.name)
+    }
+
+    /// The SF Symbol of a kind (B-284): a car, a motorcycle, a shoe or a bicycle.
+    static func symbol(_ kind: BikeKind) -> String {
+        switch kind {
+        case .motorcycle: "motorcycle"
+        case .car: "car"
+        case .runningShoe: "shoe"
+        case .bike, .mountain, .road, .gravel, .cargo: "bicycle"
+        }
     }
 
     var color: Color {

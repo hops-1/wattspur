@@ -12,10 +12,10 @@ Wähle **Profil** unten in der Seitenleiste (⌘6).
 
 ## Bike anlegen und bearbeiten
 **Bike hinzufügen** (oder **Bearbeiten …** an einer Kachel) öffnet den Editor:
-- **Name, Farbe und Art:** Fahrrad, Mountainbike, Rennrad, Gravelbike, Lastenrad oder Motorrad, dazu der Schalter **E-Bike**. Die Art bestimmt das Symbol, die Farbe färbt es überall, wo das Bike erscheint.
-- **Motorrad:** Fahrten auf einem Motorrad stehen in der Liste, auf der Karte und in der Kachel des Bikes, zählen aber nicht in Summen, Auswertung, Highlights, Rekorden, Zielen und im Durchschnitt beim Vergleich und sparen kein CO₂. Stellst du den Bike-Filter auf das Motorrad, zeigen Auswertung und Highlights seine eigenen Zahlen, CO₂ weiterhin nicht. Zum Aufnehmen am iPhone siehe [iPhone und iCloud](09-iphone-and-icloud.md#motorrad).
+- **Name, Farbe und Art:** Fahrrad, Mountainbike, Rennrad, Gravelbike, Lastenrad, Motorrad oder Auto, beim Rad dazu der Schalter **E-Bike**. Die Art bestimmt das Symbol, die Farbe färbt es überall, wo das Bike erscheint.
+- **Motorrad und Auto:** Du kannst mehrere Fahrzeuge anlegen, zum Beispiel „Nugget“ und „Zweitwagen“. Fahrten mit einem Fahrzeug stehen in der Liste, auf der Karte und in seiner Kachel, zählen aber nicht in Summen, Auswertung, Highlights, Rekorden, Zielen und im Durchschnitt beim Vergleich und sparen kein CO₂. Stellst du den Bike-Filter auf das Fahrzeug, zeigen Auswertung und Highlights seine eigenen Zahlen, CO₂ weiterhin nicht. **Autos brauchen Wattspur ab Mac 1.9 und iPhone 1.1 auf allen deinen Geräten:** Ältere Versionen kennen das Auto nicht und zählen seine Fahrten als Radfahrten. Zum Aufnehmen am iPhone siehe [iPhone und iCloud](09-iphone-and-icloud.md#motorrad).
 - **Foto:** nur hier und in der Kachel im Profil; sonst siehst du das farbige Symbol.
-- **Hersteller, Modell, Antrieb, Akku (Wh), Gewicht, Kaufdatum** und **Kilometer-Startwert** (der Kilometerstand vor deiner ersten Fahrt in Wattspur; er zählt nur in der Kachel). Das Gewicht ist zur Information und fließt in keine Rechnung ein.
+- **Hersteller, Modell, Antrieb, Akku (Wh), Gewicht, Kaufdatum** und **Kilometer-Startwert**; Antrieb und Akku nur beim Rad (der Kilometerstand vor deiner ersten Fahrt in Wattspur; er zählt nur in der Kachel). Das Gewicht ist zur Information und fließt in keine Rechnung ein.
 - **Bike archivieren:** Ein Bike, das du nicht mehr fährst, verschwindet aus dem Import-Menü, seine Fahrten bleiben aber zugeordnet, und es bleibt in den Filtern. Unter **Archivierte Bikes** am Ende des Profils steht es mit **Wiederherstellen**. Das letzte Bike lässt sich nicht archivieren, weil neue Fahrten ein Bike brauchen.
 
 ## Zu welchem Bike gehört eine neue Fahrt?

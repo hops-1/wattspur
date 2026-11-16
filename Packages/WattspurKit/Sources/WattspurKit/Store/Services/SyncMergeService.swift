@@ -166,6 +166,7 @@ struct SyncMergeService: LibraryService {
     private func take(from other: Ride, to keeper: Ride) {
         if !isRenamed(keeper), isRenamed(other) || keeper.name.isEmpty { keeper.name = other.name }
         if !hasOwnBike(keeper), hasOwnBike(other) { keeper.bike = other.bike }
+        if keeper.sportRawValue == nil, other.sportRawValue != nil { keeper.sportRawValue = other.sportRawValue }
         if other.deletedAt == nil { keeper.deletedAt = nil }
         if keeper.attachedSourceFormat == nil, other.attachedSourceFormat != nil {
             keeper.attachedSourceName = other.attachedSourceName

@@ -35,7 +35,9 @@ struct MergeService: LibraryService {
         ride.timeZoneIdentifier = first.timeZoneIdentifier
         ride.deviceSerialNumber = first.deviceSerialNumber
         ride.rider = first.rider ?? bikes.defaultRider()
-        ride.bike = first.bike ?? bikes.defaultBike()
+        // A ride without a device but with a kind (a car, B-284) stays without one.
+        ride.sportRawValue = first.sportRawValue
+        ride.bike = first.bike ?? (first.sportRawValue == nil ? bikes.defaultBike() : nil)
         context.insert(ride)
         for old in rides where old.isMerged {
             old.parts = []
