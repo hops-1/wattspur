@@ -50,6 +50,8 @@ struct RideMapView: View {
     var curves: [CurvatureAnalyzer.Piece] = []
     /// The route by lean angle (B-247); used only while `curves` is empty.
     var leanStretches: [RideMotion.LeanStretch] = []
+    /// What `leanStretches` stand for: lean angle, or a car's lateral acceleration (B-287).
+    var side: SideMeasure = .leanAngle
     /// The route by road surface (B-248); used only while `curves` and `leanStretches` are empty.
     var surfaceStretches: [RideMotion.SurfaceStretch] = []
     /// The imported curvy roads, drawn below the route; `nil` while the layer is off (B-183).
@@ -82,7 +84,7 @@ struct RideMapView: View {
                     if !curves.isEmpty {
                         CurvesLegend()
                     } else if !leanStretches.isEmpty {
-                        LeanLegend()
+                        LeanLegend(side: side)
                     } else if !surfaceStretches.isEmpty {
                         SurfaceLegend()
                     } else if let elevation {
@@ -361,15 +363,17 @@ extension Color {
     static func lean(_ band: RideMotion.LeanBand) -> Color { .map(MapPalette.lean(band)) }
 }
 
-/// What the colours of the route by lean angle mean (B-247).
+/// What the colours of the route by lean angle mean (B-247), or by a car's lateral acceleration (B-287).
 private struct LeanLegend: View {
+    var side: SideMeasure = .leanAngle
+
     var body: some View {
         VStack(alignment: .leading, spacing: 6) {
-            Text("Lean Angle").font(.caption.weight(.bold))
+            Text(side == .leanAngle ? "Lean Angle" : "Lateral Acceleration").font(.caption.weight(.bold))
             ForEach(RideMotion.LeanBand.allCases.reversed(), id: \.self) { band in
                 HStack(spacing: 8) {
                     Capsule().fill(Color.lean(band)).frame(width: 30, height: 4.5).accessibilityHidden(true)
-                    Text(verbatim: band == .extreme ? "40° +" : "\(Int(band.lowerBound))–\(Int(band.lowerBound) + 10)°")
+                    Text(verbatim: side.label(band))
                         .font(.caption)
                         .monospacedDigit()
                 }
@@ -379,7 +383,8 @@ private struct LeanLegend: View {
         .padding(.horizontal, 10)
         .background(.regularMaterial, in: RoundedRectangle(cornerRadius: 10))
         .accessibilityElement(children: .ignore)
-        .accessibilityLabel(Text("Track coloured by lean angle, from green upright to purple at 40° and more"))
+        .accessibilityLabel(side == .leanAngle ? Text("Track coloured by lean angle, from green upright to purple at 40° and more")
+                                               : Text("Track coloured by lateral acceleration, from green below 0.1 g to purple at 0.4 g and more"))
     }
 }
 

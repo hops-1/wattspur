@@ -16,7 +16,7 @@ struct RideMotionTests {
 
     @Test("Rides without lean angles have no motion figures")
     func noMotion() {
-        #expect(RideMotion(samples: Self.samples(kmh: [10, 20, 30]), motorized: true) == nil)
+        #expect(RideMotion(samples: Self.samples(kmh: [10, 20, 30]), kind: .motorcycle) == nil)
     }
 
     @Test("Strongest lean to each side and strongest speeding up and braking")
@@ -25,7 +25,7 @@ struct RideMotionTests {
             samples: Self.samples(kmh: [50, 60, 60, 50, 40],
                                   lean: [0, 32.5, -41.2, 12, 0],
                                   acceleration: [0.3, 0.1, nil, -0.75, -0.2]),
-            motorized: true))
+            kind: .motorcycle))
         #expect(motion.maxLeanLeft == 32.5)
         #expect(motion.maxLeanRight == 41.2)
         #expect(motion.strongestAcceleration == 0.3)
@@ -36,7 +36,7 @@ struct RideMotionTests {
     @Test("Only one side or no braking")
     func oneSided() throws {
         let motion = try #require(RideMotion(samples: Self.samples(kmh: [20, 20], lean: [5, 8], acceleration: [0.1, 0.2]),
-                                             motorized: false))
+                                             kind: .bike))
         #expect(motion.maxLeanRight == 0)
         #expect(motion.strongestBraking == nil)
     }
@@ -45,7 +45,7 @@ struct RideMotionTests {
     func sprint() throws {
         // Standing, then 30 → 60 → 90 → 110: 100 km/h 3.5 s after the last standstill.
         let kmh: [Double] = [0, 0, 30, 60, 90, 110, 120, 90, 40, 0, 0, 40, 80, 105]
-        let motion = try #require(RideMotion(samples: Self.samples(kmh: kmh, lean: kmh.map { _ in 0 }), motorized: true))
+        let motion = try #require(RideMotion(samples: Self.samples(kmh: kmh, lean: kmh.map { _ in 0 }), kind: .motorcycle))
         // The second run is the best: 0 at 10 s, 100 between 12 (80) and 13 (105): 12.8 → 2.8 s.
         let sprint = try #require(motion.sprint)
         #expect(sprint.targetKmh == 100)
@@ -57,7 +57,7 @@ struct RideMotionTests {
     @Test("A bicycle sprints to 25 km/h; a slow run or a gap is no sprint")
     func bicycle() throws {
         let motion = try #require(RideMotion(samples: Self.samples(kmh: [0, 8, 16, 22, 27], lean: [0, 0, 0, 0, 0]),
-                                             motorized: false))
+                                             kind: .bike))
         #expect(motion.sprint?.targetKmh == 25)
         #expect(abs((motion.sprint?.seconds ?? 0) - 3.6) < 0.001)
 
@@ -105,7 +105,7 @@ struct RideMotionTests {
             + Array(repeating: 0.8, count: 12) + Array(repeating: 0.1, count: 12)
         let samples = Self.samples(kmh: Array(repeating: 36, count: roughness.count),
                                    lean: roughness.map { _ in 0 }, roughness: roughness)
-        let motion = try #require(RideMotion(samples: samples, motorized: false))
+        let motion = try #require(RideMotion(samples: samples, kind: .bike))
         #expect(abs((motion.roughShare ?? 0) - 24.0 / 47) < 0.03)
         #expect(RideMotion.surfaceStretches(samples).map(\.band) == [.smooth, .uneven, .rough, .smooth])
         #expect(RideMotion.SurfaceBand(roughness: 0.399) == .smooth)
@@ -114,7 +114,7 @@ struct RideMotionTests {
         #expect(RideMotion.SurfaceBand(roughness: 0.6) == .rough)
 
         let without = Self.samples(kmh: [30, 30], lean: [0, 0])
-        #expect(try #require(RideMotion(samples: without, motorized: false)).roughShare == nil)
+        #expect(try #require(RideMotion(samples: without, kind: .bike)).roughShare == nil)
         #expect(RideMotion.surfaceStretches(without).isEmpty)
     }
 

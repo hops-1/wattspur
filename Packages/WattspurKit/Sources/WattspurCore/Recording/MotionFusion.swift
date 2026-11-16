@@ -42,6 +42,11 @@ public struct MotionValues: Codable, Sendable, Equatable {
 /// - **Acceleration along the way:** the horizontal acceleration without the part of the turn
 ///   (v · ω) is what speeds up or brakes; the GPS speed says which of the two it is.
 /// - **Roughness:** the vertical acceleration after the slow part is taken away.
+/// - **A turned iPhone** (B-287): turning the iPhone in the mount also turns it about “up”, which
+///   reads like a curve (17° on a straight road on 9.11.2026). A vehicle turns as its track does, so
+///   where the sensors turned more than `maxTurnMismatch` away from the GPS course over an interval,
+///   its lean and acceleration from the sensors do not count. A motorcycle that leans into a curve
+///   rolls about its length, not about “up”, so it is not caught by this.
 ///
 /// Readings are smoothed over about half a second against the vibration of the engine; the
 /// values are tuned with the test rides of spike V-16 (`docs/SPIKE-BEWEGUNG.md`).
@@ -60,6 +65,13 @@ public struct MotionFusion: Sendable {
     public static let steadyAcceleration = 0.03
     /// A reading this long after the one before starts the filters afresh (pause, app in background).
     static let maxReadingGap: TimeInterval = 0.5
+    /// Degrees: how far the turn of the sensors may differ from the change of the GPS course over
+    /// one interval before its lean and acceleration are left out (B-287), at least twice the
+    /// course's accuracy. A first value: the 17° on a straight road at 90 km/h were 7° of turn a
+    /// second; a steady curve turns sensors and course alike.
+    public static let maxTurnMismatch = 4.0
+    /// Degrees: a GPS course less sure than this is not used for the check.
+    static let maxCourseAccuracy = 10.0
 
     // The filters.
     private var lastReading: Date?
@@ -72,10 +84,15 @@ public struct MotionFusion: Sendable {
     private var strongestAlong = 0.0
     private var squares = 0.0
     private var count = 0
+    /// Radians the sensors turned about “up” in the interval, positive to the left.
+    private var turned = 0.0
+    /// Whether `turned` covers the whole interval (no gap in the readings).
+    private var turnedWhole = true
 
     // The GPS.
     private var speed: Double?
     private var lastFix: (date: Date, speed: Double)?
+    private var lastCourse: Double?
 
     public init() {}
 
@@ -99,8 +116,10 @@ public struct MotionFusion: Sendable {
             yaw = turn
             horizontal = flat
             vertical = lift
+            if gap.isFinite { turnedWhole = false }
             return
         }
+        turned += turn * gap
         let k = gap / (Self.smoothing + gap)
         yaw += k * (turn - yaw)
         horizontal.x += k * (flat.x - horizontal.x)
@@ -125,30 +144,51 @@ public struct MotionFusion: Sendable {
     }
 
     /// Closes the interval at a GPS point and starts the next. `speed` in m/s, `nil` or negative if
-    /// unknown. Returns `nil` if no reading came since the last point (no sensors, or a gap).
-    public mutating func close(at date: Date, speed newSpeed: Double?) -> MotionValues? {
+    /// unknown. `course` in degrees clockwise from north and its accuracy, as `CLLocation` gives them
+    /// (negative if unknown); without them the check for a turned iPhone is skipped. Returns `nil`
+    /// if no reading came since the last point (no sensors, or a gap).
+    public mutating func close(at date: Date, speed newSpeed: Double?, course newCourse: Double? = nil,
+                               courseAccuracy: Double? = nil) -> MotionValues? {
         let valid = newSpeed.flatMap { $0 >= 0 && $0.isFinite ? $0 : nil }
+        let sure = courseAccuracy.map { $0 >= 0 && $0 <= Self.maxCourseAccuracy } ?? true
+        let allowed = max(Self.maxTurnMismatch, 2 * (courseAccuracy.flatMap { $0 >= 0 ? $0 : nil } ?? 0))
+        let course = newCourse.flatMap { $0 >= 0 && $0.isFinite && sure ? $0 : nil }
         defer {
             strongestLean = 0
             strongestAlong = 0
             squares = 0
             count = 0
+            turned = 0
+            turnedWhole = true
             speed = valid
             lastFix = valid.map { (date, $0) }
+            lastCourse = (valid ?? 0) >= Self.minLeanSpeed ? course : nil
         }
         guard count > 0 else { return nil }
 
+        let turnedIPhone = isTurnedIPhone(course: course, speed: valid, allowed: allowed)
         var acceleration: Double?
         if let valid, let lastFix, date > lastFix.date {
             // The GPS says whether it was speeding up or braking, the sensors how strongly.
             let change = (valid - lastFix.speed) / date.timeIntervalSince(lastFix.date) / Self.gravity
-            if abs(change) < Self.steadyAcceleration {
+            if abs(change) < Self.steadyAcceleration || turnedIPhone {
                 acceleration = change
             } else {
                 acceleration = (change > 0 ? 1 : -1) * max(strongestAlong, abs(change))
             }
         }
-        return MotionValues(lean: strongestLean, acceleration: acceleration,
+        return MotionValues(lean: turnedIPhone ? 0 : strongestLean, acceleration: acceleration,
                             roughness: (squares / Double(count)).squareRoot())
+    }
+
+    /// Whether the sensors turned about “up” other than the GPS course did over this interval: the
+    /// iPhone was turned in the mount (B-287). Needs a sure course at both ends, at riding speed.
+    private func isTurnedIPhone(course: Double?, speed: Double?, allowed: Double) -> Bool {
+        guard turnedWhole, let course, let lastCourse, let speed, speed >= Self.minLeanSpeed else { return false }
+        // The course turns clockwise, the sensors' turn is positive to the left.
+        var courseChange = course - lastCourse
+        courseChange -= 360 * (courseChange / 360).rounded()
+        let sensors = turned * 180 / .pi
+        return abs(sensors + courseChange) > allowed
     }
 }

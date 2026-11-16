@@ -94,11 +94,12 @@ Only for rides recorded with the iPhone app 0.5.1 or later. While recording, the
 
 | Value | How |
 |---|---|
-| Max. Lean Left, Right | From the speed and the turn around the vertical: tan(lean) = speed × turn rate ÷ g. So it does not matter how the iPhone sits in the mount or the pocket. Counts from 10 km/h, at most 70° |
+| Max. Lean Left, Right | From the speed and the turn around the vertical: tan(lean) = speed × turn rate ÷ g. So it does not matter how the iPhone sits in the mount or the pocket. Counts from 10 km/h, at most 70°. When the iPhone turns other than the direction of travel in the GPS, for example because you turn it in the mount, that moment does not count (from iPhone 1.1) |
+| Max. Lateral Left, Right | Only in a car, instead of the lean angle (from Mac 1.9 and iPhone 1.1): a car hardly leans in a curve, the value is the force to the side in g, from the same readings (lateral acceleration = speed × turn rate ÷ g). Older car rides show it too, without a new recording. 0.4 g is already a brisk curve in everyday driving |
 | Max. Acceleration, Max. Braking | The acceleration along the way in g, from the sensors and the GPS speed; curves do not count |
 | 0–100 km/h, 0–25 km/h | The fastest time from a standstill (below 3 km/h) to 100 km/h on a motorcycle or in a car, to 25 km/h on any bicycle; at most 30 s, a gap of more than 5 s breaks it |
 | Uneven Surface | Share of the distance on an uneven or rough surface. The roughness is the strength of the vertical shaking without slow movements such as over a crest: smooth below 0.2 g (asphalt), uneven up to 0.45 g (field paths, smooth gravel, paving stones), rough above (forest tracks, off-road). The limits hold for an e-bike with the iPhone in the handlebar mount |
-| Map by lean angle, by surface | The track in pieces: lean in steps of 10° (green upright to purple from 40°), surface in three steps (grey, yellow, brown) |
+| Map by lean angle, by surface | The track in pieces: lean in steps of 10° (green upright to purple from 40°), in a car lateral acceleration in steps of 0.1 g (to purple from 0.4 g), surface in three steps (grey, yellow, brown) |
 
 ## Rounding
 Wattspur shows distance to 0.1 km, speed to 0.1 km/h, and power, cadence and metres as whole numbers. Totals in the analysis are calculated from the exact values and rounded only at the end, so they can differ from a sum of the rounded values by 0.1.

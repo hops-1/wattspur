@@ -14,6 +14,8 @@ struct RouteMap: View {
     var leanStretches: [RideMotion.LeanStretch] = []
     /// The track by road surface (B-248); the detail map switches between the two.
     var surfaceStretches: [RideMotion.SurfaceStretch] = []
+    /// What `leanStretches` stand for: lean angle, or a car's lateral acceleration (B-287).
+    var side: SideMeasure = .leanAngle
     /// Which colouring the detail map shows, remembered.
     @AppStorage(PhoneSettingsKey.trackColouring) private var colouring: TrackColouring = .lean
     /// The track by height (B-283), worked out from the route once per route; every ride with heights has it.
@@ -78,7 +80,7 @@ struct RouteMap: View {
             // were too wide for a small iPhone and covered the style button.
             if interactive {
                 if !available.isEmpty {
-                    TrackColouringMenu(options: available + [.plain],
+                    TrackColouringMenu(options: available + [.plain], side: side,
                                        selection: Binding(get: { shown ?? .plain }, set: { colouring = $0 }))
                         .padding(8)
                 }
@@ -94,7 +96,7 @@ struct RouteMap: View {
     @ViewBuilder private var legend: some View {
         let style: LegendStyle = interactive && legendFolded ? .folded : .compact
         switch shown {
-        case .lean: LeanLegend(style: style)
+        case .lean: LeanLegend(style: style, side: side)
         case .surface: SurfaceLegend(style: style)
         case .elevation: elevation.map { ElevationLegend(scale: $0.scale, style: style) }
         case nil, .plain?: EmptyView()
@@ -174,17 +176,18 @@ extension MapTypeMenu where Extra == EmptyView {
 /// chosen one, the others in its menu. Fits a small iPhone, also in landscape.
 struct TrackColouringMenu: View {
     let options: [TrackColouring]
+    var side: SideMeasure = .leanAngle
     @Binding var selection: TrackColouring
 
     var body: some View {
         Menu {
             Picker("Track Colour", selection: $selection) {
                 ForEach(options, id: \.self) { option in
-                    Label(option.name, systemImage: option.symbol).tag(option)
+                    Label(option.name(side: side), systemImage: option.symbol).tag(option)
                 }
             }
         } label: {
-            Label(selection.name, systemImage: selection.symbol)
+            Label(selection.name(side: side), systemImage: selection.symbol)
                 .font(.subheadline.weight(.medium))
                 .lineLimit(1)
                 .padding(.horizontal, 12)
@@ -193,7 +196,7 @@ struct TrackColouringMenu: View {
         .buttonStyle(.glass)
         .tint(Color.track)
         .accessibilityLabel(Text("Track Colour"))
-        .accessibilityValue(Text(selection.name))
+        .accessibilityValue(Text(selection.name(side: side)))
     }
 }
 
@@ -210,6 +213,11 @@ enum TrackColouring: String {
         case .elevation: "Route Elevation"
         case .plain: "Plain"
         }
+    }
+
+    /// For a car the lean colouring is the lateral acceleration (B-287); the stored value stays `lean`.
+    func name(side: SideMeasure) -> LocalizedStringKey {
+        self == .lean && side == .lateralAcceleration ? "Lateral Acceleration" : name
     }
 
     var symbol: String {
@@ -297,15 +305,17 @@ extension RideMotion.SurfaceBand {
 /// What the colours of the track by lean angle mean (B-246).
 private struct LeanLegend: View {
     var style = LegendStyle.full
+    /// A car's lateral acceleration in steps of 0.1 g (B-287).
+    var side: SideMeasure = .leanAngle
 
     var body: some View {
-        LegendFrame(title: "Lean Angle", style: style) {
+        LegendFrame(title: side == .leanAngle ? "Lean Angle" : "Lateral Acceleration", style: style) {
             HStack(spacing: style == .folded ? 2 : 6) {
                 ForEach(RideMotion.LeanBand.allCases, id: \.self) { band in
                     HStack(spacing: 2) {
                         Capsule().fill(Color.lean(band)).frame(width: 10, height: 4)
                         if style != .folded {
-                            Text(verbatim: band == .extreme ? "40°+" : "\(Int(band.lowerBound))°")
+                            Text(verbatim: Self.label(band, side: side))
                                 .font(.caption2)
                                 .monospacedDigit()
                         }
@@ -314,7 +324,19 @@ private struct LeanLegend: View {
             }
         }
         .accessibilityElement(children: .ignore)
-        .accessibilityLabel(Text("Track coloured by lean angle, from green upright to purple at 40° and more"))
+        .accessibilityLabel(side == .leanAngle ? Text("Track coloured by lean angle, from green upright to purple at 40° and more")
+                                               : Text("Track coloured by lateral acceleration, from green below 0.1 g to purple at 0.4 g and more"))
+    }
+
+    /// The lower end of a band, short: “20°” or “0.2 g”, the top band with a plus.
+    static func label(_ band: RideMotion.LeanBand, side: SideMeasure) -> String {
+        switch side {
+        case .leanAngle:
+            return band == .extreme ? "40°+" : "\(Int(band.lowerBound))°"
+        case .lateralAcceleration:
+            let g = (Double(band.rawValue) / 10).formatted(.number.precision(.fractionLength(1)))
+            return band == .extreme ? "\(g) g+" : "\(g) g"
+        }
     }
 }
 
@@ -328,6 +350,7 @@ struct RideMap: View {
     var marker: CLLocationCoordinate2D?
     var leanStretches: [RideMotion.LeanStretch] = []
     var surfaceStretches: [RideMotion.SurfaceStretch] = []
+    var side: SideMeasure = .leanAngle
     @State private var loaded: RideExchange.Route?
     @State private var finished = false
 
@@ -335,7 +358,7 @@ struct RideMap: View {
         Group {
             if let shown = route ?? loaded, shown.pointCount > 0 {
                 RouteMap(route: shown, interactive: interactive, marker: marker, leanStretches: leanStretches,
-                         surfaceStretches: surfaceStretches)
+                         surfaceStretches: surfaceStretches, side: side)
                     // A fresh map for each route: `Map(initialPosition:)` frames the track only once,
                     // so the tile "Last Ride" kept the view of the ride before (B-275), and of the
                     // recording after the Mac brought its Bosch file (B-279).

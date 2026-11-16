@@ -223,7 +223,7 @@ struct GPXDuplicateTests {
         #expect(samples.compactMap(\.lean).max() == 14)
         #expect(samples.compactMap(\.lean).min() == -15)
         // The figures of the ride detail come back from the Bosch time series.
-        #expect(RideMotion(samples: samples, motorized: false) != nil)
+        #expect(RideMotion(samples: samples, kind: .bike) != nil)
     }
 
     @Test("A GPX with motion values attached to a Bosch ride brings them along")

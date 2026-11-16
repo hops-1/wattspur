@@ -263,6 +263,8 @@ public struct RideRecording: Codable, Sendable, Equatable {
 public enum RecordingVehicle: String, Codable, CaseIterable, Identifiable, Sendable {
     case eBike = "ebike"
     case motorcycle
+    /// A car (B-287): fast like a motorcycle; the recording shows the lateral acceleration.
+    case car
 
     public var id: Self { self }
 
@@ -270,9 +272,12 @@ public enum RecordingVehicle: String, Codable, CaseIterable, Identifiable, Senda
     public var maxSpeed: Double {
         switch self {
         case .eBike: RideRecording.maxSpeed
-        case .motorcycle: 300 / 3.6
+        case .motorcycle, .car: 300 / 3.6
         }
     }
+
+    /// What the recording shows beside the speed (B-287): the lean angle, or a car's lateral acceleration.
+    public var side: SideMeasure { self == .car ? .lateralAcceleration : .leanAngle }
 }
 
 public enum RecordingLog {

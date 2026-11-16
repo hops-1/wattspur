@@ -21,7 +21,7 @@ The Mac and the iPhone have to be signed in to iCloud with the same Apple Accoun
 ## The tab “More”
 From 0.6.2 on, **More** is a list like the iOS Settings. Each row opens a page of its own:
 - **Profile** (at the top, with photo and name): your data for the calories. You set it on the Mac under **Profile**; with iCloud it comes to the iPhone. Editing it on the iPhone comes with a later version.
-- **Recording:** the vehicle, e-bike or motorcycle.
+- **Recording:** the vehicle, e-bike, motorcycle or car.
 - **Maps:** the map style for every map.
 - **iCloud & Library:** sync on or off, when it last synced, hints when something is wrong.
 - **Trash:** deleted rides, for 30 days.
@@ -116,7 +116,7 @@ While recording, Wattspur measures the height with the iPhone's **barometer**, f
 The first time you record, the iPhone asks once for **Motion & Fitness**. If you do not allow it, Wattspur uses the GPS height as before. You can change it in **Settings › Privacy & Security › Motion & Fitness**.
 
 ## Lean angle, acceleration and surface
-From 0.5.1 on, the iPhone also reads its motion sensors while recording, with the same permission **Motion & Fitness** as the barometer. The ride detail then has tiles for the strongest lean to the left and right, the strongest acceleration and braking, the best time from a standstill and the share of uneven surface. The carousel has the page **Lean Angle**. The map colours the track by lean angle; the switch at the top of the map changes to **Surface**. How the values come about is under [Metrics](05-metrics.md). The Mac shows the same values in the ride detail.
+From 0.5.1 on, the iPhone also reads its motion sensors while recording, with the same permission **Motion & Fitness** as the barometer. The ride detail then has tiles for the strongest lean to the left and right, the strongest acceleration and braking, the best time from a standstill and the share of uneven surface. The carousel has the page **Lean Angle**, for a ride in a car **Lateral Acceleration** in g (from iPhone 1.1). The map colours the track by lean angle; the switch at the top of the map changes to **Surface**. How the values come about is under [Metrics](05-metrics.md). The Mac shows the same values in the ride detail.
 
 For tests, **More › Test Tools** has the switch **Record Raw Motion**. When it is on, every recording also puts a file into the Files app (**On My iPhone › Wattspur › Bewegung**), about 20 MB per hour. Normally it stays off. The test tools are only in builds from TestFlight.
 
@@ -199,9 +199,9 @@ Good to know:
 - Wattspur uses the vehicle from step 1. If you switch vehicles, change it first.
 
 ## Motorcycle
-While recording, Wattspur leaves out points that would mean an impossible speed. That removes GPS jumps. For an e-bike the limit is 100 km/h. If you record on a motorcycle, choose **More › Recording › Vehicle › Motorcycle**. The limit is then 300 km/h.
+While recording, Wattspur leaves out points that would mean an impossible speed. That removes GPS jumps. For an e-bike the limit is 100 km/h. If you record on a motorcycle, choose **More › Recording › Vehicle › Motorcycle**. The limit is then 300 km/h. In a car, choose **Car** (from iPhone 1.1): the same limit applies, and the recording shows the lateral acceleration below the speed as a bar from 0.5 g left to 0.5 g right.
 
-So that motorcycle rides do not count in the totals of your bicycles, add a bike of the type **Motorcycle** in Profile (see [Profile and Bikes](07-profile-and-bikes.md)).
+So that motorcycle and car rides do not count in the totals of your bicycles, add a device of the type **Motorcycle** or **Car** in Profile and choose it when you save (see [Profile and Bikes](07-profile-and-bikes.md)). Only then does the ride detail of a car ride show the lateral acceleration.
 
 ---
 Next: [FAQ](06-faq.md) · [Contents](README.md)

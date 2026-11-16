@@ -94,11 +94,12 @@ Nur bei Fahrten, die mit der iPhone-App ab 0.5.1 aufgenommen sind. Das iPhone li
 
 | Wert | Wie |
 |---|---|
-| Max. Schräglage links, rechts | Aus Tempo und Drehung um die Senkrechte: tan(Schräglage) = Tempo × Drehrate ÷ g. So spielt es keine Rolle, wie das iPhone in der Halterung oder der Tasche sitzt. Zählt ab 10 km/h, höchstens 70° |
+| Max. Schräglage links, rechts | Aus Tempo und Drehung um die Senkrechte: tan(Schräglage) = Tempo × Drehrate ÷ g. So spielt es keine Rolle, wie das iPhone in der Halterung oder der Tasche sitzt. Zählt ab 10 km/h, höchstens 70°. Dreht sich das iPhone anders als die Richtung der Fahrt im GPS, etwa weil du es in der Halterung drehst, zählt dieser Moment nicht (ab iPhone 1.1) |
+| Max. Querbeschleunigung links, rechts | Nur beim Auto, statt der Schräglage (ab Mac 1.9 und iPhone 1.1): Ein Auto neigt sich in der Kurve kaum, der Wert ist die Kraft zur Seite in g, aus denselben Messwerten (Querbeschleunigung = Tempo × Drehrate ÷ g). Ältere Autofahrten zeigen sie auch, ohne neue Aufnahme. 0,4 g ist im Alltag schon eine flotte Kurve |
 | Max. Beschleunigung, Max. Bremsung | Die Beschleunigung längs der Fahrt in g, aus den Sensoren und dem GPS-Tempo; Kurven zählen nicht mit |
 | 0–100 km/h, 0–25 km/h | Die schnellste Zeit vom Stillstand (unter 3 km/h) bis 100 km/h beim Motorrad und Auto, bis 25 km/h bei jedem Rad; höchstens 30 s, eine Lücke von mehr als 5 s bricht ab |
 | Unebener Belag | Anteil der Strecke auf unebenem oder rauem Belag. Das Rütteln ist die Stärke der senkrechten Erschütterung ohne langsame Bewegungen wie über eine Kuppe: eben unter 0,2 g (Asphalt), uneben bis 0,45 g (Feldweg, glatter Schotter, Pflaster), rau darüber (Waldweg, Gelände). Die Grenzen gelten für ein E-Bike mit dem iPhone in der Halterung am Lenker |
-| Karte nach Schräglage, nach Belag | Die Spur in Stücken: Schräglage in Stufen von 10° (grün aufrecht bis lila ab 40°), Belag in drei Stufen (grau, gelb, braun) |
+| Karte nach Schräglage, nach Belag | Die Spur in Stücken: Schräglage in Stufen von 10° (grün aufrecht bis lila ab 40°), beim Auto Querbeschleunigung in Stufen von 0,1 g (bis lila ab 0,4 g), Belag in drei Stufen (grau, gelb, braun) |
 
 ## Rundung
 Wattspur zeigt die Strecke auf 0,1 km und das Tempo auf 0,1 km/h genau, Leistung, Trittfrequenz und Höhenmeter als ganze Zahlen. Summen in der Auswertung werden aus den genauen Werten berechnet und erst am Ende gerundet. Sie können deshalb um 0,1 von einer Summe der gerundeten Werte abweichen.
