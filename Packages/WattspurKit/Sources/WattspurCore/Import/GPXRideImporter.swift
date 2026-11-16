@@ -79,6 +79,8 @@ public struct GPXTrack: Sendable, Equatable {
     public var discarded: Discarded
     /// The bike a recording of the iPhone app was ridden on (`wattspur:bike`, B-213).
     public var bikeID: UUID? = nil
+    /// The kind of a recording without a device (`wattspur:kind`, B-286), e.g. `car`.
+    public var kind: String? = nil
 
     public var startDate: Date { parts.first?.startDate ?? .distantPast }
     public var pointCount: Int { parts.reduce(0) { $0 + $1.samples.count } }
@@ -305,7 +307,8 @@ public struct GPXRideImporter: RideImporter {
         let name = [reader.trackName, reader.metadataName].compactMap { $0 }.first { !$0.isEmpty }
         return GPXTrack(name: name, creator: reader.creator, activityType: reader.trackType,
                         parts: parts, discarded: discarded,
-                        bikeID: reader.bikeText.flatMap { UUID(uuidString: $0) })
+                        bikeID: reader.bikeText.flatMap { UUID(uuidString: $0) },
+                        kind: reader.kindText?.trimmingCharacters(in: .whitespacesAndNewlines))
     }
 
     private static func part(from points: [RawPoint]) -> GPXTrack.Part {
@@ -374,7 +377,8 @@ public struct GPXRideImporter: RideImporter {
         )
         return ParsedRide(startDate: track.startDate, summary: summary, samples: samples,
                           deviceSerialNumber: nil, parserVersion: parserVersion, workKilojoules: work,
-                          summaryEstimated: true, suggestedName: track.name, suggestedBikeID: track.bikeID)
+                          summaryEstimated: true, suggestedName: track.name, suggestedBikeID: track.bikeID,
+                          suggestedKind: track.bikeID == nil ? track.kind.flatMap(BikeKind.init(rawValue:)) : nil)
     }
 
     // MARK: - Header
@@ -526,6 +530,7 @@ private final class GPXReader: NSObject, XMLParserDelegate {
     var trackType: String?
     var metadataName: String?
     var bikeText: String?
+    var kindText: String?
 
     private var stack: [String] = []
     private var pointCount = 0
@@ -589,6 +594,8 @@ private final class GPXReader: NSObject, XMLParserDelegate {
                 collectingTrackText = \.trackType
             } else if name == "bike", parent == "extensions", stack.dropLast(2).last == "metadata" {
                 collectingTrackText = \.bikeText
+            } else if name == "kind", parent == "extensions", stack.dropLast(2).last == "metadata" {
+                collectingTrackText = \.kindText
             }
         }
     }

@@ -158,6 +158,11 @@ struct WattspurApp: App {
         .reportsSaveFailures()
         .environment(library)
         .environment(recorder)
+        // A start from Siri or a shortcut takes the next device of this library (B-286); again when
+        // the library changes with the iCloud switch.
+        .task(id: ObjectIdentifier(library)) {
+            recorder.nextDevice = { [library] in library.nextRecordingDevice }
+        }
         // The recording covers everything while it runs (B-211).
         .fullScreenCover(isPresented: Binding(get: { recorder.isRecording }, set: { _ in })) {
             RecordingView()
@@ -195,11 +200,10 @@ struct WattspurApp: App {
             Button("End and Save") {
                 if let recording = recorder.unfinished, !recording.isTooShort {
                     let bikes = (library.state?.bikes ?? []).filter { !$0.isArchived }
-                    let id = SaveRecordingSheet.defaultBike(among: bikes, last: SaveRecordingSheet.lastBikeID,
-                                                            lastRide: library.state?.lastRide)
+                    let device = SaveRecordingSheet.defaultDevice(for: recording, among: bikes, lastRide: library.state?.lastRide)
                     do {
                         try SaveRecordingSheet.store(recording, name: RecordingView.defaultName(for: recording.startDate),
-                                                     bike: bikes.first { $0.id == id }, library: library)
+                                                     device: device, library: library)
                     } catch {
                         // Ending now would delete the log and with it the whole ride.
                         unfinishedProblem = error.localizedDescription

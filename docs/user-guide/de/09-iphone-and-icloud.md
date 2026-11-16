@@ -24,7 +24,6 @@ Ab 0.6.2 ist **Mehr** eine Liste wie die Einstellungen von iOS. Jede Zeile öffn
   - **Für die Kalorien:** Name, Foto, Gewicht, Größe, Geburtsjahr und Geschlecht. **Bearbeiten** oben rechts ändert sie am iPhone; mit iCloud gelten sie auch am Mac, und was du am Mac änderst, kommt aufs iPhone. Werte außerhalb von 20–300 kg und 80–250 cm werden nicht gespeichert.
   - **Summen je Sportart:** Strecke, Fahrten, Fahrzeit, längste Fahrt und Höchsttempo, für Rad, Fahrzeuge und Laufen getrennt. Eine Autofahrt zählt nie beim Rad.
   - **Geräte:** deine Bikes, Fahrzeuge und Schuhe mit ihren Kilometern; ein Tipp öffnet eines, **Bearbeiten** ändert Name, Art, Farbe, Foto, Hersteller, Modell und die Kilometer vor Wattspur, beim Rad auch den Schalter **E-Bike**. **Gerät hinzufügen** legt ein neues an, zum Beispiel dein Auto. Archivieren geht dort auch; das letzte Gerät bleibt. Mit iCloud kommt alles auf den Mac.
-- **Aufnahme:** das Fahrzeug, E-Bike, Motorrad oder Auto.
 - **Karten:** der Kartenstil für alle Karten.
 - **iCloud & Bibliothek:** Sync an oder aus, wann zuletzt synchronisiert wurde, Hinweise bei Problemen.
 - **Papierkorb:** gelöschte Fahrten, 30 Tage lang.
@@ -177,7 +176,7 @@ Das Widget zeigt die Kilometer und Fahrten dieser Woche, mit einem Balken je Tag
 
 ## Kurzbefehle und Siri
 Sag zum Beispiel:
-- „Starte eine Fahrt mit Wattspur“
+- „Starte eine Fahrt mit Wattspur“, oder mit einem Gerät: „Starte eine Fahrt mit Nugget in Wattspur“ (ab iPhone 1.1)
 - „Fahrt beenden mit Wattspur“: Wattspur öffnet **Fahrt speichern**, wie bei Stopp.
 - „Wie viele Kilometer diese Woche in Wattspur“
 - „Öffne meine letzte Fahrt in Wattspur“
@@ -187,11 +186,10 @@ Du findest die vier auch als Aktionen in der App **Kurzbefehle**, zum Beispiel f
 ## Aufnahme automatisch starten
 Mit einer Automation in der App **Kurzbefehle** startet die Aufnahme von selbst, sobald sich das iPhone mit dem Auto (CarPlay) oder einem Bluetooth-Gerät verbindet, zum Beispiel der Freisprechanlage oder dem Headset am Motorradhelm. Das geht ab iOS 17.
 
-1. Stelle in Wattspur unter **Mehr › Aufnahme › Fahrzeug** dein Fahrzeug ein.
-2. Öffne **Kurzbefehle**, tippe unten auf **Automation** und dann auf **+**.
-3. Wähle **CarPlay** oder **Bluetooth**, dann **Verbindet**. Bei Bluetooth wählst du dein Gerät aus.
-4. Wähle **Sofort ausführen** und tippe auf **Weiter**.
-5. Wähle **Neue leere Automation › Aktion hinzufügen**, suche **Wattspur** und wähle **Fahrt starten**. Tippe auf **Fertig**.
+1. Öffne **Kurzbefehle**, tippe unten auf **Automation** und dann auf **+**.
+2. Wähle **CarPlay** oder **Bluetooth**, dann **Verbindet**. Bei Bluetooth wählst du dein Gerät aus.
+3. Wähle **Sofort ausführen** und tippe auf **Weiter**.
+4. Wähle **Neue leere Automation › Aktion hinzufügen**, suche **Wattspur** und wähle **Fahrt starten**. Tippe in der Aktion auf **Gerät** und wähle dein Auto oder Motorrad. Tippe auf **Fertig**.
 
 Für das Ende legst du eine zweite Automation mit **Trennt** und **Fahrt beenden** an. Wattspur öffnet dann **Fahrt speichern**.
 
@@ -199,12 +197,14 @@ Gut zu wissen:
 - Die Aufnahme beginnt schon beim Verbinden, oft beim Motorstart. Die Zeit im Stand zählt nicht zur Fahrzeit.
 - Ist das iPhone gesperrt, fragt iOS manchmal erst nach dem Entsperren.
 - Läuft schon eine Aufnahme, startet keine zweite.
-- Wattspur nimmt das Fahrzeug aus Schritt 1. Wechselst du zwischen Fahrzeugen, stelle es vorher um.
+- Wattspur nimmt das Gerät aus der Aktion. Ohne Gerät nimmt es das der letzten Aufnahme.
 
-## Motorrad
-Beim Aufnehmen lässt Wattspur Punkte weg, die eine unmögliche Geschwindigkeit ergeben würden. So fallen GPS-Sprünge heraus. Beim E-Bike liegt die Grenze bei 100 km/h. Wer mit dem Motorrad aufnimmt, stellt **Mehr › Aufnahme › Fahrzeug › Motorrad** ein. Dann gilt eine Grenze von 300 km/h. Im Auto stellst du **Auto** ein (ab iPhone 1.1): Dieselbe Grenze gilt, und die Aufnahme zeigt unter dem Tempo die Querbeschleunigung als Balken von 0,5 g links bis 0,5 g rechts.
+## Womit du fährst: Rad, Motorrad, Auto
+Ab iPhone 1.1 wählst du das Gerät beim Start. Ein Tipp auf **Fahrt starten** nimmt das Gerät der letzten Aufnahme. Darunter steht klein „mit Nugget ▾“: Ein Tipp darauf öffnet **Womit fährst du?** mit deinen Bikes, Fahrzeugen und Schuhen. Darunter stehen **Auto** und **Motorrad** ohne Gerät, für den schnellen Start. Ein Tipp auf eine Zeile startet die Fahrt damit. Beim Sichern ist das Gerät schon gewählt, du kannst es dort noch ändern. Die Live-Aktivität zeigt sein Symbol.
 
-Damit Motorrad- und Autofahrten nicht in die Summen deiner Fahrräder fallen, lege dafür im Profil ein Gerät mit der Art **Motorrad** oder **Auto** an und wähle es beim Sichern (siehe [Profil und Bikes](07-profile-and-bikes.md)). Erst dann zeigt das Tour-Detail einer Autofahrt die Querbeschleunigung.
+Das Gerät bestimmt auch, welche Punkte Wattspur weglässt, weil sie eine unmögliche Geschwindigkeit ergeben würden (GPS-Sprünge): Beim Rad liegt die Grenze bei 100 km/h, beim Motorrad und Auto bei 300 km/h. Im Auto zeigt die Aufnahme unter dem Tempo die Querbeschleunigung als Balken von 0,5 g links bis 0,5 g rechts.
+
+Fahrten mit Motorrad und Auto, auch ohne Gerät, zählen nicht zu den Summen deiner Fahrräder (siehe [Profil und Bikes](07-profile-and-bikes.md)). Die frühere Einstellung **Mehr › Aufnahme › Fahrzeug** gibt es nicht mehr; was dort stand, gilt bis zur ersten Wahl weiter.
 
 ---
 Weiter: [Fragen](06-faq.md) · [Inhalt](README.md)

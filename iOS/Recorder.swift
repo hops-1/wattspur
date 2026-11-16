@@ -36,11 +36,9 @@ final class Recorder {
     /// Siri or a shortcut asked to end the ride (B-225): the recording screen opens “Save Ride”.
     var endRequested = false
 
-    /// What is recorded, chosen in “More”; a motorcycle keeps speeds above 100 km/h.
-    static let vehicleKey = PhoneSettingsKey.recordingVehicle
-    static var vehicle: RecordingVehicle {
-        UserDefaults.standard.string(forKey: vehicleKey).flatMap(RecordingVehicle.init(rawValue:)) ?? .eBike
-    }
+    /// Where a start without a device (Siri, a shortcut) gets it from: the library's next device
+    /// (B-286). Set by the app; without it a recording starts as a bicycle.
+    var nextDevice: () -> RecordingDevice = { RecordingChoice.next(devices: RecordingChoice.cachedDevices, activeID: nil) }
 
     private var updates: Task<Void, Never>?
     private var backgroundSession: CLBackgroundActivitySession?
@@ -75,16 +73,20 @@ final class Recorder {
         }
     }
 
-    func start(at date: Date = .now) {
+    /// Starts a recording with `device` (B-286), or the next one (the last device used) without.
+    func start(at date: Date = .now, device: RecordingDevice? = nil) {
         guard recording == nil else { return }
         unfinished = nil
-        let vehicle = Self.vehicle
-        recording = RideRecording(startDate: date, vehicle: vehicle)
+        let device = device ?? nextDevice()
+        RecordingChoice.last = device
+        let vehicle = device.vehicle
+        recording = RideRecording(startDate: date, device: device)
         logProblem = nil
         FileManager.default.createFile(atPath: logURL.path, contents: nil)
         log = try? FileHandle(forWritingTo: logURL)
         write(.start(date))
         write(.vehicle(vehicle))
+        write(.device(device))
         startUpdates()
         if let recording { activity.start(recording) }
     }

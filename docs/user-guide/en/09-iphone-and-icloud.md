@@ -24,7 +24,6 @@ From 0.6.2 on, **More** is a list like the iOS Settings. Each row opens a page o
   - **For the Calories:** name, photo, weight, height, year of birth and sex. **Edit** at the top right changes them on the iPhone; with iCloud they apply on the Mac too, and what you change on the Mac comes to the iPhone. Values outside 20–300 kg and 80–250 cm are not saved.
   - **Totals per sport:** distance, rides, ride time, longest ride and top speed, separately for cycling, vehicles and running. A car ride never counts for cycling.
   - **Devices:** your bikes, vehicles and shoes with their kilometres; a tap opens one, **Edit** changes name, kind, colour, photo, manufacturer, model and the kilometres before Wattspur, for a bicycle also the switch **E-Bike**. **Add Device** adds a new one, for example your car. You can archive there too; the last device stays. With iCloud everything comes to the Mac.
-- **Recording:** the vehicle, e-bike, motorcycle or car.
 - **Maps:** the map style for every map.
 - **iCloud & Library:** sync on or off, when it last synced, hints when something is wrong.
 - **Trash:** deleted rides, for 30 days.
@@ -177,7 +176,7 @@ The widget shows the kilometres and rides of this week, with one bar per day. Th
 
 ## Shortcuts and Siri
 Say for example:
-- “Start a ride with Wattspur”
+- “Start a ride with Wattspur”, or with a device: “Start a ride with Nugget in Wattspur” (from iPhone 1.1)
 - “End the ride in Wattspur”: Wattspur opens **Save Ride**, as Stop does.
 - “How far did I ride this week in Wattspur”
 - “Open my last ride in Wattspur”
@@ -187,11 +186,10 @@ On an iPhone set to German, the German sentences apply, for example „Starte ei
 ## Start recording automatically
 With an automation in the **Shortcuts** app, recording starts by itself as soon as the iPhone connects to the car (CarPlay) or to a Bluetooth device, for example the hands-free kit or the headset on your motorcycle helmet. This needs iOS 17 or later.
 
-1. In Wattspur, choose your vehicle under **More › Recording › Vehicle**.
-2. Open **Shortcuts**, tap **Automation** at the bottom, then **+**.
-3. Choose **CarPlay** or **Bluetooth**, then **Connects**. For Bluetooth, pick your device.
-4. Choose **Run Immediately** and tap **Next**.
-5. Choose **New Blank Automation › Add Action**, search for **Wattspur** and choose **Start Ride**. Tap **Done**.
+1. Open **Shortcuts**, tap **Automation** at the bottom, then **+**.
+2. Choose **CarPlay** or **Bluetooth**, then **Connects**. For Bluetooth, pick your device.
+3. Choose **Run Immediately** and tap **Next**.
+4. Choose **New Blank Automation › Add Action**, search for **Wattspur** and choose **Start Ride**. In the action, tap **Device** and choose your car or motorcycle. Tap **Done**.
 
 For the end, add a second automation with **Disconnects** and **End Ride**. Wattspur then opens **Save Ride**.
 
@@ -199,12 +197,14 @@ Good to know:
 - Recording starts when the iPhone connects, often when you start the engine. Time standing still does not count as riding time.
 - If the iPhone is locked, iOS may ask you to unlock it first.
 - If a ride is already being recorded, no second one starts.
-- Wattspur uses the vehicle from step 1. If you switch vehicles, change it first.
+- Wattspur uses the device from the action. Without one, it uses the device of the last recording.
 
-## Motorcycle
-While recording, Wattspur leaves out points that would mean an impossible speed. That removes GPS jumps. For an e-bike the limit is 100 km/h. If you record on a motorcycle, choose **More › Recording › Vehicle › Motorcycle**. The limit is then 300 km/h. In a car, choose **Car** (from iPhone 1.1): the same limit applies, and the recording shows the lateral acceleration below the speed as a bar from 0.5 g left to 0.5 g right.
+## What you ride: bike, motorcycle, car
+From iPhone 1.1 you choose the device at the start. A tap on **Start Ride** takes the device of the last recording. Below it, “with Nugget ▾” in small type opens **What Are You Riding?** with your bikes, vehicles and shoes. Below them are **Car** and **Motorcycle** without a device, for a quick start. A tap on a row starts the ride with it. When you save, the device is already chosen; you can still change it there. The Live Activity shows its symbol.
 
-So that motorcycle and car rides do not count in the totals of your bicycles, add a device of the type **Motorcycle** or **Car** in Profile and choose it when you save (see [Profile and Bikes](07-profile-and-bikes.md)). Only then does the ride detail of a car ride show the lateral acceleration.
+The device also sets which points Wattspur leaves out because they would mean an impossible speed (GPS jumps): 100 km/h on a bicycle, 300 km/h on a motorcycle or in a car. In a car the recording shows the lateral acceleration below the speed as a bar from 0.5 g left to 0.5 g right.
+
+Rides on a motorcycle or in a car, also without a device, do not count in the totals of your bicycles (see [Profile and Bikes](07-profile-and-bikes.md)). The former setting **More › Recording › Vehicle** is gone; what was set there applies until the first choice.
 
 ---
 Next: [FAQ](06-faq.md) · [Contents](README.md)

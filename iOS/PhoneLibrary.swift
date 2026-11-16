@@ -79,6 +79,11 @@ final class PhoneLibrary {
 
     func canArchive(deviceID: UUID) -> Bool { database?.canArchive(deviceID: deviceID) ?? false }
 
+    /// The device for the next recording (B-286): the last one, else the active bike.
+    var nextRecordingDevice: RecordingDevice {
+        RecordingChoice.next(devices: state?.bikes ?? [], activeID: database?.activeDeviceID())
+    }
+
     /// Saves the profile edited on the iPhone (B-299); iCloud brings it to the Mac.
     func updateRider(_ details: RiderDetails) {
         database?.updateRider(details)
@@ -96,6 +101,7 @@ final class PhoneLibrary {
         }
         trash = database.trash()
         rider = database.riderDetails()
+        RecordingChoice.cache(devices: state?.bikes ?? [])
     }
 
     /// The pending reload after changes from iCloud.

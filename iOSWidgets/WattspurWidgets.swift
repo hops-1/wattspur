@@ -56,7 +56,7 @@ struct RecordingLiveActivity: Widget {
                     }
                 }
             } compactLeading: {
-                Image(systemName: context.state.isPaused ? "pause.fill" : "bicycle")
+                Image(systemName: context.state.isPaused ? "pause.fill" : context.attributes.symbol ?? "bicycle")
                     .foregroundStyle(Color.track)
             } compactTrailing: {
                 // Little room beside the island: the number large, the unit small.
@@ -72,7 +72,7 @@ struct RecordingLiveActivity: Widget {
                 .lineLimit(1)
                 .minimumScaleFactor(0.6)
             } minimal: {
-                Image(systemName: context.state.isPaused ? "pause.fill" : "bicycle")
+                Image(systemName: context.state.isPaused ? "pause.fill" : context.attributes.symbol ?? "bicycle")
                     .foregroundStyle(Color.track)
             }
             .keylineTint(Color.track)
@@ -86,7 +86,7 @@ private struct LockScreenView: View {
     var body: some View {
         VStack(alignment: .leading, spacing: 10) {
             HStack {
-                Label("Wattspur", systemImage: "bicycle")
+                Label("Wattspur", systemImage: context.attributes.symbol ?? "bicycle")
                     .font(.subheadline.weight(.semibold))
                     .foregroundStyle(Color.track)
                 Spacer()

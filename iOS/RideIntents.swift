@@ -11,6 +11,8 @@ struct WattspurShortcuts: AppShortcutsProvider {
             "Start a ride with \(.applicationName)",
             "Start \(.applicationName)",
             "Record a ride with \(.applicationName)",
+            "Start a ride with \(\.$device) in \(.applicationName)",
+            "Start \(.applicationName) with \(\.$device)",
         ], shortTitle: "Start Ride", systemImageName: "record.circle")
         AppShortcut(intent: EndRideIntent(), phrases: [
             "End the ride in \(.applicationName)",
@@ -28,10 +30,14 @@ struct WattspurShortcuts: AppShortcutsProvider {
 }
 
 /// Starts the recording, as “Start Ride” in the overview. The app comes to the front: GPS needs it.
+/// With a device (B-286), e.g. “Start a ride with Nugget”; without one, the device of the last ride.
 struct StartRideIntent: AppIntent {
     static let title: LocalizedStringResource = "Start Ride"
     static let description = IntentDescription("Starts recording a ride with GPS.")
     static let openAppWhenRun = true
+
+    @Parameter(title: "Device")
+    var device: DeviceEntity?
 
     @Dependency private var recorder: Recorder
 
@@ -44,7 +50,7 @@ struct StartRideIntent: AppIntent {
         if recorder.unfinished != nil {
             return .result(dialog: .app("Wattspur has an unfinished ride. Continue it or end it first."))
         }
-        recorder.start()
+        recorder.start(device: device?.recordingDevice)
         return .result(dialog: .app("Ride started. Have a good ride!"))
     }
 }
@@ -109,4 +115,49 @@ extension IntentDialog {
 final class IntentRouter {
     enum Request: Equatable { case lastRide }
     var request: Request?
+}
+
+/// A device for “Start a ride with …” (B-286): one of the open devices, or a car or motorcycle
+/// without one. Read from the list the library writes at every reload, so Siri finds it at once.
+struct DeviceEntity: AppEntity {
+    static let typeDisplayRepresentation = TypeDisplayRepresentation(name: "Device")
+    static let defaultQuery = DeviceQuery()
+
+    /// The device's UUID, or `car` / `motorcycle` for one without a device.
+    var id: String
+    var name: String
+    var recordingDevice: RecordingDevice
+
+    var displayRepresentation: DisplayRepresentation {
+        DisplayRepresentation(title: "\(name)", image: .init(systemName: recordingDevice.symbol))
+    }
+
+    @MainActor
+    static var all: [DeviceEntity] {
+        let devices = RecordingChoice.cachedDevices.map { bike in
+            DeviceEntity(id: bike.id.uuidString, name: bike.name,
+                         recordingDevice: RecordingDevice(bikeID: bike.id, kind: BikeKind(rawValue: bike.kind) ?? .bike))
+        }
+        let without = [BikeKind.car, .motorcycle].map { kind in
+            DeviceEntity(id: kind.rawValue, name: kind.localizedName, recordingDevice: .without(kind))
+        }
+        return devices + without
+    }
+}
+
+struct DeviceQuery: EntityStringQuery {
+    @MainActor
+    func entities(for identifiers: [String]) async throws -> [DeviceEntity] {
+        DeviceEntity.all.filter { identifiers.contains($0.id) }
+    }
+
+    @MainActor
+    func entities(matching string: String) async throws -> [DeviceEntity] {
+        DeviceEntity.all.filter { $0.name.localizedStandardContains(string) }
+    }
+
+    @MainActor
+    func suggestedEntities() async throws -> [DeviceEntity] {
+        DeviceEntity.all
+    }
 }

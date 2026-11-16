@@ -28,7 +28,8 @@ struct MoreView: View {
     }
 
     private var pages: [[MorePage]] {
-        var groups: [[MorePage]] = [[.recording, .maps], [.library, .trash], [.help, .about]]
+        // The vehicle under “Recording” went with B-286: the start button chooses the device.
+        var groups: [[MorePage]] = [[.maps], [.library, .trash], [.help, .about]]
         if showsTestTools { groups.append([.testTools]) }
         return groups
     }
@@ -107,14 +108,13 @@ struct MoreView: View {
 
 /// The pages of “More”, in the order of the list.
 enum MorePage: String, Hashable, CaseIterable, Identifiable {
-    case profile, recording, maps, library, trash, help, about, testTools
+    case profile, maps, library, trash, help, about, testTools
 
     var id: Self { self }
 
     var title: LocalizedStringKey {
         switch self {
         case .profile: "Profile"
-        case .recording: "Recording"
         case .maps: "Maps"
         case .library: "iCloud & Library"
         case .trash: "Trash"
@@ -127,7 +127,6 @@ enum MorePage: String, Hashable, CaseIterable, Identifiable {
     var systemImage: String {
         switch self {
         case .profile: "person.crop.circle"
-        case .recording: "record.circle"
         case .maps: "map"
         case .library: "icloud"
         case .trash: "trash"
@@ -141,7 +140,6 @@ enum MorePage: String, Hashable, CaseIterable, Identifiable {
     var tint: Color {
         switch self {
         case .profile: .track
-        case .recording: .red
         case .maps: .green
         case .library: .blue
         case .trash: .gray
@@ -157,7 +155,6 @@ private struct MoreRow: View {
     let page: MorePage
     @Environment(PhoneLibrary.self) private var library
     @Environment(PhoneSync.self) private var sync
-    @AppStorage(Recorder.vehicleKey) private var vehicle = RecordingVehicle.eBike
     @AppStorage(PhoneSettingsKey.mapType) private var mapType: RideMapType = .standard
 
     var body: some View {
@@ -178,7 +175,6 @@ private struct MoreRow: View {
 
     private var value: Text? {
         switch page {
-        case .recording: Text(vehicle.label)
         case .maps: Text(mapType.label)
         case .library: library.mode == .iCloud ? Text("iCloud") : Text("This iPhone")
         case .trash: library.trash.isEmpty ? nil : Text(library.trash.count.formatted())
