@@ -16,7 +16,7 @@ enum GPXExport {
         guard panel.runModal() == .OK, let url = panel.url else { return }
         // The bike goes into the file as a note, so other programs show it too (B-136).
         let bike = ride.bike?.name.nonEmpty.map { String(localized: "Bike: \($0)") }
-        let data = GPXWriter.document(name: ride.name, segments: ride.gpxSegments, description: bike)
+        let data = GPXWriter.document(name: ride.name, segments: ride.gpxSegments, description: bike, sport: ride.sport)
         do {
             try data.write(to: url)
         } catch {

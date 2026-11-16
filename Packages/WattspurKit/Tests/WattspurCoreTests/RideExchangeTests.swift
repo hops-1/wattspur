@@ -69,7 +69,7 @@ struct RideExchangeTests {
         let data = try RideExchange.encoder().encode(library)
         #expect(try RideExchange.library(from: data) == library)
         let text = String(decoding: data, as: UTF8.self)
-        #expect(text.contains("\"schemaVersion\":1"))
+        #expect(text.contains("\"schemaVersion\":2"))
         #expect(text.contains("\"startDate\":\"2027-01-15T08:00:00Z\""))
 
         let route = RideExchange.Route(rideID: newer.id, recordings: [Self.samples(count: 30, metres: 7)])
@@ -78,8 +78,8 @@ struct RideExchangeTests {
 
     @Test("A library from a newer app is refused")
     func newerSchema() {
-        let data = Data(#"{"schemaVersion": 2, "generatedAt": "2026-11-02T10:00:00Z", "generator": "x", "bikes": [], "rides": []}"#.utf8)
-        #expect(throws: RideExchange.ReadError.newerSchema(2)) { try RideExchange.library(from: data) }
+        let data = Data(#"{"schemaVersion": 3, "generatedAt": "2026-11-02T10:00:00Z", "generator": "x", "bikes": [], "rides": []}"#.utf8)
+        #expect(throws: RideExchange.ReadError.newerSchema(3)) { try RideExchange.library(from: data) }
     }
 
     @Test("Unknown fields from a later version are ignored")

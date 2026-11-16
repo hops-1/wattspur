@@ -17,7 +17,7 @@ To read all rides at once, use the backup and the example script below. Between 
 | `metadata/name`, `trk/name` | The ride's name |
 | `metadata/desc`, `trk/desc` | The bike's name, if the ride has one |
 | `metadata/time` | Start of the ride, UTC |
-| `trk/type` | `cycling` |
+| `trk/type` | `cycling`; `driving` for a ride in a car or on a motorcycle, `running` for a run (from Mac 1.9 and iPhone 1.1, B-310) |
 | `trkseg` | One segment per part of a merged ride, so the gap between the parts stays a gap. A ride that was not merged has one segment |
 | `trkpt/@lat`, `@lon` | Degrees, 7 decimals (about 1 cm) |
 | `trkpt/ele` | Altitude in metres, 1 decimal, where the source has one |
@@ -42,6 +42,8 @@ What stays:
 - The **import folder** on the Mac: FIT and GPX files put there are imported as before, also a GPX shared from the iPhone.
 - **Share GPX** on the iPhone, e.g. by AirDrop to the Mac.
 - A subfolder `iPhone` left from earlier versions is no longer written or read. The folder import never looked into it; you can delete it.
+
+The JSON coding of this state is still used inside the app. Its `schemaVersion` is `2` since Mac 1.9 and iPhone 1.1 (B-310): a ride without `bikeID` has `kind`, the kind like `ZBIKE.ZKINDRAWVALUE` (e.g. `car`); missing means a bicycle. A reader of version 1 would count a car ride as cycling, so it refuses version 2.
 
 ## Backup folder
 
@@ -109,6 +111,8 @@ Tables starting with `A` (`ACHANGE`, `ATRANSACTION`, `ATRANSACTIONSTRING`) are S
 #### Which rides to count
 
 Wattspur's own totals use rides where `ZDELETEDAT IS NULL` (not in the trash), `ZISSAMPLE = 0` (not the sample ride) and `ZMERGEDINTO IS NULL` (not a part of a merged ride; the merged ride counts instead).
+
+From Mac 1.9 and iPhone 1.1 the cycling totals, records and the CO₂ saved count only cycling. A ride's kind is `ZBIKE.ZKINDRAWVALUE` of its bike, else its own `ZRIDE.ZSPORTRAWVALUE`, else `bike`; an unknown value counts as `bike`. `motorcycle` and `car` are vehicles, `runningShoe` is running, all others are cycling. A backup from before these versions has no `ZSPORTRAWVALUE`; its rides without a bike are bicycles, and it restores as before (B-310).
 
 ### `ZRIDE`
 
@@ -256,7 +260,7 @@ Keys without a value are missing, not zero. A merged ride has the time series of
 
 ## Example: reading a backup with Python
 
-[`wattspur_backup.py`](wattspur_backup.py) needs only Python 3's standard library. It lists the counted rides as CSV, or writes one ride's time series or original file:
+[`wattspur_backup.py`](wattspur_backup.py) needs only Python 3's standard library. It lists the rides as CSV, with the columns `kind` and `sport` (`cycling`, `vehicle` or `running`; from Mac 1.9 and iPhone 1.1, also for older backups), or writes one ride's time series or original file:
 
 ```bash
 python3 docs/reference/wattspur_backup.py "Wattspur Backup 2026-10-27 1230" > rides.csv

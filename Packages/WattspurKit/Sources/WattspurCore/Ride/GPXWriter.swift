@@ -28,8 +28,18 @@ public enum GPXWriter {
     /// The `creator` of recordings made with the iPhone app (B-212).
     public static let iPhoneCreator = "Wattspur iOS"
 
+    /// `trk/type` for a sport (B-310), the words Garmin and Strava use; a car or motorcycle ride is
+    /// not sent on as a bike ride.
+    public static func activityType(_ sport: Sport) -> String {
+        switch sport {
+        case .cycling: "cycling"
+        case .vehicle: "driving"
+        case .running: "running"
+        }
+    }
+
     public static func document(name: String, segments: [Segment], description: String? = nil,
-                                creator: String = "Wattspur", bikeID: UUID? = nil) -> Data {
+                                creator: String = "Wattspur", bikeID: UUID? = nil, sport: Sport = .cycling) -> Data {
         let note = description.flatMap { $0.isEmpty ? nil : escape($0) }
         let ownExtension = bikeID != nil || segments.contains { $0.samples.contains {
             $0.horizontalAccuracy != nil || $0.lean != nil || $0.acceleration != nil || $0.roughness != nil
@@ -59,7 +69,7 @@ public enum GPXWriter {
 
         """
         if let note { xml += "    <desc>\(note)</desc>\n" }
-        xml += "    <type>cycling</type>\n"
+        xml += "    <type>\(activityType(sport))</type>\n"
         for segment in segments {
             let points = segment.samples.filter { $0.latitude != nil && $0.longitude != nil }
             // A new segment at every gap in the track, so other programs draw no line across it (B-309).
