@@ -43,14 +43,18 @@ public enum RideExchange {
         public var color: String
         public var isEbike: Bool
         public var isArchived: Bool
+        /// Kilometres on the odometer before the first ride in Wattspur (B-290); missing is 0.
+        public var startKilometers: Double?
 
-        public init(id: UUID, name: String, kind: String, color: String, isEbike: Bool, isArchived: Bool) {
+        public init(id: UUID, name: String, kind: String, color: String, isEbike: Bool, isArchived: Bool,
+                    startKilometers: Double? = nil) {
             self.id = id
             self.name = name
             self.kind = kind
             self.color = color
             self.isEbike = isEbike
             self.isArchived = isArchived
+            self.startKilometers = startKilometers
         }
     }
 

@@ -23,8 +23,11 @@ struct BikeBadge: View {
         }
     }
 
-    var color: Color {
-        let (light, dark): (UInt32, UInt32) = switch BikeColor(rawValue: bike.color) ?? .blue {
+    var color: Color { Self.color(BikeColor(rawValue: bike.color) ?? .blue) }
+
+    /// The shade of a bike colour, light and dark like on the Mac.
+    static func color(_ bikeColor: BikeColor) -> Color {
+        let (light, dark): (UInt32, UInt32) = switch bikeColor {
         case .blue: (0x0A6ED1, 0x4DA3FF)
         case .orange: (0xC2410C, 0xFF8A4C)
         case .teal: (0x0E7C86, 0x4FC3CF)

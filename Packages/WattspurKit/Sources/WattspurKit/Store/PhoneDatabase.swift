@@ -251,6 +251,49 @@ public final class PhoneDatabase {
         LibrarySave.save(context)
     }
 
+    // MARK: - Devices (B-290)
+
+    private func device(_ id: UUID) -> Bike? {
+        library.bikes().first { $0.id == id }
+    }
+
+    /// The values of a device for the editor; `nil` for an unknown id.
+    public func deviceDraft(id: UUID) -> BikeDraft? {
+        device(id).map { BikeDraft($0, isActive: oldestRider()?.activeBikeID == $0.id) }
+    }
+
+    /// Adds a device (`id` nil) or changes one, with the rules of the Mac's editor (`BikeDraft`), and
+    /// returns its id; iCloud brings it to the Mac. An unknown id adds nothing and returns `nil`.
+    @discardableResult
+    public func saveDevice(_ draft: BikeDraft, id: UUID?) -> UUID? {
+        let bike: Bike
+        if let id {
+            guard let existing = device(id) else { return nil }
+            bike = existing
+        } else {
+            bike = library.makeBike(name: draft.name, kind: draft.kind, color: draft.color)
+        }
+        // An empty name keeps the one the device has (a new one has the default name already).
+        let name = bike.name
+        var checked = draft
+        checked.startKilometers = ProfileInput.accepted(draft.startKilometers, in: ProfileInput.startKilometers)
+        checked.apply(to: bike)
+        if bike.name.isEmpty { bike.name = name }
+        LibrarySave.save(context)
+        return bike.id
+    }
+
+    /// Archives a device or takes it out of the archive (B-134); the last open bike stays.
+    public func setArchived(_ archived: Bool, deviceID: UUID) throws(BikeArchiveError) {
+        guard let bike = device(deviceID) else { return }
+        if archived { try library.archive(bike) } else { library.unarchive(bike) }
+    }
+
+    /// Whether a device may be archived: not the last one that is not archived.
+    public func canArchive(deviceID: UUID) -> Bool {
+        library.bikes(includingArchived: false).contains { $0.id != deviceID }
+    }
+
     /// The trash, last trashed first. Merged rides' parts and the sample ride are not in it.
     public func trash() -> [TrashedRide] {
         let descriptor = FetchDescriptor<Ride>(predicate: #Predicate { $0.deletedAt != nil && $0.mergedInto == nil })
