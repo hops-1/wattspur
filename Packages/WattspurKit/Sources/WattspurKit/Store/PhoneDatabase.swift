@@ -225,8 +225,30 @@ public final class PhoneDatabase {
     /// make a rider the way `RideLibrary.defaultRider()` does. With two riders before the sync
     /// merged them, the oldest, the one that stays (as `SyncMergeService` decides).
     public func riderDetails() -> RiderDetails? {
+        oldestRider()?.details
+    }
+
+    private func oldestRider() -> Rider? {
         let riders = (try? context.fetch(FetchDescriptor<Rider>())) ?? []
-        return riders.min { ($0.createdAt, $0.id.uuidString) < ($1.createdAt, $1.id.uuidString) }?.details
+        return riders.min { ($0.createdAt, $0.id.uuidString) < ($1.createdAt, $1.id.uuidString) }
+    }
+
+    /// Saves the profile edited on the iPhone (B-299): name, photo and the data for the calories,
+    /// into the same rider the Mac edits, so iCloud brings it there. Numbers out of range are not
+    /// stored (`ProfileInput`). Makes the rider if there is none yet.
+    public func updateRider(_ details: RiderDetails, now: Date = .now) {
+        let rider = oldestRider() ?? library.defaultRider()
+        let name = details.name.trimmingCharacters(in: .whitespacesAndNewlines)
+        if rider.name != name { rider.name = name }
+        if rider.photoData != details.photoData { rider.photoData = details.photoData }
+        let weight = ProfileInput.accepted(details.body.weightKg, in: ProfileInput.weightKg)
+        if rider.weightKg != weight { rider.weightKg = weight }
+        let height = ProfileInput.accepted(details.body.heightCm, in: ProfileInput.heightCm)
+        if rider.heightCm != height { rider.heightCm = height }
+        let year = ProfileInput.accepted(details.body.birthYear, in: ProfileInput.birthYears(now: now))
+        if rider.birthYear != year { rider.birthYear = year }
+        if rider.sex != details.body.sex { rider.sex = details.body.sex }
+        LibrarySave.save(context)
     }
 
     /// The trash, last trashed first. Merged rides' parts and the sample ride are not in it.

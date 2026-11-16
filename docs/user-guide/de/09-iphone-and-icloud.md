@@ -20,7 +20,10 @@ Mac und iPhone müssen mit demselben Apple Account bei iCloud angemeldet sein.
 
 ## Der Bereich „Mehr“
 Ab 0.6.2 ist **Mehr** eine Liste wie die Einstellungen von iOS. Jede Zeile öffnet eine eigene Seite:
-- **Profil** (oben, mit Foto und Name): deine Angaben für die Kalorien. Du machst sie am Mac unter **Profil**; mit iCloud kommen sie aufs iPhone. Bearbeiten am iPhone kommt mit einer späteren Version.
+- **Profil** (oben, mit Foto und Name), ab iPhone 1.1 in drei Teilen:
+  - **Für die Kalorien:** Name, Foto, Gewicht, Größe, Geburtsjahr und Geschlecht. **Bearbeiten** oben rechts ändert sie am iPhone; mit iCloud gelten sie auch am Mac, und was du am Mac änderst, kommt aufs iPhone. Werte außerhalb von 20–300 kg und 80–250 cm werden nicht gespeichert.
+  - **Summen je Sportart:** Strecke, Fahrten, Fahrzeit, längste Fahrt und Höchsttempo, für Rad, Fahrzeuge und Laufen getrennt. Eine Autofahrt zählt nie beim Rad.
+  - **Geräte:** deine Bikes, Fahrzeuge und Schuhe mit ihren Kilometern; ein Tipp öffnet eines. Anlegen und ändern kannst du Geräte vorerst am Mac.
 - **Aufnahme:** das Fahrzeug, E-Bike, Motorrad oder Auto.
 - **Karten:** der Kartenstil für alle Karten.
 - **iCloud & Bibliothek:** Sync an oder aus, wann zuletzt synchronisiert wurde, Hinweise bei Problemen.
