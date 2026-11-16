@@ -118,10 +118,13 @@ public struct ParsedRide: Sendable {
     public var suggestedName: String?
     /// The bike the file names (a recording of the iPhone app, B-213); `nil` if it names none.
     public var suggestedBikeID: UUID?
+    /// The kind of a recording without a device (B-286), e.g. a car; the ride then gets no bike.
+    public var suggestedKind: BikeKind?
 
     public init(startDate: Date, summary: RideSummary, samples: [RideSample],
                 deviceSerialNumber: UInt64?, parserVersion: Int, workKilojoules: Double? = nil,
-                summaryEstimated: Bool = false, suggestedName: String? = nil, suggestedBikeID: UUID? = nil) {
+                summaryEstimated: Bool = false, suggestedName: String? = nil, suggestedBikeID: UUID? = nil,
+                suggestedKind: BikeKind? = nil) {
         self.startDate = startDate
         self.summary = summary
         self.samples = samples
@@ -131,5 +134,6 @@ public struct ParsedRide: Sendable {
         self.summaryEstimated = summaryEstimated
         self.suggestedName = suggestedName
         self.suggestedBikeID = suggestedBikeID
+        self.suggestedKind = suggestedKind
     }
 }

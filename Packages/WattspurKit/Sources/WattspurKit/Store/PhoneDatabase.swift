@@ -289,6 +289,11 @@ public final class PhoneDatabase {
         if archived { try library.archive(bike) } else { library.unarchive(bike) }
     }
 
+    /// The device new rides go to on the Mac (`Rider.activeBikeID`), the first default for a recording (B-286).
+    public func activeDeviceID() -> UUID? {
+        oldestRider()?.activeBikeID
+    }
+
     /// Whether a device may be archived: not the last one that is not archived.
     public func canArchive(deviceID: UUID) -> Bool {
         library.bikes(includingArchived: false).contains { $0.id != deviceID }

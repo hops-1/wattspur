@@ -3,8 +3,13 @@ import Foundation
 /// The keys of the iPhone app's settings in one place, like `SettingsKey` on the Mac (rule 7, R-65).
 /// The values are stored on users' iPhones: never change one, only add new keys.
 enum PhoneSettingsKey {
-    /// What is recorded, chosen in “More” (`RecordingVehicle`).
+    /// What was recorded, chosen in “More” until B-286 (`RecordingVehicle`); only read once, for the
+    /// first default of `recordingDevice`.
     static let recordingVehicle = "recordingVehicle"
+    /// The device of the last recording (B-286), JSON of `RecordingDevice`.
+    static let recordingDevice = "recordingDevice"
+    /// The open devices for Siri and the Shortcuts app (B-286), JSON, written at every reload.
+    static let shortcutDevices = "shortcutDevices"
     /// Whether the raw motion data is written while recording (V-16).
     static let recordRawMotion = "recordRawMotion"
     /// What the detail map colours the track by (`TrackColouring`, B-248).

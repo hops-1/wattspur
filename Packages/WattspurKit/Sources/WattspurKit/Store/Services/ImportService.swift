@@ -66,7 +66,9 @@ struct ImportService: LibraryService {
         }
         // A recording of the iPhone app names its bike (B-213); it wins over the bike asked for.
         let named = parsed.suggestedBikeID.flatMap { id in bikes.bikes(includingArchived: true).first { $0.id == id } }
-        let target = named ?? bike ?? bikes.activeBike()
+        // A recording without a device (B-286), e.g. a car, keeps its kind and gets no bike.
+        let withoutDevice = named == nil ? parsed.suggestedKind : nil
+        let target = withoutDevice != nil ? nil : named ?? bike ?? bikes.activeBike()
         if detectDuplicates, let similar = findSimilarRide(to: parsed, bike: target) {
             switch (RideSource(fileExtension: ext), similar.source) {
             case (.gpx?, .fit?):
@@ -92,6 +94,7 @@ struct ImportService: LibraryService {
         ride.apply(parsed)
         ride.rider = bikes.defaultRider()
         ride.bike = target
+        if let withoutDevice { ride.sportRawValue = withoutDevice.rawValue }
         ride.sourceFile = SourceFile(fileName: fileName, data: data)
         context.insert(ride)
         LibrarySave.save(context)
@@ -154,7 +157,8 @@ struct ImportService: LibraryService {
             ride.attachedSourceName = nil
             ride.attachedSourceFormat = nil
         }
-        if ride.bike == nil { ride.bike = bikes.defaultBike() }
+        // A ride without a device keeps its kind (B-286); only one without either gets the default bike.
+        if ride.bike == nil, ride.sportRawValue == nil { ride.bike = bikes.defaultBike() }
         if let file = ride.sourceFile {
             file.fileName = fileName
             file.data = data
@@ -193,7 +197,7 @@ struct ImportService: LibraryService {
                         let before = ride.attachedSourceFormat == nil ? nil : (samples: ride.samples, start: ride.startDate)
                         ride.apply(parsed)
                         if let before { carrySensorValues(from: before.samples, startDate: before.start, to: ride) }
-                        if ride.bike == nil { ride.bike = bikes.defaultBike() }
+                        if ride.bike == nil, ride.sportRawValue == nil { ride.bike = bikes.defaultBike() }
                         if let merged = ride.mergedInto { mergedToRefresh.insert(merged.id) }
                         updated += 1
                     }

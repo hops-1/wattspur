@@ -72,6 +72,11 @@ public struct RideRecording: Codable, Sendable, Equatable {
         get { storedVehicle ?? .eBike }
         set { storedVehicle = newValue }
     }
+    /// What it is recorded with (B-286): a device, or a car or motorcycle without one; `nil` in
+    /// recordings from before the choice, which save with the bike picked then.
+    public var device: RecordingDevice? {
+        didSet { if let device { storedVehicle = device.vehicle } }
+    }
     /// One segment per stretch between start or resume and pause or stop.
     public private(set) var segments: [[Point]] = [[]]
     public private(set) var isPaused = false
@@ -85,6 +90,13 @@ public struct RideRecording: Codable, Sendable, Equatable {
     public init(startDate: Date, vehicle: RecordingVehicle = .eBike) {
         self.startDate = startDate
         self.storedVehicle = vehicle
+    }
+
+    /// A recording with a device (B-286); the device sets the vehicle, and with it the speed limit.
+    public init(startDate: Date, device: RecordingDevice) {
+        self.startDate = startDate
+        self.storedVehicle = device.vehicle
+        self.device = device
     }
 
     /// Adds a position; returns `false` if it was dropped (or the recording is paused).
@@ -285,6 +297,8 @@ public enum RecordingLog {
         case start(Date)
         /// Written right after the start; logs from before it mean an e-bike.
         case vehicle(RecordingVehicle)
+        /// Written right after the start from B-286 on: what it is recorded with.
+        case device(RecordingDevice)
         case fix(RideRecording.Fix)
         case pause
         case resume
@@ -309,11 +323,61 @@ public enum RecordingLog {
             switch event {
             case .start(let date): recording = RideRecording(startDate: date)
             case .vehicle(let vehicle): recording?.vehicle = vehicle
+            case .device(let device): recording?.device = device
             case .fix(let fix): recording?.add(fix)
             case .pause: recording?.pause()
             case .resume: recording?.resume()
             }
         }
         return recording
+    }
+}
+
+/// What a recording is made with (B-286): one of the devices, or a car or motorcycle without one
+/// (the quick start). The kind is kept with it, so the recording knows its speed limit and what to
+/// show without the library.
+public struct RecordingDevice: Codable, Hashable, Sendable {
+    /// The device; `nil` for a recording without one.
+    public var bikeID: UUID?
+    /// `BikeKind` raw value: the device's kind, or the kind without a device.
+    public var kindRawValue: String
+
+    public init(bikeID: UUID?, kind: BikeKind) {
+        self.bikeID = bikeID
+        kindRawValue = kind.rawValue
+    }
+
+    /// A car or motorcycle without a device.
+    public static func without(_ kind: BikeKind) -> RecordingDevice { RecordingDevice(bikeID: nil, kind: kind) }
+
+    public var kind: BikeKind { BikeKind(rawValue: kindRawValue) ?? .bike }
+
+    /// The speed limit for GPS jumps and what the recording shows beside the speed.
+    public var vehicle: RecordingVehicle {
+        switch kind {
+        case .car: .car
+        case .motorcycle: .motorcycle
+        case .bike, .mountain, .road, .gravel, .cargo, .runningShoe: .eBike
+        }
+    }
+
+    /// The device for the next recording: the last one if it is still there and not archived (or
+    /// the last kind without a device), else the active bike, else the first open device, else a
+    /// bicycle without one. `oldVehicle` is the setting in “More” before B-286: a motorcycle or car
+    /// there starts without a device of that kind, until the first choice.
+    public static func next(last: RecordingDevice?, devices: [RideExchange.Bike], activeID: UUID?,
+                            oldVehicle: RecordingVehicle? = nil) -> RecordingDevice {
+        let open = devices.filter { !$0.isArchived }
+        func device(_ id: UUID?) -> RecordingDevice? {
+            guard let id, let bike = open.first(where: { $0.id == id }) else { return nil }
+            return RecordingDevice(bikeID: bike.id, kind: BikeKind(rawValue: bike.kind) ?? .bike)
+        }
+        if let last {
+            if last.bikeID == nil { return last }
+            if let still = device(last.bikeID) { return still }
+        } else if let oldVehicle, oldVehicle != .eBike {
+            return .without(oldVehicle == .car ? .car : .motorcycle)
+        }
+        return device(activeID) ?? device(open.first?.id) ?? .without(.bike)
     }
 }

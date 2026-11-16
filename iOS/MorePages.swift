@@ -14,7 +14,6 @@ struct MorePageView: View {
     var body: some View {
         switch page {
         case .profile: ProfilePage()
-        case .recording: RecordingPage()
         case .maps: MapsPage()
         case .library: LibraryPage()
         case .trash: TrashView(embedded: embedded)
@@ -25,15 +24,6 @@ struct MorePageView: View {
     }
 }
 
-extension RecordingVehicle {
-    var label: LocalizedStringKey {
-        switch self {
-        case .eBike: "E-Bike"
-        case .motorcycle: "Motorcycle"
-        case .car: "Car"
-        }
-    }
-}
 
 // MARK: - Profile
 
@@ -557,24 +547,6 @@ private struct ProfileEditor: View {
             .task(id: photoItem) {
                 guard let photoItem, let data = try? await photoItem.loadTransferable(type: Data.self) else { return }
                 if let scaled = PhotoScaler.jpegData(from: data, maxEdge: Self.photoEdge) { details.photoData = scaled }
-            }
-        }
-    }
-}
-
-// MARK: - Recording
-
-private struct RecordingPage: View {
-    @AppStorage(Recorder.vehicleKey) private var vehicle = RecordingVehicle.eBike
-
-    var body: some View {
-        Form {
-            Section {
-                Picker("Vehicle", selection: $vehicle) {
-                    ForEach(RecordingVehicle.allCases) { Text($0.label).tag($0) }
-                }
-            } footer: {
-                Text("GPS jumps look like impossible speeds and are left out. For an e-bike that is above 100 km/h, for a motorcycle or a car above 300 km/h. In a car the recording shows the lateral acceleration.")
             }
         }
     }

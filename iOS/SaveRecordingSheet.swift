@@ -1,7 +1,8 @@
 import SwiftUI
 import WattspurCore
 
-/// After Stop (B-212): name the ride, choose the bike, then save it, discard it, or keep riding.
+/// After Stop (B-212): name the ride, choose the device (set to the one it was started with, B-286),
+/// then save it, discard it, or keep riding.
 struct SaveRecordingSheet: View {
     @Environment(Recorder.self) private var recorder
     @Environment(PhoneLibrary.self) private var library
@@ -11,7 +12,7 @@ struct SaveRecordingSheet: View {
     var close: (() -> Void)?
 
     @State private var name = ""
-    @State private var bikeID: UUID?
+    @State private var device: RecordingDevice?
     @State private var confirmingDiscard = false
     @State private var problem: String?
 
@@ -19,16 +20,25 @@ struct SaveRecordingSheet: View {
         (library.state?.bikes ?? []).filter { !$0.isArchived }
     }
 
+    /// The devices, then a car and a motorcycle without one (B-286).
+    private var choices: [RecordingDevice] {
+        bikes.map { RecordingDevice(bikeID: $0.id, kind: BikeKind(rawValue: $0.kind) ?? .bike) }
+            + [.without(.car), .without(.motorcycle)]
+    }
+
     var body: some View {
         NavigationStack {
             Form {
                 Section {
                     TextField("Name", text: $name)
-                    if !bikes.isEmpty {
-                        Picker("Bike", selection: $bikeID) {
-                            ForEach(bikes) { bike in
+                    Picker("Device", selection: $device) {
+                        ForEach(choices, id: \.self) { choice in
+                            if let bike = bikes.first(where: { $0.id == choice.bikeID }) {
                                 Label { Text(bike.name) } icon: { BikeBadge(bike: bike) }
-                                    .tag(Optional(bike.id))
+                                    .tag(Optional(choice))
+                            } else {
+                                Label { Text("\(choice.kind.localizedName), no device") } icon: { Image(systemName: choice.symbol) }
+                                    .tag(Optional(choice))
                             }
                         }
                     }
@@ -78,7 +88,7 @@ struct SaveRecordingSheet: View {
         }
         .onAppear {
             name = RecordingView.defaultName(for: recording.startDate)
-            bikeID = Self.defaultBike(among: bikes, last: Self.lastBikeID, lastRide: library.state?.lastRide)
+            device = Self.defaultDevice(for: recording, among: bikes, lastRide: library.state?.lastRide)
         }
     }
 
@@ -99,6 +109,17 @@ struct SaveRecordingSheet: View {
         return bikes.first?.id
     }
 
+    /// The device the recording was started with if it is still there (B-286); for a recording from
+    /// before the choice, the bike chosen last time as before.
+    static func defaultDevice(for recording: RideRecording, among bikes: [RideExchange.Bike],
+                              lastRide: RideExchange.Ride?) -> RecordingDevice? {
+        if let device = recording.device, device.bikeID == nil || bikes.contains(where: { $0.id == device.bikeID }) {
+            return device
+        }
+        let id = defaultBike(among: bikes, last: lastBikeID, lastRide: lastRide)
+        return bikes.first { $0.id == id }.map { RecordingDevice(bikeID: $0.id, kind: BikeKind(rawValue: $0.kind) ?? .bike) }
+    }
+
     /// The last bike chosen when saving, as the default for the next ride.
     static var lastBikeID: UUID? {
         get { UserDefaults.standard.string(forKey: PhoneSettingsKey.lastRecordingBike).flatMap(UUID.init(uuidString:)) }
@@ -107,21 +128,27 @@ struct SaveRecordingSheet: View {
 
     /// Saves a finished recording as a ride of the iPhone's own store (B-216): as GPX with its bike
     /// (creator “Wattspur iOS”, B-213) through the Kit's import, as on the Mac.
-    static func store(_ recording: RideRecording, name: String, bike: RideExchange.Bike?,
+    /// Without a bike, a car or motorcycle goes in as its kind (`wattspur:kind`, B-286), so the ride
+    /// has no device and stays out of the cycling totals.
+    static func store(_ recording: RideRecording, name: String, device: RecordingDevice?,
                       library: PhoneLibrary) throws {
+        let bike = (library.state?.bikes ?? []).first { $0.id == device?.bikeID && device?.bikeID != nil }
+        let kind = bike == nil ? device?.kind : nil
         let note = bike.map { String(localized: "Bike: \($0.name)") }
         let data = GPXWriter.document(name: name, segments: recording.gpxSegments, description: note,
-                                      creator: GPXWriter.iPhoneCreator, bikeID: bike?.id)
+                                      creator: GPXWriter.iPhoneCreator, bikeID: bike?.id,
+                                      sport: (bike.flatMap { BikeKind(rawValue: $0.kind) } ?? kind ?? .bike).sport,
+                                      kind: kind?.sport == .cycling ? nil : kind)
         try library.saveRecording(gpx: data, fileName: GPXWriter.fileName(name))
     }
 
     private func save() {
         let title = name.trimmingCharacters(in: .whitespaces)
-        let bike = bikes.first { $0.id == bikeID }
         do {
             try Self.store(recording, name: title.isEmpty ? RecordingView.defaultName(for: recording.startDate) : title,
-                           bike: bike, library: library)
-            Self.lastBikeID = bike?.id
+                           device: device, library: library)
+            if let id = device?.bikeID { Self.lastBikeID = id }
+            if let device { RecordingChoice.last = device }
             _ = recorder.stop()
             finish()
         } catch {

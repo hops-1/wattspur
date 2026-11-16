@@ -28,7 +28,7 @@ final class RecordingActivityController {
     func start(_ recording: RideRecording) {
         guard activity == nil, ActivityAuthorizationInfo().areActivitiesEnabled else { return }
         let state = Self.state(of: recording)
-        activity = try? Activity.request(attributes: RecordingAttributes(startDate: recording.startDate),
+        activity = try? Activity.request(attributes: RecordingAttributes(startDate: recording.startDate, symbol: recording.device?.symbol),
                                          content: ActivityContent(state: state, staleDate: nil))
         lastState = state
         lastUpdate = .now

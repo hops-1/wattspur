@@ -16,6 +16,8 @@ struct RecordingAttributes: ActivityAttributes {
 
     /// When the recording started; the time counts from here, as in the app.
     var startDate: Date
+    /// The symbol of the device recorded with (B-286), e.g. `car`; `nil` is a bicycle.
+    var symbol: String? = nil
 }
 
 /// Pause or Resume from the Live Activity. A `LiveActivityIntent` runs in the app's process, so

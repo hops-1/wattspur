@@ -2554,16 +2554,6 @@
         }
       }
     },
-    "Vehicle" : {
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Fahrzeug"
-          }
-        }
-      }
-    },
     "E-Bike" : {
       "localizations" : {
         "de" : {
@@ -3626,16 +3616,6 @@
         }
       }
     },
-    "GPS jumps look like impossible speeds and are left out. For an e-bike that is above 100 km/h, for a motorcycle or a car above 300 km/h. In a car the recording shows the lateral acceleration." : {
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "GPS-Sprünge sehen aus wie unmögliche Geschwindigkeiten und werden weggelassen. Beim E-Bike ist das über 100 km/h, beim Motorrad oder Auto über 300 km/h. Im Auto zeigt die Aufnahme die Querbeschleunigung."
-          }
-        }
-      }
-    },
     "With iCloud the Mac shows the same profile." : {
       "localizations" : {
         "de" : {
@@ -4082,6 +4062,76 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Grün"
+          }
+        }
+      }
+    },
+    "with %@" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "mit %@"
+          }
+        }
+      }
+    },
+    "Choose what you ride with" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Wählen, womit du fährst"
+          }
+        }
+      }
+    },
+    "Without a Device" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ohne Gerät"
+          }
+        }
+      }
+    },
+    "Such a ride does not count towards your bikes, like a ride on a vehicle." : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "So eine Fahrt zählt nicht zu deinen Bikes, wie eine Fahrt mit einem Fahrzeug."
+          }
+        }
+      }
+    },
+    "What Are You Riding?" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Womit fährst du?"
+          }
+        }
+      }
+    },
+    "Device" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Gerät"
+          }
+        }
+      }
+    },
+    "%@, no device" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@, ohne Gerät"
           }
         }
       }

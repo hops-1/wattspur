@@ -39,9 +39,12 @@ public enum GPXWriter {
     }
 
     public static func document(name: String, segments: [Segment], description: String? = nil,
-                                creator: String = "Wattspur", bikeID: UUID? = nil, sport: Sport = .cycling) -> Data {
+                                creator: String = "Wattspur", bikeID: UUID? = nil, sport: Sport = .cycling,
+                                kind: BikeKind? = nil) -> Data {
+        // A recording without a device names its kind instead (B-286), e.g. a car.
+        let kind = bikeID == nil ? kind : nil
         let note = description.flatMap { $0.isEmpty ? nil : escape($0) }
-        let ownExtension = bikeID != nil || segments.contains { $0.samples.contains {
+        let ownExtension = bikeID != nil || kind != nil || segments.contains { $0.samples.contains {
             $0.horizontalAccuracy != nil || $0.lean != nil || $0.acceleration != nil || $0.roughness != nil
         } }
         let wattspur = ownExtension ? "xmlns:wattspur=\"\(wattspurNamespace)\" " : ""
@@ -61,6 +64,8 @@ public enum GPXWriter {
         }
         if let bikeID {
             xml += "    <extensions><wattspur:bike>\(bikeID.uuidString)</wattspur:bike></extensions>\n"
+        } else if let kind {
+            xml += "    <extensions><wattspur:kind>\(kind.rawValue)</wattspur:kind></extensions>\n"
         }
         xml += """
           </metadata>

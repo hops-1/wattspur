@@ -33,7 +33,7 @@ struct OverviewView: View {
                         LastRideTile(ride: last)
                     }
                     .buttonStyle(.plain)
-                    StartRideButton { recorder.start() }
+                    StartRideButton { recorder.start(device: $0) }
                     Button { showRides(.all) } label: {
                         HStack {
                             Text("All Rides")
@@ -59,7 +59,7 @@ struct OverviewView: View {
                         LastRideTile(ride: sample.ride, route: sample.route)
                     }
                     .buttonStyle(.plain)
-                    StartRideButton { recorder.start() }
+                    StartRideButton { recorder.start(device: $0) }
                     Text("Sample data: the tiles count the sample ride's week and month.")
                         .font(.footnote)
                         .foregroundStyle(.secondary)
@@ -117,7 +117,7 @@ struct OverviewView: View {
         // Room for “Start Ride” and the tab bar below the last tiles.
         .contentMargins(.bottom, LandscapeTabBar.height + 12, for: .scrollContent)
         .overlay(alignment: .bottomTrailing) {
-            StartRideButton { recorder.start() }
+            StartRideButton { recorder.start(device: $0) }
                 .frame(width: 230)
                 .padding(.trailing, 4)
                 .padding(.bottom, 4)
@@ -187,19 +187,106 @@ struct OverviewView: View {
     }
 }
 
-/// The large red button that opens the recording (design C).
+/// The large red button that opens the recording (design C). One tap starts with the device of the
+/// last recording; “with … ▾” below it opens “What are you riding?” (B-286).
 struct StartRideButton: View {
-    var action: () -> Void
+    @Environment(PhoneLibrary.self) private var library
+    var action: (RecordingDevice) -> Void
+    @State private var choosing = false
 
     var body: some View {
-        Button(action: action) {
-            Label("Start Ride", systemImage: "record.circle")
-                .font(.title3.weight(.semibold))
-                .frame(maxWidth: .infinity, minHeight: 36)
+        let device = library.nextRecordingDevice
+        VStack(spacing: 6) {
+            Button { action(device) } label: {
+                Label("Start Ride", systemImage: "record.circle")
+                    .font(.title3.weight(.semibold))
+                    .frame(maxWidth: .infinity, minHeight: 36)
+            }
+            .buttonStyle(.glassProminent)
+            .tint(.red)
+            .controlSize(.extraLarge)
+            Button { choosing = true } label: {
+                HStack(spacing: 4) {
+                    Image(systemName: device.symbol)
+                    Text("with \(device.name(in: library.state?.bikes ?? []))")
+                    Image(systemName: "chevron.down").font(.caption2.weight(.semibold))
+                }
+                .font(.footnote.weight(.medium))
+                .foregroundStyle(.secondary)
+                .frame(minHeight: 28)
+            }
+            .buttonStyle(.plain)
+            .accessibilityLabel(Text("Choose what you ride with"))
+            .accessibilityValue(Text(verbatim: device.name(in: library.state?.bikes ?? [])))
         }
-        .buttonStyle(.glassProminent)
-        .tint(.red)
-        .controlSize(.extraLarge)
+        .sheet(isPresented: $choosing) {
+            DeviceChoiceSheet(current: device) { chosen in
+                RecordingChoice.last = chosen
+                choosing = false
+                action(chosen)
+            }
+            .presentationDetents([.medium, .large])
+        }
+    }
+}
+
+/// “What are you riding?” (B-286): the devices in groups Bikes, Vehicles and Shoes, below them a car
+/// or motorcycle without a device for the quick start. A tap starts the ride with it.
+struct DeviceChoiceSheet: View {
+    @Environment(PhoneLibrary.self) private var library
+    @Environment(\.dismiss) private var dismiss
+    var current: RecordingDevice
+    var start: (RecordingDevice) -> Void
+
+    var body: some View {
+        NavigationStack {
+            List {
+                ForEach(groups, id: \.sport) { group in
+                    Section {
+                        ForEach(group.devices) { device in
+                            row(RecordingDevice(bikeID: device.id, kind: BikeKind(rawValue: device.kind) ?? .bike)) {
+                                Label { Text(device.name) } icon: { BikeBadge(bike: device) }
+                            }
+                        }
+                    } header: {
+                        Text(group.sport.devicesTitle)
+                    }
+                }
+                Section {
+                    ForEach([BikeKind.car, .motorcycle], id: \.self) { kind in
+                        row(.without(kind)) {
+                            Label { Text(kind.label) } icon: { Image(systemName: BikeBadge.symbol(kind)) }
+                        }
+                    }
+                } header: {
+                    Text("Without a Device")
+                } footer: {
+                    Text("Such a ride does not count towards your bikes, like a ride on a vehicle.")
+                }
+            }
+            .navigationTitle("What Are You Riding?")
+            .navigationBarTitleDisplayMode(.inline)
+            .toolbar {
+                ToolbarItem(placement: .cancellationAction) { Button("Cancel") { dismiss() } }
+            }
+        }
+    }
+
+    private var groups: [(sport: Sport, devices: [RideExchange.Bike])] {
+        (library.state?.devicesBySport() ?? []).map { ($0.sport, $0.devices.filter { !$0.isArchived }) }
+            .filter { !$0.devices.isEmpty }
+    }
+
+    private func row(_ device: RecordingDevice, @ViewBuilder label: () -> some View) -> some View {
+        Button { start(device) } label: {
+            HStack {
+                label()
+                Spacer()
+                if device == current { Image(systemName: "checkmark").foregroundStyle(.tint) }
+            }
+            .contentShape(.rect)
+        }
+        .buttonStyle(.plain)
     }
 }
 
