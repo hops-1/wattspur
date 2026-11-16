@@ -26,6 +26,8 @@ struct TourDetailView: View {
     /// the motion sensors.
     @State private var motion: RideMotion?
     @State private var leanStretches: [RideMotion.LeanStretch] = []
+    /// Lean angle, or a car's lateral acceleration (B-287).
+    private var side: SideMeasure { motion?.side ?? .leanAngle }
     @State private var surfaceStretches: [RideMotion.SurfaceStretch] = []
 
     private var marker: CLLocationCoordinate2D? {
@@ -97,12 +99,12 @@ struct TourDetailView: View {
         ScrollView {
             VStack(alignment: .leading, spacing: 16) {
                 RideMap(ride: ride, route: route, interactive: true, marker: marker, leanStretches: leanStretches,
-                        surfaceStretches: surfaceStretches)
+                        surfaceStretches: surfaceStretches, side: side)
                     .frame(height: 300)
                     .clipShape(.rect(cornerRadius: 24))
                 // Right below the map, so both stay on screen while the finger is on a chart (B-221).
                 if hasCarousel {
-                    RideChartCarousel(ride: ride, points: chartPoints, track: track, spot: $spot)
+                    RideChartCarousel(ride: ride, points: chartPoints, track: track, spot: $spot, side: side)
                 }
                 info
                 FigureGrid(ride: ride, motion: motion)
@@ -117,7 +119,7 @@ struct TourDetailView: View {
     private var landscape: some View {
         HStack(spacing: 16) {
             RideMap(ride: ride, route: route, interactive: true, marker: marker, leanStretches: leanStretches,
-                        surfaceStretches: surfaceStretches)
+                        surfaceStretches: surfaceStretches, side: side)
                 .clipShape(.rect(cornerRadius: 24))
                 .containerRelativeFrame(.horizontal) { width, _ in width * 0.45 }
             ScrollView {
@@ -129,7 +131,7 @@ struct TourDetailView: View {
                         info
                     }
                     if hasCarousel {
-                        RideChartCarousel(ride: ride, points: chartPoints, track: track, spot: $spot, height: 230)
+                        RideChartCarousel(ride: ride, points: chartPoints, track: track, spot: $spot, side: side, height: 230)
                     }
                     FigureGrid(ride: ride, motion: motion)
                     elevationProfile
@@ -160,13 +162,13 @@ struct TourDetailView: View {
                 }
                 HStack(alignment: .top, spacing: 12) {
                     RideMap(ride: ride, route: route, interactive: true, marker: marker, leanStretches: leanStretches,
-                        surfaceStretches: surfaceStretches)
+                        surfaceStretches: surfaceStretches, side: side)
                         .frame(width: 170, height: 190)
                         .clipShape(.rect(cornerRadius: 20))
                     FigureGrid(ride: ride, motion: motion, compact: true)
                 }
                 if hasCarousel {
-                    RideChartCarousel(ride: ride, points: chartPoints, track: track, spot: $spot, height: 230)
+                    RideChartCarousel(ride: ride, points: chartPoints, track: track, spot: $spot, side: side, height: 230)
                 }
                 elevationProfile
             }
@@ -303,8 +305,14 @@ struct FigureGrid: View {
             items.append(Item(title: "Work", value: "\(Int(work.rounded())) kJ", systemImage: "flame"))
         }
         if let motion {
-            items.append(Item(title: "Max. Lean Left", value: RideFormat.lean(motion.maxLeanLeft), systemImage: "arrow.turn.up.left"))
-            items.append(Item(title: "Max. Lean Right", value: RideFormat.lean(motion.maxLeanRight), systemImage: "arrow.turn.up.right"))
+            if motion.side == .lateralAcceleration {
+                // A car: the same values as lateral acceleration (B-287).
+                items.append(Item(title: "Max. Lateral Left", value: RideFormat.gForce(motion.maxSideLeft), systemImage: "arrow.turn.up.left"))
+                items.append(Item(title: "Max. Lateral Right", value: RideFormat.gForce(motion.maxSideRight), systemImage: "arrow.turn.up.right"))
+            } else {
+                items.append(Item(title: "Max. Lean Left", value: RideFormat.lean(motion.maxLeanLeft), systemImage: "arrow.turn.up.left"))
+                items.append(Item(title: "Max. Lean Right", value: RideFormat.lean(motion.maxLeanRight), systemImage: "arrow.turn.up.right"))
+            }
             if let g = motion.strongestAcceleration {
                 items.append(Item(title: "Max. Acceleration", value: RideFormat.gForce(g), systemImage: "arrow.up.forward.circle"))
             }

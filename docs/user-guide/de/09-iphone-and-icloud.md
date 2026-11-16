@@ -21,7 +21,7 @@ Mac und iPhone müssen mit demselben Apple Account bei iCloud angemeldet sein.
 ## Der Bereich „Mehr“
 Ab 0.6.2 ist **Mehr** eine Liste wie die Einstellungen von iOS. Jede Zeile öffnet eine eigene Seite:
 - **Profil** (oben, mit Foto und Name): deine Angaben für die Kalorien. Du machst sie am Mac unter **Profil**; mit iCloud kommen sie aufs iPhone. Bearbeiten am iPhone kommt mit einer späteren Version.
-- **Aufnahme:** das Fahrzeug, E-Bike oder Motorrad.
+- **Aufnahme:** das Fahrzeug, E-Bike, Motorrad oder Auto.
 - **Karten:** der Kartenstil für alle Karten.
 - **iCloud & Bibliothek:** Sync an oder aus, wann zuletzt synchronisiert wurde, Hinweise bei Problemen.
 - **Papierkorb:** gelöschte Fahrten, 30 Tage lang.
@@ -116,7 +116,7 @@ Wattspur misst die Höhe beim Aufnehmen mit dem **Barometer** des iPhones, also 
 Beim ersten Aufnehmen fragt das iPhone einmal nach **Bewegung & Fitness**. Erlaubst du das nicht, nimmt Wattspur die GPS-Höhe wie bisher. Ändern kannst du das unter **Einstellungen › Datenschutz & Sicherheit › Bewegung & Fitness**.
 
 ## Schräglage, Beschleunigung und Belag
-Ab 0.5.1 liest das iPhone beim Aufnehmen auch seine Bewegungssensoren, mit derselben Freigabe **Bewegung & Fitness** wie das Barometer. Im Tour-Detail stehen dann Kacheln für die größte Schräglage links und rechts, die stärkste Beschleunigung und Bremsung, die beste Zeit aus dem Stand und den Anteil unebenen Belags. Im Karussell gibt es die Seite **Schräglage**. Die Karte färbt die Spur nach Schräglage; mit dem Umschalter oben auf der Karte wechselst du zu **Belag**. Wie die Werte entstehen, steht unter [Kennzahlen](05-metrics.md). Am Mac siehst du dieselben Werte im Tour-Detail.
+Ab 0.5.1 liest das iPhone beim Aufnehmen auch seine Bewegungssensoren, mit derselben Freigabe **Bewegung & Fitness** wie das Barometer. Im Tour-Detail stehen dann Kacheln für die größte Schräglage links und rechts, die stärkste Beschleunigung und Bremsung, die beste Zeit aus dem Stand und den Anteil unebenen Belags. Im Karussell gibt es die Seite **Schräglage**, bei einer Fahrt mit dem Auto **Querbeschleunigung** in g (ab iPhone 1.1). Die Karte färbt die Spur nach Schräglage; mit dem Umschalter oben auf der Karte wechselst du zu **Belag**. Wie die Werte entstehen, steht unter [Kennzahlen](05-metrics.md). Am Mac siehst du dieselben Werte im Tour-Detail.
 
 Für Tests gibt es unter **Mehr › Test-Werkzeuge** den Schalter **Rohdaten der Bewegung mitschreiben**. Ist er an, legt jede Aufnahme zusätzlich eine Datei in der Dateien-App ab (**Auf meinem iPhone › Wattspur › Bewegung**), etwa 20 MB pro Stunde. Normalerweise bleibt er aus. Die Test-Werkzeuge gibt es nur in Builds über TestFlight.
 
@@ -199,9 +199,9 @@ Gut zu wissen:
 - Wattspur nimmt das Fahrzeug aus Schritt 1. Wechselst du zwischen Fahrzeugen, stelle es vorher um.
 
 ## Motorrad
-Beim Aufnehmen lässt Wattspur Punkte weg, die eine unmögliche Geschwindigkeit ergeben würden. So fallen GPS-Sprünge heraus. Beim E-Bike liegt die Grenze bei 100 km/h. Wer mit dem Motorrad aufnimmt, stellt **Mehr › Aufnahme › Fahrzeug › Motorrad** ein. Dann gilt eine Grenze von 300 km/h.
+Beim Aufnehmen lässt Wattspur Punkte weg, die eine unmögliche Geschwindigkeit ergeben würden. So fallen GPS-Sprünge heraus. Beim E-Bike liegt die Grenze bei 100 km/h. Wer mit dem Motorrad aufnimmt, stellt **Mehr › Aufnahme › Fahrzeug › Motorrad** ein. Dann gilt eine Grenze von 300 km/h. Im Auto stellst du **Auto** ein (ab iPhone 1.1): Dieselbe Grenze gilt, und die Aufnahme zeigt unter dem Tempo die Querbeschleunigung als Balken von 0,5 g links bis 0,5 g rechts.
 
-Damit Motorradfahrten nicht in die Summen deiner Fahrräder fallen, lege dafür im Profil ein Bike mit der Art **Motorrad** an (siehe [Profil und Bikes](07-profile-and-bikes.md)).
+Damit Motorrad- und Autofahrten nicht in die Summen deiner Fahrräder fallen, lege dafür im Profil ein Gerät mit der Art **Motorrad** oder **Auto** an und wähle es beim Sichern (siehe [Profil und Bikes](07-profile-and-bikes.md)). Erst dann zeigt das Tour-Detail einer Autofahrt die Querbeschleunigung.
 
 ---
 Weiter: [Fragen](06-faq.md) · [Inhalt](README.md)

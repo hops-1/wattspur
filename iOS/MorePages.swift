@@ -29,6 +29,7 @@ extension RecordingVehicle {
         switch self {
         case .eBike: "E-Bike"
         case .motorcycle: "Motorcycle"
+        case .car: "Car"
         }
     }
 }
@@ -93,7 +94,7 @@ private struct RecordingPage: View {
                     ForEach(RecordingVehicle.allCases) { Text($0.label).tag($0) }
                 }
             } footer: {
-                Text("GPS jumps look like impossible speeds and are left out. For an e-bike that is above 100 km/h, for a motorcycle above 300 km/h.")
+                Text("GPS jumps look like impossible speeds and are left out. For an e-bike that is above 100 km/h, for a motorcycle or a car above 300 km/h. In a car the recording shows the lateral acceleration.")
             }
         }
     }

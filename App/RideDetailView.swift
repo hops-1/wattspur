@@ -120,8 +120,8 @@ private struct RideDetailContent: View {
         // and off the main thread, so a long ride does not stall opening or the arrow keys (R-58).
         .task(id: DetailKey(ride)) {
             let data = ride.samplesData
-            let motorized = ride.isMotorized
-            let computed = await Task.detached(priority: .userInitiated) { DetailValues(samplesData: data, motorized: motorized) }.value
+            let kind = ride.deviceKind
+            let computed = await Task.detached(priority: .userInitiated) { DetailValues(samplesData: data, kind: kind) }.value
             guard !Task.isCancelled else { return }
             route = computed.route
             curves = computed.curves
@@ -173,12 +173,12 @@ extension RideDetailContent {
         var timePoints: [ChartPoint]
         var track: RideTrack
 
-        nonisolated init(samplesData: Data?, motorized: Bool) {
+        nonisolated init(samplesData: Data?, kind: BikeKind) {
             let samples = samplesData.flatMap { try? PropertyListDecoder().decode([RideSample].self, from: $0) } ?? []
             route = RideSeries.route(from: samples)
             curves = CurvatureAnalyzer.analyze(samples).pieces
-            motion = RideMotion(samples: samples, motorized: motorized)
-            lean = RideMotion.leanStretches(samples)
+            motion = RideMotion(samples: samples, kind: kind)
+            lean = RideMotion.leanStretches(samples, side: SideMeasure(kind: kind))
             surface = RideMotion.surfaceStretches(samples)
             elevation = RouteElevation.stretches(samples)
             points = RideSeries.chartPoints(from: samples)
@@ -260,6 +260,7 @@ extension RideDetailContent {
             RideMapView(route: route, mapType: mapType, joins: joins,
                         newStretches: showsCurves || showsLean || showsSurface || showsElevation ? [] : newPaths.result(for: ride)?.stretches ?? [],
                         curves: colourByCurves ? curves : [], leanStretches: showsLean ? leanStretches : [],
+                        side: motion?.side ?? .leanAngle,
                         surfaceStretches: showsSurface ? surfaceStretches : [],
                         curvyRoads: curvyRoads.set(enabled: showsCurvyRoads),
                         elevation: showsElevation ? elevation : nil)
@@ -300,8 +301,10 @@ extension RideDetailContent {
                             .buttonStyle(.glass)
                             .buttonBorderShape(.circle)
                             .tint(on ? Color.accentColor : nil)
-                            .help(Text("Color the route by lean angle"))
-                            .accessibilityLabel(Text("Color the route by lean angle"))
+                            .help(motion?.side == .lateralAcceleration ? Text("Color the route by lateral acceleration")
+                                                                       : Text("Color the route by lean angle"))
+                            .accessibilityLabel(motion?.side == .lateralAcceleration ? Text("Color the route by lateral acceleration")
+                                                                                     : Text("Color the route by lean angle"))
                             .accessibilityValue(Text(on ? LocalizedStringKey("On") : LocalizedStringKey("Off")))
                             .accessibilityAddTraits(.isToggle)
                         }
@@ -524,8 +527,14 @@ struct KeyFiguresGrid: View {
             }
             if let motion {
                 GridRow {
-                    Figure("Max. Lean Left", value: RideFormat.lean(motion.maxLeanLeft))
-                    Figure("Max. Lean Right", value: RideFormat.lean(motion.maxLeanRight))
+                    if motion.side == .lateralAcceleration {
+                        // A car: the same values as lateral acceleration (B-287).
+                        Figure("Max. Lateral Left", value: Self.g(motion.maxSideLeft), unit: "g")
+                        Figure("Max. Lateral Right", value: Self.g(motion.maxSideRight), unit: "g")
+                    } else {
+                        Figure("Max. Lean Left", value: RideFormat.lean(motion.maxLeanLeft))
+                        Figure("Max. Lean Right", value: RideFormat.lean(motion.maxLeanRight))
+                    }
                     Figure("Max. Acceleration", value: motion.strongestAcceleration.map(Self.g) ?? "–", unit: "g")
                     Figure("Max. Braking", value: motion.strongestBraking.map(Self.g) ?? "–", unit: "g")
                 }

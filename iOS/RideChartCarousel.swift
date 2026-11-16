@@ -12,6 +12,8 @@ struct RideChartCarousel: View {
     /// Where on the ride the finger is (B-221); the detail shows it on the map.
     var track: RideTrack
     @Binding var spot: RideTrack.Fix?
+    /// Lean angle, or a car's lateral acceleration (B-287).
+    var side: SideMeasure = .leanAngle
     /// Lower in landscape, where the screen is short (B-243).
     var height: CGFloat = 290
     @State private var page: ChartMeasure?
@@ -21,7 +23,7 @@ struct RideChartCarousel: View {
     var body: some View {
         TabView(selection: $page) {
             ForEach(measures) { measure in
-                ChartPage(measure: measure, ride: ride, points: points, track: track, spot: $spot)
+                ChartPage(measure: measure, ride: ride, points: points, track: track, spot: $spot, side: side)
                     .padding(.horizontal)
                     .padding(.top)
                     .padding(.bottom, 36)
@@ -45,6 +47,7 @@ private struct ChartPage: View {
     var points: [ChartPoint]
     var track: RideTrack
     @Binding var spot: RideTrack.Fix?
+    var side: SideMeasure
     @State private var selectedKm: Double?
 
     private struct Figure {
@@ -53,7 +56,10 @@ private struct ChartPage: View {
     }
 
     var body: some View {
-        let values = points.compactMap { point in point[keyPath: measure.value].map { (km: point.distanceKm, y: $0) } }
+        // A car's lean angles are shown as lateral acceleration in g (B-287).
+        let values = points.compactMap { point in
+            point[keyPath: measure.value].map { (km: point.distanceKm, y: measure == .lean ? side.value(lean: $0) : $0) }
+        }
         let domain = yDomain(values.map(\.y))
         // From the start to the end of the ride; left alone, Charts rounds up (30.7 km → 40 km).
         let lastKm = max(points.map(\.distanceKm).max() ?? 0, 0.1)
@@ -116,7 +122,7 @@ private struct ChartPage: View {
         case .cadence: "Cadence"
         case .heartRate: "Heart Rate"
         case .altitude: "Elevation"
-        case .lean: "Lean Angle"
+        case .lean: side == .leanAngle ? "Lean Angle" : "Lateral Acceleration"
         }
     }
 
@@ -149,7 +155,7 @@ private struct ChartPage: View {
         case .cadence: String(localized: "rpm")
         case .heartRate: String(localized: "bpm")
         case .altitude: "m"
-        case .lean: "°"
+        case .lean: side.unit
         }
     }
 
@@ -176,8 +182,8 @@ private struct ChartPage: View {
         case .lean:
             // Positive is left; the chart keeps the strongest lean of each slice.
             let leans = points.compactMap(\.lean)
-            return [Figure(title: "Left", value: RideFormat.lean(max(leans.max() ?? 0, 0))),
-                    Figure(title: "Right", value: RideFormat.lean(max(-(leans.min() ?? 0), 0)))]
+            return [Figure(title: "Left", value: side.text(lean: max(leans.max() ?? 0, 0))),
+                    Figure(title: "Right", value: side.text(lean: max(-(leans.min() ?? 0), 0)))]
         }
     }
 
@@ -187,7 +193,7 @@ private struct ChartPage: View {
         guard let value = fix[keyPath: measure.fixValue] else { return position }
         if measure == .lean {
             let side = value > 0 ? String(localized: "left") : value < 0 ? String(localized: "right") : ""
-            return "\(position) · \(RideFormat.lean(value)) \(side)".trimmingCharacters(in: .whitespaces)
+            return "\(position) · \(self.side.text(lean: value)) \(side)".trimmingCharacters(in: .whitespaces)
         }
         let digits = measure == .speed ? 1 : 0
         return "\(position) · \(value.formatted(.number.precision(.fractionLength(digits)))) \(unit)"
@@ -210,7 +216,7 @@ private struct ChartPage: View {
             return 0...max(10, high * 1.05)
         case .lean:
             // Around 0, the same both ways: left above, right below.
-            let reach = max(15, abs(low), abs(high)) * 1.05
+            let reach = max(side.minimumReach, abs(low), abs(high)) * 1.05
             return -reach...reach
         }
     }

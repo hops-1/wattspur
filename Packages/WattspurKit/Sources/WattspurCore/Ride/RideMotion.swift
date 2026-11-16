@@ -4,10 +4,18 @@ import Foundation
 /// to either side, the strongest speeding up and braking, and the best time from a standstill to
 /// 100 km/h (motorcycle) or 25 km/h (bicycle). Only for rides whose samples have a lean angle
 /// (recordings of the iPhone app from 0.5.1 on, B-245).
+///
+/// In a car the same values are the lateral acceleration (B-287): the car itself hardly leans, the
+/// stored angle is what a bike would lean in that turn. `side` says which of the two a ride shows.
 public struct RideMotion: Sendable, Equatable {
     /// Degrees, both positive.
     public var maxLeanLeft: Double
     public var maxLeanRight: Double
+    /// Lean angle or lateral acceleration (B-287).
+    public var side: SideMeasure
+    /// The strongest value to either side as `side` shows it, both positive: degrees or g.
+    public var maxSideLeft: Double { side.value(lean: maxLeanLeft) }
+    public var maxSideRight: Double { side.value(lean: maxLeanRight) }
     /// In g, both positive; `nil` without values.
     public var strongestAcceleration: Double?
     public var strongestBraking: Double?
@@ -32,10 +40,13 @@ public struct RideMotion: Sendable, Equatable {
     /// The target of the sprint: 100 km/h on a motorcycle, 25 km/h on a bicycle.
     public static func sprintTarget(motorized: Bool) -> Double { motorized ? 100 : 25 }
 
-    /// `nil` if no sample has a lean angle.
-    public init?(samples: [RideSample], motorized: Bool) {
+    /// `nil` if no sample has a lean angle. `kind` is the ride's device (`Ride.deviceKind`): a car
+    /// shows the lateral acceleration, a vehicle sprints to 100 km/h.
+    public init?(samples: [RideSample], kind: BikeKind) {
         let leans = samples.compactMap(\.lean)
         guard !leans.isEmpty else { return nil }
+        let motorized = kind.isMotorized
+        side = SideMeasure(kind: kind)
         maxLeanLeft = max(leans.max() ?? 0, 0)
         maxLeanRight = max(-(leans.min() ?? 0), 0)
         let accelerations = samples.compactMap(\.acceleration)
@@ -107,6 +118,11 @@ public struct RideMotion: Sendable, Equatable {
             self = LeanBand(rawValue: min(Int(abs(lean) / 10), LeanBand.extreme.rawValue)) ?? .upright
         }
 
+        /// The same five colours for a car's lateral acceleration (B-287), in steps of 0.1 g.
+        public init(lateral g: Double) {
+            self = LeanBand(rawValue: min(Int(abs(g) * 10 + 1e-9), LeanBand.extreme.rawValue)) ?? .upright
+        }
+
         public static func < (a: LeanBand, b: LeanBand) -> Bool { a.rawValue < b.rawValue }
     }
 
@@ -148,9 +164,9 @@ public struct RideMotion: Sendable, Equatable {
     /// The track in pieces of the same lean band, broken where the samples are more than
     /// `maxSampleGap` seconds apart (pause); empty without lean angles. Samples without a lean count
     /// as upright.
-    public static func leanStretches(_ samples: [RideSample]) -> [LeanStretch] {
+    public static func leanStretches(_ samples: [RideSample], side: SideMeasure = .leanAngle) -> [LeanStretch] {
         guard samples.contains(where: { $0.lean != nil }) else { return [] }
-        return stretches(samples) { LeanBand(lean: $0.lean ?? 0) }
+        return stretches(samples) { side.band(lean: $0.lean ?? 0) }
     }
 
     /// The track in pieces of the same surface band (B-248), like `leanStretches`, by the smoothed
@@ -212,5 +228,72 @@ public struct RideMotion: Sendable, Equatable {
         }
         if let piece = current, piece.latitude.count > 1 { stretches.append(piece) }
         return stretches
+    }
+}
+
+/// What the side figure of a ride means (B-287): on a bike or motorcycle the lean angle, in a car
+/// the lateral acceleration. Both come from the same stored value, `RideSample.lean`, which is
+/// atan(v · ω / g) (`MotionFusion`); its tangent is the lateral acceleration in g. So older car
+/// rides show it too, without a new recording. Positive is left, as for the lean.
+public enum SideMeasure: Sendable, Equatable {
+    /// Degrees.
+    case leanAngle
+    /// In g.
+    case lateralAcceleration
+
+    public init(kind: BikeKind) {
+        self = kind == .car ? .lateralAcceleration : .leanAngle
+    }
+
+    /// The value for a stored lean angle in degrees: the angle itself, or its tangent in g.
+    public func value(lean degrees: Double) -> Double {
+        switch self {
+        case .leanAngle: degrees
+        case .lateralAcceleration: tan(min(max(degrees, -MotionFusion.maxLean), MotionFusion.maxLean) * .pi / 180)
+        }
+    }
+
+    public var unit: String {
+        switch self {
+        case .leanAngle: "°"
+        case .lateralAcceleration: "g"
+        }
+    }
+
+    /// “38°” or “0.39 g”, without a sign.
+    public func text(lean degrees: Double) -> String {
+        let value = abs(self.value(lean: degrees))
+        switch self {
+        case .leanAngle: return "\(value.formatted(.number.precision(.fractionLength(0))))°"
+        case .lateralAcceleration: return "\(value.formatted(.number.precision(.fractionLength(2)))) g"
+        }
+    }
+
+    /// A chart around 0 reaches at least this far to either side, so a calm ride stays calm.
+    public var minimumReach: Double {
+        switch self {
+        case .leanAngle: 15
+        case .lateralAcceleration: 0.3
+        }
+    }
+
+    /// The colour band of the track for a stored lean angle.
+    public func band(lean degrees: Double) -> RideMotion.LeanBand {
+        switch self {
+        case .leanAngle: RideMotion.LeanBand(lean: degrees)
+        case .lateralAcceleration: RideMotion.LeanBand(lateral: value(lean: degrees))
+        }
+    }
+
+    /// The legend of a band: “10–20°” or “0.1–0.2 g”, the top band “40° +” or “0.4 g +”.
+    public func label(_ band: RideMotion.LeanBand) -> String {
+        switch self {
+        case .leanAngle:
+            let low = Int(band.lowerBound)
+            return band == .extreme ? "\(low)° +" : "\(low)–\(low + 10)°"
+        case .lateralAcceleration:
+            func g(_ steps: Int) -> String { (Double(steps) / 10).formatted(.number.precision(.fractionLength(1))) }
+            return band == .extreme ? "\(g(band.rawValue)) g +" : "\(g(band.rawValue))–\(g(band.rawValue + 1)) g"
+        }
     }
 }

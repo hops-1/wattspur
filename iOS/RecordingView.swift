@@ -304,6 +304,10 @@ struct LandscapeRecordingFigures: View {
                     figure("Ascent", recording.ascent.map(RideFormat.ascent) ?? "–")
                 }
             }
+            if recording.vehicle == .car {
+                Divider()
+                LateralBar(recording: recording)
+            }
         }
     }
 
@@ -340,6 +344,14 @@ struct RecordingFigures: View {
                 figure("Speed", RideFormat.speed(recording.currentSpeed))
                 figure("Altitude", recording.lastPoint?.fix.altitude.map(RideFormat.altitude) ?? "–")
             }
+            if recording.vehicle == .car {
+                GridRow {
+                    LateralBar(recording: recording)
+                        .padding(12)
+                        .glassEffect(.regular, in: .rect(cornerRadius: 16))
+                        .gridCellColumns(2)
+                }
+            }
         }
         .overlay(alignment: .top) {
             if recording.isPaused {
@@ -369,5 +381,59 @@ struct RecordingFigures: View {
         .padding(12)
         .glassEffect(.regular, in: .rect(cornerRadius: 16))
         .accessibilityElement(children: .combine)
+    }
+}
+
+/// A car's lateral acceleration while recording (B-287): the value of the last GPS point in g and a
+/// bar from 0.5 g left to 0.5 g right, filled from the middle towards the side of the turn, like the
+/// lean of a bike.
+struct LateralBar: View {
+    var recording: RideRecording
+    static let reach = 0.5
+
+    /// In g, positive in a left turn; `nil` before the first value or while paused.
+    private var lateral: Double? {
+        guard !recording.isPaused, let lean = recording.lastPoint?.fix.motion?.lean else { return nil }
+        return SideMeasure.lateralAcceleration.value(lean: lean)
+    }
+
+    var body: some View {
+        VStack(alignment: .leading, spacing: 6) {
+            HStack(alignment: .firstTextBaseline) {
+                Text("Lateral Acceleration")
+                    .font(.caption)
+                    .foregroundStyle(.secondary)
+                Spacer()
+                Text(verbatim: lateral.map { SideMeasure.lateralAcceleration.text(lean: atan($0) * 180 / .pi) } ?? "–")
+                    .font(.title3.weight(.bold))
+                    .monospacedDigit()
+            }
+            GeometryReader { proxy in
+                let half = proxy.size.width / 2
+                let share = min(abs(lateral ?? 0) / Self.reach, 1)
+                ZStack(alignment: .leading) {
+                    Capsule().fill(.quaternary)
+                    // Left turn: from the middle to the left; right turn: from the middle to the right.
+                    Capsule()
+                        .fill(Color.indigo)
+                        .frame(width: half * share)
+                        .offset(x: (lateral ?? 0) > 0 ? half - half * share : half)
+                    Rectangle().fill(.secondary).frame(width: 1.5).offset(x: half - 0.75)
+                }
+            }
+            .frame(height: 10)
+            HStack {
+                Text(verbatim: "0.5 g").font(.caption2).foregroundStyle(.secondary)
+                Spacer()
+                Text(verbatim: "0.5 g").font(.caption2).foregroundStyle(.secondary)
+            }
+        }
+        .frame(maxWidth: .infinity)
+        .accessibilityElement(children: .ignore)
+        .accessibilityLabel(Text("Lateral Acceleration"))
+        .accessibilityValue(Text(verbatim: lateral.map { value in
+            let side = value > 0 ? String(localized: "left") : value < 0 ? String(localized: "right") : ""
+            return "\(SideMeasure.lateralAcceleration.text(lean: atan(value) * 180 / .pi)) \(side)"
+        } ?? "–"))
     }
 }

@@ -62,15 +62,23 @@ struct RideChartsView: View {
             } else {
                 NoDataCard(title: "Power", message: "This file contains no power data.")
             }
-            // Only rides recorded with the iPhone app from 0.5.1 on have a lean angle (B-247).
+            // Only rides recorded with the iPhone app from 0.5.1 on have a lean angle (B-247); a car
+            // shows the same values as lateral acceleration in g (B-287).
             if !points.isEmpty, points.contains(where: { $0.lean != nil }) {
+                let side = SideMeasure(kind: ride.deviceKind)
                 let leans = points.compactMap(\.lean)
-                let reach = max(15, (leans.map(abs).max() ?? 0) * 1.1)
+                let shown = side == .leanAngle ? points : points.map { point in
+                    var point = point
+                    point.lean = point.lean.map { side.value(lean: $0) }
+                    return point
+                }
+                let reach = max(side.minimumReach, (leans.map { abs(side.value(lean: $0)) }.max() ?? 0) * 1.1)
                 ChartCard(
-                    title: "Lean Angle", color: .metricLean, points: points, axis: axis, joins: joinX, value: \.lean, fixValue: \.lean,
-                    figures: [("Left", RideFormat.lean(max(leans.max() ?? 0, 0))),
-                              ("Right", RideFormat.lean(max(-(leans.min() ?? 0), 0)))],
-                    unit: "°", yDomain: -reach...reach, isLean: true
+                    title: side == .leanAngle ? "Lean Angle" : "Lateral Acceleration", color: .metricLean, points: shown, axis: axis,
+                    joins: joinX, value: \.lean, fixValue: \.lean,
+                    figures: [("Left", side.text(lean: max(leans.max() ?? 0, 0))),
+                              ("Right", side.text(lean: max(-(leans.min() ?? 0), 0)))],
+                    unit: side.unit, yDomain: -reach...reach, isLean: true, side: side
                 )
             }
         }
@@ -122,6 +130,9 @@ private struct ChartCard: View {
     var showsGrade = false
     /// Lean angles around 0: left up, right down; the area starts at 0 and the readout says the side (B-247).
     var isLean = false
+    /// Degrees, or a car's lateral acceleration in g (B-287); the points carry the shown value, the
+    /// spot of the coupling the stored angle.
+    var side: SideMeasure = .leanAngle
 
     /// Kilometres or minutes since the start.
     private func x(_ point: ChartPoint) -> Double {
@@ -151,7 +162,7 @@ private struct ChartCard: View {
         var text = fix[keyPath: fixValue].map { "\(position) · \($0.formatted(.number.precision(.fractionLength(digits)))) \(unit)" } ?? position
         if isLean, let lean = fix.lean {
             let side = lean > 0.5 ? String(localized: "left") : lean < -0.5 ? String(localized: "right") : ""
-            text = "\(position) · \(RideFormat.lean(lean)) \(side)".trimmingCharacters(in: .whitespaces)
+            text = "\(position) · \(self.side.text(lean: lean)) \(side)".trimmingCharacters(in: .whitespaces)
         }
         if showsGrade, fix.altitude != nil, let grade = cursor?.track.gradeText(atDistanceKm: fix.distanceKm) {
             text += " · \(grade)"
@@ -265,7 +276,7 @@ private struct ChartCard: View {
                     AxisGridLine(stroke: StrokeStyle(lineWidth: 0.5, dash: [3, 3]))
                     AxisValueLabel {
                         if let v = mark.as(Double.self) {
-                            Text(verbatim: "\((isLean ? abs(v) : v).formatted(.number.precision(.fractionLength(0)))) \(unit)")
+                            Text(verbatim: "\((isLean ? abs(v) : v).formatted(.number.precision(.fractionLength(side == .lateralAcceleration ? 1 : 0)))) \(unit)")
                         }
                     }
                 }

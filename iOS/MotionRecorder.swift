@@ -64,7 +64,10 @@ final class MotionRecorder: @unchecked Sendable {
     /// The values since the GPS point before; `nil` without readings in between. Called for each
     /// kept GPS point.
     func values(at location: CLLocation) -> MotionValues? {
-        fusion.withLock { $0.close(at: location.timestamp, speed: location.speed) }
+        fusion.withLock {
+            $0.close(at: location.timestamp, speed: location.speed, course: location.course,
+                     courseAccuracy: location.courseAccuracy)
+        }
     }
 
     /// Every location update for the raw log, also while paused or when the recording drops it.

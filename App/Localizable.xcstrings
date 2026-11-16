@@ -9866,6 +9866,56 @@
           }
         }
       }
+    },
+    "Max. Lateral Left" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Max. Querbeschl. links"
+          }
+        }
+      }
+    },
+    "Max. Lateral Right" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Max. Querbeschl. rechts"
+          }
+        }
+      }
+    },
+    "Lateral Acceleration" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Querbeschleunigung"
+          }
+        }
+      }
+    },
+    "Track coloured by lateral acceleration, from green below 0.1 g to purple at 0.4 g and more" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Spur nach Querbeschleunigung eingefärbt, von Grün unter 0,1 g bis Lila ab 0,4 g"
+          }
+        }
+      }
+    },
+    "Color the route by lateral acceleration" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Spur nach Querbeschleunigung einfärben"
+          }
+        }
+      }
     }
   },
   "version" : "1.0"
