@@ -3,57 +3,6 @@ import SwiftUI
 import UniformTypeIdentifiers
 import WattspurKit
 
-/// The values the editor works on; applied to the bike only on "Save".
-struct BikeDraft: Equatable {
-    var name = ""
-    var color: BikeColor = .blue
-    var kind: BikeKind = .bike
-    var isEbike = true
-    var photoData: Data?
-    var manufacturer = ""
-    var model = ""
-    var driveUnit = ""
-    var batteryWh: Int?
-    var weightKg: Double?
-    var purchaseDate: Date?
-    var startKilometers: Double?
-    var makeActive = false
-
-    init() {}
-
-    init(_ bike: Bike, isActive: Bool) {
-        name = bike.name
-        color = bike.color
-        kind = bike.kind
-        isEbike = bike.isEbike
-        photoData = bike.photoData
-        manufacturer = bike.manufacturer
-        model = bike.model
-        driveUnit = bike.driveUnit
-        batteryWh = bike.batteryWh
-        weightKg = bike.weightKg
-        purchaseDate = bike.purchaseDate
-        startKilometers = bike.startKilometers > 0 ? bike.startKilometers : nil
-        makeActive = isActive
-    }
-
-    func apply(to bike: Bike) {
-        bike.name = name.trimmingCharacters(in: .whitespacesAndNewlines)
-        bike.color = color
-        bike.kind = kind
-        // “E-bike” is a bicycle's switch only (B-284).
-        bike.isEbike = kind.sport == .cycling && isEbike
-        bike.photoData = photoData
-        bike.manufacturer = manufacturer.trimmingCharacters(in: .whitespacesAndNewlines)
-        bike.model = model.trimmingCharacters(in: .whitespacesAndNewlines)
-        bike.driveUnit = driveUnit.trimmingCharacters(in: .whitespacesAndNewlines)
-        bike.batteryWh = batteryWh
-        bike.weightKg = weightKg
-        bike.purchaseDate = purchaseDate
-        bike.startKilometers = startKilometers ?? 0
-    }
-}
-
 /// Adds a bike or edits one (B-134, PROF-03): name, colour, kind, photo and the data
 /// of the bike. Archiving a bike is offered here, because deleting it would orphan its rides.
 struct BikeEditorView: View {

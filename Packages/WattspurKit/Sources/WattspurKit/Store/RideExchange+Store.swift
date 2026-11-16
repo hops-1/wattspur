@@ -50,6 +50,6 @@ extension Ride {
 extension Bike {
     var exchangeBike: RideExchange.Bike {
         RideExchange.Bike(id: id, name: name, kind: kindRawValue, color: colorRawValue,
-                          isEbike: isEbike, isArchived: isArchived)
+                          isEbike: isEbike, isArchived: isArchived, startKilometers: startKilometers > 0 ? startKilometers : nil)
     }
 }

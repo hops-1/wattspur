@@ -62,6 +62,23 @@ final class PhoneLibrary {
 
     // MARK: - Database (B-216, B-217)
 
+    /// The values of a device for the editor (B-290).
+    func deviceDraft(id: UUID) -> BikeDraft? { database?.deviceDraft(id: id) }
+
+    /// Adds or changes a device (B-290); iCloud brings it to the Mac.
+    func saveDevice(_ draft: BikeDraft, id: UUID?) {
+        database?.saveDevice(draft, id: id)
+        reload()
+    }
+
+    /// Archives a device or brings it back; the last open one stays.
+    func setArchived(_ archived: Bool, deviceID: UUID) {
+        try? database?.setArchived(archived, deviceID: deviceID)
+        reload()
+    }
+
+    func canArchive(deviceID: UUID) -> Bool { database?.canArchive(deviceID: deviceID) ?? false }
+
     /// Saves the profile edited on the iPhone (B-299); iCloud brings it to the Mac.
     func updateRider(_ details: RiderDetails) {
         database?.updateRider(details)

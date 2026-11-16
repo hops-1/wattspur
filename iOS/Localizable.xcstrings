@@ -3836,16 +3836,6 @@
         }
       }
     },
-    "You change devices on the Mac under Profile; with iCloud they come to this iPhone." : {
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Geräte änderst du am Mac unter Profil; mit iCloud kommen sie auf dieses iPhone."
-          }
-        }
-      }
-    },
     "Choose Photo" : {
       "localizations" : {
         "de" : {
@@ -3892,6 +3882,206 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Gewicht 20–300 kg, Größe 80–250 cm. Ohne diese Angaben kommen die Kalorien nur aus der Arbeit."
+          }
+        }
+      }
+    },
+    "Add Device" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Gerät hinzufügen"
+          }
+        }
+      }
+    },
+    "With iCloud the devices come to the Mac too." : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Mit iCloud kommen die Geräte auch auf den Mac."
+          }
+        }
+      }
+    },
+    "Before Wattspur" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Vor Wattspur"
+          }
+        }
+      }
+    },
+    "Manufacturer" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Hersteller"
+          }
+        }
+      }
+    },
+    "Model" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Modell"
+          }
+        }
+      }
+    },
+    "Color" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Farbe"
+          }
+        }
+      }
+    },
+    "Kilometres before Wattspur" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Kilometer vor Wattspur"
+          }
+        }
+      }
+    },
+    "The kilometres before the first ride in Wattspur count in this device's total only." : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Die Kilometer vor der ersten Fahrt in Wattspur zählen nur beim Gesamtstand dieses Geräts."
+          }
+        }
+      }
+    },
+    "Restore from Archive" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Aus dem Archiv holen"
+          }
+        }
+      }
+    },
+    "Archive" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Archivieren"
+          }
+        }
+      }
+    },
+    "An archived device keeps its rides and stays in the filters; new rides do not go to it." : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ein archiviertes Gerät behält seine Fahrten und bleibt in den Filtern; neue Fahrten gehen nicht mehr darauf."
+          }
+        }
+      }
+    },
+    "The last device cannot be archived: new rides need one." : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Das letzte Gerät lässt sich nicht archivieren: Neue Fahrten brauchen eines."
+          }
+        }
+      }
+    },
+    "New Device" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Neues Gerät"
+          }
+        }
+      }
+    },
+    "Edit Device" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Gerät bearbeiten"
+          }
+        }
+      }
+    },
+    "Blue" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Blau"
+          }
+        }
+      }
+    },
+    "Orange" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Orange"
+          }
+        }
+      }
+    },
+    "Teal" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Petrol"
+          }
+        }
+      }
+    },
+    "Purple" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Violett"
+          }
+        }
+      }
+    },
+    "Pink" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Pink"
+          }
+        }
+      }
+    },
+    "Green" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Grün"
           }
         }
       }
