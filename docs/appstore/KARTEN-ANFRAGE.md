@@ -1,4 +1,4 @@
-# Kartenstile im App Store: Anfrage an die Betreiber (V-18)
+# Kartenstile im App Store: Anfrage an die Betreiber (V-19)
 
 Stand: 12.11.2026. **Entscheidung Nils (12.11.2026): Weg A, die Betreiber fragen.** Die OSM-Kartenstile (OpenStreetMap, CyclOSM, OpenTopoMap) bleiben in der App. Apple-Karten bleiben die Voreinstellung.
 

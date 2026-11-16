@@ -26,7 +26,7 @@ Das Skript prüft die Längen, Leerzeichen bei den Schlüsselwörtern und Namen 
 
 Regeln für die Texte:
 - Nur nennen, was der Build wirklich kann. Kein „bald“, keine Preise, keine anderen Plattformen außer dem eigenen Mac.
-- Die OSM-Kartenstile nicht nennen, solange V-18 (Karten im Store) nicht entschieden ist.
+- Die OSM-Kartenstile nicht nennen, solange V-19 (Karten im Store) nicht entschieden ist.
 - Wörter aus Name und Untertitel nicht in den Schlüsselwörtern wiederholen; Apple findet sie ohnehin.
 
 ## Screenshots
