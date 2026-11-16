@@ -14,7 +14,7 @@ struct BikeBadge: View {
     }
 
     /// The SF Symbol of a kind (B-284): a car, a motorcycle, a shoe or a bicycle.
-    static func symbol(_ kind: BikeKind) -> String {
+    nonisolated static func symbol(_ kind: BikeKind) -> String {
         switch kind {
         case .motorcycle: "motorcycle"
         case .car: "car"
