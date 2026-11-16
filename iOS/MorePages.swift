@@ -81,7 +81,7 @@ private struct ProfilePage: View {
                         NavigationLink {
                             DevicePage(device: device)
                         } label: {
-                            DeviceRow(device: device, usage: library.state?.usage(of: device.id) ?? (0, 0))
+                            DeviceRow(device: device, usage: library.state?.usage(of: device.id) ?? (rides: 0, distance: 0))
                         }
                     }
                 } header: {
@@ -234,7 +234,7 @@ private struct DevicePage: View {
     private var kind: BikeKind { BikeKind(rawValue: device.kind) ?? .bike }
 
     var body: some View {
-        let usage = library.state?.usage(of: device.id) ?? (0, 0)
+        let usage = library.state?.usage(of: device.id) ?? (rides: 0, distance: 0)
         Form {
             Section {
                 VStack(spacing: 8) {
@@ -286,13 +286,15 @@ private struct ProfileEditor: View {
     static let photoEdge = 1000
 
     var body: some View {
+        // The picker's label is a Sendable closure: it gets a copy, not the state.
+        let avatar = details
         NavigationStack {
             Form {
                 Section {
                     HStack {
                         Spacer()
                         PhotosPicker(selection: $photoItem, matching: .images) {
-                            RiderAvatar(rider: details, size: 88)
+                            RiderAvatar(rider: avatar, size: 88)
                                 .overlay(alignment: .bottomTrailing) {
                                     Image(systemName: "camera.circle.fill")
                                         .font(.title2)
