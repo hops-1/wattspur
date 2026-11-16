@@ -76,6 +76,16 @@ Mit der Fahrt aus A.3:
 
 Hier eintragen oder an Claude schicken. Ein ✗ wird ein eigener Backlog-Punkt. B-287 wird ☑, wenn B.1–B.2 und C.3 passen.
 
+| Teil | Ergebnis | Datum, Notiz |
+|---|---|---|
+| 0 | ✓ | 16.11.2026: Schema in Production; Mac 1.9 (773), iPhone 1.1 (27) in TestFlight |
+| A | ✓ | 16.11.2026, Mac 1.9 (773) |
+| B.1 | ✓ | 16.11.2026, Mac |
+| B.2–B.4 | offen | iPhone 1.1 erst nach Nils' Video für Apple |
+| C–F | offen | |
+
+**Vorsicht beim Mac-Test:** Öffne Wattspur aus **Programme** und prüfe unter **Über Wattspur** die Version. Am 16.11. öffnete macOS stattdessen einen alten Debug-Build (1.1.0). Er setzte die Bibliothek auf seinen alten Stand zurück. Dadurch fehlten Bikes, Fotos und Profil, und iCloud gab das an das iPhone weiter. Zurückgeholt aus der Sicherung vom 11.11.
+
 ---
 
 ## Text für TestFlight › „Was testen“ (Build 1.1 (27))
