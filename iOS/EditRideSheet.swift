@@ -24,7 +24,7 @@ struct EditRideSheet: View {
                     TextField("Name", text: $name)
                         .submitLabel(.done)
                     if !bikes.isEmpty {
-                        Picker("Bike", selection: $bikeID) {
+                        Picker("Vehicle", selection: $bikeID) {
                             ForEach(bikes) { bike in
                                 Label { Text(bike.name) } icon: { BikeBadge(bike: bike) }
                                     .tag(Optional(bike.id))

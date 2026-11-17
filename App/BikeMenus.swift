@@ -2,7 +2,7 @@ import SwiftData
 import SwiftUI
 import WattspurKit
 
-// Menus around the bikes: "Import for" (B-135), "Assign Bike" and the bike of a ride.
+// Menus around the bikes: "Import for" (B-135), "Assign Vehicle" and the bike of a ride.
 
 /// The note after assigning rides, with "Undo" (B-135). One for the whole window.
 @MainActor
@@ -49,7 +49,7 @@ extension RideLibrary {
     func assign(_ rides: [Ride], to bike: Bike, undoManager: UndoManager?, notice: BikeAssignmentNotice) {
         let changed = assign(rides, to: bike)
         guard changed > 0 else { return }
-        undoManager?.setActionName(String(localized: "Assign Bike"))
+        undoManager?.setActionName(String(localized: "Assign Vehicle"))
         notice.show(count: changed, bikeName: bike.name)
         AccessibilityNotification.Announcement(notice.current?.text ?? "").post()
     }
@@ -80,7 +80,7 @@ struct BikeAssignMenu<Title: View>: View {
                     .disabled(rides.allSatisfy { $0.bike === bike })
                 }
                 Divider()
-                Button("Manage Bikes…") { NotificationCenter.default.post(name: .showProfile, object: nil) }
+                Button("Manage Vehicles…") { NotificationCenter.default.post(name: .showProfile, object: nil) }
             } label: {
                 label
             }
@@ -114,7 +114,7 @@ struct ImportBikeMenu: View {
                     .pickerStyle(.inline)
                     .labelsHidden()
                     Divider()
-                    Button("Manage Bikes…") { NotificationCenter.default.post(name: .showProfile, object: nil) }
+                    Button("Manage Vehicles…") { NotificationCenter.default.post(name: .showProfile, object: nil) }
                 } label: {
                     HStack(spacing: 6) {
                         BikeChip(kind: active.kind, color: active.color, size: 20)
@@ -155,7 +155,7 @@ struct RideBikeMenu: View {
             // Open bikes, and the ride's own bike even if it was archived since.
             let choices = Bike.sorted(bikes.filter { !$0.isArchived || $0 === current })
             Menu {
-                Picker("Bike of this ride", selection: Binding(get: { current.id }, set: { id in
+                Picker("Vehicle of this ride", selection: Binding(get: { current.id }, set: { id in
                     if let bike = choices.first(where: { $0.id == id }) {
                         sharedLibrary.using(undoManager)
                             .assign([ride], to: bike, undoManager: undoManager, notice: notice)
@@ -168,7 +168,7 @@ struct RideBikeMenu: View {
                 .pickerStyle(.inline)
                 .labelsHidden()
                 Divider()
-                Button("Manage Bikes…") { NotificationCenter.default.post(name: .showProfile, object: nil) }
+                Button("Manage Vehicles…") { NotificationCenter.default.post(name: .showProfile, object: nil) }
             } label: {
                 HStack(spacing: 8) {
                     BikeChip(kind: current.kind, color: current.color, size: 22)
@@ -186,8 +186,8 @@ struct RideBikeMenu: View {
             .buttonStyle(.plain)
             .menuIndicator(.hidden)
             .fixedSize()
-            .help(Text("Move this ride to another bike"))
-            .accessibilityLabel(Text("Bike of this ride"))
+            .help(Text("Move this ride to another vehicle"))
+            .accessibilityLabel(Text("Vehicle of this ride"))
             .accessibilityValue(Text(verbatim: current.name))
         }
     }
@@ -233,8 +233,8 @@ struct BikeFilterPicker: View {
         if bikes.count >= 2 {
             let sorted = Bike.sorted(bikes)
             let archived = sorted.filter(\.isArchived)
-            Picker("Bike", selection: Binding(get: { filter.resolved(knownBikeIDs: Set(bikes.map(\.id))) }, set: { filter = $0 })) {
-                Text("All bikes").tag(BikeFilter.all)
+            Picker("Vehicle", selection: Binding(get: { filter.resolved(knownBikeIDs: Set(bikes.map(\.id))) }, set: { filter = $0 })) {
+                Text("All vehicles").tag(BikeFilter.all)
                 ForEach(sorted.filter { !$0.isArchived }) { bike in
                     BikeMenuImage.label(bike).tag(BikeFilter.bike(bike.id))
                 }
@@ -250,7 +250,7 @@ struct BikeFilterPicker: View {
     }
 }
 
-/// "Bike: All bikes ▾": the filter of an area with its own choice, remembered per area
+/// "Vehicle: All vehicles ▾": the filter of an area with its own choice, remembered per area
 /// (B-137). Outlined in the accent color while it filters.
 struct BikeFilterMenu: View {
     @Binding var filter: BikeFilter
@@ -267,12 +267,12 @@ struct BikeFilterMenu: View {
                     .labelsHidden()
             } label: {
                 HStack(spacing: 6) {
-                    Text("Bike:").foregroundStyle(.secondary)
+                    Text("Vehicle:").foregroundStyle(.secondary)
                     if let selected {
                         BikeChip(kind: selected.kind, color: selected.color, size: 20)
                         Text(verbatim: selected.name).fontWeight(.semibold).lineLimit(1)
                     } else {
-                        Text("All bikes").fontWeight(.semibold)
+                        Text("All vehicles").fontWeight(.semibold)
                     }
                     Image(systemName: "chevron.down").font(.system(size: 9, weight: .bold)).foregroundStyle(.secondary)
                 }
@@ -288,9 +288,9 @@ struct BikeFilterMenu: View {
             .buttonStyle(.plain)
             .menuIndicator(.hidden)
             .fixedSize()
-            .help(Text("Show only the rides of one bike"))
-            .accessibilityLabel(Text("Filter by bike"))
-            .accessibilityValue(selected.map { Text(verbatim: $0.name) } ?? Text("All bikes"))
+            .help(Text("Show only the rides of one vehicle"))
+            .accessibilityLabel(Text("Filter by vehicle"))
+            .accessibilityValue(selected.map { Text(verbatim: $0.name) } ?? Text("All vehicles"))
         }
     }
 }

@@ -350,6 +350,9 @@ public struct RecordingDevice: Codable, Hashable, Sendable {
     /// A car or motorcycle without a device.
     public static func without(_ kind: BikeKind) -> RecordingDevice { RecordingDevice(bikeID: nil, kind: kind) }
 
+    /// The kinds offered without a device (B-321): a hired bicycle, a car or a motorcycle.
+    public static let vehicleTypes: [BikeKind] = [.bike, .car, .motorcycle]
+
     public var kind: BikeKind { BikeKind(rawValue: kindRawValue) ?? .bike }
 
     /// The speed limit for GPS jumps and what the recording shows beside the speed.

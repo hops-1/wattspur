@@ -7,6 +7,14 @@ public enum BikeArchiveError: Error, Sendable, Equatable {
     case lastBike
 }
 
+/// Why a bike or vehicle cannot be deleted (B-322).
+public enum BikeDeleteError: Error, Sendable, Equatable {
+    /// Only an archived one: so it is never the active or the last one.
+    case notArchived
+    /// It still has rides in the list; they are to be assigned to another one first.
+    case hasRides(Int)
+}
+
 /// The rider and the rider's bikes (PROF-03, B-007, B-074, B-134, B-135, B-138).
 struct BikeService: LibraryService {
     let env: LibraryEnvironment
@@ -93,6 +101,27 @@ struct BikeService: LibraryService {
     func unarchive(_ bike: Bike) {
         guard bike.isArchived else { return }
         bike.isArchived = false
+        LibrarySave.save(context)
+    }
+
+    // MARK: - Deleting (B-322)
+
+    /// The rides in the list (not in the trash, not a merged part) that keep a bike from being deleted.
+    func listedRideCount(of bike: Bike) -> Int {
+        (bike.rides ?? []).filter { $0.deletedAt == nil && $0.mergedInto == nil }.count
+    }
+
+    /// Deletes an archived bike or vehicle without rides in the list. Rides in the trash and the
+    /// parts of merged rides lose it but keep its kind (`sportRawValue`), so a car's ride never
+    /// becomes a bicycle ride; restored from the trash it has no device.
+    func delete(_ bike: Bike) throws(BikeDeleteError) {
+        guard bike.isArchived else { throw .notArchived }
+        let listed = listedRideCount(of: bike)
+        guard listed == 0 else { throw .hasRides(listed) }
+        for ride in bike.rides ?? [] where ride.sportRawValue == nil {
+            ride.sportRawValue = bike.kindRawValue
+        }
+        context.delete(bike)
         LibrarySave.save(context)
     }
 

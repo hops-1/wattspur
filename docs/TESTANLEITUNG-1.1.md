@@ -55,7 +55,7 @@ Mit der Fahrt aus A.3:
 
 1. „Starte eine Fahrt mit Nugget in Wattspur“ → die Aufnahme startet mit dem Auto-Symbol.
 2. „Starte eine Fahrt mit Wattspur“ → mit dem Gerät der letzten Aufnahme.
-3. App **Kurzbefehle**: Die Aktion **Fahrt starten** hat ein Feld **Gerät** mit deinen Geräten und Auto/Motorrad ohne Gerät. In deiner CarPlay-Automation dort **Nugget** wählen und einmal im Auto probieren.
+3. App **Kurzbefehle**: Mit **+ › Aktion hinzufügen**, Suche „Wattspur“. Die Aktion **Fahrt starten** hat ein Feld **Gerät** (Pfeil › neben der Aktion; eine Aktion von vor 1.1 einmal löschen und neu hinzufügen) mit deinen Geräten und Auto/Motorrad ohne Gerät. In deiner CarPlay-Automation dort **Nugget** wählen und einmal im Auto probieren.
 
 ## E. Profil und Geräte am iPhone (B-299, B-290)
 
@@ -68,9 +68,9 @@ Mit der Fahrt aus A.3:
 
 ## F. Sicherung (B-310)
 
-1. **Sichern:** Am Mac **Ablage › Mediathek-Backup › Sichern …**. Erwartet: Das Backup enthält das Auto und die Fahrt ohne Gerät aus C.6.
+1. **Sichern:** Am Mac **Ablage › Mediathek-Backup › Sichern …**. Erwartet: Das Backup enthält das Auto **Nugget** mit seinen Fahrten (z. B. „Testfahrt Auto“ vom 17.11.) und das Motorrad „Test“ aus E.5. Sag Claude, wo das Backup liegt: Claude prüft eine Kopie davon, ohne deine Bibliothek anzufassen. Die Fahrt ohne Gerät aus C.6 kommt erst mit dem späteren Test dazu.
 2. **Zurückholen:** Ein altes Backup von vor 1.9 (z. B. vom 12.11.) **auf einer Kopie** zurückholen. Erwartet: Es geht ohne Fehler, die Fahrten sind Rad, Motorrad-Bikes bleiben Motorrad.
-3. **GPX:** Die Autofahrt aus C als GPX exportieren (Mac) oder teilen (iPhone) und in komoot oder Strava öffnen. Erwartet: Sie kommt dort nicht als Radfahrt an (Typ `driving`).
+3. **GPX:** Eine Autofahrt (z. B. „Testfahrt Auto“) als GPX exportieren (Mac) oder teilen (iPhone). Die Datei mit TextEdit öffnen und nach `<type>` suchen. Erwartet: `<type>driving</type>`, nicht `cycling`. (komoot fragt beim Import selbst nach der Sportart und legt eine geplante Tour an, darum taugt es für diesen Test nicht.)
 
 ## Ergebnis
 
@@ -81,9 +81,19 @@ Hier eintragen oder an Claude schicken. Ein ✗ wird ein eigener Backlog-Punkt. 
 | 0 | ✓ | 16.11.2026: Schema in Production; Mac 1.9 (773), iPhone 1.1 (27) in TestFlight |
 | A | ✓ | 16.11.2026, Mac 1.9 (773) |
 | B.1 | ✓ | 16.11.2026, Mac |
-| B.2–B.4 | offen | iPhone 1.1 erst nach Nils' Video für Apple |
+| B.2 | ✓ | 17.11.2026, iPhone 1.1 (27): Tour-Detail der Fahrten „Testfahrt Auto“ mit Querbeschleunigung in g, Karussell und Legende (Screenshots von Nils) |
+| B.3 | ✓ | 17.11.2026: Motorradfahrt bleibt bei Schräglage in Grad (ältere Fahrt, ohne neue Aufnahme) |
+| B.4 | nicht getestet | 0–100 km/h aus dem Stand geht im Berufsverkehr und auf der Landstraße nicht; im Kit mit erfundenen Fahrten getestet (`CarLateralTests`) |
 | C.1–C.3 | ✓ / ✗ | 17.11.2026, zwei Fahrten „Testfahrt Auto“: Werte folgen dem GPS, Drehen an der Ampel ohne falschen Ausschlag (nur im Stand gedreht); ✗ bei 85 km/h zu hoch → B-319; ✗ Kachel und Karte → B-320; „Ohne Gerät“ → B-321 |
-| C.4–F | offen | |
+| C.4–C.8 | ✓ | 17.11.2026, iPhone 1.1 (27): Sichern auf Nugget, nächster Start mit Nugget, Auto ohne Gerät, danach Rad ohne Balken, *Mehr* ohne Seite Aufnahme |
+| D.1 | ✗ | 17.11.2026, iPhone 1.1 (27): „Starte eine Fahrt mit Nugget in Wattspur“ startete mit Cube Nadja (letztes Gerät); dazu startete hr.info die Wiedergabe → B-323 |
+| D.2 | ✓ | 17.11.2026: „Starte eine Fahrt mit Wattspur“ nimmt das Gerät der letzten Aufnahme |
+| D.3 | ✓ | 17.11.2026: Aktion **Fahrt starten** mit **+ › Aktion hinzufügen › Wattspur** gefunden, Feld **Gerät** mit den Geräten |
+| E | ✓ | 17.11.2026, iPhone 1.1 (27): Profil, Gewicht, Kacheln, Geräte, Motorrad „Test“ anlegen, bearbeiten, archivieren; jeweils über iCloud am Mac angekommen |
+| F.1 | ✓ | 17.11.2026, Backup 22:04 von Mac 1.9 (773): 96 Fahrten, Nugget (Auto) mit beiden „Testfahrt Auto“, „Test Motorrad“ archiviert, Profil; von Claude auf einer Kopie geprüft |
+| F.2 | ✓ | 17.11.2026, Mac 1.9 (773): Backup vom 12.11. ohne Fehler zurückgeholt (auf der echten Bibliothek, nicht auf einer Kopie), danach Backup 22:04 ebenso ohne Fehler zurück |
+| F.3 | ✓ | 17.11.2026, Mac 1.9 (773): „Testfahrt Auto“ als GPX mit `<type>driving</type>` und `wattspur:bike` (Nugget); Beschreibung noch „Bike: Nugget“, ab Mac 1.9.1 „Fahrzeug: Nugget“ (B-321) |
+| B-319–B-323 | umgesetzt, offen | iPhone 1.1.1 und Mac 1.9.1: Auto-Querbeschleunigung bei 85 km/h, Kachel, „Fahrzeugart“ mit Fahrrad, „Fahrzeug“ statt „Bike“ am Mac, Fahrzeug löschen (archiviert, ohne Fahrten: „Test Motorrad“), Siri mit Nugget |
 
 **Vorsicht beim Mac-Test:** Öffne Wattspur aus **Programme** und prüfe unter **Über Wattspur** die Version. Am 16.11. öffnete macOS stattdessen einen alten Debug-Build (1.1.0). Er setzte die Bibliothek auf seinen alten Stand zurück. Dadurch fehlten Bikes, Fotos und Profil, und iCloud gab das an das iPhone weiter. Zurückgeholt aus der Sicherung vom 11.11.
 

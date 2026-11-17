@@ -27,11 +27,11 @@ struct BikeEditorView: View {
     var body: some View {
         VStack(spacing: 0) {
             HStack(spacing: 12) {
-                Text(existing == nil ? "New Bike" : "Edit Bike").font(.title2.bold())
+                Text(existing == nil ? "New Vehicle" : "Edit Vehicle").font(.title2.bold())
                 Spacer()
                 HStack(spacing: 8) {
                     BikeChip(kind: draft.kind, color: draft.color, size: 24)
-                    Text(verbatim: draft.name.nonEmpty ?? String(localized: "New bike")).font(.callout.weight(.semibold))
+                    Text(verbatim: draft.name.nonEmpty ?? String(localized: "New vehicle")).font(.callout.weight(.semibold))
                 }
                 .padding(.leading, 4)
                 .padding(.trailing, 12)
@@ -124,7 +124,7 @@ struct BikeEditorView: View {
     private var fields: some View {
         VStack(alignment: .leading, spacing: 16) {
             LabeledField("Name") {
-                TextField("Name", text: $draft.name, prompt: Text("Bike name"))
+                TextField("Name", text: $draft.name, prompt: Text("Vehicle name"))
                     .textFieldStyle(.roundedBorder)
                     .labelsHidden()
             }
@@ -211,7 +211,7 @@ struct BikeEditorView: View {
 
     private var kinds: some View {
         VStack(alignment: .leading, spacing: 2) {
-            Text("Bike type").font(.caption).foregroundStyle(.secondary).padding(.bottom, 4)
+            Text("Vehicle type").font(.caption).foregroundStyle(.secondary).padding(.bottom, 4)
             ForEach(BikeKind.selectable + (draft.kind == .runningShoe ? [.runningShoe] : [])) { kind in
                 let selected = draft.kind == kind
                 Button { draft.kind = kind } label: {
@@ -258,14 +258,14 @@ struct BikeEditorView: View {
             }
         }
         .accessibilityElement(children: .contain)
-        .accessibilityLabel(Text("Bike type"))
+        .accessibilityLabel(Text("Vehicle type"))
     }
 
     private func archiveBox(_ bike: Bike) -> some View {
         let isLast = openBikeCount <= 1 && !bike.isArchived
         return HStack(spacing: 14) {
             VStack(alignment: .leading, spacing: 2) {
-                Text("Archive bike").font(.body.weight(.semibold))
+                Text("Archive vehicle").font(.body.weight(.semibold))
                 Text(isLast
                      ? "The last bike cannot be archived: new rides need a bike."
                      : "It disappears from the Import menu. Its rides stay assigned and the bike stays in the filters. You can restore it any time.")

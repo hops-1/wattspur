@@ -230,8 +230,9 @@ struct StartRideButton: View {
     }
 }
 
-/// “What are you riding?” (B-286): the devices in groups Bikes, Vehicles and Shoes, below them a car
-/// or motorcycle without a device for the quick start. A tap starts the ride with it.
+/// “What are you riding?” (B-286): the devices in groups Bikes, Vehicles and Shoes, below them the
+/// vehicle types bicycle, car and motorcycle without a device (B-321), e.g. for a hired bike or a
+/// rented car. A tap starts the ride with it.
 struct DeviceChoiceSheet: View {
     @Environment(PhoneLibrary.self) private var library
     @Environment(\.dismiss) private var dismiss
@@ -253,15 +254,15 @@ struct DeviceChoiceSheet: View {
                     }
                 }
                 Section {
-                    ForEach([BikeKind.car, .motorcycle], id: \.self) { kind in
+                    ForEach(RecordingDevice.vehicleTypes, id: \.self) { kind in
                         row(.without(kind)) {
                             Label { Text(kind.label) } icon: { Image(systemName: BikeBadge.symbol(kind)) }
                         }
                     }
                 } header: {
-                    Text("Without a Device")
+                    Text("Vehicle Type")
                 } footer: {
-                    Text("Such a ride does not count towards your bikes, like a ride on a vehicle.")
+                    Text("For a bike or vehicle that is not yours. A bicycle ride counts in the cycling totals but towards none of your bikes; a car or motorcycle ride does not count in them.")
                 }
             }
             .navigationTitle("What Are You Riding?")

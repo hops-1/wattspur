@@ -325,16 +325,6 @@
         }
       }
     },
-    "All Bikes" : {
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Alle Bikes"
-          }
-        }
-      }
-    },
     "All Rides" : {
       "localizations" : {
         "de" : {
@@ -466,42 +456,12 @@
         }
       }
     },
-    "Bike" : {
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Bike"
-          }
-        }
-      }
-    },
-    "Bike: %@" : {
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Bike: %@"
-          }
-        }
-      }
-    },
     "Change the search or the filters." : {
       "localizations" : {
         "de" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "Ändere die Suche oder die Filter."
-          }
-        }
-      }
-    },
-    "Choose another period or bike, or record a ride." : {
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Wähle einen anderen Zeitraum oder ein anderes Bike, oder nimm eine Fahrt auf."
           }
         }
       }
@@ -2314,16 +2274,6 @@
         }
       }
     },
-    "Which Bike?" : {
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Welches Bike?"
-          }
-        }
-      }
-    },
     "Work" : {
       "localizations" : {
         "de" : {
@@ -4086,26 +4036,6 @@
         }
       }
     },
-    "Without a Device" : {
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Ohne Gerät"
-          }
-        }
-      }
-    },
-    "Such a ride does not count towards your bikes, like a ride on a vehicle." : {
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "So eine Fahrt zählt nicht zu deinen Bikes, wie eine Fahrt mit einem Fahrzeug."
-          }
-        }
-      }
-    },
     "What Are You Riding?" : {
       "localizations" : {
         "de" : {
@@ -4126,12 +4056,122 @@
         }
       }
     },
-    "%@, no device" : {
+    "All Vehicles" : {
       "localizations" : {
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "%@, ohne Gerät"
+            "value" : "Alle Fahrzeuge"
+          }
+        }
+      }
+    },
+    "Vehicle" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Fahrzeug"
+          }
+        }
+      }
+    },
+    "Vehicle: %@" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Fahrzeug: %@"
+          }
+        }
+      }
+    },
+    "Choose another period or vehicle, or record a ride." : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Wähle einen anderen Zeitraum oder ein anderes Fahrzeug, oder nimm eine Fahrt auf."
+          }
+        }
+      }
+    },
+    "Which Vehicle?" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Für welches Fahrzeug?"
+          }
+        }
+      }
+    },
+    "Vehicle Type" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Fahrzeugart"
+          }
+        }
+      }
+    },
+    "For a bike or vehicle that is not yours. A bicycle ride counts in the cycling totals but towards none of your bikes; a car or motorcycle ride does not count in them." : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Für ein Rad oder Fahrzeug, das nicht deins ist. Eine Fahrt mit dem Fahrrad zählt in die Rad-Summen, aber zu keinem deiner Bikes; eine Fahrt mit Auto oder Motorrad zählt dort nicht."
+          }
+        }
+      }
+    },
+    "%@ (vehicle type only)" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@ (nur Fahrzeugart)"
+          }
+        }
+      }
+    },
+    "Delete Device" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Gerät löschen"
+          }
+        }
+      }
+    },
+    "Delete this device?" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Dieses Gerät löschen?"
+          }
+        }
+      }
+    },
+    "It disappears on all your devices. This cannot be undone." : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Es verschwindet auf allen deinen Geräten. Das lässt sich nicht rückgängig machen."
+          }
+        }
+      }
+    },
+    "To delete it, assign all its rides (%lld) to another device first." : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Zum Löschen weise erst alle seine Fahrten (%lld) einem anderen Gerät zu."
           }
         }
       }

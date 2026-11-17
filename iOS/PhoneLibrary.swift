@@ -79,6 +79,15 @@ final class PhoneLibrary {
 
     func canArchive(deviceID: UUID) -> Bool { database?.canArchive(deviceID: deviceID) ?? false }
 
+    /// Deletes an archived device without rides in the list (B-322); over iCloud also on the Mac.
+    func deleteDevice(id: UUID) {
+        try? database?.deleteDevice(id: id)
+        reload()
+    }
+
+    /// The rides in the list that keep a device from being deleted (B-322).
+    func listedRideCount(deviceID: UUID) -> Int { database?.listedRideCount(deviceID: deviceID) ?? 0 }
+
     /// The device for the next recording (B-286): the last one, else the active bike.
     var nextRecordingDevice: RecordingDevice {
         RecordingChoice.next(devices: state?.bikes ?? [], activeID: database?.activeDeviceID())
@@ -183,7 +192,7 @@ final class PhoneLibrary {
     /// The ride as GPX for the share sheet, built only when the user shares.
     func sharedGPX(for ride: RideExchange.Ride) -> SharedGPX {
         SharedGPX(fileName: GPXWriter.fileName(ride.name)) { [weak self] in
-            guard let file = self?.database?.gpx(forRideID: ride.id, note: { String(localized: "Bike: \($0)") }) else {
+            guard let file = self?.database?.gpx(forRideID: ride.id, note: { String(localized: "Vehicle: \($0)") }) else {
                 throw CocoaError(.fileNoSuchFile)
             }
             return file.data

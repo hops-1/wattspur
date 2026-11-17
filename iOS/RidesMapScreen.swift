@@ -141,8 +141,8 @@ struct RidesMapScreen: View {
                 .buttonStyle(.glass)
                 if bikes.count > 1 {
                     Menu {
-                        Picker("Bike", selection: $bike) {
-                            Text("All Bikes").tag(BikeFilter.all)
+                        Picker("Vehicle", selection: $bike) {
+                            Text("All Vehicles").tag(BikeFilter.all)
                             ForEach(bikes.filter { !$0.isArchived || BikeFilter.bike($0.id) == bike }) { bike in
                                 Text(verbatim: bike.name).tag(BikeFilter.bike(bike.id))
                             }
@@ -152,7 +152,7 @@ struct RidesMapScreen: View {
                             if let name = bikes.first(where: { BikeFilter.bike($0.id) == shownBike })?.name {
                                 Text(verbatim: name)
                             } else {
-                                Text("All Bikes")
+                                Text("All Vehicles")
                             }
                         } icon: { Image(systemName: "bicycle") }
                             .font(.subheadline.weight(.medium))
@@ -201,7 +201,7 @@ struct RidesMapScreen: View {
         ContentUnavailableView {
             Label("No Rides on the Map", systemImage: "map")
         } description: {
-            Text("Choose another period or bike, or record a ride.")
+            Text("Choose another period or vehicle, or record a ride.")
         }
         .padding()
         .glassEffect(.regular, in: .rect(cornerRadius: 24))

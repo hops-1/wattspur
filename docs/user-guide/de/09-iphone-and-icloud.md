@@ -23,7 +23,7 @@ Ab 0.6.2 ist **Mehr** eine Liste wie die Einstellungen von iOS. Jede Zeile öffn
 - **Profil** (oben, mit Foto und Name), ab iPhone 1.1 in drei Teilen:
   - **Für die Kalorien:** Name, Foto, Gewicht, Größe, Geburtsjahr und Geschlecht. **Bearbeiten** oben rechts ändert sie am iPhone; mit iCloud gelten sie auch am Mac, und was du am Mac änderst, kommt aufs iPhone. Werte außerhalb von 20–300 kg und 80–250 cm werden nicht gespeichert.
   - **Summen je Sportart:** Strecke, Fahrten, Fahrzeit, längste Fahrt und Höchsttempo, für Rad, Fahrzeuge und Laufen getrennt. Eine Autofahrt zählt nie beim Rad.
-  - **Geräte:** deine Bikes, Fahrzeuge und Schuhe mit ihren Kilometern; ein Tipp öffnet eines, **Bearbeiten** ändert Name, Art, Farbe, Foto, Hersteller, Modell und die Kilometer vor Wattspur, beim Rad auch den Schalter **E-Bike**. **Gerät hinzufügen** legt ein neues an, zum Beispiel dein Auto. Archivieren geht dort auch; das letzte Gerät bleibt. Mit iCloud kommt alles auf den Mac.
+  - **Geräte:** deine Bikes, Fahrzeuge und Schuhe mit ihren Kilometern; ein Tipp öffnet eines, **Bearbeiten** ändert Name, Art, Farbe, Foto, Hersteller, Modell und die Kilometer vor Wattspur, beim Rad auch den Schalter **E-Bike**. **Gerät hinzufügen** legt ein neues an, zum Beispiel dein Auto. Archivieren geht dort auch; das letzte Gerät bleibt. Ein archiviertes Gerät ohne Fahrten lässt sich dort ab iPhone 1.1.1 mit **Gerät löschen** löschen; hat es noch Fahrten, weise sie erst einem anderen Gerät zu. Mit iCloud kommt alles auf den Mac.
 - **Karten:** der Kartenstil für alle Karten.
 - **iCloud & Bibliothek:** Sync an oder aus, wann zuletzt synchronisiert wurde, Hinweise bei Problemen.
 - **Papierkorb:** gelöschte Fahrten, 30 Tage lang.
@@ -69,7 +69,7 @@ Die Bosch-Datei einer Fahrt hat mehr Werte als eine GPS-Aufnahme, z. B. Leistung
 2. Wähle im Teilen-Menü **Wattspur**. Eine FIT- oder GPX-Datei in der **Dateien-App** kannst du ebenso mit Wattspur öffnen.
 
 **Mit iCloud** wird daraus eine Fahrt auf dem iPhone, und sie kommt auch an den Mac. Wattspur stellt dieselben Fragen wie am Mac:
-- **Welches Bike?** Eine GPX-Datei sagt nicht, zu welchem Bike sie gehört. Bei zwei oder mehr Bikes fragt Wattspur.
+- **Welches Fahrzeug?** Eine GPX-Datei sagt nicht, zu welchem Bike oder Fahrzeug sie gehört. Bei zwei oder mehr fragt Wattspur.
 - **Schon in der Bibliothek:** Hast du die Fahrt auch mit dem iPhone aufgenommen, kannst du **Bosch-Werte übernehmen**, **Beide behalten** oder **Überspringen**. Wattspur zeigt dazu Start, Strecke und Zeit von beiden.
 - Eine GPX-Datei zu einer Bosch-Fahrt hängt Wattspur an die Fahrt an. Die Bosch-Werte bleiben.
 - **Eine Tour in mehreren Bosch-Teilen:** Die Flow-App teilt eine Tour mit langen Pausen in mehrere Fahrten, das iPhone nimmt sie als eine auf. Liegen die Bosch-Fahrten ganz in der Zeit deiner Aufnahme und ergeben zusammen ihre Strecke, fügt Wattspur sie zu einer Fahrt zusammen. Sie bekommt Name und Bike der Aufnahme und deren Puls, Schräglage und Belag. Die Aufnahme selbst kommt in den Papierkorb, dort kannst du sie wiederherstellen. Es ist egal, welche Datei zuletzt kommt. Hast du die Teile schon früher importiert, lege eine ihrer FIT-Dateien noch einmal ab.
@@ -200,11 +200,11 @@ Gut zu wissen:
 - Wattspur nimmt das Gerät aus der Aktion. Ohne Gerät nimmt es das der letzten Aufnahme.
 
 ## Womit du fährst: Rad, Motorrad, Auto
-Ab iPhone 1.1 wählst du das Gerät beim Start. Ein Tipp auf **Fahrt starten** nimmt das Gerät der letzten Aufnahme. Darunter steht klein „mit Nugget ▾“: Ein Tipp darauf öffnet **Womit fährst du?** mit deinen Bikes, Fahrzeugen und Schuhen. Darunter stehen **Auto** und **Motorrad** ohne Gerät, für den schnellen Start. Ein Tipp auf eine Zeile startet die Fahrt damit. Beim Sichern ist das Gerät schon gewählt, du kannst es dort noch ändern. Die Live-Aktivität zeigt sein Symbol.
+Ab iPhone 1.1 wählst du das Gerät beim Start. Ein Tipp auf **Fahrt starten** nimmt das Gerät der letzten Aufnahme. Darunter steht klein „mit Nugget ▾“: Ein Tipp darauf öffnet **Womit fährst du?** mit deinen Bikes, Fahrzeugen und Schuhen. Darunter steht **Fahrzeugart** mit **Fahrrad**, **Auto** und **Motorrad** ohne eigenes Gerät, zum Beispiel für ein geliehenes Rad oder einen Mietwagen (Fahrrad ab iPhone 1.1.1). Ein Tipp auf eine Zeile startet die Fahrt damit. Beim Sichern ist das Gerät schon gewählt, du kannst es dort noch ändern. Die Live-Aktivität zeigt sein Symbol.
 
-Das Gerät bestimmt auch, welche Punkte Wattspur weglässt, weil sie eine unmögliche Geschwindigkeit ergeben würden (GPS-Sprünge): Beim Rad liegt die Grenze bei 100 km/h, beim Motorrad und Auto bei 300 km/h. Im Auto zeigt die Aufnahme unter dem Tempo die Querbeschleunigung als Balken von 0,5 g links bis 0,5 g rechts.
+Das Gerät bestimmt auch, welche Punkte Wattspur weglässt, weil sie eine unmögliche Geschwindigkeit ergeben würden (GPS-Sprünge): Beim Rad liegt die Grenze bei 100 km/h, beim Motorrad und Auto bei 300 km/h. Im Auto zeigt die Aufnahme unter dem Tempo die Querbeschleunigung als Balken von 0,5 g links bis 0,5 g rechts. Ab iPhone 1.1.1 ist das beim Auto das Mittel jeder Sekunde, nicht mehr die stärkste Spitze: Bei hohem Tempo schwingt die Halterung, und die Spitze zeigte zwei- bis dreimal so viel wie aus dem GPS-Kurs.
 
-Fahrten mit Motorrad und Auto, auch ohne Gerät, zählen nicht zu den Summen deiner Fahrräder (siehe [Profil und Bikes](07-profile-and-bikes.md)). Die frühere Einstellung **Mehr › Aufnahme › Fahrzeug** gibt es nicht mehr; was dort stand, gilt bis zur ersten Wahl weiter.
+Fahrten mit Motorrad und Auto, auch ohne Gerät, zählen nicht zu den Summen deiner Fahrräder (siehe [Profil und Bikes](07-profile-and-bikes.md)). Eine Fahrt mit **Fahrrad** ohne Gerät zählt in die Rad-Summen, aber zu keinem deiner Bikes. Siri und die Aktion **Fahrt starten** in Kurzbefehle bieten dieselben drei Arten an. Die frühere Einstellung **Mehr › Aufnahme › Fahrzeug** gibt es nicht mehr; was dort stand, gilt bis zur ersten Wahl weiter.
 
 ---
 Weiter: [Fragen](06-faq.md) · [Inhalt](README.md)

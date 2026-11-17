@@ -111,6 +111,72 @@ struct CarLateralTests {
         #expect(near.lean > 20)
     }
 
+    /// A steady curve at 85 km/h as on 17.11.2026 (B-319): the GPS course says 0.15 g, the holder
+    /// sways with 20°/s at 2 Hz, the course is 2° off each second, to the one side and then the other.
+    static func swayingCurve(vehicle: RecordingVehicle, seconds: Int = 20) -> [MotionValues?] {
+        let speed = 85 / 3.6
+        let turn = 0.15 * MotionFusion.gravity / speed // rad/s to the left
+        let sway = 20 * Double.pi / 180
+        var fusion = MotionFusion(vehicle: vehicle)
+        let start = MotionFusionTests.start
+        let g = MotionFusionTests.gravity
+        let up = MotionFusionTests.up
+        _ = fusion.close(at: start, speed: speed, course: 180, courseAccuracy: 2)
+        var values: [MotionValues?] = []
+        for second in 1...seconds {
+            for i in 0..<50 {
+                let t = Double(second - 1) + Double(i) / 50
+                let rate = turn + sway * sin(2 * .pi * 2 * t)
+                fusion.add(MotionFusion.Reading(date: start.addingTimeInterval(t), quaternion: (0, 0, 0, 1),
+                                                gravity: g, acceleration: (0, 0, 0),
+                                                rotation: (rate * up.x, rate * up.y, rate * up.z)))
+            }
+            let noise = second.isMultiple(of: 2) ? 2.0 : -2.0
+            let course = 180 - turn * 180 / .pi * Double(second) + noise
+            values.append(fusion.close(at: start.addingTimeInterval(Double(second)), speed: speed,
+                                       course: course, courseAccuracy: 2))
+        }
+        return values
+    }
+
+    @Test("A car takes the mean of a second: a swaying holder at 85 km/h stays near the GPS value")
+    func swayingHolder() throws {
+        let lateral = SideMeasure.lateralAcceleration
+        let car = try Self.swayingCurve(vehicle: .car).dropFirst().map { try #require($0) }
+        // No point of the steady curve is left out as a turned iPhone.
+        #expect(car.allSatisfy { $0.lean != 0 })
+        // Within 30 % of the 0.15 g from the course.
+        for value in car {
+            #expect(abs(lateral.value(lean: value.lean) - 0.15) <= 0.045)
+        }
+        // A bike keeps the strongest value of the second, as before.
+        let bike = try Self.swayingCurve(vehicle: .eBike).dropFirst().map { try #require($0) }
+        #expect(bike.contains { lateral.value(lean: $0.lean) > 0.3 })
+    }
+
+    @Test("The check allows more at speed and in a curve, but not a turned iPhone")
+    func allowedMismatch() throws {
+        // 7°/s on a straight road at 90 km/h is still a turned iPhone, in a car as well.
+        var fusion = MotionFusion(vehicle: .car)
+        let start = MotionFusionTests.start
+        _ = fusion.close(at: start, speed: 25, course: 90, courseAccuracy: 2)
+        var last: MotionValues?
+        for second in 1...4 {
+            for reading in MotionFusionTests.readings(from: Double(second - 1), seconds: 1, turn: 0.12) {
+                fusion.add(reading)
+            }
+            last = fusion.close(at: start.addingTimeInterval(Double(second)), speed: 25, course: 90, courseAccuracy: 2)
+        }
+        #expect(try #require(last).lean == 0)
+        // At 30 km/h a course 4.5° off the sensors in a curve still counts, on a straight road not.
+        let speed = 30 / 3.6
+        let inCurve = try #require(Self.drive(seconds: 3, speed: speed, turn: 0.3,
+                                              courseRate: -0.3 * 180 / .pi + 4.5).last ?? nil)
+        #expect(inCurve.lean > 10)
+        let straight = try #require(Self.drive(seconds: 3, speed: speed, turn: 4.5 * .pi / 180).last ?? nil)
+        #expect(straight.lean == 0)
+    }
+
     @Test("Below 10 km/h there is no check, and no lean either")
     func slow() throws {
         let slow = try #require(Self.drive(seconds: 3, speed: 2, turn: 0.5).last ?? nil)

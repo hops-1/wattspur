@@ -164,8 +164,8 @@ struct HighlightsView: View {
                                    description: Text("Choose another source or all sources."))
                 .frame(maxWidth: .infinity, minHeight: 300)
         } else if bikeFilter.isActive && !allRides.isEmpty {
-            ContentUnavailableView("No Rides on This Bike", systemImage: "trophy",
-                                   description: Text("Choose another bike or all bikes."))
+            ContentUnavailableView("No Rides with This Vehicle", systemImage: "trophy",
+                                   description: Text("Choose another vehicle or all vehicles."))
                 .frame(maxWidth: .infinity, minHeight: 300)
         } else {
             ContentUnavailableView("No Rides Yet", systemImage: "trophy",

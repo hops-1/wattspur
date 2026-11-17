@@ -244,6 +244,7 @@ private struct DeviceRow: View {
 /// One device, opened from the profile (B-299); **Edit** changes it (B-290).
 private struct DevicePage: View {
     @Environment(PhoneLibrary.self) private var library
+    @Environment(\.dismiss) private var dismiss
     let deviceID: UUID
     @State private var editing: BikeDraft?
 
@@ -292,6 +293,10 @@ private struct DevicePage: View {
             Button("Edit") { editing = library.deviceDraft(id: deviceID) }
                 .disabled(library.database == nil)
         }
+        // Deleted (B-322), here or on the Mac: back to the list.
+        .onChange(of: library.state?.bikes.contains { $0.id == deviceID }) { _, exists in
+            if exists == false { dismiss() }
+        }
         .sheet(item: Binding(get: { editing.map(EditedDevice.init) }, set: { if $0 == nil { editing = nil } })) { edited in
             DeviceEditor(id: deviceID, draft: edited.draft, isArchived: device.isArchived,
                          canArchive: library.canArchive(deviceID: deviceID))
@@ -316,6 +321,7 @@ private struct DeviceEditor: View {
     var isArchived = false
     let canArchive: Bool
     @State private var photoItem: PhotosPickerItem?
+    @State private var confirmingDelete = false
 
     init(id: UUID?, draft: BikeDraft, isArchived: Bool = false, canArchive: Bool) {
         self.id = id
@@ -388,6 +394,9 @@ private struct DeviceEditor: View {
                                 library.setArchived(false, deviceID: id)
                                 dismiss()
                             }
+                            // Only without rides in the list, so no ride loses its device (B-322).
+                            Button("Delete Device", role: .destructive) { confirmingDelete = true }
+                                .disabled(library.listedRideCount(deviceID: id) > 0)
                         } else {
                             Button("Archive", role: .destructive) {
                                 library.saveDevice(draft, id: id)
@@ -397,9 +406,22 @@ private struct DeviceEditor: View {
                             .disabled(!canArchive)
                         }
                     } footer: {
-                        Text(canArchive || isArchived
-                             ? "An archived device keeps its rides and stays in the filters; new rides do not go to it."
-                             : "The last device cannot be archived: new rides need one.")
+                        let rides = library.listedRideCount(deviceID: id)
+                        if isArchived && rides > 0 {
+                            Text("To delete it, assign all its rides (\(rides)) to another device first.")
+                        } else {
+                            Text(canArchive || isArchived
+                                 ? "An archived device keeps its rides and stays in the filters; new rides do not go to it."
+                                 : "The last device cannot be archived: new rides need one.")
+                        }
+                    }
+                    .confirmationDialog("Delete this device?", isPresented: $confirmingDelete, titleVisibility: .visible) {
+                        Button("Delete Device", role: .destructive) {
+                            library.deleteDevice(id: id)
+                            dismiss()
+                        }
+                    } message: {
+                        Text("It disappears on all your devices. This cannot be undone.")
                     }
                 }
             }

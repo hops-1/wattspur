@@ -113,4 +113,28 @@ struct RecordingDeviceTests {
         let onCar = try #require(database.library.ride(withID: second))
         #expect(onCar.bike?.id == nugget.id && onCar.sportRawValue == nil)
     }
+
+    @Test("A hired bicycle without a device counts in the cycling totals, towards no bike (B-321)")
+    func bicycleWithoutDevice() throws {
+        #expect(RecordingDevice.vehicleTypes == [.bike, .car, .motorcycle])
+        let text = String(decoding: gpx(kind: .bike), as: UTF8.self)
+        #expect(text.contains("<wattspur:kind>bike</wattspur:kind>"))
+        #expect(try GPXRideImporter().parse(gpx(kind: .bike)).suggestedKind == .bike)
+
+        let container = try ModelContainer(for: Schema(WattspurSchema.models),
+                                           configurations: ModelConfiguration(isStoredInMemoryOnly: true))
+        let database = PhoneDatabase(container: container, defaultBikeName: "Mein eBike")
+        guard case .imported(let id) = database.saveRecording(gpx: gpx(kind: .bike), fileName: "Leihrad.gpx").outcome else {
+            Issue.record("not imported")
+            return
+        }
+        let ride = try #require(database.library.ride(withID: id))
+        #expect(ride.bike == nil && ride.sportRawValue == "bike")
+        #expect(ride.sport == .cycling && ride.countsInTotals)
+        let state = try database.snapshot(generator: "test")
+        #expect(state.countedRides.map(\.id) == [id])
+        // It counts towards no bike: the iPhone's own bike has no ride.
+        let own = try #require(state.bikes.first)
+        #expect(state.usage(of: own.id).rides == 0)
+    }
 }

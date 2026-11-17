@@ -14,7 +14,7 @@ A GPX file holds positions, altitude and time, sometimes also power, cadence, he
 ## Importing
 Import GPX files the same way as FIT files, see [Importing rides](03-importing.md): drag them onto the ride list or the import window, click **+** (⌘O), or save them in the watched folder.
 
-**Which bike?** A GPX file does not say which bike it was ridden on. If you have two or more bikes, a sheet asks when you drop GPX files by hand; the active bike is preselected. With one bike, or in the watched folder, the ride goes to the active bike (see [Profile and bikes](07-profile-and-bikes.md)). You can change it later with **Assign Bike**.
+**Which vehicle?** A GPX file does not say which bike it was ridden on. If you have two or more bikes, a sheet asks when you drop GPX files by hand; the active bike is preselected. With one bike, or in the watched folder, the ride goes to the active bike (see [Profile and bikes](07-profile-and-bikes.md)). You can change it later with **Assign Bike**.
 
 ## What Wattspur calculates
 Because the file has no totals, Wattspur works them out from the points. The ride is marked **≈ Totals estimated**; click it for the short explanation.

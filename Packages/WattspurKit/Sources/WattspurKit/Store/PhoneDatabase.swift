@@ -294,6 +294,17 @@ public final class PhoneDatabase {
         oldestRider()?.activeBikeID
     }
 
+    /// Deletes an archived device without rides in the list (B-322); an unknown one is gone already.
+    public func deleteDevice(id: UUID) throws(BikeDeleteError) {
+        guard let bike = device(id) else { return }
+        try library.delete(bike)
+    }
+
+    /// The rides in the list that keep a device from being deleted (B-322).
+    public func listedRideCount(deviceID: UUID) -> Int {
+        device(deviceID).map { library.listedRideCount(of: $0) } ?? 0
+    }
+
     /// Whether a device may be archived: not the last one that is not archived.
     public func canArchive(deviceID: UUID) -> Bool {
         library.bikes(includingArchived: false).contains { $0.id != deviceID }
