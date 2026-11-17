@@ -2,7 +2,7 @@ import SwiftData
 import SwiftUI
 import WattspurKit
 
-/// "Which bike?": asked when GPX files are imported by hand and there are two or more bikes,
+/// "Which vehicle?": asked when GPX files are imported by hand and there are two or more bikes,
 /// because a GPX file does not say which bike it was ridden on (IMP-04, mockup "GPX importieren").
 /// The watched folder does not ask; its files go to the active bike.
 struct GPXBikeSheet: View {
@@ -35,7 +35,7 @@ struct GPXBikeSheet: View {
                     .background(Color.accentColor.opacity(0.14), in: Circle())
                     .accessibilityHidden(true)
                 VStack(alignment: .leading, spacing: 3) {
-                    Text("Which bike?").font(.title3.bold())
+                    Text("Which vehicle?").font(.title3.bold())
                     Text(gpx.count == 1
                          ? "GPX files do not say which bike they belong to. Wattspur assigns the ride to the bike you choose."
                          : "GPX files do not say which bike they belong to. Wattspur assigns the rides to the bike you choose.")
@@ -76,7 +76,7 @@ struct GPXBikeSheet: View {
                 }
             }
             .accessibilityElement(children: .contain)
-            .accessibilityLabel(Text("Which bike?"))
+            .accessibilityLabel(Text("Which vehicle?"))
 
             HStack(spacing: 12) {
                 Text("In the watched folder the active bike is used. You can change a ride’s bike later.")

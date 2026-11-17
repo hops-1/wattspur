@@ -29,7 +29,7 @@ Eine GPX-Datei hat keine Summen. Wattspur berechnet Fahrzeit, Strecke, Geschwind
 Die Datei hat keine Leistung. Ohne sie gibt es keine Arbeit und keine Kalorien. Wattspur zeigt einen Strich statt 0 und zählt die Fahrt nicht in Summen, die Leistung brauchen. Die **CO₂-Einsparung** kommt aus der Strecke und ist immer da.
 
 ### Ich habe eine GPX-Datei importiert, und eine Bosch-Fahrt erschien doppelt oder gar nicht
-Wattspur vergleicht Start (±60 s, oder die Zeiten überschneiden sich zu mindestens 80 %), Strecke (±10 %) und Route, nur auf demselben Bike. Liegt dieselbe Fahrt auf zwei Bikes, zählt sie als zwei Fahrten; weise das richtige Bike mit **Rechtsklick › Bike zuweisen** zu. Eine GPX für eine Bosch-Fahrt wird angehängt, es entsteht also keine zweite Fahrt; achte auf das Symbol **+GPX**.
+Wattspur vergleicht Start (±60 s, oder die Zeiten überschneiden sich zu mindestens 80 %), Strecke (±10 %) und Route, nur auf demselben Bike. Liegt dieselbe Fahrt auf zwei Bikes, zählt sie als zwei Fahrten; weise das richtige Bike mit **Rechtsklick › Fahrzeug zuweisen** zu. Eine GPX für eine Bosch-Fahrt wird angehängt, es entsteht also keine zweite Fahrt; achte auf das Symbol **+GPX**.
 
 ### Datum oder Uhrzeit einer Fahrt stimmen nicht
 Wattspur zeigt die Startzeit in der Zeitzone des Startorts. Die Zeitzone wird einmal über Apple Karten nachgeschlagen. Ohne Internet gilt die Zeitzone deines Macs, bis die Abfrage klappt.
@@ -73,7 +73,7 @@ Wattspur fragt einmal am Tag bei GitHub nach, ob eine neuere Version erschienen 
 Wattspur folgt der Sprache von macOS. Nur für Wattspur: **Systemeinstellungen › Allgemein › Sprache & Region › Apps**, Wattspur hinzufügen und Deutsch oder Englisch wählen.
 
 ### Eine Fahrt liegt auf dem falschen Bike
-Bosch-Exporte enthalten keine Bike-Kennung, neue Fahrten gehen deshalb an das **aktive Bike** (der Stern im Profil). Eine Fahrt verschiebst du mit **Rechtsklick › Bike zuweisen** oder über das Bike neben dem Titel im Tour-Detail; ⌘Z nimmt es zurück. Siehe [Profil und Bikes](07-profile-and-bikes.md).
+Bosch-Exporte enthalten keine Bike-Kennung, neue Fahrten gehen deshalb an das **aktive Bike** (der Stern im Profil). Eine Fahrt verschiebst du mit **Rechtsklick › Fahrzeug zuweisen** oder über das Bike neben dem Titel im Tour-Detail; ⌘Z nimmt es zurück. Siehe [Profil und Bikes](07-profile-and-bikes.md).
 
 ### Wie sichere ich meine Fahrten oder ziehe auf einen neuen Mac um?
 **Ablage › Mediathek-Backup …** öffnet ein Fenster. **Sichern …** fragt nach einem Ort und legt dort einen Ordner („Wattspur Backup 2026-10-26 1230“) mit deinen Fahrten, Bikes, Zielen und Notizen an, auch während Wattspur läuft. Bewahre ihn auf einer anderen Platte oder in iCloud Drive auf. Deine Einstellungen und der überwachte Ordner gehören nicht dazu.

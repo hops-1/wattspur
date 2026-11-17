@@ -20,10 +20,10 @@ struct SaveRecordingSheet: View {
         (library.state?.bikes ?? []).filter { !$0.isArchived }
     }
 
-    /// The devices, then a car and a motorcycle without one (B-286).
+    /// The devices, then the vehicle types without one (B-286, B-321).
     private var choices: [RecordingDevice] {
         bikes.map { RecordingDevice(bikeID: $0.id, kind: BikeKind(rawValue: $0.kind) ?? .bike) }
-            + [.without(.car), .without(.motorcycle)]
+            + RecordingDevice.vehicleTypes.map(RecordingDevice.without)
     }
 
     var body: some View {
@@ -37,7 +37,7 @@ struct SaveRecordingSheet: View {
                                 Label { Text(bike.name) } icon: { BikeBadge(bike: bike) }
                                     .tag(Optional(choice))
                             } else {
-                                Label { Text("\(choice.kind.localizedName), no device") } icon: { Image(systemName: choice.symbol) }
+                                Label { Text("\(choice.kind.localizedName) (vehicle type only)") } icon: { Image(systemName: choice.symbol) }
                                     .tag(Optional(choice))
                             }
                         }
@@ -128,17 +128,17 @@ struct SaveRecordingSheet: View {
 
     /// Saves a finished recording as a ride of the iPhone's own store (B-216): as GPX with its bike
     /// (creator “Wattspur iOS”, B-213) through the Kit's import, as on the Mac.
-    /// Without a bike, a car or motorcycle goes in as its kind (`wattspur:kind`, B-286), so the ride
-    /// has no device and stays out of the cycling totals.
+    /// Without a bike, the ride goes in as its kind (`wattspur:kind`, B-286): a car or motorcycle stays
+    /// out of the cycling totals, a bicycle (B-321) counts in them but towards no bike.
     static func store(_ recording: RideRecording, name: String, device: RecordingDevice?,
                       library: PhoneLibrary) throws {
         let bike = (library.state?.bikes ?? []).first { $0.id == device?.bikeID && device?.bikeID != nil }
         let kind = bike == nil ? device?.kind : nil
-        let note = bike.map { String(localized: "Bike: \($0.name)") }
+        let note = bike.map { String(localized: "Vehicle: \($0.name)") }
         let data = GPXWriter.document(name: name, segments: recording.gpxSegments, description: note,
                                       creator: GPXWriter.iPhoneCreator, bikeID: bike?.id,
                                       sport: (bike.flatMap { BikeKind(rawValue: $0.kind) } ?? kind ?? .bike).sport,
-                                      kind: kind?.sport == .cycling ? nil : kind)
+                                      kind: kind)
         try library.saveRecording(gpx: data, fileName: GPXWriter.fileName(name))
     }
 

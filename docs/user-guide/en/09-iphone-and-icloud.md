@@ -69,7 +69,7 @@ The Bosch file of a ride has more values than a GPS recording, such as power and
 2. Choose **Wattspur** in the share menu. You can also open a FIT or GPX file in the **Files** app with Wattspur.
 
 **With iCloud** it becomes a ride on the iPhone and reaches the Mac too. Wattspur asks the same questions as the Mac:
-- **Which bike?** A GPX file does not say which bike it belongs to. With two bikes or more, Wattspur asks.
+- **Which Vehicle?** A GPX file does not say which bike or vehicle it belongs to. With two or more, Wattspur asks.
 - **Already in the library:** if you recorded the ride with the iPhone too, you can choose **Use the Bosch Values**, **Keep Both** or **Skip**. Wattspur shows the start, distance and time of both.
 - A GPX file for a Bosch ride is attached to the ride. The Bosch values stay.
 - **One tour in several Bosch parts:** the Flow app splits a tour with long pauses into several rides, the iPhone records it as one. When the Bosch rides lie wholly inside the time of your recording and add up to its distance, Wattspur merges them into one ride. It gets the recording's name and bike and its heart rate, lean angle and surface. The recording itself goes to the trash, where you can restore it. It does not matter which file comes last. If you imported the parts earlier, drop one of their FIT files once more.
@@ -200,11 +200,11 @@ Good to know:
 - Wattspur uses the device from the action. Without one, it uses the device of the last recording.
 
 ## What you ride: bike, motorcycle, car
-From iPhone 1.1 you choose the device at the start. A tap on **Start Ride** takes the device of the last recording. Below it, “with Nugget ▾” in small type opens **What Are You Riding?** with your bikes, vehicles and shoes. Below them are **Car** and **Motorcycle** without a device, for a quick start. A tap on a row starts the ride with it. When you save, the device is already chosen; you can still change it there. The Live Activity shows its symbol.
+From iPhone 1.1 you choose the device at the start. A tap on **Start Ride** takes the device of the last recording. Below it, “with Nugget ▾” in small type opens **What Are You Riding?** with your bikes, vehicles and shoes. Below them, **Vehicle Type** offers **Bicycle**, **Car** and **Motorcycle** without a device of your own, e.g. for a hired bike or a rental car (Bicycle from iPhone 1.1.1). A tap on a row starts the ride with it. When you save, the device is already chosen; you can still change it there. The Live Activity shows its symbol.
 
-The device also sets which points Wattspur leaves out because they would mean an impossible speed (GPS jumps): 100 km/h on a bicycle, 300 km/h on a motorcycle or in a car. In a car the recording shows the lateral acceleration below the speed as a bar from 0.5 g left to 0.5 g right.
+The device also sets which points Wattspur leaves out because they would mean an impossible speed (GPS jumps): 100 km/h on a bicycle, 300 km/h on a motorcycle or in a car. In a car the recording shows the lateral acceleration below the speed as a bar from 0.5 g left to 0.5 g right. From iPhone 1.1.1 a car takes the mean of each second, no longer the strongest peak: at speed the holder sways, and the peak showed two to three times the value from the GPS course.
 
-Rides on a motorcycle or in a car, also without a device, do not count in the totals of your bicycles (see [Profile and Bikes](07-profile-and-bikes.md)). The former setting **More › Recording › Vehicle** is gone; what was set there applies until the first choice.
+Rides on a motorcycle or in a car, also without a device, do not count in the totals of your bicycles (see [Profile and Bikes](07-profile-and-bikes.md)). A ride on a **Bicycle** without a device counts in the cycling totals but towards none of your bikes. Siri and the **Start Ride** action in Shortcuts offer the same three types. The former setting **More › Recording › Vehicle** is gone; what was set there applies until the first choice.
 
 ---
 Next: [FAQ](06-faq.md) · [Contents](README.md)

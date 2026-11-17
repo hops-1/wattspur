@@ -40,7 +40,7 @@ struct RideReport {
                 if let bike = ride.bike, let name = bike.name.nonEmpty {
                     HStack(spacing: 6) {
                         BikeChip(kind: bike.kind, color: bike.color, size: 18)
-                        Text(verbatim: [String(localized: "Bike: \(name)"), bike.driveUnit.nonEmpty].compactMap { $0 }.joined(separator: " · "))
+                        Text(verbatim: [String(localized: "Vehicle: \(name)"), bike.driveUnit.nonEmpty].compactMap { $0 }.joined(separator: " · "))
                             .font(.callout)
                     }
                     .padding(.top, 2)

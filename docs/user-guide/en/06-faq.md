@@ -29,7 +29,7 @@ A GPX file has no totals. Wattspur calculates ride time, distance, speed and asc
 The file has no power. Without it there is no work and no calories. Wattspur shows a dash instead of 0, and does not count the ride in sums that need power. **CO₂ saved** comes from the distance and is always there.
 
 ### I imported a GPX file and a Bosch ride appeared twice, or not at all
-Wattspur compares start (±60 s, or times that overlap by at least 80 %), distance (±10 %) and route, only on the same bike. If the same ride is on two bikes it counts as two rides; assign the right bike with **Right-click › Assign Bike**. A GPX for a Bosch ride is attached, so no second ride appears; look for the **+GPX** symbol.
+Wattspur compares start (±60 s, or times that overlap by at least 80 %), distance (±10 %) and route, only on the same bike. If the same ride is on two bikes it counts as two rides; assign the right bike with **Right-click › Assign Vehicle**. A GPX for a Bosch ride is attached, so no second ride appears; look for the **+GPX** symbol.
 
 ### The date or time of a ride is wrong
 Wattspur shows the start time in the time zone of the start location. It looks the time zone up once with Apple Maps; without internet it uses the time zone of your Mac until it can look it up.
@@ -73,7 +73,7 @@ Wattspur asks GitHub once a day whether a newer version has been released. If so
 Wattspur follows the language of macOS. For Wattspur only: **System Settings › General › Language & Region › Applications**, add Wattspur and choose English or German.
 
 ### A ride is on the wrong bike
-Bosch exports carry no bike identifier, so new rides go to the **active bike** (the star in the profile). Move a ride with **Right-click › Assign Bike**, or from the bike next to its title in the ride detail; ⌘Z takes it back. See [Profile and bikes](07-profile-and-bikes.md).
+Bosch exports carry no bike identifier, so new rides go to the **active bike** (the star in the profile). Move a ride with **Right-click › Assign Vehicle**, or from the bike next to its title in the ride detail; ⌘Z takes it back. See [Profile and bikes](07-profile-and-bikes.md).
 
 ### How do I back up my rides, or move them to a new Mac?
 **File › Library Backup…** opens a window. **Back Up…** asks for a place and creates a folder there (“Wattspur Backup 2026-10-26 1230”) with your rides, bikes, goals and notes, also while Wattspur is running. Keep it on another disk or in iCloud Drive. Your settings and the watched folder are not part of it.

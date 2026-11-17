@@ -114,8 +114,8 @@ struct RideFilterBar: View {
     private var bikeMenu: some View {
         let chosen = bikes.first { $0.id == filter.bike.bikeID }
         return Menu {
-            Picker("Bike", selection: $filter.bike) {
-                Text("All Bikes").tag(BikeFilter.all)
+            Picker("Vehicle", selection: $filter.bike) {
+                Text("All Vehicles").tag(BikeFilter.all)
                 ForEach(bikes) { bike in
                     Text(verbatim: bike.name).tag(BikeFilter.bike(bike.id))
                 }
@@ -124,7 +124,7 @@ struct RideFilterBar: View {
             if let chosen {
                 FilterChip(verbatim: chosen.name, active: true)
             } else {
-                FilterChip(title: "Bike", active: false)
+                FilterChip(title: "Vehicle", active: false)
             }
         }
     }

@@ -1973,7 +1973,7 @@
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Aktives Bike"
+            "value" : "Aktives Fahrzeug"
           }
         }
       }
@@ -1984,16 +1984,6 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Hinzufügen"
-          }
-        }
-      }
-    },
-    "Add Bike" : {
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Bike hinzufügen"
           }
         }
       }
@@ -2044,16 +2034,6 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Alles"
-          }
-        }
-      }
-    },
-    "All bikes" : {
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Alle Bikes"
           }
         }
       }
@@ -2258,32 +2238,12 @@
         }
       }
     },
-    "Archive bike" : {
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Bike archivieren"
-          }
-        }
-      }
-    },
     "Archived" : {
       "localizations" : {
         "de" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "Archiviert"
-          }
-        }
-      }
-    },
-    "Archived bikes (%lld)" : {
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Archivierte Bikes (%lld)"
           }
         }
       }
@@ -2324,16 +2284,6 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Anstieg pro km"
-          }
-        }
-      }
-    },
-    "Assign Bike" : {
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Bike zuweisen"
           }
         }
       }
@@ -2698,66 +2648,6 @@
         }
       }
     },
-    "Bike of this ride" : {
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Bike dieser Fahrt"
-          }
-        }
-      }
-    },
-    "Bike type" : {
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Art des Bikes"
-          }
-        }
-      }
-    },
-    "Bike:" : {
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Bike:"
-          }
-        }
-      }
-    },
-    "Bike: %@" : {
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Bike: %@"
-          }
-        }
-      }
-    },
-    "Bike: %@, %@" : {
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Bike: %@, %@"
-          }
-        }
-      }
-    },
-    "Bikes" : {
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Bikes"
-          }
-        }
-      }
-    },
     "birth year" : {
       "localizations" : {
         "de" : {
@@ -2968,16 +2858,6 @@
         }
       }
     },
-    "Change the search, the bike or the period." : {
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Ändere die Suche, das Bike oder den Zeitraum."
-          }
-        }
-      }
-    },
     "Change…" : {
       "localizations" : {
         "de" : {
@@ -3054,16 +2934,6 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Wähle eine Bilddatei, zum Beispiel JPEG, PNG oder HEIC."
-          }
-        }
-      }
-    },
-    "Choose another bike or all bikes." : {
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Wähle ein anderes Bike oder alle Bikes."
           }
         }
       }
@@ -3799,16 +3669,6 @@
         }
       }
     },
-    "Edit Bike" : {
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Bike bearbeiten"
-          }
-        }
-      }
-    },
     "Edit Goal" : {
       "localizations" : {
         "de" : {
@@ -4065,16 +3925,6 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Filter"
-          }
-        }
-      }
-    },
-    "Filter by bike" : {
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Nach Bike filtern"
           }
         }
       }
@@ -4929,7 +4779,7 @@
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Im überwachten Ordner gilt das aktive Bike. Das Bike einer Fahrt lässt sich später ändern."
+            "value" : "Im überwachten Ordner gilt das aktive Fahrzeug. Das Fahrzeug einer Fahrt lässt sich später ändern."
           }
         }
       }
@@ -4999,7 +4849,7 @@
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Es verschwindet aus dem Import-Menü. Die Fahrten bleiben zugeordnet, das Bike bleibt in den Filtern. Du kannst es jederzeit wiederherstellen."
+            "value" : "Es verschwindet aus dem Import-Menü. Die Fahrten bleiben zugeordnet, das Fahrzeug bleibt in den Filtern. Du kannst es jederzeit wiederherstellen."
           }
         }
       }
@@ -5309,7 +5159,7 @@
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Als aktives Bike festlegen"
+            "value" : "Als aktives Fahrzeug festlegen"
           }
         }
       }
@@ -5319,7 +5169,7 @@
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Als aktives Bike festlegen"
+            "value" : "Als aktives Fahrzeug festlegen"
           }
         }
       }
@@ -5330,16 +5180,6 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Männlich"
-          }
-        }
-      }
-    },
-    "Manage Bikes…" : {
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Bikes verwalten …"
           }
         }
       }
@@ -5735,16 +5575,6 @@
         }
       }
     },
-    "Move this ride to another bike" : {
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Diese Fahrt einem anderen Bike zuweisen"
-          }
-        }
-      }
-    },
     "Move to Trash" : {
       "localizations" : {
         "de" : {
@@ -5825,26 +5655,6 @@
         }
       }
     },
-    "New bike" : {
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Neues Bike"
-          }
-        }
-      }
-    },
-    "New Bike" : {
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Neues Bike"
-          }
-        }
-      }
-    },
     "New file · Bosch FIT" : {
       "localizations" : {
         "de" : {
@@ -5910,7 +5720,7 @@
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Neue Fahrten gehen an das aktive Bike"
+            "value" : "Neue Fahrten gehen an das aktive Fahrzeug"
           }
         }
       }
@@ -5920,7 +5730,7 @@
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Neue Fahrten gehen an das aktive Bike."
+            "value" : "Neue Fahrten gehen an das aktive Fahrzeug."
           }
         }
       }
@@ -5930,7 +5740,7 @@
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Neue Fahrten, auch aus dem überwachten Ordner, gehören zu diesem Bike"
+            "value" : "Neue Fahrten, auch aus dem überwachten Ordner, gehören zu diesem Fahrzeug"
           }
         }
       }
@@ -6181,16 +5991,6 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Noch keine Fahrten auf der Karte"
-          }
-        }
-      }
-    },
-    "No Rides on This Bike" : {
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Keine Fahrten mit diesem Bike"
           }
         }
       }
@@ -7767,16 +7567,6 @@
         }
       }
     },
-    "Show only the rides of one bike" : {
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Nur die Fahrten eines Bikes zeigen"
-          }
-        }
-      }
-    },
     "Show only the rides selected in the list" : {
       "localizations" : {
         "de" : {
@@ -8332,7 +8122,7 @@
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Das letzte Bike lässt sich nicht archivieren: Neue Fahrten brauchen ein Bike."
+            "value" : "Das letzte Fahrzeug lässt sich nicht archivieren: Neue Fahrten brauchen ein Fahrzeug."
           }
         }
       }
@@ -8402,7 +8192,7 @@
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Die Fahrten bleiben zugeordnet; das Bike fehlt im Import-Menü, bleibt aber in den Filtern."
+            "value" : "Die Fahrten bleiben zugeordnet; das Fahrzeug fehlt im Import-Menü, bleibt aber in den Filtern."
           }
         }
       }
@@ -9317,16 +9107,6 @@
         }
       }
     },
-    "Which bike?" : {
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Für welches Bike?"
-          }
-        }
-      }
-    },
     "Why “estimated”?" : {
       "localizations" : {
         "de" : {
@@ -9913,6 +9693,246 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Spur nach Querbeschleunigung einfärben"
+          }
+        }
+      }
+    },
+    "Add Vehicle" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Fahrzeug hinzufügen"
+          }
+        }
+      }
+    },
+    "All vehicles" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Alle Fahrzeuge"
+          }
+        }
+      }
+    },
+    "Archive vehicle" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Fahrzeug archivieren"
+          }
+        }
+      }
+    },
+    "Archived vehicles (%lld)" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Archivierte Fahrzeuge (%lld)"
+          }
+        }
+      }
+    },
+    "Assign Vehicle" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Fahrzeug zuweisen"
+          }
+        }
+      }
+    },
+    "Vehicle" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Fahrzeug"
+          }
+        }
+      }
+    },
+    "Vehicle name" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Name des Fahrzeugs"
+          }
+        }
+      }
+    },
+    "Vehicle of this ride" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Fahrzeug dieser Fahrt"
+          }
+        }
+      }
+    },
+    "Vehicle type" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Fahrzeugart"
+          }
+        }
+      }
+    },
+    "Vehicle:" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Fahrzeug:"
+          }
+        }
+      }
+    },
+    "Vehicle: %@" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Fahrzeug: %@"
+          }
+        }
+      }
+    },
+    "Vehicle: %@, %@" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Fahrzeug: %@, %@"
+          }
+        }
+      }
+    },
+    "Vehicles" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Fahrzeuge"
+          }
+        }
+      }
+    },
+    "Change the search, the vehicle or the period." : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ändere die Suche, das Fahrzeug oder den Zeitraum."
+          }
+        }
+      }
+    },
+    "Choose another vehicle or all vehicles." : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Wähle ein anderes Fahrzeug oder alle Fahrzeuge."
+          }
+        }
+      }
+    },
+    "Edit Vehicle" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Fahrzeug bearbeiten"
+          }
+        }
+      }
+    },
+    "Filter by vehicle" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Nach Fahrzeug filtern"
+          }
+        }
+      }
+    },
+    "Manage Vehicles…" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Fahrzeuge verwalten …"
+          }
+        }
+      }
+    },
+    "Move this ride to another vehicle" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Diese Fahrt einem anderen Fahrzeug zuweisen"
+          }
+        }
+      }
+    },
+    "New vehicle" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Neues Fahrzeug"
+          }
+        }
+      }
+    },
+    "New Vehicle" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Neues Fahrzeug"
+          }
+        }
+      }
+    },
+    "No Rides with This Vehicle" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Keine Fahrten mit diesem Fahrzeug"
+          }
+        }
+      }
+    },
+    "Show only the rides of one vehicle" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Nur die Fahrten eines Fahrzeugs zeigen"
+          }
+        }
+      }
+    },
+    "Which vehicle?" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Für welches Fahrzeug?"
           }
         }
       }

@@ -44,7 +44,7 @@ struct MultiSelectionView: View {
             }
             .buttonStyle(.glass)
             BikeAssignMenu(rides: rides.filter { rideIDs.contains($0.id) }) {
-                Label("Assign Bike", systemImage: "bicycle")
+                Label("Assign Vehicle", systemImage: "bicycle")
             }
             .menuStyle(.button)
             .buttonStyle(.glass)

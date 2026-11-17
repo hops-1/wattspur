@@ -14,7 +14,7 @@ Eine GPX-Datei enthält Positionen, Höhe und Zeit, manchmal auch Leistung, Trit
 ## Importieren
 GPX-Dateien importierst du wie FIT-Dateien, siehe [Fahrten importieren](03-importing.md): auf die Fahrtenliste oder das Import-Fenster ziehen, auf **+** klicken (⌘O) oder in den überwachten Ordner legen.
 
-**Für welches Bike?** Eine GPX-Datei sagt nicht, auf welchem Bike sie gefahren wurde. Hast du zwei oder mehr Bikes, fragt ein Blatt danach, wenn du GPX-Dateien von Hand hineinziehst; das aktive Bike ist vorgewählt. Mit einem Bike und im überwachten Ordner geht die Fahrt an das aktive Bike (siehe [Profil und Bikes](07-profile-and-bikes.md)). Später änderst du es mit **Bike zuweisen**.
+**Für welches Fahrzeug?** Eine GPX-Datei sagt nicht, auf welchem Bike sie gefahren wurde. Hast du zwei oder mehr Bikes, fragt ein Blatt danach, wenn du GPX-Dateien von Hand hineinziehst; das aktive Bike ist vorgewählt. Mit einem Bike und im überwachten Ordner geht die Fahrt an das aktive Bike (siehe [Profil und Bikes](07-profile-and-bikes.md)). Später änderst du es mit **Bike zuweisen**.
 
 ## Was Wattspur berechnet
 Weil die Datei keine Summen hat, rechnet Wattspur sie aus den Punkten aus. Die Fahrt trägt die Kennzeichnung **≈ Summen geschätzt**; ein Klick darauf zeigt die kurze Erklärung.

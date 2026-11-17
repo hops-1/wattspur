@@ -117,13 +117,14 @@ final class IntentRouter {
     var request: Request?
 }
 
-/// A device for “Start a ride with …” (B-286): one of the open devices, or a car or motorcycle
-/// without one. Read from the list the library writes at every reload, so Siri finds it at once.
+/// A device for “Start a ride with …” (B-286): one of the open devices, or a vehicle type without
+/// one (bicycle, car, motorcycle, B-321). Read from the list the library writes at every reload,
+/// so Siri finds it at once.
 struct DeviceEntity: AppEntity {
     static let typeDisplayRepresentation = TypeDisplayRepresentation(name: "Device")
     static let defaultQuery = DeviceQuery()
 
-    /// The device's UUID, or `car` / `motorcycle` for one without a device.
+    /// The device's UUID, or `bike` / `car` / `motorcycle` for a vehicle type without a device (B-321).
     var id: String
     var name: String
     var recordingDevice: RecordingDevice
@@ -138,7 +139,7 @@ struct DeviceEntity: AppEntity {
             DeviceEntity(id: bike.id.uuidString, name: bike.name,
                          recordingDevice: RecordingDevice(bikeID: bike.id, kind: BikeKind(rawValue: bike.kind) ?? .bike))
         }
-        let without = [BikeKind.car, .motorcycle].map { kind in
+        let without = RecordingDevice.vehicleTypes.map { kind in
             DeviceEntity(id: kind.rawValue, name: kind.localizedName, recordingDevice: .without(kind))
         }
         return devices + without

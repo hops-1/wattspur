@@ -137,7 +137,7 @@ private struct BikeQuestionSheet: View {
                     choose(bike)
                 }
             }
-            .navigationTitle("Which Bike?")
+            .navigationTitle("Which Vehicle?")
             .navigationBarTitleDisplayMode(.inline)
             .safeAreaInset(edge: .top) {
                 Text("GPX files do not say which bike they belong to: \(question.gpxURLs.map(\.lastPathComponent).formatted(.list(type: .and)))")

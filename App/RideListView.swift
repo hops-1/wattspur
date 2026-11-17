@@ -620,7 +620,7 @@ struct RideListView: View {
                 Button("Split into Original Rides") { selection = Set(library.split(single).map(\.id)) }
             }
             BikeAssignMenu(rides: rides.filter { ids.contains($0.id) }) {
-                Label("Assign Bike", systemImage: "bicycle")
+                Label("Assign Vehicle", systemImage: "bicycle")
             }
             Divider()
             Button("Move to Trash", role: .destructive) { requestTrash(ids) }
@@ -737,7 +737,7 @@ struct RideListView: View {
             }
         } else if filteredRides.count <= (filter.referenceID == nil ? 0 : 1) {
             ContentUnavailableView("No Matching Rides", systemImage: "line.3.horizontal.decrease.circle",
-                                   description: Text("Change the search, the bike or the period."))
+                                   description: Text("Change the search, the vehicle or the period."))
         }
     }
 

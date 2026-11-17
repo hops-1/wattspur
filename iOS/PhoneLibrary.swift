@@ -183,7 +183,7 @@ final class PhoneLibrary {
     /// The ride as GPX for the share sheet, built only when the user shares.
     func sharedGPX(for ride: RideExchange.Ride) -> SharedGPX {
         SharedGPX(fileName: GPXWriter.fileName(ride.name)) { [weak self] in
-            guard let file = self?.database?.gpx(forRideID: ride.id, note: { String(localized: "Bike: \($0)") }) else {
+            guard let file = self?.database?.gpx(forRideID: ride.id, note: { String(localized: "Vehicle: \($0)") }) else {
                 throw CocoaError(.fileNoSuchFile)
             }
             return file.data

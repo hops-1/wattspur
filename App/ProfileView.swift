@@ -66,7 +66,7 @@ struct ProfileView: View {
     private func bikesSection(rider: Rider) -> some View {
         VStack(alignment: .leading, spacing: 14) {
             HStack(spacing: 12) {
-                Text("Bikes").font(.title2.bold())
+                Text("Vehicles").font(.title2.bold())
                 Text("\(openBikes.count) active · \(archivedBikes.count) archived")
                     .font(.callout)
                     .foregroundStyle(.secondary)
@@ -74,7 +74,7 @@ struct ProfileView: View {
                 Label("New rides go to the active bike", systemImage: "star.fill")
                     .font(.caption)
                     .foregroundStyle(.secondary)
-                Button { editor = .new } label: { Label("Add Bike", systemImage: "plus") }
+                Button { editor = .new } label: { Label("Add Vehicle", systemImage: "plus") }
                     .buttonStyle(.borderedProminent)
                     .controlSize(.regular)
             }
@@ -117,7 +117,7 @@ struct ProfileView: View {
             }
             .padding(.top, 10)
         } label: {
-            Text("Archived bikes (\(archivedBikes.count))").font(.callout.weight(.semibold))
+            Text("Archived vehicles (\(archivedBikes.count))").font(.callout.weight(.semibold))
         }
         .padding(.horizontal, 18)
         .padding(.vertical, 12)

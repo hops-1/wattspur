@@ -29,7 +29,7 @@ struct CompareRidesView: View {
     @Query private var riders: [Rider]
     private var calories: CalorieModel { CalorieModel(mode: calorieMode, rider: riders.first) }
 
-    /// A row "Bike" in the table, from two bikes on (B-136).
+    /// A row "Vehicle" in the table, from two bikes on (B-136).
     private var showsBike: Bool { bikes.count >= 2 && compared.contains { $0.bike != nil } }
 
     /// Oldest first, so a ride keeps its column and colour while others are added.

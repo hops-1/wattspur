@@ -232,7 +232,7 @@ struct BikeChip: View {
             .background(onAccent ? Color.white.opacity(0.24) : color.color.opacity(isSmall ? 0.22 : 0.14), in: Circle())
             .accessibilityHidden(accessibilityName == nil)
             .accessibilityElement(children: .ignore)
-            .accessibilityLabel(accessibilityName.map { Text("Bike: \($0)") } ?? Text(verbatim: ""))
+            .accessibilityLabel(accessibilityName.map { Text("Vehicle: \($0)") } ?? Text(verbatim: ""))
     }
 }
 

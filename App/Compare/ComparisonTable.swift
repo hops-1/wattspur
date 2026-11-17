@@ -73,7 +73,7 @@ struct ComparisonTable: View {
     /// Which bike each ride was on.
     private var bikeRow: some View {
         HStack(spacing: 0) {
-            Text("Bike")
+            Text("Vehicle")
                 .frame(width: Self.labelWidth, alignment: .leading)
                 .padding(.horizontal, 14)
             ForEach(rides.indices, id: \.self) { index in
@@ -86,7 +86,7 @@ struct ComparisonTable: View {
                     }
                 }
                 .accessibilityElement(children: .combine)
-                .accessibilityLabel(Text("Bike: \(rides[index].bike?.name ?? "–"), \(rides[index].name)"))
+                .accessibilityLabel(Text("Vehicle: \(rides[index].bike?.name ?? "–"), \(rides[index].name)"))
                 .cell()
             }
             if showsDeviation { Color.clear.cell() }
