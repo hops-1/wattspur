@@ -81,7 +81,9 @@ Hier eintragen oder an Claude schicken. Ein ✗ wird ein eigener Backlog-Punkt. 
 | 0 | ✓ | 16.11.2026: Schema in Production; Mac 1.9 (773), iPhone 1.1 (27) in TestFlight |
 | A | ✓ | 16.11.2026, Mac 1.9 (773) |
 | B.1 | ✓ | 16.11.2026, Mac |
-| B.2–B.4 | offen | iPhone 1.1 erst nach Nils' Video für Apple |
+| B.2 | ✓ | 17.11.2026, iPhone 1.1 (27): Tour-Detail der Fahrten „Testfahrt Auto“ mit Querbeschleunigung in g, Karussell und Legende (Screenshots von Nils) |
+| B.3 | ✓ | 17.11.2026: Motorradfahrt bleibt bei Schräglage in Grad (ältere Fahrt, ohne neue Aufnahme) |
+| B.4 | nicht getestet | 0–100 km/h aus dem Stand geht im Berufsverkehr und auf der Landstraße nicht; im Kit mit erfundenen Fahrten getestet (`CarLateralTests`) |
 | C.1–C.3 | ✓ / ✗ | 17.11.2026, zwei Fahrten „Testfahrt Auto“: Werte folgen dem GPS, Drehen an der Ampel ohne falschen Ausschlag (nur im Stand gedreht); ✗ bei 85 km/h zu hoch → B-319; ✗ Kachel und Karte → B-320; „Ohne Gerät“ → B-321 |
 | C.4–D | offen | |
 | E | ✓ | 17.11.2026, iPhone 1.1 (27): Profil, Gewicht, Kacheln, Geräte, Motorrad „Test“ anlegen, bearbeiten, archivieren; jeweils über iCloud am Mac angekommen |
