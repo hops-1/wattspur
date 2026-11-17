@@ -109,12 +109,16 @@ public struct MapFilter: Sendable, Equatable {
     public var bike: BikeFilter
     /// Only the rides from this kind of file (B-145). Like the bike, it does not apply to `selectedIDs`.
     public var source: SourceFilter
+    /// Only the rides of this sport (B-288); `nil` shows all. Like the bike, it does not apply to `selectedIDs`.
+    public var sport: Sport?
 
-    public init(interval: DateInterval? = nil, selectedIDs: Set<UUID>? = nil, bike: BikeFilter = .all, source: SourceFilter = .all) {
+    public init(interval: DateInterval? = nil, selectedIDs: Set<UUID>? = nil, bike: BikeFilter = .all, source: SourceFilter = .all,
+                sport: Sport? = nil) {
         self.interval = interval
         self.selectedIDs = selectedIDs
         self.bike = bike
         self.source = source
+        self.sport = sport
     }
 
     /// - Parameters:
@@ -122,10 +126,12 @@ public struct MapFilter: Sendable, Equatable {
     ///   - isListed: shown in the ride list, i.e. not in the trash and not a part.
     ///   - bikeID: the ride's bike.
     ///   - rideSource: the kind of file the ride comes from.
+    ///   - rideSport: the ride's sport.
     public func admits(id: UUID, startDate: Date, countsInStatistics: Bool, isListed: Bool, bikeID: UUID? = nil,
-                       rideSource: RideSource? = nil) -> Bool {
+                       rideSource: RideSource? = nil, rideSport: Sport = .cycling) -> Bool {
         if let selectedIDs { return isListed && selectedIDs.contains(id) }
         guard countsInStatistics, bike.admits(bikeID: bikeID), source.admits(source: rideSource) else { return false }
+        if let sport, sport != rideSport { return false }
         return interval?.contains(startDate) ?? true
     }
 }

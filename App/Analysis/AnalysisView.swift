@@ -21,10 +21,10 @@ struct AnalysisView: View {
     /// Rides picked by hand are analysed whatever their bike; otherwise the filter applies.
     private var rides: [Ride] {
         guard selection == nil else { return allRides }
-        let filter = bikeFilterChoice.resolved(knownBikeIDs: Set(bikes.map(\.id)))
+        let filter = bikeFilterChoice.resolved(sport: sport, bikes: bikes)
         let source = sourceFilterChoice.resolved(hasGPXRides: hasGPXRides)
-        // Rides in a vehicle (or running) count only when the filter shows that device (CO₂, totals; B-284).
-        return allRides.filter { ($0.sport == .cycling || filter.bikeID != nil) && $0.isOnBike(filter) && $0.isFromSource(source) }
+        // Only the sport chosen in the sidebar (B-288): a car never lands in the cycling totals or the CO₂.
+        return allRides.filter { $0.sport == sport && $0.isOnBike(filter) && $0.isFromSource(source) }
     }
 
     private var hasGPXRides: Bool { allRides.contains { $0.source == .gpx } }
@@ -36,6 +36,7 @@ struct AnalysisView: View {
     /// The source filter of the analysis, the same way (B-145).
     @AppStorage(SettingsKey.sourceFilterAnalysis) private var sourceFilterChoice: SourceFilter = .all
     @Query private var bikes: [Bike]
+    @Environment(\.shownSport) private var sport
     /// "From pedal power" or "with profile" (SET-06, B-067).
     @AppStorage(SettingsKey.calorieMode) private var calorieMode: CalorieMode = .fromWork
     @Query private var riders: [Rider]

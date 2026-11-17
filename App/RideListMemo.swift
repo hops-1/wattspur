@@ -25,9 +25,12 @@ struct RideListFact: Equatable {
     let id: UUID
     let name: String
     let bikeID: UUID?
+    /// The ride's sport: the list shows one at a time (B-288).
+    let sport: Sport
     let source: RideSource?
     /// Start, distance, riding time, ascent, average power and curves.
     let sortKey: RideSortKey
+    /// Counts towards the totals of its own sport (not in the trash, not the sample, not a part).
     let countsInTotals: Bool
     /// The other values a record is made of (`RideFigures`), so a changed value moves the star.
     let averageSpeed: Double?
@@ -43,9 +46,10 @@ struct RideListFact: Equatable {
         id = ride.id
         name = ride.name
         bikeID = ride.bike?.id
+        sport = ride.sport
         source = ride.source
         sortKey = ride.sortKey
-        countsInTotals = ride.countsInTotals
+        countsInTotals = ride.countsInTotals(sport: ride.sport)
         averageSpeed = ride.averageSpeed
         maxSpeed = ride.maxSpeed
         maxPower = ride.maxPower
@@ -70,6 +74,7 @@ final class RideListPass {
 struct RideListInputs: Equatable {
     var facts: [RideListFact]
     var filter: RideFilter
+    var sport: Sport
     var source: SourceFilter
     var sortOrder: RideSortOrder
     var scope: Set<UUID>?

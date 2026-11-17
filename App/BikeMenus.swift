@@ -223,18 +223,20 @@ struct BikeAssignmentNoticeView: View {
 
 // MARK: - Filter (B-137)
 
-/// The choices of the bike filter: all bikes, the open bikes, then the archived ones
-/// (their rides stay in the filters). Only from two bikes on.
+/// The choices of the device filter: all devices of the sport shown, the open ones, then the
+/// archived ones (their rides stay in the filters). Only from two devices of the sport on (B-288).
 struct BikeFilterPicker: View {
     @Binding var filter: BikeFilter
-    @Query private var bikes: [Bike]
+    @Query private var allBikes: [Bike]
+    @Environment(\.shownSport) private var sport
+    private var bikes: [Bike] { allBikes.filter { $0.kind.sport == sport } }
 
     var body: some View {
         if bikes.count >= 2 {
             let sorted = Bike.sorted(bikes)
             let archived = sorted.filter(\.isArchived)
             Picker("Vehicle", selection: Binding(get: { filter.resolved(knownBikeIDs: Set(bikes.map(\.id))) }, set: { filter = $0 })) {
-                Text("All vehicles").tag(BikeFilter.all)
+                Text(sport.allDevicesTitle).tag(BikeFilter.all)
                 ForEach(sorted.filter { !$0.isArchived }) { bike in
                     BikeMenuImage.label(bike).tag(BikeFilter.bike(bike.id))
                 }
@@ -254,9 +256,11 @@ struct BikeFilterPicker: View {
 /// (B-137). Outlined in the accent color while it filters.
 struct BikeFilterMenu: View {
     @Binding var filter: BikeFilter
-    @Query private var bikes: [Bike]
+    @Query private var allBikes: [Bike]
+    @Environment(\.shownSport) private var sport
 
     var body: some View {
+        let bikes = allBikes.filter { $0.kind.sport == sport }
         let known = Set(bikes.map(\.id))
         if known.count >= 2 {
             let effective = filter.resolved(knownBikeIDs: known)
@@ -267,12 +271,12 @@ struct BikeFilterMenu: View {
                     .labelsHidden()
             } label: {
                 HStack(spacing: 6) {
-                    Text("Vehicle:").foregroundStyle(.secondary)
+                    Text(sport.deviceFilterLabel).foregroundStyle(.secondary)
                     if let selected {
                         BikeChip(kind: selected.kind, color: selected.color, size: 20)
                         Text(verbatim: selected.name).fontWeight(.semibold).lineLimit(1)
                     } else {
-                        Text("All vehicles").fontWeight(.semibold)
+                        Text(sport.allDevicesTitle).fontWeight(.semibold)
                     }
                     Image(systemName: "chevron.down").font(.system(size: 9, weight: .bold)).foregroundStyle(.secondary)
                 }
@@ -290,7 +294,7 @@ struct BikeFilterMenu: View {
             .fixedSize()
             .help(Text("Show only the rides of one vehicle"))
             .accessibilityLabel(Text("Filter by vehicle"))
-            .accessibilityValue(selected.map { Text(verbatim: $0.name) } ?? Text("All vehicles"))
+            .accessibilityValue(selected.map { Text(verbatim: $0.name) } ?? Text(sport.allDevicesTitle))
         }
     }
 }

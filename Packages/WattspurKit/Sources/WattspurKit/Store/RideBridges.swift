@@ -8,7 +8,8 @@ import Foundation
 extension Ride {
     public func isOnMap(_ filter: MapFilter) -> Bool {
         filter.admits(id: id, startDate: startDate, countsInStatistics: countsInStatistics,
-                      isListed: deletedAt == nil && mergedInto == nil, bikeID: bike?.id, rideSource: self.source)
+                      isListed: deletedAt == nil && mergedInto == nil, bikeID: bike?.id, rideSource: self.source,
+                      rideSport: sport)
     }
 
     /// The ride for the map; `nil` without GPS or while its route is still being prepared.
@@ -76,6 +77,33 @@ extension Ride {
     public func countsInTotals(bikeFilter: BikeFilter) -> Bool {
         guard countsInStatistics, isOnBike(bikeFilter) else { return false }
         return sport == .cycling || bikeFilter.bikeID != nil
+    }
+
+    /// Counts towards the totals and records of the sport an area shows (B-288): like
+    /// `countsInStatistics`, but only this sport, so a car never lands in the cycling totals and
+    /// a bicycle never in the vehicles'.
+    public func countsInTotals(sport shown: Sport) -> Bool {
+        countsInStatistics && sport == shown
+    }
+
+    /// The same with the area's device filter, which only offers devices of the sport.
+    public func countsInTotals(sport shown: Sport, bikeFilter: BikeFilter) -> Bool {
+        countsInTotals(sport: shown) && isOnBike(bikeFilter)
+    }
+}
+
+extension SportChoice {
+    /// The sports there are in a library: open devices and rides that count (B-288).
+    public static func available(bikes: [Bike], rides: [Ride]) -> [Sport] {
+        available(deviceKinds: bikes.lazy.filter { !$0.isArchived }.map(\.kindRawValue),
+                  rideSports: rides.lazy.filter(\.countsInStatistics).map(\.sport))
+    }
+}
+
+extension BikeFilter {
+    /// `resolved(sport:devices:)` for the bikes of the library.
+    public func resolved(sport: Sport, bikes: [Bike]) -> BikeFilter {
+        resolved(sport: sport, devices: bikes.map { (id: $0.id, kind: $0.kindRawValue) })
     }
 }
 

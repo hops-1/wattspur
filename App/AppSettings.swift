@@ -16,6 +16,8 @@ enum SettingsKey {
     /// The distance band of the ride list (B-244), shared rule with the iPhone (`RideFilter`).
     static let rideDistance = "rideDistance"
     static let bikeFilterRides = "bikeFilter.rides"
+    /// The sport the main window shows (B-288); not synced, each device has its own.
+    static let shownSport = "shownSport"
     static let sourceFilterRides = "sourceFilter.rides"
     static let analysisPeriod = "analysisPeriod"
     static let analysisBarMetric = "analysisBarMetric"

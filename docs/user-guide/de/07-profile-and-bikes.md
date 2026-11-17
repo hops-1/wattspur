@@ -34,12 +34,12 @@ Bosch-Exporte enthalten keine Bike-Kennung, Wattspur kann deine Bikes deshalb ni
 - In einer exportierten **GPX-Datei** als Beschreibung der Strecke, sodass auch andere Programme es zeigen.
 
 ## Ein Bike für sich ansehen
-**Fahrten**, **Auswertung**, **Karte** und **Highlights** haben je einen Filter nach Fahrzeug und merken sich ihre Wahl: **Fahrzeug: Alle Fahrzeuge ▾** neben dem Zeitraum (in der Fahrtenliste steckt er im Menü neben dem Suchfeld, bei Zeitraum und Sortierung). Archivierte Bikes stehen unter **Archiviert**.
+**Fahrten**, **Auswertung**, **Karte** und **Highlights** haben je einen Filter nach Fahrzeug und merken sich ihre Wahl: **Fahrzeug: Alle Fahrzeuge ▾** neben dem Zeitraum (in der Fahrtenliste steckt er im Menü neben dem Suchfeld, bei Zeitraum und Sortierung). Archivierte Bikes stehen unter **Archiviert**. Ab Mac 1.10 bietet der Filter nur die Geräte der Sportart, die oben in der Seitenleiste gewählt ist (**Alle Bikes** oder **Alle Fahrzeuge**), siehe [Ansichten](04-views.md).
 - In den **Highlights** folgen Jahr und Rekorde dem Filter. **Ziele zählen immer alle deine Bikes.**
 - Fahrten, die du von Hand wählst und an die Auswertung oder die Karte schickst, werden unabhängig vom Bike gezeigt.
 - Sobald du eine Fahrt aus einer GPX-Datei hast, hat jeder Bereich daneben auch einen Filter **Quelle**, siehe [GPX-Dateien importieren](08-importing-gpx.md#so-siehst-du-gpx-fahrten). Eine GPX-Datei sagt nicht, auf welchem Bike sie gefahren wurde: Wattspur fragt danach, siehe [GPX-Dateien importieren](08-importing-gpx.md#importieren).
 
-Ab Mac 1.9.1 heißen Knöpfe, Menüs und Filter „Fahrzeug“ statt „Bike“, weil dort auch Autos und Motorräder stehen. Eine Fahrt mit **Fahrrad** ohne Gerät (am iPhone unter **Fahrzeugart**, z. B. ein geliehenes Rad) zählt in die Rad-Summen, aber zu keinem deiner Bikes; mit dem Filter **Alle Fahrzeuge** ist sie dabei.
+Ab Mac 1.9.1 heißen Knöpfe, Menüs und Filter „Fahrzeug“ statt „Bike“, weil dort auch Autos und Motorräder stehen. Eine Fahrt mit **Fahrrad** ohne Gerät (am iPhone unter **Fahrzeugart**, z. B. ein geliehenes Rad) zählt in die Rad-Summen, aber zu keinem deiner Bikes; mit dem Filter **Alle Bikes** (bis Mac 1.9.1 **Alle Fahrzeuge**) ist sie dabei.
 
 ## Umstieg von einer früheren Version
 Mit 1.5 wurden alle bisherigen Fahrten einem Bike namens **Mein eBike** zugeordnet. Ein Hinweis oben im Fenster bittet dich einmal, deine Bikes einzurichten: benenne es um und lege die anderen im Profil an. Neue Installationen fragen im [Einrichtungsassistenten](02-first-launch.md) nach dem ersten Bike.

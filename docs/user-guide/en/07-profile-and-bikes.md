@@ -34,12 +34,12 @@ Bosch exports carry no bike identifier, so Wattspur cannot tell your bikes apart
 - In an exported **GPX file**, as the description of the track, so other programs show it too.
 
 ## Looking at one bike
-**Rides**, **Analysis**, **Map** and **Highlights** each have a vehicle filter, and each remembers its own choice: **Vehicle: All vehicles ▾** beside the period (in the ride list it is in the menu next to the search field, with the period and the sort order). Archived bikes are listed under **Archived**.
+**Rides**, **Analysis**, **Map** and **Highlights** each have a vehicle filter, and each remembers its own choice: **Vehicle: All vehicles ▾** beside the period (in the ride list it is in the menu next to the search field, with the period and the sort order). Archived bikes are listed under **Archived**. From Mac 1.10 the filter offers only the devices of the sport chosen at the top of the sidebar (**All bikes** or **All vehicles**), see [Views](04-views.md).
 - In **Highlights**, the year and the records follow the filter. **Goals always count all your bikes.**
 - Rides you pick by hand and send to the analysis or the map are shown whatever their bike.
 - Once you have a ride from a GPX file, each area also has a **Source** filter next to it, see [Importing GPX files](08-importing-gpx.md#how-you-see-gpx-rides). A GPX file does not say which bike it was ridden on: Wattspur asks for it, see [Importing GPX files](08-importing-gpx.md#importing).
 
-From Mac 1.9.1, buttons, menus and filters say “vehicle” instead of “bike”, as cars and motorcycles are listed there too. A ride on a **Bicycle** without a device (on the iPhone under **Vehicle Type**, e.g. a hired bike) counts in the cycling totals but towards none of your bikes; the filter **All vehicles** includes it.
+From Mac 1.9.1, buttons, menus and filters say “vehicle” instead of “bike”, as cars and motorcycles are listed there too. A ride on a **Bicycle** without a device (on the iPhone under **Vehicle Type**, e.g. a hired bike) counts in the cycling totals but towards none of your bikes; the filter **All bikes** (up to Mac 1.9.1 **All vehicles**) includes it.
 
 ## Updating from an earlier version
 In 1.5 all your earlier rides were given to one bike named **Mein eBike** (**My eBike**). A note at the top of the window, once, asks you to set up your bikes: rename it and add the others in the profile. New installations ask for the first bike in the [setup assistant](02-first-launch.md).
