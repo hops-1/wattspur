@@ -150,6 +150,66 @@
           }
         }
       }
+    },
+    "Lateral Acceleration" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Querbeschleunigung"
+          }
+        }
+      }
+    },
+    "Lean Angle" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Schräglage"
+          }
+        }
+      }
+    },
+    "Sport" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sportart"
+          }
+        }
+      }
+    },
+    "Cycling" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Rad"
+          }
+        }
+      }
+    },
+    "Vehicles" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Fahrzeuge"
+          }
+        }
+      }
+    },
+    "Choose which sport the widget shows." : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Wähle, welche Sportart das Widget zeigt."
+          }
+        }
+      }
     }
   },
   "version" : "1.0"

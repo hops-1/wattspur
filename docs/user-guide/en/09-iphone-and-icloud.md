@@ -165,7 +165,7 @@ Above the ride list:
 Below it you see how many rides match, for example “2 of 40 rides”. ✕ resets everything. A tap on **This Week**, **This Month** or **This Year** in the overview opens the rides of that period. The Mac uses the same rules, so both find the same rides.
 
 ## The recording on the Lock Screen
-While you record, the **Lock Screen** shows the time, distance and speed. The button there pauses the ride and resumes it. On iPhones with the **Dynamic Island** the distance shows next to the camera; touch and hold it for more. To stop, open Wattspur: you name the ride and save it there.
+While you record, the **Lock Screen** shows the time, distance and speed. The button there pauses the ride and resumes it. On iPhones with the **Dynamic Island** the distance shows next to the camera; touch and hold it for more. To stop, open Wattspur: you name the ride and save it there. From iPhone 1.2, in a **car** the Lock Screen also shows the lateral acceleration as a bar (0.5 g left to 0.5 g right), and on a **motorcycle** the lean angle, with an arrow for the side. Like distance and speed, the value is updated every few seconds at most.
 
 ## Widget “This Week”
 1. Touch and hold an empty spot on the Home Screen.
@@ -173,6 +173,8 @@ While you record, the **Lock Screen** shows the time, distance and speed. The bu
 3. Choose the small or the medium size.
 
 The widget shows the kilometres and rides of this week, with one bar per day. The medium size also shows your last ride. The numbers are the same as in the overview. On Monday the widget starts at zero by itself.
+
+From iPhone 1.2 you can choose the sport: touch and hold the widget, tap **Edit Widget**, then under **Sport** choose **Cycling** or **Vehicles**. Without a choice it shows cycling. The last ride is then the last ride of that sport.
 
 ## Shortcuts and Siri
 Say for example:

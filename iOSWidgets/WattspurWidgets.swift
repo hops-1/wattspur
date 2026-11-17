@@ -112,9 +112,53 @@ private struct LockScreenView: View {
                 Spacer()
                 Figure(title: "Speed", value: ActivityFormat.speed(context.state.speed))
             }
+            if let kind = context.attributes.side {
+                SideRow(kind: kind, lean: context.state.lean)
+            }
             PauseButton(isPaused: context.state.isPaused)
         }
         .padding()
+    }
+}
+
+/// A car's lateral acceleration as a bar from 0.5 g left to 0.5 g right, as in the app, or a
+/// motorcycle's lean angle (B-289). A dash before the first value and while paused.
+private struct SideRow: View {
+    let kind: String
+    let lean: Double?
+    private static let reach = 0.5
+
+    var body: some View {
+        HStack(spacing: 10) {
+            Text(kind == "lateral" ? "Lateral Acceleration" : "Lean Angle")
+                .font(.caption)
+                .foregroundStyle(.secondary)
+                .fixedSize()
+            if kind == "lateral" {
+                GeometryReader { proxy in
+                    let half = proxy.size.width / 2
+                    let value = lean.map(ActivitySide.lateral) ?? 0
+                    let share = min(abs(value) / Self.reach, 1)
+                    ZStack(alignment: .leading) {
+                        Capsule().fill(.quaternary)
+                        Capsule()
+                            .fill(Color.indigo)
+                            .frame(width: half * share)
+                            .offset(x: value > 0 ? half - half * share : half)
+                        Rectangle().fill(.secondary).frame(width: 1.5).offset(x: half - 0.75)
+                    }
+                }
+                .frame(height: 8)
+                .clipShape(.capsule)
+            } else {
+                Spacer(minLength: 0)
+            }
+            Text(verbatim: lean.map { ActivitySide.text(lean: $0, kind: kind) } ?? "–")
+                .font(.subheadline.weight(.semibold))
+                .monospacedDigit()
+                .fixedSize()
+        }
+        .accessibilityElement(children: .combine)
     }
 }
 

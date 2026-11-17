@@ -1,6 +1,7 @@
 import ActivityKit
 import AppIntents
 import Foundation
+import WattspurCore
 
 /// The Live Activity of a recording (B-223): time, distance and speed on the Lock Screen and in
 /// the Dynamic Island, with a button for Pause. Shared by the app, which starts and updates it,
@@ -12,12 +13,17 @@ struct RecordingAttributes: ActivityAttributes {
         /// Metres per second, the current speed; 0 while standing or paused.
         var speed: Double
         var isPaused: Bool
+        /// The lean angle of the last point in degrees, positive to the left (B-289); `nil` for a
+        /// bicycle, before the first value and while paused. A car shows it as lateral acceleration.
+        var lean: Double? = nil
     }
 
     /// When the recording started; the time counts from here, as in the app.
     var startDate: Date
     /// The symbol of the device recorded with (B-286), e.g. `car`; `nil` is a bicycle.
     var symbol: String? = nil
+    /// What the side value means (B-289): `lateral` for a car, `lean` for a motorcycle; `nil` shows none.
+    var side: String? = nil
 }
 
 /// Pause or Resume from the Live Activity. A `LiveActivityIntent` runs in the app's process, so
@@ -39,6 +45,20 @@ struct ToggleRecordingPauseIntent: LiveActivityIntent {
 @MainActor
 enum RecordingControl {
     static var togglePause: () -> Void = {}
+}
+
+/// The side value of the Live Activity as text: “0,23 g” for a car, “23°” for a motorcycle, in the
+/// language of the device; the side as an arrow. The same rule as in the app (`SideMeasure`).
+enum ActivitySide {
+    /// In g from the lean angle (`SideMeasure.lateralAcceleration`).
+    static func lateral(lean degrees: Double) -> Double {
+        SideMeasure.lateralAcceleration.value(lean: degrees)
+    }
+
+    static func text(lean degrees: Double, kind: String) -> String {
+        let arrow = degrees > 0.5 ? "← " : degrees < -0.5 ? "→ " : ""
+        return arrow + (kind == "lateral" ? SideMeasure.lateralAcceleration : SideMeasure.leanAngle).text(lean: degrees)
+    }
 }
 
 /// Numbers for the Live Activity, in the units of the app: km and km/h, or miles and mph by region.
