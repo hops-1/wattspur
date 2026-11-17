@@ -68,7 +68,7 @@ Mit der Fahrt aus A.3:
 
 ## F. Sicherung (B-310)
 
-1. **Sichern:** Am Mac **Ablage › Mediathek-Backup › Sichern …**. Erwartet: Das Backup enthält das Auto **Nugget** mit seinen Fahrten (z. B. „Testfahrt Auto“ vom 17.11.) und das Motorrad „Test“ aus E.5. Prüfen kannst du das in F.2, wenn du das Backup auf der Kopie zurückholst. Die Fahrt ohne Gerät aus C.6 kommt erst mit dem späteren Test dazu.
+1. **Sichern:** Am Mac **Ablage › Mediathek-Backup › Sichern …**. Erwartet: Das Backup enthält das Auto **Nugget** mit seinen Fahrten (z. B. „Testfahrt Auto“ vom 17.11.) und das Motorrad „Test“ aus E.5. Sag Claude, wo das Backup liegt: Claude prüft eine Kopie davon, ohne deine Bibliothek anzufassen. Die Fahrt ohne Gerät aus C.6 kommt erst mit dem späteren Test dazu.
 2. **Zurückholen:** Ein altes Backup von vor 1.9 (z. B. vom 12.11.) **auf einer Kopie** zurückholen. Erwartet: Es geht ohne Fehler, die Fahrten sind Rad, Motorrad-Bikes bleiben Motorrad.
 3. **GPX:** Die Autofahrt aus C als GPX exportieren (Mac) oder teilen (iPhone) und in komoot oder Strava öffnen. Erwartet: Sie kommt dort nicht als Radfahrt an (Typ `driving`).
 
