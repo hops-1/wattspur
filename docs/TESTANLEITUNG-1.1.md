@@ -88,7 +88,7 @@ Hier eintragen oder an Claude schicken. Ein ✗ wird ein eigener Backlog-Punkt. 
 | C.4–C.8 | ✓ | 17.11.2026, iPhone 1.1 (27): Sichern auf Nugget, nächster Start mit Nugget, Auto ohne Gerät, danach Rad ohne Balken, *Mehr* ohne Seite Aufnahme |
 | D.1 | ✗ | 17.11.2026, iPhone 1.1 (27): „Starte eine Fahrt mit Nugget in Wattspur“ startete mit Cube Nadja (letztes Gerät); dazu startete hr.info die Wiedergabe → B-323 |
 | D.2 | ✓ | 17.11.2026: „Starte eine Fahrt mit Wattspur“ nimmt das Gerät der letzten Aufnahme |
-| D.3 | ✓ / offen | 17.11.2026: Aktion **Fahrt starten** mit **+ › Aktion hinzufügen › Wattspur** gefunden; mit Nugget in der CarPlay-Automation im Auto noch offen |
+| D.3 | ✓ | 17.11.2026: Aktion **Fahrt starten** mit **+ › Aktion hinzufügen › Wattspur** gefunden, Feld **Gerät** mit den Geräten |
 | E | ✓ | 17.11.2026, iPhone 1.1 (27): Profil, Gewicht, Kacheln, Geräte, Motorrad „Test“ anlegen, bearbeiten, archivieren; jeweils über iCloud am Mac angekommen |
 | F.1 | ✓ | 17.11.2026, Backup 22:04 von Mac 1.9 (773): 96 Fahrten, Nugget (Auto) mit beiden „Testfahrt Auto“, „Test Motorrad“ archiviert, Profil; von Claude auf einer Kopie geprüft |
 | F.2 | ✓ | 17.11.2026, Mac 1.9 (773): Backup vom 12.11. ohne Fehler zurückgeholt (auf der echten Bibliothek, nicht auf einer Kopie), danach Backup 22:04 ebenso ohne Fehler zurück |
