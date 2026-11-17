@@ -1,3 +1,4 @@
+import AppIntents
 import Foundation
 import WattspurCore
 
@@ -31,8 +32,18 @@ enum RecordingChoice {
     /// the library has opened.
     static func cache(devices: [RideExchange.Bike]) {
         let open = devices.filter { !$0.isArchived }
-        UserDefaults.standard.set(try? JSONEncoder().encode(open), forKey: PhoneSettingsKey.shortcutDevices)
+        let data = try? JSONEncoder().encode(open)
+        let changed = data != UserDefaults.standard.data(forKey: PhoneSettingsKey.shortcutDevices)
+        UserDefaults.standard.set(data, forKey: PhoneSettingsKey.shortcutDevices)
+        // Siri only knows the names in “Start a ride with Nugget” once it is told (D.1 of the 1.1 test:
+        // it took the last device instead). Once per launch, and whenever the devices change.
+        if changed || !toldSiri {
+            toldSiri = true
+            WattspurShortcuts.updateAppShortcutParameters()
+        }
     }
+
+    private static var toldSiri = false
 
     static var cachedDevices: [RideExchange.Bike] {
         UserDefaults.standard.data(forKey: PhoneSettingsKey.shortcutDevices)

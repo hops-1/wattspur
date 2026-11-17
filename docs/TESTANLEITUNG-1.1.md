@@ -86,7 +86,8 @@ Hier eintragen oder an Claude schicken. Ein ✗ wird ein eigener Backlog-Punkt. 
 | B.4 | nicht getestet | 0–100 km/h aus dem Stand geht im Berufsverkehr und auf der Landstraße nicht; im Kit mit erfundenen Fahrten getestet (`CarLateralTests`) |
 | C.1–C.3 | ✓ / ✗ | 17.11.2026, zwei Fahrten „Testfahrt Auto“: Werte folgen dem GPS, Drehen an der Ampel ohne falschen Ausschlag (nur im Stand gedreht); ✗ bei 85 km/h zu hoch → B-319; ✗ Kachel und Karte → B-320; „Ohne Gerät“ → B-321 |
 | C.4–C.8 | ✓ | 17.11.2026, iPhone 1.1 (27): Sichern auf Nugget, nächster Start mit Nugget, Auto ohne Gerät, danach Rad ohne Balken, *Mehr* ohne Seite Aufnahme |
-| D | offen | |
+| D.1 | ✗ | 17.11.2026, iPhone 1.1 (27): „Starte eine Fahrt mit Nugget in Wattspur“ startete mit Cube Nadja (letztes Gerät); dazu startete hr.info die Wiedergabe → B-323 |
+| D.2–D.3 | offen | |
 | E | ✓ | 17.11.2026, iPhone 1.1 (27): Profil, Gewicht, Kacheln, Geräte, Motorrad „Test“ anlegen, bearbeiten, archivieren; jeweils über iCloud am Mac angekommen |
 | F.1 | ✓ | 17.11.2026, Backup 22:04 von Mac 1.9 (773): 96 Fahrten, Nugget (Auto) mit beiden „Testfahrt Auto“, „Test Motorrad“ archiviert, Profil; von Claude auf einer Kopie geprüft |
 | F.2 | ✓ | 17.11.2026, Mac 1.9 (773): Backup vom 12.11. ohne Fehler zurückgeholt (auf der echten Bibliothek, nicht auf einer Kopie), danach Backup 22:04 ebenso ohne Fehler zurück |
