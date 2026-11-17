@@ -93,7 +93,7 @@ Hier eintragen oder an Claude schicken. Ein ✗ wird ein eigener Backlog-Punkt. 
 | F.1 | ✓ | 17.11.2026, Backup 22:04 von Mac 1.9 (773): 96 Fahrten, Nugget (Auto) mit beiden „Testfahrt Auto“, „Test Motorrad“ archiviert, Profil; von Claude auf einer Kopie geprüft |
 | F.2 | ✓ | 17.11.2026, Mac 1.9 (773): Backup vom 12.11. ohne Fehler zurückgeholt (auf der echten Bibliothek, nicht auf einer Kopie), danach Backup 22:04 ebenso ohne Fehler zurück |
 | F.3 | ✓ | 17.11.2026, Mac 1.9 (773): „Testfahrt Auto“ als GPX mit `<type>driving</type>` und `wattspur:bike` (Nugget); Beschreibung noch „Bike: Nugget“, ab Mac 1.9.1 „Fahrzeug: Nugget“ (B-321) |
-| B-319–B-321 | umgesetzt, offen | iPhone 1.1.1 und Mac 1.9.1: Auto-Querbeschleunigung bei 85 km/h, Kachel, „Fahrzeugart“ mit Fahrrad, „Fahrzeug“ statt „Bike“ am Mac |
+| B-319–B-323 | umgesetzt, offen | iPhone 1.1.1 und Mac 1.9.1: Auto-Querbeschleunigung bei 85 km/h, Kachel, „Fahrzeugart“ mit Fahrrad, „Fahrzeug“ statt „Bike“ am Mac, Fahrzeug löschen (archiviert, ohne Fahrten: „Test Motorrad“), Siri mit Nugget |
 
 **Vorsicht beim Mac-Test:** Öffne Wattspur aus **Programme** und prüfe unter **Über Wattspur** die Version. Am 16.11. öffnete macOS stattdessen einen alten Debug-Build (1.1.0). Er setzte die Bibliothek auf seinen alten Stand zurück. Dadurch fehlten Bikes, Fotos und Profil, und iCloud gab das an das iPhone weiter. Zurückgeholt aus der Sicherung vom 11.11.
 

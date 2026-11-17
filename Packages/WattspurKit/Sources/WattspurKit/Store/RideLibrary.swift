@@ -192,6 +192,10 @@ public final class RideLibrary {
 
     public func archive(_ bike: Bike) throws(BikeArchiveError) { try bikes.archive(bike) }
     public func unarchive(_ bike: Bike) { bikes.unarchive(bike) }
+    /// Deletes an archived bike without rides in the list (B-322).
+    public func delete(_ bike: Bike) throws(BikeDeleteError) { try bikes.delete(bike) }
+    /// The rides in the list that keep `bike` from being deleted (B-322).
+    public func listedRideCount(of bike: Bike) -> Int { bikes.listedRideCount(of: bike) }
 
     @discardableResult
     public func configureActiveBike(name: String, color: BikeColor) -> Bike {

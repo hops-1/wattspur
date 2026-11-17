@@ -23,7 +23,7 @@ From 0.6.2 on, **More** is a list like the iOS Settings. Each row opens a page o
 - **Profile** (at the top, with photo and name), from iPhone 1.1 in three parts:
   - **For the Calories:** name, photo, weight, height, year of birth and sex. **Edit** at the top right changes them on the iPhone; with iCloud they apply on the Mac too, and what you change on the Mac comes to the iPhone. Values outside 20–300 kg and 80–250 cm are not saved.
   - **Totals per sport:** distance, rides, ride time, longest ride and top speed, separately for cycling, vehicles and running. A car ride never counts for cycling.
-  - **Devices:** your bikes, vehicles and shoes with their kilometres; a tap opens one, **Edit** changes name, kind, colour, photo, manufacturer, model and the kilometres before Wattspur, for a bicycle also the switch **E-Bike**. **Add Device** adds a new one, for example your car. You can archive there too; the last device stays. With iCloud everything comes to the Mac.
+  - **Devices:** your bikes, vehicles and shoes with their kilometres; a tap opens one, **Edit** changes name, kind, colour, photo, manufacturer, model and the kilometres before Wattspur, for a bicycle also the switch **E-Bike**. **Add Device** adds a new one, for example your car. You can archive there too; the last device stays. From iPhone 1.1.1, an archived device without rides can be deleted there with **Delete Device**; if it still has rides, assign them to another device first. With iCloud everything comes to the Mac.
 - **Maps:** the map style for every map.
 - **iCloud & Library:** sync on or off, when it last synced, hints when something is wrong.
 - **Trash:** deleted rides, for 30 days.

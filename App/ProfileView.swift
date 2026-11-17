@@ -10,6 +10,8 @@ struct ProfileView: View {
     @Query private var riders: [Rider]
     @Query private var bikes: [Bike]
     @State private var editor: BikeEditorTarget?
+    /// The archived bike or vehicle to delete after the question (B-322).
+    @State private var deleting: Bike?
 
     @Environment(RideLibrary.self) private var library
     @Environment(\.librarySyncs) private var librarySyncs
@@ -104,12 +106,22 @@ struct ProfileView: View {
                                 .monospacedDigit()
                         }
                         Spacer()
-                        Text("The rides stay assigned; the bike is missing from the Import menu but stays in the filters.")
+                        let rides = library.listedRideCount(of: bike)
+                        Group {
+                            if rides > 0 {
+                                Text("To delete it, assign all its rides (\(rides)) to another vehicle first.")
+                            } else {
+                                Text("The rides stay assigned; the bike is missing from the Import menu but stays in the filters.")
+                            }
+                        }
                             .font(.caption)
                             .foregroundStyle(.secondary)
                             .frame(maxWidth: 320, alignment: .trailing)
                             .multilineTextAlignment(.trailing)
                         Button("Restore") { library.unarchive(bike) }
+                        // Only without rides in the list, so no ride loses its vehicle (B-322).
+                        Button("Delete…", role: .destructive) { deleting = bike }
+                            .disabled(rides > 0)
                     }
                     .accessibilityElement(children: .combine)
                     .accessibilityAction(named: Text("Restore")) { library.unarchive(bike) }
@@ -118,6 +130,16 @@ struct ProfileView: View {
             .padding(.top, 10)
         } label: {
             Text("Archived vehicles (\(archivedBikes.count))").font(.callout.weight(.semibold))
+        }
+        .confirmationDialog(Text("Delete “\(deleting?.name ?? "")”?"),
+                            isPresented: Binding(get: { deleting != nil }, set: { if !$0 { deleting = nil } }),
+                            titleVisibility: .visible) {
+            Button("Delete", role: .destructive) {
+                if let deleting { try? library.delete(deleting) }
+                deleting = nil
+            }
+        } message: {
+            Text("It disappears on all your devices. This cannot be undone.")
         }
         .padding(.horizontal, 18)
         .padding(.vertical, 12)

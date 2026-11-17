@@ -9936,6 +9936,56 @@
           }
         }
       }
+    },
+    "Delete…" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Löschen …"
+          }
+        }
+      }
+    },
+    "Delete" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Löschen"
+          }
+        }
+      }
+    },
+    "Delete “%@”?" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "„%@“ löschen?"
+          }
+        }
+      }
+    },
+    "It disappears on all your devices. This cannot be undone." : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Es verschwindet auf allen deinen Geräten. Das lässt sich nicht rückgängig machen."
+          }
+        }
+      }
+    },
+    "To delete it, assign all its rides (%lld) to another vehicle first." : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Zum Löschen weise erst alle seine Fahrten (%lld) einem anderen Fahrzeug zu."
+          }
+        }
+      }
     }
   },
   "version" : "1.0"

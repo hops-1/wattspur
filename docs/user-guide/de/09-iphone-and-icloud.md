@@ -23,7 +23,7 @@ Ab 0.6.2 ist **Mehr** eine Liste wie die Einstellungen von iOS. Jede Zeile öffn
 - **Profil** (oben, mit Foto und Name), ab iPhone 1.1 in drei Teilen:
   - **Für die Kalorien:** Name, Foto, Gewicht, Größe, Geburtsjahr und Geschlecht. **Bearbeiten** oben rechts ändert sie am iPhone; mit iCloud gelten sie auch am Mac, und was du am Mac änderst, kommt aufs iPhone. Werte außerhalb von 20–300 kg und 80–250 cm werden nicht gespeichert.
   - **Summen je Sportart:** Strecke, Fahrten, Fahrzeit, längste Fahrt und Höchsttempo, für Rad, Fahrzeuge und Laufen getrennt. Eine Autofahrt zählt nie beim Rad.
-  - **Geräte:** deine Bikes, Fahrzeuge und Schuhe mit ihren Kilometern; ein Tipp öffnet eines, **Bearbeiten** ändert Name, Art, Farbe, Foto, Hersteller, Modell und die Kilometer vor Wattspur, beim Rad auch den Schalter **E-Bike**. **Gerät hinzufügen** legt ein neues an, zum Beispiel dein Auto. Archivieren geht dort auch; das letzte Gerät bleibt. Mit iCloud kommt alles auf den Mac.
+  - **Geräte:** deine Bikes, Fahrzeuge und Schuhe mit ihren Kilometern; ein Tipp öffnet eines, **Bearbeiten** ändert Name, Art, Farbe, Foto, Hersteller, Modell und die Kilometer vor Wattspur, beim Rad auch den Schalter **E-Bike**. **Gerät hinzufügen** legt ein neues an, zum Beispiel dein Auto. Archivieren geht dort auch; das letzte Gerät bleibt. Ein archiviertes Gerät ohne Fahrten lässt sich dort ab iPhone 1.1.1 mit **Gerät löschen** löschen; hat es noch Fahrten, weise sie erst einem anderen Gerät zu. Mit iCloud kommt alles auf den Mac.
 - **Karten:** der Kartenstil für alle Karten.
 - **iCloud & Bibliothek:** Sync an oder aus, wann zuletzt synchronisiert wurde, Hinweise bei Problemen.
 - **Papierkorb:** gelöschte Fahrten, 30 Tage lang.

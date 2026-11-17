@@ -98,4 +98,42 @@ struct PhoneDeviceTests {
         #expect(read.name == "Pegasus" && read.kind == .runningShoe && read.color == .pink)
         #expect(read.photoData == draft.photoData && !read.isEbike && read.startKilometers == nil)
     }
+
+    @Test("An archived device without rides can be deleted; one with rides or not archived cannot (B-322)")
+    func delete() throws {
+        var draft = BikeDraft()
+        draft.name = "Test"
+        draft.kind = .motorcycle
+        let test = try #require(database.saveDevice(draft, id: nil))
+        // Not archived: not deleted, so it is never the active or the last one.
+        #expect(throws: BikeDeleteError.notArchived) { try database.deleteDevice(id: test) }
+        try database.setArchived(true, deviceID: test)
+        try database.deleteDevice(id: test)
+        #expect(try bikes().contains { $0.id == test } == false)
+        // Gone already: nothing happens.
+        try database.deleteDevice(id: test)
+    }
+
+    @Test("A device with rides in the list says how many; rides in the trash keep its kind (B-322)")
+    func deleteWithRides() throws {
+        let library = database.library
+        let nugget = library.makeBike(name: "Nugget", kind: .car)
+        let listed = Ride(name: "Autobahn", startDate: Date(timeIntervalSince1970: 1_800_000_000))
+        let trashed = Ride(name: "Weg", startDate: Date(timeIntervalSince1970: 1_800_100_000))
+        container.mainContext.insert(listed)
+        container.mainContext.insert(trashed)
+        listed.bike = nugget
+        trashed.bike = nugget
+        trashed.deletedAt = .now
+        try container.mainContext.save()
+        try database.setArchived(true, deviceID: nugget.id)
+        #expect(database.listedRideCount(deviceID: nugget.id) == 1)
+        #expect(throws: BikeDeleteError.hasRides(1)) { try database.deleteDevice(id: nugget.id) }
+
+        // Assigned to another device, it can go; the ride in the trash stays a car ride.
+        listed.bike = try bikes().first { $0.kind != .car }
+        try database.deleteDevice(id: nugget.id)
+        #expect(try bikes().contains { $0.name == "Nugget" } == false)
+        #expect(trashed.bike == nil && trashed.sportRawValue == "car" && trashed.deviceKind == .car)
+    }
 }
