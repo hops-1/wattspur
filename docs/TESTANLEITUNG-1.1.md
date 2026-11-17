@@ -85,7 +85,8 @@ Hier eintragen oder an Claude schicken. Ein ✗ wird ein eigener Backlog-Punkt. 
 | C.1–C.3 | ✓ / ✗ | 17.11.2026, zwei Fahrten „Testfahrt Auto“: Werte folgen dem GPS, Drehen an der Ampel ohne falschen Ausschlag (nur im Stand gedreht); ✗ bei 85 km/h zu hoch → B-319; ✗ Kachel und Karte → B-320; „Ohne Gerät“ → B-321 |
 | C.4–D | offen | |
 | E | ✓ | 17.11.2026, iPhone 1.1 (27): Profil, Gewicht, Kacheln, Geräte, Motorrad „Test“ anlegen, bearbeiten, archivieren; jeweils über iCloud am Mac angekommen |
-| F | offen | |
+| F.1 | ✓ | 17.11.2026, Backup 22:04 von Mac 1.9 (773): 96 Fahrten, Nugget (Auto) mit beiden „Testfahrt Auto“, „Test Motorrad“ archiviert, Profil; von Claude auf einer Kopie geprüft |
+| F.2–F.3 | offen | |
 | B-319–B-321 | umgesetzt, offen | iPhone 1.1.1 und Mac 1.9.1: Auto-Querbeschleunigung bei 85 km/h, Kachel, „Fahrzeugart“ mit Fahrrad, „Fahrzeug“ statt „Bike“ am Mac |
 
 **Vorsicht beim Mac-Test:** Öffne Wattspur aus **Programme** und prüfe unter **Über Wattspur** die Version. Am 16.11. öffnete macOS stattdessen einen alten Debug-Build (1.1.0). Er setzte die Bibliothek auf seinen alten Stand zurück. Dadurch fehlten Bikes, Fotos und Profil, und iCloud gab das an das iPhone weiter. Zurückgeholt aus der Sicherung vom 11.11.
