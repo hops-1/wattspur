@@ -50,17 +50,21 @@ struct RecordingView: View {
                 gpsStatus
                 if let recording = recorder.recording {
                     // Swipe from the figures to the profile of the ride so far (B-277).
+                    // The page dots sit at the bottom: the figures keep room for them below (B-320).
                     TabView(selection: $page) {
                         RecordingFigures(recording: recording)
                             .padding(.top, 28)
+                            .padding(.bottom, recording.vehicle == .car ? Self.dotsRoom : 0)
+                            .frame(maxHeight: .infinity, alignment: .top)
                             .tag(Page.figures)
                         RecordingProfileView(recording: recording)
-                            .padding(.bottom, 28)
+                            .padding(.bottom, Self.dotsRoom)
                             .tag(Page.profile)
                     }
                     .tabViewStyle(.page(indexDisplayMode: .always))
                     .indexViewStyle(.page(backgroundDisplayMode: .always))
-                    .frame(height: 210)
+                    // A car adds the bar of the lateral acceleration (B-287) and room for the dots.
+                    .frame(height: recording.vehicle == .car ? 330 : 210)
                 }
                 buttons
             }
@@ -80,7 +84,9 @@ struct RecordingView: View {
                     if let recording = recorder.recording {
                         // Swipe from the figures to a small profile of the ride so far (B-277).
                         TabView(selection: $page) {
+                            // Room for the page dots at the bottom, so they cover no figure (B-320).
                             LandscapeRecordingFigures(recording: recording)
+                                .padding(.bottom, recording.vehicle == .car ? Self.dotsRoom : 0)
                                 .frame(maxHeight: .infinity, alignment: .top)
                                 .tag(Page.figures)
                             RecordingProfileView(recording: recording, compact: true)
@@ -114,6 +120,9 @@ struct RecordingView: View {
             }
             .animation(.snappy, value: ending)
     }
+
+    /// Points at the bottom of a page for the page dots.
+    static let dotsRoom: CGFloat = 28
 
     /// Why there is no position, or that the GPS is still settling.
     @ViewBuilder private var gpsStatus: some View {
@@ -390,6 +399,7 @@ struct RecordingFigures: View {
 struct LateralBar: View {
     var recording: RideRecording
     static let reach = 0.5
+    static var scaleText: String { "\(reach.formatted(.number.precision(.fractionLength(1)))) g" }
 
     /// In g, positive in a left turn; `nil` before the first value or while paused.
     private var lateral: Double? {
@@ -422,10 +432,12 @@ struct LateralBar: View {
                 }
             }
             .frame(height: 10)
+            .clipShape(.capsule)
+            // The ends of the bar, in the device's language: “0,5 g” in German (B-320).
             HStack {
-                Text(verbatim: "0.5 g").font(.caption2).foregroundStyle(.secondary)
+                Text(verbatim: Self.scaleText).font(.caption2).foregroundStyle(.secondary)
                 Spacer()
-                Text(verbatim: "0.5 g").font(.caption2).foregroundStyle(.secondary)
+                Text(verbatim: Self.scaleText).font(.caption2).foregroundStyle(.secondary)
             }
         }
         .frame(maxWidth: .infinity)
