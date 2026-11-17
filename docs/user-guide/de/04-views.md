@@ -4,6 +4,8 @@ Das Fenster hat drei Teile: links die Seitenleiste, in der Mitte die Fahrtenlist
 
 **Rad und Fahrzeuge** (ab Mac 1.10): Hast du neben Bikes auch ein Auto oder Motorrad, oder Fahrten damit, steht oben in der Seitenleiste ein Umschalter **Rad · Fahrzeuge**. **Fahrten**, **Auswertung**, **Highlights** und **Karte** zeigen dann nur die Fahrten der gewählten Sportart; der Filter daneben bietet nur deren Geräte (**Alle Bikes** bzw. **Alle Fahrzeuge**). **Papierkorb** und **Profil** gelten für alle. Die Wahl bleibt beim nächsten Start; sie gilt nur auf diesem Mac. In der schmalen Seitenleiste stehen die Symbole untereinander. Die **Ziele** in den Highlights zählen immer das Rad.
 
+Bei **Fahrzeugen** zeigen Tour-Detail, Auswertung und Highlights nur, was zu Auto und Motorrad passt: keine Leistung, Trittfrequenz, Kalorien und kein CO₂; im Tour-Detail dafür die **Höchstgeschwindigkeit**. Die Rekorde der Fahrzeuge sind Strecke, Fahrzeit, Höhenmeter, Durchschnitts- und Höchsttempo und die kurvigste Fahrt; Sterne in der Liste und im Tour-Detail gelten jeweils innerhalb der Sportart. Der **Vergleich** misst Fahrzeuge am Durchschnitt deiner Fahrzeug-Fahrten.
+
 ![Hauptfenster](../images/de/main.png)
 
 ## Fahrten

@@ -7,6 +7,8 @@ import WattspurKit
 
 struct TotalsGrid: View {
     let model: AnalysisModel
+    /// Vehicles have no work, calories or CO₂ (B-288).
+    var sport: Sport = .cycling
 
     var body: some View {
         let c = model.current
@@ -24,6 +26,12 @@ struct TotalsGrid: View {
                     StatTile("Ascent", value: AnalysisFormat.whole(c.ascentIfKnown), unit: "m",
                              coverage: c.ascentCoverage, change: model.change { $0.ascentIfKnown }, caption: caption)
                 }
+                if sport != .cycling {
+                    GridRow {
+                        StatTile("Avg per ride", value: RideFormat.distanceValue(c.distancePerRide ?? 0), unit: "km",
+                                 change: model.change { $0.distancePerRide }, caption: caption)
+                    }
+                } else {
                 GridRow {
                     StatTile("Work", value: AnalysisFormat.whole(c.workKilojoulesIfKnown), unit: "kJ",
                              coverage: c.powerCoverage, change: model.change { $0.workKilojoulesIfKnown }, caption: caption)
@@ -35,6 +43,7 @@ struct TotalsGrid: View {
                     StatTile("Avg per ride", value: RideFormat.distanceValue(c.distancePerRide ?? 0), unit: "km",
                              change: model.change { $0.distancePerRide }, caption: caption)
                 }
+                }
             }
         }
     }
@@ -42,13 +51,15 @@ struct TotalsGrid: View {
 
 struct AveragesCard: View {
     let model: AnalysisModel
+    /// Vehicles have no power or cadence (B-288).
+    var sport: Sport = .cycling
 
     var body: some View {
         let c = model.current
         VStack(alignment: .leading, spacing: 12) {
             HStack(alignment: .firstTextBaseline, spacing: 10) {
                 Text("Averages").font(.subheadline.weight(.semibold))
-                Text("Speed, power and cadence weighted by ride time")
+                Text(sport == .cycling ? "Speed, power and cadence weighted by ride time" : "Speed weighted by ride time")
                     .font(.caption)
                     .foregroundStyle(.secondary)
             }
@@ -56,10 +67,12 @@ struct AveragesCard: View {
                 GridRow {
                     StatTile("Avg speed", value: RideFormat.speedValue(c.averageSpeed), unit: "km/h", dot: .metricSpeed,
                              compact: true, change: model.change { $0.averageSpeed })
-                    StatTile("Avg power", value: AnalysisFormat.whole(c.averagePower), unit: "W", dot: .metricPower,
-                             compact: true, coverage: c.powerCoverage, change: model.change { $0.averagePower })
-                    StatTile("Avg cadence", value: AnalysisFormat.whole(c.averageCadence), unit: String(localized: "rpm"),
-                             dot: .metricCadence, compact: true, coverage: c.cadenceCoverage, change: model.change { $0.averageCadence })
+                    if sport == .cycling {
+                        StatTile("Avg power", value: AnalysisFormat.whole(c.averagePower), unit: "W", dot: .metricPower,
+                                 compact: true, coverage: c.powerCoverage, change: model.change { $0.averagePower })
+                        StatTile("Avg cadence", value: AnalysisFormat.whole(c.averageCadence), unit: String(localized: "rpm"),
+                                 dot: .metricCadence, compact: true, coverage: c.cadenceCoverage, change: model.change { $0.averageCadence })
+                    }
                     StatTile("Avg ride time", value: AnalysisFormat.hoursMinutes(c.timerTimePerRide ?? 0),
                              compact: true, change: model.change { $0.timerTimePerRide })
                 }

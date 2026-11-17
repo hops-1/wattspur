@@ -396,9 +396,11 @@ extension RideDetailContent {
 
     /// The records this ride holds now, each with the best value of all other rides.
     private var heldRecords: [RecordBanner.Held] {
-        guard ride.countsInTotals else { return [] }
+        // Records within the ride's own sport (B-288).
+        let sport = ride.sport
+        guard ride.countsInTotals(sport: sport) else { return [] }
         let calendar = GoalPeriod.calendar()
-        let all = listedRides.filter(\.countsInTotals).map(\.highlightRide)
+        let all = listedRides.filter { $0.countsInTotals(sport: sport) }.map(\.highlightRide)
         let kinds = RideRecords.kinds(heldBy: ride.id, in: RideRecords.records(all, calendar: calendar))
         guard !kinds.isEmpty else { return [] }
         let others = RideRecords.records(all.filter { $0.id != ride.id }, calendar: calendar)
@@ -508,6 +510,13 @@ struct KeyFiguresGrid: View {
                 Figure("Ascent", value: ride.totalAscent.map(String.init) ?? "–", unit: "m", approximate: totalsEstimated,
                        caption: ride.totalAscent == nil ? notInFile : nil, isRecord: records.contains(.mostAscent))
             }
+            if ride.sport == .vehicle {
+                // A vehicle: no pedal power, cadence, calories or CO₂ (B-288, `DESIGN-SPORTARTEN.md`).
+                GridRow {
+                    Figure("Top speed", value: RideFormat.speedValue(ride.maxSpeed), unit: "km/h",
+                           isRecord: records.contains(.highestSpeed))
+                }
+            } else {
             GridRow {
                 Figure("Avg power", value: ride.averagePower.map(String.init) ?? "–", unit: "W",
                        caption: ride.averagePower == nil ? notInFile : nil, isRecord: records.contains(.highestAveragePower))
@@ -524,6 +533,7 @@ struct KeyFiguresGrid: View {
                            note: String(localized: "Calculated from the distance"),
                            caption: ride.source == .gpx ? String(localized: "From the distance") : nil)
                 }
+            }
             }
             if let motion {
                 GridRow {

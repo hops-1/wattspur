@@ -10066,6 +10066,26 @@
           }
         }
       }
+    },
+    "Speed weighted by ride time" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tempo gewichtet nach Fahrzeit"
+          }
+        }
+      }
+    },
+    "Records of your vehicles: distance, ride time, ascent, speed and curves. Average speed counts from 5 km on. Merged rides count as one ride." : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Rekorde deiner Fahrzeuge: Strecke, Fahrzeit, Höhenmeter, Tempo und Kurven. Das Durchschnittstempo zählt ab 5 km. Zusammengefügte Fahrten zählen als eine Fahrt."
+          }
+        }
+      }
     }
   },
   "version" : "1.0"

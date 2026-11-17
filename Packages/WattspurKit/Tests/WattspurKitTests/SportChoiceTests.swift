@@ -117,4 +117,28 @@ struct SportChoiceTests {
         #expect(onBike.isOnMap(MapFilter()) && inCar.isOnMap(MapFilter()))
         #expect(inCar.isOnMap(MapFilter(selectedIDs: [inCar.id], sport: .cycling)))
     }
+
+    @Test("Each sport keeps its own records: no power or streak for a car")
+    func records() {
+        let day = 86_400.0
+        func figures(_ sport: Sport, days: Double, km: Double, power: Int?) -> HighlightRide {
+            HighlightRide(figures: RideFigures(startDate: Date(timeIntervalSince1970: 1_800_000_000 + days * day), distance: km * 1000,
+                                               timerTime: 3600, averageSpeed: km / 3.6, averagePower: power,
+                                               maxSpeed: km / 2, maxPower: power, sport: sport),
+                          timeZone: TimeZone(identifier: "Europe/Berlin")!)
+        }
+        let cars = [figures(.vehicle, days: 0, km: 80, power: 300), figures(.vehicle, days: 1, km: 120, power: nil)]
+        let kinds = Set(RideRecords.records(cars).map(\.kind))
+        #expect(kinds == [.longestDistance, .longestDuration, .highestAverageSpeed, .highestSpeed])
+        #expect(RideRecords.records(cars).first { $0.kind == .longestDistance }?.rideIDs == [cars[1].id])
+        let bikes = [figures(.cycling, days: 0, km: 30, power: 180), figures(.cycling, days: 1, km: 40, power: 200)]
+        let bikeKinds = Set(RideRecords.records(bikes).map(\.kind))
+        #expect(bikeKinds.isSuperset(of: [.highestAveragePower, .highestPower, .longestStreak]))
+        // Mixed in by mistake, a car never takes a cycling record.
+        let mixed = RideRecords.records(bikes + cars)
+        #expect(mixed.first { $0.kind == .highestAveragePower }?.rideIDs == [bikes[1].id])
+        #expect(mixed.first { $0.kind == .longestStreak }?.rideIDs == bikes.map(\.id))
+        #expect(!RecordKind.highestPower.applies(to: .vehicle) && RecordKind.highestSpeed.applies(to: .vehicle))
+        #expect(RecordKind.longestStreak.applies(to: .running) && !RecordKind.highestSpeed.applies(to: .running))
+    }
 }

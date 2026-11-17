@@ -290,10 +290,9 @@ struct RideListView: View {
 
     /// Rides that hold a record now get a star (ADV-R2).
     private var recordHolders: Set<UUID> {
-        // Records of cycling only for now; the other sports get their own with part 2 of B-288.
-        recordsMemo.value(for: sport == .cycling ? facts : []) {
-            guard sport == .cycling else { return [] }
-            let counted = rides.filter { $0.countsInTotals(sport: .cycling) }.map(\.highlightRide)
+        // The records of the sport shown (B-288): a car never takes a star from a bike.
+        recordsMemo.value(for: facts.filter { $0.sport == sport }) {
+            let counted = rides.filter { $0.countsInTotals(sport: sport) }.map(\.highlightRide)
             let records = RideRecords.records(counted, calendar: GoalPeriod.calendar())
             return Set(records.filter(\.kind.isRideRecord).flatMap(\.rideIDs))
         }
