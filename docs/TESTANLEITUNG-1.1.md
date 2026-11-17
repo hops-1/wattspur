@@ -82,7 +82,8 @@ Hier eintragen oder an Claude schicken. Ein ✗ wird ein eigener Backlog-Punkt. 
 | A | ✓ | 16.11.2026, Mac 1.9 (773) |
 | B.1 | ✓ | 16.11.2026, Mac |
 | B.2–B.4 | offen | iPhone 1.1 erst nach Nils' Video für Apple |
-| C–F | offen | |
+| C.1–C.3 | ✓ / ✗ | 17.11.2026, zwei Fahrten „Testfahrt Auto“: Werte folgen dem GPS, Drehen an der Ampel ohne falschen Ausschlag (nur im Stand gedreht); ✗ bei 85 km/h zu hoch → B-319; ✗ Kachel und Karte → B-320; „Ohne Gerät“ → B-321 |
+| C.4–F | offen | |
 
 **Vorsicht beim Mac-Test:** Öffne Wattspur aus **Programme** und prüfe unter **Über Wattspur** die Version. Am 16.11. öffnete macOS stattdessen einen alten Debug-Build (1.1.0). Er setzte die Bibliothek auf seinen alten Stand zurück. Dadurch fehlten Bikes, Fotos und Profil, und iCloud gab das an das iPhone weiter. Zurückgeholt aus der Sicherung vom 11.11.
 
