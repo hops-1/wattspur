@@ -141,4 +141,24 @@ struct SportChoiceTests {
         #expect(!RecordKind.highestPower.applies(to: .vehicle) && RecordKind.highestSpeed.applies(to: .vehicle))
         #expect(RecordKind.longestStreak.applies(to: .running) && !RecordKind.highestSpeed.applies(to: .running))
     }
+
+    @Test("iPhone: the library of one sport, its devices and its tiles")
+    func phoneLibrary() {
+        let now = Date(timeIntervalSince1970: 1_800_000_000)
+        let cube = RideExchange.Bike(id: UUID(), name: "Cube", kind: "bike", color: "blue", isEbike: true, isArchived: false)
+        let nugget = RideExchange.Bike(id: UUID(), name: "Nugget", kind: "car", color: "teal", isEbike: false, isArchived: false)
+        func ride(_ bike: RideExchange.Bike?, kind: String? = nil, km: Double) -> RideExchange.Ride {
+            RideExchange.Ride(id: UUID(), name: "Tour", startDate: now.addingTimeInterval(-3600), bikeID: bike?.id, kind: kind,
+                              source: "gpx", timerTime: 3600, elapsedTime: 3600, distance: km * 1000)
+        }
+        let library = RideExchange.Library(generatedAt: now, generator: "test", bikes: [cube, nugget],
+                                           rides: [ride(cube, km: 20), ride(nugget, km: 100), ride(nil, kind: "motorcycle", km: 50)])
+        #expect(library.availableSports == [.cycling, .vehicle])
+        #expect(library.only(.vehicle).rides.count == 2 && library.only(.cycling).rides.count == 1)
+        #expect(library.devices(of: .vehicle).map(\.name) == ["Nugget"])
+        #expect(library.totals(of: .vehicle, now: now).weekDistance == 150_000)
+        #expect(library.totals(of: .cycling, now: now).weekDistance == 20_000)
+        let onlyBikes = RideExchange.Library(generatedAt: now, generator: "test", bikes: [cube], rides: [])
+        #expect(!SportChoice.showsSwitch(available: onlyBikes.availableSports))
+    }
 }

@@ -53,6 +53,7 @@ struct WattspurApp: App {
         // For the App Store screenshots (B-315, scripts/appstore-screenshots.sh): recent rides, a tab,
         // the newest ride open, or a recording running from the start.
         library.importRecentDemoRidesForTesting(UserDefaults.standard.integer(forKey: "WattspurDemoRecent"))
+        if UserDefaults.standard.bool(forKey: "WattspurDemoCar") { library.addDemoCarForTesting() }
         switch UserDefaults.standard.string(forKey: "WattspurDemoTab") {
         case "rides": _tab = State(initialValue: .rides)
         case "map": _tab = State(initialValue: .map)

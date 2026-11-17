@@ -37,6 +37,8 @@ enum PhoneSettingsKey {
     static let ridesMapMode = "ridesMapMode"
     static let ridesMapPeriod = "ridesMapPeriod"
     static let ridesMapBike = "ridesMapBike"
+    /// The sport Overview, Rides and Map show (B-289, `Sport`); each iPhone keeps its own, not synced.
+    static let shownSport = "shownSport"
     /// The legend of the coloured track on the ride's map is folded to its colours (tap to unfold).
     static let mapLegendFolded = "mapLegendFolded"
     /// Height or speed in the profile while recording (B-277).

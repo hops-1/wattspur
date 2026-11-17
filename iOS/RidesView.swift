@@ -7,6 +7,8 @@ struct RidesView: View {
     @Environment(PhoneLibrary.self) private var library
     @Environment(\.isLandscape) private var isLandscape
     @Environment(PhoneImport.self) private var phoneImport
+    /// The sport of the capsule (B-289): the list shows only its rides.
+    @ShownSport private var sport
     /// The ride shown beside the list in landscape (B-243); the newest until one is tapped.
     @State private var selection: UUID?
     /// Search and filters (B-222), kept by the app: the period tiles of the overview set them.
@@ -34,20 +36,26 @@ struct RidesView: View {
         }
     }
 
-    /// The filter as it applies: a bike filter only with two bikes or more (`RideFilter.resolved`).
+    /// The filter as it applies: a bike filter only with two devices of the sport or more (`RideFilter.resolved`).
     private func effectiveFilter(_ state: RideExchange.Library) -> RideFilter {
-        filter.resolved(knownBikeIDs: Set(state.bikes.map(\.id)))
+        filter.resolved(knownBikeIDs: Set(state.devices(of: sport).map(\.id)))
+    }
+
+    /// The rides of the sport shown, by month, with search and filters.
+    private func shownMonths(_ state: RideExchange.Library) -> [RideExchange.Library.Month] {
+        state.only(sport).months(filteredBy: effectiveFilter(state))
     }
 
     private func filterBar(_ state: RideExchange.Library, months: [RideExchange.Library.Month]) -> some View {
-        RideFilterBar(filter: $filter, compact: isLandscape, bikes: state.bikes.filter { !$0.isArchived || $0.id == filter.bike.bikeID },
-                      shown: months.reduce(0) { $0 + $1.rides.count }, total: state.rides.count,
+        RideFilterBar(filter: $filter, compact: isLandscape, sport: sport,
+                      bikes: state.devices(of: sport).filter { !$0.isArchived || $0.id == filter.bike.bikeID },
+                      shown: months.reduce(0) { $0 + $1.rides.count }, total: state.only(sport).rides.count,
                       importFiles: { phoneImport.choosingFiles = true })
     }
 
     /// No rides at all, or none that pass the search and filters.
     @ViewBuilder private func emptyState(_ state: RideExchange.Library, months: [RideExchange.Library.Month]) -> some View {
-        if state.rides.isEmpty {
+        if state.only(sport).rides.isEmpty {
             noRides
         } else if months.isEmpty {
             ContentUnavailableView {
@@ -62,7 +70,7 @@ struct RidesView: View {
 
     /// Landscape (B-243): the list on the left, the detail of the chosen ride on the right.
     private func split(_ state: RideExchange.Library) -> some View {
-        let months = state.months(filteredBy: effectiveFilter(state))
+        let months = shownMonths(state)
         let shownRides = months.flatMap(\.rides)
         let chosen = shownRides.first { $0.id == selection } ?? shownRides.first
         return HStack(spacing: 0) {
@@ -135,7 +143,7 @@ struct RidesView: View {
     }
 
     private func list(_ state: RideExchange.Library) -> some View {
-        let months = state.months(filteredBy: effectiveFilter(state))
+        let months = shownMonths(state)
         return List {
             // Only when reading the store went wrong.
             if library.problem != nil {
