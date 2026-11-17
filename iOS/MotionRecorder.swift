@@ -46,6 +46,7 @@ final class MotionRecorder: @unchecked Sendable {
     /// if the device has no motion sensors.
     @MainActor func start(at date: Date, vehicle: RecordingVehicle, rawLog: Bool) {
         guard manager.isDeviceMotionAvailable else { return }
+        fusion.withLock { $0 = MotionFusion(vehicle: vehicle) }
         if rawLog, let handle = Self.makeFile(for: date) {
             writesRaw = true
             open(handle, at: date, vehicle: vehicle)

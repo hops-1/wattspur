@@ -46,7 +46,11 @@ public struct MotionValues: Codable, Sendable, Equatable {
 ///   reads like a curve (17° on a straight road on 9.11.2026). A vehicle turns as its track does, so
 ///   where the sensors turned more than `maxTurnMismatch` away from the GPS course over an interval,
 ///   its lean and acceleration from the sensors do not count. A motorcycle that leans into a curve
-///   rolls about its length, not about “up”, so it is not caught by this.
+///   rolls about its length, not about “up”, so it is not caught by this. The check allows more
+///   at speed (`turnMismatchPerSpeed`) and in a curve (`turnMismatchShare`): a holder that sways at
+///   85 km/h and a GPS course a little late left out real curve points (B-319).
+/// - **A car** (B-319) takes the mean of the interval instead of the strongest value: at speed the
+///   holder sways, and the strongest of a second showed 0.35–0.47 g where the course said 0.15 g.
 ///
 /// Readings are smoothed over about half a second against the vibration of the engine; the
 /// values are tuned with the test rides of spike V-16 (`docs/SPIKE-BEWEGUNG.md`).
@@ -72,6 +76,16 @@ public struct MotionFusion: Sendable {
     public static let maxTurnMismatch = 4.0
     /// Degrees: a GPS course less sure than this is not used for the check.
     static let maxCourseAccuracy = 10.0
+    /// Degrees per km/h the check allows at least (B-319): 5.1° at 85 km/h, where a swaying holder
+    /// and the GPS course left out real curve points; the 7° a second of the turned iPhone at
+    /// 90 km/h (5.4° allowed) still count. A first value, like `maxTurnMismatch`.
+    public static let turnMismatchPerSpeed = 0.06
+    /// The share of the course's own change the check allows on top (B-319): a GPS course a little
+    /// late differs from the sensors most where the curve changes.
+    public static let turnMismatchShare = 0.25
+
+    /// Whether the lean of an interval is its mean (a car, B-319) or its strongest value.
+    public let usesMean: Bool
 
     // The filters.
     private var lastReading: Date?
@@ -81,6 +95,9 @@ public struct MotionFusion: Sendable {
 
     // The interval since the last GPS point.
     private var strongestLean = 0.0
+    /// The sum and count of the sideways values in g at riding speed, for the mean of a car.
+    private var sidewaysSum = 0.0
+    private var sidewaysCount = 0
     private var strongestAlong = 0.0
     private var squares = 0.0
     private var count = 0
@@ -94,7 +111,10 @@ public struct MotionFusion: Sendable {
     private var lastFix: (date: Date, speed: Double)?
     private var lastCourse: Double?
 
-    public init() {}
+    /// `vehicle` decides whether the lean is the strongest of an interval or, for a car, its mean.
+    public init(vehicle: RecordingVehicle = .eBike) {
+        usesMean = vehicle == .car
+    }
 
     /// One device-motion reading.
     public mutating func add(_ reading: Reading) {
@@ -137,6 +157,8 @@ public struct MotionFusion: Sendable {
         if v >= Self.minLeanSpeed {
             let lean = min(max(atan(sideways) * 180 / .pi, -Self.maxLean), Self.maxLean)
             if abs(lean) > abs(strongestLean) { strongestLean = lean }
+            sidewaysSum += sideways
+            sidewaysCount += 1
         }
         let flatSquared = horizontal.x * horizontal.x + horizontal.y * horizontal.y + horizontal.z * horizontal.z
         let along = max(flatSquared - sideways * sideways, 0).squareRoot()
@@ -151,10 +173,13 @@ public struct MotionFusion: Sendable {
                                courseAccuracy: Double? = nil) -> MotionValues? {
         let valid = newSpeed.flatMap { $0 >= 0 && $0.isFinite ? $0 : nil }
         let sure = courseAccuracy.map { $0 >= 0 && $0 <= Self.maxCourseAccuracy } ?? true
-        let allowed = max(Self.maxTurnMismatch, 2 * (courseAccuracy.flatMap { $0 >= 0 ? $0 : nil } ?? 0))
+        let allowed = max(Self.maxTurnMismatch, 2 * (courseAccuracy.flatMap { $0 >= 0 ? $0 : nil } ?? 0),
+                          Self.turnMismatchPerSpeed * (valid ?? 0) * 3.6)
         let course = newCourse.flatMap { $0 >= 0 && $0.isFinite && sure ? $0 : nil }
         defer {
             strongestLean = 0
+            sidewaysSum = 0
+            sidewaysCount = 0
             strongestAlong = 0
             squares = 0
             count = 0
@@ -177,7 +202,12 @@ public struct MotionFusion: Sendable {
                 acceleration = (change > 0 ? 1 : -1) * max(strongestAlong, abs(change))
             }
         }
-        return MotionValues(lean: turnedIPhone ? 0 : strongestLean, acceleration: acceleration,
+        var lean = strongestLean
+        if usesMean {
+            lean = sidewaysCount == 0 ? 0 : min(max(atan(sidewaysSum / Double(sidewaysCount)) * 180 / .pi,
+                                                    -Self.maxLean), Self.maxLean)
+        }
+        return MotionValues(lean: turnedIPhone ? 0 : lean, acceleration: acceleration,
                             roughness: (squares / Double(count)).squareRoot())
     }
 
@@ -189,6 +219,6 @@ public struct MotionFusion: Sendable {
         var courseChange = course - lastCourse
         courseChange -= 360 * (courseChange / 360).rounded()
         let sensors = turned * 180 / .pi
-        return abs(sensors + courseChange) > allowed
+        return abs(sensors + courseChange) > allowed + Self.turnMismatchShare * abs(courseChange)
     }
 }
