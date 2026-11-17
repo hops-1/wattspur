@@ -7,8 +7,14 @@ Every DMG handed out to testers corresponds to one entry below.
 
 ## [Unreleased]
 
+## [1.9.1] – 2026-11-17
+
+Sports, part 1: cars and motorcycles as devices, and the iPhone chooses the device at the start. Together with the iPhone app 1.1.1 (28). Mac 1.9 (773) and iPhone 1.1 (27) were test builds of the same features.
+
 ### Added
 
+- **Vehicle type with a bicycle too** (B-321). “What Are You Riding?” on the iPhone offers Bicycle, Car and Motorcycle without a device of your own, e.g. a hired bike or a rental car; a hired bicycle counts in the cycling totals but towards none of your bikes. Siri and Shortcuts offer the same.
+- **Delete a vehicle** (B-322). An archived bike or vehicle without rides in the list can be deleted, on the Mac under Archived vehicles and on the iPhone in its editor; rides in the trash keep its kind.
 - **iPhone app 1.0 (26), the first build for the App Store.** Same features as 0.7.1, plus the privacy manifests Apple asks for (app, widgets, share extension) and a support page (B-313, B-314).
 - **Sports as the base, with cars as devices** (B-284; Mac 1.9 with iPhone 1.1). Besides bikes and motorcycles, the profile on the Mac now takes cars, as many as you like, with name, photo, starting mileage, manufacturer and model; the switch "E-bike", the drive unit and the battery belong to bicycles only. Rides in a car or on a motorcycle stay out of the cycling totals, records, goals, the iPhone tiles, the widget and the CO₂ saved, also when they have no device (new optional field on the ride). Older versions read a car as a bicycle, so all devices need the new versions.
 - **iPhone: choose the device at the start** (B-286). One tap on Start Ride takes the device of the last recording; “with … ▾” opens “What Are You Riding?” with the bikes, vehicles and shoes, and a car or motorcycle without a device. The choice is set when saving, sets the GPS jump limit and the symbol of the Live Activity, and Siri and Shortcuts take it too (“Start a ride with Nugget”). A car or motorcycle without a device is saved as such (`wattspur:kind` in the GPX) and stays out of the cycling totals. The setting More › Recording › Vehicle is gone.
@@ -16,6 +22,16 @@ Every DMG handed out to testers corresponds to one entry below.
 - **iPhone: the profile** (B-299). More › Profile edits name, photo, weight, height, year of birth and sex on the iPhone, the same profile as on the Mac over iCloud. Below it the totals and records of each sport (distance, rides, ride time, longest ride, top speed) and the devices by sport, each with its kilometres.
 - **A car shows lateral acceleration instead of lean angle** (B-287). The ride detail, the charts, the carousel on the iPhone and the map show a car's lateral acceleration in g, left and right, worked out from the same readings, so older car rides show it too; the map colours it in steps of 0.1 g. The iPhone records with the new vehicle **Car** (300 km/h limit for GPS jumps) and shows the lateral acceleration as a bar while recording. A car sprints 0–100 km/h. Turning the iPhone in the mount no longer reads as a curve: where the sensors turn other than the GPS course, that moment does not count (for every sport).
 - **The sport in backups and exports** (B-310). A backup keeps cars, motorcycles and the kind of a ride without a device, and a backup from before Mac 1.9 and iPhone 1.1 still restores, with its rides as bike rides. An exported GPX names a car or motorcycle ride `driving` instead of `cycling`, so komoot or Strava do not take it for a bike ride. The example script for backups lists each ride's kind and sport.
+
+### Changed
+
+- **“Vehicle” instead of “bike”** where cars and motorcycles are listed too (B-321): Add Vehicle, All vehicles, Assign Vehicle, Vehicle type, Manage Vehicles…, Which vehicle?, on the Mac and the iPhone.
+
+### Fixed
+
+- **A car's lateral acceleration at speed** (B-319): a car takes the mean of each second instead of the strongest value, which a swaying holder made 2–3 times too high at 85 km/h; the check for a turned iPhone no longer leaves out points of real curves at speed.
+- **The lateral acceleration tile while recording** (B-320): fully visible in portrait with its scale, the page dots clear of it, the scale in the device's language (“0,5 g”).
+- **Siri knows the devices** (B-323): “Start a ride with Nugget in Wattspur” took the device of the last ride, as the app never told Siri the names.
 
 ## [1.8.15] – 2026-11-11
 
