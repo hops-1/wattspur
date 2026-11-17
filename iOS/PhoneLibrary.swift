@@ -287,8 +287,7 @@ final class PhoneLibrary {
         library.prepareBikes()
         let car = library.makeBike(name: "Demo car", kind: .car, color: .teal)
         let rides = ((try? library.context.fetch(FetchDescriptor<Ride>())) ?? []).sorted { $0.startDate > $1.startDate }
-        for (index, ride) in rides.enumerated() where index % 3 == 0 { ride.bike = car }
-        try? library.context.save()
+        _ = library.assign(rides.enumerated().filter { $0.offset % 3 == 0 }.map(\.element), to: car)
         reload()
     }
     #endif
