@@ -4175,6 +4175,46 @@
           }
         }
       }
+    },
+    "All Bikes" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Alle Bikes"
+          }
+        }
+      }
+    },
+    "All Shoes" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Alle Schuhe"
+          }
+        }
+      }
+    },
+    "Bike" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Bike"
+          }
+        }
+      }
+    },
+    "Sport" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sportart"
+          }
+        }
+      }
     }
   },
   "version" : "1.1"

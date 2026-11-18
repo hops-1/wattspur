@@ -11,6 +11,8 @@ struct OverviewView: View {
     var showRides: (RidePeriod) -> Void
     @State private var sample = SampleRide.load()
     @Environment(\.isLandscape) private var isLandscape
+    /// The sport of the capsule (B-289): tiles, last ride and the count of all rides are of it.
+    @ShownSport private var sport
 
     var body: some View {
         Group {
@@ -25,20 +27,24 @@ struct OverviewView: View {
     private var portrait: some View {
         ScrollView {
             VStack(spacing: 16) {
-                if let state = library.state, let last = state.lastRide {
+                if let state = library.state, state.lastRide != nil {
+                    SportMenu()
+                        .frame(maxWidth: .infinity, alignment: .leading)
                     tiles(totals: totals(state), linked: true)
-                    NavigationLink {
-                        TourDetailView(ride: last)
-                    } label: {
-                        LastRideTile(ride: last)
+                    if let last = state.only(sport).lastRide {
+                        NavigationLink {
+                            TourDetailView(ride: last)
+                        } label: {
+                            LastRideTile(ride: last)
+                        }
+                        .buttonStyle(.plain)
                     }
-                    .buttonStyle(.plain)
                     StartRideButton { recorder.start(device: $0) }
                     Button { showRides(.all) } label: {
                         HStack {
                             Text("All Rides")
                             Spacer()
-                            Text("\(state.rides.count)").foregroundStyle(.secondary)
+                            Text("\(state.only(sport).rides.count)").foregroundStyle(.secondary)
                             Image(systemName: "chevron.right").foregroundStyle(.tertiary)
                         }
                         .padding()
@@ -77,14 +83,18 @@ struct OverviewView: View {
         ScrollView {
             HStack(alignment: .top, spacing: 16) {
                 VStack(spacing: 16) {
-                    if let state = library.state, let last = state.lastRide {
+                    if let state = library.state, state.lastRide != nil {
+                        SportMenu()
+                            .frame(maxWidth: .infinity, alignment: .leading)
+                    }
+                    if let state = library.state, let last = state.only(sport).lastRide {
                         NavigationLink {
                             TourDetailView(ride: last)
                         } label: {
                             LastRideTile(ride: last, mapHeight: 100)
                         }
                         .buttonStyle(.plain)
-                    } else if let sample {
+                    } else if library.state?.lastRide == nil, let sample {
                         NavigationLink {
                             TourDetailView(ride: sample.ride, route: sample.route)
                         } label: {
@@ -96,7 +106,7 @@ struct OverviewView: View {
                 .frame(width: 340)
                 VStack(spacing: 16) {
                     if let state = library.state, state.lastRide != nil {
-                        landscapeTiles(totals: totals(state), allRides: state.rides.count, linked: true)
+                        landscapeTiles(totals: totals(state), allRides: state.only(sport).rides.count, linked: true)
                         StateLine()
                             .frame(maxWidth: .infinity, alignment: .leading)
                     } else if let sample {
@@ -124,9 +134,10 @@ struct OverviewView: View {
         }
     }
 
-    /// The totals of the library (B-214); motorcycle rides stay out, like on the Mac.
+    /// The totals of the library (B-214) for the sport of the capsule (B-289): a car never lands in
+    /// the cycling tiles, like on the Mac.
     private func totals(_ state: RideExchange.Library) -> RidePeriodTotals {
-        RidePeriodTotals(rides: state.countedRides.map { (start: $0.startDate, distance: $0.distance) })
+        state.totals(of: sport)
     }
 
     private func landscapeTiles(totals: RidePeriodTotals, allRides: Int, linked: Bool) -> some View {
@@ -147,7 +158,7 @@ struct OverviewView: View {
                              caption: Self.rides(totals.yearRides), systemImage: "calendar")
                 }
                 periodTile(.all, linked: linked) {
-                    StatTile(title: "All Rides", value: allRides.formatted(), systemImage: "bicycle")
+                    StatTile(title: "All Rides", value: allRides.formatted(), systemImage: sport.symbol)
                 }
             }
         }
@@ -181,7 +192,7 @@ struct OverviewView: View {
             }
             periodTile(.thisMonth, linked: linked) {
                 StatTile(title: "This Month", value: totals.monthRides.formatted(),
-                         unit: totals.monthRides == 1 ? "ride" : "rides", systemImage: "bicycle")
+                         unit: totals.monthRides == 1 ? "ride" : "rides", systemImage: sport.symbol)
             }
         }
     }

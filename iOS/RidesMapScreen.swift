@@ -15,6 +15,8 @@ struct RidesMapScreen: View {
     @AppStorage(PhoneSettingsKey.ridesMapMode) private var mode: RidesMapStyle.Mode = .lines
     @AppStorage(PhoneSettingsKey.ridesMapPeriod) private var period: RidePeriod = .all
     @AppStorage(PhoneSettingsKey.ridesMapBike) private var bike: BikeFilter = .all
+    /// The sport of the capsule (B-289): the map shows only its rides.
+    @ShownSport private var sport
 
     @State private var overview = MapOverview(rides: [])
     @State private var style: RidesMapStyle?
@@ -31,19 +33,19 @@ struct RidesMapScreen: View {
     }
 
     /// The bikes in the filter: only with two or more, like the ride list (`RideFilter.resolved`).
-    private var bikes: [RideExchange.Bike] { library.state?.bikes ?? [] }
+    private var bikes: [RideExchange.Bike] { library.state?.devices(of: sport) ?? [] }
     private var shownBike: BikeFilter {
         guard case .bike(let id) = bike, bikes.count > 1, bikes.contains(where: { $0.id == id }) else { return .all }
         return bike
     }
 
     private var filter: MapFilter {
-        MapFilter(interval: period.interval(), bike: shownBike)
+        MapFilter(interval: period.interval(), bike: shownBike, sport: sport)
     }
 
     /// Changes when the filter, the library or the appearance changes; then the rides are collected again.
     private var dataKey: String {
-        "\(period.rawValue)|\(shownBike.rawValue)|\(library.state?.generatedAt.timeIntervalSince1970 ?? 0)|\(library.state?.rides.count ?? 0)"
+        "\(sport.rawValue)|\(period.rawValue)|\(shownBike.rawValue)|\(library.state?.generatedAt.timeIntervalSince1970 ?? 0)|\(library.state?.rides.count ?? 0)"
     }
 
     var body: some View {
@@ -128,6 +130,7 @@ struct RidesMapScreen: View {
     private var controls: some View {
         VStack(alignment: .leading, spacing: 8) {
             HStack(spacing: 8) {
+                SportMenu(glass: true)
                 Menu {
                     Picker("Period", selection: $period) {
                         ForEach(RidePeriod.allCases) { Text($0.label).tag($0) }
@@ -142,7 +145,7 @@ struct RidesMapScreen: View {
                 if bikes.count > 1 {
                     Menu {
                         Picker("Vehicle", selection: $bike) {
-                            Text("All Vehicles").tag(BikeFilter.all)
+                            Text(sport.allDevicesTitle).tag(BikeFilter.all)
                             ForEach(bikes.filter { !$0.isArchived || BikeFilter.bike($0.id) == bike }) { bike in
                                 Text(verbatim: bike.name).tag(BikeFilter.bike(bike.id))
                             }
@@ -152,9 +155,9 @@ struct RidesMapScreen: View {
                             if let name = bikes.first(where: { BikeFilter.bike($0.id) == shownBike })?.name {
                                 Text(verbatim: name)
                             } else {
-                                Text("All Vehicles")
+                                Text(sport.allDevicesTitle)
                             }
-                        } icon: { Image(systemName: "bicycle") }
+                        } icon: { Image(systemName: sport.symbol) }
                             .font(.subheadline.weight(.medium))
                             .lineLimit(1)
                             .padding(.horizontal, 12)

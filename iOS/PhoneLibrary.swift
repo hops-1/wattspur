@@ -3,6 +3,7 @@ import CoreTransferable
 import UniformTypeIdentifiers
 import Foundation
 import Observation
+import SwiftData
 import WattspurCore
 import WattspurKit
 
@@ -275,6 +276,18 @@ final class PhoneLibrary {
                                                 trimDistance: 0, days: daysBack - 3 * index).anonymize(data) else { continue }
             database.library.importFile(data: copy, fileName: "\(names[index % names.count]).fit")
         }
+        reload()
+    }
+
+    /// For trying the sport menu (B-289): `-WattspurDemoCar YES` adds a car and puts every third ride
+    /// in it, the newest first. Debug builds only.
+    func addDemoCarForTesting() {
+        guard let database else { return }
+        let library = database.library
+        library.prepareBikes()
+        let car = library.makeBike(name: "Demo car", kind: .car, color: .teal)
+        let rides = ((try? library.context.fetch(FetchDescriptor<Ride>())) ?? []).sorted { $0.startDate > $1.startDate }
+        _ = library.assign(rides.enumerated().filter { $0.offset % 3 == 0 }.map(\.element), to: car)
         reload()
     }
     #endif

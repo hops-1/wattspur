@@ -206,5 +206,8 @@ The device also sets which points Wattspur leaves out because they would mean an
 
 Rides on a motorcycle or in a car, also without a device, do not count in the totals of your bicycles (see [Profile and Bikes](07-profile-and-bikes.md)). A ride on a **Bicycle** without a device counts in the cycling totals but towards none of your bikes. Siri and the **Start Ride** action in Shortcuts offer the same three types. The former setting **More › Recording › Vehicle** is gone; what was set there applies until the first choice.
 
+## Cycling and vehicles apart
+From iPhone 1.2: if you have a car or a motorcycle besides your bikes, or rides with one, **Overview**, **Rides** and **Map** show a capsule **Cycling ▾**. Tap it to choose **Cycling** or **Vehicles**; the choice holds for all three tabs and stays for the next launch. The tiles, the last ride, the list and the map then show only that sport, and the device filter offers only its devices (**All Bikes** or **All Vehicles**). On the map only the symbol shows. Each iPhone keeps its own choice; on the Mac the switch sits at the top of the sidebar (see [Views](04-views.md)).
+
 ---
 Next: [FAQ](06-faq.md) · [Contents](README.md)

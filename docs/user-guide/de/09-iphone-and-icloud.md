@@ -206,5 +206,8 @@ Das Gerät bestimmt auch, welche Punkte Wattspur weglässt, weil sie eine unmög
 
 Fahrten mit Motorrad und Auto, auch ohne Gerät, zählen nicht zu den Summen deiner Fahrräder (siehe [Profil und Bikes](07-profile-and-bikes.md)). Eine Fahrt mit **Fahrrad** ohne Gerät zählt in die Rad-Summen, aber zu keinem deiner Bikes. Siri und die Aktion **Fahrt starten** in Kurzbefehle bieten dieselben drei Arten an. Die frühere Einstellung **Mehr › Aufnahme › Fahrzeug** gibt es nicht mehr; was dort stand, gilt bis zur ersten Wahl weiter.
 
+## Rad und Fahrzeuge getrennt ansehen
+Ab iPhone 1.2: Hast du neben Bikes auch ein Auto oder Motorrad, oder Fahrten damit, steht in **Übersicht**, **Fahrten** und **Karte** eine Kapsel **Rad ▾**. Ein Tipp darauf wählt **Rad** oder **Fahrzeuge**; die Wahl gilt für alle drei Tabs und bleibt beim nächsten Start. Kacheln, letzte Fahrt, Liste und Karte zeigen dann nur diese Sportart, und der Filter nach Gerät bietet nur ihre Geräte (**Alle Bikes** oder **Alle Fahrzeuge**). Auf der Karte steht nur das Symbol. Jedes iPhone merkt sich seine Wahl selbst; am Mac gibt es dafür den Umschalter oben in der Seitenleiste (siehe [Ansichten](04-views.md)).
+
 ---
 Weiter: [Fragen](06-faq.md) · [Inhalt](README.md)

@@ -8,6 +8,8 @@ struct RideFilterBar: View {
     @Binding var filter: RideFilter
     /// Tighter in landscape, where the screen is short (B-243).
     var compact = false
+    /// The sport of the capsule (B-289), for the name of the device filter.
+    var sport: Sport = .cycling
     var bikes: [RideExchange.Bike]
     var shown: Int
     var total: Int
@@ -32,6 +34,7 @@ struct RideFilterBar: View {
             }
             ScrollView(.horizontal) {
                 HStack(spacing: 8) {
+                    SportMenu()
                     periodMenu
                     distanceMenu
                     if bikes.count >= 2 { bikeMenu }
@@ -115,7 +118,7 @@ struct RideFilterBar: View {
         let chosen = bikes.first { $0.id == filter.bike.bikeID }
         return Menu {
             Picker("Vehicle", selection: $filter.bike) {
-                Text("All Vehicles").tag(BikeFilter.all)
+                Text(sport.allDevicesTitle).tag(BikeFilter.all)
                 ForEach(bikes) { bike in
                     Text(verbatim: bike.name).tag(BikeFilter.bike(bike.id))
                 }
@@ -124,7 +127,7 @@ struct RideFilterBar: View {
             if let chosen {
                 FilterChip(verbatim: chosen.name, active: true)
             } else {
-                FilterChip(title: "Vehicle", active: false)
+                FilterChip(title: sport.deviceFilterTitle, active: false)
             }
         }
     }
