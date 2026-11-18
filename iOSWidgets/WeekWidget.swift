@@ -1,3 +1,4 @@
+import AppIntents
 import SwiftUI
 import WattspurCore
 import WidgetKit
@@ -7,7 +8,8 @@ import WidgetKit
 /// itself is counted here, so a new week starts at zero on Monday even before the app runs.
 struct WeekWidget: Widget {
     var body: some WidgetConfiguration {
-        StaticConfiguration(kind: WidgetShare.weekWidgetKind, provider: WeekProvider()) { entry in
+        // With a choice of the sport when editing the widget (B-289); cycling unless chosen.
+        AppIntentConfiguration(kind: WidgetShare.weekWidgetKind, intent: WeekWidgetIntent.self, provider: WeekProvider()) { entry in
             WeekWidgetView(entry: entry)
                 .containerBackground(.fill.tertiary, for: .widget)
         }
@@ -17,31 +19,58 @@ struct WeekWidget: Widget {
     }
 }
 
+/// The sports the widget offers (B-289); running follows with B-285.
+enum WidgetSport: String, AppEnum {
+    case cycling, vehicle
+
+    static let typeDisplayRepresentation: TypeDisplayRepresentation = "Sport"
+    static let caseDisplayRepresentations: [WidgetSport: DisplayRepresentation] = [
+        .cycling: DisplayRepresentation(title: "Cycling", image: .init(systemName: "bicycle")),
+        .vehicle: DisplayRepresentation(title: "Vehicles", image: .init(systemName: "car")),
+    ]
+
+    var sport: Sport { self == .vehicle ? .vehicle : .cycling }
+}
+
+/// What can be set when editing the widget: the sport.
+struct WeekWidgetIntent: WidgetConfigurationIntent {
+    static let title: LocalizedStringResource = "This Week"
+    static let description = IntentDescription("Choose which sport the widget shows.")
+
+    @Parameter(title: "Sport", default: .cycling)
+    var sport: WidgetSport
+
+    init() {}
+}
+
 struct WeekEntry: TimelineEntry {
     var date: Date
     /// `nil` before the app has written anything.
     var snapshot: WeekSnapshot?
+    var sport: Sport = .cycling
 }
 
-struct WeekProvider: TimelineProvider {
+struct WeekProvider: AppIntentTimelineProvider {
     func placeholder(in context: Context) -> WeekEntry {
         WeekEntry(date: .now, snapshot: Self.sample)
     }
 
-    func getSnapshot(in context: Context, completion: @escaping (WeekEntry) -> Void) {
+    func snapshot(for configuration: WeekWidgetIntent, in context: Context) async -> WeekEntry {
         // The gallery shows a sample week until the app has rides.
-        let snapshot = WidgetShare.load()
-        completion(WeekEntry(date: .now, snapshot: context.isPreview && snapshot == nil ? Self.sample : snapshot))
+        let sport = configuration.sport.sport
+        let snapshot = WidgetShare.load(sport)
+        return WeekEntry(date: .now, snapshot: context.isPreview && snapshot == nil ? Self.sample : snapshot, sport: sport)
     }
 
-    func getTimeline(in context: Context, completion: @escaping (Timeline<WeekEntry>) -> Void) {
-        let snapshot = WidgetShare.load()
-        var entries = [WeekEntry(date: .now, snapshot: snapshot)]
+    func timeline(for configuration: WeekWidgetIntent, in context: Context) async -> Timeline<WeekEntry> {
+        let sport = configuration.sport.sport
+        let snapshot = WidgetShare.load(sport)
+        var entries = [WeekEntry(date: .now, snapshot: snapshot, sport: sport)]
         // A new week starts empty by itself; the app reloads the widget when it has new rides.
         if let next = WeekSnapshot.nextWeek() {
-            entries.append(WeekEntry(date: next, snapshot: snapshot))
+            entries.append(WeekEntry(date: next, snapshot: snapshot, sport: sport))
         }
-        completion(Timeline(entries: entries, policy: .atEnd))
+        return Timeline(entries: entries, policy: .atEnd)
     }
 
     /// Three rides this week, for the gallery and the placeholder.
@@ -91,7 +120,7 @@ struct WeekWidgetContent: View {
 
     private var week: some View {
         VStack(alignment: .leading, spacing: 4) {
-            Label("This Week", systemImage: "bicycle")
+            Label("This Week", systemImage: entry.sport == .vehicle ? "car" : "bicycle")
                 .font(.caption.weight(.semibold))
                 .foregroundStyle(Color.track)
             let parts = ActivityFormat.distanceParts(totals.weekDistance)

@@ -28,7 +28,13 @@ final class RecordingActivityController {
     func start(_ recording: RideRecording) {
         guard activity == nil, ActivityAuthorizationInfo().areActivitiesEnabled else { return }
         let state = Self.state(of: recording)
-        activity = try? Activity.request(attributes: RecordingAttributes(startDate: recording.startDate, symbol: recording.device?.symbol),
+        let side: String? = switch recording.vehicle {
+        case .car: "lateral"
+        case .motorcycle: "lean"
+        case .eBike: nil
+        }
+        activity = try? Activity.request(attributes: RecordingAttributes(startDate: recording.startDate, symbol: recording.device?.symbol,
+                                                                         side: side),
                                          content: ActivityContent(state: state, staleDate: nil))
         lastState = state
         lastUpdate = .now
@@ -65,8 +71,10 @@ final class RecordingActivityController {
 
     private static func state(of recording: RideRecording) -> RecordingAttributes.ContentState {
         // Rounded, so a tiny change of speed does not count as new.
-        RecordingAttributes.ContentState(distance: (recording.distance / 10).rounded() * 10,
-                                         speed: (recording.currentSpeed * 36).rounded() / 36,
-                                         isPaused: recording.isPaused)
+        // The side value only for vehicles, to whole degrees: a bicycle's activity stays as it was.
+        let lean = recording.vehicle == .eBike || recording.isPaused ? nil : recording.lastPoint?.fix.motion?.lean.rounded()
+        return RecordingAttributes.ContentState(distance: (recording.distance / 10).rounded() * 10,
+                                                speed: (recording.currentSpeed * 36).rounded() / 36,
+                                                isPaused: recording.isPaused, lean: lean)
     }
 }

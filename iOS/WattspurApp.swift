@@ -81,14 +81,15 @@ struct WattspurApp: App {
         Task { await library.refresh() }
     }
 
-    /// The week for the widget: the same rides as the tiles of the overview (without motorcycles),
-    /// and the newest ride of all.
-    private var weekSnapshot: WeekSnapshot {
-        let state = library.state
-        let rides = (state?.countedRides ?? []).map { (start: $0.startDate, distance: $0.distance) }
-        let last = state?.lastRide.map { WeekSnapshot.LastRide(name: $0.name, start: $0.startDate,
-                                                                 distance: $0.distance, timeZone: $0.timeZone) }
-        return WeekSnapshot(rides: rides, lastRide: last)
+    /// The week for the widget, per sport (B-289): the same rides as the tiles of the overview for
+    /// that sport, and its newest ride. The widget shows cycling unless it is set to another sport.
+    private var weekSnapshots: [Sport: WeekSnapshot] {
+        Dictionary(uniqueKeysWithValues: [Sport.cycling, .vehicle].map { sport in
+            let rides = library.state?.only(sport).rides ?? []
+            let last = rides.max { $0.startDate < $1.startDate }
+                .map { WeekSnapshot.LastRide(name: $0.name, start: $0.startDate, distance: $0.distance, timeZone: $0.timeZone) }
+            return (sport, WeekSnapshot(rides: rides.map { (start: $0.startDate, distance: $0.distance) }, lastRide: last))
+        })
     }
 
     var body: some Scene {
@@ -241,8 +242,9 @@ struct WattspurApp: App {
             }
         }
         // The widget “This Week” shows the same week as the overview (B-224).
-        .onChange(of: weekSnapshot, initial: true) { _, snapshot in
-            if WidgetShare.save(snapshot) {
+        .onChange(of: weekSnapshots, initial: true) { _, snapshots in
+            let changed = snapshots.filter { WidgetShare.save($0.value, for: $0.key) }
+            if !changed.isEmpty {
                 WidgetCenter.shared.reloadTimelines(ofKind: WidgetShare.weekWidgetKind)
             }
         }

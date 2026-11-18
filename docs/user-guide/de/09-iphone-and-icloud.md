@@ -165,7 +165,7 @@ Soll sich der Bildschirm nicht drehen, schalte im Kontrollzentrum die Ausrichtun
 Darunter steht, wie viele Fahrten passen, zum Beispiel „2 von 40 Fahrten“. ✕ setzt alles zurück. Ein Tipp auf **Diese Woche**, **Dieser Monat** oder **Dieses Jahr** in der Übersicht öffnet die Fahrten dieses Zeitraums. Der Mac nutzt dieselben Regeln, beide finden also dieselben Fahrten.
 
 ## Die Aufnahme auf dem Sperrbildschirm
-Während du aufnimmst, zeigt der **Sperrbildschirm** Zeit, Strecke und Tempo. Mit dem Knopf dort hältst du die Fahrt an und setzt sie fort. Auf iPhones mit **Dynamic Island** steht die Strecke neben der Kamera; halte den Finger darauf für mehr. Zum Beenden öffne Wattspur: Dort gibst du der Fahrt einen Namen und speicherst sie.
+Während du aufnimmst, zeigt der **Sperrbildschirm** Zeit, Strecke und Tempo. Mit dem Knopf dort hältst du die Fahrt an und setzt sie fort. Auf iPhones mit **Dynamic Island** steht die Strecke neben der Kamera; halte den Finger darauf für mehr. Zum Beenden öffne Wattspur: Dort gibst du der Fahrt einen Namen und speicherst sie. Ab iPhone 1.2 zeigt der Sperrbildschirm im **Auto** dazu die Querbeschleunigung als Balken (0,5 g links bis 0,5 g rechts) und auf dem **Motorrad** die Schräglage, mit einem Pfeil für die Seite. Der Wert kommt wie Strecke und Tempo höchstens alle paar Sekunden neu.
 
 ## Widget „Diese Woche“
 1. Halte den Finger auf eine freie Stelle des Home-Bildschirms.
@@ -173,6 +173,8 @@ Während du aufnimmst, zeigt der **Sperrbildschirm** Zeit, Strecke und Tempo. Mi
 3. Wähle die kleine oder die mittlere Größe.
 
 Das Widget zeigt die Kilometer und Fahrten dieser Woche, mit einem Balken je Tag. Die mittlere Größe zeigt dazu deine letzte Fahrt. Die Zahlen sind dieselben wie in der Übersicht. Am Montag beginnt das Widget von selbst bei null.
+
+Ab iPhone 1.2 kannst du die Sportart wählen: Halte den Finger auf das Widget und tippe auf **Widget bearbeiten**, dann bei **Sportart** auf **Rad** oder **Fahrzeuge**. Ohne Wahl zeigt es das Rad. Die letzte Fahrt ist dann die letzte Fahrt dieser Sportart.
 
 ## Kurzbefehle und Siri
 Sag zum Beispiel:

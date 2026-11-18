@@ -11,17 +11,21 @@ enum WidgetShare {
 
     private static var defaults: UserDefaults? { UserDefaults(suiteName: appGroup) }
 
-    static func load() -> WeekSnapshot? {
-        guard let data = defaults?.data(forKey: key) else { return nil }
+    /// The key of a sport's week (B-289): cycling keeps the key of before, so a widget placed earlier
+    /// shows the same; the other sports get their own.
+    private static func key(for sport: Sport) -> String { sport == .cycling ? key : "\(key).\(sport.rawValue)" }
+
+    static func load(_ sport: Sport = .cycling) -> WeekSnapshot? {
+        guard let data = defaults?.data(forKey: key(for: sport)) else { return nil }
         return try? JSONDecoder().decode(WeekSnapshot.self, from: data)
     }
 
     /// Returns whether something new was written, so the app reloads the widget only then.
     @discardableResult
-    static func save(_ snapshot: WeekSnapshot) -> Bool {
+    static func save(_ snapshot: WeekSnapshot, for sport: Sport = .cycling) -> Bool {
         guard let defaults, let data = try? JSONEncoder().encode(snapshot),
-              defaults.data(forKey: key) != data else { return false }
-        defaults.set(data, forKey: key)
+              defaults.data(forKey: key(for: sport)) != data else { return false }
+        defaults.set(data, forKey: key(for: sport))
         return true
     }
 }

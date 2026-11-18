@@ -285,6 +285,9 @@ final class PhoneLibrary {
         guard let database else { return }
         let library = database.library
         library.prepareBikes()
+        // Once only: a second launch with the switch keeps the car it made before.
+        let bikes = (try? library.context.fetch(FetchDescriptor<Bike>())) ?? []
+        guard !bikes.contains(where: { $0.name == "Demo car" }) else { return }
         let car = library.makeBike(name: "Demo car", kind: .car, color: .teal)
         let rides = ((try? library.context.fetch(FetchDescriptor<Ride>())) ?? []).sorted { $0.startDate > $1.startDate }
         _ = library.assign(rides.enumerated().filter { $0.offset % 3 == 0 }.map(\.element), to: car)

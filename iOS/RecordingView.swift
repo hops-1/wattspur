@@ -54,7 +54,7 @@ struct RecordingView: View {
                     TabView(selection: $page) {
                         RecordingFigures(recording: recording)
                             .padding(.top, 28)
-                            .padding(.bottom, recording.vehicle == .car ? Self.dotsRoom : 0)
+                            .padding(.bottom, Self.dotsRoom)
                             .frame(maxHeight: .infinity, alignment: .top)
                             .tag(Page.figures)
                         RecordingProfileView(recording: recording)
@@ -63,8 +63,8 @@ struct RecordingView: View {
                     }
                     .tabViewStyle(.page(indexDisplayMode: .always))
                     .indexViewStyle(.page(backgroundDisplayMode: .always))
-                    // A car adds the bar of the lateral acceleration (B-287) and room for the dots.
-                    .frame(height: recording.vehicle == .car ? 330 : 210)
+                    // A car adds the bar of the lateral acceleration (B-287); every sport keeps room for the dots.
+                    .frame(height: recording.vehicle == .car ? 330 : 210 + Self.dotsRoom)
                 }
                 buttons
             }
@@ -86,7 +86,7 @@ struct RecordingView: View {
                         TabView(selection: $page) {
                             // Room for the page dots at the bottom, so they cover no figure (B-320).
                             LandscapeRecordingFigures(recording: recording)
-                                .padding(.bottom, recording.vehicle == .car ? Self.dotsRoom : 0)
+                                .padding(.bottom, Self.dotsRoom)
                                 .frame(maxHeight: .infinity, alignment: .top)
                                 .tag(Page.figures)
                             RecordingProfileView(recording: recording, compact: true)
