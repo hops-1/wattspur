@@ -1,0 +1,56 @@
+{
+  "source": "/Volumes/NILS_EXTERN/Claude Code/eBike/.claude/worktrees/quizzical-rhodes-bbd76b/iOS/EditRideSheet.swift",
+  "tables": {
+    "Localizable": [
+      {
+        "comment": "",
+        "key": "Edit Ride",
+        "location": {
+          "startingColumn": 30,
+          "startingLine": 40
+        }
+      },
+      {
+        "comment": "",
+        "key": "Name",
+        "location": {
+          "startingColumn": 31,
+          "startingLine": 24
+        }
+      },
+      {
+        "comment": "",
+        "key": "Vehicle",
+        "location": {
+          "startingColumn": 32,
+          "startingLine": 27
+        }
+      },
+      {
+        "comment": "",
+        "key": "The change reaches your Mac over iCloud.",
+        "location": {
+          "startingColumn": 30,
+          "startingLine": 36
+        }
+      },
+      {
+        "comment": "",
+        "key": "Cancel",
+        "location": {
+          "startingColumn": 28,
+          "startingLine": 44
+        }
+      },
+      {
+        "comment": "",
+        "key": "Save",
+        "location": {
+          "startingColumn": 28,
+          "startingLine": 47
+        }
+      }
+    ]
+  },
+  "version": 1
+}

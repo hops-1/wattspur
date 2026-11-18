@@ -1,0 +1,216 @@
+{
+  "source": "/Volumes/NILS_EXTERN/Claude Code/eBike/.claude/worktrees/quizzical-rhodes-bbd76b/iOS/RecordingView.swift",
+  "tables": {
+    "Localizable": [
+      {
+        "comment": "",
+        "key": "GPS is getting more accurate …",
+        "location": {
+          "startingColumn": 19,
+          "startingLine": 140
+        }
+      },
+      {
+        "comment": "",
+        "key": "Color the route by elevation",
+        "location": {
+          "startingColumn": 38,
+          "startingLine": 169
+        }
+      },
+      {
+        "comment": "",
+        "key": "Direction of travel up",
+        "location": {
+          "startingColumn": 38,
+          "startingLine": 182
+        }
+      },
+      {
+        "comment": "",
+        "key": "On",
+        "location": {
+          "startingColumn": 71,
+          "startingLine": 170
+        }
+      },
+      {
+        "comment": "",
+        "key": "Off",
+        "location": {
+          "startingColumn": 98,
+          "startingLine": 170
+        }
+      },
+      {
+        "comment": "",
+        "key": "On",
+        "location": {
+          "startingColumn": 69,
+          "startingLine": 183
+        }
+      },
+      {
+        "comment": "",
+        "key": "Off",
+        "location": {
+          "startingColumn": 96,
+          "startingLine": 183
+        }
+      },
+      {
+        "comment": "",
+        "key": "Resume",
+        "location": {
+          "startingColumn": 27,
+          "startingLine": 234
+        }
+      },
+      {
+        "comment": "",
+        "key": "Pause",
+        "location": {
+          "startingColumn": 27,
+          "startingLine": 239
+        }
+      },
+      {
+        "comment": "",
+        "key": "Stop",
+        "location": {
+          "startingColumn": 23,
+          "startingLine": 246
+        }
+      },
+      {
+        "comment": "",
+        "key": "Ride on %@",
+        "location": {
+          "startingColumn": 27,
+          "startingLine": 260
+        }
+      },
+      {
+        "comment": "",
+        "key": "Speed",
+        "location": {
+          "startingColumn": 26,
+          "startingLine": 273
+        }
+      },
+      {
+        "comment": "",
+        "key": "Paused",
+        "location": {
+          "startingColumn": 30,
+          "startingLine": 278
+        }
+      },
+      {
+        "comment": "",
+        "key": "Distance",
+        "location": {
+          "startingColumn": 28,
+          "startingLine": 305
+        }
+      },
+      {
+        "comment": "",
+        "key": "Time",
+        "location": {
+          "startingColumn": 32,
+          "startingLine": 307
+        }
+      },
+      {
+        "comment": "",
+        "key": "Altitude",
+        "location": {
+          "startingColumn": 28,
+          "startingLine": 312
+        }
+      },
+      {
+        "comment": "",
+        "key": "Ascent",
+        "location": {
+          "startingColumn": 28,
+          "startingLine": 313
+        }
+      },
+      {
+        "comment": "",
+        "key": "Distance",
+        "location": {
+          "startingColumn": 24,
+          "startingLine": 350
+        }
+      },
+      {
+        "comment": "",
+        "key": "Time",
+        "location": {
+          "startingColumn": 28,
+          "startingLine": 347
+        }
+      },
+      {
+        "comment": "",
+        "key": "Speed",
+        "location": {
+          "startingColumn": 24,
+          "startingLine": 353
+        }
+      },
+      {
+        "comment": "",
+        "key": "Altitude",
+        "location": {
+          "startingColumn": 24,
+          "startingLine": 354
+        }
+      },
+      {
+        "comment": "",
+        "key": "Paused",
+        "location": {
+          "startingColumn": 22,
+          "startingLine": 367
+        }
+      },
+      {
+        "comment": "",
+        "key": "Lateral Acceleration",
+        "location": {
+          "startingColumn": 34,
+          "startingLine": 445
+        }
+      },
+      {
+        "comment": "",
+        "key": "Lateral Acceleration",
+        "location": {
+          "startingColumn": 22,
+          "startingLine": 413
+        }
+      },
+      {
+        "comment": "",
+        "key": "left",
+        "location": {
+          "startingColumn": 54,
+          "startingLine": 447
+        }
+      },
+      {
+        "comment": "",
+        "key": "right",
+        "location": {
+          "startingColumn": 94,
+          "startingLine": 447
+        }
+      }
+    ]
+  },
+  "version": 1
+}

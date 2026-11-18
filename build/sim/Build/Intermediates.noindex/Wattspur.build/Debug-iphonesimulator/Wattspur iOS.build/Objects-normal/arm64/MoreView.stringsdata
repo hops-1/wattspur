@@ -1,0 +1,104 @@
+{
+  "source": "/Volumes/NILS_EXTERN/Claude Code/eBike/.claude/worktrees/quizzical-rhodes-bbd76b/iOS/MoreView.swift",
+  "tables": {
+    "Localizable": [
+      {
+        "comment": "",
+        "key": "More",
+        "location": {
+          "startingColumn": 26,
+          "startingLine": 26
+        }
+      },
+      {
+        "comment": "",
+        "key": "Profile",
+        "location": {
+          "startingColumn": 24,
+          "startingLine": 117
+        }
+      },
+      {
+        "comment": "",
+        "key": "Maps",
+        "location": {
+          "startingColumn": 21,
+          "startingLine": 118
+        }
+      },
+      {
+        "comment": "",
+        "key": "iCloud & Library",
+        "location": {
+          "startingColumn": 24,
+          "startingLine": 119
+        }
+      },
+      {
+        "comment": "",
+        "key": "Trash",
+        "location": {
+          "startingColumn": 22,
+          "startingLine": 120
+        }
+      },
+      {
+        "comment": "",
+        "key": "Help & Handbook",
+        "location": {
+          "startingColumn": 21,
+          "startingLine": 121
+        }
+      },
+      {
+        "comment": "",
+        "key": "About Wattspur",
+        "location": {
+          "startingColumn": 22,
+          "startingLine": 122
+        }
+      },
+      {
+        "comment": "",
+        "key": "Test Tools",
+        "location": {
+          "startingColumn": 26,
+          "startingLine": 123
+        }
+      },
+      {
+        "comment": "",
+        "key": "iCloud",
+        "location": {
+          "startingColumn": 55,
+          "startingLine": 179
+        }
+      },
+      {
+        "comment": "",
+        "key": "This iPhone",
+        "location": {
+          "startingColumn": 72,
+          "startingLine": 179
+        }
+      },
+      {
+        "comment": "",
+        "key": "Profile",
+        "location": {
+          "startingColumn": 49,
+          "startingLine": 208
+        }
+      },
+      {
+        "comment": "",
+        "key": "%lld rides · %@",
+        "location": {
+          "startingColumn": 34,
+          "startingLine": 215
+        }
+      }
+    ]
+  },
+  "version": 1
+}

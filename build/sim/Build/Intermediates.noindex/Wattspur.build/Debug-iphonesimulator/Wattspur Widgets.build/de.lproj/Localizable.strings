@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>Choose which sport the widget shows.</key>
+	<string>Wähle, welche Sportart das Widget zeigt.</string>
+	<key>Cycling</key>
+	<string>Rad</string>
+	<key>Distance</key>
+	<string>Strecke</string>
+	<key>Distance and rides of this week, and your last ride.</key>
+	<string>Strecke und Fahrten dieser Woche und deine letzte Fahrt.</string>
+	<key>Evening Ride</key>
+	<string>Abendrunde</string>
+	<key>Last Ride</key>
+	<string>Letzte Fahrt</string>
+	<key>Lateral Acceleration</key>
+	<string>Querbeschleunigung</string>
+	<key>Lean Angle</key>
+	<string>Schräglage</string>
+	<key>Open Wattspur to show your rides here.</key>
+	<string>Öffne Wattspur, damit deine Fahrten hier erscheinen.</string>
+	<key>Pause</key>
+	<string>Pause</string>
+	<key>Paused</key>
+	<string>Pausiert</string>
+	<key>Resume</key>
+	<string>Weiter</string>
+	<key>Speed</key>
+	<string>Tempo</string>
+	<key>Sport</key>
+	<string>Sportart</string>
+	<key>This Week</key>
+	<string>Diese Woche</string>
+	<key>Time</key>
+	<string>Zeit</string>
+	<key>Vehicles</key>
+	<string>Fahrzeuge</string>
+</dict>
+</plist>

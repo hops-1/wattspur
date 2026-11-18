@@ -1,0 +1,1240 @@
+{
+  "source": "/Volumes/NILS_EXTERN/Claude Code/eBike/.claude/worktrees/quizzical-rhodes-bbd76b/iOS/MorePages.swift",
+  "tables": {
+    "Localizable": [
+      {
+        "comment": "",
+        "key": "No name yet",
+        "location": {
+          "startingColumn": 49,
+          "startingLine": 111
+        }
+      },
+      {
+        "comment": "",
+        "key": "Weight",
+        "location": {
+          "startingColumn": 32,
+          "startingLine": 53
+        }
+      },
+      {
+        "comment": "",
+        "key": "Height",
+        "location": {
+          "startingColumn": 32,
+          "startingLine": 54
+        }
+      },
+      {
+        "comment": "",
+        "key": "Year of Birth",
+        "location": {
+          "startingColumn": 32,
+          "startingLine": 55
+        }
+      },
+      {
+        "comment": "",
+        "key": "Sex",
+        "location": {
+          "startingColumn": 32,
+          "startingLine": 56
+        }
+      },
+      {
+        "comment": "",
+        "key": "Male",
+        "location": {
+          "startingColumn": 21,
+          "startingLine": 130
+        }
+      },
+      {
+        "comment": "",
+        "key": "Female",
+        "location": {
+          "startingColumn": 23,
+          "startingLine": 131
+        }
+      },
+      {
+        "comment": "",
+        "key": "Not specified",
+        "location": {
+          "startingColumn": 28,
+          "startingLine": 132
+        }
+      },
+      {
+        "comment": "",
+        "key": "For the Calories",
+        "location": {
+          "startingColumn": 22,
+          "startingLine": 58
+        }
+      },
+      {
+        "comment": "",
+        "key": "With iCloud the Mac shows the same profile.",
+        "location": {
+          "startingColumn": 22,
+          "startingLine": 60
+        }
+      },
+      {
+        "comment": "",
+        "key": "Cycling",
+        "location": {
+          "startingColumn": 24,
+          "startingLine": 141
+        }
+      },
+      {
+        "comment": "",
+        "key": "Vehicles",
+        "location": {
+          "startingColumn": 24,
+          "startingLine": 142
+        }
+      },
+      {
+        "comment": "",
+        "key": "Running",
+        "location": {
+          "startingColumn": 24,
+          "startingLine": 143
+        }
+      },
+      {
+        "comment": "",
+        "key": "Bikes",
+        "location": {
+          "startingColumn": 24,
+          "startingLine": 150
+        }
+      },
+      {
+        "comment": "",
+        "key": "Vehicles",
+        "location": {
+          "startingColumn": 24,
+          "startingLine": 151
+        }
+      },
+      {
+        "comment": "",
+        "key": "Shoes",
+        "location": {
+          "startingColumn": 24,
+          "startingLine": 152
+        }
+      },
+      {
+        "comment": "",
+        "key": "Bicycle",
+        "location": {
+          "startingColumn": 21,
+          "startingLine": 169
+        }
+      },
+      {
+        "comment": "",
+        "key": "Mountain bike",
+        "location": {
+          "startingColumn": 25,
+          "startingLine": 170
+        }
+      },
+      {
+        "comment": "",
+        "key": "Road bike",
+        "location": {
+          "startingColumn": 21,
+          "startingLine": 171
+        }
+      },
+      {
+        "comment": "",
+        "key": "Gravel bike",
+        "location": {
+          "startingColumn": 23,
+          "startingLine": 172
+        }
+      },
+      {
+        "comment": "",
+        "key": "Cargo bike",
+        "location": {
+          "startingColumn": 22,
+          "startingLine": 173
+        }
+      },
+      {
+        "comment": "",
+        "key": "Motorcycle",
+        "location": {
+          "startingColumn": 27,
+          "startingLine": 174
+        }
+      },
+      {
+        "comment": "",
+        "key": "Car",
+        "location": {
+          "startingColumn": 20,
+          "startingLine": 175
+        }
+      },
+      {
+        "comment": "",
+        "key": "Running shoes",
+        "location": {
+          "startingColumn": 28,
+          "startingLine": 176
+        }
+      },
+      {
+        "comment": "",
+        "key": "Add Device",
+        "location": {
+          "startingColumn": 27,
+          "startingLine": 89
+        }
+      },
+      {
+        "comment": "",
+        "key": "With iCloud the devices come to the Mac too.",
+        "location": {
+          "startingColumn": 22,
+          "startingLine": 93
+        }
+      },
+      {
+        "comment": "",
+        "key": "Edit",
+        "location": {
+          "startingColumn": 20,
+          "startingLine": 98
+        }
+      },
+      {
+        "comment": "",
+        "key": "Not set",
+        "location": {
+          "startingColumn": 39,
+          "startingLine": 115
+        }
+      },
+      {
+        "comment": "",
+        "key": "Distance",
+        "location": {
+          "startingColumn": 18,
+          "startingLine": 187
+        }
+      },
+      {
+        "comment": "",
+        "key": "Rides",
+        "location": {
+          "startingColumn": 18,
+          "startingLine": 188
+        }
+      },
+      {
+        "comment": "",
+        "key": "Ride Time",
+        "location": {
+          "startingColumn": 18,
+          "startingLine": 189
+        }
+      },
+      {
+        "comment": "",
+        "key": "Longest Ride",
+        "location": {
+          "startingColumn": 18,
+          "startingLine": 190
+        }
+      },
+      {
+        "comment": "",
+        "key": "Top Speed",
+        "location": {
+          "startingColumn": 18,
+          "startingLine": 191
+        }
+      },
+      {
+        "comment": "",
+        "key": "Archived",
+        "location": {
+          "startingColumn": 26,
+          "startingLine": 234
+        }
+      },
+      {
+        "comment": "",
+        "key": "Kind",
+        "location": {
+          "startingColumn": 32,
+          "startingLine": 276
+        }
+      },
+      {
+        "comment": "",
+        "key": "E-Bike",
+        "location": {
+          "startingColumn": 36,
+          "startingLine": 278
+        }
+      },
+      {
+        "comment": "",
+        "key": "Rides",
+        "location": {
+          "startingColumn": 32,
+          "startingLine": 280
+        }
+      },
+      {
+        "comment": "",
+        "key": "Distance",
+        "location": {
+          "startingColumn": 32,
+          "startingLine": 281
+        }
+      },
+      {
+        "comment": "",
+        "key": "Before Wattspur",
+        "location": {
+          "startingColumn": 36,
+          "startingLine": 283
+        }
+      },
+      {
+        "comment": "",
+        "key": "Status",
+        "location": {
+          "startingColumn": 36,
+          "startingLine": 286
+        }
+      },
+      {
+        "comment": "",
+        "key": "Yes",
+        "location": {
+          "startingColumn": 89,
+          "startingLine": 278
+        }
+      },
+      {
+        "comment": "",
+        "key": "No",
+        "location": {
+          "startingColumn": 117,
+          "startingLine": 278
+        }
+      },
+      {
+        "comment": "",
+        "key": "Archived",
+        "location": {
+          "startingColumn": 53,
+          "startingLine": 286
+        }
+      },
+      {
+        "comment": "",
+        "key": "Edit",
+        "location": {
+          "startingColumn": 20,
+          "startingLine": 293
+        }
+      },
+      {
+        "comment": "",
+        "key": "New Device",
+        "location": {
+          "startingColumn": 42,
+          "startingLine": 428
+        }
+      },
+      {
+        "comment": "",
+        "key": "Edit Device",
+        "location": {
+          "startingColumn": 57,
+          "startingLine": 428
+        }
+      },
+      {
+        "comment": "",
+        "key": "Delete this device?",
+        "location": {
+          "startingColumn": 41,
+          "startingLine": 418
+        }
+      },
+      {
+        "comment": "",
+        "key": "Remove Photo",
+        "location": {
+          "startingColumn": 32,
+          "startingLine": 357
+        }
+      },
+      {
+        "comment": "",
+        "key": "Name",
+        "location": {
+          "startingColumn": 31,
+          "startingLine": 359
+        }
+      },
+      {
+        "comment": "",
+        "key": "Choose Photo",
+        "location": {
+          "startingColumn": 50,
+          "startingLine": 352
+        }
+      },
+      {
+        "comment": "",
+        "key": "Kind",
+        "location": {
+          "startingColumn": 28,
+          "startingLine": 362
+        }
+      },
+      {
+        "comment": "",
+        "key": "E-Bike",
+        "location": {
+          "startingColumn": 32,
+          "startingLine": 368
+        }
+      },
+      {
+        "comment": "",
+        "key": "Color",
+        "location": {
+          "startingColumn": 28,
+          "startingLine": 370
+        }
+      },
+      {
+        "comment": "",
+        "key": "Blue",
+        "location": {
+          "startingColumn": 21,
+          "startingLine": 479
+        }
+      },
+      {
+        "comment": "",
+        "key": "Orange",
+        "location": {
+          "startingColumn": 23,
+          "startingLine": 480
+        }
+      },
+      {
+        "comment": "",
+        "key": "Teal",
+        "location": {
+          "startingColumn": 21,
+          "startingLine": 481
+        }
+      },
+      {
+        "comment": "",
+        "key": "Purple",
+        "location": {
+          "startingColumn": 23,
+          "startingLine": 482
+        }
+      },
+      {
+        "comment": "",
+        "key": "Pink",
+        "location": {
+          "startingColumn": 21,
+          "startingLine": 483
+        }
+      },
+      {
+        "comment": "",
+        "key": "Green",
+        "location": {
+          "startingColumn": 22,
+          "startingLine": 484
+        }
+      },
+      {
+        "comment": "",
+        "key": "km",
+        "location": {
+          "startingColumn": 95,
+          "startingLine": 384
+        }
+      },
+      {
+        "comment": "",
+        "key": "Manufacturer",
+        "location": {
+          "startingColumn": 31,
+          "startingLine": 381
+        }
+      },
+      {
+        "comment": "",
+        "key": "Model",
+        "location": {
+          "startingColumn": 31,
+          "startingLine": 382
+        }
+      },
+      {
+        "comment": "",
+        "key": "Kilometres before Wattspur",
+        "location": {
+          "startingColumn": 31,
+          "startingLine": 383
+        }
+      },
+      {
+        "comment": "",
+        "key": "The kilometres before the first ride in Wattspur count in this device's total only.",
+        "location": {
+          "startingColumn": 26,
+          "startingLine": 387
+        }
+      },
+      {
+        "comment": "",
+        "key": "Restore from Archive",
+        "location": {
+          "startingColumn": 36,
+          "startingLine": 392
+        }
+      },
+      {
+        "comment": "",
+        "key": "Delete Device",
+        "location": {
+          "startingColumn": 36,
+          "startingLine": 398
+        }
+      },
+      {
+        "comment": "",
+        "key": "Archive",
+        "location": {
+          "startingColumn": 36,
+          "startingLine": 401
+        }
+      },
+      {
+        "comment": "",
+        "key": "To delete it, assign all its rides (%lld) to another device first.",
+        "location": {
+          "startingColumn": 34,
+          "startingLine": 411
+        }
+      },
+      {
+        "comment": "",
+        "key": "An archived device keeps its rides and stays in the filters; new rides do not go to it.",
+        "location": {
+          "startingColumn": 36,
+          "startingLine": 414
+        }
+      },
+      {
+        "comment": "",
+        "key": "The last device cannot be archived: new rides need one.",
+        "location": {
+          "startingColumn": 36,
+          "startingLine": 415
+        }
+      },
+      {
+        "comment": "",
+        "key": "Delete Device",
+        "location": {
+          "startingColumn": 32,
+          "startingLine": 419
+        }
+      },
+      {
+        "comment": "",
+        "key": "It disappears on all your devices. This cannot be undone.",
+        "location": {
+          "startingColumn": 30,
+          "startingLine": 424
+        }
+      },
+      {
+        "comment": "",
+        "key": "Cancel",
+        "location": {
+          "startingColumn": 70,
+          "startingLine": 431
+        }
+      },
+      {
+        "comment": "",
+        "key": "Save",
+        "location": {
+          "startingColumn": 28,
+          "startingLine": 433
+        }
+      },
+      {
+        "comment": "",
+        "key": "Profile",
+        "location": {
+          "startingColumn": 30,
+          "startingLine": 555
+        }
+      },
+      {
+        "comment": "",
+        "key": "Remove Photo",
+        "location": {
+          "startingColumn": 32,
+          "startingLine": 530
+        }
+      },
+      {
+        "comment": "",
+        "key": "Name",
+        "location": {
+          "startingColumn": 31,
+          "startingLine": 532
+        }
+      },
+      {
+        "comment": "",
+        "key": "Choose Photo",
+        "location": {
+          "startingColumn": 50,
+          "startingLine": 525
+        }
+      },
+      {
+        "comment": "",
+        "key": "kg",
+        "location": {
+          "startingColumn": 121,
+          "startingLine": 536
+        }
+      },
+      {
+        "comment": "",
+        "key": "cm",
+        "location": {
+          "startingColumn": 117,
+          "startingLine": 538
+        }
+      },
+      {
+        "comment": "",
+        "key": "Weight",
+        "location": {
+          "startingColumn": 31,
+          "startingLine": 536
+        }
+      },
+      {
+        "comment": "",
+        "key": "Height",
+        "location": {
+          "startingColumn": 31,
+          "startingLine": 538
+        }
+      },
+      {
+        "comment": "",
+        "key": "Year of Birth",
+        "location": {
+          "startingColumn": 28,
+          "startingLine": 540
+        }
+      },
+      {
+        "comment": "",
+        "key": "Sex",
+        "location": {
+          "startingColumn": 28,
+          "startingLine": 546
+        }
+      },
+      {
+        "comment": "",
+        "key": "Not set",
+        "location": {
+          "startingColumn": 30,
+          "startingLine": 541
+        }
+      },
+      {
+        "comment": "",
+        "key": "For the Calories",
+        "location": {
+          "startingColumn": 26,
+          "startingLine": 550
+        }
+      },
+      {
+        "comment": "",
+        "key": "Weight 20–300 kg, height 80–250 cm. Without them the calories come from the work alone.",
+        "location": {
+          "startingColumn": 26,
+          "startingLine": 552
+        }
+      },
+      {
+        "comment": "",
+        "key": "Cancel",
+        "location": {
+          "startingColumn": 70,
+          "startingLine": 558
+        }
+      },
+      {
+        "comment": "",
+        "key": "Save",
+        "location": {
+          "startingColumn": 28,
+          "startingLine": 560
+        }
+      },
+      {
+        "comment": "",
+        "key": "Map Style",
+        "location": {
+          "startingColumn": 24,
+          "startingLine": 586
+        }
+      },
+      {
+        "comment": "",
+        "key": "Apple",
+        "location": {
+          "startingColumn": 29,
+          "startingLine": 587
+        }
+      },
+      {
+        "comment": "",
+        "key": "OpenStreetMap",
+        "location": {
+          "startingColumn": 29,
+          "startingLine": 590
+        }
+      },
+      {
+        "comment": "",
+        "key": "The OpenStreetMap styles come from volunteer servers; Wattspur loads only the tiles on screen and keeps them for a while. Without a connection the route shows on a plain ground.",
+        "location": {
+          "startingColumn": 22,
+          "startingLine": 595
+        }
+      },
+      {
+        "comment": "",
+        "key": "Stop syncing with iCloud?",
+        "location": {
+          "startingColumn": 37,
+          "startingLine": 631
+        }
+      },
+      {
+        "comment": "",
+        "key": "Sync with iCloud",
+        "location": {
+          "startingColumn": 28,
+          "startingLine": 615
+        }
+      },
+      {
+        "comment": "",
+        "key": "One library on this iPhone and your Mac, in your own iCloud account.",
+        "location": {
+          "startingColumn": 34,
+          "startingLine": 621
+        }
+      },
+      {
+        "comment": "",
+        "key": "Without iCloud, the rides stay on this iPhone. They reach the Mac with “Share GPX”, e.g. by AirDrop.",
+        "location": {
+          "startingColumn": 34,
+          "startingLine": 623
+        }
+      },
+      {
+        "comment": "",
+        "key": "Takes effect the next time Wattspur opens: close it in the app switcher.",
+        "location": {
+          "startingColumn": 34,
+          "startingLine": 626
+        }
+      },
+      {
+        "comment": "",
+        "key": "Turn Off",
+        "location": {
+          "startingColumn": 28,
+          "startingLine": 632
+        }
+      },
+      {
+        "comment": "",
+        "key": "The rides stay in iCloud, on your Mac and on this iPhone. New rides then stay on this iPhone.",
+        "location": {
+          "startingColumn": 26,
+          "startingLine": 634
+        }
+      },
+      {
+        "comment": "",
+        "key": "Import Files …",
+        "location": {
+          "startingColumn": 27,
+          "startingLine": 644
+        }
+      },
+      {
+        "comment": "",
+        "key": "FIT and GPX files, several at once, also from iCloud Drive. Files you put into “On My iPhone › Wattspur › Import” in the Files app are imported when Wattspur opens; then they move to “Importiert”, or to “Fehler” if they cannot be read.",
+        "location": {
+          "startingColumn": 22,
+          "startingLine": 647
+        }
+      },
+      {
+        "comment": "",
+        "key": "Rides",
+        "location": {
+          "startingColumn": 32,
+          "startingLine": 651
+        }
+      },
+      {
+        "comment": "",
+        "key": "Library",
+        "location": {
+          "startingColumn": 22,
+          "startingLine": 653
+        }
+      },
+      {
+        "comment": "",
+        "key": "Your rides are on this iPhone and in your own iCloud account, the same as on your Mac.",
+        "location": {
+          "startingColumn": 26,
+          "startingLine": 656
+        }
+      },
+      {
+        "comment": "",
+        "key": "Your rides are on this iPhone. Sync with the Mac comes with iCloud.",
+        "location": {
+          "startingColumn": 26,
+          "startingLine": 658
+        }
+      },
+      {
+        "comment": "",
+        "key": "Restore This Backup?",
+        "location": {
+          "startingColumn": 16,
+          "startingLine": 732
+        }
+      },
+      {
+        "comment": "",
+        "key": "Back Up Automatically",
+        "location": {
+          "startingColumn": 20,
+          "startingLine": 700
+        }
+      },
+      {
+        "comment": "",
+        "key": "Back Up Library …",
+        "location": {
+          "startingColumn": 23,
+          "startingLine": 690
+        }
+      },
+      {
+        "comment": "",
+        "key": "Restore Backup …",
+        "location": {
+          "startingColumn": 23,
+          "startingLine": 697
+        }
+      },
+      {
+        "comment": "",
+        "key": "Backup",
+        "location": {
+          "startingColumn": 18,
+          "startingLine": 703
+        }
+      },
+      {
+        "comment": "",
+        "key": "A backup is a folder with all your rides, bikes, goals and notes, the same as on the Mac. Choose iCloud Drive, On My iPhone or a USB stick. A backup from this iPhone restores on the Mac, and the other way round.",
+        "location": {
+          "startingColumn": 22,
+          "startingLine": 706
+        }
+      },
+      {
+        "comment": "",
+        "key": "The folder for the automatic backup is no longer there. Back up once by hand to choose a new one.",
+        "location": {
+          "startingColumn": 30,
+          "startingLine": 709
+        }
+      },
+      {
+        "comment": "",
+        "key": "Back up once by hand to choose the folder. After that Wattspur backs up there when it opens and the last backup is older than a week, and keeps the newest three automatic backups.",
+        "location": {
+          "startingColumn": 30,
+          "startingLine": 712
+        }
+      },
+      {
+        "comment": "",
+        "key": "When Wattspur opens and the last backup is older than a week, it backs up into the folder you chose last. It keeps the newest three automatic backups there and deletes only its own.",
+        "location": {
+          "startingColumn": 30,
+          "startingLine": 714
+        }
+      },
+      {
+        "comment": "",
+        "key": "Last backup: %@",
+        "location": {
+          "startingColumn": 26,
+          "startingLine": 718
+        }
+      },
+      {
+        "comment": "",
+        "key": "Restore",
+        "location": {
+          "startingColumn": 20,
+          "startingLine": 735
+        }
+      },
+      {
+        "comment": "",
+        "key": "Cancel",
+        "location": {
+          "startingColumn": 20,
+          "startingLine": 736
+        }
+      },
+      {
+        "comment": "",
+        "key": "The backup is from %@ (Wattspur %@).",
+        "location": {
+          "startingColumn": 38,
+          "startingLine": 780
+        }
+      },
+      {
+        "comment": "",
+        "key": "It holds %lld rides.",
+        "location": {
+          "startingColumn": 45,
+          "startingLine": 782
+        }
+      },
+      {
+        "comment": "",
+        "key": "The library on this iPhone is replaced with the backup the next time Wattspur opens. Rides and changes since the backup are not in it. The current library is kept in a folder beside it.",
+        "location": {
+          "startingColumn": 44,
+          "startingLine": 784
+        }
+      },
+      {
+        "comment": "",
+        "key": "Sync with iCloud is on: the rides in iCloud and on all your devices are then replaced with the backup too.",
+        "location": {
+          "startingColumn": 48,
+          "startingLine": 786
+        }
+      },
+      {
+        "comment": "",
+        "key": "This backup was made by a newer version of Wattspur. Update Wattspur before you restore it.",
+        "location": {
+          "startingColumn": 48,
+          "startingLine": 789
+        }
+      },
+      {
+        "comment": "",
+        "key": "Backed Up",
+        "location": {
+          "startingColumn": 26,
+          "startingLine": 754
+        }
+      },
+      {
+        "comment": "",
+        "key": "“%@” in “%@”",
+        "location": {
+          "startingColumn": 26,
+          "startingLine": 755
+        }
+      },
+      {
+        "comment": "",
+        "key": "Close Wattspur in the app switcher and open it again. It then replaces the library with the backup.",
+        "location": {
+          "startingColumn": 22,
+          "startingLine": 765
+        }
+      },
+      {
+        "comment": "",
+        "key": "Ready to Restore",
+        "location": {
+          "startingColumn": 23,
+          "startingLine": 764
+        }
+      },
+      {
+        "comment": "",
+        "key": "Cancel Restore",
+        "location": {
+          "startingColumn": 24,
+          "startingLine": 768
+        }
+      },
+      {
+        "comment": "",
+        "key": "Some changes from this iPhone are not in iCloud yet. Keep iCloud on for Wattspur until they are, or they may be lost.",
+        "location": {
+          "startingColumn": 34,
+          "startingLine": 808
+        }
+      },
+      {
+        "comment": "",
+        "key": "Last synced",
+        "location": {
+          "startingColumn": 36,
+          "startingLine": 813
+        }
+      },
+      {
+        "comment": "",
+        "key": "This iPhone is not signed in to iCloud, or iCloud is off for Wattspur. New rides stay only on this iPhone.",
+        "location": {
+          "startingColumn": 31,
+          "startingLine": 835
+        }
+      },
+      {
+        "comment": "",
+        "key": "iCloud is restricted on this iPhone. New rides stay only on this iPhone.",
+        "location": {
+          "startingColumn": 31,
+          "startingLine": 837
+        }
+      },
+      {
+        "comment": "",
+        "key": "Your iCloud storage is full. New rides stay on this iPhone until there is room again.",
+        "location": {
+          "startingColumn": 31,
+          "startingLine": 839
+        }
+      },
+      {
+        "comment": "",
+        "key": "No connection to iCloud. Wattspur syncs as soon as there is one again.",
+        "location": {
+          "startingColumn": 31,
+          "startingLine": 841
+        }
+      },
+      {
+        "comment": "",
+        "key": "Sync is not working at the moment: %@",
+        "location": {
+          "startingColumn": 31,
+          "startingLine": 843
+        }
+      },
+      {
+        "comment": "",
+        "key": "Not yet",
+        "location": {
+          "startingColumn": 34,
+          "startingLine": 822
+        }
+      },
+      {
+        "comment": "",
+        "key": "Syncing …",
+        "location": {
+          "startingColumn": 38,
+          "startingLine": 817
+        }
+      },
+      {
+        "comment": "",
+        "key": "iCloud",
+        "location": {
+          "startingColumn": 18,
+          "startingLine": 828
+        }
+      },
+      {
+        "comment": "",
+        "key": "Wattspur on the iPhone",
+        "location": {
+          "startingColumn": 27,
+          "startingLine": 856
+        }
+      },
+      {
+        "comment": "",
+        "key": "Handbook",
+        "location": {
+          "startingColumn": 27,
+          "startingLine": 859
+        }
+      },
+      {
+        "comment": "",
+        "key": "Questions and Answers",
+        "location": {
+          "startingColumn": 27,
+          "startingLine": 862
+        }
+      },
+      {
+        "comment": "",
+        "key": "The handbook is online, so it can get better between versions.",
+        "location": {
+          "startingColumn": 22,
+          "startingLine": 865
+        }
+      },
+      {
+        "comment": "",
+        "key": "What's New",
+        "location": {
+          "startingColumn": 27,
+          "startingLine": 869
+        }
+      },
+      {
+        "comment": "",
+        "key": "Version",
+        "location": {
+          "startingColumn": 32,
+          "startingLine": 883
+        }
+      },
+      {
+        "comment": "",
+        "key": "Commit",
+        "location": {
+          "startingColumn": 32,
+          "startingLine": 887
+        }
+      },
+      {
+        "comment": "",
+        "key": "%@ (%@)",
+        "location": {
+          "startingColumn": 26,
+          "startingLine": 884
+        }
+      },
+      {
+        "comment": "",
+        "key": "Apple",
+        "location": {
+          "startingColumn": 32,
+          "startingLine": 893
+        }
+      },
+      {
+        "comment": "",
+        "key": "Standard, Satellite, Hybrid",
+        "location": {
+          "startingColumn": 48,
+          "startingLine": 893
+        }
+      },
+      {
+        "comment": "",
+        "key": "Map Sources",
+        "location": {
+          "startingColumn": 22,
+          "startingLine": 906
+        }
+      },
+      {
+        "comment": "",
+        "key": "Apple shows its credit on the map itself.",
+        "location": {
+          "startingColumn": 22,
+          "startingLine": 908
+        }
+      },
+      {
+        "comment": "",
+        "key": "Privacy Policy",
+        "location": {
+          "startingColumn": 27,
+          "startingLine": 912
+        }
+      },
+      {
+        "comment": "",
+        "key": "Wattspur has no server and no account. Your rides stay on your devices and in your own iCloud.",
+        "location": {
+          "startingColumn": 22,
+          "startingLine": 915
+        }
+      },
+      {
+        "comment": "",
+        "key": "Record Raw Motion",
+        "location": {
+          "startingColumn": 24,
+          "startingLine": 931
+        }
+      },
+      {
+        "comment": "",
+        "key": "For a test of acceleration and lean angle: each recording also writes the motion sensors and GPS into a file. You find it in the Files app under “On My iPhone › Wattspur › Bewegung”. About 20 MB per hour.",
+        "location": {
+          "startingColumn": 22,
+          "startingLine": 933
+        }
+      }
+    ]
+  },
+  "version": 1
+}

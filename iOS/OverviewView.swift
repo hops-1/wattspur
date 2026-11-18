@@ -202,11 +202,13 @@ struct OverviewView: View {
 /// last recording; “with … ▾” below it opens “What are you riding?” (B-286).
 struct StartRideButton: View {
     @Environment(PhoneLibrary.self) private var library
+    /// The sport of the capsule: the button offers a device of it (B-324).
+    @ShownSport private var sport
     var action: (RecordingDevice) -> Void
     @State private var choosing = false
 
     var body: some View {
-        let device = library.nextRecordingDevice
+        let device = library.nextRecordingDevice(in: sport)
         VStack(spacing: 6) {
             Button { action(device) } label: {
                 Label("Start Ride", systemImage: "record.circle")

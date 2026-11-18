@@ -1,0 +1,16 @@
+{
+  "source": "/Volumes/NILS_EXTERN/Claude Code/eBike/.claude/worktrees/quizzical-rhodes-bbd76b/iOS/PhoneLibrary.swift",
+  "tables": {
+    "Localizable": [
+      {
+        "comment": "",
+        "key": "Vehicle: %@",
+        "location": {
+          "startingColumn": 96,
+          "startingLine": 204
+        }
+      }
+    ]
+  },
+  "version": 1
+}

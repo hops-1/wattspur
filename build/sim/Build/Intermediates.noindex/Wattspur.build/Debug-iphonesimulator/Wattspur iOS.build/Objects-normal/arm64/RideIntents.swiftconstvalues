@@ -1,0 +1,1422 @@
+[
+  {
+    "typeName": "Wattspur.WattspurShortcuts",
+    "mangledTypeName": "8Wattspur0A9ShortcutsV",
+    "kind": "struct",
+    "file": "/Volumes/NILS_EXTERN/Claude Code/eBike/.claude/worktrees/quizzical-rhodes-bbd76b/iOS/RideIntents.swift",
+    "line": 8,
+    "conformances": [
+      "AppIntents.AppShortcutsProvider",
+      "Swift.Sendable",
+      "Swift.SendableMetatype",
+      "Swift.BitwiseCopyable"
+    ],
+    "allConformances": [
+      {
+        "protocolName": "AppIntents.AppShortcutsProvider",
+        "conformanceDefiningModule": "Wattspur"
+      },
+      {
+        "protocolName": "Swift.Sendable",
+        "conformanceDefiningModule": "Wattspur"
+      },
+      {
+        "protocolName": "Swift.SendableMetatype",
+        "conformanceDefiningModule": "Wattspur"
+      },
+      {
+        "protocolName": "Swift.BitwiseCopyable",
+        "conformanceDefiningModule": "Wattspur"
+      }
+    ],
+    "associatedTypeAliases": [],
+    "properties": [
+      {
+        "label": "appShortcuts",
+        "type": "Swift.Array<AppIntents.AppShortcut>",
+        "mangledTypeName": "n/a - deprecated",
+        "isStatic": "true",
+        "isComputed": "true",
+        "file": "/Volumes/NILS_EXTERN/Claude Code/eBike/.claude/worktrees/quizzical-rhodes-bbd76b/iOS/RideIntents.swift",
+        "line": 9,
+        "valueKind": "Builder",
+        "value": {
+          "type": "AppIntents.AppShortcutsBuilder",
+          "members": [
+            {
+              "kind": "buildExpression",
+              "element": {
+                "valueKind": "InitCall",
+                "value": {
+                  "type": "AppIntents.AppShortcut",
+                  "arguments": [
+                    {
+                      "label": "intent",
+                      "type": "Wattspur.StartRideIntent",
+                      "valueKind": "InitCall",
+                      "value": {
+                        "type": "Wattspur.StartRideIntent",
+                        "arguments": []
+                      }
+                    },
+                    {
+                      "label": "phrases",
+                      "type": "Swift.Array<AppIntents.AppShortcutPhrase<Wattspur.StartRideIntent>>",
+                      "valueKind": "Array",
+                      "value": [
+                        {
+                          "valueKind": "InterpolatedStringLiteral",
+                          "value": {
+                            "segments": [
+                              {
+                                "valueKind": "RawLiteral",
+                                "value": "Start a ride with "
+                              },
+                              {
+                                "valueKind": "Enum",
+                                "value": {
+                                  "name": "applicationName"
+                                }
+                              },
+                              {
+                                "valueKind": "RawLiteral",
+                                "value": ""
+                              }
+                            ]
+                          }
+                        },
+                        {
+                          "valueKind": "InterpolatedStringLiteral",
+                          "value": {
+                            "segments": [
+                              {
+                                "valueKind": "RawLiteral",
+                                "value": "Start "
+                              },
+                              {
+                                "valueKind": "Enum",
+                                "value": {
+                                  "name": "applicationName"
+                                }
+                              },
+                              {
+                                "valueKind": "RawLiteral",
+                                "value": ""
+                              }
+                            ]
+                          }
+                        },
+                        {
+                          "valueKind": "InterpolatedStringLiteral",
+                          "value": {
+                            "segments": [
+                              {
+                                "valueKind": "RawLiteral",
+                                "value": "Record a ride with "
+                              },
+                              {
+                                "valueKind": "Enum",
+                                "value": {
+                                  "name": "applicationName"
+                                }
+                              },
+                              {
+                                "valueKind": "RawLiteral",
+                                "value": ""
+                              }
+                            ]
+                          }
+                        },
+                        {
+                          "valueKind": "InterpolatedStringLiteral",
+                          "value": {
+                            "segments": [
+                              {
+                                "valueKind": "RawLiteral",
+                                "value": "Start a ride with "
+                              },
+                              {
+                                "valueKind": "KeyPath",
+                                "value": {
+                                  "path": "$device",
+                                  "rootType": "Wattspur.StartRideIntent",
+                                  "components": [
+                                    {
+                                      "label": "$device",
+                                      "type": "AppIntents.IntentParameter<Swift.Optional<Wattspur.DeviceEntity>>"
+                                    }
+                                  ]
+                                }
+                              },
+                              {
+                                "valueKind": "RawLiteral",
+                                "value": " in "
+                              },
+                              {
+                                "valueKind": "Enum",
+                                "value": {
+                                  "name": "applicationName"
+                                }
+                              },
+                              {
+                                "valueKind": "RawLiteral",
+                                "value": ""
+                              }
+                            ]
+                          }
+                        },
+                        {
+                          "valueKind": "InterpolatedStringLiteral",
+                          "value": {
+                            "segments": [
+                              {
+                                "valueKind": "RawLiteral",
+                                "value": "Start "
+                              },
+                              {
+                                "valueKind": "Enum",
+                                "value": {
+                                  "name": "applicationName"
+                                }
+                              },
+                              {
+                                "valueKind": "RawLiteral",
+                                "value": " with "
+                              },
+                              {
+                                "valueKind": "KeyPath",
+                                "value": {
+                                  "path": "$device",
+                                  "rootType": "Wattspur.StartRideIntent",
+                                  "components": [
+                                    {
+                                      "label": "$device",
+                                      "type": "AppIntents.IntentParameter<Swift.Optional<Wattspur.DeviceEntity>>"
+                                    }
+                                  ]
+                                }
+                              },
+                              {
+                                "valueKind": "RawLiteral",
+                                "value": ""
+                              }
+                            ]
+                          }
+                        }
+                      ]
+                    },
+                    {
+                      "label": "shortTitle",
+                      "type": "Foundation.LocalizedStringResource",
+                      "valueKind": "RawLiteral",
+                      "value": "Start Ride"
+                    },
+                    {
+                      "label": "systemImageName",
+                      "type": "Swift.String",
+                      "valueKind": "RawLiteral",
+                      "value": "record.circle"
+                    }
+                  ]
+                }
+              }
+            },
+            {
+              "kind": "buildExpression",
+              "element": {
+                "valueKind": "InitCall",
+                "value": {
+                  "type": "AppIntents.AppShortcut",
+                  "arguments": [
+                    {
+                      "label": "intent",
+                      "type": "Wattspur.EndRideIntent",
+                      "valueKind": "InitCall",
+                      "value": {
+                        "type": "Wattspur.EndRideIntent",
+                        "arguments": []
+                      }
+                    },
+                    {
+                      "label": "phrases",
+                      "type": "Swift.Array<AppIntents.AppShortcutPhrase<Wattspur.EndRideIntent>>",
+                      "valueKind": "Array",
+                      "value": [
+                        {
+                          "valueKind": "InterpolatedStringLiteral",
+                          "value": {
+                            "segments": [
+                              {
+                                "valueKind": "RawLiteral",
+                                "value": "End the ride in "
+                              },
+                              {
+                                "valueKind": "Enum",
+                                "value": {
+                                  "name": "applicationName"
+                                }
+                              },
+                              {
+                                "valueKind": "RawLiteral",
+                                "value": ""
+                              }
+                            ]
+                          }
+                        },
+                        {
+                          "valueKind": "InterpolatedStringLiteral",
+                          "value": {
+                            "segments": [
+                              {
+                                "valueKind": "RawLiteral",
+                                "value": "Stop "
+                              },
+                              {
+                                "valueKind": "Enum",
+                                "value": {
+                                  "name": "applicationName"
+                                }
+                              },
+                              {
+                                "valueKind": "RawLiteral",
+                                "value": ""
+                              }
+                            ]
+                          }
+                        }
+                      ]
+                    },
+                    {
+                      "label": "shortTitle",
+                      "type": "Foundation.LocalizedStringResource",
+                      "valueKind": "RawLiteral",
+                      "value": "End Ride"
+                    },
+                    {
+                      "label": "systemImageName",
+                      "type": "Swift.String",
+                      "valueKind": "RawLiteral",
+                      "value": "stop.circle"
+                    }
+                  ]
+                }
+              }
+            },
+            {
+              "kind": "buildExpression",
+              "element": {
+                "valueKind": "InitCall",
+                "value": {
+                  "type": "AppIntents.AppShortcut",
+                  "arguments": [
+                    {
+                      "label": "intent",
+                      "type": "Wattspur.WeekDistanceIntent",
+                      "valueKind": "InitCall",
+                      "value": {
+                        "type": "Wattspur.WeekDistanceIntent",
+                        "arguments": []
+                      }
+                    },
+                    {
+                      "label": "phrases",
+                      "type": "Swift.Array<AppIntents.AppShortcutPhrase<Wattspur.WeekDistanceIntent>>",
+                      "valueKind": "Array",
+                      "value": [
+                        {
+                          "valueKind": "InterpolatedStringLiteral",
+                          "value": {
+                            "segments": [
+                              {
+                                "valueKind": "RawLiteral",
+                                "value": "How far did I ride this week in "
+                              },
+                              {
+                                "valueKind": "Enum",
+                                "value": {
+                                  "name": "applicationName"
+                                }
+                              },
+                              {
+                                "valueKind": "RawLiteral",
+                                "value": ""
+                              }
+                            ]
+                          }
+                        },
+                        {
+                          "valueKind": "InterpolatedStringLiteral",
+                          "value": {
+                            "segments": [
+                              {
+                                "valueKind": "RawLiteral",
+                                "value": "My week in "
+                              },
+                              {
+                                "valueKind": "Enum",
+                                "value": {
+                                  "name": "applicationName"
+                                }
+                              },
+                              {
+                                "valueKind": "RawLiteral",
+                                "value": ""
+                              }
+                            ]
+                          }
+                        }
+                      ]
+                    },
+                    {
+                      "label": "shortTitle",
+                      "type": "Foundation.LocalizedStringResource",
+                      "valueKind": "RawLiteral",
+                      "value": "This Week"
+                    },
+                    {
+                      "label": "systemImageName",
+                      "type": "Swift.String",
+                      "valueKind": "RawLiteral",
+                      "value": "calendar"
+                    }
+                  ]
+                }
+              }
+            },
+            {
+              "kind": "buildExpression",
+              "element": {
+                "valueKind": "InitCall",
+                "value": {
+                  "type": "AppIntents.AppShortcut",
+                  "arguments": [
+                    {
+                      "label": "intent",
+                      "type": "Wattspur.OpenLastRideIntent",
+                      "valueKind": "InitCall",
+                      "value": {
+                        "type": "Wattspur.OpenLastRideIntent",
+                        "arguments": []
+                      }
+                    },
+                    {
+                      "label": "phrases",
+                      "type": "Swift.Array<AppIntents.AppShortcutPhrase<Wattspur.OpenLastRideIntent>>",
+                      "valueKind": "Array",
+                      "value": [
+                        {
+                          "valueKind": "InterpolatedStringLiteral",
+                          "value": {
+                            "segments": [
+                              {
+                                "valueKind": "RawLiteral",
+                                "value": "Open my last ride in "
+                              },
+                              {
+                                "valueKind": "Enum",
+                                "value": {
+                                  "name": "applicationName"
+                                }
+                              },
+                              {
+                                "valueKind": "RawLiteral",
+                                "value": ""
+                              }
+                            ]
+                          }
+                        },
+                        {
+                          "valueKind": "InterpolatedStringLiteral",
+                          "value": {
+                            "segments": [
+                              {
+                                "valueKind": "RawLiteral",
+                                "value": "Show my last ride in "
+                              },
+                              {
+                                "valueKind": "Enum",
+                                "value": {
+                                  "name": "applicationName"
+                                }
+                              },
+                              {
+                                "valueKind": "RawLiteral",
+                                "value": ""
+                              }
+                            ]
+                          }
+                        }
+                      ]
+                    },
+                    {
+                      "label": "shortTitle",
+                      "type": "Foundation.LocalizedStringResource",
+                      "valueKind": "RawLiteral",
+                      "value": "Last Ride"
+                    },
+                    {
+                      "label": "systemImageName",
+                      "type": "Swift.String",
+                      "valueKind": "RawLiteral",
+                      "value": "bicycle"
+                    }
+                  ]
+                }
+              }
+            }
+          ]
+        }
+      }
+    ]
+  },
+  {
+    "typeName": "Wattspur.StartRideIntent",
+    "mangledTypeName": "8Wattspur15StartRideIntentV",
+    "kind": "struct",
+    "file": "/Volumes/NILS_EXTERN/Claude Code/eBike/.claude/worktrees/quizzical-rhodes-bbd76b/iOS/RideIntents.swift",
+    "line": 34,
+    "conformances": [
+      "AppIntents.AppIntent",
+      "AppIntents.PersistentlyIdentifiable",
+      "AppIntents._SupportsAppDependencies",
+      "Swift.Sendable",
+      "Swift.SendableMetatype"
+    ],
+    "allConformances": [
+      {
+        "protocolName": "AppIntents.AppIntent",
+        "conformanceDefiningModule": "Wattspur"
+      },
+      {
+        "protocolName": "AppIntents.PersistentlyIdentifiable",
+        "conformanceDefiningModule": "Wattspur"
+      },
+      {
+        "protocolName": "AppIntents._SupportsAppDependencies",
+        "conformanceDefiningModule": "Wattspur"
+      },
+      {
+        "protocolName": "Swift.Sendable",
+        "conformanceDefiningModule": "Wattspur"
+      },
+      {
+        "protocolName": "Swift.SendableMetatype",
+        "conformanceDefiningModule": "Wattspur"
+      }
+    ],
+    "associatedTypeAliases": [
+      {
+        "typeAliasName": "PerformResult",
+        "substitutedTypeName": "some AppIntents.ProvidesDialog",
+        "substitutedMangledTypeName": "8Wattspur15StartRideIntentV7performQryYaKFQOy_Qo_",
+        "opaqueTypeProtocolRequirements": [
+          "AppIntents.ProvidesDialog"
+        ],
+        "opaqueTypeSameTypeRequirements": []
+      },
+      {
+        "typeAliasName": "SummaryContent",
+        "substitutedTypeName": "some AppIntents.ParameterSummary",
+        "substitutedMangledTypeName": "10AppIntents0A6IntentPAAE16parameterSummaryQrvpZQOy8Wattspur09StartRideC0V_Qo_",
+        "opaqueTypeProtocolRequirements": [
+          "AppIntents.ParameterSummary"
+        ],
+        "opaqueTypeSameTypeRequirements": []
+      }
+    ],
+    "properties": [
+      {
+        "label": "_device",
+        "type": "AppIntents.IntentParameter<Swift.Optional<Wattspur.DeviceEntity>>",
+        "mangledTypeName": "n/a - deprecated",
+        "isStatic": "false",
+        "isComputed": "false",
+        "file": "/Volumes/NILS_EXTERN/Claude Code/eBike/.claude/worktrees/quizzical-rhodes-bbd76b/iOS/RideIntents.swift",
+        "line": 40,
+        "valueKind": "InitCall",
+        "value": {
+          "type": "AppIntents.IntentParameter<Swift.Optional<Wattspur.DeviceEntity>>",
+          "arguments": [
+            {
+              "label": "title",
+              "type": "Foundation.LocalizedStringResource",
+              "valueKind": "RawLiteral",
+              "value": "Device"
+            },
+            {
+              "label": "description",
+              "type": "Swift.Optional<Foundation.LocalizedStringResource>",
+              "valueKind": "NilLiteral"
+            },
+            {
+              "label": "default",
+              "type": "Swift.Optional<Wattspur.DeviceEntity>",
+              "valueKind": "NilLiteral"
+            },
+            {
+              "label": "requestValueDialog",
+              "type": "Swift.Optional<AppIntents.IntentDialog>",
+              "valueKind": "NilLiteral"
+            },
+            {
+              "label": "requestDisambiguationDialog",
+              "type": "Swift.Optional<AppIntents.IntentDialog>",
+              "valueKind": "NilLiteral"
+            },
+            {
+              "label": "inputConnectionBehavior",
+              "type": "AppIntents.InputConnectionBehavior",
+              "valueKind": "Runtime"
+            }
+          ]
+        }
+      },
+      {
+        "label": "_recorder",
+        "type": "AppIntents.AppDependency<Wattspur.Recorder>",
+        "mangledTypeName": "n/a - deprecated",
+        "isStatic": "false",
+        "isComputed": "false",
+        "file": "/Volumes/NILS_EXTERN/Claude Code/eBike/.claude/worktrees/quizzical-rhodes-bbd76b/iOS/RideIntents.swift",
+        "line": 42,
+        "valueKind": "InitCall",
+        "value": {
+          "type": "AppIntents.AppDependency<Wattspur.Recorder>",
+          "arguments": [
+            {
+              "label": "key",
+              "type": "Swift.Optional<Swift.AnyHashable>",
+              "valueKind": "NilLiteral"
+            },
+            {
+              "label": "manager",
+              "type": "AppIntents.AppDependencyManager",
+              "valueKind": "Runtime"
+            }
+          ]
+        }
+      },
+      {
+        "label": "title",
+        "type": "Foundation.LocalizedStringResource",
+        "mangledTypeName": "n/a - deprecated",
+        "isStatic": "true",
+        "isComputed": "false",
+        "file": "/Volumes/NILS_EXTERN/Claude Code/eBike/.claude/worktrees/quizzical-rhodes-bbd76b/iOS/RideIntents.swift",
+        "line": 35,
+        "valueKind": "RawLiteral",
+        "value": "Start Ride"
+      },
+      {
+        "label": "description",
+        "type": "AppIntents.IntentDescription",
+        "mangledTypeName": "n/a - deprecated",
+        "isStatic": "true",
+        "isComputed": "false",
+        "file": "/Volumes/NILS_EXTERN/Claude Code/eBike/.claude/worktrees/quizzical-rhodes-bbd76b/iOS/RideIntents.swift",
+        "line": 36,
+        "valueKind": "RawLiteral",
+        "value": "Starts recording a ride with GPS."
+      },
+      {
+        "label": "openAppWhenRun",
+        "type": "Swift.Bool",
+        "mangledTypeName": "n/a - deprecated",
+        "isStatic": "true",
+        "isComputed": "false",
+        "file": "/Volumes/NILS_EXTERN/Claude Code/eBike/.claude/worktrees/quizzical-rhodes-bbd76b/iOS/RideIntents.swift",
+        "line": 37,
+        "valueKind": "RawLiteral",
+        "value": "true"
+      },
+      {
+        "label": "device",
+        "type": "Swift.Optional<Wattspur.DeviceEntity>",
+        "mangledTypeName": "n/a - deprecated",
+        "isStatic": "false",
+        "isComputed": "true",
+        "file": "/Volumes/NILS_EXTERN/Claude Code/eBike/.claude/worktrees/quizzical-rhodes-bbd76b/iOS/RideIntents.swift",
+        "line": 40,
+        "valueKind": "InitCall",
+        "value": {
+          "type": "AppIntents.IntentParameter<Swift.Optional<Wattspur.DeviceEntity>>",
+          "arguments": [
+            {
+              "label": "title",
+              "type": "Foundation.LocalizedStringResource",
+              "valueKind": "RawLiteral",
+              "value": "Device"
+            },
+            {
+              "label": "description",
+              "type": "Swift.Optional<Foundation.LocalizedStringResource>",
+              "valueKind": "NilLiteral"
+            },
+            {
+              "label": "default",
+              "type": "Swift.Optional<Wattspur.DeviceEntity>",
+              "valueKind": "NilLiteral"
+            },
+            {
+              "label": "requestValueDialog",
+              "type": "Swift.Optional<AppIntents.IntentDialog>",
+              "valueKind": "NilLiteral"
+            },
+            {
+              "label": "requestDisambiguationDialog",
+              "type": "Swift.Optional<AppIntents.IntentDialog>",
+              "valueKind": "NilLiteral"
+            },
+            {
+              "label": "inputConnectionBehavior",
+              "type": "AppIntents.InputConnectionBehavior",
+              "valueKind": "Runtime"
+            }
+          ]
+        },
+        "propertyWrappers": [
+          {
+            "type": "AppIntents.IntentParameter",
+            "file": "/Volumes/NILS_EXTERN/Claude Code/eBike/.claude/worktrees/quizzical-rhodes-bbd76b/iOS/RideIntents.swift",
+            "line": 39,
+            "arguments": [
+              {
+                "label": "title",
+                "type": "Foundation.LocalizedStringResource",
+                "valueKind": "RawLiteral",
+                "value": "Device"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "label": "$device",
+        "type": "AppIntents.IntentParameter<Swift.Optional<Wattspur.DeviceEntity>>",
+        "mangledTypeName": "n/a - deprecated",
+        "isStatic": "false",
+        "isComputed": "true",
+        "file": "/Volumes/NILS_EXTERN/Claude Code/eBike/.claude/worktrees/quizzical-rhodes-bbd76b/iOS/RideIntents.swift",
+        "line": 40,
+        "valueKind": "Runtime"
+      },
+      {
+        "label": "recorder",
+        "type": "Wattspur.Recorder",
+        "mangledTypeName": "n/a - deprecated",
+        "isStatic": "false",
+        "isComputed": "true",
+        "file": "/Volumes/NILS_EXTERN/Claude Code/eBike/.claude/worktrees/quizzical-rhodes-bbd76b/iOS/RideIntents.swift",
+        "line": 42,
+        "valueKind": "Runtime",
+        "propertyWrappers": [
+          {
+            "type": "AppIntents.AppDependency",
+            "file": "/Volumes/NILS_EXTERN/Claude Code/eBike/.claude/worktrees/quizzical-rhodes-bbd76b/iOS/RideIntents.swift",
+            "line": 42,
+            "arguments": []
+          }
+        ]
+      },
+      {
+        "label": "$recorder",
+        "type": "AppIntents.AppDependency<Wattspur.Recorder>",
+        "mangledTypeName": "n/a - deprecated",
+        "isStatic": "false",
+        "isComputed": "true",
+        "file": "/Volumes/NILS_EXTERN/Claude Code/eBike/.claude/worktrees/quizzical-rhodes-bbd76b/iOS/RideIntents.swift",
+        "line": 42,
+        "valueKind": "Runtime"
+      }
+    ]
+  },
+  {
+    "typeName": "Wattspur.EndRideIntent",
+    "mangledTypeName": "8Wattspur13EndRideIntentV",
+    "kind": "struct",
+    "file": "/Volumes/NILS_EXTERN/Claude Code/eBike/.claude/worktrees/quizzical-rhodes-bbd76b/iOS/RideIntents.swift",
+    "line": 59,
+    "conformances": [
+      "AppIntents.AppIntent",
+      "AppIntents.PersistentlyIdentifiable",
+      "AppIntents._SupportsAppDependencies",
+      "Swift.Sendable",
+      "Swift.SendableMetatype"
+    ],
+    "allConformances": [
+      {
+        "protocolName": "AppIntents.AppIntent",
+        "conformanceDefiningModule": "Wattspur"
+      },
+      {
+        "protocolName": "AppIntents.PersistentlyIdentifiable",
+        "conformanceDefiningModule": "Wattspur"
+      },
+      {
+        "protocolName": "AppIntents._SupportsAppDependencies",
+        "conformanceDefiningModule": "Wattspur"
+      },
+      {
+        "protocolName": "Swift.Sendable",
+        "conformanceDefiningModule": "Wattspur"
+      },
+      {
+        "protocolName": "Swift.SendableMetatype",
+        "conformanceDefiningModule": "Wattspur"
+      }
+    ],
+    "associatedTypeAliases": [
+      {
+        "typeAliasName": "PerformResult",
+        "substitutedTypeName": "some AppIntents.ProvidesDialog",
+        "substitutedMangledTypeName": "8Wattspur13EndRideIntentV7performQryYaKFQOy_Qo_",
+        "opaqueTypeProtocolRequirements": [
+          "AppIntents.ProvidesDialog"
+        ],
+        "opaqueTypeSameTypeRequirements": []
+      },
+      {
+        "typeAliasName": "SummaryContent",
+        "substitutedTypeName": "some AppIntents.ParameterSummary",
+        "substitutedMangledTypeName": "10AppIntents0A6IntentPAAE16parameterSummaryQrvpZQOy8Wattspur07EndRideC0V_Qo_",
+        "opaqueTypeProtocolRequirements": [
+          "AppIntents.ParameterSummary"
+        ],
+        "opaqueTypeSameTypeRequirements": []
+      }
+    ],
+    "properties": [
+      {
+        "label": "_recorder",
+        "type": "AppIntents.AppDependency<Wattspur.Recorder>",
+        "mangledTypeName": "n/a - deprecated",
+        "isStatic": "false",
+        "isComputed": "false",
+        "file": "/Volumes/NILS_EXTERN/Claude Code/eBike/.claude/worktrees/quizzical-rhodes-bbd76b/iOS/RideIntents.swift",
+        "line": 64,
+        "valueKind": "InitCall",
+        "value": {
+          "type": "AppIntents.AppDependency<Wattspur.Recorder>",
+          "arguments": [
+            {
+              "label": "key",
+              "type": "Swift.Optional<Swift.AnyHashable>",
+              "valueKind": "NilLiteral"
+            },
+            {
+              "label": "manager",
+              "type": "AppIntents.AppDependencyManager",
+              "valueKind": "Runtime"
+            }
+          ]
+        }
+      },
+      {
+        "label": "title",
+        "type": "Foundation.LocalizedStringResource",
+        "mangledTypeName": "n/a - deprecated",
+        "isStatic": "true",
+        "isComputed": "false",
+        "file": "/Volumes/NILS_EXTERN/Claude Code/eBike/.claude/worktrees/quizzical-rhodes-bbd76b/iOS/RideIntents.swift",
+        "line": 60,
+        "valueKind": "RawLiteral",
+        "value": "End Ride"
+      },
+      {
+        "label": "description",
+        "type": "AppIntents.IntentDescription",
+        "mangledTypeName": "n/a - deprecated",
+        "isStatic": "true",
+        "isComputed": "false",
+        "file": "/Volumes/NILS_EXTERN/Claude Code/eBike/.claude/worktrees/quizzical-rhodes-bbd76b/iOS/RideIntents.swift",
+        "line": 61,
+        "valueKind": "RawLiteral",
+        "value": "Ends the recording and opens Save Ride."
+      },
+      {
+        "label": "openAppWhenRun",
+        "type": "Swift.Bool",
+        "mangledTypeName": "n/a - deprecated",
+        "isStatic": "true",
+        "isComputed": "false",
+        "file": "/Volumes/NILS_EXTERN/Claude Code/eBike/.claude/worktrees/quizzical-rhodes-bbd76b/iOS/RideIntents.swift",
+        "line": 62,
+        "valueKind": "RawLiteral",
+        "value": "true"
+      },
+      {
+        "label": "recorder",
+        "type": "Wattspur.Recorder",
+        "mangledTypeName": "n/a - deprecated",
+        "isStatic": "false",
+        "isComputed": "true",
+        "file": "/Volumes/NILS_EXTERN/Claude Code/eBike/.claude/worktrees/quizzical-rhodes-bbd76b/iOS/RideIntents.swift",
+        "line": 64,
+        "valueKind": "Runtime",
+        "propertyWrappers": [
+          {
+            "type": "AppIntents.AppDependency",
+            "file": "/Volumes/NILS_EXTERN/Claude Code/eBike/.claude/worktrees/quizzical-rhodes-bbd76b/iOS/RideIntents.swift",
+            "line": 64,
+            "arguments": []
+          }
+        ]
+      },
+      {
+        "label": "$recorder",
+        "type": "AppIntents.AppDependency<Wattspur.Recorder>",
+        "mangledTypeName": "n/a - deprecated",
+        "isStatic": "false",
+        "isComputed": "true",
+        "file": "/Volumes/NILS_EXTERN/Claude Code/eBike/.claude/worktrees/quizzical-rhodes-bbd76b/iOS/RideIntents.swift",
+        "line": 64,
+        "valueKind": "Runtime"
+      }
+    ]
+  },
+  {
+    "typeName": "Wattspur.WeekDistanceIntent",
+    "mangledTypeName": "8Wattspur18WeekDistanceIntentV",
+    "kind": "struct",
+    "file": "/Volumes/NILS_EXTERN/Claude Code/eBike/.claude/worktrees/quizzical-rhodes-bbd76b/iOS/RideIntents.swift",
+    "line": 77,
+    "conformances": [
+      "AppIntents.AppIntent",
+      "AppIntents.PersistentlyIdentifiable",
+      "AppIntents._SupportsAppDependencies",
+      "Swift.Sendable",
+      "Swift.SendableMetatype",
+      "Swift.BitwiseCopyable"
+    ],
+    "allConformances": [
+      {
+        "protocolName": "AppIntents.AppIntent",
+        "conformanceDefiningModule": "Wattspur"
+      },
+      {
+        "protocolName": "AppIntents.PersistentlyIdentifiable",
+        "conformanceDefiningModule": "Wattspur"
+      },
+      {
+        "protocolName": "AppIntents._SupportsAppDependencies",
+        "conformanceDefiningModule": "Wattspur"
+      },
+      {
+        "protocolName": "Swift.Sendable",
+        "conformanceDefiningModule": "Wattspur"
+      },
+      {
+        "protocolName": "Swift.SendableMetatype",
+        "conformanceDefiningModule": "Wattspur"
+      },
+      {
+        "protocolName": "Swift.BitwiseCopyable",
+        "conformanceDefiningModule": "Wattspur"
+      }
+    ],
+    "associatedTypeAliases": [
+      {
+        "typeAliasName": "PerformResult",
+        "substitutedTypeName": "some AppIntents.ProvidesDialog & AppIntents.ReturnsValue<Swift.Double>",
+        "substitutedMangledTypeName": "8Wattspur18WeekDistanceIntentV7performQryYaKFQOy_Qo_",
+        "opaqueTypeProtocolRequirements": [
+          "AppIntents.ProvidesDialog",
+          "AppIntents.ReturnsValue"
+        ],
+        "opaqueTypeSameTypeRequirements": [
+          {
+            "typeAliasName": "AppIntents.IntentResult.Value",
+            "substitutedTypeName": "Swift.Double",
+            "substitutedMangledTypeName": "Sd"
+          }
+        ]
+      },
+      {
+        "typeAliasName": "SummaryContent",
+        "substitutedTypeName": "some AppIntents.ParameterSummary",
+        "substitutedMangledTypeName": "10AppIntents0A6IntentPAAE16parameterSummaryQrvpZQOy8Wattspur012WeekDistanceC0V_Qo_",
+        "opaqueTypeProtocolRequirements": [
+          "AppIntents.ParameterSummary"
+        ],
+        "opaqueTypeSameTypeRequirements": []
+      }
+    ],
+    "properties": [
+      {
+        "label": "title",
+        "type": "Foundation.LocalizedStringResource",
+        "mangledTypeName": "n/a - deprecated",
+        "isStatic": "true",
+        "isComputed": "false",
+        "file": "/Volumes/NILS_EXTERN/Claude Code/eBike/.claude/worktrees/quizzical-rhodes-bbd76b/iOS/RideIntents.swift",
+        "line": 78,
+        "valueKind": "RawLiteral",
+        "value": "Distance This Week"
+      },
+      {
+        "label": "description",
+        "type": "AppIntents.IntentDescription",
+        "mangledTypeName": "n/a - deprecated",
+        "isStatic": "true",
+        "isComputed": "false",
+        "file": "/Volumes/NILS_EXTERN/Claude Code/eBike/.claude/worktrees/quizzical-rhodes-bbd76b/iOS/RideIntents.swift",
+        "line": 79,
+        "valueKind": "RawLiteral",
+        "value": "Tells how far you rode this week."
+      }
+    ]
+  },
+  {
+    "typeName": "Wattspur.OpenLastRideIntent",
+    "mangledTypeName": "8Wattspur18OpenLastRideIntentV",
+    "kind": "struct",
+    "file": "/Volumes/NILS_EXTERN/Claude Code/eBike/.claude/worktrees/quizzical-rhodes-bbd76b/iOS/RideIntents.swift",
+    "line": 91,
+    "conformances": [
+      "AppIntents.AppIntent",
+      "AppIntents.PersistentlyIdentifiable",
+      "AppIntents._SupportsAppDependencies",
+      "Swift.Sendable",
+      "Swift.SendableMetatype"
+    ],
+    "allConformances": [
+      {
+        "protocolName": "AppIntents.AppIntent",
+        "conformanceDefiningModule": "Wattspur"
+      },
+      {
+        "protocolName": "AppIntents.PersistentlyIdentifiable",
+        "conformanceDefiningModule": "Wattspur"
+      },
+      {
+        "protocolName": "AppIntents._SupportsAppDependencies",
+        "conformanceDefiningModule": "Wattspur"
+      },
+      {
+        "protocolName": "Swift.Sendable",
+        "conformanceDefiningModule": "Wattspur"
+      },
+      {
+        "protocolName": "Swift.SendableMetatype",
+        "conformanceDefiningModule": "Wattspur"
+      }
+    ],
+    "associatedTypeAliases": [
+      {
+        "typeAliasName": "PerformResult",
+        "substitutedTypeName": "some AppIntents.IntentResult",
+        "substitutedMangledTypeName": "8Wattspur18OpenLastRideIntentV7performQryYaKFQOy_Qo_",
+        "opaqueTypeProtocolRequirements": [
+          "AppIntents.IntentResult"
+        ],
+        "opaqueTypeSameTypeRequirements": []
+      },
+      {
+        "typeAliasName": "SummaryContent",
+        "substitutedTypeName": "some AppIntents.ParameterSummary",
+        "substitutedMangledTypeName": "10AppIntents0A6IntentPAAE16parameterSummaryQrvpZQOy8Wattspur012OpenLastRideC0V_Qo_",
+        "opaqueTypeProtocolRequirements": [
+          "AppIntents.ParameterSummary"
+        ],
+        "opaqueTypeSameTypeRequirements": []
+      }
+    ],
+    "properties": [
+      {
+        "label": "_router",
+        "type": "AppIntents.AppDependency<Wattspur.IntentRouter>",
+        "mangledTypeName": "n/a - deprecated",
+        "isStatic": "false",
+        "isComputed": "false",
+        "file": "/Volumes/NILS_EXTERN/Claude Code/eBike/.claude/worktrees/quizzical-rhodes-bbd76b/iOS/RideIntents.swift",
+        "line": 96,
+        "valueKind": "InitCall",
+        "value": {
+          "type": "AppIntents.AppDependency<Wattspur.IntentRouter>",
+          "arguments": [
+            {
+              "label": "key",
+              "type": "Swift.Optional<Swift.AnyHashable>",
+              "valueKind": "NilLiteral"
+            },
+            {
+              "label": "manager",
+              "type": "AppIntents.AppDependencyManager",
+              "valueKind": "Runtime"
+            }
+          ]
+        }
+      },
+      {
+        "label": "title",
+        "type": "Foundation.LocalizedStringResource",
+        "mangledTypeName": "n/a - deprecated",
+        "isStatic": "true",
+        "isComputed": "false",
+        "file": "/Volumes/NILS_EXTERN/Claude Code/eBike/.claude/worktrees/quizzical-rhodes-bbd76b/iOS/RideIntents.swift",
+        "line": 92,
+        "valueKind": "RawLiteral",
+        "value": "Open Last Ride"
+      },
+      {
+        "label": "description",
+        "type": "AppIntents.IntentDescription",
+        "mangledTypeName": "n/a - deprecated",
+        "isStatic": "true",
+        "isComputed": "false",
+        "file": "/Volumes/NILS_EXTERN/Claude Code/eBike/.claude/worktrees/quizzical-rhodes-bbd76b/iOS/RideIntents.swift",
+        "line": 93,
+        "valueKind": "RawLiteral",
+        "value": "Shows your newest ride."
+      },
+      {
+        "label": "openAppWhenRun",
+        "type": "Swift.Bool",
+        "mangledTypeName": "n/a - deprecated",
+        "isStatic": "true",
+        "isComputed": "false",
+        "file": "/Volumes/NILS_EXTERN/Claude Code/eBike/.claude/worktrees/quizzical-rhodes-bbd76b/iOS/RideIntents.swift",
+        "line": 94,
+        "valueKind": "RawLiteral",
+        "value": "true"
+      },
+      {
+        "label": "router",
+        "type": "Wattspur.IntentRouter",
+        "mangledTypeName": "n/a - deprecated",
+        "isStatic": "false",
+        "isComputed": "true",
+        "file": "/Volumes/NILS_EXTERN/Claude Code/eBike/.claude/worktrees/quizzical-rhodes-bbd76b/iOS/RideIntents.swift",
+        "line": 96,
+        "valueKind": "Runtime",
+        "propertyWrappers": [
+          {
+            "type": "AppIntents.AppDependency",
+            "file": "/Volumes/NILS_EXTERN/Claude Code/eBike/.claude/worktrees/quizzical-rhodes-bbd76b/iOS/RideIntents.swift",
+            "line": 96,
+            "arguments": []
+          }
+        ]
+      },
+      {
+        "label": "$router",
+        "type": "AppIntents.AppDependency<Wattspur.IntentRouter>",
+        "mangledTypeName": "n/a - deprecated",
+        "isStatic": "false",
+        "isComputed": "true",
+        "file": "/Volumes/NILS_EXTERN/Claude Code/eBike/.claude/worktrees/quizzical-rhodes-bbd76b/iOS/RideIntents.swift",
+        "line": 96,
+        "valueKind": "Runtime"
+      }
+    ]
+  },
+  {
+    "typeName": "Wattspur.DeviceEntity",
+    "mangledTypeName": "8Wattspur12DeviceEntityV",
+    "kind": "struct",
+    "file": "/Volumes/NILS_EXTERN/Claude Code/eBike/.claude/worktrees/quizzical-rhodes-bbd76b/iOS/RideIntents.swift",
+    "line": 123,
+    "conformances": [
+      "AppIntents.AppEntity",
+      "AppIntents.AppValue",
+      "AppIntents.DisplayRepresentable",
+      "Swift.Identifiable",
+      "AppIntents.PersistentlyIdentifiable",
+      "AppIntents.TypeDisplayRepresentable",
+      "AppIntents._IntentValue",
+      "Swift.Sendable",
+      "AppIntents.InstanceDisplayRepresentable",
+      "Swift.SendableMetatype",
+      "Foundation.CustomLocalizedStringResourceConvertible"
+    ],
+    "allConformances": [
+      {
+        "protocolName": "AppIntents.AppEntity",
+        "conformanceDefiningModule": "Wattspur"
+      },
+      {
+        "protocolName": "AppIntents.AppValue",
+        "conformanceDefiningModule": "Wattspur"
+      },
+      {
+        "protocolName": "AppIntents.DisplayRepresentable",
+        "conformanceDefiningModule": "Wattspur"
+      },
+      {
+        "protocolName": "Swift.Identifiable",
+        "conformanceDefiningModule": "Wattspur"
+      },
+      {
+        "protocolName": "AppIntents.PersistentlyIdentifiable",
+        "conformanceDefiningModule": "Wattspur"
+      },
+      {
+        "protocolName": "AppIntents.TypeDisplayRepresentable",
+        "conformanceDefiningModule": "Wattspur"
+      },
+      {
+        "protocolName": "AppIntents._IntentValue",
+        "conformanceDefiningModule": "Wattspur"
+      },
+      {
+        "protocolName": "Swift.Sendable",
+        "conformanceDefiningModule": "Wattspur"
+      },
+      {
+        "protocolName": "AppIntents.InstanceDisplayRepresentable",
+        "conformanceDefiningModule": "Wattspur"
+      },
+      {
+        "protocolName": "Swift.SendableMetatype",
+        "conformanceDefiningModule": "Wattspur"
+      },
+      {
+        "protocolName": "Foundation.CustomLocalizedStringResourceConvertible",
+        "conformanceDefiningModule": "Wattspur"
+      }
+    ],
+    "associatedTypeAliases": [
+      {
+        "typeAliasName": "DefaultQuery",
+        "substitutedTypeName": "Wattspur.DeviceQuery",
+        "substitutedMangledTypeName": "8Wattspur11DeviceQueryV"
+      },
+      {
+        "typeAliasName": "ID",
+        "substitutedTypeName": "Swift.String",
+        "substitutedMangledTypeName": "SS"
+      },
+      {
+        "typeAliasName": "ValueType",
+        "substitutedTypeName": "Wattspur.DeviceEntity",
+        "substitutedMangledTypeName": "8Wattspur12DeviceEntityV"
+      },
+      {
+        "typeAliasName": "UnwrappedType",
+        "substitutedTypeName": "Wattspur.DeviceEntity",
+        "substitutedMangledTypeName": "8Wattspur12DeviceEntityV"
+      },
+      {
+        "typeAliasName": "Specification",
+        "substitutedTypeName": "AppIntents.EmptyResolverSpecification<Wattspur.DeviceEntity>",
+        "substitutedMangledTypeName": "10AppIntents26EmptyResolverSpecificationVy8Wattspur12DeviceEntityVG"
+      }
+    ],
+    "properties": [
+      {
+        "label": "id",
+        "type": "Swift.String",
+        "mangledTypeName": "n/a - deprecated",
+        "isStatic": "false",
+        "isComputed": "false",
+        "file": "/Volumes/NILS_EXTERN/Claude Code/eBike/.claude/worktrees/quizzical-rhodes-bbd76b/iOS/RideIntents.swift",
+        "line": 128,
+        "valueKind": "Runtime"
+      },
+      {
+        "label": "name",
+        "type": "Swift.String",
+        "mangledTypeName": "n/a - deprecated",
+        "isStatic": "false",
+        "isComputed": "false",
+        "file": "/Volumes/NILS_EXTERN/Claude Code/eBike/.claude/worktrees/quizzical-rhodes-bbd76b/iOS/RideIntents.swift",
+        "line": 129,
+        "valueKind": "Runtime"
+      },
+      {
+        "label": "recordingDevice",
+        "type": "WattspurCore.RecordingDevice",
+        "mangledTypeName": "n/a - deprecated",
+        "isStatic": "false",
+        "isComputed": "false",
+        "file": "/Volumes/NILS_EXTERN/Claude Code/eBike/.claude/worktrees/quizzical-rhodes-bbd76b/iOS/RideIntents.swift",
+        "line": 130,
+        "valueKind": "Runtime"
+      },
+      {
+        "label": "typeDisplayRepresentation",
+        "type": "AppIntents.TypeDisplayRepresentation",
+        "mangledTypeName": "n/a - deprecated",
+        "isStatic": "true",
+        "isComputed": "false",
+        "file": "/Volumes/NILS_EXTERN/Claude Code/eBike/.claude/worktrees/quizzical-rhodes-bbd76b/iOS/RideIntents.swift",
+        "line": 124,
+        "valueKind": "InitCall",
+        "value": {
+          "type": "AppIntents.TypeDisplayRepresentation",
+          "arguments": [
+            {
+              "label": "name",
+              "type": "Foundation.LocalizedStringResource",
+              "valueKind": "RawLiteral",
+              "value": "Device"
+            },
+            {
+              "label": "numericFormat",
+              "type": "Swift.Optional<Foundation.LocalizedStringResource>",
+              "valueKind": "NilLiteral"
+            }
+          ]
+        }
+      },
+      {
+        "label": "defaultQuery",
+        "type": "Wattspur.DeviceQuery",
+        "mangledTypeName": "n/a - deprecated",
+        "isStatic": "true",
+        "isComputed": "false",
+        "file": "/Volumes/NILS_EXTERN/Claude Code/eBike/.claude/worktrees/quizzical-rhodes-bbd76b/iOS/RideIntents.swift",
+        "line": 125,
+        "valueKind": "InitCall",
+        "value": {
+          "type": "Wattspur.DeviceQuery",
+          "arguments": []
+        }
+      },
+      {
+        "label": "displayRepresentation",
+        "type": "AppIntents.DisplayRepresentation",
+        "mangledTypeName": "n/a - deprecated",
+        "isStatic": "false",
+        "isComputed": "true",
+        "file": "/Volumes/NILS_EXTERN/Claude Code/eBike/.claude/worktrees/quizzical-rhodes-bbd76b/iOS/RideIntents.swift",
+        "line": 132,
+        "valueKind": "InitCall",
+        "value": {
+          "type": "AppIntents.DisplayRepresentation",
+          "arguments": [
+            {
+              "label": "title",
+              "type": "Foundation.LocalizedStringResource",
+              "valueKind": "InterpolatedStringLiteral",
+              "value": {
+                "segments": [
+                  {
+                    "valueKind": "RawLiteral",
+                    "value": ""
+                  },
+                  {
+                    "valueKind": "Runtime"
+                  },
+                  {
+                    "valueKind": "RawLiteral",
+                    "value": ""
+                  }
+                ]
+              }
+            },
+            {
+              "label": "subtitle",
+              "type": "Swift.Optional<Foundation.LocalizedStringResource>",
+              "valueKind": "NilLiteral"
+            },
+            {
+              "label": "image",
+              "type": "Swift.Optional<AppIntents.DisplayRepresentation.Image>",
+              "valueKind": "InitCall",
+              "value": {
+                "type": "AppIntents.DisplayRepresentation.Image",
+                "arguments": [
+                  {
+                    "label": "systemName",
+                    "type": "Swift.String",
+                    "valueKind": "Runtime"
+                  },
+                  {
+                    "label": "isTemplate",
+                    "type": "Swift.Optional<Swift.Bool>",
+                    "valueKind": "NilLiteral"
+                  }
+                ]
+              }
+            }
+          ]
+        }
+      },
+      {
+        "label": "all",
+        "type": "Swift.Array<Wattspur.DeviceEntity>",
+        "mangledTypeName": "n/a - deprecated",
+        "isStatic": "true",
+        "isComputed": "true",
+        "file": "/Volumes/NILS_EXTERN/Claude Code/eBike/.claude/worktrees/quizzical-rhodes-bbd76b/iOS/RideIntents.swift",
+        "line": 137,
+        "valueKind": "Runtime"
+      }
+    ]
+  },
+  {
+    "typeName": "Wattspur.DeviceQuery",
+    "mangledTypeName": "8Wattspur11DeviceQueryV",
+    "kind": "struct",
+    "file": "/Volumes/NILS_EXTERN/Claude Code/eBike/.claude/worktrees/quizzical-rhodes-bbd76b/iOS/RideIntents.swift",
+    "line": 149,
+    "conformances": [
+      "AppIntents.EntityStringQuery",
+      "AppIntents.EntityQuery",
+      "AppIntents.DynamicOptionsProvider",
+      "AppIntents.PersistentlyIdentifiable",
+      "Swift.Sendable",
+      "AppIntents._SupportsAppDependencies",
+      "Swift.SendableMetatype",
+      "Swift.BitwiseCopyable"
+    ],
+    "allConformances": [
+      {
+        "protocolName": "AppIntents.EntityStringQuery",
+        "conformanceDefiningModule": "Wattspur"
+      },
+      {
+        "protocolName": "AppIntents.EntityQuery",
+        "conformanceDefiningModule": "Wattspur"
+      },
+      {
+        "protocolName": "AppIntents.DynamicOptionsProvider",
+        "conformanceDefiningModule": "Wattspur"
+      },
+      {
+        "protocolName": "AppIntents.PersistentlyIdentifiable",
+        "conformanceDefiningModule": "Wattspur"
+      },
+      {
+        "protocolName": "Swift.Sendable",
+        "conformanceDefiningModule": "Wattspur"
+      },
+      {
+        "protocolName": "AppIntents._SupportsAppDependencies",
+        "conformanceDefiningModule": "Wattspur"
+      },
+      {
+        "protocolName": "Swift.SendableMetatype",
+        "conformanceDefiningModule": "Wattspur"
+      },
+      {
+        "protocolName": "Swift.BitwiseCopyable",
+        "conformanceDefiningModule": "Wattspur"
+      }
+    ],
+    "associatedTypeAliases": [
+      {
+        "typeAliasName": "Entity",
+        "substitutedTypeName": "Wattspur.DeviceEntity",
+        "substitutedMangledTypeName": "8Wattspur12DeviceEntityV"
+      },
+      {
+        "typeAliasName": "Result",
+        "substitutedTypeName": "Swift.Array<Wattspur.DeviceEntity>",
+        "substitutedMangledTypeName": "Say8Wattspur12DeviceEntityVG"
+      },
+      {
+        "typeAliasName": "Result",
+        "substitutedTypeName": "Swift.Array<Wattspur.DeviceEntity>",
+        "substitutedMangledTypeName": "Say8Wattspur12DeviceEntityVG"
+      },
+      {
+        "typeAliasName": "DefaultValue",
+        "substitutedTypeName": "Wattspur.DeviceEntity",
+        "substitutedMangledTypeName": "8Wattspur12DeviceEntityV"
+      }
+    ],
+    "properties": []
+  }
+]

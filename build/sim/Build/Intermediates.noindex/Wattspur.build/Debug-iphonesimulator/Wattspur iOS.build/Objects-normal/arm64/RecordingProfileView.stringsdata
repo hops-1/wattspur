@@ -1,0 +1,96 @@
+{
+  "source": "/Volumes/NILS_EXTERN/Claude Code/eBike/.claude/worktrees/quizzical-rhodes-bbd76b/iOS/RecordingProfileView.swift",
+  "tables": {
+    "Localizable": [
+      {
+        "comment": "",
+        "key": "The profile appears after the first few hundred metres.",
+        "location": {
+          "startingColumn": 22,
+          "startingLine": 25
+        }
+      },
+      {
+        "comment": "",
+        "key": "Profile",
+        "location": {
+          "startingColumn": 20,
+          "startingLine": 18
+        }
+      },
+      {
+        "comment": "",
+        "key": "Altitude",
+        "location": {
+          "startingColumn": 22,
+          "startingLine": 19
+        }
+      },
+      {
+        "comment": "",
+        "key": "Speed",
+        "location": {
+          "startingColumn": 22,
+          "startingLine": 20
+        }
+      },
+      {
+        "comment": "",
+        "key": "Altitude profile of the ride so far",
+        "location": {
+          "startingColumn": 55,
+          "startingLine": 56
+        }
+      },
+      {
+        "comment": "",
+        "key": "Speed profile of the ride so far",
+        "location": {
+          "startingColumn": 95,
+          "startingLine": 56
+        }
+      },
+      {
+        "comment": "",
+        "key": "Distance",
+        "location": {
+          "startingColumn": 32,
+          "startingLine": 46
+        }
+      },
+      {
+        "comment": "",
+        "key": "Base",
+        "location": {
+          "startingColumn": 70,
+          "startingLine": 46
+        }
+      },
+      {
+        "comment": "",
+        "key": "Value",
+        "location": {
+          "startingColumn": 35,
+          "startingLine": 47
+        }
+      },
+      {
+        "comment": "",
+        "key": "Distance",
+        "location": {
+          "startingColumn": 32,
+          "startingLine": 49
+        }
+      },
+      {
+        "comment": "",
+        "key": "Value",
+        "location": {
+          "startingColumn": 65,
+          "startingLine": 49
+        }
+      }
+    ]
+  },
+  "version": 1
+}

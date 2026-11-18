@@ -1,0 +1,152 @@
+{
+  "source": "/Volumes/NILS_EXTERN/Claude Code/eBike/.claude/worktrees/quizzical-rhodes-bbd76b/iOS/ImportReport+Text.swift",
+  "tables": {
+    "Localizable": [
+      {
+        "comment": "",
+        "key": "%lld rides imported",
+        "location": {
+          "startingColumn": 63,
+          "startingLine": 23
+        }
+      },
+      {
+        "comment": "",
+        "key": "%lld files skipped, file type not supported yet: %@",
+        "location": {
+          "startingColumn": 44,
+          "startingLine": 28
+        }
+      },
+      {
+        "comment": "",
+        "key": "%lld more files could not be read",
+        "location": {
+          "startingColumn": 54,
+          "startingLine": 33
+        }
+      },
+      {
+        "comment": "",
+        "key": "Export the tour again after you have ridden it, then it has times and becomes a ride.",
+        "location": {
+          "startingColumn": 44,
+          "startingLine": 37
+        }
+      },
+      {
+        "comment": "",
+        "key": "%lld more",
+        "location": {
+          "startingColumn": 54,
+          "startingLine": 15
+        }
+      },
+      {
+        "comment": "",
+        "key": "Already in your library: %@",
+        "location": {
+          "startingColumn": 40,
+          "startingLine": 17
+        }
+      },
+      {
+        "comment": "",
+        "key": "Update them from the new files? Your names are kept.",
+        "location": {
+          "startingColumn": 40,
+          "startingLine": 18
+        }
+      },
+      {
+        "comment": "",
+        "key": "no extension",
+        "location": {
+          "startingColumn": 84,
+          "startingLine": 26
+        }
+      },
+      {
+        "comment": "",
+        "key": "%@: file could not be read",
+        "location": {
+          "startingColumn": 81,
+          "startingLine": 31
+        }
+      },
+      {
+        "comment": "",
+        "key": "%@: this is a planned route, not a ride",
+        "location": {
+          "startingColumn": 92,
+          "startingLine": 35
+        }
+      },
+      {
+        "comment": "",
+        "key": "%lld new",
+        "location": {
+          "startingColumn": 59,
+          "startingLine": 48
+        }
+      },
+      {
+        "comment": "",
+        "key": "%lld completed",
+        "location": {
+          "startingColumn": 60,
+          "startingLine": 49
+        }
+      },
+      {
+        "comment": "",
+        "key": "%lld duplicates",
+        "location": {
+          "startingColumn": 61,
+          "startingLine": 50
+        }
+      },
+      {
+        "comment": "",
+        "key": "%lld files skipped, file type not supported",
+        "location": {
+          "startingColumn": 44,
+          "startingLine": 53
+        }
+      },
+      {
+        "comment": "",
+        "key": "%lld more files could not be read",
+        "location": {
+          "startingColumn": 54,
+          "startingLine": 58
+        }
+      },
+      {
+        "comment": "",
+        "key": "Export the tour again after you have ridden it, then it has times and becomes a ride.",
+        "location": {
+          "startingColumn": 44,
+          "startingLine": 61
+        }
+      },
+      {
+        "comment": "",
+        "key": "%@: file could not be read",
+        "location": {
+          "startingColumn": 72,
+          "startingLine": 56
+        }
+      },
+      {
+        "comment": "",
+        "key": "%@: this is a planned route, not a ride",
+        "location": {
+          "startingColumn": 78,
+          "startingLine": 59
+        }
+      }
+    ]
+  },
+  "version": 1
+}

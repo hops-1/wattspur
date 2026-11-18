@@ -1,0 +1,16 @@
+{
+  "source": "/Volumes/NILS_EXTERN/Claude Code/eBike/.claude/worktrees/quizzical-rhodes-bbd76b/iOSShared/RecordingActivity.swift",
+  "tables": {
+    "Localizable": [
+      {
+        "comment": "",
+        "key": "Pause or Resume Ride",
+        "location": {
+          "startingColumn": 49,
+          "startingLine": 32
+        }
+      }
+    ]
+  },
+  "version": 1
+}

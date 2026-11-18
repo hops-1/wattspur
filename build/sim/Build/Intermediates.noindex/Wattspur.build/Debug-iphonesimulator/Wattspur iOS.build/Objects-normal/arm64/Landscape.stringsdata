@@ -1,0 +1,40 @@
+{
+  "source": "/Volumes/NILS_EXTERN/Claude Code/eBike/.claude/worktrees/quizzical-rhodes-bbd76b/iOS/Landscape.swift",
+  "tables": {
+    "Localizable": [
+      {
+        "comment": "",
+        "key": "Overview",
+        "location": {
+          "startingColumn": 37,
+          "startingLine": 62
+        }
+      },
+      {
+        "comment": "",
+        "key": "Rides",
+        "location": {
+          "startingColumn": 34,
+          "startingLine": 63
+        }
+      },
+      {
+        "comment": "",
+        "key": "Map",
+        "location": {
+          "startingColumn": 32,
+          "startingLine": 64
+        }
+      },
+      {
+        "comment": "",
+        "key": "More",
+        "location": {
+          "startingColumn": 33,
+          "startingLine": 65
+        }
+      }
+    ]
+  },
+  "version": 1
+}

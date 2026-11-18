@@ -1,0 +1,32 @@
+{
+  "source": "/Volumes/NILS_EXTERN/Claude Code/eBike/.claude/worktrees/quizzical-rhodes-bbd76b/iOS/SaveFailureAlert.swift",
+  "tables": {
+    "Localizable": [
+      {
+        "comment": "",
+        "key": "Could Not Save",
+        "location": {
+          "startingColumn": 20,
+          "startingLine": 13
+        }
+      },
+      {
+        "comment": "",
+        "key": "OK",
+        "location": {
+          "startingColumn": 24,
+          "startingLine": 14
+        }
+      },
+      {
+        "comment": "",
+        "key": "The last change could not be saved and may be lost when Wattspur quits. Check that there is free space on this device. %@",
+        "location": {
+          "startingColumn": 22,
+          "startingLine": 16
+        }
+      }
+    ]
+  },
+  "version": 1
+}

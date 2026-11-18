@@ -1,0 +1,136 @@
+{
+  "source": "/Volumes/NILS_EXTERN/Claude Code/eBike/.claude/worktrees/quizzical-rhodes-bbd76b/iOS/SaveRecordingSheet.swift",
+  "tables": {
+    "Localizable": [
+      {
+        "comment": "",
+        "key": "End Ride",
+        "location": {
+          "startingColumn": 30,
+          "startingLine": 71
+        }
+      },
+      {
+        "comment": "",
+        "key": "Discard this ride?",
+        "location": {
+          "startingColumn": 33,
+          "startingLine": 82
+        }
+      },
+      {
+        "comment": "",
+        "key": "The recording has no track yet: GPS needs a few seconds of riding. Keep riding or discard it.",
+        "location": {
+          "startingColumn": 26,
+          "startingLine": 61
+        }
+      },
+      {
+        "comment": "",
+        "key": "Name",
+        "location": {
+          "startingColumn": 31,
+          "startingLine": 33
+        }
+      },
+      {
+        "comment": "",
+        "key": "Device",
+        "location": {
+          "startingColumn": 28,
+          "startingLine": 34
+        }
+      },
+      {
+        "comment": "",
+        "key": "%@ (vehicle type only)",
+        "location": {
+          "startingColumn": 46,
+          "startingLine": 40
+        }
+      },
+      {
+        "comment": "",
+        "key": "The ride is saved on this iPhone and reaches your Mac over iCloud.",
+        "location": {
+          "startingColumn": 30,
+          "startingLine": 48
+        }
+      },
+      {
+        "comment": "",
+        "key": "The ride is saved on this iPhone.",
+        "location": {
+          "startingColumn": 30,
+          "startingLine": 50
+        }
+      },
+      {
+        "comment": "",
+        "key": "Distance",
+        "location": {
+          "startingColumn": 36,
+          "startingLine": 54
+        }
+      },
+      {
+        "comment": "",
+        "key": "Riding Time",
+        "location": {
+          "startingColumn": 36,
+          "startingLine": 55
+        }
+      },
+      {
+        "comment": "",
+        "key": "Ascent",
+        "location": {
+          "startingColumn": 40,
+          "startingLine": 57
+        }
+      },
+      {
+        "comment": "",
+        "key": "Discard Ride",
+        "location": {
+          "startingColumn": 28,
+          "startingLine": 68
+        }
+      },
+      {
+        "comment": "",
+        "key": "Keep Riding",
+        "location": {
+          "startingColumn": 28,
+          "startingLine": 75
+        }
+      },
+      {
+        "comment": "",
+        "key": "Save",
+        "location": {
+          "startingColumn": 28,
+          "startingLine": 78
+        }
+      },
+      {
+        "comment": "",
+        "key": "Discard Ride",
+        "location": {
+          "startingColumn": 24,
+          "startingLine": 83
+        }
+      },
+      {
+        "comment": "",
+        "key": "Vehicle: %@",
+        "location": {
+          "startingColumn": 49,
+          "startingLine": 137
+        }
+      }
+    ]
+  },
+  "version": 1
+}

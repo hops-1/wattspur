@@ -89,9 +89,17 @@ final class PhoneLibrary {
     /// The rides in the list that keep a device from being deleted (B-322).
     func listedRideCount(deviceID: UUID) -> Int { database?.listedRideCount(deviceID: deviceID) ?? 0 }
 
-    /// The device for the next recording (B-286): the last one, else the active bike.
+    /// The device for the next recording (B-286): the last one, else the active bike; always one of
+    /// the sport in the capsule (B-324).
     var nextRecordingDevice: RecordingDevice {
-        RecordingChoice.next(devices: state?.bikes ?? [], activeID: database?.activeDeviceID())
+        let stored = UserDefaults.standard.string(forKey: PhoneSettingsKey.shownSport).flatMap(Sport.init(rawValue:)) ?? .cycling
+        return nextRecordingDevice(in: state?.shownSport(stored) ?? .cycling)
+    }
+
+    /// The device for the next recording in a sport (B-324).
+    func nextRecordingDevice(in sport: Sport) -> RecordingDevice {
+        RecordingChoice.next(for: sport, devices: state?.bikes ?? [], activeID: database?.activeDeviceID(),
+                                    lastRideDeviceID: state?.only(sport).lastRide?.bikeID)
     }
 
     /// Saves the profile edited on the iPhone (B-299); iCloud brings it to the Mac.
