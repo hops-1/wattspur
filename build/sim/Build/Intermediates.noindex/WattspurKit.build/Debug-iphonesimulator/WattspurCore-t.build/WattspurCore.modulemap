@@ -1,4 +1,0 @@
-module WattspurCore {
-header "WattspurCore-Swift.h"
-export *
-}

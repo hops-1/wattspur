@@ -5,6 +5,8 @@
 xcuserdata/
 DerivedData/
 .build/
+# Local simulator and archive builds (scripts, xcodebuild -derivedDataPath build/...)
+build/
 .swiftpm/
 *.xcodeproj/
 !*.xcodeproj/project.pbxproj
