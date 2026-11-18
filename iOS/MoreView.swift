@@ -179,7 +179,7 @@ struct MoreRow: View {
     private var value: Text? {
         switch page {
         case .maps: Text(mapType.label)
-        case .library: library.mode == .iCloud ? Text("iCloud") : Text("This iPhone")
+        case .library: library.mode == .iCloud ? Text("iCloud") : RecordingAvailability.isSupported ? Text("This iPhone") : Text("This iPad")
         case .trash: library.trash.isEmpty ? nil : Text(library.trash.count.formatted())
         default: nil
         }

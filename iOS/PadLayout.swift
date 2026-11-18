@@ -67,22 +67,22 @@ struct PadRootView: View {
 
     var body: some View {
         NavigationSplitView {
+            // One style for every row, like the Mac's sidebar: symbol and name, no values (wish of Nils).
             List(selection: selection) {
-                Section {
+                Section("Media Library") {
                     Label("Overview", systemImage: "square.grid.2x2").tag(Item.overview)
                     Label("Rides", systemImage: "list.bullet").tag(Item.rides)
                     Label("Map", systemImage: "map").tag(Item.map)
-                } header: {
-                    SportSwitch()
-                        .textCase(nil)
-                        .padding(.bottom, 8)
+                    label(.trash)
                 }
-                Section {
-                    ProfileHeader().tag(Item.page(.profile))
-                    ForEach(MorePage.groups(showsTestTools: showsTestTools).joined().map { $0 }) { page in
-                        MoreRow(page: page).tag(Item.page(page))
-                    }
+                Section("Settings") {
+                    ForEach(settingsPages) { label($0) }
                 }
+            }
+            .safeAreaInset(edge: .top, spacing: 0) {
+                SportSwitch()
+                    .padding(.horizontal)
+                    .padding(.vertical, 8)
             }
             .navigationTitle("Wattspur")
         } detail: {
@@ -97,6 +97,15 @@ struct PadRootView: View {
         .onChange(of: showsTestTools) { if !showsTestTools && page == .testTools { page = .profile } }
     }
 
+    /// Profile, then the pages of “More” but the trash, which sits with the rides.
+    private var settingsPages: [MorePage] {
+        [.profile] + MorePage.groups(showsTestTools: showsTestTools).joined().filter { $0 != .trash }
+    }
+
+    private func label(_ page: MorePage) -> some View {
+        Label(page.title, systemImage: page.systemImage).tag(Item.page(page))
+    }
+
     @ViewBuilder private var detail: some View {
         switch tab {
         case .overview:
@@ -104,12 +113,13 @@ struct PadRootView: View {
                 rideFilter = RideFilter(period: period)
                 tab = .rides
             }
+        // A slim title bar stays on every screen: it holds the button that brings the sidebar back.
         case .rides:
             RidesView(filter: $rideFilter, openedRideID: $openedRideID)
-                .hidesTitleBar()
+                .navigationBarTitleDisplayMode(.inline)
         case .map:
             RidesMapScreen()
-                .hidesTitleBar()
+                .navigationBarTitleDisplayMode(.inline)
         case .more:
             MorePageView(page: page)
                 .navigationTitle(page.title)
