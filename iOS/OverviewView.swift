@@ -11,14 +11,14 @@ struct OverviewView: View {
     var showRides: (RidePeriod) -> Void
     @State private var sample = SampleRide.load()
     @Environment(\.isLandscape) private var isLandscape
-    /// The iPad's sidebar layout (B-292): the wide arrangement of landscape.
+    /// The iPad's sidebar layout (B-292): its own arrangement, see `pad`.
     @Environment(\.isPadLayout) private var isPadLayout
     /// The sport of the capsule (B-289): tiles, last ride and the count of all rides are of it.
     @ShownSport private var sport
 
     var body: some View {
         Group {
-            if isLandscape || isPadLayout { landscape } else { portrait }
+            if isPadLayout { pad } else if isLandscape { landscape } else { portrait }
         }
         .refreshable {
             await library.refresh()
@@ -133,6 +133,68 @@ struct OverviewView: View {
                 .frame(width: 230)
                 .padding(.trailing, 4)
                 .padding(.bottom, 4)
+        }
+    }
+
+    /// The iPad (B-292): the last ride with a large map, the four tiles beside it when the
+    /// window is wider than tall, below it when it is taller (wish of Nils 18.11.2026).
+    private var pad: some View {
+        GeometryReader { geo in
+            // Beside each other only with room for both: the tiles need about 380 pt.
+            let wide = geo.size.width > geo.size.height && geo.size.width >= 760
+            ScrollView {
+                Group {
+                    if wide {
+                        HStack(alignment: .top, spacing: 16) {
+                            padLastRide(mapHeight: max(240, geo.size.height - 300))
+                            VStack(spacing: 16) { padTiles }
+                                .frame(width: min(440, max(380, geo.size.width * 0.38)))
+                        }
+                    } else {
+                        VStack(spacing: 16) {
+                            padLastRide(mapHeight: min(max(240, geo.size.height * 0.4), 480))
+                            padTiles
+                        }
+                    }
+                }
+                .padding(.horizontal)
+                .padding(.vertical, 8)
+            }
+        }
+    }
+
+    @ViewBuilder private func padLastRide(mapHeight: CGFloat) -> some View {
+        if let state = library.state, let last = state.only(sport).lastRide {
+            NavigationLink {
+                TourDetailView(ride: last)
+            } label: {
+                LastRideTile(ride: last, mapHeight: mapHeight)
+            }
+            .buttonStyle(.plain)
+        } else if library.state?.lastRide == nil, let sample {
+            NavigationLink {
+                TourDetailView(ride: sample.ride, route: sample.route)
+            } label: {
+                LastRideTile(ride: sample.ride, route: sample.route, mapHeight: mapHeight)
+            }
+            .buttonStyle(.plain)
+        }
+    }
+
+    @ViewBuilder private var padTiles: some View {
+        if let state = library.state, state.lastRide != nil {
+            landscapeTiles(totals: totals(state), allRides: state.only(sport).rides.count, linked: true)
+            StateLine()
+                .frame(maxWidth: .infinity, alignment: .leading)
+        } else if let sample {
+            landscapeTiles(totals: RidePeriodTotals(rides: [(start: sample.ride.startDate, distance: sample.ride.distance)],
+                                                    now: sample.ride.startDate),
+                           allRides: 1, linked: false)
+            Text("Sample data: the tiles count the sample ride's week and month.")
+                .font(.footnote)
+                .foregroundStyle(.secondary)
+                .frame(maxWidth: .infinity, alignment: .leading)
+            FirstRidePrompt()
         }
     }
 
@@ -325,9 +387,13 @@ struct StatTile: View {
             Label(title, systemImage: systemImage)
                 .font(.subheadline.weight(.semibold))
                 .foregroundStyle(.secondary)
+                .lineLimit(1)
+                .minimumScaleFactor(0.8)
             Text(value)
                 .font(.title.weight(.bold))
                 .monospacedDigit()
+                .lineLimit(1)
+                .minimumScaleFactor(0.6)
                 .foregroundStyle(Color.track)
             if let unit {
                 Text(unit)

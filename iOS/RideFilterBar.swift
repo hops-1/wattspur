@@ -16,6 +16,8 @@ struct RideFilterBar: View {
     /// The “+” beside the search: FIT and GPX files from the Files app (B-300).
     var importFiles: (() -> Void)?
 
+    @Environment(\.isPadLayout) private var isPadLayout
+
     var body: some View {
         VStack(alignment: .leading, spacing: compact ? 6 : 8) {
             HStack(spacing: 8) {
@@ -32,32 +34,16 @@ struct RideFilterBar: View {
                     .accessibilityLabel(Text("Import Files …"))
                 }
             }
-            ScrollView(.horizontal) {
-                HStack(spacing: 8) {
-                    SportMenu()
-                    periodMenu
-                    distanceMenu
-                    if bikes.count >= 2 { bikeMenu }
-                    if filter.hasFilters {
-                        // An ✕ rather than a word: it has to fit beside the menus in the narrow
-                        // list of the landscape layout too.
-                        Button {
-                            filter.period = .all
-                            filter.distance = .all
-                            filter.bike = .all
-                        } label: {
-                            Image(systemName: "xmark.circle.fill")
-                                .font(.title3)
-                                .foregroundStyle(.secondary)
-                                .frame(width: 32, height: 32)
-                                .contentShape(.rect)
-                        }
-                        .buttonStyle(.plain)
-                        .accessibilityLabel(Text("Reset"))
-                    }
+            if isPadLayout {
+                // The list column on the iPad is narrow and has room below: wrap the chips
+                // instead of cutting them off at its edge.
+                ChipFlow(spacing: 8) { chips }
+            } else {
+                ScrollView(.horizontal) {
+                    HStack(spacing: 8) { chips }
                 }
+                .scrollIndicators(.hidden)
             }
-            .scrollIndicators(.hidden)
             if filter.isActive {
                 Text("\(shown) of \(total) rides")
                     .font(.footnote)
@@ -69,6 +55,30 @@ struct RideFilterBar: View {
         .padding(.vertical, compact ? 6 : 8)
         // Only behind the bar itself: reaching into the safe area, it would cover the large title.
         .background(.bar, ignoresSafeAreaEdges: [])
+    }
+
+    @ViewBuilder private var chips: some View {
+        SportMenu()
+        periodMenu
+        distanceMenu
+        if bikes.count >= 2 { bikeMenu }
+        if filter.hasFilters {
+            // An ✕ rather than a word: it has to fit beside the menus in the narrow
+            // list of the landscape layout too.
+            Button {
+                filter.period = .all
+                filter.distance = .all
+                filter.bike = .all
+            } label: {
+                Image(systemName: "xmark.circle.fill")
+                    .font(.title3)
+                    .foregroundStyle(.secondary)
+                    .frame(width: 32, height: 32)
+                    .contentShape(.rect)
+            }
+            .buttonStyle(.plain)
+            .accessibilityLabel(Text("Reset"))
+        }
     }
 
     private var searchField: some View {
@@ -187,5 +197,51 @@ extension RideDistanceBand {
         case .from25To50: "25–50 km"
         case .over50: "Over 50 km"
         }
+    }
+}
+
+/// Lays the filter chips out in rows, starting a new row when the next chip does not fit.
+private struct ChipFlow: Layout {
+    var spacing: CGFloat
+
+    func sizeThatFits(proposal: ProposedViewSize, subviews: Subviews, cache: inout ()) -> CGSize {
+        let rows = rows(for: subviews, width: proposal.width ?? .infinity)
+        let height = rows.map(\.height).reduce(0, +) + spacing * CGFloat(max(rows.count - 1, 0))
+        let width = rows.map(\.width).max() ?? 0
+        return CGSize(width: proposal.width ?? width, height: height)
+    }
+
+    func placeSubviews(in bounds: CGRect, proposal: ProposedViewSize, subviews: Subviews, cache: inout ()) {
+        var y = bounds.minY
+        for row in rows(for: subviews, width: bounds.width) {
+            var x = bounds.minX
+            for index in row.indices {
+                let size = subviews[index].sizeThatFits(ProposedViewSize(width: bounds.width, height: nil))
+                subviews[index].place(at: CGPoint(x: x, y: y + (row.height - size.height) / 2),
+                                      proposal: ProposedViewSize(size))
+                x += size.width + spacing
+            }
+            y += row.height + spacing
+        }
+    }
+
+    private struct Row { var indices: [Int] = []; var width: CGFloat = 0; var height: CGFloat = 0 }
+
+    private func rows(for subviews: Subviews, width: CGFloat) -> [Row] {
+        var rows: [Row] = []
+        var row = Row()
+        for index in subviews.indices {
+            let size = subviews[index].sizeThatFits(ProposedViewSize(width: width, height: nil))
+            let needed = row.indices.isEmpty ? size.width : row.width + spacing + size.width
+            if needed > width, !row.indices.isEmpty {
+                rows.append(row)
+                row = Row()
+            }
+            row.width = row.indices.isEmpty ? size.width : row.width + spacing + size.width
+            row.height = max(row.height, size.height)
+            row.indices.append(index)
+        }
+        if !row.indices.isEmpty { rows.append(row) }
+        return rows
     }
 }
