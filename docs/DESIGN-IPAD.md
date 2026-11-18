@@ -11,6 +11,7 @@ Nils wünscht sich eine iPad-App (10.11.2026). Sie soll alles können, was die M
 - Das iPad kommt **in Stufen**:
   - **iPad 1:** die iPhone-App im iPad-Layout, mit GPS-Aufnahme;
   - **iPad 2:** die Funktionen der Mac-App.
+- **Nachtrag 18.11.2026 (Nils):** iPad 1 kommt als iOS 1.3 **ohne Aufnahme**. Nils hat kein iPad mit Mobilfunk zum Testen. Die GPS-Aufnahme (B-293, Abschnitt unten) ist ohne Version zurück im Backlog.
 - Das iPad kommt **nach den Sportarten** (B-284 bis B-290, `DESIGN-SPORTARTEN.md`). So bekommt es den Umschalter für die Sportart gleich mit, und die Seitenleiste wird nur einmal gebaut.
 
 ## Weg: eine App für iPhone und iPad
