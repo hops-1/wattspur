@@ -50,4 +50,4 @@ Ergebnis: alles ✓ (Nils, 18.11.2026, iPhone 1.2 (30)).
 1. **B-324 Gerät beim Start:** Oben **Fahrzeuge** wählen, dann **Fahrt starten**: Ein Fahrzeug ist vorausgewählt (Nugget). Mit **Rad** ein Rad.
 2. **B-325 iPhone drehen im Auto:** Während der Fahrt ein- oder zweimal zwischen hoch und quer drehen. In der Fahrt danach keine Spitze der Querbeschleunigung an diesen Stellen. Die GPX bitte schicken.
 3. **B-325 Legende quer:** In der Aufnahme quer: Die Höhen-Legende steht neben dem Balken, nicht darunter.
-4. **B-326 Mac-Karte:** Im Bereich **Karte** zwischen **Rad** und **Fahrzeuge** wechseln: Karte, Kacheln und Liste daneben zeigen nur die Fahrten der Sportart.
+4. **B-326 Mac-Karte:** Im Bereich **Karte** zwischen **Rad** und **Fahrzeuge** wechseln: Karte, Kacheln und Liste daneben zeigen nur die Fahrten der Sportart. ✓ (Nils, 18.11.2026, Mac 1.10.1)
