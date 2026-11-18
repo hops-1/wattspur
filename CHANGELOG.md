@@ -7,6 +7,14 @@ Every DMG handed out to testers corresponds to one entry below.
 
 ## [Unreleased]
 
+iPhone 1.2 (30) on TestFlight, with fixes from the test drive of 18.11.2026; the Mac stays 1.10.
+
+### Fixed
+
+- **iPhone: the device at the start follows the sport menu** (B-324). With **Cycling** shown, “Start Ride” offers a bike (the one chosen last, else the one of the last bike ride), with **Vehicles** a vehicle; each sport keeps its own last choice.
+- **iPhone: turning the iPhone in a car is no curve** (B-325). Turning it between upright and across showed a lateral acceleration of up to 0.36 g on a straight road for a second or two; those seconds now count as a turned iPhone. Bicycles and motorcycles are unchanged.
+- **iPhone: the elevation legend in landscape** sits beside the bar with the figures, no longer half under it (B-325).
+
 ## [1.10] – 2026-11-18
 
 Sports, part 2: one sport at a time. Together with the iPhone app 1.2 (29).
