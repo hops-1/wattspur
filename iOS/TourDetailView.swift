@@ -146,36 +146,62 @@ struct TourDetailView: View {
 
     /// Beside the list of rides in landscape (B-243): name and date as a heading, a small map next
     /// to the figures, the charts below.
-    private var besideList: some View {
+    @ViewBuilder private var besideList: some View {
+        if isPadLayout { padDetail } else { besideListPhone }
+    }
+
+    /// The heading with name, date, device and the buttons, beside the list.
+    private var heading: some View {
+        HStack(alignment: .top, spacing: 8) {
+            VStack(alignment: .leading, spacing: 2) {
+                Text(ride.name)
+                    .font(.title3.weight(.bold))
+                    .accessibilityAddTraits(.isHeader)
+                info
+            }
+            Spacer(minLength: 0)
+            actions
+                .labelStyle(.iconOnly)
+                .buttonStyle(.glass)
+                .buttonBorderShape(.circle)
+        }
+    }
+
+    /// On the iPad (B-292, wish of Nils): heading and map stay at the top, as on the Mac; only the
+    /// data below scrolls, the charts first and the figures after them, as on the iPhone. A finger
+    /// on a chart shows the spot on the map, which stays in view.
+    private var padDetail: some View {
+        VStack(alignment: .leading, spacing: 12) {
+            heading
+            RideMap(ride: ride, route: route, interactive: true, marker: marker, leanStretches: leanStretches,
+                    surfaceStretches: surfaceStretches, side: side)
+                .containerRelativeFrame(.vertical) { height, _ in min(380, height * 0.4) }
+                .clipShape(.rect(cornerRadius: 24))
+            ScrollView {
+                VStack(alignment: .leading, spacing: 12) {
+                    if hasCarousel {
+                        RideChartCarousel(ride: ride, points: chartPoints, track: track, spot: $spot, side: side, height: 230)
+                    }
+                    FigureGrid(ride: ride, motion: motion)
+                    elevationProfile
+                }
+                .padding(.bottom)
+            }
+            .clipShape(.rect(cornerRadius: 24))
+        }
+        .padding([.horizontal, .top])
+    }
+
+    private var besideListPhone: some View {
         ScrollView {
             VStack(alignment: .leading, spacing: 12) {
-                HStack(alignment: .top, spacing: 8) {
-                    VStack(alignment: .leading, spacing: 2) {
-                        Text(ride.name)
-                            .font(.title3.weight(.bold))
-                            .accessibilityAddTraits(.isHeader)
-                        info
-                    }
-                    Spacer(minLength: 0)
-                    actions
-                        .labelStyle(.iconOnly)
-                        .buttonStyle(.glass)
-                        .buttonBorderShape(.circle)
-                }
-                if isPadLayout {
+                heading
+                HStack(alignment: .top, spacing: 12) {
                     RideMap(ride: ride, route: route, interactive: true, marker: marker, leanStretches: leanStretches,
                         surfaceStretches: surfaceStretches, side: side)
-                        .frame(height: 380)
-                        .clipShape(.rect(cornerRadius: 24))
-                    FigureGrid(ride: ride, motion: motion)
-                } else {
-                    HStack(alignment: .top, spacing: 12) {
-                        RideMap(ride: ride, route: route, interactive: true, marker: marker, leanStretches: leanStretches,
-                            surfaceStretches: surfaceStretches, side: side)
-                            .frame(width: 170, height: 190)
-                            .clipShape(.rect(cornerRadius: 20))
-                        FigureGrid(ride: ride, motion: motion, compact: true)
-                    }
+                        .frame(width: 170, height: 190)
+                        .clipShape(.rect(cornerRadius: 20))
+                    FigureGrid(ride: ride, motion: motion, compact: true)
                 }
                 if hasCarousel {
                     RideChartCarousel(ride: ride, points: chartPoints, track: track, spot: $spot, side: side, height: 230)
