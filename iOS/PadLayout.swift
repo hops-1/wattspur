@@ -65,27 +65,15 @@ struct PadRootView: View {
         }
     }
 
+    /// The sidebar with names, or only the symbols (wish of Nils, like the Mac's narrow sidebar);
+    /// kept for the next start.
+    @AppStorage(PhoneSettingsKey.padSidebarExpanded) private var expanded = true
+
     var body: some View {
-        NavigationSplitView {
-            // One style for every row, like the Mac's sidebar: symbol and name, no values (wish of Nils).
-            List(selection: selection) {
-                Section("Media Library") {
-                    Label("Overview", systemImage: "square.grid.2x2").tag(Item.overview)
-                    Label("Rides", systemImage: "list.bullet").tag(Item.rides)
-                    Label("Map", systemImage: "map").tag(Item.map)
-                    label(.trash)
-                }
-                Section("Settings") {
-                    ForEach(settingsPages) { label($0) }
-                }
-            }
-            .safeAreaInset(edge: .top, spacing: 0) {
-                SportSwitch()
-                    .padding(.horizontal)
-                    .padding(.vertical, 8)
-            }
-            .navigationTitle("Wattspur")
-        } detail: {
+        // Not `NavigationSplitView`: its sidebar hides completely; this one folds to the symbols.
+        HStack(spacing: 0) {
+            PadSidebar(selection: selection, expanded: $expanded, settingsPages: settingsPages)
+            Divider().ignoresSafeArea()
             NavigationStack {
                 detail
             }
@@ -102,10 +90,6 @@ struct PadRootView: View {
         [.profile] + MorePage.groups(showsTestTools: showsTestTools).joined().filter { $0 != .trash }
     }
 
-    private func label(_ page: MorePage) -> some View {
-        Label(page.title, systemImage: page.systemImage).tag(Item.page(page))
-    }
-
     @ViewBuilder private var detail: some View {
         switch tab {
         case .overview:
@@ -113,16 +97,111 @@ struct PadRootView: View {
                 rideFilter = RideFilter(period: period)
                 tab = .rides
             }
-        // A slim title bar stays on every screen: it holds the button that brings the sidebar back.
         case .rides:
             RidesView(filter: $rideFilter, openedRideID: $openedRideID)
-                .navigationBarTitleDisplayMode(.inline)
+                .hidesTitleBar()
         case .map:
             RidesMapScreen()
-                .navigationBarTitleDisplayMode(.inline)
+                .hidesTitleBar()
         case .more:
             MorePageView(page: page)
                 .navigationTitle(page.title)
         }
+    }
+}
+
+/// The sidebar of the iPad (B-292): one style for every row, symbol and name, no values; in two
+/// groups, the sport switch above. Folded, only the symbols stand one below the other.
+private struct PadSidebar: View {
+    @Binding var selection: PadRootView.Item?
+    @Binding var expanded: Bool
+    let settingsPages: [MorePage]
+
+    static let wideWidth: CGFloat = 280
+    static let narrowWidth: CGFloat = 68
+
+    var body: some View {
+        VStack(alignment: .leading, spacing: 0) {
+            HStack {
+                if expanded {
+                    Text(verbatim: "Wattspur").font(.headline)
+                    Spacer(minLength: 0)
+                }
+                Button {
+                    withAnimation(.snappy) { expanded.toggle() }
+                } label: {
+                    Image(systemName: "sidebar.left")
+                        .frame(width: 24, height: 24)
+                }
+                .buttonStyle(.glass)
+                .buttonBorderShape(.circle)
+                .accessibilityLabel(expanded ? Text("Show Only Symbols") : Text("Show Names"))
+            }
+            .frame(maxWidth: .infinity, alignment: expanded ? .leading : .center)
+            .padding(.horizontal, expanded ? 16 : 0)
+            .padding(.vertical, 8)
+            SportSwitch(compact: !expanded)
+                .frame(maxWidth: .infinity, alignment: .center)
+                .padding(.horizontal, expanded ? 16 : 0)
+                .padding(.bottom, 8)
+            ScrollView {
+                VStack(alignment: .leading, spacing: 2) {
+                    header("Media Library")
+                    row(.overview, "Overview", "square.grid.2x2")
+                    row(.rides, "Rides", "list.bullet")
+                    row(.map, "Map", "map")
+                    row(.page(.trash), MorePage.trash.title, MorePage.trash.systemImage)
+                    header("Settings")
+                    ForEach(settingsPages) { page in
+                        row(.page(page), page.title, page.systemImage)
+                    }
+                }
+                .padding(.horizontal, 8)
+            }
+        }
+        .frame(width: expanded ? Self.wideWidth : Self.narrowWidth)
+        .background(Color(.secondarySystemBackground).ignoresSafeArea())
+    }
+
+    @ViewBuilder private func header(_ title: LocalizedStringKey) -> some View {
+        if expanded {
+            Text(title)
+                .font(.subheadline.weight(.semibold))
+                .foregroundStyle(.secondary)
+                .padding(.horizontal, 12)
+                .padding(.top, 16)
+                .padding(.bottom, 4)
+        } else {
+            Divider().padding(.vertical, 10)
+        }
+    }
+
+    private func row(_ item: PadRootView.Item, _ title: LocalizedStringKey, _ symbol: String) -> some View {
+        let selected = selection == item
+        return Button {
+            selection = item
+        } label: {
+            HStack(spacing: 12) {
+                Image(systemName: symbol)
+                    .font(.body)
+                    .foregroundStyle(Color.track)
+                    .frame(width: 28)
+                if expanded {
+                    Text(title)
+                        .foregroundStyle(.primary)
+                        .lineLimit(1)
+                    Spacer(minLength: 0)
+                }
+            }
+            .padding(.horizontal, expanded ? 12 : 0)
+            .frame(maxWidth: .infinity, minHeight: 44, alignment: expanded ? .leading : .center)
+            .background(selected ? Color(.systemFill) : .clear, in: .rect(cornerRadius: 12))
+            .contentShape(.rect)
+        }
+        .buttonStyle(.plain)
+        // Folded, the name is still there for VoiceOver and as a tooltip with a pointer.
+        .accessibilityLabel(Text(title))
+        .accessibilityAddTraits(selected ? .isSelected : [])
+        .help(Text(title))
     }
 }

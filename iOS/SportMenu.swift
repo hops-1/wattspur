@@ -62,10 +62,28 @@ private struct SportMenuStyle: ViewModifier {
 struct SportSwitch: View {
     @Environment(PhoneLibrary.self) private var library
     @AppStorage(PhoneSettingsKey.shownSport) private var stored: Sport = .cycling
+    /// The folded sidebar: the symbols one below the other, as on the Mac.
+    var compact = false
 
     var body: some View {
         let sports = library.state?.availableSports ?? [.cycling]
-        if SportChoice.showsSwitch(available: sports) {
+        if SportChoice.showsSwitch(available: sports), compact {
+            let shown = SportChoice.resolved(stored, available: sports)
+            VStack(spacing: 4) {
+                ForEach(sports) { sport in
+                    Button { stored = sport } label: {
+                        Image(systemName: sport.symbol)
+                            .frame(width: 44, height: 36)
+                            .foregroundStyle(sport == shown ? Color.white : Color.track)
+                            .background(sport == shown ? Color.track : Color.track.opacity(0.12), in: .rect(cornerRadius: 10))
+                    }
+                    .buttonStyle(.plain)
+                    .accessibilityLabel(Text(sport.totalsTitle))
+                    .accessibilityAddTraits(sport == shown ? .isSelected : [])
+                    .help(Text(sport.totalsTitle))
+                }
+            }
+        } else if SportChoice.showsSwitch(available: sports) {
             Picker("Sport", selection: Binding(get: { SportChoice.resolved(stored, available: sports) },
                                                set: { stored = $0 })) {
                 ForEach(sports) { sport in

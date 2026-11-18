@@ -4265,6 +4265,26 @@
           }
         }
       }
+    },
+    "Show Only Symbols" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Nur Symbole zeigen"
+          }
+        }
+      }
+    },
+    "Show Names" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Namen zeigen"
+          }
+        }
+      }
     }
   },
   "version" : "1.1"
