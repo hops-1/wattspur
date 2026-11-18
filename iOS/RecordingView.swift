@@ -11,6 +11,8 @@ struct RecordingView: View {
     /// Figures or profile below the map and in the bar on the left (B-277).
     enum Page: Hashable { case figures, profile }
     @State private var page = Page.figures
+    /// The right edge of the landscape bar on the screen: the elevation legend starts after it (B-325).
+    @State private var barEdge: CGFloat = 270
     /// The map turns with the direction of travel instead of north up (B-280); remembered.
     @AppStorage(PhoneSettingsKey.recordingMapHeadingUp) private var headingUp = false
     /// The direction the map points in while `headingUp`; kept while standing.
@@ -105,6 +107,8 @@ struct RecordingView: View {
                 .frame(maxHeight: .infinity)
                 .glassEffect(.regular, in: .rect(cornerRadius: 30))
                 .padding(.vertical, 8)
+                // The bar keeps clear of the camera side; the map under it does not.
+                .onGeometryChange(for: CGFloat.self) { $0.frame(in: .global).maxX } action: { barEdge = $0 }
             }
             .overlay(alignment: .trailing) {
                 if ending, let recording = recorder.recording {
@@ -190,8 +194,8 @@ struct RecordingView: View {
             if byElevation, let route = recorder.recording?.route, let elevation = RouteElevation.stretches(route) {
                 ElevationLegend(scale: elevation.scale)
                     .padding(isLandscape ? 0 : 8)
-                    // In landscape the bar with the figures covers the left side.
-                    .padding(.leading, isLandscape ? 270 : 0)
+                    // In landscape the bar with the figures covers the left side, camera side included (B-325).
+                    .padding(.leading, isLandscape ? barEdge + 12 : 0)
                     .padding(.bottom, (isLandscape ? 12 : 0) + creditRoom)
             }
         }

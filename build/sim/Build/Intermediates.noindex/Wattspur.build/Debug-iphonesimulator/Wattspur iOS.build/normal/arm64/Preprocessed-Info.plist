@@ -4,7 +4,7 @@
 <dict>
  <!-- Replaced at build time from Config/… prefix header (see project.yml) -->
  <key>WattspurGitCommit</key>
- <string>e4a773a-dirty</string>
+ <string>72e11de-dirty</string>
  <!-- Whether the store syncs (B-216): local or icloud, from Config/iOS.xcconfig -->
  <key>WattspurDatabase</key>
  <string>$(WATTSPUR_IOS_DATABASE)</string>

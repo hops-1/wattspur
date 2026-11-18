@@ -6,11 +6,11 @@
 	<dict>
 		<key>Assets.car</key>
 		<data>
-		8nNApSKV+1V8mY3cVI6ohbd84cE=
+		GKWBcfSQfLGtJHzztD1zu/ac1vM=
 		</data>
 		<key>Info.plist</key>
 		<data>
-		KhbRHE0VBk2eACgDqnUydCkWRb8=
+		2UkfjqbX5SDiCjt7aiHckFTnyDk=
 		</data>
 		<key>Metadata.appintents/extract.actionsdata</key>
 		<data>
@@ -18,7 +18,7 @@
 		</data>
 		<key>Metadata.appintents/root.ssu.yaml</key>
 		<data>
-		gNJVEBhl5V2jElJ/CzFmehPabZU=
+		0bVwqYmHadChxC1Bs50InpoDdOU=
 		</data>
 		<key>Metadata.appintents/version.json</key>
 		<data>
@@ -46,15 +46,15 @@
 		</data>
 		<key>PlugIns/WattspurShare.appex/WattspurShare</key>
 		<data>
-		AseeRPXnvVTmKNjdeevSTF4Y9f4=
+		+aOIZs4UB6enbJiGonPxNjyVV8Y=
 		</data>
 		<key>PlugIns/WattspurShare.appex/WattspurShare.debug.dylib</key>
 		<data>
-		ECp+t2upB4FRCBKSNdaOfQVYLGU=
+		Lk7t2+HStZBwhjJgaYDzCtzZrXg=
 		</data>
 		<key>PlugIns/WattspurShare.appex/_CodeSignature/CodeResources</key>
 		<data>
-		DMhgbiWZuhs9bkh2kWYSyATyKkg=
+		SRuAexxsFvddtH67/PBHsc+RDNo=
 		</data>
 		<key>PlugIns/WattspurShare.appex/__preview.dylib</key>
 		<data>
@@ -87,15 +87,15 @@
 		</data>
 		<key>PlugIns/WattspurWidgets.appex/WattspurWidgets</key>
 		<data>
-		c7BwMoXDSkFh8qAS+Mtgr0MEJTY=
+		ngCA60pREFZ6YtMreaRxjDCuR0E=
 		</data>
 		<key>PlugIns/WattspurWidgets.appex/WattspurWidgets.debug.dylib</key>
 		<data>
-		+K4+qgAdaLodAWFJgKXl81Cm68w=
+		GcvLiuv1+xryFUAtOPCziK2NQaY=
 		</data>
 		<key>PlugIns/WattspurWidgets.appex/_CodeSignature/CodeResources</key>
 		<data>
-		LVyQxzFSC+W4isixcJ7uZH5s+bc=
+		a20zTzEk6EVjo4C6rWrUADalDnM=
 		</data>
 		<key>PlugIns/WattspurWidgets.appex/__preview.dylib</key>
 		<data>
@@ -138,7 +138,7 @@
 		</data>
 		<key>Wattspur.debug.dylib</key>
 		<data>
-		33UXx1u5L1fKJzw+Hd9aBZauvbU=
+		EzcPB1oeU5DUcVQYn8R+BEvI1oU=
 		</data>
 		<key>Wattspur60x60@2x.png</key>
 		<data>
@@ -201,7 +201,7 @@
 		<dict>
 			<key>hash</key>
 			<data>
-			pHanMYmje99wxD2iS0Z5vhmkd1U=
+			KmCdreQJkzFk408JxRdMhNrOt3Y=
 			</data>
 			<key>optional</key>
 			<true/>
@@ -228,7 +228,7 @@
 		<dict>
 			<key>hash</key>
 			<data>
-			ULHtY2mjPjpSkOOgT3gluM/oJAY=
+			UR1uijBcYGwa+CeDhzWN2FKRh1I=
 			</data>
 			<key>optional</key>
 			<true/>
@@ -240,7 +240,7 @@
 		<dict>
 			<key>hash2</key>
 			<data>
-			+v9SS0JS05KHordOeLTgLr6oLyfAQk7gKCqz9PYAtOs=
+			FUXgtgmVSmskk6Kl2oXeQQKYx5GQyNXd19vtHQPvr6s=
 			</data>
 		</dict>
 		<key>Metadata.appintents/extract.actionsdata</key>
@@ -254,7 +254,7 @@
 		<dict>
 			<key>hash2</key>
 			<data>
-			O1CSvfb3FdMtBI3HDVvnUQFQXueO/lZf1rvuWcs3qKw=
+			J9SRXAUXqRAKKPd31ifxQ4PlUbimiSVpIRTs6NOSAVA=
 			</data>
 		</dict>
 		<key>Metadata.appintents/version.json</key>
@@ -296,21 +296,21 @@
 		<dict>
 			<key>hash2</key>
 			<data>
-			fZPytn4kNDKBjqVtA/oyVmBIIVjXq5G7vtyoEpkZXMU=
+			U69BZKBK+ykbeMachXs40imFOk0EWhRPzTwbB5QLOgI=
 			</data>
 		</dict>
 		<key>PlugIns/WattspurShare.appex/WattspurShare.debug.dylib</key>
 		<dict>
 			<key>hash2</key>
 			<data>
-			zGo49nSNE6bMu3zaLPUHEpCX2hjV+QmY0lYK45aYZpg=
+			jee1viD/DZfS2lhBAN+LIYEUcnd/6XZgXZC/aHT8JxE=
 			</data>
 		</dict>
 		<key>PlugIns/WattspurShare.appex/_CodeSignature/CodeResources</key>
 		<dict>
 			<key>hash2</key>
 			<data>
-			Bmxv9+CQhfL+paMRQroA3EWMNFWLhB5cbFcBLyY9XMo=
+			e/vz4FvdRjGNz4WkR1+oksMvphGqBMphf38M8YIX3Jc=
 			</data>
 		</dict>
 		<key>PlugIns/WattspurShare.appex/__preview.dylib</key>
@@ -361,21 +361,21 @@
 		<dict>
 			<key>hash2</key>
 			<data>
-			nVIEwMQWJq8WFAQFdSxQYr1BRVzJm9vxwFnuIS+wUSM=
+			8gGvMjgBhPDcLChKe4uXiWHsfLEQ4p5H89N4AW1sjH8=
 			</data>
 		</dict>
 		<key>PlugIns/WattspurWidgets.appex/WattspurWidgets.debug.dylib</key>
 		<dict>
 			<key>hash2</key>
 			<data>
-			U8wt7AQ3xYfGLtSq2dVJcZ9RePHYl5gdLdlHdNUJtqA=
+			6DhVIYajnmN8oGbpD5n5lqz2t9NBJmzzy71HeZVlDjs=
 			</data>
 		</dict>
 		<key>PlugIns/WattspurWidgets.appex/_CodeSignature/CodeResources</key>
 		<dict>
 			<key>hash2</key>
 			<data>
-			Om9EOXZjw3jYW0TT/FDIIhN42RJMETPGzOJ4Jot8oJg=
+			Y6VnFo5O0uTbDmiLA50aCV4ptqP3GOUItL0+vOMlHNo=
 			</data>
 		</dict>
 		<key>PlugIns/WattspurWidgets.appex/__preview.dylib</key>
@@ -430,7 +430,7 @@
 		<dict>
 			<key>hash2</key>
 			<data>
-			Q+rMVc4JzRRcDVjLUSgl0xsn3Ydl/TbVLMLFPEVkzVQ=
+			bLJ1IhVOMVn+LSQy/kz6csw47XlVhZQtEpw3Y42T+zk=
 			</data>
 		</dict>
 		<key>Wattspur60x60@2x.png</key>
@@ -503,7 +503,7 @@
 		<dict>
 			<key>hash2</key>
 			<data>
-			w6tCmddDSLEO3Mxb9rR+GXhRUu9ZqLO0VxCO92mcBVg=
+			HnBe7dQws1zm0NMKJe8FfS7JhkO5UzRvaUzxZMK3ypo=
 			</data>
 			<key>optional</key>
 			<true/>
@@ -530,7 +530,7 @@
 		<dict>
 			<key>hash2</key>
 			<data>
-			W0WU58z2ZU0rkCsfDA3s4FlYHSMqYivpm5uZb+slSFU=
+			EqY+6aMFwcxT2HeQ8Cjdr7gO1gCtqoZMzq5SEwnxOkM=
 			</data>
 			<key>optional</key>
 			<true/>

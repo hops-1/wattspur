@@ -8,13 +8,6 @@ nlu:
         title: Start Ride
       corpuses:
         training:
-        - locale: de
-          utterances:
-          - '{${+prefix} }Starte eine Fahrt mit ${+applicationName}'
-          - '{${+prefix} }Fahrt starten mit ${+applicationName}'
-          - '{${+prefix} }Nimm eine Fahrt mit ${+applicationName} auf'
-          - '{${+prefix} }Starte eine Fahrt mit ${DeviceEntity} in ${+applicationName}'
-          - '{${+prefix} }Starte ${+applicationName} mit ${DeviceEntity}'
         - locale: en
           utterances:
           - '{${+prefix} }Start a ride with ${+applicationName}'
@@ -22,74 +15,81 @@ nlu:
           - '{${+prefix} }Record a ride with ${+applicationName}'
           - '{${+prefix} }Start a ride with ${DeviceEntity} in ${+applicationName}'
           - '{${+prefix} }Start ${+applicationName} with ${DeviceEntity}'
+        - locale: de
+          utterances:
+          - '{${+prefix} }Starte eine Fahrt mit ${+applicationName}'
+          - '{${+prefix} }Fahrt starten mit ${+applicationName}'
+          - '{${+prefix} }Nimm eine Fahrt mit ${+applicationName} auf'
+          - '{${+prefix} }Starte eine Fahrt mit ${DeviceEntity} in ${+applicationName}'
+          - '{${+prefix} }Starte ${+applicationName} mit ${DeviceEntity}'
     - metadata:
         name: EndRideIntent_1
         title: End Ride
       corpuses:
         training:
-        - locale: de
-          utterances:
-          - '{${+prefix} }Beende die Fahrt in ${+applicationName}'
-          - '{${+prefix} }Fahrt beenden mit ${+applicationName}'
         - locale: en
           utterances:
           - '{${+prefix} }End the ride in ${+applicationName}'
           - '{${+prefix} }Stop ${+applicationName}'
+        - locale: de
+          utterances:
+          - '{${+prefix} }Beende die Fahrt in ${+applicationName}'
+          - '{${+prefix} }Fahrt beenden mit ${+applicationName}'
     - metadata:
         name: WeekDistanceIntent_2
         title: Distance This Week
       corpuses:
         training:
-        - locale: de
-          utterances:
-          - '{${+prefix} }Wie viele Kilometer diese Woche in ${+applicationName}'
-          - '{${+prefix} }Meine Woche in ${+applicationName}'
         - locale: en
           utterances:
           - '{${+prefix} }How far did I ride this week in ${+applicationName}'
           - '{${+prefix} }My week in ${+applicationName}'
+        - locale: de
+          utterances:
+          - '{${+prefix} }Wie viele Kilometer diese Woche in ${+applicationName}'
+          - '{${+prefix} }Meine Woche in ${+applicationName}'
     - metadata:
         name: OpenLastRideIntent_3
         title: Open Last Ride
       corpuses:
         training:
-        - locale: de
-          utterances:
-          - '{${+prefix} }Öffne meine letzte Fahrt in ${+applicationName}'
-          - '{${+prefix} }Letzte Fahrt in ${+applicationName} öffnen'
         - locale: en
           utterances:
           - '{${+prefix} }Open my last ride in ${+applicationName}'
           - '{${+prefix} }Show my last ride in ${+applicationName}'
+        - locale: de
+          utterances:
+          - '{${+prefix} }Öffne meine letzte Fahrt in ${+applicationName}'
+          - '{${+prefix} }Letzte Fahrt in ${+applicationName} öffnen'
     - metadata:
         name: +negative
       corpuses:
         training:
-        - locale: de
+        - locale: en
           utterances:
           - '{${+prefix} }${+standardAppShortcutNegatives}'
-        - locale: en
+        - locale: de
           utterances:
           - '{${+prefix} }${+standardAppShortcutNegatives}'
 variables:
 - name: +applicationName
   type: ssu/expansion
   definitions:
-  - locale: de
+  - locale: en
     synomyms:
     - Wattspur
-  - locale: en
+  - locale: de
     synomyms:
     - Wattspur
 - name: DeviceEntity
   type: ssu/parameter
   definitions:
-  - locale: de
-    synomyms:
-    - Gerät
   - locale: en
     synomyms:
     - Device
+  - locale: de
+    synomyms:
+    - Gerät
 - name: +prefix
   type: ssu/expansion
   definitions:
