@@ -98,7 +98,7 @@ public struct MapRide: Sendable, Identifiable, Equatable {
 }
 
 /// Which rides the map shows (AGG-05, Requirements 10.11).
-public struct MapFilter: Sendable, Equatable {
+public struct MapFilter: Sendable, Hashable {
     /// `nil` shows all periods.
     public var interval: DateInterval?
     /// The rides selected in the list, when the map shows only those; `nil` otherwise.

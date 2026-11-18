@@ -537,9 +537,8 @@ final class MapCache {
 
     func overview(_ rides: [Ride], filter: MapFilter) -> MapOverview {
         var hasher = Hasher()
-        hasher.combine(filter.interval)
-        hasher.combine(filter.selectedIDs)
-        hasher.combine(filter.bike)
+        // The whole filter, so a new field (like the sport, B-326) cannot be left out.
+        hasher.combine(filter)
         for ride in rides {
             // Everything that decides whether and how a ride is on the map.
             hasher.combine(ride.id)
@@ -551,6 +550,8 @@ final class MapCache {
             hasher.combine(ride.startDate)
             hasher.combine(ride.bike?.id)
             hasher.combine(ride.name)
+            hasher.combine(ride.source)
+            hasher.combine(ride.sport)
         }
         let key = hasher.finalize()
         if key != overviewKey {

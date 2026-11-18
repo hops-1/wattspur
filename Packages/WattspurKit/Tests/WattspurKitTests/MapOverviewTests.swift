@@ -70,6 +70,15 @@ struct MapOverviewTests {
         #expect(!selected.admits(id: UUID(), startDate: start, countsInStatistics: true, isListed: true))
         #expect(!selected.admits(id: id, startDate: start, countsInStatistics: false, isListed: false))
     }
+
+    @Test("Filters that differ only in sport or source are different, so the Mac map recomputes (B-326)")
+    func filterIdentity() {
+        let cycling = MapFilter(sport: .cycling)
+        let vehicle = MapFilter(sport: .vehicle)
+        #expect(cycling != vehicle)
+        #expect(MapFilter(source: .all) != MapFilter(source: .gpx))
+        #expect(MapFilter(sport: .vehicle).hashValue == vehicle.hashValue)
+    }
 }
 
 @MainActor
