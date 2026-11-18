@@ -4215,6 +4215,26 @@
           }
         }
       }
+    },
+    "Wattspur cannot record rides on the iPad yet. Record them on the iPhone." : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Wattspur kann auf dem iPad noch keine Fahrten aufnehmen. Nimm sie mit dem iPhone auf."
+          }
+        }
+      }
+    },
+    "Rides recorded on your iPhone or imported on your Mac appear here once they sync with iCloud. You can also import FIT and GPX files under Rides." : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Fahrten, die du mit dem iPhone aufnimmst oder am Mac importierst, erscheinen hier, sobald sie über iCloud abgeglichen sind. Unter Fahrten kannst du auch FIT- und GPX-Dateien importieren."
+          }
+        }
+      }
     }
   },
   "version" : "1.1"

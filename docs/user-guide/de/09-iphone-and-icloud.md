@@ -211,5 +211,8 @@ Fahrten mit Motorrad und Auto, auch ohne Gerät, zählen nicht zu den Summen dei
 ## Rad und Fahrzeuge getrennt ansehen
 Ab iPhone 1.2: Hast du neben Bikes auch ein Auto oder Motorrad, oder Fahrten damit, steht in **Übersicht**, **Fahrten** und **Karte** eine Kapsel **Rad ▾**. Ein Tipp darauf wählt **Rad** oder **Fahrzeuge**; die Wahl gilt für alle drei Tabs und bleibt beim nächsten Start. Kacheln, letzte Fahrt, Liste und Karte zeigen dann nur diese Sportart, und der Filter nach Gerät bietet nur ihre Geräte (**Alle Bikes** oder **Alle Fahrzeuge**). Auf der Karte steht nur das Symbol. Jedes iPhone merkt sich seine Wahl selbst; am Mac gibt es dafür den Umschalter oben in der Seitenleiste (siehe [Ansichten](04-views.md)).
 
+## Auf dem iPad
+Ab Version 1.3 läuft Wattspur auch auf dem iPad. Im Vollbild oder in einem breiten Fenster steht links eine Seitenleiste wie am Mac: oben der Umschalter **Rad · Fahrzeuge**, darunter **Übersicht**, **Fahrten** und **Karte**, darunter Profil, Karten, iCloud & Bibliothek, Papierkorb, Hilfe und Info. Unter **Fahrten** stehen Liste und Fahrt nebeneinander, mit großer Karte und allen Diagrammen untereinander. In einem schmalen Fenster (Split View) sieht Wattspur aus wie auf dem iPhone. Fahrten aufnehmen kann das iPad noch nicht: Nimm sie mit dem iPhone auf, über iCloud kommen sie aufs iPad.
+
 ---
 Weiter: [Fragen](06-faq.md) · [Inhalt](README.md)

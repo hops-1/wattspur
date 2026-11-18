@@ -6,6 +6,8 @@ import WattspurCore
 struct RidesView: View {
     @Environment(PhoneLibrary.self) private var library
     @Environment(\.isLandscape) private var isLandscape
+    /// On the iPad the ride is shown beside the list too (B-292).
+    @Environment(\.isPadLayout) private var isPadLayout
     @Environment(PhoneImport.self) private var phoneImport
     /// The sport of the capsule (B-289): the list shows only its rides.
     @ShownSport private var sport
@@ -19,7 +21,7 @@ struct RidesView: View {
     var body: some View {
         Group {
             if let state = library.state {
-                if isLandscape {
+                if sideBySide {
                     split(state)
                 } else {
                     list(state)
@@ -29,12 +31,15 @@ struct RidesView: View {
         .navigationTitle("Rides")
         // In landscape the ride is shown beside the list.
         .onChange(of: openedRideID, initial: true) { _, id in
-            if isLandscape, let id {
+            if sideBySide, let id {
                 selection = id
                 openedRideID = nil
             }
         }
     }
+
+    /// List and ride side by side: in landscape on the iPhone (B-243), always on the iPad (B-292).
+    private var sideBySide: Bool { isLandscape || isPadLayout }
 
     /// The filter as it applies: a bike filter only with two devices of the sport or more (`RideFilter.resolved`).
     private func effectiveFilter(_ state: RideExchange.Library) -> RideFilter {
@@ -47,7 +52,7 @@ struct RidesView: View {
     }
 
     private func filterBar(_ state: RideExchange.Library, months: [RideExchange.Library.Month]) -> some View {
-        RideFilterBar(filter: $filter, compact: isLandscape, sport: sport,
+        RideFilterBar(filter: $filter, compact: sideBySide, sport: sport,
                       bikes: state.devices(of: sport).filter { !$0.isArchived || $0.id == filter.bike.bikeID },
                       shown: months.reduce(0) { $0 + $1.rides.count }, total: state.only(sport).rides.count,
                       importFiles: { phoneImport.choosingFiles = true })
@@ -178,7 +183,7 @@ struct RidesView: View {
     }
 
     private func openedRide(in state: RideExchange.Library) -> RideExchange.Ride? {
-        guard let openedRideID, !isLandscape else { return nil }
+        guard let openedRideID, !sideBySide else { return nil }
         return state.rides.first { $0.id == openedRideID }
     }
 }

@@ -11,12 +11,14 @@ struct OverviewView: View {
     var showRides: (RidePeriod) -> Void
     @State private var sample = SampleRide.load()
     @Environment(\.isLandscape) private var isLandscape
+    /// The iPad's sidebar layout (B-292): the wide arrangement of landscape.
+    @Environment(\.isPadLayout) private var isPadLayout
     /// The sport of the capsule (B-289): tiles, last ride and the count of all rides are of it.
     @ShownSport private var sport
 
     var body: some View {
         Group {
-            if isLandscape { landscape } else { portrait }
+            if isLandscape || isPadLayout { landscape } else { portrait }
         }
         .refreshable {
             await library.refresh()
@@ -208,8 +210,13 @@ struct StartRideButton: View {
     @State private var choosing = false
 
     var body: some View {
+        // Not on the iPad for now (B-292): it has no recording until B-293.
+        if RecordingAvailability.isSupported { button }
+    }
+
+    private var button: some View {
         let device = library.nextRecordingDevice(in: sport)
-        VStack(spacing: 6) {
+        return VStack(spacing: 6) {
             Button { action(device) } label: {
                 Label("Start Ride", systemImage: "record.circle")
                     .font(.title3.weight(.semibold))

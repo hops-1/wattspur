@@ -106,7 +106,8 @@ struct WattspurApp: App {
         }
     }
 
-    private var mainView: some View {
+    /// The iPhone's four tabs; also the iPad in a narrow window.
+    private var tabs: some View {
         TabView(selection: $tab) {
             SwiftUI.Tab("Overview", systemImage: "square.grid.2x2", value: Tab.overview) {
                 NavigationStack {
@@ -144,6 +145,15 @@ struct WattspurApp: App {
         // In landscape the tab bar sits at the bottom left, in every tab (B-243).
         .overlay(alignment: .bottomLeading) {
             LandscapeTabBar(tab: $tab)
+        }
+    }
+
+    private var mainView: some View {
+        // On an iPad in the regular width a sidebar instead of the tabs (B-292).
+        RootLayout {
+            tabs
+        } pad: {
+            PadRootView(tab: $tab, rideFilter: $rideFilter, openedRideID: $openedRideID)
         }
         .tint(.track)
         // A FIT from the Flow app or a GPX from the Files app, shared to or opened with Wattspur; or

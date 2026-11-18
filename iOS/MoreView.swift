@@ -27,12 +27,7 @@ struct MoreView: View {
         .task { showsTestTools = await BuildChannel.showsTestTools() }
     }
 
-    private var pages: [[MorePage]] {
-        // The vehicle under “Recording” went with B-286: the start button chooses the device.
-        var groups: [[MorePage]] = [[.maps], [.library, .trash], [.help, .about]]
-        if showsTestTools { groups.append([.testTools]) }
-        return groups
-    }
+    private var pages: [[MorePage]] { MorePage.groups(showsTestTools: showsTestTools) }
 
     // MARK: - Portrait
 
@@ -112,6 +107,14 @@ enum MorePage: String, Hashable, CaseIterable, Identifiable {
 
     var id: Self { self }
 
+    /// The pages below the profile, in groups; also the lower part of the iPad's sidebar (B-292).
+    static func groups(showsTestTools: Bool) -> [[MorePage]] {
+        // The vehicle under “Recording” went with B-286: the start button chooses the device.
+        var groups: [[MorePage]] = [[.maps], [.library, .trash], [.help, .about]]
+        if showsTestTools { groups.append([.testTools]) }
+        return groups
+    }
+
     var title: LocalizedStringKey {
         switch self {
         case .profile: "Profile"
@@ -151,7 +154,7 @@ enum MorePage: String, Hashable, CaseIterable, Identifiable {
 }
 
 /// One row of the list: the symbol in a coloured square, the title and what is set now.
-private struct MoreRow: View {
+struct MoreRow: View {
     let page: MorePage
     @Environment(PhoneLibrary.self) private var library
     @Environment(PhoneSync.self) private var sync
@@ -184,7 +187,7 @@ private struct MoreRow: View {
 }
 
 /// The head of the list: photo, name and how much was ridden; opens the profile (B-299 makes it editable).
-private struct ProfileHeader: View {
+struct ProfileHeader: View {
     @Environment(PhoneLibrary.self) private var library
 
     var body: some View {

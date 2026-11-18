@@ -9,10 +9,12 @@ struct SportMenu: View {
     @AppStorage(PhoneSettingsKey.shownSport) private var stored: Sport = .cycling
     /// The glass button of the map, with the symbol only, instead of the chip of the list.
     var glass = false
+    /// On the iPad the switch sits in the sidebar (`SportSwitch`, B-292).
+    @Environment(\.isPadLayout) private var isPadLayout
 
     var body: some View {
         let sports = library.state?.availableSports ?? [.cycling]
-        if SportChoice.showsSwitch(available: sports) {
+        if !isPadLayout && SportChoice.showsSwitch(available: sports) {
             let shown = SportChoice.resolved(stored, available: sports)
             Menu {
                 Picker("Sport", selection: Binding(get: { shown }, set: { stored = $0 })) {
@@ -52,6 +54,27 @@ private struct SportMenuStyle: ViewModifier {
 
     func body(content: Content) -> some View {
         if glass { content.buttonStyle(.glass) } else { content.buttonStyle(.plain) }
+    }
+}
+
+/// The switch at the top of the iPad's sidebar (B-292), segments like on the Mac (B-288); the same
+/// choice as the capsule. Only from the second sport on.
+struct SportSwitch: View {
+    @Environment(PhoneLibrary.self) private var library
+    @AppStorage(PhoneSettingsKey.shownSport) private var stored: Sport = .cycling
+
+    var body: some View {
+        let sports = library.state?.availableSports ?? [.cycling]
+        if SportChoice.showsSwitch(available: sports) {
+            Picker("Sport", selection: Binding(get: { SportChoice.resolved(stored, available: sports) },
+                                               set: { stored = $0 })) {
+                ForEach(sports) { sport in
+                    Text(sport.totalsTitle).tag(sport)
+                }
+            }
+            .pickerStyle(.segmented)
+            .labelsHidden()
+        }
     }
 }
 

@@ -39,6 +39,8 @@ struct TourDetailView: View {
     /// Beside the list of rides in landscape (B-243): the name as a heading instead of the title.
     private var embedded: Bool
     @Environment(\.isLandscape) private var isLandscape
+    /// Beside the list on the iPad (B-292): a large map and all charts one below the other.
+    @Environment(\.isPadLayout) private var isPadLayout
 
     init(ride: RideExchange.Ride, route: RideExchange.Route? = nil, embedded: Bool = false) {
         opened = ride
@@ -160,12 +162,20 @@ struct TourDetailView: View {
                         .buttonStyle(.glass)
                         .buttonBorderShape(.circle)
                 }
-                HStack(alignment: .top, spacing: 12) {
+                if isPadLayout {
                     RideMap(ride: ride, route: route, interactive: true, marker: marker, leanStretches: leanStretches,
                         surfaceStretches: surfaceStretches, side: side)
-                        .frame(width: 170, height: 190)
-                        .clipShape(.rect(cornerRadius: 20))
-                    FigureGrid(ride: ride, motion: motion, compact: true)
+                        .frame(height: 380)
+                        .clipShape(.rect(cornerRadius: 24))
+                    FigureGrid(ride: ride, motion: motion)
+                } else {
+                    HStack(alignment: .top, spacing: 12) {
+                        RideMap(ride: ride, route: route, interactive: true, marker: marker, leanStretches: leanStretches,
+                            surfaceStretches: surfaceStretches, side: side)
+                            .frame(width: 170, height: 190)
+                            .clipShape(.rect(cornerRadius: 20))
+                        FigureGrid(ride: ride, motion: motion, compact: true)
+                    }
                 }
                 if hasCarousel {
                     RideChartCarousel(ride: ride, points: chartPoints, track: track, spot: $spot, side: side, height: 230)

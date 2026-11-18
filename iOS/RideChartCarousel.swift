@@ -17,10 +17,28 @@ struct RideChartCarousel: View {
     /// Lower in landscape, where the screen is short (B-243).
     var height: CGFloat = 290
     @State private var page: ChartMeasure?
+    /// On the iPad there is room for all charts, one below the other (B-292).
+    @Environment(\.isPadLayout) private var isPadLayout
 
     private var measures: [ChartMeasure] { ChartMeasure.available(in: points) }
 
     var body: some View {
+        if isPadLayout { column } else { carousel }
+    }
+
+    /// Every measurement on a card of its own, one below the other.
+    private var column: some View {
+        VStack(spacing: 12) {
+            ForEach(measures) { measure in
+                ChartPage(measure: measure, ride: ride, points: points, track: track, spot: $spot, side: side)
+                    .padding()
+                    .frame(height: height)
+                    .glassEffect(.regular, in: .rect(cornerRadius: 24))
+            }
+        }
+    }
+
+    private var carousel: some View {
         TabView(selection: $page) {
             ForEach(measures) { measure in
                 ChartPage(measure: measure, ride: ride, points: points, track: track, spot: $spot, side: side)
