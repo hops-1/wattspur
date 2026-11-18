@@ -6,7 +6,7 @@ Kein neues CloudKit-Feld: Das Schema bleibt, wie es ist. Die Wahl der Sportart i
 
 ## 0. Vorher
 
-- Am iPhone **1.2 (29)** aus TestFlight, am Mac **1.10** aus dem DMG.
+- Am iPhone **1.2 (30)** aus TestFlight, am Mac **1.10.1** aus dem DMG (vorher 1.2 (29) und 1.10).
 
 ## A. Mac: Umschalter (B-288)
 
@@ -38,3 +38,10 @@ Kein neues CloudKit-Feld: Das Schema bleibt, wie es ist. Die Wahl der Sportart i
 1. **B-323 Siri:** „Starte eine Fahrt mit Nugget in Wattspur“ startet mit Nugget, ebenso mit einem Bike und mit „Auto“.
 2. **B.4 0 auf 100:** Eine Autofahrt mit Sprint aus dem Stand zeigt die Zeit im Tour-Detail.
 3. **B-319:** Eine Fahrt bei 80 bis 100 km/h in gleichmäßigen Kurven. Die Aufnahme bitte schicken, Claude wertet sie aus.
+
+## E. Korrekturen aus dem Test vom 18.11. (iPhone 1.2 (30), Mac 1.10.1)
+
+1. **B-324 Gerät beim Start:** Oben **Fahrzeuge** wählen, dann **Fahrt starten**: Ein Fahrzeug ist vorausgewählt (Nugget). Mit **Rad** ein Rad.
+2. **B-325 iPhone drehen im Auto:** Während der Fahrt ein- oder zweimal zwischen hoch und quer drehen. In der Fahrt danach keine Spitze der Querbeschleunigung an diesen Stellen. Die GPX bitte schicken.
+3. **B-325 Legende quer:** In der Aufnahme quer: Die Höhen-Legende steht neben dem Balken, nicht darunter.
+4. **B-326 Mac-Karte:** Im Bereich **Karte** zwischen **Rad** und **Fahrzeuge** wechseln: Karte, Kacheln und Liste daneben zeigen nur die Fahrten der Sportart.
