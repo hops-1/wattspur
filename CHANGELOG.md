@@ -7,7 +7,9 @@ Every DMG handed out to testers corresponds to one entry below.
 
 ## [Unreleased]
 
-iPhone and iPad 1.3 (33) on TestFlight (before: 31, 32), a test build for the iPad (B-291, B-292); the Mac stays 1.10.1.
+## [iOS 1.3] – 2026-11-18
+
+iPad 1: the iPhone app in an iPad layout. iPhone and iPad 1.3 (33) on TestFlight (before: 31, 32); the Mac stays 1.10.1.
 
 ### Added
 

@@ -5,16 +5,28 @@
 #
 #   scripts/appstore-screenshots.sh            # all languages, into dist/appstore-screenshots/
 #   scripts/appstore-screenshots.sh de-DE      # one language
+#   scripts/appstore-screenshots.sh --ipad     # the iPad, 13" (2064 × 2752, iPad Pro 13-inch), into
+#                                              # dist/appstore-screenshots-ipad/; no recording (B-292)
 #
 # The debug launch arguments it uses are in iOS/WattspurApp.swift (WattspurDemoRecent, -Tab, -OpenLast, -Record).
 set -euo pipefail
 cd "$(dirname "$0")/.."
 export DEVELOPER_DIR=${DEVELOPER_DIR:-/Applications/Xcode.app/Contents/Developer}
 
-DEVICE_NAME="Wattspur Screenshots"
-DEVICE_TYPE="com.apple.CoreSimulator.SimDeviceType.iPhone-17-Pro-Max"
+IPAD=false
+if [ "${1:-}" = "--ipad" ]; then IPAD=true; shift; fi
+if $IPAD; then
+    DEVICE_NAME="Wattspur Screenshots iPad"
+    DEVICE_TYPE="com.apple.CoreSimulator.SimDeviceType.iPad-Pro-13-inch-M5-12GB"
+    OUT=dist/appstore-screenshots-ipad
+    SIZE="2064 2752 "
+else
+    DEVICE_NAME="Wattspur Screenshots"
+    DEVICE_TYPE="com.apple.CoreSimulator.SimDeviceType.iPhone-17-Pro-Max"
+    OUT=dist/appstore-screenshots
+    SIZE="1320 2868 "
+fi
 BUNDLE_ID="io.github.hops-1.wattspur.ios"
-OUT=dist/appstore-screenshots
 BUILD=${TMPDIR:-/tmp}/wattspur-screenshots-build
 LOCALES=${*:-de-DE en-US}
 # A ride along a public street (Straße des 17. Juni, Berlin) for the recording screen; nobody's home.
@@ -43,10 +55,12 @@ fi
 # Starts the app with these extra launch arguments, waits, takes the screenshot.
 shot() {
     local file=$1 wait=$2; shift 2
+    # The unsigned debug build has no iCloud entitlement: with sync on, CloudKit stops the app.
     xcrun simctl terminate "$DEVICE" "$BUNDLE_ID" >/dev/null 2>&1 || true
     # Metric in every language: the rides are European, and miles would mix with metres (heights).
     xcrun simctl launch "$DEVICE" "$BUNDLE_ID" -AppleLanguages "($LANG_CODE)" -AppleLocale "$LOCALE_CODE" \
-        -AppleMetricUnits YES -AppleMeasurementUnits Centimeters -WattspurDemoRecent 14 "$@" >/dev/null
+        -AppleMetricUnits YES -AppleMeasurementUnits Centimeters -WattspurDemoRecent 14 \
+        -iCloudSyncEnabled NO "$@" >/dev/null
     sleep "$wait"
     xcrun simctl io "$DEVICE" screenshot --type=png "$OUT/$LOCALE/$file.png" >/dev/null 2>&1
     echo "   $LOCALE/$file.png"
@@ -72,6 +86,12 @@ for LOCALE in $LOCALES; do
 
     # The first start imports the demo rides; give it time, the later starts find them.
     shot 01-overview 12
+    if $IPAD; then
+        # The iPad shows the list and the ride side by side, and records nothing yet.
+        shot 02-rides 8 -WattspurDemoTab rides
+        shot 03-map 10 -WattspurDemoTab map
+        continue
+    fi
     shot 02-ride 8 -WattspurDemoOpenLast YES
     shot 03-map 10 -WattspurDemoTab map
     shot 04-rides 6 -WattspurDemoTab rides
@@ -85,9 +105,9 @@ done
 xcrun simctl status_bar "$DEVICE" clear || true
 xcrun simctl shutdown "$DEVICE" >/dev/null 2>&1 || true
 
-# Apple takes 1320 × 2868 for 6.9" (portrait).
+# Apple takes 1320 × 2868 for 6.9" and 2064 × 2752 for 13" (portrait).
 for f in "$OUT"/*/*.png; do
     size=$(sips -g pixelWidth -g pixelHeight "$f" | awk '/pixel/ {printf "%s ", $2}')
-    [ "$size" = "1320 2868 " ] || { echo "wrong size: $f ($size)"; exit 1; }
+    [ "$size" = "$SIZE" ] || { echo "wrong size: $f ($size)"; exit 1; }
 done
 echo "Screenshots: $OUT"
