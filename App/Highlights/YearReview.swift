@@ -9,6 +9,8 @@ struct YearReviewContent: View {
     let calendar: Calendar
     let rideNames: [UUID: String]
     var isPrinting = false
+    /// Only cycling saves CO₂ (B-288).
+    var sport: Sport = .cycling
     var onOpenRides: ([UUID]) -> Void = { _ in }
 
     private static let everest = 8_848.0
@@ -65,8 +67,10 @@ struct YearReviewContent: View {
                      note: a.ascentCoverage.isNone ? String(localized: "no elevation in the files")
                          : String(localized: "≈ \((a.ascent / Self.everest).formatted(.number.precision(.fractionLength(1)))) × Mount Everest"),
                      coverage: a.ascentCoverage)
-            YearTile(label: "CO₂ saved", value: Int(a.co2SavedKilograms.rounded()).formatted(), unit: "kg",
-                     note: String(localized: "estimate"))
+            if sport == .cycling {
+                YearTile(label: "CO₂ saved", value: Int(a.co2SavedKilograms.rounded()).formatted(), unit: "kg",
+                         note: String(localized: "estimate"))
+            }
         }
     }
 

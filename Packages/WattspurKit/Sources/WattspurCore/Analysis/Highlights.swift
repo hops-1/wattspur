@@ -73,6 +73,17 @@ public enum RecordKind: String, CaseIterable, Identifiable, Sendable {
 
     /// Records of single rides; the streak spans several.
     public var isRideRecord: Bool { self != .longestStreak }
+
+    /// Whether rides of a sport keep this record (B-288): power, cadence and gradients are records of
+    /// cycling; a vehicle keeps distance, time, speed, ascent and curves, but no streak; running keeps
+    /// distance, time, ascent and the streak.
+    public func applies(to sport: Sport) -> Bool {
+        switch sport {
+        case .cycling: true
+        case .vehicle: [.longestDistance, .longestDuration, .mostAscent, .highestAverageSpeed, .highestSpeed, .mostCurves].contains(self)
+        case .running: [.longestDistance, .longestDuration, .mostAscent, .longestStreak].contains(self)
+        }
+    }
 }
 
 /// Consecutive calendar days with at least one ride.
@@ -117,6 +128,8 @@ public enum RideRecords {
         let sorted = rides.sorted { $0.startDate < $1.startDate }
         var result: [RideRecord] = []
         for kind in RecordKind.allCases {
+            // Each ride only competes for the records of its sport (B-288).
+            let sorted = sorted.filter { kind.applies(to: $0.figures.sport) }
             if kind == .longestStreak {
                 if let streak = longestStreak(sorted, calendar: calendar) {
                     result.append(RideRecord(kind: kind, value: Double(streak.days), rideIDs: streak.rideIDs,

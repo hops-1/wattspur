@@ -32,6 +32,14 @@ struct CompareRidesView: View {
     /// A row "Vehicle" in the table, from two bikes on (B-136).
     private var showsBike: Bool { bikes.count >= 2 && compared.contains { $0.bike != nil } }
 
+    /// The rides the average comes from: those of the compared rides' sport (B-288), cycling when
+    /// they are of several.
+    private func baselineRides(for compared: [Ride]) -> [Ride] {
+        let sports = Set(compared.map(\.sport))
+        let sport = sports.count == 1 ? sports.first ?? .cycling : .cycling
+        return rides.filter { $0.countsInTotals(sport: sport) }
+    }
+
     /// Oldest first, so a ride keeps its column and colour while others are added.
     private var compared: [Ride] {
         rides.filter { rideIDs.contains($0.id) }.sorted { $0.startDate < $1.startDate }
@@ -40,7 +48,7 @@ struct CompareRidesView: View {
     var body: some View {
         let compared = compared
         // The sample ride can be compared, but it never counts towards the average (CMP-04).
-        let baseline = rides.filter(\.countsInTotals)
+        let baseline = baselineRides(for: compared)
         let comparison = RideComparison(rides: compared.map(\.comparisonFigures),
                                         baseline: baseline.map(\.comparisonFigures), calories: calories)
         ScrollView {
@@ -107,7 +115,7 @@ struct CompareRidesView: View {
         exporting = true
         defer { exporting = false }
         let compared = compared
-        let baseline = rides.filter(\.countsInTotals)
+        let baseline = baselineRides(for: compared)
         let report = ComparisonReport(
             rides: compared,
             comparison: RideComparison(rides: compared.map(\.comparisonFigures), baseline: baseline.map(\.comparisonFigures), calories: calories),

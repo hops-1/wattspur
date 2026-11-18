@@ -7,6 +7,8 @@ struct RecordsContent: View {
     let records: [RideRecord]
     let rides: [UUID: Ride]
     var isPrinting = false
+    /// Vehicles keep distance, time, speed, ascent and curves (B-288).
+    var sport: Sport = .cycling
     var onOpenRides: ([UUID]) -> Void = { _ in }
 
     /// A record set by a ride imported in the last week is marked "New".
@@ -32,8 +34,12 @@ struct RecordsContent: View {
                 }
             }
             VStack(alignment: .leading, spacing: 6) {
-                Text("Records come from the Bosch totals of each ride. Average speed and power count from 5 km on. The streak counts consecutive days with at least one ride, by the local time of the start. Merged rides count as one ride.")
-                Text("Top speed, highest power and highest cadence are the maximum stored in the file. The best 1-minute power is the highest average power over 60 seconds without a break; rides without power values, like many GPX files, do not count for the power records.")
+                if sport == .cycling {
+                    Text("Records come from the Bosch totals of each ride. Average speed and power count from 5 km on. The streak counts consecutive days with at least one ride, by the local time of the start. Merged rides count as one ride.")
+                    Text("Top speed, highest power and highest cadence are the maximum stored in the file. The best 1-minute power is the highest average power over 60 seconds without a break; rides without power values, like many GPX files, do not count for the power records.")
+                } else {
+                    Text("Records of your vehicles: distance, ride time, ascent, speed and curves. Average speed counts from 5 km on. Merged rides count as one ride.")
+                }
             }
             .font(.caption)
             .foregroundStyle(.secondary)

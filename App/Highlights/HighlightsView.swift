@@ -142,13 +142,13 @@ struct HighlightsView: View {
             } else {
                 YearReviewContent(review: YearReview(data.highlightRides, year: shownYear, calendar: calendar),
                                   isCurrentYear: shownYear == currentYear, calendar: calendar,
-                                  rideNames: data.names, onOpenRides: onOpenRides)
+                                  rideNames: data.names, sport: sport, onOpenRides: onOpenRides)
             }
         case .records:
             if rides.isEmpty {
                 noRides
             } else {
-                RecordsContent(records: data.records, rides: data.byID, onOpenRides: onOpenRides)
+                RecordsContent(records: data.records, rides: data.byID, sport: sport, onOpenRides: onOpenRides)
             }
         case .goals:
             GoalsContent(goals: Goal.sorted(goals), rides: allRideData.highlightRides, calendar: calendar,
@@ -189,13 +189,13 @@ struct HighlightsView: View {
             title = String(localized: "Wattspur \(String(shownYear))")
             page = AnyView(VStack(alignment: .leading, spacing: 22) {
                 YearReviewContent(review: review, isCurrentYear: shownYear == currentYear, calendar: calendar,
-                                  rideNames: data.names, isPrinting: true)
+                                  rideNames: data.names, isPrinting: true, sport: sport)
                 PDFExport.createdNote
             })
         case .records:
             title = String(localized: "Wattspur Records")
             page = AnyView(VStack(alignment: .leading, spacing: 22) {
-                RecordsContent(records: data.records, rides: data.byID, isPrinting: true)
+                RecordsContent(records: data.records, rides: data.byID, isPrinting: true, sport: sport)
                 PDFExport.createdNote
             })
         case .goals:

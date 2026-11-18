@@ -82,8 +82,8 @@ struct AnalysisView: View {
                                                description: Text("Choose another period or import rides."))
                             .frame(maxWidth: .infinity, minHeight: 300)
                     } else {
-                        TotalsGrid(model: model)
-                        AveragesCard(model: model)
+                        TotalsGrid(model: model, sport: sport)
+                        AveragesCard(model: model, sport: sport)
                         BarChartCard(model: model, metric: $barMetric,
                                      grouping: Binding(get: { model.grouping }, set: { groupingChoice = $0 }))
                         trends(model)
@@ -182,8 +182,10 @@ struct AnalysisView: View {
                 .foregroundStyle(.secondary)
         }
         .padding(.top, 6)
-        TrendCard(model: model, metric: .averagePower, title: "Avg power", color: .metricPower)
-        TrendCard(model: model, metric: .averageCadence, title: "Avg cadence", color: .metricCadence)
+        if sport == .cycling {
+            TrendCard(model: model, metric: .averagePower, title: "Avg power", color: .metricPower)
+            TrendCard(model: model, metric: .averageCadence, title: "Avg cadence", color: .metricCadence)
+        }
         TrendCard(model: model, metric: .averageSpeed, title: "Avg speed", color: .metricSpeed)
     }
 }

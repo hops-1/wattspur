@@ -4,6 +4,8 @@ The window has three parts: the sidebar on the left, the ride list in the middle
 
 **Cycling and vehicles** (from Mac 1.10): if you have a car or a motorcycle besides your bikes, or rides with one, a switch **Cycling · Vehicles** sits at the top of the sidebar. **Rides**, **Analysis**, **Highlights** and **Map** then show only the rides of the chosen sport, and the filter next to them offers only its devices (**All bikes** or **All vehicles**). The **Trash** and the **Profile** are for all of them. The choice stays for the next launch, on this Mac only. In the narrow sidebar the symbols are one below the other. The **goals** in Highlights always count cycling.
 
+For **vehicles**, the ride detail, Analysis and Highlights show only what suits a car or a motorcycle: no power, cadence, calories or CO₂; the ride detail shows the **top speed** instead. The records of vehicles are distance, ride time, ascent, average and top speed and the curviest ride; the stars in the list and the ride detail count within the sport. The **comparison** measures vehicles against the average of your vehicle rides.
+
 ![Main window](../images/en/main.png)
 
 ## Rides
