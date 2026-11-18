@@ -6,6 +6,48 @@
 	<integer>13</integer>
 	<key>logs</key>
 	<dict>
+		<key>5B675CFC-124A-48A8-B47B-7577D644892E</key>
+		<dict>
+			<key>className</key>
+			<string>IDECommandLineBuildLog</string>
+			<key>documentTypeString</key>
+			<string>&lt;nil&gt;</string>
+			<key>domainType</key>
+			<string>Xcode.IDEActivityLogDomainType.BuildLog</string>
+			<key>fileName</key>
+			<string>5B675CFC-124A-48A8-B47B-7577D644892E.xcactivitylog</string>
+			<key>hasPrimaryLog</key>
+			<true/>
+			<key>primaryObservable</key>
+			<dict>
+				<key>highLevelStatus</key>
+				<string>S</string>
+				<key>totalNumberOfAnalyzerIssues</key>
+				<integer>0</integer>
+				<key>totalNumberOfErrors</key>
+				<integer>0</integer>
+				<key>totalNumberOfTestFailures</key>
+				<integer>0</integer>
+				<key>totalNumberOfWarnings</key>
+				<integer>0</integer>
+			</dict>
+			<key>schemeIdentifier-containerName</key>
+			<string>Wattspur project</string>
+			<key>schemeIdentifier-schemeName</key>
+			<string>Wattspur iOS</string>
+			<key>schemeIdentifier-sharedScheme</key>
+			<integer>1</integer>
+			<key>signature</key>
+			<string>Building project Wattspur with scheme Wattspur iOS</string>
+			<key>timeStartedRecording</key>
+			<real>816710951.03757</real>
+			<key>timeStoppedRecording</key>
+			<real>816710975.77266395</real>
+			<key>title</key>
+			<string>Building project Wattspur with scheme Wattspur iOS</string>
+			<key>uniqueIdentifier</key>
+			<string>5B675CFC-124A-48A8-B47B-7577D644892E</string>
+		</dict>
 		<key>F000D4E6-5EB6-4450-9566-BB562E036E96</key>
 		<dict>
 			<key>className</key>

@@ -1,0 +1,4 @@
+module WattspurKit {
+header "WattspurKit-Swift.h"
+export *
+}

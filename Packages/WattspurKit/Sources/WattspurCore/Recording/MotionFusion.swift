@@ -49,6 +49,12 @@ public struct MotionValues: Codable, Sendable, Equatable {
 ///   rolls about its length, not about “up”, so it is not caught by this. The check allows more
 ///   at speed (`turnMismatchPerSpeed`) and in a curve (`turnMismatchShare`): a holder that sways at
 ///   85 km/h and a GPS course a little late left out real curve points (B-319).
+/// - **A car turned between upright and across** (B-325): turning it by hand swings it to and fro,
+///   so the turn over a second nearly cancels and the check above misses it, while the smoothed
+///   turn rate shows a curve of 10–20° for a second or two (18.11.2026, three times). In a car the
+///   iPhone does not tilt with the road, so where “up” moved more than `maxAttitudeChange` in the
+///   iPhone, that second and `settleTime` after it count as a turned iPhone. Not for a bicycle or a
+///   motorcycle: there the iPhone leans with the vehicle into the curve.
 /// - **A car** (B-319) takes the mean of the interval instead of the strongest value: at speed the
 ///   holder sways, and the strongest of a second showed 0.35–0.47 g where the course said 0.15 g.
 ///
@@ -84,14 +90,27 @@ public struct MotionFusion: Sendable {
     /// late differs from the sensors most where the curve changes.
     public static let turnMismatchShare = 0.25
 
+    /// Degrees “up” may move in the iPhone of a car before it counts as turned in the holder (B-325).
+    /// A car rolls a few degrees at most; turning the iPhone moves “up” by up to 90°.
+    public static let maxAttitudeChange = 20.0
+    /// Seconds after such a move that still count as turned: the smoothed turn rate needs them.
+    public static let settleTime: TimeInterval = 1.5
+    /// Seconds; the time constant of the “up” the attitude is compared with.
+    static let attitudeSmoothing: TimeInterval = 1.0
+
     /// Whether the lean of an interval is its mean (a car, B-319) or its strongest value.
     public let usesMean: Bool
+    /// Whether a move of the iPhone's attitude counts as turning it (a car, B-325).
+    public let checksAttitude: Bool
 
     // The filters.
     private var lastReading: Date?
     private var yaw = 0.0
     private var horizontal = (x: 0.0, y: 0.0, z: 0.0)
     private var vertical = 0.0
+    /// “Up” in the iPhone, slowly smoothed, and until when the iPhone counts as turned (B-325).
+    private var settledUp: (x: Double, y: Double, z: Double)?
+    private var unsettledUntil: Date?
 
     // The interval since the last GPS point.
     private var strongestLean = 0.0
@@ -105,6 +124,8 @@ public struct MotionFusion: Sendable {
     private var turned = 0.0
     /// Whether `turned` covers the whole interval (no gap in the readings).
     private var turnedWhole = true
+    /// Whether the iPhone of a car was turned between upright and across in the interval (B-325).
+    private var moved = false
 
     // The GPS.
     private var speed: Double?
@@ -114,6 +135,7 @@ public struct MotionFusion: Sendable {
     /// `vehicle` decides whether the lean is the strongest of an interval or, for a car, its mean.
     public init(vehicle: RecordingVehicle = .eBike) {
         usesMean = vehicle == .car
+        checksAttitude = vehicle == .car
     }
 
     /// One device-motion reading.
@@ -132,6 +154,7 @@ public struct MotionFusion: Sendable {
         let gap = lastReading.map { reading.date.timeIntervalSince($0) } ?? .infinity
         lastReading = reading.date
         if gap <= 0 { return }
+        if checksAttitude { checkAttitude(up: up, at: reading.date, gap: gap) }
         if gap > Self.maxReadingGap {
             yaw = turn
             horizontal = flat
@@ -185,13 +208,14 @@ public struct MotionFusion: Sendable {
             count = 0
             turned = 0
             turnedWhole = true
+            moved = false
             speed = valid
             lastFix = valid.map { (date, $0) }
             lastCourse = (valid ?? 0) >= Self.minLeanSpeed ? course : nil
         }
         guard count > 0 else { return nil }
 
-        let turnedIPhone = isTurnedIPhone(course: course, speed: valid, allowed: allowed)
+        let turnedIPhone = moved || isTurnedIPhone(course: course, speed: valid, allowed: allowed)
         var acceleration: Double?
         if let valid, let lastFix, date > lastFix.date {
             // The GPS says whether it was speeding up or braking, the sensors how strongly.
@@ -209,6 +233,26 @@ public struct MotionFusion: Sendable {
         }
         return MotionValues(lean: turnedIPhone ? 0 : lean, acceleration: acceleration,
                             roughness: (squares / Double(count)).squareRoot())
+    }
+
+    /// Compares “up” with its slowly smoothed value: a large move turns the iPhone (B-325).
+    private mutating func checkAttitude(up: (x: Double, y: Double, z: Double), at date: Date, gap: TimeInterval) {
+        guard let settled = settledUp, gap <= Self.maxReadingGap else {
+            settledUp = up
+            return
+        }
+        let norm = (settled.x * settled.x + settled.y * settled.y + settled.z * settled.z).squareRoot()
+        let cosine = (up.x * settled.x + up.y * settled.y + up.z * settled.z) / max(norm, 1e-9)
+        if acos(min(max(cosine, -1), 1)) * 180 / .pi > Self.maxAttitudeChange {
+            // Compared from here on with the new attitude, so the iPhone settles once it stops turning.
+            unsettledUntil = date.addingTimeInterval(Self.settleTime)
+            settledUp = up
+            moved = true
+            return
+        }
+        if let unsettledUntil, date < unsettledUntil { moved = true }
+        let k = gap / (Self.attitudeSmoothing + gap)
+        settledUp = (settled.x + k * (up.x - settled.x), settled.y + k * (up.y - settled.y), settled.z + k * (up.z - settled.z))
     }
 
     /// Whether the sensors turned about “up” other than the GPS course did over this interval: the

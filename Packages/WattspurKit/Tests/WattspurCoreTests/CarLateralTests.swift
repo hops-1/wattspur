@@ -97,6 +97,42 @@ struct CarLateralTests {
         #expect(abs(unsure.lean - 17) < 0.5)
     }
 
+    /// A curve of 0.15 rad/s at 36 km/h, where the iPhone is turned from upright to across between
+    /// seconds 3 and 3.5 (B-325): “up” turns by 90° about the screen.
+    static func turnedAcross(vehicle: RecordingVehicle, seconds: Int = 8) -> [MotionValues?] {
+        var fusion = MotionFusion(vehicle: vehicle)
+        let start = MotionFusionTests.start
+        let (c, s) = (cos(MotionFusionTests.tilt), sin(MotionFusionTests.tilt))
+        let rate = -0.15 * 180 / .pi
+        _ = fusion.close(at: start, speed: 10, course: 90, courseAccuracy: 2)
+        var values: [MotionValues?] = []
+        for second in 1...seconds {
+            for i in 0..<50 {
+                let t = Double(second - 1) + Double(i) / 50
+                let angle = min(max((t - 3) / 0.5, 0), 1) * .pi / 2
+                let gravity = (x: c * sin(angle), y: -c * cos(angle), z: -s)
+                let up = (x: -gravity.x, y: -gravity.y, z: -gravity.z)
+                fusion.add(MotionFusion.Reading(date: start.addingTimeInterval(t), quaternion: (0, 0, 0, 1), gravity: gravity,
+                                                acceleration: (0, 0, 0), rotation: (0.15 * up.x, 0.15 * up.y, 0.15 * up.z)))
+            }
+            let heading = (90 + rate * Double(second) + 360).truncatingRemainder(dividingBy: 360)
+            values.append(fusion.close(at: start.addingTimeInterval(Double(second)), speed: 10, course: heading, courseAccuracy: 2))
+        }
+        return values
+    }
+
+    @Test("A car's iPhone turned between upright and across is no curve for a moment (B-325)")
+    func turnedAcross() throws {
+        let car = Self.turnedAcross(vehicle: .car).map { $0?.lean ?? .nan }
+        // The curve before, nothing while the iPhone turns and settles, the curve again after.
+        #expect(car[0...2].allSatisfy { $0 > 8 })
+        #expect(car[3...4].allSatisfy { $0 == 0 })
+        #expect(car[5...].allSatisfy { $0 > 8 })
+        // A motorcycle leans with its iPhone: its curve keeps its value.
+        let motorcycle = Self.turnedAcross(vehicle: .motorcycle).map { $0?.lean ?? .nan }
+        #expect(motorcycle.allSatisfy { $0 > 8 })
+    }
+
     @Test("A real curve, where the course turns with the sensors, keeps its value")
     func realCurve() throws {
         // A left turn at 0.15 rad/s: the course goes counter-clockwise by 8.6° a second.

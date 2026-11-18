@@ -1,0 +1,4 @@
+module WattspurMap {
+header "WattspurMap-Swift.h"
+export *
+}
