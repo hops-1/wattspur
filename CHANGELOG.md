@@ -7,6 +7,12 @@ Every DMG handed out to testers corresponds to one entry below.
 
 ## [Unreleased]
 
+iPhone and iPad 1.3 (31) on TestFlight, a test build for the iPad (B-291, B-292); the Mac stays 1.10.1.
+
+### Added
+
+- **iPad** (B-291, B-292). Wattspur runs on the iPad. In the full width a sidebar like on the Mac: the switch Cycling · Vehicles, Overview, Rides, Map and Trash, then Profile and Settings; it folds to the symbols. Rides show the list and the ride side by side, with the map fixed at the top and the data scrolling below; under Settings › View the charts stand stacked as on the iPhone or one below the other as on the Mac. In a narrow window the iPhone's tabs. The iPad does not record rides yet (B-293).
+
 ## [1.10.1] – 2026-11-18
 
 Fixes from the tests of 18.11.2026. Together with the iPhone app 1.2 (30) on TestFlight.
