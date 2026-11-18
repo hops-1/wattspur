@@ -43,6 +43,10 @@ struct StartRideIntent: AppIntent {
 
     @MainActor
     func perform() async throws -> some IntentResult & ProvidesDialog {
+        // The iPad has no recording for now (B-292).
+        guard RecordingAvailability.isSupported else {
+            return .result(dialog: .app("Wattspur cannot record rides on the iPad yet. Record them on the iPhone."))
+        }
         if recorder.isRecording {
             return .result(dialog: .app("A ride is already being recorded."))
         }

@@ -211,5 +211,8 @@ Rides on a motorcycle or in a car, also without a device, do not count in the to
 ## Cycling and vehicles apart
 From iPhone 1.2: if you have a car or a motorcycle besides your bikes, or rides with one, **Overview**, **Rides** and **Map** show a capsule **Cycling ▾**. Tap it to choose **Cycling** or **Vehicles**; the choice holds for all three tabs and stays for the next launch. The tiles, the last ride, the list and the map then show only that sport, and the device filter offers only its devices (**All Bikes** or **All Vehicles**). On the map only the symbol shows. Each iPhone keeps its own choice; on the Mac the switch sits at the top of the sidebar (see [Views](04-views.md)).
 
+## On the iPad
+From version 1.3 Wattspur runs on the iPad too. Full screen or in a wide window, a sidebar like on the Mac sits on the left: the switch **Cycling · Vehicles** at the top, then **Overview**, **Rides** and **Map**, then Trash, then **Profile** and **Settings**. Settings opens the list with View, Maps, iCloud & Library, Help and About on the right. Under **View** you choose how the charts of a ride stand: **Stacked** to swipe, as on the iPhone, or **One Below the Other**, as on the Mac. The button at the top of the sidebar folds it to the symbols, as on the Mac, and opens it again. Under **Rides** the list and the ride stand side by side, The map stays at the top; the charts and figures scroll below it. Put a finger on a chart, and the map shows the spot. In a narrow window (Split View) Wattspur looks as on the iPhone. The iPad does not record rides yet: record them with the iPhone, and iCloud brings them to the iPad.
+
 ---
 Next: [FAQ](06-faq.md) · [Contents](README.md)

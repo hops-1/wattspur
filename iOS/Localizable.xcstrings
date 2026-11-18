@@ -4215,6 +4215,126 @@
           }
         }
       }
+    },
+    "Wattspur cannot record rides on the iPad yet. Record them on the iPhone." : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Wattspur kann auf dem iPad noch keine Fahrten aufnehmen. Nimm sie mit dem iPhone auf."
+          }
+        }
+      }
+    },
+    "Rides recorded on your iPhone or imported on your Mac appear here once they sync with iCloud. You can also import FIT and GPX files under Rides." : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Fahrten, die du mit dem iPhone aufnimmst oder am Mac importierst, erscheinen hier, sobald sie über iCloud abgeglichen sind. Unter Fahrten kannst du auch FIT- und GPX-Dateien importieren."
+          }
+        }
+      }
+    },
+    "Media Library" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Mediathek"
+          }
+        }
+      }
+    },
+    "Settings" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Einstellungen"
+          }
+        }
+      }
+    },
+    "This iPad" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Dieses iPad"
+          }
+        }
+      }
+    },
+    "Show Only Symbols" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Nur Symbole zeigen"
+          }
+        }
+      }
+    },
+    "Show Names" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Namen zeigen"
+          }
+        }
+      }
+    },
+    "View" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ansicht"
+          }
+        }
+      }
+    },
+    "Charts" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Diagramme"
+          }
+        }
+      }
+    },
+    "Stacked" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Gestapelt"
+          }
+        }
+      }
+    },
+    "One Below the Other" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Untereinander"
+          }
+        }
+      }
+    },
+    "Stacked: one chart at a time, swipe to the next, as on the iPhone. One below the other: all charts at once, as on the Mac. The map stays at the top either way." : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Gestapelt: ein Diagramm auf einmal, zum nächsten wischen, wie am iPhone. Untereinander: alle Diagramme zugleich, wie am Mac. Die Karte bleibt in beiden Fällen oben."
+          }
+        }
+      }
     }
   },
   "version" : "1.1"

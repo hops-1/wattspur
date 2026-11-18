@@ -14,6 +14,7 @@ struct MorePageView: View {
     var body: some View {
         switch page {
         case .profile: ProfilePage()
+        case .view: ViewPage()
         case .maps: MapsPage()
         case .library: LibraryPage()
         case .trash: TrashView(embedded: embedded)
@@ -593,6 +594,30 @@ private struct MapsPage: View {
                 }
             } footer: {
                 Text("The OpenStreetMap styles come from volunteer servers; Wattspur loads only the tiles on screen and keeps them for a while. Without a connection the route shows on a plain ground.")
+            }
+        }
+    }
+}
+
+// MARK: - View
+
+/// How the iPad shows the charts of a ride (wish of Nils, B-292): stacked to swipe through, as on
+/// the iPhone, or one below the other, as on the Mac.
+private struct ViewPage: View {
+    @AppStorage(PhoneSettingsKey.padChartLayout) private var chartLayout: ChartLayout = .column
+
+    var body: some View {
+        Form {
+            Section {
+                Picker("Charts", selection: $chartLayout) {
+                    ForEach(ChartLayout.allCases) { Text($0.label).tag($0) }
+                }
+                .pickerStyle(.inline)
+                .labelsHidden()
+            } header: {
+                Text("Charts")
+            } footer: {
+                Text("Stacked: one chart at a time, swipe to the next, as on the iPhone. One below the other: all charts at once, as on the Mac. The map stays at the top either way.")
             }
         }
     }
