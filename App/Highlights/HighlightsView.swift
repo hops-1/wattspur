@@ -36,22 +36,26 @@ struct HighlightsView: View {
     /// The source filter of the highlights, the same way (B-145).
     @AppStorage(SettingsKey.sourceFilterHighlights) private var sourceFilterChoice: SourceFilter = .all
     @Query private var bikes: [Bike]
+    /// The sport chosen in the sidebar (B-288): year and records are of that sport.
+    @Environment(\.shownSport) private var sport
     @State private var exporting = false
     @State private var goalEditor: GoalEditor.Target?
 
     /// Only rides that count (Requirements 10.10), of every bike; motorcycle rides only when the
     /// filter shows that bike.
-    private var allRides: [Ride] { listedRides.filter(\.countsInTotals) }
-    private var bikeFilter: BikeFilter { bikeFilterChoice.resolved(knownBikeIDs: Set(bikes.map(\.id))) }
+    private var allRides: [Ride] { listedRides.filter { $0.countsInTotals(sport: sport) } }
+    /// The goals are for cycling, whatever sport the sidebar shows.
+    private var cyclingRides: [Ride] { sport == .cycling ? allRides : listedRides.filter { $0.countsInTotals(sport: .cycling) } }
+    private var bikeFilter: BikeFilter { bikeFilterChoice.resolved(sport: sport, bikes: bikes) }
     private var hasGPXRides: Bool { allRides.contains { $0.source == .gpx } }
     private var sourceFilter: SourceFilter { sourceFilterChoice.resolved(hasGPXRides: hasGPXRides) }
     /// The rides of the chosen bike and source: for the year and the records.
     private var rides: [Ride] {
         bikeFilter.isActive || sourceFilter.isActive
-            ? listedRides.filter { $0.countsInTotals(bikeFilter: bikeFilter) && $0.isFromSource(sourceFilter) } : allRides
+            ? listedRides.filter { $0.countsInTotals(sport: sport, bikeFilter: bikeFilter) && $0.isFromSource(sourceFilter) } : allRides
     }
     /// The rides of every bike as plain values, for the goals.
-    private var allRideData: HighlightsData { HighlightsData(rides: allRides, calendar: calendar) }
+    private var allRideData: HighlightsData { HighlightsData(rides: cyclingRides, calendar: calendar) }
     private var calendar: Calendar { GoalPeriod.calendar() }
     private var currentYear: Int { calendar.component(.year, from: .now) }
     private var shownYear: Int { year ?? currentYear }

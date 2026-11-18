@@ -16,6 +16,7 @@ import WattspurKit
 /// rides, one week apart, e.g. to try merging rides (B-095).
 /// `-bikesHintDone YES` hides the note "Set up your bikes" after the update to 1.5 (B-138).
 /// `-WattspurDemoBikes YES` adds two more bikes with the demo rides spread over them (B-134).
+/// `-WattspurDemoCar YES` adds a car and puts every third demo ride in it, to try the sport switch (B-288).
 /// `-WattspurDemoGoals YES` adds a weekly, a monthly and a yearly goal (B-053).
 /// `-WattspurDemoVariety YES` makes the copies slightly different in time, speed and power (older = slower), so a history has a trend (B-179).
 /// `-WattspurDemoSize 1100x740` sets the size of the main window in points (B-179).
@@ -59,6 +60,7 @@ enum DemoMode {
             rideID = ride.id
         }
         if UserDefaults.standard.bool(forKey: "WattspurDemoBikes") { addBikes(to: container.mainContext) }
+        if UserDefaults.standard.bool(forKey: "WattspurDemoCar") { addCar(to: container.mainContext) }
         if UserDefaults.standard.bool(forKey: "WattspurDemoGoals") {
             container.mainContext.insert(Goal(metric: .distance, period: .week, target: 100_000))
             container.mainContext.insert(Goal(metric: .rides, period: .month, target: 4))
@@ -85,6 +87,17 @@ enum DemoMode {
         let rides = ((try? context.fetch(FetchDescriptor<Ride>())) ?? []).sorted { $0.startDate < $1.startDate }
         for (index, ride) in rides.enumerated() { ride.bike = [first, gravel, old][index % 3] }
         try? library.archive(old)
+        try? context.save()
+    }
+
+    /// A car, with every third demo ride in it (the oldest first), so the sidebar shows the sport switch.
+    private static func addCar(to context: ModelContext) {
+        let library = RideLibrary(context: context)
+        library.prepareBikes()
+        let car = library.makeBike(name: "Demo car", kind: .car, color: .teal)
+        let rides = ((try? context.fetch(FetchDescriptor<Ride>())) ?? []).filter { $0.name.hasPrefix("Demo ") }
+            .sorted { $0.startDate < $1.startDate }
+        for (index, ride) in rides.enumerated() where index % 3 == 0 { ride.bike = car }
         try? context.save()
     }
 

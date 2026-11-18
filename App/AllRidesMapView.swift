@@ -33,6 +33,8 @@ struct AllRidesMapView: View {
     @AppStorage(SettingsKey.sourceFilterMap) private var sourceFilterChoice: SourceFilter = .all
     private var hasGPXRides: Bool { rides.contains { $0.source == .gpx } }
     @Query private var bikes: [Bike]
+    /// The sport chosen in the sidebar (B-288): the map shows only its rides.
+    @Environment(\.shownSport) private var sport
     @AppStorage(SettingsKey.mapType) private var mapType: RideMapType = .standard
     /// Heat lines or heat map (B-107, B-108).
     @AppStorage(SettingsKey.mapMode) private var mode: RidesMapStyle.Mode = .lines
@@ -66,8 +68,8 @@ struct AllRidesMapView: View {
     var body: some View {
         let interval = period.interval(calendar: calendar)
         let filter = MapFilter(interval: interval, selectedIDs: analysisRides ?? (showsSelection ? selectedRideIDs : nil),
-                               bike: bikeFilterChoice.resolved(knownBikeIDs: Set(bikes.map(\.id))),
-                               source: sourceFilterChoice.resolved(hasGPXRides: hasGPXRides))
+                               bike: bikeFilterChoice.resolved(sport: sport, bikes: bikes),
+                               source: sourceFilterChoice.resolved(hasGPXRides: hasGPXRides), sport: sport)
         let overview = cache.overview(rides, filter: filter)
         // 1 to 4 selected rides in the comparison's colours, oldest first like there.
         let highlighted = showsSelection && (1...RideComparison.allowedCount.upperBound).contains(overview.rides.count)

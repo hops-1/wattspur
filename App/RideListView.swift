@@ -27,6 +27,8 @@ struct RideListView: View {
     @Environment(MergeSuggestionCenter.self) private var suggestions
     @Environment(RouteSimilarityStore.self) private var similarity
     @Environment(\.openWindow) private var openWindow
+    /// The sport chosen in the sidebar (B-288): the list shows only its rides.
+    @Environment(\.shownSport) private var sport
     /// The window's undo manager: ⌘Z undoes renaming, trashing, merging and splitting.
     @Environment(\.undoManager) private var undoManager
     /// Parts of a merged ride are hidden; the merged ride stands for them (B-095).
@@ -41,7 +43,7 @@ struct RideListView: View {
     @AppStorage(SettingsKey.dismissedRouteSuggestions) private var dismissedRoutes = ""
     /// The bike filter of this list, remembered (B-137).
     @AppStorage(SettingsKey.bikeFilterRides) private var bikeFilterChoice: BikeFilter = .all
-    private var bikeFilter: BikeFilter { scope == nil ? bikeFilterChoice.resolved(knownBikeIDs: Set(bikes.map(\.id))) : .all }
+    private var bikeFilter: BikeFilter { scope == nil ? bikeFilterChoice.resolved(sport: sport, bikes: bikes) : .all }
     /// The source filter of this list, remembered (B-145); only with a ride from a GPX file.
     @AppStorage(SettingsKey.sourceFilterRides) private var sourceFilterChoice: SourceFilter = .all
     private var hasGPXRides: Bool { facts.contains { $0.source == .gpx } }
@@ -89,7 +91,7 @@ struct RideListView: View {
     private var facts: [RideListFact] { pass.facts }
 
     private var filteredRides: [Ride] {
-        let inputs = RideListInputs(facts: facts, filter: listFilter, source: sourceFilter, sortOrder: sortOrder,
+        let inputs = RideListInputs(facts: facts, filter: listFilter, sport: sport, source: sourceFilter, sortOrder: sortOrder,
                                     scope: scope?.rideIDs, day: activeDayFilter?.rideIDs,
                                     similar: activeSimilarFilter, hits: similarHits)
         return shownMemo.value(for: inputs) {
@@ -112,8 +114,9 @@ struct RideListView: View {
                 .sorted { order.areInIncreasingOrder($0.sortKey, $1.sortKey) }
                 .map(\.id)
         }
+        // Beside the map and the analysis the rides are already of the sport.
         let base = inputs.facts
-            .filter { inputs.scope?.contains($0.id) ?? true }
+            .filter { inputs.scope?.contains($0.id) ?? ($0.sport == inputs.sport) }
             .filter { inputs.source.admits(source: $0.source) }
             .filter { inputs.filter.admits(name: $0.name, startDate: $0.startDate, bikeID: $0.bikeID, distance: $0.distance) }
         guard let filter = inputs.similar else {
@@ -145,7 +148,7 @@ struct RideListView: View {
     /// The rides of the year card: the bike and the source of the list apply, search and period do not.
     /// The year in review opens with the same filters (B-145).
     private var yearRides: [Ride] {
-        rides.filter { $0.isOnBike(bikeFilter) && $0.isFromSource(sourceFilter) }
+        rides.filter { $0.sport == sport && $0.isOnBike(bikeFilter) && $0.isFromSource(sourceFilter) }
     }
 
     /// Sorted by date the list is grouped by month; other orders show one flat list.
@@ -234,7 +237,7 @@ struct RideListView: View {
                     .background(Color.accentColor.opacity(0.1), in: RoundedRectangle(cornerRadius: 9))
                     .padding(.horizontal, 12)
                     .padding(.top, 8)
-            } else if activeSimilarFilter == nil, yearRides.contains(where: \.countsInTotals) {
+            } else if activeSimilarFilter == nil, yearRides.contains(where: { $0.countsInTotals(sport: sport) }) {
                 YearTileView(rides: yearRides) {
                     highlightsBikeFilter = bikeFilter
                     highlightsSourceFilter = sourceFilter
@@ -287,8 +290,10 @@ struct RideListView: View {
 
     /// Rides that hold a record now get a star (ADV-R2).
     private var recordHolders: Set<UUID> {
-        recordsMemo.value(for: facts) {
-            let counted = rides.filter(\.countsInTotals).map(\.highlightRide)
+        // Records of cycling only for now; the other sports get their own with part 2 of B-288.
+        recordsMemo.value(for: sport == .cycling ? facts : []) {
+            guard sport == .cycling else { return [] }
+            let counted = rides.filter { $0.countsInTotals(sport: .cycling) }.map(\.highlightRide)
             let records = RideRecords.records(counted, calendar: GoalPeriod.calendar())
             return Set(records.filter(\.kind.isRideRecord).flatMap(\.rideIDs))
         }
@@ -381,10 +386,11 @@ struct RideListView: View {
                         if let scope {
                             Text(scope.count)
                         } else {
+                            let ofSport = rides.filter { !$0.isSample && $0.sport == sport }
                             if bikeFilter.isActive || sourceFilter.isActive {
-                                Text("\(rides.count { !$0.isSample && $0.isOnBike(bikeFilter) && $0.isFromSource(sourceFilter) }) of \(rides.count { !$0.isSample }) rides")
+                                Text("\(ofSport.count { $0.isOnBike(bikeFilter) && $0.isFromSource(sourceFilter) }) of \(ofSport.count) rides")
                             } else {
-                                Text("\(rides.count { !$0.isSample }) rides total")
+                                Text("\(ofSport.count) rides total")
                             }
                         }
                     }

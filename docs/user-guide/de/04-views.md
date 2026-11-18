@@ -2,6 +2,8 @@
 
 Das Fenster hat drei Teile: links die Seitenleiste, in der Mitte die Fahrtenliste, rechts die Details. Ziehst du die Seitenleiste schmaler, zeigt sie nur noch Symbole. Alternativ benutzt du den Knopf oben in der Seitenleiste (⌃⌘S).
 
+**Rad und Fahrzeuge** (ab Mac 1.10): Hast du neben Bikes auch ein Auto oder Motorrad, oder Fahrten damit, steht oben in der Seitenleiste ein Umschalter **Rad · Fahrzeuge**. **Fahrten**, **Auswertung**, **Highlights** und **Karte** zeigen dann nur die Fahrten der gewählten Sportart; der Filter daneben bietet nur deren Geräte (**Alle Bikes** bzw. **Alle Fahrzeuge**). **Papierkorb** und **Profil** gelten für alle. Die Wahl bleibt beim nächsten Start; sie gilt nur auf diesem Mac. In der schmalen Seitenleiste stehen die Symbole untereinander. Die **Ziele** in den Highlights zählen immer das Rad.
+
 ![Hauptfenster](../images/de/main.png)
 
 ## Fahrten

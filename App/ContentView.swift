@@ -64,8 +64,14 @@ struct ContentView: View {
     @AppStorage(SettingsKey.updateCheckEnabled) private var updateCheckEnabled = true
     @Environment(UpdateChecker.self) private var updates
     @Query(filter: #Predicate<Bike> { !$0.isArchived }, sort: \Bike.sortOrder) private var openBikes: [Bike]
+    /// The sport chosen in the sidebar (B-288); see `shownSport` for the one in effect.
+    @AppStorage(SettingsKey.shownSport) private var storedSport: Sport = .cycling
     @Query private var allRides: [Ride]
     private var rideCount: Int { allRides.count }
+    /// The sports there are: the switch shows from the second one on (B-288).
+    private var sports: [Sport] { SportChoice.available(bikes: openBikes, rides: allRides) }
+    /// The sport the areas show: the stored choice while there is that sport, else the first one.
+    private var shownSport: Sport { SportChoice.resolved(storedSport, available: sports) }
     /// Tab and year shown in Highlights; the year tile and the record links open them.
     @State private var highlightsTab: HighlightsTab = .year
     @State private var highlightsYear: Int?
@@ -119,7 +125,7 @@ struct ContentView: View {
     private var layout: some View {
         // A fixed layout instead of NavigationSplitView: the split view restores
         // stored column widths and ignores our minimums, which squeezed the list.
-        NavigationStack { columns }
+        NavigationStack { columns.environment(\.shownSport, shownSport) }
             // The title would overlap our own sidebar; the list shows its own header instead.
             .toolbar(removing: .title)
             // Keep a regular-height toolbar: without one, macOS moves the traffic-light
@@ -134,7 +140,9 @@ struct ContentView: View {
 
     private var columns: some View {
         HStack(spacing: 0) {
-            SidebarRail(section: $section, compact: $sidebarCompact, width: sidebarWidth)
+            SidebarRail(section: $section, compact: $sidebarCompact, width: sidebarWidth,
+                        sports: SportChoice.showsSwitch(available: sports) ? sports : [],
+                        sport: Binding(get: { shownSport }, set: { storedSport = $0 }))
             ColumnResizeHandle(
                 width: Binding(get: { sidebarCompact ? SidebarRail.compactWidth : sidebarWidth },
                                set: { setSidebarWidth($0) }),
@@ -540,6 +548,9 @@ struct SidebarRail: View {
     @Binding var section: AppSection
     @Binding var compact: Bool
     var width: Double = 220
+    /// The sports of the switch at the top; empty with only one sport (B-288).
+    var sports: [Sport] = []
+    @Binding var sport: Sport
     /// Wide enough that the window's traffic-light buttons sit inside the panel.
     static let compactWidth = 84.0
     @Query(filter: #Predicate<Ride> { $0.deletedAt != nil }) private var trashedRides: [Ride]
@@ -565,6 +576,9 @@ struct SidebarRail: View {
                 .padding(.leading, 10)
                 .padding(.top, 40)
                 .padding(.bottom, 4)
+            }
+            if !sports.isEmpty {
+                SportSwitch(sports: sports, selection: $sport, compact: compact)
             }
             row("Rides", systemImage: "bicycle", target: .rides, shortcut: "1")
             row("Analysis", systemImage: "chart.bar", target: .analysis, shortcut: "2")
