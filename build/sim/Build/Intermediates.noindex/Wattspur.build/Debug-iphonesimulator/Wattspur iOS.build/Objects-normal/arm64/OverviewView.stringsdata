@@ -1,0 +1,240 @@
+{
+  "source": "/Volumes/NILS_EXTERN/Claude Code/eBike/.claude/worktrees/quizzical-rhodes-bbd76b/iOS/OverviewView.swift",
+  "tables": {
+    "Localizable": [
+      {
+        "comment": "",
+        "key": "Overview",
+        "location": {
+          "startingColumn": 26,
+          "startingLine": 24
+        }
+      },
+      {
+        "comment": "",
+        "key": "Sample data: the tiles count the sample ride's week and month.",
+        "location": {
+          "startingColumn": 26,
+          "startingLine": 69
+        }
+      },
+      {
+        "comment": "",
+        "key": "All Rides",
+        "location": {
+          "startingColumn": 34,
+          "startingLine": 45
+        }
+      },
+      {
+        "comment": "",
+        "key": "%lld",
+        "location": {
+          "startingColumn": 34,
+          "startingLine": 47
+        }
+      },
+      {
+        "comment": "",
+        "key": "Sample data: the tiles count the sample ride's week and month.",
+        "location": {
+          "startingColumn": 30,
+          "startingLine": 116
+        }
+      },
+      {
+        "comment": "",
+        "key": "This Week",
+        "location": {
+          "startingColumn": 37,
+          "startingLine": 147
+        }
+      },
+      {
+        "comment": "",
+        "key": "ride",
+        "location": {
+          "startingColumn": 64,
+          "startingLine": 184
+        }
+      },
+      {
+        "comment": "",
+        "key": "rides",
+        "location": {
+          "startingColumn": 92,
+          "startingLine": 184
+        }
+      },
+      {
+        "comment": "",
+        "key": "Shows all rides",
+        "location": {
+          "startingColumn": 49,
+          "startingLine": 176
+        }
+      },
+      {
+        "comment": "",
+        "key": "Shows the rides of this period",
+        "location": {
+          "startingColumn": 69,
+          "startingLine": 176
+        }
+      },
+      {
+        "comment": "",
+        "key": "This Month",
+        "location": {
+          "startingColumn": 37,
+          "startingLine": 151
+        }
+      },
+      {
+        "comment": "",
+        "key": "This Year",
+        "location": {
+          "startingColumn": 37,
+          "startingLine": 157
+        }
+      },
+      {
+        "comment": "",
+        "key": "All Rides",
+        "location": {
+          "startingColumn": 37,
+          "startingLine": 161
+        }
+      },
+      {
+        "comment": "",
+        "key": "This Week",
+        "location": {
+          "startingColumn": 33,
+          "startingLine": 190
+        }
+      },
+      {
+        "comment": "",
+        "key": "This Month",
+        "location": {
+          "startingColumn": 33,
+          "startingLine": 194
+        }
+      },
+      {
+        "comment": "",
+        "key": "ride",
+        "location": {
+          "startingColumn": 57,
+          "startingLine": 195
+        }
+      },
+      {
+        "comment": "",
+        "key": "rides",
+        "location": {
+          "startingColumn": 66,
+          "startingLine": 195
+        }
+      },
+      {
+        "comment": "",
+        "key": "Choose what you ride with",
+        "location": {
+          "startingColumn": 38,
+          "startingLine": 232
+        }
+      },
+      {
+        "comment": "",
+        "key": "Start Ride",
+        "location": {
+          "startingColumn": 23,
+          "startingLine": 214
+        }
+      },
+      {
+        "comment": "",
+        "key": "with %@",
+        "location": {
+          "startingColumn": 26,
+          "startingLine": 224
+        }
+      },
+      {
+        "comment": "",
+        "key": "What Are You Riding?",
+        "location": {
+          "startingColumn": 30,
+          "startingLine": 281
+        }
+      },
+      {
+        "comment": "",
+        "key": "Vehicle Type",
+        "location": {
+          "startingColumn": 26,
+          "startingLine": 276
+        }
+      },
+      {
+        "comment": "",
+        "key": "For a bike or vehicle that is not yours. A bicycle ride counts in the cycling totals but towards none of your bikes; a car or motorcycle ride does not count in them.",
+        "location": {
+          "startingColumn": 26,
+          "startingLine": 278
+        }
+      },
+      {
+        "comment": "",
+        "key": "Cancel",
+        "location": {
+          "startingColumn": 70,
+          "startingLine": 284
+        }
+      },
+      {
+        "comment": "",
+        "key": "Shows the ride",
+        "location": {
+          "startingColumn": 28,
+          "startingLine": 376
+        }
+      },
+      {
+        "comment": "",
+        "key": "Last Ride",
+        "location": {
+          "startingColumn": 18,
+          "startingLine": 352
+        }
+      },
+      {
+        "comment": "",
+        "key": "Distance",
+        "location": {
+          "startingColumn": 23,
+          "startingLine": 392
+        }
+      },
+      {
+        "comment": "",
+        "key": "Riding Time",
+        "location": {
+          "startingColumn": 23,
+          "startingLine": 393
+        }
+      },
+      {
+        "comment": "",
+        "key": "Ascent",
+        "location": {
+          "startingColumn": 27,
+          "startingLine": 395
+        }
+      }
+    ]
+  },
+  "version": 1
+}

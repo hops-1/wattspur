@@ -383,4 +383,30 @@ public struct RecordingDevice: Codable, Hashable, Sendable {
         }
         return device(activeID) ?? device(open.first?.id) ?? .without(.bike)
     }
+
+    /// The device for the next recording in the sport of the capsule (B-324): with “Cycling” shown, a
+    /// bike, with “Vehicles” a vehicle. The general choice while it is of that sport; else the last
+    /// device chosen in that sport, the device of its last ride, the active bike, its first open
+    /// device, and last a bicycle or car without a device.
+    public static func next(for sport: Sport, last: RecordingDevice?, lastOfSport: RecordingDevice?,
+                            lastRideDeviceID: UUID?, devices: [RideExchange.Bike], activeID: UUID?,
+                            oldVehicle: RecordingVehicle? = nil) -> RecordingDevice {
+        let general = next(last: last, devices: devices, activeID: activeID, oldVehicle: oldVehicle)
+        if general.kind.sport == sport { return general }
+        let open = devices.filter { !$0.isArchived && (BikeKind(rawValue: $0.kind) ?? .bike).sport == sport }
+        func device(_ id: UUID?) -> RecordingDevice? {
+            guard let id, let bike = open.first(where: { $0.id == id }) else { return nil }
+            return RecordingDevice(bikeID: bike.id, kind: BikeKind(rawValue: bike.kind) ?? .bike)
+        }
+        if let lastOfSport, lastOfSport.kind.sport == sport {
+            if lastOfSport.bikeID == nil { return lastOfSport }
+            if let still = device(lastOfSport.bikeID) { return still }
+        }
+        if let found = device(lastRideDeviceID) ?? device(activeID) ?? device(open.first?.id) { return found }
+        switch sport {
+        case .cycling: return .without(.bike)
+        case .vehicle: return .without(.car)
+        case .running: return general
+        }
+    }
 }

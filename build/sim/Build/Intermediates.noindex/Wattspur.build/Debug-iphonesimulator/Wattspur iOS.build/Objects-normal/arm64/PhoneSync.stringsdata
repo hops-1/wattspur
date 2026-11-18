@@ -1,0 +1,16 @@
+{
+  "source": "/Volumes/NILS_EXTERN/Claude Code/eBike/.claude/worktrees/quizzical-rhodes-bbd76b/iOS/PhoneSync.swift",
+  "tables": {
+    "Localizable": [
+      {
+        "comment": "",
+        "key": "My eBike",
+        "location": {
+          "startingColumn": 103,
+          "startingLine": 95
+        }
+      }
+    ]
+  },
+  "version": 1
+}

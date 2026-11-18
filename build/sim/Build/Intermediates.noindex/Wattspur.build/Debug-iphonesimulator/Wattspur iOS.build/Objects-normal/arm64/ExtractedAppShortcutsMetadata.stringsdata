@@ -1,0 +1,109 @@
+{
+  "source" : "\/Volumes\/NILS_EXTERN\/Claude Code\/eBike\/.claude\/worktrees\/quizzical-rhodes-bbd76b\/iOS\/RideIntents.swift",
+  "tables" : {
+    "AppShortcuts" : [
+      {
+        "appShortcutMetadata" : [
+          {
+            "actionIdentifier" : "StartRideIntent",
+            "index" : 0,
+            "parameterDisplayRepresentations" : {
+              "DeviceEntity" : [
+                "Device"
+              ]
+            },
+            "parameterTypes" : {
+              "device" : "DeviceEntity"
+            },
+            "title" : "Start Ride"
+          }
+        ],
+        "key" : "Start a ride with ${applicationName}",
+        "location" : {
+          "startingColumn" : 0,
+          "startingLine" : 9
+        },
+        "values" : [
+          "Start a ride with ${applicationName}",
+          "Start ${applicationName}",
+          "Record a ride with ${applicationName}",
+          "Start a ride with ${device} in ${applicationName}",
+          "Start ${applicationName} with ${device}"
+        ]
+      },
+      {
+        "appShortcutMetadata" : [
+          {
+            "actionIdentifier" : "EndRideIntent",
+            "index" : 1,
+            "parameterDisplayRepresentations" : {
+
+            },
+            "parameterTypes" : {
+
+            },
+            "title" : "End Ride"
+          }
+        ],
+        "key" : "End the ride in ${applicationName}",
+        "location" : {
+          "startingColumn" : 0,
+          "startingLine" : 9
+        },
+        "values" : [
+          "End the ride in ${applicationName}",
+          "Stop ${applicationName}"
+        ]
+      },
+      {
+        "appShortcutMetadata" : [
+          {
+            "actionIdentifier" : "WeekDistanceIntent",
+            "index" : 2,
+            "parameterDisplayRepresentations" : {
+
+            },
+            "parameterTypes" : {
+
+            },
+            "title" : "Distance This Week"
+          }
+        ],
+        "key" : "How far did I ride this week in ${applicationName}",
+        "location" : {
+          "startingColumn" : 0,
+          "startingLine" : 9
+        },
+        "values" : [
+          "How far did I ride this week in ${applicationName}",
+          "My week in ${applicationName}"
+        ]
+      },
+      {
+        "appShortcutMetadata" : [
+          {
+            "actionIdentifier" : "OpenLastRideIntent",
+            "index" : 3,
+            "parameterDisplayRepresentations" : {
+
+            },
+            "parameterTypes" : {
+
+            },
+            "title" : "Open Last Ride"
+          }
+        ],
+        "key" : "Open my last ride in ${applicationName}",
+        "location" : {
+          "startingColumn" : 0,
+          "startingLine" : 9
+        },
+        "values" : [
+          "Open my last ride in ${applicationName}",
+          "Show my last ride in ${applicationName}"
+        ]
+      }
+    ]
+  },
+  "version" : 2
+}

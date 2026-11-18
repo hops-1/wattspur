@@ -1,0 +1,51 @@
+{
+  "/Volumes/NILS_EXTERN/Claude Code/eBike/.claude/worktrees/quizzical-rhodes-bbd76b/Packages/WattspurKit/Sources/WattspurCore/FIT/FITProfile.swift" : {
+    "const-values" : "/Volumes/NILS_EXTERN/Claude Code/eBike/.claude/worktrees/quizzical-rhodes-bbd76b/build/sim/Build/Intermediates.noindex/WattspurKit.build/Debug-iphonesimulator/WattspurCore-t.build/Objects-normal/arm64/FITProfile.swiftconstvalues",
+    "dependencies" : "/Volumes/NILS_EXTERN/Claude Code/eBike/.claude/worktrees/quizzical-rhodes-bbd76b/build/sim/Build/Intermediates.noindex/WattspurKit.build/Debug-iphonesimulator/WattspurCore-t.build/Objects-normal/arm64/FITProfile.d",
+    "diagnostics" : "/Volumes/NILS_EXTERN/Claude Code/eBike/.claude/worktrees/quizzical-rhodes-bbd76b/build/sim/Build/Intermediates.noindex/WattspurKit.build/Debug-iphonesimulator/WattspurCore-t.build/Objects-normal/arm64/FITProfile.dia",
+    "object" : "/Volumes/NILS_EXTERN/Claude Code/eBike/.claude/worktrees/quizzical-rhodes-bbd76b/build/sim/Build/Intermediates.noindex/WattspurKit.build/Debug-iphonesimulator/WattspurCore-t.build/Objects-normal/arm64/FITProfile.o",
+    "swift-dependencies" : "/Volumes/NILS_EXTERN/Claude Code/eBike/.claude/worktrees/quizzical-rhodes-bbd76b/build/sim/Build/Intermediates.noindex/WattspurKit.build/Debug-iphonesimulator/WattspurCore-t.build/Objects-normal/arm64/FITProfile.swiftdeps"
+  },
+  "/Volumes/NILS_EXTERN/Claude Code/eBike/.claude/worktrees/quizzical-rhodes-bbd76b/Packages/WattspurKit/Sources/WattspurCore/FIT/FITValue.swift" : {
+    "const-values" : "/Volumes/NILS_EXTERN/Claude Code/eBike/.claude/worktrees/quizzical-rhodes-bbd76b/build/sim/Build/Intermediates.noindex/WattspurKit.build/Debug-iphonesimulator/WattspurCore-t.build/Objects-normal/arm64/FITValue.swiftconstvalues",
+    "dependencies" : "/Volumes/NILS_EXTERN/Claude Code/eBike/.claude/worktrees/quizzical-rhodes-bbd76b/build/sim/Build/Intermediates.noindex/WattspurKit.build/Debug-iphonesimulator/WattspurCore-t.build/Objects-normal/arm64/FITValue.d",
+    "diagnostics" : "/Volumes/NILS_EXTERN/Claude Code/eBike/.claude/worktrees/quizzical-rhodes-bbd76b/build/sim/Build/Intermediates.noindex/WattspurKit.build/Debug-iphonesimulator/WattspurCore-t.build/Objects-normal/arm64/FITValue.dia",
+    "object" : "/Volumes/NILS_EXTERN/Claude Code/eBike/.claude/worktrees/quizzical-rhodes-bbd76b/build/sim/Build/Intermediates.noindex/WattspurKit.build/Debug-iphonesimulator/WattspurCore-t.build/Objects-normal/arm64/FITValue.o",
+    "swift-dependencies" : "/Volumes/NILS_EXTERN/Claude Code/eBike/.claude/worktrees/quizzical-rhodes-bbd76b/build/sim/Build/Intermediates.noindex/WattspurKit.build/Debug-iphonesimulator/WattspurCore-t.build/Objects-normal/arm64/FITValue.swiftdeps"
+  },
+  "/Volumes/NILS_EXTERN/Claude Code/eBike/.claude/worktrees/quizzical-rhodes-bbd76b/Packages/WattspurKit/Sources/WattspurCore/Import/GPXRideImporter.swift" : {
+    "const-values" : "/Volumes/NILS_EXTERN/Claude Code/eBike/.claude/worktrees/quizzical-rhodes-bbd76b/build/sim/Build/Intermediates.noindex/WattspurKit.build/Debug-iphonesimulator/WattspurCore-t.build/Objects-normal/arm64/GPXRideImporter.swiftconstvalues",
+    "dependencies" : "/Volumes/NILS_EXTERN/Claude Code/eBike/.claude/worktrees/quizzical-rhodes-bbd76b/build/sim/Build/Intermediates.noindex/WattspurKit.build/Debug-iphonesimulator/WattspurCore-t.build/Objects-normal/arm64/GPXRideImporter.d",
+    "diagnostics" : "/Volumes/NILS_EXTERN/Claude Code/eBike/.claude/worktrees/quizzical-rhodes-bbd76b/build/sim/Build/Intermediates.noindex/WattspurKit.build/Debug-iphonesimulator/WattspurCore-t.build/Objects-normal/arm64/GPXRideImporter.dia",
+    "object" : "/Volumes/NILS_EXTERN/Claude Code/eBike/.claude/worktrees/quizzical-rhodes-bbd76b/build/sim/Build/Intermediates.noindex/WattspurKit.build/Debug-iphonesimulator/WattspurCore-t.build/Objects-normal/arm64/GPXRideImporter.o",
+    "swift-dependencies" : "/Volumes/NILS_EXTERN/Claude Code/eBike/.claude/worktrees/quizzical-rhodes-bbd76b/build/sim/Build/Intermediates.noindex/WattspurKit.build/Debug-iphonesimulator/WattspurCore-t.build/Objects-normal/arm64/GPXRideImporter.swiftdeps"
+  },
+  "/Volumes/NILS_EXTERN/Claude Code/eBike/.claude/worktrees/quizzical-rhodes-bbd76b/Packages/WattspurKit/Sources/WattspurCore/Import/GPXSummary.swift" : {
+    "const-values" : "/Volumes/NILS_EXTERN/Claude Code/eBike/.claude/worktrees/quizzical-rhodes-bbd76b/build/sim/Build/Intermediates.noindex/WattspurKit.build/Debug-iphonesimulator/WattspurCore-t.build/Objects-normal/arm64/GPXSummary.swiftconstvalues",
+    "dependencies" : "/Volumes/NILS_EXTERN/Claude Code/eBike/.claude/worktrees/quizzical-rhodes-bbd76b/build/sim/Build/Intermediates.noindex/WattspurKit.build/Debug-iphonesimulator/WattspurCore-t.build/Objects-normal/arm64/GPXSummary.d",
+    "diagnostics" : "/Volumes/NILS_EXTERN/Claude Code/eBike/.claude/worktrees/quizzical-rhodes-bbd76b/build/sim/Build/Intermediates.noindex/WattspurKit.build/Debug-iphonesimulator/WattspurCore-t.build/Objects-normal/arm64/GPXSummary.dia",
+    "object" : "/Volumes/NILS_EXTERN/Claude Code/eBike/.claude/worktrees/quizzical-rhodes-bbd76b/build/sim/Build/Intermediates.noindex/WattspurKit.build/Debug-iphonesimulator/WattspurCore-t.build/Objects-normal/arm64/GPXSummary.o",
+    "swift-dependencies" : "/Volumes/NILS_EXTERN/Claude Code/eBike/.claude/worktrees/quizzical-rhodes-bbd76b/build/sim/Build/Intermediates.noindex/WattspurKit.build/Debug-iphonesimulator/WattspurCore-t.build/Objects-normal/arm64/GPXSummary.swiftdeps"
+  },
+  "/Volumes/NILS_EXTERN/Claude Code/eBike/.claude/worktrees/quizzical-rhodes-bbd76b/Packages/WattspurKit/Sources/WattspurCore/Import/ImportResult.swift" : {
+    "const-values" : "/Volumes/NILS_EXTERN/Claude Code/eBike/.claude/worktrees/quizzical-rhodes-bbd76b/build/sim/Build/Intermediates.noindex/WattspurKit.build/Debug-iphonesimulator/WattspurCore-t.build/Objects-normal/arm64/ImportResult.swiftconstvalues",
+    "dependencies" : "/Volumes/NILS_EXTERN/Claude Code/eBike/.claude/worktrees/quizzical-rhodes-bbd76b/build/sim/Build/Intermediates.noindex/WattspurKit.build/Debug-iphonesimulator/WattspurCore-t.build/Objects-normal/arm64/ImportResult.d",
+    "diagnostics" : "/Volumes/NILS_EXTERN/Claude Code/eBike/.claude/worktrees/quizzical-rhodes-bbd76b/build/sim/Build/Intermediates.noindex/WattspurKit.build/Debug-iphonesimulator/WattspurCore-t.build/Objects-normal/arm64/ImportResult.dia",
+    "object" : "/Volumes/NILS_EXTERN/Claude Code/eBike/.claude/worktrees/quizzical-rhodes-bbd76b/build/sim/Build/Intermediates.noindex/WattspurKit.build/Debug-iphonesimulator/WattspurCore-t.build/Objects-normal/arm64/ImportResult.o",
+    "swift-dependencies" : "/Volumes/NILS_EXTERN/Claude Code/eBike/.claude/worktrees/quizzical-rhodes-bbd76b/build/sim/Build/Intermediates.noindex/WattspurKit.build/Debug-iphonesimulator/WattspurCore-t.build/Objects-normal/arm64/ImportResult.swiftdeps"
+  },
+  "/Volumes/NILS_EXTERN/Claude Code/eBike/.claude/worktrees/quizzical-rhodes-bbd76b/Packages/WattspurKit/Sources/WattspurCore/Import/RideImporter.swift" : {
+    "const-values" : "/Volumes/NILS_EXTERN/Claude Code/eBike/.claude/worktrees/quizzical-rhodes-bbd76b/build/sim/Build/Intermediates.noindex/WattspurKit.build/Debug-iphonesimulator/WattspurCore-t.build/Objects-normal/arm64/RideImporter.swiftconstvalues",
+    "dependencies" : "/Volumes/NILS_EXTERN/Claude Code/eBike/.claude/worktrees/quizzical-rhodes-bbd76b/build/sim/Build/Intermediates.noindex/WattspurKit.build/Debug-iphonesimulator/WattspurCore-t.build/Objects-normal/arm64/RideImporter.d",
+    "diagnostics" : "/Volumes/NILS_EXTERN/Claude Code/eBike/.claude/worktrees/quizzical-rhodes-bbd76b/build/sim/Build/Intermediates.noindex/WattspurKit.build/Debug-iphonesimulator/WattspurCore-t.build/Objects-normal/arm64/RideImporter.dia",
+    "object" : "/Volumes/NILS_EXTERN/Claude Code/eBike/.claude/worktrees/quizzical-rhodes-bbd76b/build/sim/Build/Intermediates.noindex/WattspurKit.build/Debug-iphonesimulator/WattspurCore-t.build/Objects-normal/arm64/RideImporter.o",
+    "swift-dependencies" : "/Volumes/NILS_EXTERN/Claude Code/eBike/.claude/worktrees/quizzical-rhodes-bbd76b/build/sim/Build/Intermediates.noindex/WattspurKit.build/Debug-iphonesimulator/WattspurCore-t.build/Objects-normal/arm64/RideImporter.swiftdeps"
+  },
+  "/Volumes/NILS_EXTERN/Claude Code/eBike/.claude/worktrees/quizzical-rhodes-bbd76b/Packages/WattspurKit/Sources/WattspurCore/Import/SharedItem.swift" : {
+    "const-values" : "/Volumes/NILS_EXTERN/Claude Code/eBike/.claude/worktrees/quizzical-rhodes-bbd76b/build/sim/Build/Intermediates.noindex/WattspurKit.build/Debug-iphonesimulator/WattspurCore-t.build/Objects-normal/arm64/SharedItem.swiftconstvalues",
+    "dependencies" : "/Volumes/NILS_EXTERN/Claude Code/eBike/.claude/worktrees/quizzical-rhodes-bbd76b/build/sim/Build/Intermediates.noindex/WattspurKit.build/Debug-iphonesimulator/WattspurCore-t.build/Objects-normal/arm64/SharedItem.d",
+    "diagnostics" : "/Volumes/NILS_EXTERN/Claude Code/eBike/.claude/worktrees/quizzical-rhodes-bbd76b/build/sim/Build/Intermediates.noindex/WattspurKit.build/Debug-iphonesimulator/WattspurCore-t.build/Objects-normal/arm64/SharedItem.dia",
+    "object" : "/Volumes/NILS_EXTERN/Claude Code/eBike/.claude/worktrees/quizzical-rhodes-bbd76b/build/sim/Build/Intermediates.noindex/WattspurKit.build/Debug-iphonesimulator/WattspurCore-t.build/Objects-normal/arm64/SharedItem.o",
+    "swift-dependencies" : "/Volumes/NILS_EXTERN/Claude Code/eBike/.claude/worktrees/quizzical-rhodes-bbd76b/build/sim/Build/Intermediates.noindex/WattspurKit.build/Debug-iphonesimulator/WattspurCore-t.build/Objects-normal/arm64/SharedItem.swiftdeps"
+  }
+}

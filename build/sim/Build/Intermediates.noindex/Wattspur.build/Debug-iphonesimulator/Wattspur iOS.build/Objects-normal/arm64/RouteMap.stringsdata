@@ -1,0 +1,208 @@
+{
+  "source": "/Volumes/NILS_EXTERN/Claude Code/eBike/.claude/worktrees/quizzical-rhodes-bbd76b/iOS/RouteMap.swift",
+  "tables": {
+    "Localizable": [
+      {
+        "comment": "",
+        "key": "Shows the values of the colours",
+        "location": {
+          "startingColumn": 52,
+          "startingLine": 114
+        }
+      },
+      {
+        "comment": "",
+        "key": "Shows only the colours",
+        "location": {
+          "startingColumn": 88,
+          "startingLine": 114
+        }
+      },
+      {
+        "comment": "",
+        "key": "Map Style",
+        "location": {
+          "startingColumn": 34,
+          "startingLine": 165
+        }
+      },
+      {
+        "comment": "",
+        "key": "Map Style",
+        "location": {
+          "startingColumn": 20,
+          "startingLine": 149
+        }
+      },
+      {
+        "comment": "",
+        "key": "Apple",
+        "location": {
+          "startingColumn": 25,
+          "startingLine": 150
+        }
+      },
+      {
+        "comment": "",
+        "key": "OpenStreetMap",
+        "location": {
+          "startingColumn": 25,
+          "startingLine": 153
+        }
+      },
+      {
+        "comment": "",
+        "key": "Track Colour",
+        "location": {
+          "startingColumn": 34,
+          "startingLine": 198
+        }
+      },
+      {
+        "comment": "",
+        "key": "Track Colour",
+        "location": {
+          "startingColumn": 20,
+          "startingLine": 184
+        }
+      },
+      {
+        "comment": "",
+        "key": "Lateral Acceleration",
+        "location": {
+          "startingColumn": 57,
+          "startingLine": 220
+        }
+      },
+      {
+        "comment": "",
+        "key": "Lean Angle",
+        "location": {
+          "startingColumn": 21,
+          "startingLine": 211
+        }
+      },
+      {
+        "comment": "",
+        "key": "Surface",
+        "location": {
+          "startingColumn": 24,
+          "startingLine": 212
+        }
+      },
+      {
+        "comment": "",
+        "key": "Route Elevation",
+        "location": {
+          "startingColumn": 26,
+          "startingLine": 213
+        }
+      },
+      {
+        "comment": "",
+        "key": "Plain",
+        "location": {
+          "startingColumn": 22,
+          "startingLine": 214
+        }
+      },
+      {
+        "comment": "",
+        "key": "Track coloured by elevation, from blue at %@ to red at %@",
+        "location": {
+          "startingColumn": 34,
+          "startingLine": 270
+        }
+      },
+      {
+        "comment": "",
+        "key": "Route Elevation",
+        "location": {
+          "startingColumn": 28,
+          "startingLine": 260
+        }
+      },
+      {
+        "comment": "",
+        "key": "Track coloured by road surface: grey smooth, yellow uneven, brown rough",
+        "location": {
+          "startingColumn": 34,
+          "startingLine": 290
+        }
+      },
+      {
+        "comment": "",
+        "key": "Surface",
+        "location": {
+          "startingColumn": 28,
+          "startingLine": 279
+        }
+      },
+      {
+        "comment": "",
+        "key": "Smooth",
+        "location": {
+          "startingColumn": 23,
+          "startingLine": 298
+        }
+      },
+      {
+        "comment": "",
+        "key": "Uneven",
+        "location": {
+          "startingColumn": 23,
+          "startingLine": 299
+        }
+      },
+      {
+        "comment": "",
+        "key": "Rough",
+        "location": {
+          "startingColumn": 22,
+          "startingLine": 300
+        }
+      },
+      {
+        "comment": "",
+        "key": "Track coloured by lean angle, from green upright to purple at 40° and more",
+        "location": {
+          "startingColumn": 55,
+          "startingLine": 327
+        }
+      },
+      {
+        "comment": "",
+        "key": "Track coloured by lateral acceleration, from green below 0.1 g to purple at 0.4 g and more",
+        "location": {
+          "startingColumn": 55,
+          "startingLine": 328
+        }
+      },
+      {
+        "comment": "",
+        "key": "Lean Angle",
+        "location": {
+          "startingColumn": 49,
+          "startingLine": 312
+        }
+      },
+      {
+        "comment": "",
+        "key": "Lateral Acceleration",
+        "location": {
+          "startingColumn": 64,
+          "startingLine": 312
+        }
+      },
+      {
+        "comment": "",
+        "key": "No GPS track",
+        "location": {
+          "startingColumn": 35,
+          "startingLine": 371
+        }
+      }
+    ]
+  },
+  "version": 1
+}

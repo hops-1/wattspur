@@ -1,0 +1,790 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>%@ (vehicle type only)</key>
+	<string>%@ (nur Fahrzeugart)</string>
+	<key>%@ could not be read.</key>
+	<string>%@ konnte nicht gelesen werden.</string>
+	<key>%@: file could not be read</key>
+	<string>%@: Datei konnte nicht gelesen werden</string>
+	<key>%@: this is a planned route, not a ride</key>
+	<string>%@: Das ist eine geplante Route, keine Fahrt</string>
+	<key>%lld Rides Here</key>
+	<string>%lld Fahrten hier</string>
+	<key>%lld completed</key>
+	<string>%lld ergänzt</string>
+	<key>%lld files of this backup are still in iCloud Drive and not on this device yet. Wattspur has started to download them. Wait a few minutes, then choose the backup again. Nothing was changed.</key>
+	<string>%lld Dateien dieser Sicherung liegen noch in iCloud Drive und sind noch nicht auf diesem Gerät. Wattspur lädt sie jetzt. Warte ein paar Minuten und wähle die Sicherung dann noch einmal. Es wurde nichts geändert.</string>
+	<key>%lld more</key>
+	<string>%lld weitere</string>
+	<key>%lld more files could not be read</key>
+	<string>%lld weitere Dateien konnten nicht gelesen werden</string>
+	<key>%lld new</key>
+	<string>%lld neu</string>
+	<key>%lld of %lld rides</key>
+	<string>%1$lld von %2$lld Fahrten</string>
+	<key>%lld rpm</key>
+	<string>%lld 1/min</string>
+	<key>%lld without GPS</key>
+	<string>%lld ohne GPS</string>
+	<key>0–%lld km/h</key>
+	<string>0–%lld km/h</string>
+	<key>10–25 km</key>
+	<string>10–25 km</string>
+	<key>25–50 km</key>
+	<string>25–50 km</string>
+	<key>A backup is a folder with all your rides, bikes, goals and notes, the same as on the Mac. Choose iCloud Drive, On My iPhone or a USB stick. A backup from this iPhone restores on the Mac, and the other way round.</key>
+	<string>Eine Sicherung ist ein Ordner mit allen Fahrten, Bikes, Zielen und Notizen, wie am Mac. Wähle iCloud Drive, „Auf meinem iPhone“ oder einen USB-Stick. Eine Sicherung von diesem iPhone lässt sich am Mac zurückholen und umgekehrt.</string>
+	<key>A report with versions and the error, without rides or positions. Send it yourself if you want help.</key>
+	<string>Ein Bericht mit Versionen und dem Fehler, ohne Fahrten oder Positionen. Schick ihn selbst, wenn du Hilfe möchtest.</string>
+	<key>A ride is already being recorded.</key>
+	<string>Es wird schon eine Fahrt aufgenommen.</string>
+	<key>About Wattspur</key>
+	<string>Über Wattspur</string>
+	<key>Actions</key>
+	<string>Aktionen</string>
+	<key>Add Device</key>
+	<string>Gerät hinzufügen</string>
+	<key>All Bikes</key>
+	<string>Alle Bikes</string>
+	<key>All Rides</key>
+	<string>Alle Fahrten</string>
+	<key>All Shoes</key>
+	<string>Alle Schuhe</string>
+	<key>All Time</key>
+	<string>Alle Zeiten</string>
+	<key>All Vehicles</key>
+	<string>Alle Fahrzeuge</string>
+	<key>Already in your library: %@</key>
+	<string>Schon vorhanden: %@</string>
+	<key>Altitude</key>
+	<string>Höhe</string>
+	<key>Altitude profile of the ride so far</key>
+	<string>Höhenprofil der bisherigen Fahrt</string>
+	<key>An archived device keeps its rides and stays in the filters; new rides do not go to it.</key>
+	<string>Ein archiviertes Gerät behält seine Fahrten und bleibt in den Filtern; neue Fahrten gehen nicht mehr darauf.</string>
+	<key>Any Distance</key>
+	<string>Jede Strecke</string>
+	<key>Apple</key>
+	<string>Apple</string>
+	<key>Apple shows its credit on the map itself.</key>
+	<string>Apple zeigt seine Quellenangabe in der Karte selbst.</string>
+	<key>Archive</key>
+	<string>Archivieren</string>
+	<key>Archived</key>
+	<string>Archiviert</string>
+	<key>Ascent</key>
+	<string>Anstieg</string>
+	<key>Average Cadence</key>
+	<string>Ø Trittfrequenz</string>
+	<key>Average Power</key>
+	<string>Ø Leistung</string>
+	<key>Average Speed</key>
+	<string>Ø Geschwindigkeit</string>
+	<key>Avg</key>
+	<string>Ø</string>
+	<key>Back Up Automatically</key>
+	<string>Automatisch sichern</string>
+	<key>Back Up Library …</key>
+	<string>Bibliothek sichern …</string>
+	<key>Back up once by hand to choose the folder. After that Wattspur backs up there when it opens and the last backup is older than a week, and keeps the newest three automatic backups.</key>
+	<string>Sichere einmal von Hand, um den Ordner zu wählen. Danach sichert Wattspur dorthin, wenn es öffnet und die letzte Sicherung älter als eine Woche ist, und behält die drei neuesten automatischen Sicherungen.</string>
+	<key>Backed Up</key>
+	<string>Gesichert</string>
+	<key>Backing up automatically …</key>
+	<string>Automatische Sicherung läuft …</string>
+	<key>Backing up the library …</key>
+	<string>Bibliothek wird gesichert …</string>
+	<key>Backup</key>
+	<string>Sicherung</string>
+	<key>Backup Not Restored</key>
+	<string>Sicherung nicht zurückgeholt</string>
+	<key>Backup Restored</key>
+	<string>Sicherung zurückgeholt</string>
+	<key>Backups</key>
+	<string>Backups</string>
+	<key>Before Wattspur</key>
+	<string>Vor Wattspur</string>
+	<key>Bicycle</key>
+	<string>Fahrrad</string>
+	<key>Bike</key>
+	<string>Bike</string>
+	<key>Bikes</key>
+	<string>Bikes</string>
+	<key>Blue</key>
+	<string>Blau</string>
+	<key>Cadence</key>
+	<string>Trittfrequenz</string>
+	<key>Cancel</key>
+	<string>Abbrechen</string>
+	<key>Cancel Restore</key>
+	<string>Zurückholen abbrechen</string>
+	<key>Car</key>
+	<string>Auto</string>
+	<key>Cargo bike</key>
+	<string>Lastenrad</string>
+	<key>Change the search or the filters.</key>
+	<string>Ändere die Suche oder die Filter.</string>
+	<key>Choose Photo</key>
+	<string>Foto wählen</string>
+	<key>Choose another period or vehicle, or record a ride.</key>
+	<string>Wähle einen anderen Zeitraum oder ein anderes Fahrzeug, oder nimm eine Fahrt auf.</string>
+	<key>Choose the folder “Wattspur Import” in iCloud Drive that the Mac watches.</key>
+	<string>Wähle den Ordner „Wattspur Import“ in iCloud Drive, den der Mac beobachtet.</string>
+	<key>Choose what you ride with</key>
+	<string>Wählen, womit du fährst</string>
+	<key>Clear search</key>
+	<string>Suche löschen</string>
+	<key>Close Wattspur in the app switcher and open it again. It then replaces the library with the backup.</key>
+	<string>Schließe Wattspur im App-Umschalter und öffne es wieder. Dann ersetzt es die Bibliothek durch die Sicherung.</string>
+	<key>Color</key>
+	<string>Farbe</string>
+	<key>Color the route by elevation</key>
+	<string>Spur nach Höhe einfärben</string>
+	<key>Commit</key>
+	<string>Commit</string>
+	<key>Continue Recording</key>
+	<string>Aufnahme fortsetzen</string>
+	<key>Could Not Save</key>
+	<string>Speichern fehlgeschlagen</string>
+	<key>Create Diagnostics</key>
+	<string>Diagnose erstellen</string>
+	<key>CyclOSM</key>
+	<string>CyclOSM</string>
+	<key>Cycling</key>
+	<string>Rad</string>
+	<key>Date</key>
+	<string>Datum</string>
+	<key>Delete</key>
+	<string>Löschen</string>
+	<key>Delete %lld Rides</key>
+	<string>%lld Fahrten löschen</string>
+	<key>Delete Device</key>
+	<string>Gerät löschen</string>
+	<key>Delete all rides in the trash for good?</key>
+	<string>Alle Fahrten im Papierkorb endgültig löschen?</string>
+	<key>Delete this device?</key>
+	<string>Dieses Gerät löschen?</string>
+	<key>Deleted for good in %lld days</key>
+	<string>Wird in %lld Tagen endgültig gelöscht</string>
+	<key>Deleted rides stay here for 30 days.</key>
+	<string>Gelöschte Fahrten bleiben hier 30 Tage lang.</string>
+	<key>Descent</key>
+	<string>Abstieg</string>
+	<key>Device</key>
+	<string>Gerät</string>
+	<key>Direction of travel up</key>
+	<string>Fahrtrichtung oben</string>
+	<key>Discard</key>
+	<string>Verwerfen</string>
+	<key>Discard Ride</key>
+	<string>Fahrt verwerfen</string>
+	<key>Discard this ride?</key>
+	<string>Diese Fahrt verwerfen?</string>
+	<key>Display</key>
+	<string>Darstellung</string>
+	<key>Distance</key>
+	<string>Strecke</string>
+	<key>Distance This Week</key>
+	<string>Strecke dieser Woche</string>
+	<key>Done</key>
+	<string>Fertig</string>
+	<key>E-Bike</key>
+	<string>E-Bike</string>
+	<key>Earlier libraries Wattspur kept on this iPhone. Backups to restore are made on the Mac (File › Library Backup…).</key>
+	<string>Frühere Mediatheken, die Wattspur auf diesem iPhone aufbewahrt hat. Backups zum Wiederherstellen entstehen am Mac (Ablage › Mediathek-Backup …).</string>
+	<key>Edit</key>
+	<string>Bearbeiten</string>
+	<key>Edit Device</key>
+	<string>Gerät bearbeiten</string>
+	<key>Edit Ride</key>
+	<string>Fahrt bearbeiten</string>
+	<key>Elevation</key>
+	<string>Höhe</string>
+	<key>Elevation Profile</key>
+	<string>Höhenprofil</string>
+	<key>Elevation profile from %@ to %@</key>
+	<string>Höhenprofil von %1$@ bis %2$@</string>
+	<key>Empty</key>
+	<string>Leeren</string>
+	<key>Empty Trash</key>
+	<string>Papierkorb leeren</string>
+	<key>End Ride</key>
+	<string>Fahrt beenden</string>
+	<key>End and Save</key>
+	<string>Beenden und sichern</string>
+	<key>Ends the recording and opens Save Ride.</key>
+	<string>Beendet die Aufnahme und öffnet „Fahrt speichern“.</string>
+	<key>Export the tour again after you have ridden it, then it has times and becomes a ride.</key>
+	<string>Exportiere die Tour noch einmal, nachdem du sie gefahren bist. Dann hat sie Zeiten und wird eine Fahrt.</string>
+	<key>FIT and GPX files, several at once, also from iCloud Drive. Files you put into “On My iPhone › Wattspur › Import” in the Files app are imported when Wattspur opens; then they move to “Importiert”, or to “Fehler” if they cannot be read.</key>
+	<string>FIT- und GPX-Dateien, auch mehrere auf einmal und aus iCloud Drive. Dateien, die du in der Dateien-App unter „Auf meinem iPhone › Wattspur › Import“ ablegst, importiert Wattspur beim Öffnen; danach wandern sie nach „Importiert“, oder nach „Fehler“, wenn sie sich nicht lesen lassen.</string>
+	<key>Female</key>
+	<string>Weiblich</string>
+	<key>Figures estimated from GPS</key>
+	<string>Werte aus GPS geschätzt</string>
+	<key>Folder</key>
+	<string>Ordner</string>
+	<key>For a bike or vehicle that is not yours. A bicycle ride counts in the cycling totals but towards none of your bikes; a car or motorcycle ride does not count in them.</key>
+	<string>Für ein Rad oder Fahrzeug, das nicht deins ist. Eine Fahrt mit dem Fahrrad zählt in die Rad-Summen, aber zu keinem deiner Bikes; eine Fahrt mit Auto oder Motorrad zählt dort nicht.</string>
+	<key>For a test of acceleration and lean angle: each recording also writes the motion sensors and GPS into a file. You find it in the Files app under “On My iPhone › Wattspur › Bewegung”. About 20 MB per hour.</key>
+	<string>Für einen Test von Beschleunigung und Schräglage: Jede Aufnahme schreibt zusätzlich die Bewegungssensoren und das GPS in eine Datei. Du findest sie in der Dateien-App unter „Auf meinem iPhone › Wattspur › Bewegung“. Etwa 20 MB pro Stunde.</string>
+	<key>For the Calories</key>
+	<string>Für die Kalorien</string>
+	<key>GPS is getting more accurate …</key>
+	<string>GPS wird genauer …</string>
+	<key>GPX Attached</key>
+	<string>GPX angehängt</string>
+	<key>GPX files do not say which bike they belong to: %@</key>
+	<string>GPX-Dateien sagen nicht, zu welchem Bike sie gehören: %@</string>
+	<key>Gravel bike</key>
+	<string>Gravelbike</string>
+	<key>Green</key>
+	<string>Grün</string>
+	<key>Handbook</key>
+	<string>Handbuch</string>
+	<key>Heart Rate</key>
+	<string>Puls</string>
+	<key>Heat Map</key>
+	<string>Wärmekarte</string>
+	<key>Heat map: rides per area, from blue for one ride to red for 20 and more</key>
+	<string>Wärmekarte: Fahrten je Fläche, von Blau für eine Fahrt bis Rot für 20 und mehr</string>
+	<key>Height</key>
+	<string>Größe</string>
+	<key>Help &amp; Handbook</key>
+	<string>Hilfe &amp; Handbuch</string>
+	<key>Hybrid</key>
+	<string>Hybrid</string>
+	<key>Import Failed</key>
+	<string>Import fehlgeschlagen</string>
+	<key>Import Files …</key>
+	<string>Dateien importieren …</string>
+	<key>Import Finished</key>
+	<string>Import abgeschlossen</string>
+	<key>Importing %lld of %lld …</key>
+	<string>Importiere %1$lld von %2$lld …</string>
+	<key>In the library: %@, %@
+New file: %@</key>
+	<string>In der Bibliothek: %1$@, %2$@
+Neue Datei: %3$@</string>
+	<key>It disappears on all your devices. This cannot be undone.</key>
+	<string>Es verschwindet auf allen deinen Geräten. Das lässt sich nicht rückgängig machen.</string>
+	<key>Keep Both</key>
+	<string>Beide behalten</string>
+	<key>Keep Riding</key>
+	<string>Weiterfahren</string>
+	<key>Kilometres before Wattspur</key>
+	<string>Kilometer vor Wattspur</string>
+	<key>Kind</key>
+	<string>Art</string>
+	<key>Last 30 Days</key>
+	<string>Letzte 30 Tage</string>
+	<key>Last 365 Days</key>
+	<string>Letzte 365 Tage</string>
+	<key>Last Ride</key>
+	<string>Letzte Fahrt</string>
+	<key>Last backup: %@</key>
+	<string>Letzte Sicherung: %@</string>
+	<key>Last synced</key>
+	<string>Zuletzt synchronisiert</string>
+	<key>Later</key>
+	<string>Später</string>
+	<key>Lateral Acceleration</key>
+	<string>Querbeschleunigung</string>
+	<key>Lean Angle</key>
+	<string>Schräglage</string>
+	<key>Left</key>
+	<string>Links</string>
+	<key>Library</key>
+	<string>Bibliothek</string>
+	<key>Library Not Opened</key>
+	<string>Mediathek nicht geöffnet</string>
+	<key>Lines</key>
+	<string>Linien</string>
+	<key>Location access denied</key>
+	<string>Zugriff auf den Standort verweigert</string>
+	<key>Longest Ride</key>
+	<string>Längste Fahrt</string>
+	<key>Male</key>
+	<string>Männlich</string>
+	<key>Manufacturer</key>
+	<string>Hersteller</string>
+	<key>Map</key>
+	<string>Karte</string>
+	<key>Map Sources</key>
+	<string>Quellen der Karten</string>
+	<key>Map Style</key>
+	<string>Kartenstil</string>
+	<key>Map data and style: open the licence</key>
+	<string>Kartendaten und Darstellung: Lizenz öffnen</string>
+	<key>Maps</key>
+	<string>Karten</string>
+	<key>Max</key>
+	<string>Max.</string>
+	<key>Max. Acceleration</key>
+	<string>Max. Beschleunigung</string>
+	<key>Max. Braking</key>
+	<string>Max. Bremsung</string>
+	<key>Max. Lateral Left</key>
+	<string>Max. Querbeschl. links</string>
+	<key>Max. Lateral Right</key>
+	<string>Max. Querbeschl. rechts</string>
+	<key>Max. Lean Left</key>
+	<string>Max. Schräglage links</string>
+	<key>Max. Lean Right</key>
+	<string>Max. Schräglage rechts</string>
+	<key>Max. Power</key>
+	<string>Max. Leistung</string>
+	<key>Max. Speed</key>
+	<string>Max. Geschwindigkeit</string>
+	<key>Model</key>
+	<string>Modell</string>
+	<key>More</key>
+	<string>Mehr</string>
+	<key>Motorcycle</key>
+	<string>Motorrad</string>
+	<key>Mountain bike</key>
+	<string>Mountainbike</string>
+	<key>Move this ride to the trash?</key>
+	<string>Diese Fahrt in den Papierkorb legen?</string>
+	<key>Move to Trash</key>
+	<string>In den Papierkorb</string>
+	<key>Moves the library into a folder “Damaged Library” beside it and opens an empty one. With iCloud, the synced rides come back.</key>
+	<string>Verschiebt die Mediathek in einen Ordner „Damaged Library“ daneben und öffnet eine leere. Mit iCloud kommen die synchronisierten Fahrten zurück.</string>
+	<key>My eBike</key>
+	<string>Mein eBike</string>
+	<key>Name</key>
+	<string>Name</string>
+	<key>Name the ride and save it.</key>
+	<string>Gib der Fahrt einen Namen und speichere sie.</string>
+	<key>New Device</key>
+	<string>Neues Gerät</string>
+	<key>No</key>
+	<string>Nein</string>
+	<key>No GPS track</key>
+	<string>Keine GPS-Spur</string>
+	<key>No Matches</key>
+	<string>Keine Treffer</string>
+	<key>No Rides</key>
+	<string>Keine Fahrten</string>
+	<key>No Rides Yet</key>
+	<string>Noch keine Fahrten</string>
+	<key>No Rides on the Map</key>
+	<string>Keine Fahrten auf der Karte</string>
+	<key>No connection to iCloud. Wattspur syncs as soon as there is one again.</key>
+	<string>Keine Verbindung zu iCloud. Wattspur synchronisiert, sobald sie wieder da ist.</string>
+	<key>No earlier libraries on this iPhone. With iCloud, the rides are also on the Mac and in iCloud.</key>
+	<string>Keine früheren Mediatheken auf diesem iPhone. Mit iCloud sind die Fahrten auch am Mac und in iCloud.</string>
+	<key>No location at the moment</key>
+	<string>Gerade kein Standort</string>
+	<key>No name yet</key>
+	<string>Noch kein Name</string>
+	<key>No ride is being recorded.</key>
+	<string>Gerade wird keine Fahrt aufgenommen.</string>
+	<key>Not set</key>
+	<string>Nicht angegeben</string>
+	<key>Not specified</key>
+	<string>Keine Angabe</string>
+	<key>Not yet</key>
+	<string>Noch nicht</string>
+	<key>OK</key>
+	<string>OK</string>
+	<key>Off</key>
+	<string>Aus</string>
+	<key>On</key>
+	<string>Ein</string>
+	<key>One library on this iPhone and your Mac, in your own iCloud account.</key>
+	<string>Eine Mediathek auf diesem iPhone und deinem Mac, in deinem eigenen iCloud-Konto.</string>
+	<key>Only approximate location allowed</key>
+	<string>Nur ungefährer Standort erlaubt</string>
+	<key>Open Last Ride</key>
+	<string>Letzte Fahrt öffnen</string>
+	<key>OpenStreetMap</key>
+	<string>OpenStreetMap</string>
+	<key>OpenTopoMap</key>
+	<string>OpenTopoMap</string>
+	<key>Orange</key>
+	<string>Orange</string>
+	<key>Over 50 km</key>
+	<string>Über 50 km</string>
+	<key>Overview</key>
+	<string>Übersicht</string>
+	<key>Part</key>
+	<string>Teil</string>
+	<key>Pause</key>
+	<string>Pause</string>
+	<key>Pause or Resume Ride</key>
+	<string>Fahrt pausieren oder fortsetzen</string>
+	<key>Paused</key>
+	<string>Pausiert</string>
+	<key>Period</key>
+	<string>Zeitraum</string>
+	<key>Pink</key>
+	<string>Pink</string>
+	<key>Plain</key>
+	<string>Einfarbig</string>
+	<key>Power</key>
+	<string>Leistung</string>
+	<key>Preparing the restore …</key>
+	<string>Zurückholen wird vorbereitet …</string>
+	<key>Privacy Policy</key>
+	<string>Datenschutz</string>
+	<key>Profile</key>
+	<string>Profil</string>
+	<key>Purple</key>
+	<string>Violett</string>
+	<key>Questions and Answers</key>
+	<string>Fragen und Antworten</string>
+	<key>Ready to Restore</key>
+	<string>Bereit zum Zurückholen</string>
+	<key>Record Raw Motion</key>
+	<string>Rohdaten der Bewegung mitschreiben</string>
+	<key>Record a ride in the overview, or import FIT and GPX files.</key>
+	<string>Nimm in der Übersicht eine Fahrt auf, oder importiere FIT- und GPX-Dateien.</string>
+	<key>Record a ride in the overview.</key>
+	<string>Nimm in der Übersicht eine Fahrt auf.</string>
+	<key>Record your first ride with “Start Ride”. It is saved on this iPhone.</key>
+	<string>Nimm deine erste Fahrt mit „Fahrt starten“ auf. Sie wird auf diesem iPhone gespeichert.</string>
+	<key>Record your first ride with “Start Ride”. Rides from your Mac appear here once it syncs with iCloud too.</key>
+	<string>Nimm deine erste Fahrt mit „Fahrt starten“ auf. Fahrten von deinem Mac erscheinen hier, sobald er auch mit iCloud synchronisiert.</string>
+	<key>Recording</key>
+	<string>Aufnahme</string>
+	<key>Recordings</key>
+	<string>Aufnahmen</string>
+	<key>Remove Photo</key>
+	<string>Foto entfernen</string>
+	<key>Reset</key>
+	<string>Zurücksetzen</string>
+	<key>Restore</key>
+	<string>Wiederherstellen</string>
+	<key>Restore Backup …</key>
+	<string>Sicherung zurückholen …</string>
+	<key>Restore This Backup?</key>
+	<string>Diese Sicherung zurückholen?</string>
+	<key>Restore from Archive</key>
+	<string>Aus dem Archiv holen</string>
+	<key>Resume</key>
+	<string>Weiter</string>
+	<key>Ride Not Saved</key>
+	<string>Fahrt nicht gesichert</string>
+	<key>Ride Time</key>
+	<string>Fahrzeit</string>
+	<key>Ride on %@</key>
+	<string>Fahrt am %@</string>
+	<key>Ride started. Have a good ride!</key>
+	<string>Fahrt gestartet. Gute Fahrt!</string>
+	<key>Rides</key>
+	<string>Fahrten</string>
+	<key>Rides per Area</key>
+	<string>Fahrten je Fläche</string>
+	<key>Riding Time</key>
+	<string>Fahrzeit</string>
+	<key>Right</key>
+	<string>Rechts</string>
+	<key>Road bike</key>
+	<string>Rennrad</string>
+	<key>Rough</key>
+	<string>Rau</string>
+	<key>Route Elevation</key>
+	<string>Höhe</string>
+	<key>Running</key>
+	<string>Laufen</string>
+	<key>Running shoes</key>
+	<string>Laufschuhe</string>
+	<key>Sample Ride</key>
+	<string>Beispielfahrt</string>
+	<key>Sample data: the tiles count the sample ride's week and month.</key>
+	<string>Beispieldaten: Die Kacheln zählen Woche und Monat der Beispielfahrt.</string>
+	<key>Satellite</key>
+	<string>Satellit</string>
+	<key>Save</key>
+	<string>Sichern</string>
+	<key>Search rides</key>
+	<string>Fahrten suchen</string>
+	<key>Sex</key>
+	<string>Geschlecht</string>
+	<key>Share GPX</key>
+	<string>GPX teilen</string>
+	<key>Shoes</key>
+	<string>Schuhe</string>
+	<key>Show All Rides</key>
+	<string>Alle Fahrten zeigen</string>
+	<key>Show Backups</key>
+	<string>Backups zeigen</string>
+	<key>Shows all rides</key>
+	<string>Zeigt alle Fahrten</string>
+	<key>Shows only the colours</key>
+	<string>Zeigt nur die Farben</string>
+	<key>Shows the ride</key>
+	<string>Zeigt die Fahrt</string>
+	<key>Shows the rides of this period</key>
+	<string>Zeigt die Fahrten dieses Zeitraums</string>
+	<key>Shows the values of the colours</key>
+	<string>Zeigt die Werte zu den Farben</string>
+	<key>Shows your newest ride.</key>
+	<string>Zeigt deine neueste Fahrt.</string>
+	<key>Skip</key>
+	<string>Überspringen</string>
+	<key>Smooth</key>
+	<string>Eben</string>
+	<key>Some changes from this iPhone are not in iCloud yet. Keep iCloud on for Wattspur until they are, or they may be lost.</key>
+	<string>Einige Änderungen von diesem iPhone sind noch nicht in iCloud. Lass iCloud für Wattspur an, bis sie oben sind, sonst können sie verloren gehen.</string>
+	<key>Speed</key>
+	<string>Tempo</string>
+	<key>Speed profile of the ride so far</key>
+	<string>Tempoprofil der bisherigen Fahrt</string>
+	<key>Sport</key>
+	<string>Sportart</string>
+	<key>Standard</key>
+	<string>Standard</string>
+	<key>Standard, Satellite, Hybrid</key>
+	<string>Standard, Satellit, Hybrid</string>
+	<key>Start Ride</key>
+	<string>Fahrt starten</string>
+	<key>Start with an Empty Library</key>
+	<string>Mit leerer Mediathek starten</string>
+	<key>Start with an empty library?</key>
+	<string>Mit leerer Mediathek starten?</string>
+	<key>Starts recording a ride with GPS.</key>
+	<string>Startet die Aufnahme einer Fahrt mit GPS.</string>
+	<key>Status</key>
+	<string>Status</string>
+	<key>Stop</key>
+	<string>Stopp</string>
+	<key>Stop syncing with iCloud?</key>
+	<string>Sync mit iCloud beenden?</string>
+	<key>Storage full: the ride is not backed up</key>
+	<string>Speicher voll: Die Fahrt wird nicht gesichert</string>
+	<key>Surface</key>
+	<string>Belag</string>
+	<key>Sync is not working at the moment: %@</key>
+	<string>Der Sync klappt gerade nicht: %@</string>
+	<key>Sync with iCloud</key>
+	<string>Mit iCloud synchronisieren</string>
+	<key>Sync with iCloud is on: the rides in iCloud and on all your devices are then replaced with the backup too.</key>
+	<string>Der Sync mit iCloud ist an: Die Fahrten in iCloud und auf allen deinen Geräten werden dann auch durch die Sicherung ersetzt.</string>
+	<key>Syncing …</key>
+	<string>Wird synchronisiert …</string>
+	<key>Takes effect the next time Wattspur opens: close it in the app switcher.</key>
+	<string>Gilt beim nächsten Öffnen von Wattspur: Schließe die App dazu im App-Umschalter.</string>
+	<key>Teal</key>
+	<string>Petrol</string>
+	<key>Tells how far you rode this week.</key>
+	<string>Sagt, wie weit du diese Woche gefahren bist.</string>
+	<key>Test</key>
+	<string>Test</string>
+	<key>Test Tools</key>
+	<string>Test-Werkzeuge</string>
+	<key>The Bosch file of a recorded ride</key>
+	<string>Die Bosch-Datei einer aufgenommenen Fahrt</string>
+	<key>The Folder Exchange Has Ended</key>
+	<string>Der Ordner-Austausch ist beendet</string>
+	<key>The Library Could Not Be Opened</key>
+	<string>Die Mediathek ließ sich nicht öffnen</string>
+	<key>The OpenStreetMap styles come from volunteer servers; Wattspur loads only the tiles on screen and keeps them for a while. Without a connection the route shows on a plain ground.</key>
+	<string>Die OpenStreetMap-Stile kommen von Servern Freiwilliger. Wattspur lädt nur die Kacheln, die du siehst, und hebt sie eine Weile auf. Ohne Verbindung steht die Route auf leerem Grund.</string>
+	<key>The backup could not be restored: %@. Your library as it was before is in the folder “%@” in the app's files. Do not delete it; write to the developer to get it back.</key>
+	<string>Die Sicherung konnte nicht zurückgeholt werden: %1$@. Deine Bibliothek von vorher liegt im Ordner „%2$@“ in den Dateien der App. Lösche ihn nicht; schreib dem Entwickler, um sie zurückzubekommen.</string>
+	<key>The backup could not be restored: %@. Your library is as it was before, and a copy of it is in the folder “%@”. Choose the backup again to try once more.</key>
+	<string>Die Sicherung konnte nicht zurückgeholt werden: %1$@. Deine Bibliothek ist wie vorher, und eine Kopie davon liegt im Ordner „%2$@“. Wähle die Sicherung noch einmal, um es erneut zu versuchen.</string>
+	<key>The backup is from %@ (Wattspur %@).</key>
+	<string>Die Sicherung ist vom %1$@ (Wattspur %2$@).</string>
+	<key>The change reaches your Mac over iCloud.</key>
+	<string>Die Änderung kommt über iCloud auf deinen Mac.</string>
+	<key>The file was attached to “%@”. The Bosch values stay as they are.</key>
+	<string>Die Datei wurde an „%@“ angehängt. Die Bosch-Werte bleiben, wie sie sind.</string>
+	<key>The folder for the automatic backup is no longer there. Back up once by hand to choose a new one.</key>
+	<string>Den Ordner für die automatische Sicherung gibt es nicht mehr. Sichere einmal von Hand, um einen neuen zu wählen.</string>
+	<key>The handbook is online, so it can get better between versions.</key>
+	<string>Das Handbuch ist online, damit es auch zwischen zwei Versionen besser werden kann.</string>
+	<key>The kilometres before the first ride in Wattspur count in this device's total only.</key>
+	<string>Die Kilometer vor der ersten Fahrt in Wattspur zählen nur beim Gesamtstand dieses Geräts.</string>
+	<key>The last change could not be saved and may be lost when Wattspur quits. Check that there is free space on this device. %@</key>
+	<string>Die letzte Änderung konnte nicht gespeichert werden und geht beim Beenden von Wattspur womöglich verloren. Prüfe, ob auf diesem Gerät genug Speicher frei ist. %@</string>
+	<key>The last device cannot be archived: new rides need one.</key>
+	<string>Das letzte Gerät lässt sich nicht archivieren: Neue Fahrten brauchen eines.</string>
+	<key>The library could not be moved aside: %@</key>
+	<string>Die Mediathek konnte nicht beiseitegelegt werden: %@</string>
+	<key>The library file could not be read: %@</key>
+	<string>Die Datei der Bibliothek konnte nicht gelesen werden: %@</string>
+	<key>The library is moved into a folder “Damaged Library” beside it, not deleted.</key>
+	<string>Die Mediathek wird in einen Ordner „Damaged Library“ daneben verschoben, nicht gelöscht.</string>
+	<key>The library is now the backup from %@. The library before it is kept in a folder “Library Before Restore …”.</key>
+	<string>Die Bibliothek ist jetzt die Sicherung vom %@. Die Bibliothek davor bleibt im Ordner „Library Before Restore …“.</string>
+	<key>The library on this iPhone is replaced with the backup the next time Wattspur opens. Rides and changes since the backup are not in it. The current library is kept in a folder beside it.</key>
+	<string>Beim nächsten Öffnen ersetzt Wattspur die Bibliothek auf diesem iPhone durch die Sicherung. Fahrten und Änderungen seit der Sicherung sind nicht darin. Die jetzige Bibliothek bleibt in einem Ordner daneben.</string>
+	<key>The profile appears after the first few hundred metres.</key>
+	<string>Das Profil erscheint nach den ersten paar hundert Metern.</string>
+	<key>The recording has no track yet: GPS needs a few seconds of riding. Keep riding or discard it.</key>
+	<string>Die Aufnahme hat noch keine Spur: GPS braucht ein paar Sekunden Fahrt. Fahr weiter oder verwirf sie.</string>
+	<key>The recording is kept. %@</key>
+	<string>Die Aufnahme bleibt erhalten. %@</string>
+	<key>The ride is saved on this iPhone and reaches your Mac over iCloud.</key>
+	<string>Die Fahrt wird auf diesem iPhone gespeichert und kommt über iCloud auf deinen Mac.</string>
+	<key>The ride is saved on this iPhone.</key>
+	<string>Die Fahrt wird auf diesem iPhone gespeichert.</string>
+	<key>The rides stay in iCloud, on your Mac and on this iPhone. New rides then stay on this iPhone.</key>
+	<string>Die Fahrten bleiben in iCloud, auf deinem Mac und auf diesem iPhone. Neue Fahrten bleiben dann auf diesem iPhone.</string>
+	<key>The sample ride could not be read.</key>
+	<string>Die Beispielfahrt konnte nicht gelesen werden.</string>
+	<key>There is no library to back up yet.</key>
+	<string>Es gibt noch keine Bibliothek zum Sichern.</string>
+	<key>This Month</key>
+	<string>Dieser Monat</string>
+	<key>This Week</key>
+	<string>Diese Woche</string>
+	<key>This Year</key>
+	<string>Dieses Jahr</string>
+	<key>This backup is not complete: %lld files of ride data are missing in it. Wattspur does not restore it, so no ride loses its data. Nothing was changed.</key>
+	<string>Diese Sicherung ist nicht vollständig: Ihr fehlen %lld Dateien mit Fahrtdaten. Wattspur holt sie nicht zurück, damit keine Fahrt ihre Daten verliert. Es wurde nichts geändert.</string>
+	<key>This backup was made by a newer version of Wattspur. Update Wattspur before you restore it.</key>
+	<string>Diese Sicherung stammt von einer neueren Version von Wattspur. Aktualisiere Wattspur, bevor du sie zurückholst.</string>
+	<key>This backup was made by a newer version of Wattspur. Update Wattspur to restore it.</key>
+	<string>Diese Sicherung stammt von einer neueren Version von Wattspur. Aktualisiere Wattspur, um sie zurückzuholen.</string>
+	<key>This folder is not a Wattspur backup.</key>
+	<string>Dieser Ordner ist keine Wattspur-Sicherung.</string>
+	<key>This iPhone</key>
+	<string>Dieses iPhone</string>
+	<key>This iPhone is not signed in to iCloud, or iCloud is off for Wattspur. New rides stay only on this iPhone.</key>
+	<string>Dieses iPhone ist nicht bei iCloud angemeldet, oder iCloud ist für Wattspur aus. Neue Fahrten bleiben nur auf diesem iPhone.</string>
+	<key>This ride is already in your library</key>
+	<string>Diese Fahrt ist schon in deiner Bibliothek</string>
+	<key>This week: %@, %@.</key>
+	<string>Diese Woche: %1$@, %2$@.</string>
+	<key>Time</key>
+	<string>Zeit</string>
+	<key>To delete it, assign all its rides (%lld) to another device first.</key>
+	<string>Zum Löschen weise erst alle seine Fahrten (%lld) einem anderen Gerät zu.</string>
+	<key>Top Speed</key>
+	<string>Höchsttempo</string>
+	<key>Total Time</key>
+	<string>Gesamtzeit</string>
+	<key>Track Colour</key>
+	<string>Farbe der Spur</string>
+	<key>Track coloured by elevation, from blue at %@ to red at %@</key>
+	<string>Spur nach Höhe eingefärbt, von Blau bei %@ bis Rot bei %@</string>
+	<key>Track coloured by lateral acceleration, from green below 0.1 g to purple at 0.4 g and more</key>
+	<string>Spur nach Querbeschleunigung eingefärbt, von Grün unter 0,1 g bis Lila ab 0,4 g</string>
+	<key>Track coloured by lean angle, from green upright to purple at 40° and more</key>
+	<string>Spur nach Schräglage eingefärbt, von Grün aufrecht bis Lila ab 40°</string>
+	<key>Track coloured by road surface: grey smooth, yellow uneven, brown rough</key>
+	<string>Spur nach Belag eingefärbt: Grau eben, Gelb uneben, Braun rau</string>
+	<key>Trash</key>
+	<string>Papierkorb</string>
+	<key>Trash Is Empty</key>
+	<string>Papierkorb ist leer</string>
+	<key>Turn Off</key>
+	<string>Ausschalten</string>
+	<key>Under 10 km</key>
+	<string>Unter 10 km</string>
+	<key>Uneven</key>
+	<string>Uneben</string>
+	<key>Uneven Surface</key>
+	<string>Unebener Belag</string>
+	<key>Unfinished Ride</key>
+	<string>Nicht beendete Fahrt</string>
+	<key>Update from the New File</key>
+	<string>Aus der neuen Datei aktualisieren</string>
+	<key>Update them from the new files? Your names are kept.</key>
+	<string>Mit den neuen Dateien aktualisieren? Deine Namen bleiben erhalten.</string>
+	<key>Use iCloud</key>
+	<string>iCloud nutzen</string>
+	<key>Use the Bosch Values</key>
+	<string>Bosch-Werte übernehmen</string>
+	<key>Vehicle</key>
+	<string>Fahrzeug</string>
+	<key>Vehicle Type</key>
+	<string>Fahrzeugart</string>
+	<key>Vehicle: %@</key>
+	<string>Fahrzeug: %@</string>
+	<key>Vehicles</key>
+	<string>Fahrzeuge</string>
+	<key>Version</key>
+	<string>Version</string>
+	<key>Wattspur %@ (%@, %@)</key>
+	<string>Wattspur %1$@ (%2$@, %3$@)</string>
+	<key>Wattspur could not open your library. The file may be damaged, or an update went wrong. Nothing has been deleted: the library stays where it is until you choose what to do.</key>
+	<string>Wattspur konnte deine Mediathek nicht öffnen. Die Datei ist vielleicht beschädigt, oder ein Update ging schief. Gelöscht wurde nichts: Die Mediathek bleibt, wo sie ist, bis du entscheidest, was passieren soll.</string>
+	<key>Wattspur diagnostics</key>
+	<string>Wattspur-Diagnose</string>
+	<key>Wattspur has an unfinished ride. Continue it or end it first.</key>
+	<string>Wattspur hat eine nicht beendete Fahrt. Setze sie zuerst fort oder beende sie.</string>
+	<key>Wattspur has no server and no account. Your rides stay on your devices and in your own iCloud.</key>
+	<string>Wattspur hat keinen Server und kein Konto. Deine Fahrten bleiben auf deinen Geräten und in deinem eigenen iCloud.</string>
+	<key>Wattspur on the iPhone</key>
+	<string>Wattspur auf dem iPhone</string>
+	<key>Wattspur on the iPhone no longer reads rides from a folder. Your rides are on your Mac: turn on Sync with iCloud, here under More and on the Mac under Wattspur › Settings › iCloud, and they come to this iPhone. Rides recorded here stay on this iPhone until then; “Share GPX” takes one to the Mac.</key>
+	<string>Wattspur auf dem iPhone liest keine Fahrten mehr aus einem Ordner. Deine Fahrten sind auf deinem Mac: Schalte den Sync mit iCloud ein, hier unter Mehr und am Mac unter Wattspur › Einstellungen › iCloud, dann kommen sie auf dieses iPhone. Fahrten, die du hier aufnimmst, bleiben bis dahin auf diesem iPhone; mit „GPX teilen“ bringst du eine an den Mac.</string>
+	<key>Wattspur on the iPhone shows the rides from your Mac. Choose the folder “Wattspur Import” in iCloud Drive that the Mac watches.</key>
+	<string>Wattspur auf dem iPhone zeigt die Fahrten von deinem Mac. Wähle den Ordner „Wattspur Import“ in iCloud Drive, den der Mac beobachtet.</string>
+	<key>Wattspur was closed while recording. Continue the ride, or end it and save what was recorded?</key>
+	<string>Wattspur wurde während der Aufnahme beendet. Möchtest du die Fahrt fortsetzen oder beenden und das Aufgenommene sichern?</string>
+	<key>Weight</key>
+	<string>Gewicht</string>
+	<key>Weight 20–300 kg, height 80–250 cm. Without them the calories come from the work alone.</key>
+	<string>Gewicht 20–300 kg, Größe 80–250 cm. Ohne diese Angaben kommen die Kalorien nur aus der Arbeit.</string>
+	<key>What Are You Riding?</key>
+	<string>Womit fährst du?</string>
+	<key>What's New</key>
+	<string>Neuigkeiten</string>
+	<key>When Wattspur opens and the last backup is older than a week, it backs up into the folder you chose last. It keeps the newest three automatic backups there and deletes only its own.</key>
+	<string>Öffnet Wattspur und ist die letzte Sicherung älter als eine Woche, sichert es in den zuletzt gewählten Ordner. Dort behält es die drei neuesten automatischen Sicherungen und löscht nur eigene.</string>
+	<key>Which Vehicle?</key>
+	<string>Für welches Fahrzeug?</string>
+	<key>With iCloud the Mac shows the same profile.</key>
+	<string>Mit iCloud zeigt der Mac dasselbe Profil.</string>
+	<key>With iCloud the devices come to the Mac too.</key>
+	<string>Mit iCloud kommen die Geräte auch auf den Mac.</string>
+	<key>Without iCloud, the rides stay on this iPhone. They reach the Mac with “Share GPX”, e.g. by AirDrop.</key>
+	<string>Ohne iCloud bleiben die Fahrten auf diesem iPhone. Zum Mac kommen sie mit „GPX teilen“, z. B. per AirDrop.</string>
+	<key>Work</key>
+	<string>Arbeit</string>
+	<key>Year of Birth</key>
+	<string>Geburtsjahr</string>
+	<key>Yes</key>
+	<string>Ja</string>
+	<key>You can restore it in More › Trash for 30 days.</key>
+	<string>Unter Mehr › Papierkorb kannst du sie 30 Tage lang wiederherstellen.</string>
+	<key>Your iCloud storage is full. New rides stay on this iPhone until there is room again.</key>
+	<string>Dein iCloud-Speicher ist voll. Neue Fahrten bleiben auf diesem iPhone, bis wieder Platz ist.</string>
+	<key>Your rides are on this iPhone and in your own iCloud account, the same as on your Mac.</key>
+	<string>Deine Fahrten liegen auf diesem iPhone und in deinem eigenen iCloud-Konto, genauso wie auf deinem Mac.</string>
+	<key>Your rides are on this iPhone. Sync with the Mac comes with iCloud.</key>
+	<string>Deine Fahrten liegen auf diesem iPhone. Der Abgleich mit dem Mac kommt mit iCloud.</string>
+	<key>bpm</key>
+	<string>Schläge/min</string>
+	<key>cm</key>
+	<string>cm</string>
+	<key>iCloud</key>
+	<string>iCloud</string>
+	<key>iCloud &amp; Library</key>
+	<string>iCloud &amp; Bibliothek</string>
+	<key>iCloud is restricted on this iPhone. New rides stay only on this iPhone.</key>
+	<string>iCloud ist auf diesem iPhone eingeschränkt. Neue Fahrten bleiben nur auf diesem iPhone.</string>
+	<key>iCloud now brings your other devices to the same state; give it a few minutes.</key>
+	<string>iCloud bringt jetzt deine anderen Geräte auf denselben Stand; das dauert ein paar Minuten.</string>
+	<key>kg</key>
+	<string>kg</string>
+	<key>km</key>
+	<string>km</string>
+	<key>left</key>
+	<string>links</string>
+	<key>m</key>
+	<string>m</string>
+	<key>no extension</key>
+	<string>ohne Endung</string>
+	<key>ride</key>
+	<string>Fahrt</string>
+	<key>rides</key>
+	<string>Fahrten</string>
+	<key>right</key>
+	<string>rechts</string>
+	<key>rpm</key>
+	<string>1/min</string>
+	<key>with %@</key>
+	<string>mit %@</string>
+	<key>“%@” in “%@”</key>
+	<string>„%1$@“ in „%2$@“</string>
+</dict>
+</plist>

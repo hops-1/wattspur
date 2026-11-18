@@ -1,0 +1,88 @@
+{
+  "source": "/Volumes/NILS_EXTERN/Claude Code/eBike/.claude/worktrees/quizzical-rhodes-bbd76b/iOS/TrashView.swift",
+  "tables": {
+    "Localizable": [
+      {
+        "comment": "",
+        "key": "Delete all rides in the trash for good?",
+        "location": {
+          "startingColumn": 29,
+          "startingLine": 50
+        }
+      },
+      {
+        "comment": "",
+        "key": "Trash",
+        "location": {
+          "startingColumn": 26,
+          "startingLine": 56
+        }
+      },
+      {
+        "comment": "",
+        "key": "Deleted for good in %lld days",
+        "location": {
+          "startingColumn": 26,
+          "startingLine": 17
+        }
+      },
+      {
+        "comment": "",
+        "key": "Restore",
+        "location": {
+          "startingColumn": 28,
+          "startingLine": 22
+        }
+      },
+      {
+        "comment": "",
+        "key": "Delete",
+        "location": {
+          "startingColumn": 28,
+          "startingLine": 26
+        }
+      },
+      {
+        "comment": "",
+        "key": "Deleted rides stay here for 30 days.",
+        "location": {
+          "startingColumn": 58,
+          "startingLine": 34
+        }
+      },
+      {
+        "comment": "",
+        "key": "Trash Is Empty",
+        "location": {
+          "startingColumn": 40,
+          "startingLine": 33
+        }
+      },
+      {
+        "comment": "",
+        "key": "Empty Trash",
+        "location": {
+          "startingColumn": 24,
+          "startingLine": 39
+        }
+      },
+      {
+        "comment": "",
+        "key": "Empty",
+        "location": {
+          "startingColumn": 24,
+          "startingLine": 47
+        }
+      },
+      {
+        "comment": "",
+        "key": "Delete %lld Rides",
+        "location": {
+          "startingColumn": 20,
+          "startingLine": 52
+        }
+      }
+    ]
+  },
+  "version": 1
+}

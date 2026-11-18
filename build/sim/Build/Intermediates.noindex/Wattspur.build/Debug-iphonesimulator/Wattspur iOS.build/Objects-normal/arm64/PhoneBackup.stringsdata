@@ -1,0 +1,96 @@
+{
+  "source": "/Volumes/NILS_EXTERN/Claude Code/eBike/.claude/worktrees/quizzical-rhodes-bbd76b/iOS/PhoneBackup.swift",
+  "tables": {
+    "Localizable": [
+      {
+        "comment": "",
+        "key": "Backing up automatically …",
+        "location": {
+          "startingColumn": 56,
+          "startingLine": 114
+        }
+      },
+      {
+        "comment": "",
+        "key": "Backing up the library …",
+        "location": {
+          "startingColumn": 108,
+          "startingLine": 114
+        }
+      },
+      {
+        "comment": "",
+        "key": "There is no library to back up yet.",
+        "location": {
+          "startingColumn": 44,
+          "startingLine": 194
+        }
+      },
+      {
+        "comment": "",
+        "key": "This folder is not a Wattspur backup.",
+        "location": {
+          "startingColumn": 45,
+          "startingLine": 195
+        }
+      },
+      {
+        "comment": "",
+        "key": "This backup was made by a newer version of Wattspur. Update Wattspur to restore it.",
+        "location": {
+          "startingColumn": 52,
+          "startingLine": 196
+        }
+      },
+      {
+        "comment": "",
+        "key": "%lld files of this backup are still in iCloud Drive and not on this device yet. Wattspur has started to download them. Wait a few minutes, then choose the backup again. Nothing was changed.",
+        "location": {
+          "startingColumn": 31,
+          "startingLine": 198
+        }
+      },
+      {
+        "comment": "",
+        "key": "This backup is not complete: %lld files of ride data are missing in it. Wattspur does not restore it, so no ride loses its data. Nothing was changed.",
+        "location": {
+          "startingColumn": 31,
+          "startingLine": 200
+        }
+      },
+      {
+        "comment": "",
+        "key": "The library file could not be read: %@",
+        "location": {
+          "startingColumn": 58,
+          "startingLine": 201
+        }
+      },
+      {
+        "comment": "",
+        "key": "The backup could not be restored: %@. Your library is as it was before, and a copy of it is in the folder “%@”. Choose the backup again to try once more.",
+        "location": {
+          "startingColumn": 31,
+          "startingLine": 203
+        }
+      },
+      {
+        "comment": "",
+        "key": "The backup could not be restored: %@. Your library as it was before is in the folder “%@” in the app's files. Do not delete it; write to the developer to get it back.",
+        "location": {
+          "startingColumn": 31,
+          "startingLine": 205
+        }
+      },
+      {
+        "comment": "",
+        "key": "Preparing the restore …",
+        "location": {
+          "startingColumn": 44,
+          "startingLine": 156
+        }
+      }
+    ]
+  },
+  "version": 1
+}

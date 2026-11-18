@@ -1,0 +1,184 @@
+{
+  "source": "/Volumes/NILS_EXTERN/Claude Code/eBike/.claude/worktrees/quizzical-rhodes-bbd76b/iOS/WattspurApp.swift",
+  "tables": {
+    "Localizable": [
+      {
+        "comment": "",
+        "key": "The Folder Exchange Has Ended",
+        "location": {
+          "startingColumn": 16,
+          "startingLine": 179
+        }
+      },
+      {
+        "comment": "",
+        "key": "Unfinished Ride",
+        "location": {
+          "startingColumn": 16,
+          "startingLine": 201
+        }
+      },
+      {
+        "comment": "",
+        "key": "Ride Not Saved",
+        "location": {
+          "startingColumn": 16,
+          "startingLine": 226
+        }
+      },
+      {
+        "comment": "",
+        "key": "Overview",
+        "location": {
+          "startingColumn": 25,
+          "startingLine": 111
+        }
+      },
+      {
+        "comment": "",
+        "key": "Rides",
+        "location": {
+          "startingColumn": 25,
+          "startingLine": 121
+        }
+      },
+      {
+        "comment": "",
+        "key": "Map",
+        "location": {
+          "startingColumn": 25,
+          "startingLine": 129
+        }
+      },
+      {
+        "comment": "",
+        "key": "More",
+        "location": {
+          "startingColumn": 25,
+          "startingLine": 136
+        }
+      },
+      {
+        "comment": "",
+        "key": "Use iCloud",
+        "location": {
+          "startingColumn": 24,
+          "startingLine": 182
+        }
+      },
+      {
+        "comment": "",
+        "key": "Later",
+        "location": {
+          "startingColumn": 24,
+          "startingLine": 186
+        }
+      },
+      {
+        "comment": "",
+        "key": "OK",
+        "location": {
+          "startingColumn": 24,
+          "startingLine": 188
+        }
+      },
+      {
+        "comment": "",
+        "key": "Wattspur on the iPhone no longer reads rides from a folder. Your rides are on your Mac: turn on Sync with iCloud, here under More and on the Mac under Wattspur › Settings › iCloud, and they come to this iPhone. Rides recorded here stay on this iPhone until then; “Share GPX” takes one to the Mac.",
+        "location": {
+          "startingColumn": 18,
+          "startingLine": 191
+        }
+      },
+      {
+        "comment": "",
+        "key": "Backup Not Restored",
+        "location": {
+          "startingColumn": 50,
+          "startingLine": 273
+        }
+      },
+      {
+        "comment": "",
+        "key": "Backup Restored",
+        "location": {
+          "startingColumn": 16,
+          "startingLine": 274
+        }
+      },
+      {
+        "comment": "",
+        "key": "OK",
+        "location": {
+          "startingColumn": 20,
+          "startingLine": 196
+        }
+      },
+      {
+        "comment": "",
+        "key": "The library is now the backup from %@. The library before it is kept in a folder “Library Before Restore …”.",
+        "location": {
+          "startingColumn": 31,
+          "startingLine": 280
+        }
+      },
+      {
+        "comment": "",
+        "key": "iCloud now brings your other devices to the same state; give it a few minutes.",
+        "location": {
+          "startingColumn": 53,
+          "startingLine": 281
+        }
+      },
+      {
+        "comment": "",
+        "key": "Continue Recording",
+        "location": {
+          "startingColumn": 20,
+          "startingLine": 205
+        }
+      },
+      {
+        "comment": "",
+        "key": "End and Save",
+        "location": {
+          "startingColumn": 20,
+          "startingLine": 206
+        }
+      },
+      {
+        "comment": "",
+        "key": "Discard",
+        "location": {
+          "startingColumn": 20,
+          "startingLine": 221
+        }
+      },
+      {
+        "comment": "",
+        "key": "Wattspur was closed while recording. Continue the ride, or end it and save what was recorded?",
+        "location": {
+          "startingColumn": 18,
+          "startingLine": 223
+        }
+      },
+      {
+        "comment": "",
+        "key": "OK",
+        "location": {
+          "startingColumn": 20,
+          "startingLine": 228
+        }
+      },
+      {
+        "comment": "",
+        "key": "The recording is kept. %@",
+        "location": {
+          "startingColumn": 18,
+          "startingLine": 230
+        }
+      }
+    ]
+  },
+  "version": 1
+}

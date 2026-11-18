@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>FIT Activity</key>
+	<string>FIT-Aktivität</string>
+	<key>GPX Track</key>
+	<string>GPX-Track</string>
+	<key>NSLocationWhenInUseUsageDescription</key>
+	<string>Wattspur zeichnet deine Fahrt per GPS auf, auch bei gesperrtem Bildschirm.</string>
+	<key>NSMotionUsageDescription</key>
+	<string>Wattspur misst die Höhe deiner Fahrt mit dem Barometer und Beschleunigung und Schräglage mit den Bewegungssensoren.</string>
+</dict>
+</plist>

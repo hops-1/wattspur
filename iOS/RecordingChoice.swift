@@ -13,9 +13,19 @@ enum RecordingChoice {
                 .flatMap { try? JSONDecoder().decode(RecordingDevice.self, from: $0) }
         }
         set {
-            UserDefaults.standard.set(newValue.flatMap { try? JSONEncoder().encode($0) }, forKey: PhoneSettingsKey.recordingDevice)
+            let data = newValue.flatMap { try? JSONEncoder().encode($0) }
+            UserDefaults.standard.set(data, forKey: PhoneSettingsKey.recordingDevice)
+            // Each sport also keeps its own, for the capsule (B-324).
+            if let newValue { UserDefaults.standard.set(data, forKey: key(newValue.kind.sport)) }
         }
     }
+
+    /// The last device chosen in a sport (B-324).
+    static func last(of sport: Sport) -> RecordingDevice? {
+        UserDefaults.standard.data(forKey: key(sport)).flatMap { try? JSONDecoder().decode(RecordingDevice.self, from: $0) }
+    }
+
+    private static func key(_ sport: Sport) -> String { PhoneSettingsKey.recordingDevice + "." + sport.rawValue }
 
     /// The setting in “More” before B-286, for the first default only.
     static var oldVehicle: RecordingVehicle? {
@@ -24,6 +34,12 @@ enum RecordingChoice {
 
     static func next(devices: [RideExchange.Bike], activeID: UUID?) -> RecordingDevice {
         RecordingDevice.next(last: last, devices: devices, activeID: activeID, oldVehicle: oldVehicle)
+    }
+
+    /// The device for the next recording in the sport of the capsule (B-324).
+    static func next(for sport: Sport, devices: [RideExchange.Bike], activeID: UUID?, lastRideDeviceID: UUID?) -> RecordingDevice {
+        RecordingDevice.next(for: sport, last: last, lastOfSport: last(of: sport), lastRideDeviceID: lastRideDeviceID,
+                             devices: devices, activeID: activeID, oldVehicle: oldVehicle)
     }
 
     // MARK: - For Siri and the Shortcuts app

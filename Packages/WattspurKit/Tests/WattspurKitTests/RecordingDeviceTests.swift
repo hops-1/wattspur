@@ -30,6 +30,35 @@ struct RecordingDeviceTests {
         #expect(RecordingDevice.next(last: nil, devices: [], activeID: nil) == .without(.bike))
     }
 
+    @Test("The capsule decides the sport of the next device (B-324)")
+    func nextInSport() {
+        let gravel = RideExchange.Bike(id: UUID(), name: "Lukas", kind: "gravel", color: "red", isEbike: false, isArchived: false)
+        let devices = [Self.cube, gravel, Self.nugget, Self.old]
+        let car = RecordingDevice(bikeID: Self.nugget.id, kind: .car)
+        let lukas = RecordingDevice(bikeID: gravel.id, kind: .gravel)
+        func next(_ sport: Sport, last: RecordingDevice?, lastOfSport: RecordingDevice? = nil,
+                  lastRide: UUID? = nil, active: UUID? = Self.cube.id, in list: [RideExchange.Bike] = devices) -> RecordingDevice {
+            RecordingDevice.next(for: sport, last: last, lastOfSport: lastOfSport, lastRideDeviceID: lastRide,
+                                 devices: list, activeID: active)
+        }
+        // The last device while it is of the sport shown.
+        #expect(next(.vehicle, last: car) == car)
+        // Last the car, Cycling shown: the bike chosen last, else of the last ride, else the active bike.
+        #expect(next(.cycling, last: car, lastOfSport: lukas) == lukas)
+        #expect(next(.cycling, last: car, lastRide: gravel.id) == lukas)
+        #expect(next(.cycling, last: car).bikeID == Self.cube.id)
+        // A car in the list of the last bike, or an archived one, does not count.
+        #expect(next(.cycling, last: car, lastOfSport: car, lastRide: Self.nugget.id).bikeID == Self.cube.id)
+        #expect(next(.cycling, last: car, lastOfSport: RecordingDevice(bikeID: Self.old.id, kind: .road), active: nil)
+                    .bikeID == Self.cube.id)
+        // Last a bike, Vehicles shown: the vehicle chosen last, also one without a device.
+        #expect(next(.vehicle, last: lukas) == car)
+        #expect(next(.vehicle, last: lukas, lastOfSport: .without(.motorcycle)) == .without(.motorcycle))
+        // No device of the sport: a bicycle or car without one.
+        #expect(next(.vehicle, last: nil, in: [Self.cube]) == .without(.car))
+        #expect(next(.cycling, last: car, active: nil, in: [Self.nugget]) == .without(.bike))
+    }
+
     @Test("The old setting in More gives the first default: a motorcycle or car without a device")
     func oldSetting() {
         let devices = [Self.cube]
