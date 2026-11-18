@@ -7,6 +7,21 @@ Every DMG handed out to testers corresponds to one entry below.
 
 ## [Unreleased]
 
+## [1.10] – 2026-11-18
+
+Sports, part 2: one sport at a time. Together with the iPhone app 1.2 (29).
+
+### Added
+
+- **Mac: the sport switch** (B-288). From the second sport on, a switch **Cycling · Vehicles** sits at the top of the sidebar (in the narrow sidebar as symbols one below the other). Rides, Analysis, Highlights and the map show only the chosen sport; the device filter offers only its devices (“All bikes”, “All vehicles”). Each sport keeps its own totals and records: a car has no power, cadence, calories, CO₂ or streak, but a top speed. The choice is a setting of each Mac, not synced.
+- **iPhone: the sport menu** (B-289). A capsule **Cycling ▾** in Overview, Rides and Map switches between the sports; tiles, last ride, list, map and device filter show only that sport.
+- **iPhone: lateral acceleration and lean angle on the Lock Screen** (B-289). The Live Activity of a car shows the lateral acceleration, a motorcycle's the lean angle.
+- **iPhone: a widget per sport** (B-289). When editing the widget you choose the sport; it shows that sport's week and its last ride.
+
+### Fixed
+
+- **iPhone: the page dots while recording** cover no tile on a bike either, only in a car before (B-320).
+
 ## [1.9.1] – 2026-11-17
 
 Sports, part 1: cars and motorcycles as devices, and the iPhone chooses the device at the start. Together with the iPhone app 1.1.1 (28). Mac 1.9 (773) and iPhone 1.1 (27) were test builds of the same features.
