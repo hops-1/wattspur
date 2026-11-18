@@ -7,7 +7,9 @@ Every DMG handed out to testers corresponds to one entry below.
 
 ## [Unreleased]
 
-iPhone 1.2 (30) on TestFlight, with fixes from the test drive of 18.11.2026; the Mac stays 1.10.
+## [1.10.1] – 2026-11-18
+
+Fixes from the tests of 18.11.2026. Together with the iPhone app 1.2 (30) on TestFlight.
 
 ### Fixed
 
