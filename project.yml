@@ -102,14 +102,16 @@ targets:
         # Live Activity while recording (B-223).
         INFOPLIST_KEY_NSSupportsLiveActivities: YES
         PRODUCT_NAME: Wattspur
-        # iPhone only for now; iPad later
-        TARGETED_DEVICE_FAMILY: "1"
+        # iPhone and iPad (B-291): one app, the iPad with a sidebar in the regular width (B-292).
+        TARGETED_DEVICE_FAMILY: "1,2"
         GENERATE_INFOPLIST_FILE: YES
         INFOPLIST_KEY_CFBundleDisplayName: Wattspur
         INFOPLIST_KEY_UILaunchScreen_Generation: YES
         INFOPLIST_KEY_UIApplicationSceneManifest_Generation: YES
         # Portrait and both landscape sides for handlebar mounts (B-243); not upside down.
         INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone: "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight"
+        # The iPad turns every way and runs in Split View and Stage Manager (B-291): no UIRequiresFullScreen.
+        INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad: "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight"
         INFOPLIST_KEY_NSHumanReadableCopyright: "© 2026 Nils Wiese"
         ASSETCATALOG_COMPILER_APPICON_NAME: Wattspur
         LOCALIZATION_PREFERS_STRING_CATALOGS: YES
@@ -150,7 +152,7 @@ targets:
       base:
         PRODUCT_BUNDLE_IDENTIFIER: io.github.hops-1.wattspur.ios.widgets
         PRODUCT_NAME: WattspurWidgets
-        TARGETED_DEVICE_FAMILY: "1"
+        TARGETED_DEVICE_FAMILY: "1,2"
         GENERATE_INFOPLIST_FILE: YES
         INFOPLIST_FILE: Config/iOS-Widgets-Info.plist
         INFOPLIST_KEY_CFBundleDisplayName: Wattspur
@@ -179,7 +181,7 @@ targets:
       base:
         PRODUCT_BUNDLE_IDENTIFIER: io.github.hops-1.wattspur.ios.share
         PRODUCT_NAME: WattspurShare
-        TARGETED_DEVICE_FAMILY: "1"
+        TARGETED_DEVICE_FAMILY: "1,2"
         GENERATE_INFOPLIST_FILE: YES
         INFOPLIST_FILE: Config/iOS-Share-Info.plist
         INFOPLIST_KEY_CFBundleDisplayName: Wattspur
