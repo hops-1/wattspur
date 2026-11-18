@@ -19,11 +19,13 @@ struct RideChartCarousel: View {
     @State private var page: ChartMeasure?
     /// On the iPad there is room for all charts, one below the other (B-292).
     @Environment(\.isPadLayout) private var isPadLayout
+    /// The choice under Settings › View (B-292); only on the iPad.
+    @AppStorage(PhoneSettingsKey.padChartLayout) private var chartLayout: ChartLayout = .column
 
     private var measures: [ChartMeasure] { ChartMeasure.available(in: points) }
 
     var body: some View {
-        if isPadLayout { column } else { carousel }
+        if isPadLayout && chartLayout == .column { column } else { carousel }
     }
 
     /// Every measurement on a card of its own, one below the other.

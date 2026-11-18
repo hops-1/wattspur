@@ -7,6 +7,21 @@ enum RecordingAvailability {
     @MainActor static var isSupported: Bool { UIDevice.current.userInterfaceIdiom != .pad }
 }
 
+/// The charts of a ride on the iPad (B-292): stacked to swipe, as on the iPhone, or one below the
+/// other, as on the Mac.
+enum ChartLayout: String, CaseIterable, Identifiable {
+    case stacked, column
+
+    var id: Self { self }
+
+    var label: LocalizedStringKey {
+        switch self {
+        case .stacked: "Stacked"
+        case .column: "One Below the Other"
+        }
+    }
+}
+
 extension EnvironmentValues {
     /// `true` inside the sidebar layout of the iPad (B-292): the screens show the ride beside the
     /// list, the charts one below the other, and leave the sport switch to the sidebar.
@@ -37,12 +52,12 @@ struct PadRootView: View {
     @Binding var tab: WattspurApp.Tab
     @Binding var rideFilter: RideFilter
     @Binding var openedRideID: UUID?
-    /// The page of “More” chosen in the sidebar.
-    @State private var page: MorePage = .profile
+    /// The page of “More” chosen in the sidebar; `nil` is the list of the settings.
+    @State private var page: MorePage? = .profile
     /// Only in Debug and TestFlight builds (`BuildChannel`).
     @State private var showsTestTools = BuildChannel.isDebug
 
-    enum Item: Hashable { case overview, rides, map, page(MorePage) }
+    enum Item: Hashable { case overview, rides, map, page(MorePage), settings }
 
     private var selection: Binding<Item?> {
         Binding {
@@ -50,7 +65,7 @@ struct PadRootView: View {
             case .overview: .overview
             case .rides: .rides
             case .map: .map
-            case .more: .page(page)
+            case .more: page.map(Item.page) ?? .settings
             }
         } set: { item in
             switch item {
@@ -59,6 +74,9 @@ struct PadRootView: View {
             case .map: tab = .map
             case .page(let chosen):
                 page = chosen
+                tab = .more
+            case .settings:
+                page = nil
                 tab = .more
             case nil: break
             }
@@ -72,7 +90,7 @@ struct PadRootView: View {
     var body: some View {
         // Not `NavigationSplitView`: its sidebar hides completely; this one folds to the symbols.
         HStack(spacing: 0) {
-            PadSidebar(selection: selection, expanded: $expanded, settingsPages: settingsPages)
+            PadSidebar(selection: selection, expanded: $expanded)
             Divider().ignoresSafeArea()
             NavigationStack {
                 detail
@@ -82,12 +100,13 @@ struct PadRootView: View {
         }
         .environment(\.isPadLayout, true)
         .task { showsTestTools = await BuildChannel.showsTestTools() }
-        .onChange(of: showsTestTools) { if !showsTestTools && page == .testTools { page = .profile } }
+        .onChange(of: showsTestTools) { if !showsTestTools && page == .testTools { page = nil } }
     }
 
-    /// Profile, then the pages of “More” but the trash, which sits with the rides.
-    private var settingsPages: [MorePage] {
-        [.profile] + MorePage.groups(showsTestTools: showsTestTools).joined().filter { $0 != .trash }
+    /// The settings, a second level (wish of Nils): the pages of “More” but the profile, which has
+    /// its own row, and the trash, which sits with the rides.
+    private var settingsGroups: [[MorePage]] {
+        MorePage.groups(showsTestTools: showsTestTools).map { $0.filter { $0 != .trash } }.filter { !$0.isEmpty }
     }
 
     @ViewBuilder private var detail: some View {
@@ -104,8 +123,31 @@ struct PadRootView: View {
             RidesMapScreen()
                 .hidesTitleBar()
         case .more:
+            if let page {
+                MorePageView(page: page)
+                    .navigationTitle(page.title)
+            } else {
+                settingsList
+            }
+        }
+    }
+
+    private var settingsList: some View {
+        List {
+            ForEach(settingsGroups, id: \.self) { group in
+                Section {
+                    ForEach(group) { page in
+                        NavigationLink(value: page) { MoreRow(page: page) }
+                    }
+                }
+            }
+        }
+        .listStyle(.insetGrouped)
+        .navigationTitle("Settings")
+        .navigationDestination(for: MorePage.self) { page in
             MorePageView(page: page)
                 .navigationTitle(page.title)
+                .navigationBarTitleDisplayMode(.inline)
         }
     }
 }
@@ -115,7 +157,6 @@ struct PadRootView: View {
 private struct PadSidebar: View {
     @Binding var selection: PadRootView.Item?
     @Binding var expanded: Bool
-    let settingsPages: [MorePage]
 
     static let wideWidth: CGFloat = 280
     static let narrowWidth: CGFloat = 68
@@ -151,10 +192,9 @@ private struct PadSidebar: View {
                     row(.rides, "Rides", "list.bullet")
                     row(.map, "Map", "map")
                     row(.page(.trash), MorePage.trash.title, MorePage.trash.systemImage)
-                    header("Settings")
-                    ForEach(settingsPages) { page in
-                        row(.page(page), page.title, page.systemImage)
-                    }
+                    header(nil)
+                    row(.page(.profile), MorePage.profile.title, MorePage.profile.systemImage)
+                    row(.settings, "Settings", "gearshape")
                 }
                 .padding(.horizontal, 8)
             }
@@ -163,14 +203,16 @@ private struct PadSidebar: View {
         .background(Color(.secondarySystemBackground).ignoresSafeArea())
     }
 
-    @ViewBuilder private func header(_ title: LocalizedStringKey) -> some View {
-        if expanded {
+    @ViewBuilder private func header(_ title: LocalizedStringKey?) -> some View {
+        if expanded, let title {
             Text(title)
                 .font(.subheadline.weight(.semibold))
                 .foregroundStyle(.secondary)
                 .padding(.horizontal, 12)
                 .padding(.top, 16)
                 .padding(.bottom, 4)
+        } else if expanded {
+            Spacer().frame(height: 20)
         } else {
             Divider().padding(.vertical, 10)
         }

@@ -8,6 +8,8 @@ enum PhoneSettingsKey {
     static let recordingVehicle = "recordingVehicle"
     /// The iPad's sidebar with names (`true`) or only the symbols (B-292); each iPad keeps its own.
     static let padSidebarExpanded = "padSidebarExpanded"
+    /// How the iPad shows the charts of a ride (`ChartLayout`, B-292).
+    static let padChartLayout = "padChartLayout"
     /// The device of the last recording (B-286), JSON of `RecordingDevice`.
     static let recordingDevice = "recordingDevice"
     /// The open devices for Siri and the Shortcuts app (B-286), JSON, written at every reload.

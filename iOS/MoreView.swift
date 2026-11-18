@@ -103,14 +103,16 @@ struct MoreView: View {
 
 /// The pages of “More”, in the order of the list.
 enum MorePage: String, Hashable, CaseIterable, Identifiable {
-    case profile, maps, library, trash, help, about, testTools
+    case profile, view, maps, library, trash, help, about, testTools
 
     var id: Self { self }
 
-    /// The pages below the profile, in groups; also the lower part of the iPad's sidebar (B-292).
-    static func groups(showsTestTools: Bool) -> [[MorePage]] {
+    /// The pages below the profile, in groups; also the iPad's settings (B-292).
+    @MainActor static func groups(showsTestTools: Bool) -> [[MorePage]] {
         // The vehicle under “Recording” went with B-286: the start button chooses the device.
-        var groups: [[MorePage]] = [[.maps], [.library, .trash], [.help, .about]]
+        // “View” only on the iPad, where the charts have the room to stand one below the other.
+        let display: [MorePage] = UIDevice.current.userInterfaceIdiom == .pad ? [.view, .maps] : [.maps]
+        var groups: [[MorePage]] = [display, [.library, .trash], [.help, .about]]
         if showsTestTools { groups.append([.testTools]) }
         return groups
     }
@@ -118,6 +120,7 @@ enum MorePage: String, Hashable, CaseIterable, Identifiable {
     var title: LocalizedStringKey {
         switch self {
         case .profile: "Profile"
+        case .view: "View"
         case .maps: "Maps"
         case .library: "iCloud & Library"
         case .trash: "Trash"
@@ -130,6 +133,7 @@ enum MorePage: String, Hashable, CaseIterable, Identifiable {
     var systemImage: String {
         switch self {
         case .profile: "person.crop.circle"
+        case .view: "rectangle.split.1x2"
         case .maps: "map"
         case .library: "icloud"
         case .trash: "trash"
@@ -143,6 +147,7 @@ enum MorePage: String, Hashable, CaseIterable, Identifiable {
     var tint: Color {
         switch self {
         case .profile: .track
+        case .view: .indigo
         case .maps: .green
         case .library: .blue
         case .trash: .gray
@@ -159,6 +164,7 @@ struct MoreRow: View {
     @Environment(PhoneLibrary.self) private var library
     @Environment(PhoneSync.self) private var sync
     @AppStorage(PhoneSettingsKey.mapType) private var mapType: RideMapType = .standard
+    @AppStorage(PhoneSettingsKey.padChartLayout) private var chartLayout: ChartLayout = .column
 
     var body: some View {
         LabeledContent {
@@ -179,6 +185,7 @@ struct MoreRow: View {
     private var value: Text? {
         switch page {
         case .maps: Text(mapType.label)
+        case .view: Text(chartLayout.label)
         case .library: library.mode == .iCloud ? Text("iCloud") : RecordingAvailability.isSupported ? Text("This iPhone") : Text("This iPad")
         case .trash: library.trash.isEmpty ? nil : Text(library.trash.count.formatted())
         default: nil

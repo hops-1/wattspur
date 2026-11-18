@@ -4285,6 +4285,56 @@
           }
         }
       }
+    },
+    "View" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ansicht"
+          }
+        }
+      }
+    },
+    "Charts" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Diagramme"
+          }
+        }
+      }
+    },
+    "Stacked" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Gestapelt"
+          }
+        }
+      }
+    },
+    "One Below the Other" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Untereinander"
+          }
+        }
+      }
+    },
+    "Stacked: one chart at a time, swipe to the next, as on the iPhone. One below the other: all charts at once, as on the Mac. The map stays at the top either way." : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Gestapelt: ein Diagramm auf einmal, zum nächsten wischen, wie am iPhone. Untereinander: alle Diagramme zugleich, wie am Mac. Die Karte bleibt in beiden Fällen oben."
+          }
+        }
+      }
     }
   },
   "version" : "1.1"
