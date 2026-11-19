@@ -13,6 +13,9 @@ struct RidesView: View {
     @ShownSport private var sport
     /// The ride shown beside the list in landscape (B-243); the newest until one is tapped.
     @State private var selection: UUID?
+    /// On the iPad (B-296): choosing several rides to compare or merge them, and the chosen ones.
+    @State private var selecting = false
+    @State private var marked: Set<UUID> = []
     /// Search and filters (B-222), kept by the app: the period tiles of the overview set them.
     @Binding var filter: RideFilter
     /// A ride to open, from “Open last ride” (Siri or a shortcut, B-225); cleared when it closes.
@@ -89,14 +92,26 @@ struct RidesView: View {
                     Section(RideFormat.month(month.start)) {
                         ForEach(month.rides) { ride in
                             Button {
-                                selection = ride.id
+                                if selecting {
+                                    if marked.contains(ride.id) { marked.remove(ride.id) } else { marked.insert(ride.id) }
+                                } else {
+                                    selection = ride.id
+                                }
                             } label: {
-                                RideRow(ride: ride, bike: state.bike(withID: ride.bikeID))
-                                    .contentShape(.rect)
+                                HStack(spacing: 10) {
+                                    if selecting {
+                                        Image(systemName: marked.contains(ride.id) ? "checkmark.circle.fill" : "circle")
+                                            .font(.title3)
+                                            .foregroundStyle(marked.contains(ride.id) ? Color.track : Color.secondary)
+                                            .accessibilityHidden(true)
+                                    }
+                                    RideRow(ride: ride, bike: state.bike(withID: ride.bikeID))
+                                }
+                                .contentShape(.rect)
                             }
                             .buttonStyle(.plain)
-                            .listRowBackground(ride.id == chosen?.id ? Color.track.opacity(0.14) : nil)
-                            .accessibilityAddTraits(ride.id == chosen?.id ? .isSelected : [])
+                            .listRowBackground(highlighted(ride, chosen: chosen) ? Color.track.opacity(0.14) : nil)
+                            .accessibilityAddTraits(highlighted(ride, chosen: chosen) ? .isSelected : [])
                             .contextMenu { actions(for: ride) }
                             .swipeActions(edge: .trailing) { deleteAction(for: ride) }
                         }
@@ -107,11 +122,18 @@ struct RidesView: View {
             .refreshable { await library.refresh() }
             .scrollDismissesKeyboard(.immediately)
             .tabBarRoomInLandscape()
-            .safeAreaInset(edge: .top, spacing: 0) { filterBar(state, months: months) }
+            .safeAreaInset(edge: .top, spacing: 0) {
+                VStack(spacing: 0) {
+                    if isPadLayout { selectBar }
+                    filterBar(state, months: months)
+                }
+            }
             .frame(width: 320)
             .overlay { emptyState(state, months: months) }
             Divider()
-            if let chosen {
+            if selecting {
+                selectionDetail
+            } else if let chosen {
                 TourDetailView(ride: chosen, embedded: true)
                     .id(chosen.id)
             } else {
@@ -120,6 +142,50 @@ struct RidesView: View {
         }
         // No title bar (`hidesTitleBar`): the search sits at the top, the
         // detail has its own buttons.
+    }
+
+    /// The ride beside the list, or while choosing on the iPad the chosen ones.
+    private func highlighted(_ ride: RideExchange.Ride, chosen: RideExchange.Ride?) -> Bool {
+        selecting ? marked.contains(ride.id) : ride.id == chosen?.id
+    }
+
+    /// "Select" above the list on the iPad (B-296): then a tap marks rides to compare or merge.
+    private var selectBar: some View {
+        HStack {
+            if selecting {
+                Text("\(marked.count) selected").font(.subheadline).foregroundStyle(.secondary)
+            }
+            Spacer()
+            Button(selecting ? "Cancel" : "Select") {
+                selecting.toggle()
+                marked = []
+            }
+            .font(.subheadline.weight(.semibold))
+        }
+        .padding(.horizontal, 20)
+        .padding(.top, 8)
+    }
+
+    /// While choosing: the comparison from two rides on, before that a hint.
+    @ViewBuilder private var selectionDetail: some View {
+        if marked.count >= 2 {
+            PadCompareView(rideIDs: marked) { id in
+                selecting = false
+                marked = []
+                selection = id
+            } onMerged: { id in
+                selecting = false
+                marked = []
+                selection = id
+            } onDone: {
+                selecting = false
+                marked = []
+            }
+        } else {
+            ContentUnavailableView("Select Rides", systemImage: "checkmark.circle",
+                                   description: Text("Tap two to four rides to compare them, or two or more to merge them."))
+                .frame(maxWidth: .infinity, maxHeight: .infinity)
+        }
     }
 
     @ViewBuilder private func actions(for ride: RideExchange.Ride) -> some View {

@@ -405,6 +405,16 @@
         }
       }
     },
+    "%lld selected" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%lld ausgewählt"
+          }
+        }
+      }
+    },
     "%lld without GPS" : {
       "localizations" : {
         "de" : {
@@ -451,6 +461,16 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Eine Sicherung ist ein Ordner mit allen Fahrten, Bikes, Zielen und Notizen, wie am Mac. Wähle iCloud Drive, „Auf meinem iPad“ oder einen USB-Stick. Eine Sicherung von diesem iPad lässt sich am Mac zurückholen und umgekehrt."
+          }
+        }
+      }
+    },
+    "A comparison shows 2 to 4 rides. You can still merge them." : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ein Vergleich zeigt 2 bis 4 Fahrten. Zusammenfügen kannst du sie trotzdem."
           }
         }
       }
@@ -616,6 +636,16 @@
         }
       }
     },
+    "Ascent per km" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Anstieg pro km"
+          }
+        }
+      }
+    },
     "Average Cadence" : {
       "localizations" : {
         "de" : {
@@ -726,6 +756,16 @@
         }
       }
     },
+    "Avg power over ride time" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ø Leistung über die Fahrzeit"
+          }
+        }
+      }
+    },
     "Avg ride time" : {
       "localizations" : {
         "de" : {
@@ -766,6 +806,16 @@
         }
       }
     },
+    "Best" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Bester Wert"
+          }
+        }
+      }
+    },
     "Best 1-minute power" : {
       "localizations" : {
         "de" : {
@@ -792,6 +842,16 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Kalorien"
+          }
+        }
+      }
+    },
+    "Calories per km" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Kalorien pro km"
           }
         }
       }
@@ -846,12 +906,42 @@
         }
       }
     },
+    "Coasting share" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Rollanteil"
+          }
+        }
+      }
+    },
     "Color the route by elevation" : {
       "localizations" : {
         "de" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "Spur nach Höhe einfärben"
+          }
+        }
+      }
+    },
+    "Comparable across ride lengths" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Vergleichbar bei unterschiedlicher Länge"
+          }
+        }
+      }
+    },
+    "Comparing %lld rides" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%lld Fahrten im Vergleich"
           }
         }
       }
@@ -1052,6 +1142,16 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Schätzwert"
+          }
+        }
+      }
+    },
+    "Estimates" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Schätzwerte"
           }
         }
       }
@@ -1386,6 +1486,16 @@
         }
       }
     },
+    "Map of the compared rides" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Karte der verglichenen Fahrten"
+          }
+        }
+      }
+    },
     "Map Style" : {
       "localizations" : {
         "de" : {
@@ -1396,12 +1506,92 @@
         }
       }
     },
+    "Max cadence" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Max. Trittfreq."
+          }
+        }
+      }
+    },
+    "Max elevation" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Max. Höhe"
+          }
+        }
+      }
+    },
+    "Max power" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Max. Leistung"
+          }
+        }
+      }
+    },
+    "Max speed" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Max. Geschw."
+          }
+        }
+      }
+    },
+    "Merge" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Zusammenfügen"
+          }
+        }
+      }
+    },
+    "Merge %lld Rides" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%lld Fahrten zusammenfügen"
+          }
+        }
+      }
+    },
+    "Merge…" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Zusammenfügen …"
+          }
+        }
+      }
+    },
     "Metric" : {
       "localizations" : {
         "de" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "Kennzahl"
+          }
+        }
+      }
+    },
+    "Min elevation" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Min. Höhe"
           }
         }
       }
@@ -1836,6 +2026,16 @@
         }
       }
     },
+    "Power and cadence" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Leistung und Trittfrequenz"
+          }
+        }
+      }
+    },
     "Previous period" : {
       "localizations" : {
         "de" : {
@@ -1936,6 +2136,16 @@
         }
       }
     },
+    "Ride" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Fahrt"
+          }
+        }
+      }
+    },
     "Ride Not Saved" : {
       "localizations" : {
         "de" : {
@@ -2022,6 +2232,36 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Fahrten suchen"
+          }
+        }
+      }
+    },
+    "Select" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Auswählen"
+          }
+        }
+      }
+    },
+    "Select at least two rides to merge." : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Wähle mindestens zwei Fahrten zum Zusammenfügen aus."
+          }
+        }
+      }
+    },
+    "Select Rides" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Fahrten auswählen"
           }
         }
       }
@@ -2236,6 +2476,26 @@
         }
       }
     },
+    "Tap rides in the list to add or remove them (up to 4)." : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tippe Fahrten in der Liste an, um sie hinzuzufügen oder zu entfernen (bis zu 4)."
+          }
+        }
+      }
+    },
+    "Tap two to four rides to compare them, or two or more to merge them." : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tippe zwei bis vier Fahrten an, um sie zu vergleichen, oder zwei und mehr, um sie zusammenzufügen."
+          }
+        }
+      }
+    },
     "Tells how far you rode this week." : {
       "localizations" : {
         "de" : {
@@ -2356,6 +2616,16 @@
         }
       }
     },
+    "The rides become one. The originals are kept inside it, so you can split them again at any time on the Mac." : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Die Fahrten werden zu einer. Die Originale bleiben darin erhalten, du kannst sie am Mac jederzeit wieder trennen."
+          }
+        }
+      }
+    },
     "The rides stay in iCloud, on your Mac and on this iPad. New rides then stay on this iPad." : {
       "localizations" : {
         "de" : {
@@ -2386,12 +2656,32 @@
         }
       }
     },
+    "The sample ride cannot be merged." : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Die Beispielfahrt lässt sich nicht zusammenfügen."
+          }
+        }
+      }
+    },
     "There is already a goal for this period and metric." : {
       "localizations" : {
         "de" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "Für diesen Zeitraum und diese Kennzahl gibt es schon ein Ziel."
+          }
+        }
+      }
+    },
+    "These rides overlap in time and cannot be merged." : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Diese Fahrten überschneiden sich zeitlich und lassen sich nicht zusammenfügen."
           }
         }
       }
@@ -2436,6 +2726,16 @@
         }
       }
     },
+    "Time, distance, ascent and work are added up, maximums carried over. Average power and cadence are weighted by moving time." : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Zeit, Strecke, Anstieg und Arbeit werden addiert, Höchstwerte übernommen. Ø-Leistung und Ø-Trittfrequenz sind nach Fahrzeit gewichtet."
+          }
+        }
+      }
+    },
     "To" : {
       "localizations" : {
         "de" : {
@@ -2462,6 +2762,16 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Höchstgeschwindigkeit, höchste Leistung und höchste Trittfrequenz sind die Höchstwerte, die in der Datei stehen. Die beste 1-Minuten-Leistung ist die höchste durchschnittliche Leistung über 60 Sekunden ohne Unterbrechung; Fahrten ohne Leistungswerte, wie viele GPX-Dateien, zählen für die Leistungsrekorde nicht."
+          }
+        }
+      }
+    },
+    "Total time" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Gesamtdauer"
           }
         }
       }
@@ -2542,6 +2852,16 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Unebener Belag"
+          }
+        }
+      }
+    },
+    "Up to 4 Rides" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Bis zu 4 Fahrten"
           }
         }
       }
@@ -3674,6 +3994,16 @@
         }
       }
     },
+    "Work per km" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Arbeit pro km"
+          }
+        }
+      }
+    },
     "Year" : {
       "localizations" : {
         "de" : {
@@ -3700,6 +4030,16 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Dein Jahr %@"
+          }
+        }
+      }
+    },
+    "Your average" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ø deiner Fahrten"
           }
         }
       }
@@ -5792,6 +6132,16 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "≈ %@ × Mount Everest"
+          }
+        }
+      }
+    },
+    "★ marks the best value of a row, only for figures where more or less is better. The average is per ride over your %lld rides; averages are weighted by ride time as in the analysis." : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "★ markiert den besten Wert einer Zeile, nur bei Kennzahlen, bei denen mehr oder weniger besser ist. Der Schnitt gilt je Fahrt über deine %lld Fahrten; Ø-Werte sind nach Fahrzeit gewichtet wie in der Auswertung."
           }
         }
       }

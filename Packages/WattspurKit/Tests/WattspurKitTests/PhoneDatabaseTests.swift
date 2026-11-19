@@ -62,6 +62,27 @@ struct PhoneDatabaseTests {
         #expect(rides.allSatisfy { $0.countsInStatistics })
     }
 
+    @Test("Compare and merge on the iPad: oldest first, the sport's baseline, merged as on the Mac (B-296)")
+    func compareAndMerge() throws {
+        let later = try #require(save(start: 1_800_010_000))
+        let earlier = try #require(save(start: 1_800_000_000))
+        let compared = database.comparedRides([later, earlier])
+        #expect(compared.map(\.id) == [earlier, later])
+        #expect(compared.allSatisfy { !$0.chartPoints.isEmpty && !$0.route.isEmpty })
+        #expect(database.comparisonBaseline(for: [earlier, later]).count == 2)
+        #expect(database.mergeName([earlier, later]) == "Zur Arbeit")
+        #expect((try? database.mergePreview([earlier, later]).get()) != nil)
+        if case .failure(let problem) = database.mergePreview([earlier]) {
+            #expect(problem == .tooFewRides)
+        } else {
+            Issue.record("One ride cannot be merged")
+        }
+        let merged = try database.merge([earlier, later], name: "Hin und zurück")
+        let rides = try database.snapshot(generator: "Wattspur iOS").rides
+        #expect(rides.map(\.id) == [merged])
+        #expect(rides.first?.name == "Hin und zurück")
+    }
+
     @Test("Goals on the iPad: add, change, delete, in the Mac's order, each combination once (B-295)")
     func goals() throws {
         #expect(database.goals().isEmpty)

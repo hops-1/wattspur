@@ -74,6 +74,58 @@ public final class PhoneDatabase {
         _ = library.prepareBikes()
     }
 
+    // MARK: - Compare and merge (B-296)
+
+    /// What the comparison on the iPad needs of one ride: the figures of the table, the charts
+    /// and the route, read once (as `CompareRidesView` on the Mac).
+    public struct ComparedRide: Sendable, Identifiable {
+        public var id: UUID
+        public var name: String
+        public var startDate: Date
+        public var timeZone: TimeZone
+        public var figures: ComparisonFigures
+        public var chartPoints: [ChartPoint]
+        public var route: [RoutePoint]
+    }
+
+    /// The compared rides, oldest first, so a ride keeps its column and colour.
+    public func comparedRides(_ ids: Set<UUID>) -> [ComparedRide] {
+        ids.compactMap { library.ride(withID: $0) }
+            .sorted { $0.startDate < $1.startDate }
+            .map { ride in
+                let samples = ride.samples
+                return ComparedRide(id: ride.id, name: ride.name, startDate: ride.startDate, timeZone: ride.timeZone,
+                                    figures: ride.comparisonFigures,
+                                    chartPoints: RideSeries.chartPoints(from: samples, bins: 300),
+                                    route: RideSeries.route(from: samples, maxPoints: 800))
+            }
+    }
+
+    /// The rides the averages of a comparison come from: those of the compared rides' sport,
+    /// cycling when they are of several (B-288, as on the Mac).
+    public func comparisonBaseline(for ids: Set<UUID>) -> [ComparisonFigures] {
+        let listed = (try? ExchangeRides.listed(in: context)) ?? []
+        let sports = Set(listed.filter { ids.contains($0.id) }.map(\.sport))
+        let sport = sports.count == 1 ? sports.first ?? .cycling : .cycling
+        return listed.filter { $0.countsInTotals(sport: sport) }.map(\.comparisonFigures)
+    }
+
+    /// Why the rides cannot be merged, or the merged figures to show before merging.
+    public func mergePreview(_ ids: Set<UUID>) -> Result<RideMerge.Result, RideMerge.MergeError> {
+        let rides = ids.compactMap { library.ride(withID: $0) }
+        return Result { () throws(RideMerge.MergeError) in try library.mergePreview(rides) }
+    }
+
+    /// The name the merged ride gets unless changed: that of the first part.
+    public func mergeName(_ ids: Set<UUID>) -> String {
+        library.mergeParts(of: ids.compactMap { library.ride(withID: $0) }).first?.name ?? ""
+    }
+
+    /// Merges the rides into one, as on the Mac; the originals stay inside it. The new ride's id.
+    public func merge(_ ids: Set<UUID>, name: String) throws(RideMerge.MergeError) -> UUID {
+        try library.merge(ids.compactMap { library.ride(withID: $0) }, name: name).id
+    }
+
     // MARK: - Goals (B-295)
 
     /// A goal as plain values for the iPad: per week, month or year, kilometres, rides or ascent.
