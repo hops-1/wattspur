@@ -70,19 +70,31 @@ struct PadRootView: View {
     @State private var page: MorePage? = .profile
     /// Only in Debug and TestFlight builds (`BuildChannel`).
     @State private var showsTestTools = BuildChannel.isDebug
+    /// A section only the iPad has (B-295), shown instead of the tab's screen; `nil` for the tabs.
+    @State private var padSection: PadSection?
 
-    enum Item: Hashable { case overview, rides, map, page(MorePage), settings }
+    enum Item: Hashable { case overview, rides, map, page(MorePage), settings, pad(PadSection) }
+
+    /// The sections of the Mac that come to the iPad in 1.4 (B-295).
+    enum PadSection: Hashable { case analysis }
 
     private var selection: Binding<Item?> {
         Binding {
-            switch tab {
+            if let padSection { return .pad(padSection) }
+            return switch tab {
             case .overview: .overview
             case .rides: .rides
             case .map: .map
             case .more: page.map(Item.page) ?? .settings
             }
         } set: { item in
+            if case .pad(let section) = item {
+                padSection = section
+                return
+            }
+            if item != nil { padSection = nil }
             switch item {
+            case .pad: break
             case .overview: tab = .overview
             case .rides: tab = .rides
             case .map: tab = .map
@@ -113,6 +125,8 @@ struct PadRootView: View {
             .id(selection.wrappedValue)
         }
         .environment(\.isPadLayout, true)
+        // Siri and the overview's tiles switch the tab; then the tab's screen shows again.
+        .onChange(of: tab) { padSection = nil }
         .task { showsTestTools = await BuildChannel.showsTestTools() }
         .onChange(of: showsTestTools) { if !showsTestTools && page == .testTools { page = nil } }
     }
@@ -124,6 +138,16 @@ struct PadRootView: View {
     }
 
     @ViewBuilder private var detail: some View {
+        if let padSection {
+            switch padSection {
+            case .analysis: PadAnalysisView()
+            }
+        } else {
+            tabDetail
+        }
+    }
+
+    @ViewBuilder private var tabDetail: some View {
         switch tab {
         case .overview:
             OverviewView { period in
@@ -205,6 +229,8 @@ private struct PadSidebar: View {
                     row(.overview, "Overview", "square.grid.2x2")
                     row(.rides, "Rides", "list.bullet")
                     row(.map, "Map", "map")
+                    // After the map, as on the Mac (B-295).
+                    row(.pad(.analysis), "Analysis", "chart.bar")
                     row(.page(.trash), MorePage.trash.title, MorePage.trash.systemImage)
                     header(nil)
                     row(.page(.profile), MorePage.profile.title, MorePage.profile.systemImage)

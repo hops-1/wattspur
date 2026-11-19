@@ -52,6 +52,11 @@ enum PhoneSettingsKey {
     static let autoBackup = "autoBackup"
     static let backupFolderBookmark = "backupFolderBookmark"
     static let lastBackupDate = "lastBackupDate"
+    /// The analysis on the iPad (B-295): the period (`AnalysisPeriodKind`), what the bars show
+    /// (`BarMetric`) and the device (`BikeFilter`); each iPad keeps its own.
+    static let padAnalysisPeriod = "padAnalysisPeriod"
+    static let padAnalysisBarMetric = "padAnalysisBarMetric"
+    static let padAnalysisDevice = "padAnalysisDevice"
     /// Set by UI tests and screenshots: import the sample ride at launch.
     static let demoRide = "WattspurDemoRide"
 }

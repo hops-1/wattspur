@@ -76,6 +76,26 @@ public final class PhoneDatabase {
 
     // MARK: - Reading
 
+    /// A listed ride as plain values for the analysis and the highlights on the iPad (B-295): the
+    /// same figures as on the Mac (`Ride.highlightRide`), with name, device and source for the
+    /// filters and the list of records.
+    public struct StatsRide: Sendable, Equatable, Identifiable {
+        public var id: UUID { highlight.id }
+        public var name: String
+        public var deviceID: UUID?
+        public var source: RideSource?
+        public var highlight: HighlightRide
+        public var figures: RideFigures { highlight.figures }
+        public var sport: Sport { highlight.figures.sport }
+    }
+
+    /// The listed rides without the sample ride, oldest first, as on the Mac's analysis.
+    public func statsRides() -> [StatsRide] {
+        ((try? ExchangeRides.listed(in: context)) ?? [])
+            .map { StatsRide(name: $0.name, deviceID: $0.bike?.id, source: $0.source, highlight: $0.highlightRide) }
+            .sorted { $0.highlight.startDate < $1.highlight.startDate }
+    }
+
     /// The rides for the map of all rides (B-227): the listed rides that pass `filter`, with their
     /// overview routes, newest first, and how many it cannot draw. The same as on the Mac.
     public func mapOverview(filter: MapFilter) -> MapOverview {
