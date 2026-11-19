@@ -9,14 +9,21 @@ Every DMG handed out to testers corresponds to one entry below.
 
 ## [iOS 1.4] – 2026-11-19
 
-iPad 2: the functions of the Mac on the iPad. iPhone and iPad 1.4 (34); with the Mac 1.10.2.
+iPad 2: the functions of the Mac on the iPad. iPhone and iPad 1.4 (35); with the Mac 1.10.2.
 
 ### Added
 
 - **iPad: Analysis** (B-295). A sidebar row **Analysis** after the map, as on the Mac: a period (week, month, year, custom, all) with the arrows back and forth, a device filter from two devices on, the totals with the change to the period before, the averages weighted by ride time, the bars of distance, ride time or ascent per day, week, month or year, and the trends of speed, power and cadence. Per sport; vehicles show no work, calories, CO₂, power or cadence.
 - **iPad: Highlights** (B-295). A sidebar row **Highlights** with the year in review (tiles, riding days as a calendar, kilometres per month, records of the year), the records and the goals. Goals can be added, changed and deleted on the iPad and reach the Mac over iCloud; as on the Mac they count cycling. A tap on a day or a record opens the ride.
 - **iPad: compare and merge rides** (B-296). **Select** above the ride list marks rides; from two on, the routes on one map, a chart over the distance (speed, elevation, power, cadence) and the table of all figures with ★ for the best value and your average. **Merge…** makes one ride of them, as on the Mac; the originals stay inside it.
+- **E-scooter** (B-330). A new device type with its own symbol; it counts as cycling.
+- **Black, silver and white** (B-333) for every device, besides the six colours.
 - **iPad: drag and drop and PDF** (B-297). FIT and GPX files dropped on the ride list are imported like files from the file picker. The share button of a ride offers **Share GPX** and **Share PDF**: one A4 page with the map, the key figures, speed and elevation.
+
+### Fixed
+
+- **A Bosch FIT shared to Wattspur finds its bike and its recording** (B-329). It went to the active device, even a car, and stayed a ride of its own beside the recording of another bike. Now it takes the bike of the last ride with the same drive unit, else a bicycle, never a car or motorcycle; and it finds the recording on any bicycle, which keeps its bike.
+- **A new device no longer disappears after the sync** (B-332). Added without its own name, it looked like the default bike each device makes on its first start and was removed; it now gets a number, e.g. “My eBike 2”.
 
 ### Changed
 
@@ -24,7 +31,18 @@ iPad 2: the functions of the Mac on the iPad. iPhone and iPad 1.4 (34); with the
 
 ## [1.10.2] – 2026-11-19
 
-The analysis, highlights and comparison of the Mac take their numbers from the shared package, so the iPad shows the same (B-294). No new function on the Mac; it looks as before.
+The analysis, highlights and comparison of the Mac take their numbers from the shared package, so the iPad shows the same (B-294). With fixes and wishes from testing 1.4.
+
+### Added
+
+- **E-scooter** (B-330): a new vehicle type with its own symbol; it counts as cycling.
+- **Black, silver and white** (B-333) for every vehicle.
+- **File › Add Vehicle…** (B-331): a second way to the editor for a new vehicle. Each step of adding a vehicle is noted in the system log, without names or values.
+
+### Fixed
+
+- **A Bosch FIT finds its bike and its recording** (B-329), as on the iPhone: not the active car, and the recording on another bicycle is found.
+- **A new vehicle no longer disappears after the sync** (B-332): left with the default name, it gets a number.
 
 ## [iOS 1.3] – 2026-11-18
 
