@@ -241,6 +241,10 @@ struct WattspurApp: App {
             Divider()
             Button("Create Diagnostics…") { openWindow(id: "diagnostics") }
         }
+        CommandGroup(after: .newItem) {
+            Button("Add Vehicle…") { NotificationCenter.default.post(name: .addVehicle, object: nil) }
+                .disabled(libraryFailure != nil)
+        }
         CommandGroup(after: .importExport) {
             Button("Import Curvy Roads…") { curvyRoads.chooseFiles() }
             Button("Library Backup…") { openWindow(id: "backup") }
