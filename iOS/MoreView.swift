@@ -253,6 +253,7 @@ struct RiderAvatar: View {
         }
         .frame(width: size, height: size)
         .clipShape(.circle)
+        .contentShape(.circle)
         .accessibilityHidden(true)
     }
 }

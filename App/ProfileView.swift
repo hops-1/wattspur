@@ -359,6 +359,8 @@ struct RiderAvatar: View {
         }
         .frame(width: size, height: size)
         .clipShape(Circle())
+        // A photo filling the circle must not take clicks outside it (B-331).
+        .contentShape(Circle())
         .accessibilityHidden(true)
     }
 }
@@ -444,9 +446,12 @@ private struct BikeTile: View {
         ZStack(alignment: .topLeading) {
             if let photo = bike.photo {
                 // The photo only fills the tile; its size does not change the layout.
+                // `clipped` cuts only the drawing: a tall photo still took clicks above the tile and
+                // covered "Add Vehicle" (B-331). The content shape keeps clicks inside the tile.
                 Color.clear
                     .overlay { Image(nsImage: photo).resizable().scaledToFill() }
                     .clipped()
+                    .contentShape(Rectangle())
             } else {
                 bike.color.color.opacity(0.14)
                     .overlay { BikeKindIcon(kind: bike.kind, size: 64).foregroundStyle(bike.color.color) }

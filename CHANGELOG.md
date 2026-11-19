@@ -43,6 +43,7 @@ The analysis, highlights and comparison of the Mac take their numbers from the s
 
 - **A Bosch FIT finds its bike and its recording** (B-329), as on the iPhone: not the active car, and the recording on another bicycle is found.
 - **A new vehicle no longer disappears after the sync** (B-332): left with the default name, it gets a number.
+- **Add Vehicle works again in the profile** (B-331). A tall photo on a vehicle tile took the clicks above the tile, where the button is; photos now take clicks only inside their tile.
 
 ## [iOS 1.3] – 2026-11-18
 
