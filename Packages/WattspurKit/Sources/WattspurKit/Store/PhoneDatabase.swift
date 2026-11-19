@@ -74,6 +74,46 @@ public final class PhoneDatabase {
         _ = library.prepareBikes()
     }
 
+    // MARK: - Goals (B-295)
+
+    /// A goal as plain values for the iPad: per week, month or year, kilometres, rides or ascent.
+    public struct GoalValue: Sendable, Equatable, Identifiable {
+        public var id: UUID
+        public var metric: GoalMetric
+        public var period: GoalPeriod
+        /// Metres, a number of rides, or metres of ascent.
+        public var target: Double
+    }
+
+    /// The goals in display order: week, month, year, then km, rides, ascent (as on the Mac).
+    public func goals() -> [GoalValue] {
+        Goal.sorted((try? context.fetch(FetchDescriptor<Goal>())) ?? [])
+            .map { GoalValue(id: $0.id, metric: $0.metric, period: $0.period, target: $0.target) }
+    }
+
+    /// Combinations of period and metric that have no goal yet.
+    public func freeGoalCombinations() -> [(period: GoalPeriod, metric: GoalMetric)] {
+        Goal.freeCombinations(besides: (try? context.fetch(FetchDescriptor<Goal>())) ?? [])
+    }
+
+    public func addGoal(metric: GoalMetric, period: GoalPeriod, target: Double) {
+        _ = library.addGoal(metric: metric, period: period, target: target)
+    }
+
+    public func updateGoal(id: UUID, metric: GoalMetric, period: GoalPeriod, target: Double) {
+        guard let goal = goal(id) else { return }
+        library.update(goal, metric: metric, period: period, target: target)
+    }
+
+    public func deleteGoal(id: UUID) {
+        guard let goal = goal(id) else { return }
+        library.delete(goal)
+    }
+
+    private func goal(_ id: UUID) -> Goal? {
+        try? context.fetch(FetchDescriptor<Goal>(predicate: #Predicate { $0.id == id })).first
+    }
+
     // MARK: - Reading
 
     /// A listed ride as plain values for the analysis and the highlights on the iPad (B-295): the
@@ -84,6 +124,10 @@ public final class PhoneDatabase {
         public var name: String
         public var deviceID: UUID?
         public var source: RideSource?
+        /// Counts towards totals and records (Requirements 10.10), like `Ride.countsInStatistics`.
+        public var countsInStatistics: Bool
+        /// When the ride came into the library: records of the last week are "New".
+        public var importedAt: Date
         public var highlight: HighlightRide
         public var figures: RideFigures { highlight.figures }
         public var sport: Sport { highlight.figures.sport }
@@ -92,7 +136,9 @@ public final class PhoneDatabase {
     /// The listed rides without the sample ride, oldest first, as on the Mac's analysis.
     public func statsRides() -> [StatsRide] {
         ((try? ExchangeRides.listed(in: context)) ?? [])
-            .map { StatsRide(name: $0.name, deviceID: $0.bike?.id, source: $0.source, highlight: $0.highlightRide) }
+            .map { StatsRide(name: $0.name, deviceID: $0.bike?.id, source: $0.source,
+                             countsInStatistics: $0.countsInStatistics, importedAt: $0.importedAt,
+                             highlight: $0.highlightRide) }
             .sorted { $0.highlight.startDate < $1.highlight.startDate }
     }
 

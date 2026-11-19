@@ -75,8 +75,8 @@ struct PadRootView: View {
 
     enum Item: Hashable { case overview, rides, map, page(MorePage), settings, pad(PadSection) }
 
-    /// The sections of the Mac that come to the iPad in 1.4 (B-295).
-    enum PadSection: Hashable { case analysis }
+    /// The sections of the Mac that come to the iPad in 1.4 (B-295): Analysis and Highlights.
+    enum PadSection: Hashable { case analysis, highlights }
 
     private var selection: Binding<Item?> {
         Binding {
@@ -141,6 +141,11 @@ struct PadRootView: View {
         if let padSection {
             switch padSection {
             case .analysis: PadAnalysisView()
+            case .highlights:
+                PadHighlightsView { id in
+                    openedRideID = id
+                    tab = .rides
+                }
             }
         } else {
             tabDetail
@@ -231,6 +236,7 @@ private struct PadSidebar: View {
                     row(.map, "Map", "map")
                     // After the map, as on the Mac (B-295).
                     row(.pad(.analysis), "Analysis", "chart.bar")
+                    row(.pad(.highlights), "Highlights", "trophy")
                     row(.page(.trash), MorePage.trash.title, MorePage.trash.systemImage)
                     header(nil)
                     row(.page(.profile), MorePage.profile.title, MorePage.profile.systemImage)

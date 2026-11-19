@@ -115,6 +115,33 @@ final class PhoneLibrary {
         return database?.statsRides() ?? []
     }
 
+    /// The goals for the highlights on the iPad (B-295), in the Mac's order.
+    var goals: [PhoneDatabase.GoalValue] {
+        _ = state
+        return database?.goals() ?? []
+    }
+
+    /// Combinations of period and metric that have no goal yet.
+    var freeGoalCombinations: [(period: GoalPeriod, metric: GoalMetric)] {
+        _ = state
+        return database?.freeGoalCombinations() ?? []
+    }
+
+    func addGoal(metric: GoalMetric, period: GoalPeriod, target: Double) {
+        database?.addGoal(metric: metric, period: period, target: target)
+        reload()
+    }
+
+    func updateGoal(id: UUID, metric: GoalMetric, period: GoalPeriod, target: Double) {
+        database?.updateGoal(id: id, metric: metric, period: period, target: target)
+        reload()
+    }
+
+    func deleteGoal(id: UUID) {
+        database?.deleteGoal(id: id)
+        reload()
+    }
+
     /// Reads the rides and the trash from the store again, after every change.
     private func reload() {
         guard let database else { return }

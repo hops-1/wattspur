@@ -57,6 +57,9 @@ enum PhoneSettingsKey {
     static let padAnalysisPeriod = "padAnalysisPeriod"
     static let padAnalysisBarMetric = "padAnalysisBarMetric"
     static let padAnalysisDevice = "padAnalysisDevice"
+    /// The highlights on the iPad (B-295): the tab (`PadHighlightsTab`) and the device (`BikeFilter`).
+    static let padHighlightsTab = "padHighlightsTab"
+    static let padHighlightsDevice = "padHighlightsDevice"
     /// Set by UI tests and screenshots: import the sample ride at launch.
     static let demoRide = "WattspurDemoRide"
 }
