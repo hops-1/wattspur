@@ -142,7 +142,7 @@ struct PadRootView: View {
             switch padSection {
             case .analysis: PadAnalysisView()
             case .highlights:
-                PadHighlightsView { id in
+                HighlightsView { id in
                     openedRideID = id
                     tab = .rides
                 }

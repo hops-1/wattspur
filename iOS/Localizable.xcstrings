@@ -185,6 +185,46 @@
         }
       }
     },
+    "%lld records" : {
+      "localizations" : {
+        "de" : {
+          "variations" : {
+            "plural" : {
+              "one" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "%lld Rekord"
+                }
+              },
+              "other" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "%lld Rekorde"
+                }
+              }
+            }
+          }
+        },
+        "en" : {
+          "variations" : {
+            "plural" : {
+              "one" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "%lld record"
+                }
+              },
+              "other" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "%lld records"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "%lld rides" : {
       "localizations" : {
         "de" : {
@@ -2096,6 +2136,16 @@
         }
       }
     },
+    "Reached" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Erreicht"
+          }
+        }
+      }
+    },
     "Reached on %@" : {
       "localizations" : {
         "de" : {
@@ -2372,6 +2422,16 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Zeigt deine neueste Fahrt."
+          }
+        }
+      }
+    },
+    "Shows your year, records and goals" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Zeigt dein Jahr, deine Rekorde und Ziele"
           }
         }
       }
@@ -4080,6 +4140,16 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Jahr"
+          }
+        }
+      }
+    },
+    "Year, records and goals" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Jahr, Rekorde und Ziele"
           }
         }
       }

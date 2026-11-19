@@ -42,6 +42,7 @@ struct OverviewView: View {
                         .buttonStyle(.plain)
                     }
                     StartRideButton { recorder.start(device: $0) }
+                    highlightsLink
                     Button { showRides(.all) } label: {
                         HStack {
                             Text("All Rides")
@@ -96,6 +97,8 @@ struct OverviewView: View {
                             LastRideTile(ride: last, mapHeight: 100)
                         }
                         .buttonStyle(.plain)
+                        // Left: the right column ends under “Start Ride”.
+                        highlightsLink
                     } else if library.state?.lastRide == nil, let sample {
                         NavigationLink {
                             TourDetailView(ride: sample.ride, route: sample.route)
@@ -198,6 +201,16 @@ struct OverviewView: View {
         }
     }
 
+    /// The tile that opens the highlights on the iPhone (B-228); the iPad has them in its sidebar.
+    private var highlightsLink: some View {
+        NavigationLink {
+            HighlightsView()
+        } label: {
+            HighlightsTile()
+        }
+        .buttonStyle(.plain)
+    }
+
     /// The totals of the library (B-214) for the sport of the capsule (B-289): a car never lands in
     /// the cycling tiles, like on the Mac.
     private func totals(_ state: RideExchange.Library) -> RidePeriodTotals {
@@ -259,6 +272,92 @@ struct OverviewView: View {
                          unit: totals.monthRides == 1 ? "ride" : "rides", systemImage: sport.symbol)
             }
         }
+    }
+}
+
+/// The tile "Highlights" in the overview (B-228): the next goal not yet reached with its
+/// progress; without goals the number of records of the sport and its longest ride (the totals
+/// of the year are already in the tiles above).
+struct HighlightsTile: View {
+    @Environment(PhoneLibrary.self) private var library
+    @ShownSport private var sport
+
+    var body: some View {
+        let calendar = GoalPeriod.calendar()
+        let rides = library.statsRides.filter(\.countsInStatistics)
+        // Goals count every bike, whatever sport the capsule shows (as on the Mac and the iPad).
+        let cycling = rides.filter { $0.sport == .cycling }.map(\.highlight)
+        let goals = library.goals.map {
+            GoalProgress(metric: $0.metric, period: $0.period, target: $0.target, rides: cycling, calendar: calendar)
+        }
+        let next = goals.first { !$0.current.isReached } ?? goals.first
+        VStack(alignment: .leading, spacing: 10) {
+            HStack {
+                Label("Highlights", systemImage: "trophy")
+                    .font(.subheadline.weight(.semibold))
+                    .foregroundStyle(.secondary)
+                Spacer()
+                Image(systemName: "chevron.right")
+                    .foregroundStyle(.tertiary)
+                    .accessibilityHidden(true)
+            }
+            if let next {
+                goal(next, calendar: calendar)
+            } else {
+                records(rides.filter { $0.sport == sport }.map(\.highlight), calendar: calendar)
+            }
+        }
+        .padding()
+        .glassEffect(.regular.interactive(), in: .rect(cornerRadius: 24))
+        .contentShape(.rect(cornerRadius: 24))
+        .accessibilityElement(children: .combine)
+        .accessibilityHint("Shows your year, records and goals")
+    }
+
+    @ViewBuilder private func goal(_ progress: GoalProgress, calendar: Calendar) -> some View {
+        let metric = progress.metric
+        let unit = HighlightTexts.unit(metric)
+        let target = HighlightTexts.number(metric, progress.current.target)
+        Text(verbatim: "\(HighlightTexts.currentPeriod(progress.period, progress.current.interval, calendar: calendar)) · \(HighlightTexts.title(metric))")
+            .font(.footnote)
+            .foregroundStyle(.secondary)
+        HStack(alignment: .firstTextBaseline, spacing: 6) {
+            Text(verbatim: HighlightTexts.number(metric, progress.current.value))
+                .font(.title.weight(.bold))
+                .foregroundStyle(Color.track)
+            Text(verbatim: String(localized: "of \(unit.isEmpty ? target : "\(target) \(unit)")"))
+                .foregroundStyle(.secondary)
+            Spacer()
+            if progress.current.isReached {
+                Image(systemName: "checkmark.circle.fill")
+                    .foregroundStyle(Color.track)
+                    .accessibilityLabel(Text("Reached"))
+            }
+        }
+        .monospacedDigit()
+        ProgressView(value: min(1, progress.current.fraction))
+            .tint(Color.track)
+    }
+
+    @ViewBuilder private func records(_ rides: [HighlightRide], calendar: Calendar) -> some View {
+        let records = HighlightsSummary(rides: rides, calendar: calendar).records
+        Text("Year, records and goals")
+            .font(.footnote)
+            .foregroundStyle(.secondary)
+        HStack(alignment: .firstTextBaseline, spacing: 6) {
+            Text(verbatim: String(localized: "\(records.count) records"))
+                .font(.title.weight(.bold))
+                .foregroundStyle(Color.track)
+            Spacer()
+            if let longest = records.first(where: { $0.kind == .longestDistance }) {
+                Text(verbatim: "\(HighlightTexts.title(longest.kind)) \(HighlightTexts.text(longest.kind, longest.value))")
+                    .font(.footnote)
+                    .foregroundStyle(.secondary)
+                    .lineLimit(1)
+                    .minimumScaleFactor(0.8)
+            }
+        }
+        .monospacedDigit()
     }
 }
 
