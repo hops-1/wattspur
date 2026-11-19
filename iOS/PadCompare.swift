@@ -381,7 +381,7 @@ private struct PadMergeSheet: View {
         let preview = library.mergePreview(rideIDs)
         Form {
             Section {
-                Text("The rides become one. The originals are kept inside it, so you can split them again at any time on the Mac.")
+                Text("The rides become one. The originals are kept inside it, so you can split them again at any time.")
                     .foregroundStyle(.secondary)
             }
             switch preview {

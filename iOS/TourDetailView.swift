@@ -10,6 +10,7 @@ struct TourDetailView: View {
     @Environment(PhoneLibrary.self) private var library
     @Environment(\.dismiss) private var dismiss
     @State private var confirmingDelete = false
+    @State private var confirmingSplit = false
     @State private var editing = false
     /// The ride as it was opened; `ride` follows later changes such as a new name (B-240).
     private var opened: RideExchange.Ride
@@ -72,6 +73,14 @@ struct TourDetailView: View {
         }
         .sheet(isPresented: $editing) {
             EditRideSheet(ride: ride)
+        }
+        .confirmationDialog("Split into the original rides?", isPresented: $confirmingSplit, titleVisibility: .visible) {
+            Button("Split") {
+                library.split(ride)
+                dismiss()
+            }
+        } message: {
+            Text("The \(library.partCount(of: ride)) rides it was merged from come back to the list.")
         }
         .confirmationDialog("Move this ride to the trash?", isPresented: $confirmingDelete, titleVisibility: .visible) {
             Button("Move to Trash", role: .destructive) {
@@ -236,6 +245,10 @@ struct TourDetailView: View {
         }
         if library.database != nil, route == nil {
             Button("Edit", systemImage: "pencil") { editing = true }
+            // A merged ride can be split again (B-335), as on the Mac.
+            if library.partCount(of: ride) > 1 {
+                Button("Split into Original Rides", systemImage: "arrow.triangle.branch") { confirmingSplit = true }
+            }
             Button("Delete", systemImage: "trash") { confirmingDelete = true }
         }
     }

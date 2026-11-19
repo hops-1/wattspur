@@ -126,6 +126,25 @@ public final class PhoneDatabase {
         try library.merge(ids.compactMap { library.ride(withID: $0) }, name: name).id
     }
 
+    /// The listed rides that are merged from others (B-335), read once per reload so the list
+    /// need not ask for every row.
+    public func mergedRideIDs() -> Set<UUID> {
+        Set(((try? ExchangeRides.listed(in: context)) ?? []).filter(\.isMerged).map(\.id))
+    }
+
+    /// How many rides were merged into this one (B-335); 0 when it is not a merged ride.
+    public func partCount(rideID: UUID) -> Int {
+        library.ride(withID: rideID)?.parts?.count ?? 0
+    }
+
+    /// Splits a merged ride into its original rides again (B-335), as on the Mac; their ids,
+    /// oldest first, or none when the ride is not merged.
+    @discardableResult
+    public func split(rideID: UUID) -> [UUID] {
+        guard let ride = library.ride(withID: rideID), ride.isMerged else { return [] }
+        return library.split(ride).map(\.id)
+    }
+
     // MARK: - Goals (B-295)
 
     /// A goal as plain values for the iPad: per week, month or year, kilometres, rides or ascent.

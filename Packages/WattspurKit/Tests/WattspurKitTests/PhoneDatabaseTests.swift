@@ -83,6 +83,22 @@ struct PhoneDatabaseTests {
         #expect(rides.first?.name == "Hin und zurück")
     }
 
+    @Test("Split a merged ride on the iPhone and iPad: the originals come back (B-335)")
+    func split() throws {
+        let later = try #require(save(start: 1_800_010_000))
+        let earlier = try #require(save(start: 1_800_000_000))
+        #expect(database.partCount(rideID: earlier) == 0)
+        #expect(database.split(rideID: earlier).isEmpty)
+        let merged = try database.merge([earlier, later], name: "Hin und zurück")
+        #expect(database.partCount(rideID: merged) == 2)
+        #expect(database.mergedRideIDs() == [merged])
+        #expect(database.split(rideID: merged) == [earlier, later])
+        let rides = try database.snapshot(generator: "Wattspur iOS").rides
+        #expect(Set(rides.map(\.id)) == [earlier, later])
+        #expect(database.partCount(rideID: merged) == 0)
+        #expect(database.mergedRideIDs().isEmpty)
+    }
+
     @Test("Goals on the iPad: add, change, delete, in the Mac's order, each combination once (B-295)")
     func goals() throws {
         #expect(database.goals().isEmpty)
