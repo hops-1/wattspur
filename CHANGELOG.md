@@ -12,6 +12,7 @@ Every DMG handed out to testers corresponds to one entry below.
 - iPad: the comparison can show each value's difference from your average, as on the Mac (switch "Difference from Average", B-334).
 - iPhone and iPad: a merged ride can be split into its original rides again, in the ride and in the list's context menu (B-335).
 - iPad (and iPhone for the highlights): "Share PDF" for the highlights (year, records or goals) and for the comparison (map and table), A4 like the PDF of a ride (B-336).
+- iPhone and iPad: the ride list can be filtered by source, Bosch FIT or GPX (recorded rides count as GPX), as on the Mac; the menu shows once there is a GPX ride (B-337).
 
 ## [iOS 1.4] – 2026-11-19
 

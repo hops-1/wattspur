@@ -15,9 +15,9 @@ struct RideFilterTests {
     /// Thursday 5 Nov 2026, noon.
     static let now = Date(timeIntervalSince1970: 1_793_876_400)
 
-    static func ride(_ name: String, daysAgo: Double, km: Double, bike: UUID? = cube) -> RideExchange.Ride {
+    static func ride(_ name: String, daysAgo: Double, km: Double, bike: UUID? = cube, source: String = "fit") -> RideExchange.Ride {
         RideExchange.Ride(id: UUID(), name: name, startDate: now.addingTimeInterval(-daysAgo * 86_400), bikeID: bike,
-                          source: "fit", timerTime: 3600, elapsedTime: 3600, distance: km * 1000)
+                          source: source, timerTime: 3600, elapsedTime: 3600, distance: km * 1000)
     }
 
     static let rides = [
@@ -25,11 +25,20 @@ struct RideFilterTests {
         ride("Feierabendrunde", daysAgo: 2, km: 32.1, bike: cargo),
         ride("Runde am Mittag", daysAgo: 40, km: 10.0),
         ride("Ausflug Odenwald", daysAgo: 400, km: 61.5),
-        ride("Brötchen holen", daysAgo: 1, km: 2.4),
+        ride("Brötchen holen", daysAgo: 1, km: 2.4, source: "gpx"),
     ]
 
     private func names(_ filter: RideFilter) -> [String] {
         Self.rides.filter { filter.admits($0, now: Self.now, calendar: Self.calendar) }.map(\.name)
+    }
+
+    @Test("The source filter on the iPhone and iPad: Bosch FIT or GPX; hidden without a GPX ride (B-337)")
+    func source() {
+        #expect(names(RideFilter(source: .gpx)) == ["Brötchen holen"])
+        #expect(names(RideFilter(source: .fit)).count == Self.rides.count - 1)
+        #expect(RideFilter(source: .gpx).isActive && RideFilter(source: .gpx).hasFilters)
+        #expect(RideFilter(source: .gpx).resolved(knownBikeIDs: [], hasGPXRides: false).source == .all)
+        #expect(RideFilter(source: .gpx).resolved(knownBikeIDs: []).source == .gpx)
     }
 
     @Test("Without search or filter every ride passes")
