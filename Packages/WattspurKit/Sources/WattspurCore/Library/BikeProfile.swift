@@ -19,6 +19,9 @@ public enum Sport: String, CaseIterable, Identifiable, Sendable {
 /// as a bike there; the handbook names the minimum version.
 public enum BikeKind: String, CaseIterable, Identifiable, Sendable {
     case bike, mountain, road, gravel, cargo
+    /// An e-scooter (B-330): counts as cycling, like a bicycle without pedalling (decision Nils
+    /// 19.11.2026). Older versions read it as a bicycle.
+    case scooter
     /// Tracked with the iPhone, e.g. by a friend on a motorcycle. Its rides stay out of the cycling
     /// totals, records and the CO₂ saved, unless the filter shows only this device.
     case motorcycle
@@ -32,7 +35,7 @@ public enum BikeKind: String, CaseIterable, Identifiable, Sendable {
 
     public var sport: Sport {
         switch self {
-        case .bike, .mountain, .road, .gravel, .cargo: .cycling
+        case .bike, .mountain, .road, .gravel, .cargo, .scooter: .cycling
         case .motorcycle, .car: .vehicle
         case .runningShoe: .running
         }

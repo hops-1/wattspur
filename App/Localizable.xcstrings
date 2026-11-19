@@ -152,6 +152,26 @@
         }
       }
     },
+    "E-scooter" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "E-Scooter"
+          }
+        }
+      }
+    },
+    "Electric kick scooter; counts as cycling" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Elektro-Tretroller; zählt wie ein Rad"
+          }
+        }
+      }
+    },
     "Last backup before turning sync on: %@." : {
       "localizations" : {
         "de" : {

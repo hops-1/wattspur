@@ -32,7 +32,7 @@ struct SportTests {
 
     @Test("Each kind has its sport; the stored raw values stay as they are")
     func kinds() {
-        #expect(BikeKind.allCases.filter { $0.sport == .cycling } == [.bike, .mountain, .road, .gravel, .cargo])
+        #expect(BikeKind.allCases.filter { $0.sport == .cycling } == [.bike, .mountain, .road, .gravel, .cargo, .scooter])
         #expect(BikeKind.car.sport == .vehicle && BikeKind.motorcycle.sport == .vehicle)
         #expect(BikeKind.runningShoe.sport == .running)
         #expect(BikeKind.car.isMotorized && !BikeKind.runningShoe.isMotorized && !BikeKind.cargo.isMotorized)

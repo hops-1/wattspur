@@ -172,6 +172,7 @@ extension BikeKind {
         case .road: "Road bike"
         case .gravel: "Gravel bike"
         case .cargo: "Cargo bike"
+        case .scooter: "E-scooter"
         case .motorcycle: "Motorcycle"
         case .car: "Car"
         case .runningShoe: "Running shoes"

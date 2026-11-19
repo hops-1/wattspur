@@ -1086,6 +1086,16 @@
         }
       }
     },
+    "E-scooter" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "E-Scooter"
+          }
+        }
+      }
+    },
     "Each square is a day; the darker, the more kilometres" : {
       "localizations" : {
         "de" : {

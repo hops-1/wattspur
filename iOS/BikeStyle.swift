@@ -19,6 +19,7 @@ struct BikeBadge: View {
         case .motorcycle: "motorcycle"
         case .car: "car"
         case .runningShoe: "shoe"
+        case .scooter: "scooter"
         case .bike, .mountain, .road, .gravel, .cargo: "bicycle"
         }
     }

@@ -87,6 +87,7 @@ extension BikeKind {
         case .road: String(localized: "Road bike")
         case .gravel: String(localized: "Gravel bike")
         case .cargo: String(localized: "Cargo bike")
+        case .scooter: String(localized: "E-scooter")
         case .motorcycle: String(localized: "Motorcycle")
         case .car: String(localized: "Car")
         case .runningShoe: String(localized: "Running shoes")
