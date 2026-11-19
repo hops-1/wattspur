@@ -4,7 +4,21 @@ import WattspurCore
 /// Whether this device records rides. Not the iPad for now (B-292, decision of Nils 18.11.2026):
 /// he has no iPad with GPS to test it, so the recording on the iPad comes with B-293.
 enum RecordingAvailability {
-    @MainActor static var isSupported: Bool { UIDevice.current.userInterfaceIdiom != .pad }
+    @MainActor static var isSupported: Bool { !DeviceText.isPad }
+}
+
+/// Texts that name the device (B-328): "this iPad" on the iPad, the iPhone texts as they were.
+/// Both keys are written out at the call site, so the String Catalog finds them.
+enum DeviceText {
+    @MainActor static var isPad: Bool { UIDevice.current.userInterfaceIdiom == .pad }
+
+    @MainActor static func text(_ phone: LocalizedStringKey, pad: LocalizedStringKey) -> Text {
+        Text(isPad ? pad : phone)
+    }
+
+    @MainActor static func string(_ phone: String.LocalizationValue, pad: String.LocalizationValue) -> String {
+        isPad ? String(localized: pad) : String(localized: phone)
+    }
 }
 
 /// The charts of a ride on the iPad (B-292): stacked to swipe, as on the iPhone, or one below the
@@ -36,7 +50,7 @@ struct RootLayout<Tabs: View, Pad: View>: View {
     @ViewBuilder var pad: () -> Pad
 
     var body: some View {
-        if UIDevice.current.userInterfaceIdiom == .pad && horizontalSizeClass == .regular {
+        if DeviceText.isPad && horizontalSizeClass == .regular {
             pad()
         } else {
             tabs()

@@ -45,9 +45,9 @@ struct SaveRecordingSheet: View {
                 } footer: {
                     switch library.mode {
                     case .iCloud:
-                        Text("The ride is saved on this iPhone and reaches your Mac over iCloud.")
+                        DeviceText.text("The ride is saved on this iPhone and reaches your Mac over iCloud.", pad: "The ride is saved on this iPad and reaches your Mac over iCloud.")
                     case .local:
-                        Text("The ride is saved on this iPhone.")
+                        DeviceText.text("The ride is saved on this iPhone.", pad: "The ride is saved on this iPad.")
                     }
                 }
                 Section {

@@ -198,7 +198,7 @@ struct WattspurApp: App {
                 Button("OK", role: .cancel) { sync.folderGoneNoticeDone() }
             }
         } message: {
-            Text("Wattspur on the iPhone no longer reads rides from a folder. Your rides are on your Mac: turn on Sync with iCloud, here under More and on the Mac under Wattspur › Settings › iCloud, and they come to this iPhone. Rides recorded here stay on this iPhone until then; “Share GPX” takes one to the Mac.")
+            DeviceText.text("Wattspur on the iPhone no longer reads rides from a folder. Your rides are on your Mac: turn on Sync with iCloud, here under More and on the Mac under Wattspur › Settings › iCloud, and they come to this iPhone. Rides recorded here stay on this iPhone until then; “Share GPX” takes one to the Mac.", pad: "Wattspur no longer reads rides from a folder. Your rides are on your Mac: turn on Sync with iCloud, here under Settings and on the Mac under Wattspur › Settings › iCloud, and they come to this iPad.")
         }
         // The start after “Restore Backup …” (B-302).
         .alert(launchRestoreTitle, isPresented: Binding(get: { launchRestore != nil && !recorder.isRecording },

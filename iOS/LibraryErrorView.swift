@@ -39,7 +39,7 @@ struct LibraryErrorView: View {
                 Section {
                     Button("Show Backups", systemImage: "clock.arrow.circlepath") { showsBackups = true }
                 } footer: {
-                    Text("Earlier libraries Wattspur kept on this iPhone. Backups to restore are made on the Mac (File › Library Backup…).")
+                    DeviceText.text("Earlier libraries Wattspur kept on this iPhone. Backups to restore are made on the Mac (File › Library Backup…).", pad: "Earlier libraries Wattspur kept on this iPad. Backups to restore are made on the Mac (File › Library Backup…).")
                 }
                 Section {
                     ShareLink(item: report, subject: Text("Wattspur diagnostics")) {
@@ -73,7 +73,7 @@ struct LibraryErrorView: View {
         NavigationStack {
             List {
                 if kept.isEmpty {
-                    Text("No earlier libraries on this iPhone. With iCloud, the rides are also on the Mac and in iCloud.")
+                    DeviceText.text("No earlier libraries on this iPhone. With iCloud, the rides are also on the Mac and in iCloud.", pad: "No earlier libraries on this iPad. With iCloud, the rides are also on the Mac and in iCloud.")
                         .foregroundStyle(.secondary)
                 } else {
                     ForEach(kept, id: \.self) { folder in

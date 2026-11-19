@@ -111,7 +111,7 @@ enum MorePage: String, Hashable, CaseIterable, Identifiable {
     @MainActor static func groups(showsTestTools: Bool) -> [[MorePage]] {
         // The vehicle under “Recording” went with B-286: the start button chooses the device.
         // “View” only on the iPad, where the charts have the room to stand one below the other.
-        let display: [MorePage] = UIDevice.current.userInterfaceIdiom == .pad ? [.view, .maps] : [.maps]
+        let display: [MorePage] = DeviceText.isPad ? [.view, .maps] : [.maps]
         var groups: [[MorePage]] = [display, [.library, .trash], [.help, .about]]
         if showsTestTools { groups.append([.testTools]) }
         return groups
@@ -186,7 +186,7 @@ struct MoreRow: View {
         switch page {
         case .maps: Text(mapType.label)
         case .view: Text(chartLayout.label)
-        case .library: library.mode == .iCloud ? Text("iCloud") : RecordingAvailability.isSupported ? Text("This iPhone") : Text("This iPad")
+        case .library: library.mode == .iCloud ? Text("iCloud") : DeviceText.text("This iPhone", pad: "This iPad")
         case .trash: library.trash.isEmpty ? nil : Text(library.trash.count.formatted())
         default: nil
         }
