@@ -184,6 +184,8 @@ public final class RideLibrary {
     @discardableResult
     public func activeBike() -> Bike { bikes.activeBike() }
     public func setActiveBike(_ bike: Bike) { bikes.setActiveBike(bike) }
+    /// Call after adding a bike the user made, so the sync merge never takes it for a default bike (B-332).
+    public func keepAddedBike(_ bike: Bike) { bikes.keepAddedBike(bike) }
 
     @discardableResult
     public func makeBike(name: String, kind: BikeKind = .bike, color: BikeColor = .blue) -> Bike {
