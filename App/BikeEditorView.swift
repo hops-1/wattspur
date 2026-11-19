@@ -92,7 +92,7 @@ struct BikeEditorView: View {
             Text("Photo").font(.caption).foregroundStyle(.secondary)
             ZStack {
                 if let data = draft.photoData, let image = NSImage(data: data) {
-                    Color.clear.overlay { Image(nsImage: image).resizable().scaledToFill() }.clipped()
+                    Color.clear.overlay { Image(nsImage: image).resizable().scaledToFill() }.clipped().contentShape(Rectangle())
                 } else {
                     draft.color.color.opacity(0.14)
                         .overlay { BikeKindIcon(kind: draft.kind, size: 56).foregroundStyle(draft.color.color) }

@@ -468,6 +468,8 @@ private struct DevicePhoto: View {
         }
         .frame(width: 120, height: 88)
         .clipShape(.rect(cornerRadius: 16))
+        // A filling photo must not take taps outside its frame (B-331).
+        .contentShape(.rect(cornerRadius: 16))
         .overlay(alignment: .bottomTrailing) {
             Image(systemName: "camera.circle.fill")
                 .font(.title2)
