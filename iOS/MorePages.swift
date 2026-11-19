@@ -643,9 +643,9 @@ private struct LibraryPage: View {
                 } footer: {
                     VStack(alignment: .leading, spacing: 4) {
                         if sync.isOn {
-                            Text("One library on this iPhone and your Mac, in your own iCloud account.")
+                            DeviceText.text("One library on this iPhone and your Mac, in your own iCloud account.", pad: "One library on this iPad and your Mac, in your own iCloud account.")
                         } else {
-                            Text("Without iCloud, the rides stay on this iPhone. They reach the Mac with “Share GPX”, e.g. by AirDrop.")
+                            DeviceText.text("Without iCloud, the rides stay on this iPhone. They reach the Mac with “Share GPX”, e.g. by AirDrop.", pad: "Without iCloud, the rides stay on this iPad. They reach the Mac with “Share GPX”, e.g. by AirDrop.")
                         }
                         if sync.needsRestart {
                             Text("Takes effect the next time Wattspur opens: close it in the app switcher.")
@@ -656,7 +656,7 @@ private struct LibraryPage: View {
                 .confirmationDialog("Stop syncing with iCloud?", isPresented: $confirmingOff, titleVisibility: .visible) {
                     Button("Turn Off") { switchSync(false) }
                 } message: {
-                    Text("The rides stay in iCloud, on your Mac and on this iPhone. New rides then stay on this iPhone.")
+                    DeviceText.text("The rides stay in iCloud, on your Mac and on this iPhone. New rides then stay on this iPhone.", pad: "The rides stay in iCloud, on your Mac and on this iPad. New rides then stay on this iPad.")
                 }
             }
             if let monitor = library.syncMonitor {
@@ -669,7 +669,7 @@ private struct LibraryPage: View {
                     Label("Import Files …", systemImage: "square.and.arrow.down")
                 }
             } footer: {
-                Text("FIT and GPX files, several at once, also from iCloud Drive. Files you put into “On My iPhone › Wattspur › Import” in the Files app are imported when Wattspur opens; then they move to “Importiert”, or to “Fehler” if they cannot be read.")
+                DeviceText.text("FIT and GPX files, several at once, also from iCloud Drive. Files you put into “On My iPhone › Wattspur › Import” in the Files app are imported when Wattspur opens; then they move to “Importiert”, or to “Fehler” if they cannot be read.", pad: "FIT and GPX files, several at once, also from iCloud Drive. Files you put into “On My iPad › Wattspur › Import” in the Files app are imported when Wattspur opens; then they move to “Importiert”, or to “Fehler” if they cannot be read.")
             }
             BackupSection()
             Section {
@@ -678,9 +678,9 @@ private struct LibraryPage: View {
                 Text("Library")
             } footer: {
                 if library.mode == .iCloud {
-                    Text("Your rides are on this iPhone and in your own iCloud account, the same as on your Mac.")
+                    DeviceText.text("Your rides are on this iPhone and in your own iCloud account, the same as on your Mac.", pad: "Your rides are on this iPad and in your own iCloud account, the same as on your Mac.")
                 } else {
-                    Text("Your rides are on this iPhone. Sync with the Mac comes with iCloud.")
+                    DeviceText.text("Your rides are on this iPhone. Sync with the Mac comes with iCloud.", pad: "Your rides are on this iPad. Sync with the Mac comes with iCloud.")
                 }
             }
         }
@@ -728,7 +728,7 @@ private struct BackupSection: View {
             Text("Backup")
         } footer: {
             VStack(alignment: .leading, spacing: 4) {
-                Text("A backup is a folder with all your rides, bikes, goals and notes, the same as on the Mac. Choose iCloud Drive, On My iPhone or a USB stick. A backup from this iPhone restores on the Mac, and the other way round.")
+                DeviceText.text("A backup is a folder with all your rides, bikes, goals and notes, the same as on the Mac. Choose iCloud Drive, On My iPhone or a USB stick. A backup from this iPhone restores on the Mac, and the other way round.", pad: "A backup is a folder with all your rides, bikes, goals and notes, the same as on the Mac. Choose iCloud Drive, On My iPad or a USB stick. A backup from this iPad restores on the Mac, and the other way round.")
                 if automatic {
                     if backup.automaticFolderMissing {
                         Text("The folder for the automatic backup is no longer there. Back up once by hand to choose a new one.")
@@ -806,7 +806,7 @@ private struct BackupSection: View {
         if let count = manifest.rideCount {
             text += " " + String(localized: "It holds \(count) rides.")
         }
-        text += "\n\n" + String(localized: "The library on this iPhone is replaced with the backup the next time Wattspur opens. Rides and changes since the backup are not in it. The current library is kept in a folder beside it.")
+        text += "\n\n" + DeviceText.string("The library on this iPhone is replaced with the backup the next time Wattspur opens. Rides and changes since the backup are not in it. The current library is kept in a folder beside it.", pad: "The library on this iPad is replaced with the backup the next time Wattspur opens. Rides and changes since the backup are not in it. The current library is kept in a folder beside it.")
         if syncs {
             text += "\n\n" + String(localized: "Sync with iCloud is on: the rides in iCloud and on all your devices are then replaced with the backup too.")
         }
@@ -830,7 +830,7 @@ private struct SyncSection: View {
                         Label(text(for: problem), systemImage: "exclamationmark.triangle.fill")
                             .foregroundStyle(.orange)
                         if monitor.hasPendingChanges {
-                            Text("Some changes from this iPhone are not in iCloud yet. Keep iCloud on for Wattspur until they are, or they may be lost.")
+                            DeviceText.text("Some changes from this iPhone are not in iCloud yet. Keep iCloud on for Wattspur until they are, or they may be lost.", pad: "Some changes from this iPad are not in iCloud yet. Keep iCloud on for Wattspur until they are, or they may be lost.")
                                 .font(.footnote)
                                 .foregroundStyle(.secondary)
                         }
@@ -857,11 +857,11 @@ private struct SyncSection: View {
     private func text(for problem: SyncProblem) -> String {
         switch problem {
         case .noAccount:
-            String(localized: "This iPhone is not signed in to iCloud, or iCloud is off for Wattspur. New rides stay only on this iPhone.")
+            DeviceText.string("This iPhone is not signed in to iCloud, or iCloud is off for Wattspur. New rides stay only on this iPhone.", pad: "This iPad is not signed in to iCloud, or iCloud is off for Wattspur. New rides stay only on this iPad.")
         case .restricted:
-            String(localized: "iCloud is restricted on this iPhone. New rides stay only on this iPhone.")
+            DeviceText.string("iCloud is restricted on this iPhone. New rides stay only on this iPhone.", pad: "iCloud is restricted on this iPad. New rides stay only on this iPad.")
         case .quotaExceeded:
-            String(localized: "Your iCloud storage is full. New rides stay on this iPhone until there is room again.")
+            DeviceText.string("Your iCloud storage is full. New rides stay on this iPhone until there is room again.", pad: "Your iCloud storage is full. New rides stay on this iPad until there is room again.")
         case .offline:
             String(localized: "No connection to iCloud. Wattspur syncs as soon as there is one again.")
         case .other(let reason):
@@ -878,7 +878,7 @@ private struct HelpPage: View {
         Form {
             Section {
                 Link(destination: HelpLinks.url(.iPhone)) {
-                    Label("Wattspur on the iPhone", systemImage: "iphone")
+                    Label { DeviceText.text("Wattspur on the iPhone", pad: "Wattspur on the iPad") } icon: { Image(systemName: DeviceText.isPad ? "ipad" : "iphone") }
                 }
                 Link(destination: HelpLinks.url(.handbook)) {
                     Label("Handbook", systemImage: "book")
@@ -955,7 +955,7 @@ private struct TestToolsPage: View {
             Section {
                 Toggle("Record Raw Motion", isOn: $recordsRawMotion)
             } footer: {
-                Text("For a test of acceleration and lean angle: each recording also writes the motion sensors and GPS into a file. You find it in the Files app under “On My iPhone › Wattspur › Bewegung”. About 20 MB per hour.")
+                DeviceText.text("For a test of acceleration and lean angle: each recording also writes the motion sensors and GPS into a file. You find it in the Files app under “On My iPhone › Wattspur › Bewegung”. About 20 MB per hour.", pad: "For a test of acceleration and lean angle: each recording also writes the motion sensors and GPS into a file. You find it in the Files app under “On My iPad › Wattspur › Bewegung”. About 20 MB per hour.")
             }
         }
     }

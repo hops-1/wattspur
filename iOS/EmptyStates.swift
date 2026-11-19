@@ -14,7 +14,7 @@ struct FirstRidePrompt: View {
             } else if library.mode == .iCloud {
                 Text("Record your first ride with “Start Ride”. Rides from your Mac appear here once it syncs with iCloud too.")
             } else {
-                Text("Record your first ride with “Start Ride”. It is saved on this iPhone.")
+                DeviceText.text("Record your first ride with “Start Ride”. It is saved on this iPhone.", pad: "Record your first ride with “Start Ride”. It is saved on this iPad.")
             }
         }
     }
