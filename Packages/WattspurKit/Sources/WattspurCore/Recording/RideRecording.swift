@@ -360,7 +360,7 @@ public struct RecordingDevice: Codable, Hashable, Sendable {
         switch kind {
         case .car: .car
         case .motorcycle: .motorcycle
-        case .bike, .mountain, .road, .gravel, .cargo, .runningShoe: .eBike
+        case .bike, .mountain, .road, .gravel, .cargo, .scooter, .runningShoe: .eBike
         }
     }
 
