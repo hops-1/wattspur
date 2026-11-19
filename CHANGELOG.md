@@ -7,7 +7,7 @@ Every DMG handed out to testers corresponds to one entry below.
 
 ## [Unreleased]
 
-## [iOS 1.4] – iPad 2
+## [iOS 1.4] – 2026-11-19
 
 iPad 2: the functions of the Mac on the iPad. iPhone and iPad 1.4 (34); with the Mac 1.10.2.
 
@@ -22,7 +22,7 @@ iPad 2: the functions of the Mac on the iPad. iPhone and iPad 1.4 (34); with the
 
 - **iPad: texts name the iPad** (B-328). About 20 texts said “this iPhone” on the iPad too, e.g. “iCloud & Library: This iPhone” or “On My iPhone › Wattspur › Import”; on the iPad they now say iPad. The iPhone is unchanged.
 
-## [1.10.2] – with iOS 1.4
+## [1.10.2] – 2026-11-19
 
 The analysis, highlights and comparison of the Mac take their numbers from the shared package, so the iPad shows the same (B-294). No new function on the Mac; it looks as before.
 
