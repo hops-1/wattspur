@@ -59,6 +59,15 @@ struct BikeService: LibraryService {
     }
 
     /// Makes `bike` the one new rides go to. An archived bike cannot be active.
+    /// The bicycle a Bosch FIT without a known device goes to (B-329): the active device if it is
+    /// one, else the preferred open bicycle; a Bosch file never goes to a car or motorcycle. Only
+    /// when there is no bicycle at all, the active device.
+    func activeCyclingBike() -> Bike {
+        let active = activeBike()
+        guard active.kind.sport != .cycling else { return active }
+        return Self.preferredBike(in: bikes(includingArchived: false).filter { $0.kind.sport == .cycling }) ?? active
+    }
+
     func setActiveBike(_ bike: Bike) {
         guard !bike.isArchived else { return }
         let rider = defaultRider()

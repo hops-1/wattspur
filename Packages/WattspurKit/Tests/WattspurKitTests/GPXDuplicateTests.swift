@@ -367,6 +367,73 @@ struct GPXDuplicateTests {
         }
     }
 
+    // MARK: - The bike of a FIT (B-329)
+
+    @Test("A FIT sent while a car is active finds the recording on the bicycle; the recording keeps its bike (B-329)")
+    func fitWithCarActiveFindsRecording() throws {
+        let cube = library.makeBike(name: "Cube")
+        let car = library.makeBike(name: "Nugget", kind: .car)
+        library.setActiveBike(car)
+        let gpxResult = importGPX(try Edit.text("pair-tour1-bosch-flow"), as: "recording.gpx", bike: cube)
+        guard case .imported(let gpxID) = gpxResult.outcome else {
+            Issue.record("Expected import, got \(gpxResult.outcome)")
+            return
+        }
+        let result = try importFIT()
+        guard case .fitForGPX(let id) = result.outcome else {
+            Issue.record("Expected fitForGPX, got \(result.outcome)")
+            return
+        }
+        #expect(id == gpxID)
+        #expect(library.ride(withID: id)?.bike?.id == cube.id)
+        #expect(try rides().count == 1)
+    }
+
+    @Test("A Bosch FIT never goes to a car: without a recording it goes to a bicycle (B-329)")
+    func fitNeverToCar() throws {
+        let cube = library.makeBike(name: "Cube")
+        let car = library.makeBike(name: "Nugget", kind: .car)
+        library.setActiveBike(car)
+        guard case .imported(let id) = try importFIT().outcome, let ride = library.ride(withID: id) else {
+            Issue.record("Expected import")
+            return
+        }
+        #expect(ride.bike?.kind.sport == .cycling)
+        #expect(ride.bike?.id != car.id)
+        _ = cube
+    }
+
+    @Test("A FIT goes to the bike of the last ride with the same drive-unit serial number (B-329)")
+    func fitFollowsSerial() throws {
+        let cube = library.makeBike(name: "Cube")
+        let car = library.makeBike(name: "Nugget", kind: .car)
+        library.setActiveBike(car)
+        guard case .imported(let firstID) = try importFIT(bike: cube).outcome, let first = library.ride(withID: firstID) else {
+            Issue.record("Expected import")
+            return
+        }
+        first.deviceSerialNumber = 4_711
+        let imports = ImportService(library.env)
+        #expect(imports.bikeOfSerial(4_711)?.id == cube.id)
+        #expect(imports.bikeOfSerial(4_712) == nil)
+        #expect(imports.bikeOfSerial(nil) == nil)
+        // A car or an archived device is never the bike of a Bosch file.
+        first.bike = car
+        #expect(imports.bikeOfSerial(4_711) == nil)
+    }
+
+    @Test("A FIT of a known bike keeps the group-ride protection: a recording of another bike is not its ride (B-329)")
+    func knownBikeKeepsGroupRide() throws {
+        let mine = library.makeBike(name: "Cube")
+        let friends = library.makeBike(name: "Gravel")
+        importGPX(try Edit.text("pair-tour1-komoot"), as: "friend.gpx", bike: friends)
+        guard case .imported = try importFIT(bike: mine).outcome else {
+            Issue.record("Expected import")
+            return
+        }
+        #expect(try rides().count == 2)
+    }
+
     @Test("Rides in the trash and the sample ride do not match")
     func trashAndSample() throws {
         let result = try importFIT()

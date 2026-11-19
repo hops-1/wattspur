@@ -35,7 +35,7 @@ public final class RideLibrary {
         RideLibrary(context: context, importers: importers, undoManager: undoManager, defaultBikeName: defaultBikeName)
     }
 
-    private var env: LibraryEnvironment {
+    var env: LibraryEnvironment {
         LibraryEnvironment(context: context, importers: importers, undoManager: undoManager, defaultBikeName: defaultBikeName)
     }
     private var imports: ImportService { ImportService(env) }
