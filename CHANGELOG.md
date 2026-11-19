@@ -7,6 +7,9 @@ Every DMG handed out to testers corresponds to one entry below.
 
 ## [Unreleased]
 
+### Added
+- iPhone: Highlights (B-228). A tile in the overview shows the next goal (or your records) and opens the year in review, records and goals, the same numbers as on the Mac and the iPad. Goals can be added and changed on the iPhone.
+
 ## [iOS 1.4] – 2026-11-19
 
 iPad 2: the functions of the Mac on the iPad. iPhone and iPad 1.4 (36); with the Mac 1.10.2.

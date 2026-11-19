@@ -3,13 +3,14 @@ import SwiftUI
 import WattspurCore
 import WattspurKit
 
-/// "Highlights" on the iPad (B-295), like the Mac's section (v1.3): the year in review, records
-/// and goals. Year and records are of the sport in the sidebar and follow the device filter; the
+/// "Highlights" on the iPad (B-295) and the iPhone (B-228), like the Mac's section (v1.3): the
+/// year in review, records and goals. On the iPhone the same parts stack in one column and the
+/// page is pushed from the tile in the overview. Year and records are of the sport in the sidebar and follow the device filter; the
 /// goals count every bike (as on the Mac). The numbers come from the Kit (`HighlightsSummary`,
 /// `YearReview`, `GoalProgress`); only the texts and the layout are here.
-struct PadHighlightsView: View {
-    /// Opens a ride beside the list of rides.
-    var onOpenRide: (UUID) -> Void = { _ in }
+struct HighlightsView: View {
+    /// Opens a ride beside the list of rides (iPad); `nil` pushes it onto this page (iPhone).
+    var onOpenRide: ((UUID) -> Void)?
 
     @Environment(PhoneLibrary.self) private var library
     @ShownSport private var sport
@@ -18,6 +19,9 @@ struct PadHighlightsView: View {
     /// `nil` = the current year.
     @State private var year: Int?
     @State private var goalEditor: PadGoalEditor.Target?
+    /// The ride pushed on the iPhone.
+    @State private var openedID: UUID?
+    @Environment(\.isPadLayout) private var isPadLayout
 
     private var calendar: Calendar { GoalPeriod.calendar() }
     private var currentYear: Int { calendar.component(.year, from: .now) }
@@ -30,6 +34,7 @@ struct PadHighlightsView: View {
         let rides = all.filter { $0.sport == sport && filter.admits(bikeID: $0.deviceID) }
         let summary = HighlightsSummary(rides: rides.map(\.highlight), calendar: calendar)
         let byID = Dictionary(all.map { ($0.id, $0) }, uniquingKeysWith: { a, _ in a })
+        let open: (UUID) -> Void = onOpenRide ?? { openedID = $0 }
         ScrollView {
             VStack(alignment: .leading, spacing: 24) {
                 controls(summary)
@@ -40,29 +45,39 @@ struct PadHighlightsView: View {
                     } else {
                         PadYearReview(review: YearReview(summary.rides, year: shownYear, calendar: calendar),
                                       isCurrentYear: shownYear == currentYear, calendar: calendar,
-                                      rides: byID, sport: sport, onOpenRide: onOpenRide)
+                                      rides: byID, sport: sport, compact: !isPadLayout, onOpenRide: open)
                     }
                 case .records:
                     if rides.isEmpty {
                         noRides(anyForSport: all.contains { $0.sport == sport })
                     } else {
-                        PadRecords(records: summary.records, rides: byID, sport: sport, onOpenRide: onOpenRide)
+                        PadRecords(records: summary.records, rides: byID, sport: sport, compact: !isPadLayout, onOpenRide: open)
                     }
                 case .goals:
                     // The goals are for cycling, whatever sport the sidebar shows (as on the Mac).
                     PadGoals(goals: library.goals,
                              rides: all.filter { $0.sport == .cycling }.map(\.highlight), calendar: calendar,
+                             compact: !isPadLayout,
                              onAdd: library.freeGoalCombinations.isEmpty ? nil : { goalEditor = .new },
                              onEdit: { goalEditor = .edit($0) })
                 }
             }
-            .padding(.horizontal, 28)
-            .padding(.vertical, 16)
+            .padding(.horizontal, isPadLayout ? 28 : 16)
+            .padding(.vertical, isPadLayout ? 16 : 8)
             .frame(maxWidth: 1100, alignment: .leading)
             .frame(maxWidth: .infinity, alignment: .leading)
         }
+        // The iPhone's landscape tab bar floats over the bottom left.
+        .tabBarRoomInLandscape()
         .navigationTitle("Highlights")
-        .toolbar(.hidden, for: .navigationBar)
+        .navigationBarTitleDisplayMode(.inline)
+        // The iPad's detail has its own title in the page; the iPhone needs the bar to go back.
+        .toolbar(isPadLayout ? .hidden : .automatic, for: .navigationBar)
+        .navigationDestination(item: $openedID) { id in
+            if let ride = library.state?.rides.first(where: { $0.id == id }) {
+                TourDetailView(ride: ride)
+            }
+        }
         .sheet(item: $goalEditor) { target in
             NavigationStack { PadGoalEditor(target: target) }
         }
@@ -155,15 +170,17 @@ private struct PadYearReview: View {
     let calendar: Calendar
     let rides: [UUID: PhoneDatabase.StatsRide]
     let sport: Sport
+    /// One column on the iPhone (B-228).
+    var compact = false
     let onOpenRide: (UUID) -> Void
 
     private static let everest = 8_848.0
 
     var body: some View {
-        VStack(alignment: .leading, spacing: 24) {
-            VStack(alignment: .leading, spacing: 4) {
-                Text("Your \(String(review.year))").font(.largeTitle.bold())
-                Text(verbatim: subtitle).foregroundStyle(.secondary)
+        VStack(alignment: .leading, spacing: compact ? 14 : 24) {
+            VStack(alignment: .leading, spacing: compact ? 2 : 4) {
+                Text("Your \(String(review.year))").font(compact ? .title2.bold() : .largeTitle.bold())
+                Text(verbatim: subtitle).font(compact ? .subheadline : .body).foregroundStyle(.secondary)
             }
             if review.aggregate.rideCount == 0 {
                 ContentUnavailableView("No Rides in \(String(review.year))", systemImage: "calendar",
@@ -172,7 +189,7 @@ private struct PadYearReview: View {
             } else {
                 tiles
                 card(title: Text("Riding days"), subtitle: Text("Each square is a day; the darker, the more kilometres")) {
-                    PadYearHeatmap(year: review.year, days: review.days, calendar: calendar) { ids in
+                    PadYearHeatmap(year: review.year, days: review.days, calendar: calendar, compact: compact) { ids in
                         if let first = ids.first { onOpenRide(first) }
                     }
                 }
@@ -207,18 +224,20 @@ private struct PadYearReview: View {
             let percent = change.formatted(.percent.precision(.fractionLength(0)).sign(strategy: .always()))
             return String(localized: "\(change >= 0 ? "▲" : "▼") \(percent) vs \(String(review.year - 1))")
         }
-        return LazyVGrid(columns: [GridItem(.adaptive(minimum: 170), spacing: 16, alignment: .top)], spacing: 16) {
-            YearTile(label: "Distance", value: Int((a.distance / 1000).rounded()).formatted(), unit: "km",
+        // On the iPhone three small tiles a row, so the riding days fit on the first screen (Nils).
+        return LazyVGrid(columns: [GridItem(.adaptive(minimum: compact ? 100 : 170), spacing: compact ? 8 : 16, alignment: .top)],
+                         spacing: compact ? 8 : 16) {
+            YearTile(compact: compact, label: "Distance", value: Int((a.distance / 1000).rounded()).formatted(), unit: "km",
                      note: change ?? String(localized: "no rides the year before"))
-            YearTile(label: "Rides", value: a.rideCount.formatted(), unit: "",
+            YearTile(compact: compact, label: "Rides", value: a.rideCount.formatted(), unit: "",
                      note: String(localized: "on \(review.ridingDayCount) days"))
-            YearTile(label: "Ride time", value: Int(hours.rounded()).formatted(), unit: "h",
+            YearTile(compact: compact, label: "Ride time", value: Int(hours.rounded()).formatted(), unit: "h",
                      note: String(localized: "avg \(perRide) per ride"))
-            YearTile(label: "Ascent", value: a.ascentIfKnown.map { Int($0.rounded()).formatted() } ?? "–", unit: "m",
+            YearTile(compact: compact, label: "Ascent", value: a.ascentIfKnown.map { Int($0.rounded()).formatted() } ?? "–", unit: "m",
                      note: a.ascentCoverage.isNone ? String(localized: "no elevation in the files")
                          : String(localized: "≈ \((a.ascent / Self.everest).formatted(.number.precision(.fractionLength(1)))) × Mount Everest"))
             if sport == .cycling {
-                YearTile(label: "CO₂ saved", value: Int(a.co2SavedKilograms.rounded()).formatted(), unit: "kg",
+                YearTile(compact: compact, label: "CO₂ saved", value: Int(a.co2SavedKilograms.rounded()).formatted(), unit: "kg",
                          note: String(localized: "estimate"))
             }
         }
@@ -278,32 +297,38 @@ private struct PadYearReview: View {
             }
             content()
         }
-        .padding(16)
+        .padding(compact ? 12 : 16)
         .frame(maxWidth: .infinity, alignment: .leading)
         .background(RoundedRectangle(cornerRadius: 14).strokeBorder(.separator))
     }
 }
 
 private struct YearTile: View {
+    var compact = false
     let label: LocalizedStringKey
     let value: String
     let unit: String
     let note: String
 
     var body: some View {
-        VStack(alignment: .leading, spacing: 4) {
-            Text(label).font(.subheadline).foregroundStyle(.secondary)
-            HStack(alignment: .firstTextBaseline, spacing: 4) {
-                Text(verbatim: value).font(.system(size: 28, weight: .semibold))
-                if !unit.isEmpty { Text(verbatim: unit).foregroundStyle(.secondary) }
+        VStack(alignment: .leading, spacing: compact ? 2 : 4) {
+            Text(label).font(compact ? .caption : .subheadline).foregroundStyle(.secondary).lineLimit(1)
+            HStack(alignment: .firstTextBaseline, spacing: compact ? 2 : 4) {
+                Text(verbatim: value).font(.system(size: compact ? 20 : 28, weight: .semibold))
+                if !unit.isEmpty { Text(verbatim: unit).font(compact ? .caption : .body).foregroundStyle(.secondary) }
             }
+            .lineLimit(1)
+            .minimumScaleFactor(0.7)
             .monospacedDigit()
-            Text(verbatim: note).font(.caption).foregroundStyle(.secondary).monospacedDigit()
+            Text(verbatim: note).font(compact ? .caption2 : .caption).foregroundStyle(.secondary).monospacedDigit()
+                .lineLimit(compact ? 2 : nil)
+                .fixedSize(horizontal: false, vertical: true)
         }
-        .padding(.vertical, 14)
-        .padding(.horizontal, 16)
+        .padding(.vertical, compact ? 8 : 14)
+        .padding(.horizontal, compact ? 10 : 16)
         .frame(maxWidth: .infinity, alignment: .leading)
-        .background(.quaternary.opacity(0.5), in: RoundedRectangle(cornerRadius: 14))
+        .frame(maxHeight: .infinity, alignment: .topLeading)
+        .background(.quaternary.opacity(0.5), in: RoundedRectangle(cornerRadius: compact ? 10 : 14))
         .accessibilityElement(children: .combine)
     }
 }
@@ -313,6 +338,8 @@ private struct PadYearHeatmap: View {
     let year: Int
     let days: [RidingDay]
     let calendar: Calendar
+    /// On the iPhone the year scrolls sideways, starting at its end, and the hint goes below.
+    var compact = false
     let onOpenRides: ([UUID]) -> Void
 
     /// Opacity of the track colour for the levels 1 to 4.
@@ -320,11 +347,19 @@ private struct PadYearHeatmap: View {
 
     var body: some View {
         VStack(alignment: .trailing, spacing: 10) {
-            ViewThatFits(in: .horizontal) {
-                grid(cell: 15)
-                grid(cell: 12)
-                grid(cell: 10)
-                ScrollView(.horizontal) { grid(cell: 12) }
+            Group {
+                if compact {
+                    ScrollView(.horizontal) { grid(cell: 14) }
+                        .defaultScrollAnchor(.trailing)
+                        .scrollIndicators(.hidden)
+                } else {
+                    ViewThatFits(in: .horizontal) {
+                        grid(cell: 15)
+                        grid(cell: 12)
+                        grid(cell: 10)
+                        ScrollView(.horizontal) { grid(cell: 12) }
+                    }
+                }
             }
             .accessibilityElement(children: .ignore)
             .accessibilityLabel(Text("Calendar of riding days"))
@@ -409,18 +444,30 @@ private struct PadYearHeatmap: View {
     }
 
     private var legend: some View {
-        HStack(spacing: 6) {
-            Text("less")
-            RoundedRectangle(cornerRadius: 3).fill(Color.secondary.opacity(0.14)).frame(width: 12, height: 12)
-            ForEach(Self.shades.indices, id: \.self) { i in
-                RoundedRectangle(cornerRadius: 3).fill(Color.track.opacity(Self.shades[i])).frame(width: 12, height: 12)
+        ViewThatFits(in: .horizontal) {
+            HStack(spacing: 6) {
+                scale
+                Text("Tap a day to open its ride").padding(.leading, 12)
             }
-            Text("more")
-            Text("Tap a day to open its ride").padding(.leading, 12)
+            VStack(alignment: .trailing, spacing: 4) {
+                HStack(spacing: 6) { scale }
+                Text("Tap a day to open its ride")
+            }
         }
         .font(.caption)
         .foregroundStyle(.secondary)
         .accessibilityElement(children: .combine)
+    }
+}
+
+extension PadYearHeatmap {
+    @ViewBuilder fileprivate var scale: some View {
+        Text("less")
+        RoundedRectangle(cornerRadius: 3).fill(Color.secondary.opacity(0.14)).frame(width: 12, height: 12)
+        ForEach(Self.shades.indices, id: \.self) { i in
+            RoundedRectangle(cornerRadius: 3).fill(Color.track.opacity(Self.shades[i])).frame(width: 12, height: 12)
+        }
+        Text("more")
     }
 }
 
@@ -430,6 +477,7 @@ private struct PadRecords: View {
     let records: [RideRecord]
     let rides: [UUID: PhoneDatabase.StatsRide]
     let sport: Sport
+    var compact = false
     let onOpenRide: (UUID) -> Void
 
     /// A record set by a ride imported in the last week is marked "New".
@@ -438,12 +486,12 @@ private struct PadRecords: View {
     var body: some View {
         VStack(alignment: .leading, spacing: 22) {
             VStack(alignment: .leading, spacing: 4) {
-                Text("Records").font(.largeTitle.bold())
+                Text("Records").font(compact ? .title.bold() : .largeTitle.bold())
                 Text("Your best values across all rides · the sample ride does not count")
                     .foregroundStyle(.secondary)
             }
-            LazyVGrid(columns: [GridItem(.adaptive(minimum: 260), spacing: 20, alignment: .top)],
-                      alignment: .leading, spacing: 20) {
+            LazyVGrid(columns: [GridItem(.adaptive(minimum: 260), spacing: compact ? 12 : 20, alignment: .top)],
+                      alignment: .leading, spacing: compact ? 12 : 20) {
                 ForEach(records) { record in
                     Button { if let first = record.rideIDs.first { onOpenRide(first) } } label: { card(record) }
                         .buttonStyle(.plain)
@@ -529,6 +577,7 @@ private struct PadGoals: View {
     let goals: [PhoneDatabase.GoalValue]
     let rides: [HighlightRide]
     let calendar: Calendar
+    var compact = false
     /// `nil` when every combination already has a goal.
     var onAdd: (() -> Void)?
     var onEdit: (PhoneDatabase.GoalValue) -> Void
@@ -537,13 +586,21 @@ private struct PadGoals: View {
         VStack(alignment: .leading, spacing: 22) {
             HStack(alignment: .bottom) {
                 VStack(alignment: .leading, spacing: 4) {
-                    Text("Goals").font(.largeTitle.bold())
+                    Text("Goals").font(compact ? .title.bold() : .largeTitle.bold())
                     Text("For a week, month or year · kilometres, rides or ascent").foregroundStyle(.secondary)
                 }
                 Spacer()
-                Button("Add Goal…", systemImage: "plus") { onAdd?() }
-                    .buttonStyle(.glass)
-                    .disabled(onAdd == nil)
+                Group {
+                    if compact {
+                        Button { onAdd?() } label: { Image(systemName: "plus") }
+                            .buttonBorderShape(.circle)
+                            .accessibilityLabel(Text("Add Goal…"))
+                    } else {
+                        Button("Add Goal…", systemImage: "plus") { onAdd?() }
+                    }
+                }
+                .buttonStyle(.glass)
+                .disabled(onAdd == nil)
             }
             if goals.isEmpty {
                 ContentUnavailableView {
@@ -555,8 +612,8 @@ private struct PadGoals: View {
                 }
                 .frame(maxWidth: .infinity, minHeight: 260)
             } else {
-                LazyVGrid(columns: [GridItem(.adaptive(minimum: 260), spacing: 20, alignment: .top)],
-                          alignment: .leading, spacing: 20) {
+                LazyVGrid(columns: [GridItem(.adaptive(minimum: 260), spacing: compact ? 12 : 20, alignment: .top)],
+                          alignment: .leading, spacing: compact ? 12 : 20) {
                     ForEach(goals) { goal in
                         PadGoalCard(progress: GoalProgress(metric: goal.metric, period: goal.period, target: goal.target,
                                                            rides: rides, calendar: calendar),
