@@ -996,6 +996,26 @@
         }
       }
     },
+    "Comparison" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Vergleich"
+          }
+        }
+      }
+    },
+    "Comparison – %@" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Vergleich – %@"
+          }
+        }
+      }
+    },
     "Could Not Save" : {
       "localizations" : {
         "de" : {
@@ -1392,6 +1412,36 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Highlights"
+          }
+        }
+      }
+    },
+    "Highlights %@" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Highlights %@"
+          }
+        }
+      }
+    },
+    "Highlights – Goals" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Highlights – Ziele"
+          }
+        }
+      }
+    },
+    "Highlights – Records" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Highlights – Rekorde"
           }
         }
       }

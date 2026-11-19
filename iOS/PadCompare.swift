@@ -89,6 +89,15 @@ struct PadCompareView: View {
         Toggle("Difference from Average", isOn: $showsDeviation)
             .toggleStyle(.switch)
             .fixedSize()
+        // The comparison as a PDF (B-336), as shown: with or without the differences.
+        if rides.count == rideIDs.count, RideComparison.canCompare(count: rides.count) {
+            ShareLink(item: ComparisonPDF(rides: rides, baseline: library.comparisonBaseline(for: rideIDs),
+                                          showsDeviation: showsDeviation),
+                      preview: SharePreview(Text("Comparison"))) {
+                Label("Share PDF", systemImage: "square.and.arrow.up")
+            }
+            .buttonStyle(.glass)
+        }
         Button("Merge…", systemImage: "arrow.triangle.merge") { merging = true }
             .buttonStyle(.glass)
         Button("Done", action: onDone)
@@ -266,9 +275,11 @@ private struct PadCompareTable: View {
     let baselineCount: Int
     /// Shows below each value its difference from the average (B-334), like the Mac.
     var showsDeviation = false
+    /// Smaller type and a narrower label column, for the PDF (B-336).
+    var dense = false
     let onOpen: (UUID) -> Void
 
-    private static let labelWidth = 200.0
+    private var labelWidth: CGFloat { dense ? 120 : 200 }
 
     var body: some View {
         VStack(spacing: 0) {
@@ -300,13 +311,13 @@ private struct PadCompareTable: View {
             Text("Metric")
                 .font(.caption.weight(.semibold))
                 .foregroundStyle(.secondary)
-                .frame(width: Self.labelWidth, alignment: .leading)
+                .frame(width: labelWidth, alignment: .leading)
                 .padding(.horizontal, 14)
             ForEach(Array(rides.enumerated()), id: \.element.id) { index, ride in
                 Button { onOpen(ride.id) } label: {
                     VStack(alignment: .leading, spacing: 4) {
                         LegendMark(index: index)
-                        Text(verbatim: ride.name).font(.headline).lineLimit(2).multilineTextAlignment(.leading)
+                        Text(verbatim: ride.name).font(dense ? .caption.bold() : .headline).lineLimit(2).multilineTextAlignment(.leading)
                         Text(verbatim: ride.startDate.formatted(Date.FormatStyle(timeZone: ride.timeZone).day().month(.abbreviated).year()))
                             .font(.caption)
                             .foregroundStyle(.secondary)
@@ -317,7 +328,7 @@ private struct PadCompareTable: View {
                 .padding(10)
             }
             VStack(alignment: .leading, spacing: 2) {
-                Text("Your average").font(.headline)
+                Text("Your average").font(dense ? .caption.bold() : .headline)
                 Text("\(baselineCount) rides").font(.caption).foregroundStyle(.secondary)
             }
             .frame(maxWidth: .infinity, alignment: .leading)
@@ -331,7 +342,7 @@ private struct PadCompareTable: View {
         let best = comparison.bestIndices(metric)
         return HStack(spacing: 0) {
             Text(CompareTexts.title(metric))
-                .frame(width: Self.labelWidth, alignment: .leading)
+                .frame(width: labelWidth, alignment: .leading)
                 .padding(.horizontal, 14)
             ForEach(values.indices, id: \.self) { index in
                 VStack(alignment: .leading, spacing: 1) {
@@ -344,7 +355,7 @@ private struct PadCompareTable: View {
                     }
                     if showsDeviation, let deviation = comparison.deviation(metric, ride: index) {
                         Text(verbatim: CompareTexts.deviation(deviation, metric))
-                            .font(.caption)
+                            .font(dense ? .system(size: 7) : .caption)
                             .foregroundStyle(.secondary)
                     }
                 }
@@ -358,10 +369,72 @@ private struct PadCompareTable: View {
                 .frame(maxWidth: .infinity, alignment: .leading)
                 .padding(.horizontal, 10)
         }
-        .font(.callout)
-        .padding(.vertical, 7)
+        .font(dense ? .caption2 : .callout)
+        .padding(.vertical, dense ? 3 : 7)
         .overlay(alignment: .top) { Divider().opacity(0.6) }
         .accessibilityElement(children: .combine)
+    }
+}
+
+// MARK: - PDF
+
+/// The comparison as an A4 PDF for the share menu (B-336), like "Export as PDF…" on the Mac:
+/// the rides and their routes on a map on the first page, the table on the second.
+struct ComparisonPDF: Transferable {
+    let rides: [PhoneDatabase.ComparedRide]
+    let baseline: [ComparisonFigures]
+    let showsDeviation: Bool
+
+    static var transferRepresentation: some TransferRepresentation {
+        DataRepresentation(exportedContentType: .pdf) { pdf in await pdf.render() }
+            .suggestedFileName { $0.fileName }
+    }
+
+    /// "Comparison – Morning loop and After-work loop.pdf"
+    var fileName: String {
+        ReportPDF.fileName(String(localized: "Comparison – \(rides.map(\.name).formatted(.list(type: .and)))"))
+    }
+
+    @MainActor
+    func render() async -> Data {
+        let light = UITraitCollection(userInterfaceStyle: .light)
+        let lines = rides.enumerated().map { index, ride in
+            ReportPDF.MapLine(coordinates: ride.route.map { CLLocationCoordinate2D(latitude: $0.latitude, longitude: $0.longitude) },
+                              color: UIColor(PadCompareStyle.color(index)).resolvedColor(with: light),
+                              dash: PadCompareStyle.dash(index).map { $0 * 1.6 })
+        }
+        let map = await ReportPDF.mapImage(lines, size: CGSize(width: ReportPDF.contentWidth, height: 340))
+        let comparison = RideComparison(rides: rides.map(\.figures), baseline: baseline)
+        let first = VStack(alignment: .leading, spacing: 16) {
+            Text("Comparing \(rides.count) rides").font(.system(size: 22, weight: .bold))
+            VStack(alignment: .leading, spacing: 6) {
+                ForEach(Array(rides.enumerated()), id: \.element.id) { index, ride in
+                    HStack(spacing: 8) {
+                        LegendMark(index: index)
+                        Text(verbatim: ride.name).font(.system(size: 12, weight: .semibold))
+                        Text(verbatim: "\(RideFormat.date(ride.startDate, timeZone: ride.timeZone.identifier)) · \(RideFormat.distance(ride.figures.distance))")
+                            .font(.system(size: 11))
+                            .foregroundStyle(.secondary)
+                    }
+                }
+            }
+            if let map {
+                Image(uiImage: map)
+                    .resizable()
+                    .scaledToFit()
+                    .clipShape(RoundedRectangle(cornerRadius: 8))
+            }
+        }
+        let table = VStack(alignment: .leading, spacing: 10) {
+            PadCompareTable(rides: rides, comparison: comparison, baselineCount: baseline.count,
+                            showsDeviation: showsDeviation, dense: true, onOpen: { _ in })
+            Text("★ marks the best value of a row, only for figures where more or less is better. The average is per ride over your \(baseline.count) rides; averages are weighted by ride time as in the analysis.")
+                .font(.system(size: 8))
+                .foregroundStyle(.secondary)
+                .fixedSize(horizontal: false, vertical: true)
+            ReportPDF.createdNote
+        }
+        return ReportPDF.document([AnyView(first), AnyView(table)])
     }
 }
 

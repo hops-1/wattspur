@@ -35,9 +35,13 @@ struct HighlightsView: View {
         let summary = HighlightsSummary(rides: rides.map(\.highlight), calendar: calendar)
         let byID = Dictionary(all.map { ($0.id, $0) }, uniquingKeysWith: { a, _ in a })
         let open: (UUID) -> Void = onOpenRide ?? { openedID = $0 }
+        let pdf = HighlightsPDF(tab: tab, review: YearReview(summary.rides, year: shownYear, calendar: calendar),
+                                isCurrentYear: shownYear == currentYear, records: summary.records, goals: library.goals,
+                                goalRides: all.filter { $0.sport == .cycling }.map(\.highlight),
+                                rides: byID, sport: sport, calendar: calendar)
         ScrollView {
             VStack(alignment: .leading, spacing: 24) {
-                controls(summary)
+                controls(summary, pdf: (tab == .goals ? library.goals.isEmpty : rides.isEmpty) ? nil : pdf)
                 switch tab {
                 case .year:
                     if rides.isEmpty {
@@ -87,10 +91,33 @@ struct HighlightsView: View {
         }
     }
 
-    private func controls(_ summary: HighlightsSummary) -> some View {
+    private func controls(_ summary: HighlightsSummary, pdf: HighlightsPDF?) -> some View {
         ViewThatFits(in: .horizontal) {
-            HStack(spacing: 12) { controlItems(summary) }
-            VStack(alignment: .leading, spacing: 12) { controlItems(summary) }
+            HStack(spacing: 12) {
+                controlItems(summary)
+                Spacer(minLength: 0)
+                share(pdf)
+            }
+            VStack(alignment: .leading, spacing: 12) {
+                HStack(spacing: 12) {
+                    controlItems(summary)
+                }
+                share(pdf)
+            }
+            VStack(alignment: .leading, spacing: 12) {
+                controlItems(summary)
+                share(pdf)
+            }
+        }
+    }
+
+    /// The shown part as an A4 PDF (B-336): the year, the records or the goals.
+    @ViewBuilder private func share(_ pdf: HighlightsPDF?) -> some View {
+        if let pdf {
+            ShareLink(item: pdf, preview: SharePreview(Text(verbatim: pdf.title))) {
+                Label("Share PDF", systemImage: "square.and.arrow.up")
+            }
+            .buttonStyle(.glass)
         }
     }
 
@@ -172,27 +199,41 @@ private struct PadYearReview: View {
     let sport: Sport
     /// One column on the iPhone (B-228).
     var compact = false
+    /// For the PDF (B-336): the calendar without scrolling, and which parts this page shows.
+    var pdf = false
+    var showsOverview = true
+    var showsRecords = true
     let onOpenRide: (UUID) -> Void
 
     private static let everest = 8_848.0
 
     var body: some View {
         VStack(alignment: .leading, spacing: compact ? 14 : 24) {
-            VStack(alignment: .leading, spacing: compact ? 2 : 4) {
-                Text("Your \(String(review.year))").font(compact ? .title2.bold() : .largeTitle.bold())
-                Text(verbatim: subtitle).font(compact ? .subheadline : .body).foregroundStyle(.secondary)
+            if showsOverview { overview }
+            if showsRecords && !showsOverview {
+                card(title: Text("Records this year")) { yearRecords }
             }
-            if review.aggregate.rideCount == 0 {
-                ContentUnavailableView("No Rides in \(String(review.year))", systemImage: "calendar",
-                                       description: Text("Choose another year with the arrows at the top."))
-                    .frame(maxWidth: .infinity, minHeight: 240)
-            } else {
-                tiles
-                card(title: Text("Riding days"), subtitle: Text("Each square is a day; the darker, the more kilometres")) {
-                    PadYearHeatmap(year: review.year, days: review.days, calendar: calendar, compact: compact) { ids in
-                        if let first = ids.first { onOpenRide(first) }
-                    }
+        }
+    }
+
+    @ViewBuilder private var overview: some View {
+        VStack(alignment: .leading, spacing: compact ? 2 : 4) {
+            Text("Your \(String(review.year))").font(compact ? .title2.bold() : .largeTitle.bold())
+            Text(verbatim: subtitle).font(compact ? .subheadline : .body).foregroundStyle(.secondary)
+        }
+        if review.aggregate.rideCount == 0 {
+            ContentUnavailableView("No Rides in \(String(review.year))", systemImage: "calendar",
+                                   description: Text("Choose another year with the arrows at the top."))
+                .frame(maxWidth: .infinity, minHeight: 240)
+        } else {
+            tiles
+            card(title: Text("Riding days"), subtitle: Text("Each square is a day; the darker, the more kilometres")) {
+                PadYearHeatmap(year: review.year, days: review.days, calendar: calendar, compact: compact,
+                           fixedCell: pdf ? 5.5 : nil) { ids in
+                    if let first = ids.first { onOpenRide(first) }
                 }
+            }
+            if showsRecords {
                 ViewThatFits(in: .horizontal) {
                     HStack(alignment: .top, spacing: 20) {
                         card(title: Text("Kilometres per month")) { monthChart }
@@ -205,6 +246,8 @@ private struct PadYearReview: View {
                         card(title: Text("Records this year")) { yearRecords }
                     }
                 }
+            } else {
+                card(title: Text("Kilometres per month")) { monthChart }
             }
         }
     }
@@ -340,6 +383,8 @@ private struct PadYearHeatmap: View {
     let calendar: Calendar
     /// On the iPhone the year scrolls sideways, starting at its end, and the hint goes below.
     var compact = false
+    /// A fixed square size without scrolling, for the PDF (B-336).
+    var fixedCell: CGFloat?
     let onOpenRides: ([UUID]) -> Void
 
     /// Opacity of the track colour for the levels 1 to 4.
@@ -348,7 +393,9 @@ private struct PadYearHeatmap: View {
     var body: some View {
         VStack(alignment: .trailing, spacing: 10) {
             Group {
-                if compact {
+                if let fixedCell {
+                    grid(cell: fixedCell)
+                } else if compact {
                     ScrollView(.horizontal) { grid(cell: 14) }
                         .defaultScrollAnchor(.trailing)
                         .scrollIndicators(.hidden)
@@ -445,6 +492,10 @@ private struct PadYearHeatmap: View {
 
     private var legend: some View {
         ViewThatFits(in: .horizontal) {
+            if fixedCell != nil {
+                // Printed: nothing to tap.
+                HStack(spacing: 6) { scale }
+            }
             HStack(spacing: 6) {
                 scale
                 Text("Tap a day to open its ride").padding(.leading, 12)
@@ -478,6 +529,8 @@ private struct PadRecords: View {
     let rides: [UUID: PhoneDatabase.StatsRide]
     let sport: Sport
     var compact = false
+    /// Three narrow cards a row, for the PDF (B-336).
+    var pdf = false
     let onOpenRide: (UUID) -> Void
 
     /// A record set by a ride imported in the last week is marked "New".
@@ -490,8 +543,8 @@ private struct PadRecords: View {
                 Text("Your best values across all rides · the sample ride does not count")
                     .foregroundStyle(.secondary)
             }
-            LazyVGrid(columns: [GridItem(.adaptive(minimum: 260), spacing: compact ? 12 : 20, alignment: .top)],
-                      alignment: .leading, spacing: compact ? 12 : 20) {
+            LazyVGrid(columns: [GridItem(.adaptive(minimum: pdf ? 150 : 260), spacing: compact || pdf ? 12 : 20, alignment: .top)],
+                      alignment: .leading, spacing: compact || pdf ? 12 : 20) {
                 ForEach(records) { record in
                     Button { if let first = record.rideIDs.first { onOpenRide(first) } } label: { card(record) }
                         .buttonStyle(.plain)
@@ -535,7 +588,7 @@ private struct PadRecords: View {
             }
             .font(.subheadline)
             HStack(alignment: .firstTextBaseline, spacing: 4) {
-                Text(verbatim: value.number).font(.system(size: 30, weight: .semibold))
+                Text(verbatim: value.number).font(.system(size: pdf ? 22 : 30, weight: .semibold))
                 Text(verbatim: value.unit).foregroundStyle(.secondary)
             }
             .monospacedDigit()
@@ -578,9 +631,11 @@ private struct PadGoals: View {
     let rides: [HighlightRide]
     let calendar: Calendar
     var compact = false
+    /// Two cards a row and no buttons, for the PDF (B-336).
+    var pdf = false
     /// `nil` when every combination already has a goal.
     var onAdd: (() -> Void)?
-    var onEdit: (PhoneDatabase.GoalValue) -> Void
+    var onEdit: (PhoneDatabase.GoalValue) -> Void = { _ in }
 
     var body: some View {
         VStack(alignment: .leading, spacing: 22) {
@@ -590,6 +645,7 @@ private struct PadGoals: View {
                     Text("For a week, month or year · kilometres, rides or ascent").foregroundStyle(.secondary)
                 }
                 Spacer()
+                if !pdf {
                 Group {
                     if compact {
                         Button { onAdd?() } label: { Image(systemName: "plus") }
@@ -601,6 +657,7 @@ private struct PadGoals: View {
                 }
                 .buttonStyle(.glass)
                 .disabled(onAdd == nil)
+                }
             }
             if goals.isEmpty {
                 ContentUnavailableView {
@@ -612,12 +669,12 @@ private struct PadGoals: View {
                 }
                 .frame(maxWidth: .infinity, minHeight: 260)
             } else {
-                LazyVGrid(columns: [GridItem(.adaptive(minimum: 260), spacing: compact ? 12 : 20, alignment: .top)],
-                          alignment: .leading, spacing: compact ? 12 : 20) {
+                LazyVGrid(columns: [GridItem(.adaptive(minimum: pdf ? 230 : 260), spacing: compact || pdf ? 12 : 20, alignment: .top)],
+                          alignment: .leading, spacing: compact || pdf ? 12 : 20) {
                     ForEach(goals) { goal in
                         PadGoalCard(progress: GoalProgress(metric: goal.metric, period: goal.period, target: goal.target,
                                                            rides: rides, calendar: calendar),
-                                    calendar: calendar) { onEdit(goal) }
+                                    calendar: calendar, onEdit: pdf ? nil : { onEdit(goal) })
                     }
                 }
             }
@@ -632,7 +689,8 @@ private struct PadGoals: View {
 private struct PadGoalCard: View {
     let progress: GoalProgress
     let calendar: Calendar
-    let onEdit: () -> Void
+    /// `nil` in the PDF: no pencil.
+    var onEdit: (() -> Void)?
 
     private var metric: GoalMetric { progress.metric }
 
@@ -643,9 +701,11 @@ private struct PadGoalCard: View {
                     .fontWeight(.semibold)
                 Text(verbatim: HighlightTexts.title(metric)).foregroundStyle(.secondary)
                 Spacer()
-                Button(action: onEdit) { Image(systemName: "pencil") }
-                    .buttonStyle(.borderless)
-                    .accessibilityLabel(Text("Edit Goal…"))
+                if let onEdit {
+                    Button(action: onEdit) { Image(systemName: "pencil") }
+                        .buttonStyle(.borderless)
+                        .accessibilityLabel(Text("Edit Goal…"))
+                }
             }
             .font(.callout)
             HStack(alignment: .firstTextBaseline, spacing: 6) {
@@ -710,6 +770,62 @@ private struct PadGoalCard: View {
         }
         .accessibilityElement(children: .ignore)
         .accessibilityLabel(Text("Last \(results.count) periods · \(reached) reached"))
+    }
+}
+
+// MARK: - PDF
+
+/// The shown part of the highlights as an A4 PDF for the share menu (B-336): the year (two
+/// pages: overview, then the records of the year), the records, or the goals.
+struct HighlightsPDF: Transferable {
+    let tab: PadHighlightsTab
+    let review: YearReview
+    let isCurrentYear: Bool
+    let records: [RideRecord]
+    let goals: [PhoneDatabase.GoalValue]
+    let goalRides: [HighlightRide]
+    let rides: [UUID: PhoneDatabase.StatsRide]
+    let sport: Sport
+    let calendar: Calendar
+
+    static var transferRepresentation: some TransferRepresentation {
+        DataRepresentation(exportedContentType: .pdf) { pdf in await pdf.render() }
+            .suggestedFileName { ReportPDF.fileName($0.title) }
+    }
+
+    /// "Highlights 2026", "Highlights – Records", "Highlights – Goals".
+    var title: String {
+        switch tab {
+        case .year: String(localized: "Highlights \(String(review.year))")
+        case .records: String(localized: "Highlights – Records")
+        case .goals: String(localized: "Highlights – Goals")
+        }
+    }
+
+    @MainActor
+    func render() async -> Data {
+        let none: (UUID) -> Void = { _ in }
+        let pages: [AnyView] = switch tab {
+        case .year:
+            [AnyView(PadYearReview(review: review, isCurrentYear: isCurrentYear, calendar: calendar, rides: rides,
+                                   sport: sport, compact: true, pdf: true, showsRecords: false, onOpenRide: none)),
+             AnyView(VStack(alignment: .leading, spacing: 14) {
+                 PadYearReview(review: review, isCurrentYear: isCurrentYear, calendar: calendar, rides: rides,
+                               sport: sport, compact: true, pdf: true, showsOverview: false, onOpenRide: none)
+                 ReportPDF.createdNote
+             })]
+        case .records:
+            [AnyView(VStack(alignment: .leading, spacing: 14) {
+                PadRecords(records: records, rides: rides, sport: sport, compact: true, pdf: true, onOpenRide: none)
+                ReportPDF.createdNote
+            })]
+        case .goals:
+            [AnyView(VStack(alignment: .leading, spacing: 14) {
+                PadGoals(goals: goals, rides: goalRides, calendar: calendar, compact: true, pdf: true)
+                ReportPDF.createdNote
+            })]
+        }
+        return ReportPDF.document(pages)
     }
 }
 
