@@ -15,6 +15,10 @@ extension BikeColor {
         case .purple: (.hex(0x6E56CF), .hex(0xA98BEF))
         case .pink: (.hex(0xC2255C), .hex(0xF06595))
         case .green: (.hex(0x2F7D3A), .hex(0x6FCF7E))
+        // Symbols must stay readable on the light tile: white is a light grey there (B-333).
+        case .black: (.hex(0x1F2328), .hex(0x8B949E))
+        case .silver: (.hex(0x6E7781), .hex(0xAFB8C1))
+        case .white: (.hex(0x9AA4AE), .hex(0xF2F4F7))
         }
         return Color(nsColor: NSColor(name: nil) { appearance in
             appearance.bestMatch(from: [.darkAqua, .aqua]) == .darkAqua ? dark : light
@@ -29,6 +33,9 @@ extension BikeColor {
         case .purple: "Purple"
         case .pink: "Pink"
         case .green: "Green"
+        case .black: "Black"
+        case .silver: "Silver"
+        case .white: "White"
         }
     }
 }
@@ -281,10 +288,11 @@ struct BikeColorPicker: View {
                     Button { selection = color } label: {
                         Image(systemName: "checkmark")
                             .font(.system(size: 13, weight: .bold))
-                            .foregroundStyle(.white)
+                            .foregroundStyle(color.isLight ? .black : .white)
                             .opacity(selected ? 1 : 0)
                             .frame(width: 32, height: 32)
-                            .background(color.color, in: Circle())
+                            .background(color == .white ? Color.white : color.color, in: Circle())
+                            .overlay { Circle().strokeBorder(.separator).opacity(color.isLight ? 1 : 0) }
                             .overlay { Circle().strokeBorder(color.color, lineWidth: 2).padding(-4).opacity(selected ? 1 : 0) }
                     }
                     .buttonStyle(.plain)

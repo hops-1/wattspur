@@ -35,6 +35,9 @@ struct BikeBadge: View {
         case .purple: (0x6E56CF, 0xA98BEF)
         case .pink: (0xC2255C, 0xF06595)
         case .green: (0x2F7D3A, 0x6FCF7E)
+        case .black: (0x1F2328, 0x8B949E)
+        case .silver: (0x6E7781, 0xAFB8C1)
+        case .white: (0x9AA4AE, 0xF2F4F7)
         }
         return Color(UIColor { $0.userInterfaceStyle == .dark ? .hex(dark) : .hex(light) })
     }

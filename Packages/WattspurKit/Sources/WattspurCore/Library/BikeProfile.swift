@@ -58,8 +58,14 @@ public enum BikeKind: String, CaseIterable, Identifiable, Sendable {
 /// The colour of a bike's symbol. The shade for light and dark mode is the app's business.
 public enum BikeColor: String, CaseIterable, Identifiable, Sendable {
     case blue, orange, teal, purple, pink, green
+    /// The common car colours, for every device (B-333, wish Nils 19.11.2026). Older versions read
+    /// them as blue.
+    case black, silver, white
 
     public var id: Self { self }
+
+    /// A light colour: its swatch needs a rim and a dark check mark.
+    public var isLight: Bool { self == .silver || self == .white }
 }
 
 /// For the basal metabolic rate (B-067); "not specified" takes the mean of both formulas.

@@ -826,6 +826,16 @@
         }
       }
     },
+    "Black" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Schwarz"
+          }
+        }
+      }
+    },
     "Calendar of riding days" : {
       "localizations" : {
         "de" : {
@@ -2366,6 +2376,16 @@
         }
       }
     },
+    "Silver" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Silber"
+          }
+        }
+      }
+    },
     "Smooth" : {
       "localizations" : {
         "de" : {
@@ -3022,6 +3042,16 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "KW %1$lld · %2$@"
+          }
+        }
+      }
+    },
+    "White" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Weiß"
           }
         }
       }
