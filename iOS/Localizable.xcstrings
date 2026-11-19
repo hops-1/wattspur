@@ -1096,6 +1096,16 @@
         }
       }
     },
+    "Difference from Average" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Abweichung vom Schnitt"
+          }
+        }
+      }
+    },
     "Direction of travel up" : {
       "localizations" : {
         "de" : {
@@ -2102,6 +2112,16 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Leistung und Trittfrequenz"
+          }
+        }
+      }
+    },
+    "pp" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Pp."
           }
         }
       }

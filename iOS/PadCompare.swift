@@ -20,6 +20,8 @@ struct PadCompareView: View {
     @State private var rides: [PhoneDatabase.ComparedRide] = []
     @State private var metric: PadCompareChart.Metric = .speed
     @State private var merging = false
+    /// Each value's difference from "Your average" (B-334), off by default as on the Mac.
+    @AppStorage(PhoneSettingsKey.padCompareShowsDeviation) private var showsDeviation = false
 
     var body: some View {
         let baseline = library.comparisonBaseline(for: rideIDs)
@@ -35,7 +37,8 @@ struct PadCompareView: View {
                     let comparison = RideComparison(rides: rides.map(\.figures), baseline: baseline)
                     PadCompareMap(rides: rides)
                     PadCompareChart(rides: rides, metric: $metric)
-                    PadCompareTable(rides: rides, comparison: comparison, baselineCount: baseline.count, onOpen: onOpen)
+                    PadCompareTable(rides: rides, comparison: comparison, baselineCount: baseline.count,
+                                    showsDeviation: showsDeviation, onOpen: onOpen)
                     Text("★ marks the best value of a row, only for figures where more or less is better. The average is per ride over your \(baseline.count) rides; averages are weighted by ride time as in the analysis.")
                         .font(.caption)
                         .foregroundStyle(.secondary)
@@ -83,6 +86,9 @@ struct PadCompareView: View {
     }
 
     @ViewBuilder private var buttons: some View {
+        Toggle("Difference from Average", isOn: $showsDeviation)
+            .toggleStyle(.switch)
+            .fixedSize()
         Button("Merge…", systemImage: "arrow.triangle.merge") { merging = true }
             .buttonStyle(.glass)
         Button("Done", action: onDone)
@@ -258,6 +264,8 @@ private struct PadCompareTable: View {
     let rides: [PhoneDatabase.ComparedRide]
     let comparison: RideComparison
     let baselineCount: Int
+    /// Shows below each value its difference from the average (B-334), like the Mac.
+    var showsDeviation = false
     let onOpen: (UUID) -> Void
 
     private static let labelWidth = 200.0
@@ -326,11 +334,18 @@ private struct PadCompareTable: View {
                 .frame(width: Self.labelWidth, alignment: .leading)
                 .padding(.horizontal, 14)
             ForEach(values.indices, id: \.self) { index in
-                HStack(spacing: 4) {
-                    Text(verbatim: values[index].map { CompareTexts.value($0, metric) } ?? "–")
-                        .fontWeight(best.contains(index) ? .semibold : .regular)
-                    if best.contains(index) {
-                        Text(verbatim: "★").foregroundStyle(Color.track).accessibilityLabel(Text("Best"))
+                VStack(alignment: .leading, spacing: 1) {
+                    HStack(spacing: 4) {
+                        Text(verbatim: values[index].map { CompareTexts.value($0, metric) } ?? "–")
+                            .fontWeight(best.contains(index) ? .semibold : .regular)
+                        if best.contains(index) {
+                            Text(verbatim: "★").foregroundStyle(Color.track).accessibilityLabel(Text("Best"))
+                        }
+                    }
+                    if showsDeviation, let deviation = comparison.deviation(metric, ride: index) {
+                        Text(verbatim: CompareTexts.deviation(deviation, metric))
+                            .font(.caption)
+                            .foregroundStyle(.secondary)
                     }
                 }
                 .monospacedDigit()
@@ -458,6 +473,30 @@ enum CompareTexts {
         case .rideTime, .totalTime, .pausedTime: RideFormat.duration(v)
         default: "\(number(v, metric)) \(unit(metric))"
         }
+    }
+
+    /// "+2,1 km/h · +9 %"; durations as "+1:05 h" or "−8 min"; the coasting share in
+    /// percentage points. The same text as on the Mac (`ComparisonFormat.deviation`).
+    static func deviation(_ d: ComparisonDeviation, _ metric: ComparisonMetric) -> String {
+        let sign = d.absolute > 0.0005 ? "+" : d.absolute < -0.0005 ? "−" : "±"
+        let magnitude = abs(d.absolute)
+        let absolute: String = switch metric {
+        case .rideTime, .totalTime, .pausedTime: shortDuration(magnitude)
+        case .coastingShare: "\((magnitude * 100).formatted(.number.precision(.fractionLength(0)))) \(String(localized: "pp"))"
+        default: "\(number(magnitude, metric)) \(unit(metric))"
+        }
+        guard metric != .coastingShare, let relative = d.relative else { return sign + absolute }
+        let percent = Int((relative * 100).rounded())
+        let pSign = percent > 0 ? "+" : percent < 0 ? "−" : "±"
+        return "\(sign)\(absolute) · \(pSign)\(abs(percent)) %"
+    }
+
+    /// "12 min" or "1:05 h".
+    private static func shortDuration(_ seconds: TimeInterval) -> String {
+        let total = Int(seconds.rounded())
+        let hours = total / 3600
+        let minutes = total % 3600 / 60
+        return hours > 0 ? String(format: "%d:%02d h", hours, minutes) : "\(minutes) min"
     }
 
     private static func number(_ v: Double, _ metric: ComparisonMetric) -> String {
