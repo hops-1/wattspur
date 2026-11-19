@@ -292,6 +292,7 @@ struct BikeEditorView: View {
             bike = library.makeBike(name: draft.name, kind: draft.kind, color: draft.color)
         }
         draft.apply(to: bike)
+        if existing == nil { library.keepAddedBike(bike) }
         if draft.makeActive { library.setActiveBike(bike) }
         library.save()
         dismiss()

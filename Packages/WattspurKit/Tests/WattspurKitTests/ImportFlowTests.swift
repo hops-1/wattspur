@@ -81,8 +81,12 @@ final class ImportFlowTests {
         #expect(flow.bikeQuestion?.id == question.id)
         #expect(imported.isEmpty)
         flow.confirm(question, bike: cargo, library: library) { _, _ in }
-        #expect(imported.count == 2)
         #expect(library.ride(withID: imported[0])?.bike?.id == cargo.id)
+        // The waiting FIT ran then: it is the same tour, so it finds the GPX ride on the cargo bike
+        // although that is not the active bike (B-329), and asks whether to take the Bosch values.
+        #expect(imported.count == 1)
+        #expect(flow.comparisons.first?.rideID == imported[0])
+        #expect(flow.comparisons.first?.kind == .fitForGPX)
     }
 
     @Test("With one bike a GPX file needs no question")

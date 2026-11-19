@@ -397,6 +397,9 @@ public final class PhoneDatabase {
         checked.startKilometers = ProfileInput.accepted(draft.startKilometers, in: ProfileInput.startKilometers)
         checked.apply(to: bike)
         if bike.name.isEmpty { bike.name = name }
+        // A device added here is never the untouched default bike that the sync merge removes
+        // (B-332): left with the default name, it gets a number, e.g. "My eBike 2".
+        if id == nil { library.keepAddedBike(bike) }
         LibrarySave.save(context)
         return bike.id
     }

@@ -172,6 +172,7 @@ extension BikeKind {
         case .road: "Road bike"
         case .gravel: "Gravel bike"
         case .cargo: "Cargo bike"
+        case .scooter: "E-scooter"
         case .motorcycle: "Motorcycle"
         case .car: "Car"
         case .runningShoe: "Running shoes"
@@ -371,7 +372,9 @@ private struct DeviceEditor: View {
                     Picker("Color", selection: $draft.color) {
                         ForEach(BikeColor.allCases, id: \.self) { color in
                             Label { Text(color.label) } icon: {
-                                Image(systemName: "circle.fill").foregroundStyle(BikeBadge.color(color))
+                                Image(systemName: "circle.fill")
+                                    .foregroundStyle(color == .white ? Color.white : BikeBadge.color(color))
+                                    .overlay { Circle().strokeBorder(.secondary.opacity(color.isLight ? 0.6 : 0)) }
                             }
                             .tag(color)
                         }
@@ -483,6 +486,9 @@ extension BikeColor {
         case .purple: "Purple"
         case .pink: "Pink"
         case .green: "Green"
+        case .black: "Black"
+        case .silver: "Silver"
+        case .white: "White"
         }
     }
 }

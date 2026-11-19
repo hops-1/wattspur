@@ -59,6 +59,27 @@ struct BikeService: LibraryService {
     }
 
     /// Makes `bike` the one new rides go to. An archived bike cannot be active.
+    /// A device the user just added keeps out of the sync merge's reach (B-332): left with the
+    /// default name, it looked like the untouched default bike a device makes on its first start and
+    /// was deleted after the next sync. It gets the first free number instead, e.g. "My eBike 2".
+    func keepAddedBike(_ bike: Bike) {
+        let defaultName = SyncMergeService.normalized(env.defaultBikeName)
+        guard SyncMergeService.normalized(bike.name) == defaultName else { return }
+        let taken = Set(bikes(includingArchived: true).filter { $0.id != bike.id }.map { SyncMergeService.normalized($0.name) })
+        var number = 2
+        while taken.contains(SyncMergeService.normalized("\(env.defaultBikeName) \(number)")) { number += 1 }
+        bike.name = "\(env.defaultBikeName) \(number)"
+    }
+
+    /// The bicycle a Bosch FIT without a known device goes to (B-329): the active device if it is
+    /// one, else the preferred open bicycle; a Bosch file never goes to a car or motorcycle. Only
+    /// when there is no bicycle at all, the active device.
+    func activeCyclingBike() -> Bike {
+        let active = activeBike()
+        guard active.kind.sport != .cycling else { return active }
+        return Self.preferredBike(in: bikes(includingArchived: false).filter { $0.kind.sport == .cycling }) ?? active
+    }
+
     func setActiveBike(_ bike: Bike) {
         guard !bike.isArchived else { return }
         let rider = defaultRider()

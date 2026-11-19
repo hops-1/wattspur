@@ -213,7 +213,7 @@ struct SyncMergeService: LibraryService {
         dateA != dateB ? dateA < dateB : idA.uuidString < idB.uuidString
     }
 
-    private static func normalized(_ name: String) -> String {
+    static func normalized(_ name: String) -> String {
         name.trimmingCharacters(in: .whitespacesAndNewlines).lowercased()
     }
 }

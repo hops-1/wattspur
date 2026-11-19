@@ -32,6 +32,16 @@
         }
       }
     },
+    "Add Vehicle…" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Fahrzeug hinzufügen …"
+          }
+        }
+      }
+    },
     "Any Distance" : {
       "localizations" : {
         "de" : {
@@ -78,6 +88,16 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Vorher legt Wattspur eine Sicherung der Mediathek daneben an."
+          }
+        }
+      }
+    },
+    "Black" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Schwarz"
           }
         }
       }
@@ -148,6 +168,26 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Diagnose erstellen"
+          }
+        }
+      }
+    },
+    "E-scooter" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "E-Scooter"
+          }
+        }
+      }
+    },
+    "Electric kick scooter; counts as cycling" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Elektro-Tretroller; zählt wie ein Rad"
           }
         }
       }
@@ -238,6 +278,16 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Backups zeigen"
+          }
+        }
+      }
+    },
+    "Silver" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Silber"
           }
         }
       }
@@ -658,6 +708,16 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Wattspur lädt alle %lld Fahrten mit Messwerten und Routen, deine Bikes, dein Profil, deine Ziele und gespeicherten Strecken in dein eigenes iCloud-Konto. Dort siehst nur du sie. Das erste Hochladen kann eine Weile dauern."
+          }
+        }
+      }
+    },
+    "White" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Weiß"
           }
         }
       }

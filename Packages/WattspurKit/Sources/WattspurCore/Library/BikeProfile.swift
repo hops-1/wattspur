@@ -19,6 +19,9 @@ public enum Sport: String, CaseIterable, Identifiable, Sendable {
 /// as a bike there; the handbook names the minimum version.
 public enum BikeKind: String, CaseIterable, Identifiable, Sendable {
     case bike, mountain, road, gravel, cargo
+    /// An e-scooter (B-330): counts as cycling, like a bicycle without pedalling (decision Nils
+    /// 19.11.2026). Older versions read it as a bicycle.
+    case scooter
     /// Tracked with the iPhone, e.g. by a friend on a motorcycle. Its rides stay out of the cycling
     /// totals, records and the CO₂ saved, unless the filter shows only this device.
     case motorcycle
@@ -32,7 +35,7 @@ public enum BikeKind: String, CaseIterable, Identifiable, Sendable {
 
     public var sport: Sport {
         switch self {
-        case .bike, .mountain, .road, .gravel, .cargo: .cycling
+        case .bike, .mountain, .road, .gravel, .cargo, .scooter: .cycling
         case .motorcycle, .car: .vehicle
         case .runningShoe: .running
         }
@@ -55,8 +58,14 @@ public enum BikeKind: String, CaseIterable, Identifiable, Sendable {
 /// The colour of a bike's symbol. The shade for light and dark mode is the app's business.
 public enum BikeColor: String, CaseIterable, Identifiable, Sendable {
     case blue, orange, teal, purple, pink, green
+    /// The common car colours, for every device (B-333, wish Nils 19.11.2026). Older versions read
+    /// them as blue.
+    case black, silver, white
 
     public var id: Self { self }
+
+    /// A light colour: its swatch needs a rim and a dark check mark.
+    public var isLight: Bool { self == .silver || self == .white }
 }
 
 /// For the basal metabolic rate (B-067); "not specified" takes the mean of both formulas.

@@ -68,8 +68,17 @@ struct ImportService: LibraryService {
         let named = parsed.suggestedBikeID.flatMap { id in bikes.bikes(includingArchived: true).first { $0.id == id } }
         // A recording without a device (B-286), e.g. a car, keeps its kind and gets no bike.
         let withoutDevice = named == nil ? parsed.suggestedKind : nil
-        let target = withoutDevice != nil ? nil : named ?? bike ?? bikes.activeBike()
-        if detectDuplicates, let similar = findSimilarRide(to: parsed, bike: target) {
+        // A Bosch FIT names no device of the library, but its drive unit's serial number: the device of
+        // the last ride with that number is its bike (B-329).
+        let isFIT = RideSource(fileExtension: ext) == .fit
+        let bySerial = named == nil && bike == nil && isFIT ? bikeOfSerial(parsed.deviceSerialNumber) : nil
+        let known = named ?? bike ?? bySerial
+        let target = withoutDevice != nil ? nil : known ?? (isFIT ? bikes.activeCyclingBike() : bikes.activeBike())
+        // A guessed bike must not keep a FIT from its recording on another bike (B-329): it then looks at
+        // the rides of every bicycle, and the ride found keeps its bike. A known bike keeps the
+        // protection for group rides.
+        let guessed = isFIT && known == nil && withoutDevice == nil
+        if detectDuplicates, let similar = findSimilarRide(to: parsed, bike: guessed ? nil : target, onlyCycling: guessed) {
             switch (RideSource(fileExtension: ext), similar.source) {
             case (.gpx?, .fit?):
                 guard similar.attachedSourceFormat == nil else {
@@ -385,7 +394,7 @@ struct ImportService: LibraryService {
     /// match: two people on one tour start together and ride the same route (group ride), and
     /// their files are different rides. Rides in the trash, the sample ride and rides that are
     /// part of a merged ride do not match. The closest start wins.
-    func findSimilarRide(to parsed: ParsedRide, bike: Bike?) -> Ride? {
+    func findSimilarRide(to parsed: ParsedRide, bike: Bike?, onlyCycling: Bool = false) -> Ride? {
         let newEnd = parsed.startDate.addingTimeInterval(parsed.summary.elapsedTime)
         let from = parsed.startDate.addingTimeInterval(-Self.similarLookBack)
         let to = max(parsed.startDate.addingTimeInterval(Self.similarStartTolerance), newEnd)
@@ -395,6 +404,7 @@ struct ImportService: LibraryService {
         let candidates = ((try? context.fetch(descriptor)) ?? [])
             .filter { $0.mergedInto == nil && !$0.isMerged }
             .filter { bike == nil || $0.bike == nil || $0.bike?.id == bike?.id }
+            .filter { !onlyCycling || $0.sport == .cycling }
             .filter {
                 abs($0.startDate.timeIntervalSince(parsed.startDate)) <= Self.similarStartTolerance
                     || Self.overlapShare(start: $0.startDate, duration: $0.elapsedTime,
@@ -414,6 +424,20 @@ struct ImportService: LibraryService {
             if RouteMatch.matches(route, newRoute) { return ride }
         }
         return nil
+    }
+
+    /// The open device of the newest ride with this drive-unit serial number (B-329); `nil` for an
+    /// unknown number, or when that device is archived or not a bicycle.
+    func bikeOfSerial(_ serial: UInt64?) -> Bike? {
+        guard let serial else { return nil }
+        let number = Int64(truncatingIfNeeded: serial)
+        var descriptor = FetchDescriptor<Ride>(predicate: #Predicate {
+            $0.deviceSerialNumber == number && $0.deletedAt == nil && !$0.isSample
+        }, sortBy: [SortDescriptor(\.startDate, order: .reverse)])
+        descriptor.fetchLimit = 20
+        let found = ((try? context.fetch(descriptor)) ?? []).lazy.compactMap(\.bike).first
+        guard let found, !found.isArchived, found.kind.sport == .cycling else { return nil }
+        return found
     }
 
     /// The share of the shorter of two time spans that both cover; 0 if one has no length.

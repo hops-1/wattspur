@@ -5,6 +5,8 @@ import WattspurKit
 extension Notification.Name {
     /// Settings asks the main window to show the profile section.
     static let showProfile = Notification.Name("io.github.hops-1.wattspur.showProfile")
+    /// "Add Vehicle…" in the File menu: the profile opens with the editor for a new vehicle (B-331).
+    static let addVehicle = Notification.Name("io.github.hops-1.wattspur.addVehicle")
 }
 
 enum AppSection: Hashable {
@@ -73,6 +75,8 @@ struct ContentView: View {
     /// The sport the areas show: the stored choice while there is that sport, else the first one.
     private var shownSport: Sport { SportChoice.resolved(storedSport, available: sports) }
     /// Tab and year shown in Highlights; the year tile and the record links open them.
+    /// Set by "Add Vehicle…" in the menu; the profile opens the editor and resets it (B-331).
+    @State private var addVehicleRequested = false
     @State private var highlightsTab: HighlightsTab = .year
     @State private var highlightsYear: Int?
     /// "New record" after an import (ADV-R2).
@@ -90,6 +94,12 @@ struct ContentView: View {
             .onReceive(NotificationCenter.default.publisher(for: .showProfile)) { _ in
                 section = .profile
                 NSApplication.shared.activate()
+                window?.makeKeyAndOrderFront(nil)
+            }
+            .onReceive(NotificationCenter.default.publisher(for: .addVehicle)) { _ in
+                ProfileLog.logger.notice("Add Vehicle from the menu")
+                addVehicleRequested = true
+                section = .profile
                 window?.makeKeyAndOrderFront(nil)
             }
             // Look up missing start-location time zones (new imports, or offline before).
@@ -167,7 +177,7 @@ struct ContentView: View {
                 }
                 .frame(maxWidth: .infinity, maxHeight: .infinity)
             } else if section == .profile {
-                ProfileView()
+                ProfileView(addVehicleRequested: $addVehicleRequested)
                     .frame(maxWidth: .infinity, maxHeight: .infinity)
             } else if section == .map {
                 scopedList(.map(mapRidesInView.ids, total: mapRidesInView.total))

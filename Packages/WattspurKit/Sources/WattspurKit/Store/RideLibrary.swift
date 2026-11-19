@@ -35,7 +35,7 @@ public final class RideLibrary {
         RideLibrary(context: context, importers: importers, undoManager: undoManager, defaultBikeName: defaultBikeName)
     }
 
-    private var env: LibraryEnvironment {
+    var env: LibraryEnvironment {
         LibraryEnvironment(context: context, importers: importers, undoManager: undoManager, defaultBikeName: defaultBikeName)
     }
     private var imports: ImportService { ImportService(env) }
@@ -184,6 +184,8 @@ public final class RideLibrary {
     @discardableResult
     public func activeBike() -> Bike { bikes.activeBike() }
     public func setActiveBike(_ bike: Bike) { bikes.setActiveBike(bike) }
+    /// Call after adding a bike the user made, so the sync merge never takes it for a default bike (B-332).
+    public func keepAddedBike(_ bike: Bike) { bikes.keepAddedBike(bike) }
 
     @discardableResult
     public func makeBike(name: String, kind: BikeKind = .bike, color: BikeColor = .blue) -> Bike {

@@ -15,6 +15,10 @@ extension BikeColor {
         case .purple: (.hex(0x6E56CF), .hex(0xA98BEF))
         case .pink: (.hex(0xC2255C), .hex(0xF06595))
         case .green: (.hex(0x2F7D3A), .hex(0x6FCF7E))
+        // Symbols must stay readable on the light tile: white is a light grey there (B-333).
+        case .black: (.hex(0x1F2328), .hex(0x8B949E))
+        case .silver: (.hex(0x6E7781), .hex(0xAFB8C1))
+        case .white: (.hex(0x9AA4AE), .hex(0xF2F4F7))
         }
         return Color(nsColor: NSColor(name: nil) { appearance in
             appearance.bestMatch(from: [.darkAqua, .aqua]) == .darkAqua ? dark : light
@@ -29,6 +33,9 @@ extension BikeColor {
         case .purple: "Purple"
         case .pink: "Pink"
         case .green: "Green"
+        case .black: "Black"
+        case .silver: "Silver"
+        case .white: "White"
         }
     }
 }
@@ -48,6 +55,7 @@ extension BikeKind {
         case .road: "Road bike"
         case .gravel: "Gravel bike"
         case .cargo: "Cargo bike"
+        case .scooter: "E-scooter"
         case .motorcycle: "Motorcycle"
         case .car: "Car"
         case .runningShoe: "Running shoes"
@@ -62,6 +70,7 @@ extension BikeKind {
         case .road: String(localized: "Road bike")
         case .gravel: String(localized: "Gravel bike")
         case .cargo: String(localized: "Cargo bike")
+        case .scooter: String(localized: "E-scooter")
         case .motorcycle: String(localized: "Motorcycle")
         case .car: String(localized: "Car")
         case .runningShoe: String(localized: "Running shoes")
@@ -75,6 +84,7 @@ extension BikeKind {
         case .road: "Fast riding on paved roads"
         case .gravel: "Mixed surfaces and gravel tracks"
         case .cargo: "For kids, shopping and luggage"
+        case .scooter: "Electric kick scooter; counts as cycling"
         case .motorcycle: "Tracked with the iPhone; not in the totals and the CO₂ saved"
         case .car: "Tracked with the iPhone; not in the cycling totals and the CO₂ saved"
         case .runningShoe: "Kilometres per pair"
@@ -130,6 +140,19 @@ struct BikeKindShape: Shape {
             circle(11.6, 5.2, 1.3)
             return path
         }
+        if kind == .scooter {
+            // An e-scooter from the side: two small wheels, the deck, the stem with the handlebar
+            // and the rider standing on the deck (B-330).
+            circle(5, 18, 2.5)
+            circle(19.5, 18, 2.5)
+            line((5, 18), (7.5, 16.5), (16, 16.5))
+            line((19.5, 18), (16.5, 4.5))
+            line((14.5, 4.5), (18.5, 4.5))
+            line((10, 16.5), (11, 11), (10.5, 7.5))
+            line((10.8, 9), (16.2, 6.5))
+            circle(10.2, 5, 1.3)
+            return path
+        }
         if kind == .cargo {
             // A long john: big rear wheel, small front wheel and the box between the
             // rider and the front wheel, the handlebar steering it from above (B-201).
@@ -153,7 +176,7 @@ struct BikeKindShape: Shape {
         line((14, 10), (15.2, 6.5), (17.2, 7))
         circle(14.8, 3.2, 1.2)
         switch kind {
-        case .road, .cargo, .motorcycle, .car, .runningShoe:
+        case .road, .cargo, .scooter, .motorcycle, .car, .runningShoe:
             break
         case .bike, .mountain, .gravel:
             line((20.5, 2.5), (20.5, 5.5))
@@ -265,10 +288,11 @@ struct BikeColorPicker: View {
                     Button { selection = color } label: {
                         Image(systemName: "checkmark")
                             .font(.system(size: 13, weight: .bold))
-                            .foregroundStyle(.white)
+                            .foregroundStyle(color.isLight ? .black : .white)
                             .opacity(selected ? 1 : 0)
                             .frame(width: 32, height: 32)
-                            .background(color.color, in: Circle())
+                            .background(color == .white ? Color.white : color.color, in: Circle())
+                            .overlay { Circle().strokeBorder(.separator).opacity(color.isLight ? 1 : 0) }
                             .overlay { Circle().strokeBorder(color.color, lineWidth: 2).padding(-4).opacity(selected ? 1 : 0) }
                     }
                     .buttonStyle(.plain)

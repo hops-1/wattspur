@@ -2,11 +2,20 @@ import SwiftData
 import SwiftUI
 import UniformTypeIdentifiers
 import WattspurKit
+import os
+
+/// Steps of adding a vehicle, in the system log (B-331: on one Mac "Add Vehicle" opened nothing).
+/// Only the step and the target, never names or values.
+enum ProfileLog {
+    static let logger = Logger(subsystem: "io.github.hops-1.wattspur", category: "profile")
+}
 
 /// The "Profile" section (B-134, ACC-01, PROF-01, PROF-03): the rider with body data
 /// and the bikes as tiles. The star marks the active bike, the one new rides go to.
 /// No password, no server – the macOS user account already protects the data.
 struct ProfileView: View {
+    /// "Add Vehicle…" from the menu (B-331): opens the editor for a new vehicle, then goes back to `false`.
+    @Binding var addVehicleRequested: Bool
     @Query private var riders: [Rider]
     @Query private var bikes: [Bike]
     @State private var editor: BikeEditorTarget?
@@ -58,9 +67,23 @@ struct ProfileView: View {
             }
             #endif
         }
+        .onChange(of: addVehicleRequested, initial: true) { openRequestedEditor() }
         .sheet(item: $editor) { target in
             BikeEditorView(target: target)
+                .onAppear { ProfileLog.logger.notice("Vehicle editor shown: \(target.id == "new" ? "new" : "edit", privacy: .public)") }
         }
+    }
+
+    private func openRequestedEditor() {
+        guard addVehicleRequested else { return }
+        addVehicleRequested = false
+        openNewEditor(from: "menu")
+    }
+
+    private func openNewEditor(from source: String) {
+        let before = editor.map { $0.id == "new" ? "new" : "edit" } ?? "none"
+        ProfileLog.logger.notice("Add Vehicle (\(source, privacy: .public)), editor before: \(before, privacy: .public)")
+        editor = .new
     }
 
     // MARK: - Bikes
@@ -76,7 +99,7 @@ struct ProfileView: View {
                 Label("New rides go to the active bike", systemImage: "star.fill")
                     .font(.caption)
                     .foregroundStyle(.secondary)
-                Button { editor = .new } label: { Label("Add Vehicle", systemImage: "plus") }
+                Button { openNewEditor(from: "button") } label: { Label("Add Vehicle", systemImage: "plus") }
                     .buttonStyle(.borderedProminent)
                     .controlSize(.regular)
             }

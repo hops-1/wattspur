@@ -22,6 +22,19 @@ struct PhoneDeviceTests {
         try container.mainContext.fetch(FetchDescriptor<Bike>(sortBy: [SortDescriptor(\.sortOrder)]))
     }
 
+    @Test("A device added without a name gets a number and survives the sync merge (B-332)")
+    func addedDeviceSurvivesSyncMerge() throws {
+        #expect(try bikes().contains { $0.name == "Mein eBike" })
+        let id = try #require(database.saveDevice(BikeDraft(), id: nil))
+        let second = try #require(database.saveDevice(BikeDraft(), id: nil))
+        #expect(try bikes().first { $0.id == id }?.name == "Mein eBike 2")
+        #expect(try bikes().first { $0.id == second }?.name == "Mein eBike 3")
+        let library = RideLibrary(context: container.mainContext, importers: [], defaultBikeName: "Mein eBike")
+        _ = library.mergeSyncDuplicates()
+        #expect(try bikes().contains { $0.id == id })
+        #expect(try bikes().contains { $0.id == second })
+    }
+
     @Test("A car added on the iPhone is a device of its own, without the e-bike switch")
     func addCar() throws {
         var draft = BikeDraft()
