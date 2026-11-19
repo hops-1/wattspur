@@ -59,6 +59,24 @@ struct PhoneDatabaseTests {
         let stored = try #require(database.library.ride(withID: later))
         #expect(rides.last?.highlight == stored.highlightRide)
         #expect(rides.last?.sport == .cycling)
+        #expect(rides.allSatisfy { $0.countsInStatistics })
+    }
+
+    @Test("Goals on the iPad: add, change, delete, in the Mac's order, each combination once (B-295)")
+    func goals() throws {
+        #expect(database.goals().isEmpty)
+        #expect(database.freeGoalCombinations().count == 9)
+        database.addGoal(metric: .rides, period: .month, target: 12)
+        database.addGoal(metric: .distance, period: .week, target: 100_000)
+        #expect(database.goals().map(\.period) == [.week, .month])
+        #expect(database.freeGoalCombinations().count == 7)
+        let monthly = try #require(database.goals().last)
+        database.updateGoal(id: monthly.id, metric: .ascent, period: .year, target: 20_000)
+        let changed = try #require(database.goals().last)
+        #expect(changed.id == monthly.id)
+        #expect(changed.metric == .ascent && changed.period == .year && changed.target == 20_000)
+        database.deleteGoal(id: monthly.id)
+        #expect(database.goals().map(\.metric) == [.distance])
     }
 
     @Test("A new database has the first bike, like the Mac")
