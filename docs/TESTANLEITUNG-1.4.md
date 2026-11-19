@@ -8,7 +8,7 @@ Getestet wird am WLAN-iPad (iPad 8). Am iPad gibt es weiter keine Aufnahme (B-29
 
 ## 0. Vorher
 
-- Am iPad und am iPhone **1.4 (35)** aus TestFlight, am Mac **1.10.2** als DMG.
+- Am iPad und am iPhone **1.4 (36)** aus TestFlight, am Mac **1.10.2** als DMG.
 - Die Mediathek kommt über iCloud aufs iPad. Warten, bis die Fahrten da sind.
 - Offen aus 1.3: der Test nach `TESTANLEITUNG-1.3.md`, wenn noch nicht fertig.
 
@@ -65,4 +65,4 @@ Getestet wird am WLAN-iPad (iPad 8). Am iPad gibt es weiter keine Aufnahme (B-29
 3. **Neues Gerät bleibt (B-332):** Am iPad ein Gerät ohne eigenen Namen anlegen. Es heißt „Mein Bike 2“ (oder ähnlich) und ist auch eine Minute später noch da, am Mac ebenso.
 4. **E-Scooter (B-330):** Am Mac und am iPhone ein Gerät der Art **E-Scooter** anlegen: eigenes Symbol, es steht bei den Rädern.
 5. **Farben (B-333):** **Schwarz**, **Silber** und **Weiß** sind wählbar; Weiß hat im Farbwähler einen Rand, das Symbol auf der Kachel ist lesbar.
-6. **Mac: Fahrzeug hinzufügen (B-331):** Ablage › **Fahrzeug hinzufügen …** öffnet den Editor. Danach noch einmal den blauen Knopf im Profil probieren. Geht er nicht, mir Bescheid geben: Das Protokoll (Kategorie `profile`) zeigt dann, wo es hängt.
+6. **Mac: Fahrzeug hinzufügen (B-331):** Ablage › **Fahrzeug hinzufügen …** öffnet den Editor. Danach noch einmal den blauen Knopf im Profil probieren. Ab 1.10.2 mit dem Fix für die Foto-Kacheln (B-331) öffnet auch der Knopf den Editor, auch wenn eine Kachel mit hohem Foto oben rechts steht.

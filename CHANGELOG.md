@@ -9,7 +9,7 @@ Every DMG handed out to testers corresponds to one entry below.
 
 ## [iOS 1.4] – 2026-11-19
 
-iPad 2: the functions of the Mac on the iPad. iPhone and iPad 1.4 (35); with the Mac 1.10.2.
+iPad 2: the functions of the Mac on the iPad. iPhone and iPad 1.4 (36); with the Mac 1.10.2.
 
 ### Added
 
