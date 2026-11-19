@@ -1,3 +1,4 @@
+import CoreTransferable
 import Foundation
 import Observation
 import UniformTypeIdentifiers
@@ -156,5 +157,25 @@ final class PhoneImport {
     private static func removeFromInbox(_ url: URL) {
         guard url.deletingLastPathComponent().lastPathComponent == "Inbox" else { return }
         try? FileManager.default.removeItem(at: url)
+    }
+}
+
+/// A FIT or GPX file dropped on the list of rides on the iPad (B-297), e.g. from the Files app in
+/// Split View. The system's copy is gone once the drop is handled, so it is copied first; the
+/// import then goes the same way as files from the file picker.
+struct DroppedRideFile: Transferable {
+    let url: URL
+
+    static var transferRepresentation: some TransferRepresentation {
+        FileRepresentation(importedContentType: UTType(importedAs: "com.garmin.fit")) { try keep($0.file) }
+        FileRepresentation(importedContentType: UTType(importedAs: "com.topografix.gpx")) { try keep($0.file) }
+    }
+
+    private static func keep(_ file: URL) throws -> DroppedRideFile {
+        let folder = FileManager.default.temporaryDirectory.appending(path: "Dropped").appending(path: UUID().uuidString)
+        try FileManager.default.createDirectory(at: folder, withIntermediateDirectories: true)
+        let copy = folder.appending(path: file.lastPathComponent)
+        try FileManager.default.copyItem(at: file, to: copy)
+        return DroppedRideFile(url: copy)
     }
 }

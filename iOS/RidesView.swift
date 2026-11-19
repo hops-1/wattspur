@@ -130,6 +130,7 @@ struct RidesView: View {
             }
             .frame(width: 320)
             .overlay { emptyState(state, months: months) }
+            .modifier(RideFileDrop(enabled: isPadLayout) { phoneImport.importFiles($0, library: library) })
             Divider()
             if selecting {
                 selectionDetail
@@ -295,5 +296,33 @@ struct RideRow: View {
             .monospacedDigit()
         }
         .accessibilityElement(children: .combine)
+    }
+}
+
+/// FIT and GPX files dropped on the list on the iPad (B-297) go into the same import as files
+/// from the file picker; the iPhone's list takes no drops.
+private struct RideFileDrop: ViewModifier {
+    let enabled: Bool
+    let onDrop: ([URL]) -> Void
+    @State private var targeted = false
+
+    func body(content: Content) -> some View {
+        if enabled {
+            content
+                .dropDestination(for: DroppedRideFile.self) { files, _ in
+                    onDrop(files.map(\.url))
+                    return !files.isEmpty
+                } isTargeted: { targeted = $0 }
+                .overlay {
+                    if targeted {
+                        RoundedRectangle(cornerRadius: 16)
+                            .strokeBorder(Color.track, lineWidth: 3)
+                            .padding(6)
+                            .allowsHitTesting(false)
+                    }
+                }
+        } else {
+            content
+        }
     }
 }
