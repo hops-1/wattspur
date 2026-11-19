@@ -211,5 +211,6 @@ if [ "$MODE" = developer-id ]; then
     spctl --assess --type open --context context:primary-signature --verbose=2 "$DIST/$NAME.dmg"
 fi
 
-shasum -a 256 "$DIST/$NAME.dmg" | tee "$DIST/$NAME.dmg.sha256"
+# Only the file name in the checksum file: it is published, and `shasum -c` works next to the DMG.
+(cd "$DIST" && shasum -a 256 "$NAME.dmg") | tee "$DIST/$NAME.dmg.sha256"
 echo "==> Done: dist/$NAME.dmg"
