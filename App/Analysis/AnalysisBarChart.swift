@@ -5,25 +5,13 @@ import WattspurKit
 
 // MARK: - Bar chart (AGG-04, TREND-02)
 
-enum BarMetric: String, CaseIterable, Identifiable {
-    case distance, time, ascent
-
-    var id: Self { self }
-
+// `BarMetric` with its values and units is in the Kit (B-294); the texts stay here.
+extension BarMetric {
     var label: LocalizedStringKey {
         switch self {
         case .distance: "Distance"
         case .time: "Ride time"
         case .ascent: "Ascent"
-        }
-    }
-
-    /// km, hours or metres.
-    func value(_ aggregate: RideAggregate) -> Double {
-        switch self {
-        case .distance: aggregate.distance / 1000
-        case .time: aggregate.timerTime / 3600
-        case .ascent: aggregate.ascent
         }
     }
 
@@ -41,14 +29,6 @@ enum BarMetric: String, CaseIterable, Identifiable {
         case .distance: String(localized: "Distance")
         case .time: String(localized: "Ride time")
         case .ascent: String(localized: "Ascent")
-        }
-    }
-
-    var axisUnit: String {
-        switch self {
-        case .distance: "km"
-        case .time: "h"
-        case .ascent: "m"
         }
     }
 }

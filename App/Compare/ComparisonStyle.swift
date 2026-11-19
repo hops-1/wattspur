@@ -16,12 +16,11 @@ enum ComparisonStyle {
         .adaptive(light: 0x0E7C6B, dark: 0x3CC7A6),
         .adaptive(light: 0x8E44AD, dark: 0xC38BEF),
     ]
-    static let dashes: [[CGFloat]] = [[], [7, 4], [2, 3], [9, 3, 2, 3]]
-    static let markers = ["circle.fill", "square.fill", "triangle.fill", "diamond.fill"]
 
     static func color(_ index: Int) -> Color { colors[index % colors.count] }
-    static func dash(_ index: Int) -> [CGFloat] { dashes[index % dashes.count] }
-    static func marker(_ index: Int) -> String { markers[index % markers.count] }
+    /// Dashes and markers come from the Kit (`ComparisonMarks`, B-294), so the iPad uses the same.
+    static func dash(_ index: Int) -> [CGFloat] { ComparisonMarks.dash(index).map { CGFloat($0) } }
+    static func marker(_ index: Int) -> String { ComparisonMarks.marker(index) }
 }
 
 /// Marker and dash of a ride, as in the legend.

@@ -159,6 +159,8 @@ Target `Wattspur iOS` (ab iOS 26, Bundle-ID `io.github.hops-1.wattspur.ios`, Ver
 - **Keine Änderung am CloudKit-Schema in einem Review-Release.**
 - **Öffnet die Bibliothek nicht (B-264, R-41),** halten Mac und iPhone nicht mehr mit `fatalError` an. Der Mac öffnet dann eine leere Bibliothek nur im Speicher, zeigt `LibraryErrorView` statt `ContentView` und startet nichts, was importiert oder synchronisiert; Einstellungen und Import-Fenster zeigen nur einen Hinweis. Das iPhone zeigt die Ansicht statt der Tabs. „Mit leerer Bibliothek starten“ verschiebt die alte mit `LibraryBackup.setAsideDamaged` in einen Ordner „Damaged Library …“; gelöscht wird nichts.
 
+- **Analyse, Highlights und Vergleich (B-294):** Die Zahlen liegen in Core: `AnalysisSummary` (Zeitraum oder Auswahl, Summen, Vergleich mit dem Zeitraum davor, Balken), `BarMetric` (Werte und Einheiten), `HighlightsSummary` (Rekorde und Jahre auf `HighlightRide`) und `ComparisonMarks` (Linien und Symbole je Fahrt). Mac und iPad legen nur die Texte darüber (Regel 8): `AnalysisModel` mit den Überschriften, `HighlightsData` mit den Fahrten nach ID, `ComparisonStyle` mit den Farben.
+
 ## Offen
 
 | Punkt | Story |
@@ -167,4 +169,3 @@ Target `Wattspur iOS` (ab iOS 26, Bundle-ID `io.github.hops-1.wattspur.ios`, Ver
 | Import, Neu-Lesen und Nachrechnen in einem `ModelActor` statt zeitlich verschoben auf dem Hauptthread | B-266 |
 | Test-Target für Mac- und iPhone-App | B-267 |
 | Test auf echten Geräten: Sync aus, importieren, Sync an | B-272 |
-| `HighlightsData` hält `Ride`-Objekte und bleibt deshalb in der App; eine Fassung auf `HighlightRide` könnte nach Core | – |
