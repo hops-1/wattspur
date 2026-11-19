@@ -115,6 +115,28 @@ final class PhoneLibrary {
         return database?.statsRides() ?? []
     }
 
+    /// The compared rides on the iPad (B-296), oldest first, with figures, charts and routes.
+    func comparedRides(_ ids: Set<UUID>) -> [PhoneDatabase.ComparedRide] { database?.comparedRides(ids) ?? [] }
+
+    /// The rides the averages of a comparison come from.
+    func comparisonBaseline(for ids: Set<UUID>) -> [ComparisonFigures] {
+        _ = state
+        return database?.comparisonBaseline(for: ids) ?? []
+    }
+
+    func mergePreview(_ ids: Set<UUID>) -> Result<RideMerge.Result, RideMerge.MergeError> {
+        database?.mergePreview(ids) ?? .failure(.tooFewRides)
+    }
+
+    func mergeName(_ ids: Set<UUID>) -> String { database?.mergeName(ids) ?? "" }
+
+    /// Merges the rides into one (B-296); the new ride's id, `nil` when it did not work.
+    func merge(_ ids: Set<UUID>, name: String) -> UUID? {
+        let id = try? database?.merge(ids, name: name)
+        reload()
+        return id
+    }
+
     /// The goals for the highlights on the iPad (B-295), in the Mac's order.
     var goals: [PhoneDatabase.GoalValue] {
         _ = state
