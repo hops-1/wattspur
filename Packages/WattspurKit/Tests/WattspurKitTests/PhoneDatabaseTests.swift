@@ -44,6 +44,23 @@ struct PhoneDatabaseTests {
         #expect(PhoneDatabase.Mode.iCloud.configuration.cloudKitContainerIdentifier == LibrarySync.containerIdentifier)
     }
 
+    @Test("The rides for the analysis on the iPad: listed, oldest first, with the Mac's figures (B-295)")
+    func statsRides() throws {
+        let cargo = database.library.makeBike(name: "Lastenrad", kind: .cargo)
+        let later = try #require(save(start: 1_800_100_000, bikeID: cargo.id))
+        let earlier = try #require(save(start: 1_800_000_000))
+        let trashed = try #require(save(start: 1_800_200_000))
+        database.moveToTrash(rideID: trashed)
+        let rides = database.statsRides()
+        #expect(rides.map(\.id) == [earlier, later])
+        #expect(rides.last?.deviceID == cargo.id)
+        #expect(rides.last?.source == .gpx)
+        #expect(rides.last?.name == "Zur Arbeit")
+        let stored = try #require(database.library.ride(withID: later))
+        #expect(rides.last?.highlight == stored.highlightRide)
+        #expect(rides.last?.sport == .cycling)
+    }
+
     @Test("A new database has the first bike, like the Mac")
     func firstBike() throws {
         let snapshot = try database.snapshot(generator: "Wattspur iOS")

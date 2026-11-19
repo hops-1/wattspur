@@ -108,6 +108,13 @@ final class PhoneLibrary {
         reload()
     }
 
+    /// The listed rides as plain values for the analysis and the highlights on the iPad (B-295),
+    /// read from the store when asked; `state` ties the views to every reload.
+    var statsRides: [PhoneDatabase.StatsRide] {
+        _ = state
+        return database?.statsRides() ?? []
+    }
+
     /// Reads the rides and the trash from the store again, after every change.
     private func reload() {
         guard let database else { return }

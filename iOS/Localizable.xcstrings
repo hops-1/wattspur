@@ -255,6 +255,46 @@
         }
       }
     },
+    "%lld rides · compared with %@" : {
+      "localizations" : {
+        "de" : {
+          "variations" : {
+            "plural" : {
+              "one" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "%1$lld Fahrt · Vergleich mit %2$@"
+                }
+              },
+              "other" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "%1$lld Fahrten · Vergleich mit %2$@"
+                }
+              }
+            }
+          }
+        },
+        "en" : {
+          "variations" : {
+            "plural" : {
+              "one" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "%1$lld ride · compared with %2$@"
+                }
+              },
+              "other" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "%1$lld rides · compared with %2$@"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "%lld rpm" : {
       "localizations" : {
         "de" : {
@@ -295,6 +335,16 @@
         }
       }
     },
+    "5-ride average" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Mittel über 5 Fahrten"
+          }
+        }
+      }
+    },
     "A backup is a folder with all your rides, bikes, goals and notes, the same as on the Mac. Choose iCloud Drive, On My iPad or a USB stick. A backup from this iPad restores on the Mac, and the other way round." : {
       "localizations" : {
         "de" : {
@@ -331,6 +381,16 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Aktionen"
+          }
+        }
+      }
+    },
+    "All" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Alles"
           }
         }
       }
@@ -385,6 +445,16 @@
         }
       }
     },
+    "Analysis" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Auswertung"
+          }
+        }
+      }
+    },
     "Any Distance" : {
       "localizations" : {
         "de" : {
@@ -426,6 +496,16 @@
         }
       }
     },
+    "Average of each ride, with a moving average over 5 rides" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Durchschnitt jeder Fahrt, dazu gleitendes Mittel über 5 Fahrten"
+          }
+        }
+      }
+    },
     "Average Power" : {
       "localizations" : {
         "de" : {
@@ -446,12 +526,82 @@
         }
       }
     },
+    "Averages" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Durchschnitte"
+          }
+        }
+      }
+    },
     "Avg" : {
       "localizations" : {
         "de" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "Ø"
+          }
+        }
+      }
+    },
+    "Avg cadence" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ø Trittfreq."
+          }
+        }
+      }
+    },
+    "Avg in period" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ø im Zeitraum"
+          }
+        }
+      }
+    },
+    "Avg per ride" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ø je Fahrt"
+          }
+        }
+      }
+    },
+    "Avg power" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ø Leistung"
+          }
+        }
+      }
+    },
+    "Avg ride time" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ø Fahrzeit je Fahrt"
+          }
+        }
+      }
+    },
+    "Avg speed" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ø Geschw."
           }
         }
       }
@@ -466,12 +616,32 @@
         }
       }
     },
+    "Calories" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Kalorien"
+          }
+        }
+      }
+    },
     "Change the search or the filters." : {
       "localizations" : {
         "de" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "Ändere die Suche oder die Filter."
+          }
+        }
+      }
+    },
+    "Choose another period or import rides." : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Wähle einen anderen Zeitraum oder importiere Fahrten."
           }
         }
       }
@@ -506,6 +676,16 @@
         }
       }
     },
+    "CO₂ saved" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "CO₂-Einsparung"
+          }
+        }
+      }
+    },
     "Create Diagnostics" : {
       "localizations" : {
         "de" : {
@@ -516,12 +696,32 @@
         }
       }
     },
+    "Custom" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Frei"
+          }
+        }
+      }
+    },
     "CyclOSM" : {
       "localizations" : {
         "de" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "CyclOSM"
+          }
+        }
+      }
+    },
+    "Day" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tag"
           }
         }
       }
@@ -612,6 +812,26 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Für einen Test von Beschleunigung und Schräglage: Jede Aufnahme schreibt zusätzlich die Bewegungssensoren und das GPS in eine Datei. Du findest sie in der Dateien-App unter „Auf meinem iPad › Wattspur › Bewegung“. Etwa 20 MB pro Stunde."
+          }
+        }
+      }
+    },
+    "From" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Von"
+          }
+        }
+      }
+    },
+    "Group by" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Gruppieren nach"
           }
         }
       }
@@ -736,6 +956,26 @@
         }
       }
     },
+    "Metric" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Kennzahl"
+          }
+        }
+      }
+    },
+    "Month" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Monat"
+          }
+        }
+      }
+    },
     "Moves the library into a folder “Damaged Library” beside it and opens an empty one. With iCloud, the synced rides come back." : {
       "localizations" : {
         "de" : {
@@ -752,6 +992,26 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Gib der Fahrt einen Namen und speichere sie."
+          }
+        }
+      }
+    },
+    "Next period" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Nächster Zeitraum"
+          }
+        }
+      }
+    },
+    "no comparison" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "kein Vergleichswert"
           }
         }
       }
@@ -792,6 +1052,16 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Gerade wird keine Fahrt aufgenommen."
+          }
+        }
+      }
+    },
+    "No Rides in This Period" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Keine Fahrten in diesem Zeitraum"
           }
         }
       }
@@ -886,6 +1156,56 @@
         }
       }
     },
+    "per day" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "je Tag"
+          }
+        }
+      }
+    },
+    "per month" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "je Monat"
+          }
+        }
+      }
+    },
+    "Per ride" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Je Fahrt"
+          }
+        }
+      }
+    },
+    "per week" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "je Woche"
+          }
+        }
+      }
+    },
+    "per year" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "je Jahr"
+          }
+        }
+      }
+    },
     "Period" : {
       "localizations" : {
         "de" : {
@@ -902,6 +1222,16 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Einfarbig"
+          }
+        }
+      }
+    },
+    "Previous period" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Vorheriger Zeitraum"
           }
         }
       }
@@ -952,6 +1282,16 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Fahrt gestartet. Gute Fahrt!"
+          }
+        }
+      }
+    },
+    "Ride time" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Fahrzeit"
           }
         }
       }
@@ -1082,6 +1422,26 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Tempoprofil der bisherigen Fahrt"
+          }
+        }
+      }
+    },
+    "Speed weighted by ride time" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tempo gewichtet nach Fahrzeit"
+          }
+        }
+      }
+    },
+    "Speed, power and cadence weighted by ride time" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Geschwindigkeit, Leistung und Trittfrequenz nach Fahrzeit gewichtet"
           }
         }
       }
@@ -1296,6 +1656,16 @@
         }
       }
     },
+    "the same length before" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "gleich lange Zeit davor"
+          }
+        }
+      }
+    },
     "This iPad is not signed in to iCloud, or iCloud is off for Wattspur. New rides stay only on this iPad." : {
       "localizations" : {
         "de" : {
@@ -1322,6 +1692,26 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Diese Woche: %1$@, %2$@."
+          }
+        }
+      }
+    },
+    "To" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Bis"
+          }
+        }
+      }
+    },
+    "Totals" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Summen"
           }
         }
       }
@@ -1356,6 +1746,16 @@
         }
       }
     },
+    "Trends" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Trends"
+          }
+        }
+      }
+    },
     "Under 10 km" : {
       "localizations" : {
         "de" : {
@@ -1382,6 +1782,26 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Unebener Belag"
+          }
+        }
+      }
+    },
+    "vs %@" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ggü. %@"
+          }
+        }
+      }
+    },
+    "W%lld" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "KW %lld"
           }
         }
       }
@@ -1442,6 +1862,46 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Wattspur auf dem iPhone liest keine Fahrten mehr aus einem Ordner. Deine Fahrten sind auf deinem Mac: Schalte den Sync mit iCloud ein, hier unter Mehr und am Mac unter Wattspur › Einstellungen › iCloud, dann kommen sie auf dieses iPhone. Fahrten, die du hier aufnimmst, bleiben bis dahin auf diesem iPhone; mit „GPX teilen“ bringst du eine an den Mac."
+          }
+        }
+      }
+    },
+    "Week" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Woche"
+          }
+        }
+      }
+    },
+    "week %lld" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "KW %lld"
+          }
+        }
+      }
+    },
+    "Week %lld (%@)" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "KW %1$lld (%2$@)"
+          }
+        }
+      }
+    },
+    "Week %lld · %@" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "KW %1$lld · %2$@"
           }
         }
       }
@@ -2450,6 +2910,16 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Arbeit"
+          }
+        }
+      }
+    },
+    "Year" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Jahr"
           }
         }
       }
