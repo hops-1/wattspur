@@ -976,6 +976,16 @@
         }
       }
     },
+    "Created with Wattspur on %@" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Erstellt mit Wattspur am %@"
+          }
+        }
+      }
+    },
     "Curviest ride" : {
       "localizations" : {
         "de" : {
@@ -2272,6 +2282,26 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Setze dir ein Ziel für Kilometer, Fahrten oder Höhenmeter je Woche, Monat oder Jahr."
+          }
+        }
+      }
+    },
+    "Share" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Teilen"
+          }
+        }
+      }
+    },
+    "Share PDF" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "PDF teilen"
           }
         }
       }

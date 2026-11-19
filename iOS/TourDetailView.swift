@@ -216,14 +216,36 @@ struct TourDetailView: View {
     /// Mac's state (B-217).
     @ViewBuilder private var actions: some View {
         if library.canShare(ride), route == nil {
-            ShareLink(item: library.sharedGPX(for: ride), preview: SharePreview(ride.name)) {
-                Label("Share GPX", systemImage: "square.and.arrow.up")
+            if isPadLayout {
+                // On the iPad also as PDF (B-297), like "Export as PDF…" on the Mac.
+                Menu {
+                    ShareLink(item: library.sharedGPX(for: ride), preview: SharePreview(ride.name)) {
+                        Label("Share GPX", systemImage: "point.topleft.down.to.point.bottomright.curvepath")
+                    }
+                    ShareLink(item: pdf, preview: SharePreview(ride.name)) {
+                        Label("Share PDF", systemImage: "doc.richtext")
+                    }
+                } label: {
+                    Label("Share", systemImage: "square.and.arrow.up")
+                }
+            } else {
+                ShareLink(item: library.sharedGPX(for: ride), preview: SharePreview(ride.name)) {
+                    Label("Share GPX", systemImage: "square.and.arrow.up")
+                }
             }
         }
         if library.database != nil, route == nil {
             Button("Edit", systemImage: "pencil") { editing = true }
             Button("Delete", systemImage: "trash") { confirmingDelete = true }
         }
+    }
+
+    /// The ride as a PDF page (B-297), from what this view has already loaded.
+    private var pdf: RidePDF {
+        RidePDF(ride: ride, deviceName: library.state?.bike(withID: ride.bikeID)?.name, points: chartPoints,
+                route: (shownRoute?.segments ?? []).flatMap { segment in
+                    zip(segment.latitude, segment.longitude).map { CLLocationCoordinate2D(latitude: $0, longitude: $1) }
+                })
     }
 
     private var hasCarousel: Bool { !ChartMeasure.available(in: chartPoints).isEmpty }
