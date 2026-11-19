@@ -214,5 +214,10 @@ From iPhone 1.2: if you have a car or a motorcycle besides your bikes, or rides 
 ## On the iPad
 From version 1.3 Wattspur runs on the iPad too. Full screen or in a wide window, a sidebar like on the Mac sits on the left: the switch **Cycling · Vehicles** at the top, then **Overview**, **Rides** and **Map**, then Trash, then **Profile** and **Settings**. Settings opens the list with View, Maps, iCloud & Library, Help and About on the right. Under **View** you choose how the charts of a ride stand: **Stacked** to swipe, as on the iPhone, or **One Below the Other**, as on the Mac. The button at the top of the sidebar folds it to the symbols, as on the Mac, and opens it again. Under **Rides** the list and the ride stand side by side, The map stays at the top; the charts and figures scroll below it. Put a finger on a chart, and the map shows the spot. In a narrow window (Split View) Wattspur looks as on the iPhone. The iPad does not record rides yet: record them with the iPhone, and iCloud brings them to the iPad.
 
+### Analysis, highlights and comparison on the iPad
+From version 1.4 the iPad does what the Mac does. After the map the sidebar shows **Analysis** and **Highlights**. The analysis shows a period with the totals, the change to the period before, the averages, the bars and the trends. The highlights show your year, your records and your goals; add a goal with **Add Goal…** and change it with the pencil, over iCloud on the Mac too. Both follow the sport at the top of the sidebar.
+
+Under **Rides**, tap **Select** above the list and then two to four rides: the comparison appears on the right with a map, a chart and a table. **Merge…** makes one ride of the chosen ones; the originals stay inside it, and the Mac can split them again. Drag FIT and GPX files from the Files app (Split View) onto the list. The share button of a ride offers **Share GPX** and **Share PDF**; the PDF is one page with the map, the key figures, speed and elevation.
+
 ---
 Next: [FAQ](06-faq.md) · [Contents](README.md)

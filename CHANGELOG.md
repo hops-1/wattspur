@@ -7,6 +7,25 @@ Every DMG handed out to testers corresponds to one entry below.
 
 ## [Unreleased]
 
+## [iOS 1.4] – iPad 2
+
+iPad 2: the functions of the Mac on the iPad. iPhone and iPad 1.4 (34); with the Mac 1.10.2.
+
+### Added
+
+- **iPad: Analysis** (B-295). A sidebar row **Analysis** after the map, as on the Mac: a period (week, month, year, custom, all) with the arrows back and forth, a device filter from two devices on, the totals with the change to the period before, the averages weighted by ride time, the bars of distance, ride time or ascent per day, week, month or year, and the trends of speed, power and cadence. Per sport; vehicles show no work, calories, CO₂, power or cadence.
+- **iPad: Highlights** (B-295). A sidebar row **Highlights** with the year in review (tiles, riding days as a calendar, kilometres per month, records of the year), the records and the goals. Goals can be added, changed and deleted on the iPad and reach the Mac over iCloud; as on the Mac they count cycling. A tap on a day or a record opens the ride.
+- **iPad: compare and merge rides** (B-296). **Select** above the ride list marks rides; from two on, the routes on one map, a chart over the distance (speed, elevation, power, cadence) and the table of all figures with ★ for the best value and your average. **Merge…** makes one ride of them, as on the Mac; the originals stay inside it.
+- **iPad: drag and drop and PDF** (B-297). FIT and GPX files dropped on the ride list are imported like files from the file picker. The share button of a ride offers **Share GPX** and **Share PDF**: one A4 page with the map, the key figures, speed and elevation.
+
+### Changed
+
+- **iPad: texts name the iPad** (B-328). About 20 texts said “this iPhone” on the iPad too, e.g. “iCloud & Library: This iPhone” or “On My iPhone › Wattspur › Import”; on the iPad they now say iPad. The iPhone is unchanged.
+
+## [1.10.2] – with iOS 1.4
+
+The analysis, highlights and comparison of the Mac take their numbers from the shared package, so the iPad shows the same (B-294). No new function on the Mac; it looks as before.
+
 ## [iOS 1.3] – 2026-11-18
 
 iPad 1: the iPhone app in an iPad layout. iPhone and iPad 1.3 (33) on TestFlight (before: 31, 32); the Mac stays 1.10.1.
