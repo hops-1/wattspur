@@ -4,8 +4,8 @@
 // Version and build number of the iPhone app and its widget extension, in one place: App Store
 // Connect rejects an upload whose extension differs from the app (R-04). The build number must be
 // higher than the last TestFlight upload (1.0 build 26, the first App Store version).
-MARKETING_VERSION = 1.4
-CURRENT_PROJECT_VERSION = 36
+MARKETING_VERSION = 1.5
+CURRENT_PROJECT_VERSION = 37
 
 CODE_SIGN_STYLE = Automatic
 CODE_SIGN_IDENTITY = Apple Development

@@ -7,6 +7,10 @@ Every DMG handed out to testers corresponds to one entry below.
 
 ## [Unreleased]
 
+## [iOS 1.5]
+
+Rounding off iPhone and iPad; the first version after 1.0 for the App Store. iPhone and iPad 1.5 (37); the Mac stays at 1.10.2 (nothing changes there).
+
 ### Added
 - iPhone: Highlights (B-228). A tile in the overview shows the next goal (or your records) and opens the year in review, records and goals, the same numbers as on the Mac and the iPad. Goals can be added and changed on the iPhone.
 - iPad: the comparison can show each value's difference from your average, as on the Mac (switch "Difference from Average", B-334).
