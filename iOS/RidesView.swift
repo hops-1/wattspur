@@ -16,6 +16,8 @@ struct RidesView: View {
     /// On the iPad (B-296): choosing several rides to compare or merge them, and the chosen ones.
     @State private var selecting = false
     @State private var marked: Set<UUID> = []
+    /// A merged ride to split again, waiting for the question (B-335).
+    @State private var splitting: RideExchange.Ride?
     /// Search and filters (B-222), kept by the app: the period tiles of the overview set them.
     @Binding var filter: RideFilter
     /// A ride to open, from “Open last ride” (Siri or a shortcut, B-225); cleared when it closes.
@@ -32,6 +34,16 @@ struct RidesView: View {
             }
         }
         .navigationTitle("Rides")
+        .confirmationDialog("Split into the original rides?",
+                            isPresented: Binding(get: { splitting != nil }, set: { if !$0 { splitting = nil } }),
+                            titleVisibility: .visible, presenting: splitting) { ride in
+            Button("Split") {
+                if selection == ride.id { selection = nil }
+                library.split(ride)
+            }
+        } message: { ride in
+            Text("The \(library.partCount(of: ride)) rides it was merged from come back to the list.")
+        }
         // In landscape the ride is shown beside the list.
         .onChange(of: openedRideID, initial: true) { _, id in
             if sideBySide, let id {
@@ -194,6 +206,10 @@ struct RidesView: View {
             ShareLink(item: library.sharedGPX(for: ride), preview: SharePreview(ride.name)) {
                 Label("Share GPX", systemImage: "square.and.arrow.up")
             }
+        }
+        // A merged ride can be split again (B-335), as on the Mac.
+        if library.partCount(of: ride) > 1 {
+            Button("Split into Original Rides", systemImage: "arrow.triangle.branch") { splitting = ride }
         }
         Button("Move to Trash", systemImage: "trash", role: .destructive) { library.moveToTrash(ride) }
     }

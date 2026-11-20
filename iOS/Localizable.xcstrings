@@ -2516,6 +2516,36 @@
         }
       }
     },
+    "Split" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Trennen"
+          }
+        }
+      }
+    },
+    "Split into Original Rides" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "In Originalfahrten trennen"
+          }
+        }
+      }
+    },
+    "Split into the original rides?" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "In die Originalfahrten trennen?"
+          }
+        }
+      }
+    },
     "Standard" : {
       "localizations" : {
         "de" : {
@@ -2646,6 +2676,16 @@
         }
       }
     },
+    "The %lld rides it was merged from come back to the list." : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Die %lld Fahrten, aus denen sie zusammengefügt wurde, stehen wieder in der Liste."
+          }
+        }
+      }
+    },
     "The Folder Exchange Has Ended" : {
       "localizations" : {
         "de" : {
@@ -2756,12 +2796,12 @@
         }
       }
     },
-    "The rides become one. The originals are kept inside it, so you can split them again at any time on the Mac." : {
+    "The rides become one. The originals are kept inside it, so you can split them again at any time." : {
       "localizations" : {
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Die Fahrten werden zu einer. Die Originale bleiben darin erhalten, du kannst sie am Mac jederzeit wieder trennen."
+            "value" : "Die Fahrten werden zu einer. Die Originale bleiben darin erhalten, du kannst sie jederzeit wieder trennen."
           }
         }
       }

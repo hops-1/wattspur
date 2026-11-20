@@ -128,6 +128,21 @@ final class PhoneLibrary {
         database?.mergePreview(ids) ?? .failure(.tooFewRides)
     }
 
+    /// The rides merged from others (B-335), read on every reload.
+    private(set) var mergedRideIDs: Set<UUID> = []
+
+    /// How many rides were merged into this one (B-335); 0 when it is not merged.
+    func partCount(of ride: RideExchange.Ride) -> Int {
+        guard mergedRideIDs.contains(ride.id) else { return 0 }
+        return database?.partCount(rideID: ride.id) ?? 0
+    }
+
+    /// Splits a merged ride into its original rides (B-335), as on the Mac.
+    func split(_ ride: RideExchange.Ride) {
+        database?.split(rideID: ride.id)
+        reload()
+    }
+
     func mergeName(_ ids: Set<UUID>) -> String { database?.mergeName(ids) ?? "" }
 
     /// Merges the rides into one (B-296); the new ride's id, `nil` when it did not work.
@@ -174,6 +189,7 @@ final class PhoneLibrary {
             problem = error.localizedDescription
         }
         trash = database.trash()
+        mergedRideIDs = database.mergedRideIDs()
         rider = database.riderDetails()
         RecordingChoice.cache(devices: state?.bikes ?? [])
     }

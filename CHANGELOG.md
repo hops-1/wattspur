@@ -10,6 +10,7 @@ Every DMG handed out to testers corresponds to one entry below.
 ### Added
 - iPhone: Highlights (B-228). A tile in the overview shows the next goal (or your records) and opens the year in review, records and goals, the same numbers as on the Mac and the iPad. Goals can be added and changed on the iPhone.
 - iPad: the comparison can show each value's difference from your average, as on the Mac (switch "Difference from Average", B-334).
+- iPhone and iPad: a merged ride can be split into its original rides again, in the ride and in the list's context menu (B-335).
 
 ## [iOS 1.4] – 2026-11-19
 
