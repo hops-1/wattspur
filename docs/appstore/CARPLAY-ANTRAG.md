@@ -35,7 +35,7 @@ Stand: 20.11.2026. Gelesen: Apples Entwickler-Doku zu CarPlay („Driving task�
 
 Die Felder können anders heißen. Dann den passenden Absatz nehmen.
 
-**App name:** Wattspur – Ride Tracker (iPhone, Bundle ID `io.github.hops-1.wattspur.ios`,)
+**App name:** Wattspur – Ride Tracker (iPhone, Bundle ID `io.github.hops-1.wattspur.ios`)
 
 **What does your app do?**
 
