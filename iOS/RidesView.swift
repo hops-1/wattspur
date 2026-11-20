@@ -58,7 +58,12 @@ struct RidesView: View {
 
     /// The filter as it applies: a bike filter only with two devices of the sport or more (`RideFilter.resolved`).
     private func effectiveFilter(_ state: RideExchange.Library) -> RideFilter {
-        filter.resolved(knownBikeIDs: Set(state.devices(of: sport).map(\.id)))
+        filter.resolved(knownBikeIDs: Set(state.devices(of: sport).map(\.id)), hasGPXRides: hasGPXRides(state))
+    }
+
+    /// Whether the sport has a ride from a GPX file (B-337); only then is there a source to choose.
+    private func hasGPXRides(_ state: RideExchange.Library) -> Bool {
+        state.only(sport).rides.contains { $0.source == RideSource.gpx.rawValue }
     }
 
     /// The rides of the sport shown, by month, with search and filters.
@@ -69,6 +74,7 @@ struct RidesView: View {
     private func filterBar(_ state: RideExchange.Library, months: [RideExchange.Library.Month]) -> some View {
         RideFilterBar(filter: $filter, compact: sideBySide, sport: sport,
                       bikes: state.devices(of: sport).filter { !$0.isArchived || $0.id == filter.bike.bikeID },
+                      hasGPXRides: hasGPXRides(state),
                       shown: months.reduce(0) { $0 + $1.rides.count }, total: state.only(sport).rides.count,
                       importFiles: { phoneImport.choosingFiles = true })
     }

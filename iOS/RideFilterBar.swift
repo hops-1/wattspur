@@ -11,6 +11,8 @@ struct RideFilterBar: View {
     /// The sport of the capsule (B-289), for the name of the device filter.
     var sport: Sport = .cycling
     var bikes: [RideExchange.Bike]
+    /// The source menu (B-337) only when there is a ride from a GPX file to tell apart.
+    var hasGPXRides = false
     var shown: Int
     var total: Int
     /// The “+” beside the search: FIT and GPX files from the Files app (B-300).
@@ -62,6 +64,7 @@ struct RideFilterBar: View {
         periodMenu
         distanceMenu
         if bikes.count >= 2 { bikeMenu }
+        if hasGPXRides { sourceMenu }
         if filter.hasFilters {
             // An ✕ rather than a word: it has to fit beside the menus in the narrow
             // list of the landscape layout too.
@@ -69,6 +72,7 @@ struct RideFilterBar: View {
                 filter.period = .all
                 filter.distance = .all
                 filter.bike = .all
+                filter.source = .all
             } label: {
                 Image(systemName: "xmark.circle.fill")
                     .font(.title3)
@@ -121,6 +125,24 @@ struct RideFilterBar: View {
             }
         } label: {
             FilterChip(title: filter.distance == .all ? "Distance" : filter.distance.label, active: filter.distance != .all)
+        }
+    }
+
+    /// Bosch FIT (also with an attached GPX) or GPX, as on the Mac (B-337). A ride recorded on
+    /// the iPhone is stored as a GPX file and counts as GPX.
+    private var sourceMenu: some View {
+        Menu {
+            Picker("Source", selection: $filter.source) {
+                Text("All sources").tag(SourceFilter.all)
+                Text("Bosch FIT (also with an attached GPX)").tag(SourceFilter.fit)
+                Text("GPX (also recorded rides)").tag(SourceFilter.gpx)
+            }
+        } label: {
+            switch filter.source {
+            case .all: FilterChip(title: "Source", active: false)
+            case .fit: FilterChip(title: "Bosch FIT", active: true)
+            case .gpx: FilterChip(verbatim: "GPX", active: true)
+            }
         }
     }
 

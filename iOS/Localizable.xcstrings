@@ -585,6 +585,16 @@
         }
       }
     },
+    "All sources" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Alle Quellen"
+          }
+        }
+      }
+    },
     "All Time" : {
       "localizations" : {
         "de" : {
@@ -872,6 +882,26 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Schwarz"
+          }
+        }
+      }
+    },
+    "Bosch FIT" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Bosch-FIT"
+          }
+        }
+      }
+    },
+    "Bosch FIT (also with an attached GPX)" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Bosch-FIT (auch mit angehängter GPX)"
           }
         }
       }
@@ -1332,6 +1362,16 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Ziele zählen alle Bikes"
+          }
+        }
+      }
+    },
+    "GPX (also recorded rides)" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "GPX (auch Aufnahmen)"
           }
         }
       }
@@ -2532,6 +2572,16 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Einige Änderungen von diesem iPad sind noch nicht in iCloud. Lass iCloud für Wattspur an, bis sie oben sind, sonst können sie verloren gehen."
+          }
+        }
+      }
+    },
+    "Source" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Quelle"
           }
         }
       }

@@ -8,20 +8,23 @@ public struct RideFilter: Sendable, Equatable, Hashable {
     public var bike: BikeFilter
     public var period: RidePeriod
     public var distance: RideDistanceBand
+    /// Bosch FIT or GPX (B-337, the iPhone and iPad); the Mac keeps its own source filter.
+    public var source: SourceFilter
 
     public init(text: String = "", bike: BikeFilter = .all, period: RidePeriod = .all,
-                distance: RideDistanceBand = .all) {
+                distance: RideDistanceBand = .all, source: SourceFilter = .all) {
         self.text = text
         self.bike = bike
         self.period = period
         self.distance = distance
+        self.source = source
     }
 
     /// Whether any filter or search narrows the list.
-    public var isActive: Bool { !trimmedText.isEmpty || bike.isActive || period != .all || distance != .all }
+    public var isActive: Bool { !trimmedText.isEmpty || hasFilters }
 
     /// Whether a filter other than the search is set; the filter button shows it filled.
-    public var hasFilters: Bool { bike.isActive || period != .all || distance != .all }
+    public var hasFilters: Bool { bike.isActive || period != .all || distance != .all || source.isActive }
 
     private var trimmedText: String { text.trimmingCharacters(in: .whitespacesAndNewlines) }
 
@@ -36,15 +39,18 @@ public struct RideFilter: Sendable, Equatable, Hashable {
     }
 
     public func admits(_ ride: RideExchange.Ride, now: Date = .now, calendar: Calendar = .current) -> Bool {
-        admits(name: ride.name, startDate: ride.startDate, bikeID: ride.bikeID, distance: ride.distance,
-               now: now, calendar: calendar)
+        source.admits(source: RideSource(rawValue: ride.source))
+            && admits(name: ride.name, startDate: ride.startDate, bikeID: ride.bikeID, distance: ride.distance,
+                      now: now, calendar: calendar)
     }
 
     /// The same filter, with a bike that is gone or a bike filter without a second bike as “all”
-    /// (`BikeFilter.resolved`), so a hidden choice does not keep working unseen.
-    public func resolved(knownBikeIDs: Set<UUID>) -> RideFilter {
+    /// (`BikeFilter.resolved`), and without a source filter when there is no GPX ride
+    /// (`SourceFilter.resolved`), so a hidden choice does not keep working unseen.
+    public func resolved(knownBikeIDs: Set<UUID>, hasGPXRides: Bool = true) -> RideFilter {
         var filter = self
         filter.bike = bike.resolved(knownBikeIDs: knownBikeIDs)
+        filter.source = source.resolved(hasGPXRides: hasGPXRides)
         return filter
     }
 }
