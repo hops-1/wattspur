@@ -7,6 +7,9 @@ Every DMG handed out to testers corresponds to one entry below.
 
 ## [Unreleased]
 
+### Changed
+- iPhone: the highlights share their PDF from the share symbol at the top right instead of a "Share PDF" button that took a lot of room (wish from Nils' test of 1.5 (37)).
+
 ## [iOS 1.5]
 
 Rounding off iPhone and iPad; the first version after 1.0 for the App Store. iPhone and iPad 1.5 (37); the Mac stays at 1.10.2 (nothing changes there).
