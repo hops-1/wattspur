@@ -103,7 +103,7 @@ struct MoreView: View {
 
 /// The pages of “More”, in the order of the list.
 enum MorePage: String, Hashable, CaseIterable, Identifiable {
-    case profile, view, maps, library, trash, help, about, testTools
+    case profile, view, maps, library, trash, help, about, testTools, recording
 
     var id: Self { self }
 
@@ -111,7 +111,8 @@ enum MorePage: String, Hashable, CaseIterable, Identifiable {
     @MainActor static func groups(showsTestTools: Bool) -> [[MorePage]] {
         // The vehicle under “Recording” went with B-286: the start button chooses the device.
         // “View” only on the iPad, where the charts have the room to stand one below the other.
-        let display: [MorePage] = DeviceText.isPad ? [.view, .maps] : [.maps]
+        // “Recording” is back with auto-start (B-311), only where Wattspur records.
+        let display: [MorePage] = DeviceText.isPad ? [.view, .maps] : [.recording, .maps]
         var groups: [[MorePage]] = [display, [.library, .trash], [.help, .about]]
         if showsTestTools { groups.append([.testTools]) }
         return groups
@@ -127,6 +128,7 @@ enum MorePage: String, Hashable, CaseIterable, Identifiable {
         case .help: "Help & Handbook"
         case .about: "About Wattspur"
         case .testTools: "Test Tools"
+        case .recording: "Recording"
         }
     }
 
@@ -140,6 +142,7 @@ enum MorePage: String, Hashable, CaseIterable, Identifiable {
         case .help: "book"
         case .about: "info.circle"
         case .testTools: "hammer"
+        case .recording: "record.circle"
         }
     }
 
@@ -154,6 +157,7 @@ enum MorePage: String, Hashable, CaseIterable, Identifiable {
         case .help: .orange
         case .about: .gray
         case .testTools: .purple
+        case .recording: .red
         }
     }
 }
@@ -165,6 +169,7 @@ struct MoreRow: View {
     @Environment(PhoneSync.self) private var sync
     @AppStorage(PhoneSettingsKey.mapType) private var mapType: RideMapType = .standard
     @AppStorage(PhoneSettingsKey.padChartLayout) private var chartLayout: ChartLayout = .column
+    @AppStorage(PhoneSettingsKey.autoStart) private var autoStart = false
 
     var body: some View {
         LabeledContent {
@@ -188,6 +193,7 @@ struct MoreRow: View {
         case .view: Text(chartLayout.label)
         case .library: library.mode == .iCloud ? Text("iCloud") : DeviceText.text("This iPhone", pad: "This iPad")
         case .trash: library.trash.isEmpty ? nil : Text(library.trash.count.formatted())
+        case .recording: autoStart ? Text("Auto-Start") : nil
         default: nil
         }
     }

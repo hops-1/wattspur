@@ -21,6 +21,7 @@ struct MorePageView: View {
         case .help: HelpPage()
         case .about: AboutPage()
         case .testTools: TestToolsPage()
+        case .recording: AutoStartPage()
         }
     }
 }
