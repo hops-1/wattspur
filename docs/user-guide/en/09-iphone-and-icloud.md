@@ -224,9 +224,9 @@ From version 1.3 Wattspur runs on the iPad too. Full screen or in a wide window,
 ### Analysis, highlights and comparison on the iPad
 From version 1.4 the iPad does what the Mac does. After the map the sidebar shows **Analysis** and **Highlights**. The analysis shows a period with the totals, the change to the period before, the averages, the bars and the trends. The highlights show your year, your records and your goals; add a goal with **Add Goal…** and change it with the pencil, over iCloud on the Mac too. Both follow the sport at the top of the sidebar.
 
-Under **Rides**, tap **Select** above the list and then two to four rides: the comparison appears on the right with a map, a chart and a table. **Merge…** makes one ride of the chosen ones; the originals stay inside it, and the Mac can split them again. Drag FIT and GPX files from the Files app (Split View) onto the list. The share button of a ride offers **Share GPX** and **Share PDF**; the PDF is one page with the map, the key figures, speed and elevation.
+Under **Rides**, tap **Select** beside the month above the list and then two to four rides: the comparison appears on the right with a map, a chart and a table. **Merge…** makes one ride of the chosen ones; the originals stay inside it, and the Mac can split them again. Drag FIT and GPX files from the Files app (Split View) onto the list. The share button of a ride offers **Share GPX** and **Share PDF**; the PDF is one page with the map, the key figures, speed and elevation.
 
-From version 1.5 the switch **Difference from Average** above the table shows under each value of the comparison how far it is from your average, as on the Mac. The share symbol beside **Merge…** exports the comparison as a PDF (map, then table). **Cancel** above the list ends the selection.
+From version 1.5 the switch **Difference from Average** above the table shows under each value of the comparison how far it is from your average, as on the Mac. The share symbol beside **Merge…** exports the comparison as a PDF (map, then table). **Cancel** beside the month above the list ends the selection.
 
 ---
 Next: [FAQ](06-faq.md) · [Contents](README.md)

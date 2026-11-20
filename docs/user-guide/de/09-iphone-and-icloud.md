@@ -224,9 +224,9 @@ Ab Version 1.3 läuft Wattspur auch auf dem iPad. Im Vollbild oder in einem brei
 ### Auswertung, Highlights und Vergleich am iPad
 Ab Version 1.4 kann das iPad, was der Mac kann. In der Seitenleiste stehen nach der Karte **Auswertung** und **Highlights**. Die Auswertung zeigt einen Zeitraum mit den Summen, dem Vergleich zum Zeitraum davor, den Durchschnitten, den Balken und den Trends. Die Highlights zeigen dein Jahr, deine Rekorde und deine Ziele; Ziele legst du mit **Ziel hinzufügen …** an und änderst sie mit dem Stift, über iCloud auch am Mac. Beides gilt für die Sportart oben in der Seitenleiste.
 
-Unter **Fahrten** tippst du über der Liste auf **Auswählen** und dann auf zwei bis vier Fahrten: Rechts erscheint der Vergleich mit Karte, Diagramm und Tabelle. **Zusammenfügen …** macht aus den gewählten Fahrten eine; die Originale bleiben darin, am Mac kannst du sie wieder trennen. FIT- und GPX-Dateien ziehst du aus der Dateien-App (Split View) auf die Liste. Der Teilen-Knopf einer Fahrt bietet **GPX teilen** und **PDF teilen**; das PDF ist eine Seite mit Karte, Kennzahlen, Tempo und Höhe.
+Unter **Fahrten** tippst du neben dem Monat über der Liste auf **Auswählen** und dann auf zwei bis vier Fahrten: Rechts erscheint der Vergleich mit Karte, Diagramm und Tabelle. **Zusammenfügen …** macht aus den gewählten Fahrten eine; die Originale bleiben darin, am Mac kannst du sie wieder trennen. FIT- und GPX-Dateien ziehst du aus der Dateien-App (Split View) auf die Liste. Der Teilen-Knopf einer Fahrt bietet **GPX teilen** und **PDF teilen**; das PDF ist eine Seite mit Karte, Kennzahlen, Tempo und Höhe.
 
-Ab Version 1.5 zeigt der Vergleich mit dem Schalter **Abweichung vom Schnitt** über der Tabelle unter jedem Wert, wie weit er von deinem Durchschnitt abweicht, wie am Mac. Das Teilen-Symbol neben **Zusammenfügen …** gibt den Vergleich als PDF aus (Karte, dann Tabelle). **Abbrechen** über der Liste beendet das Auswählen.
+Ab Version 1.5 zeigt der Vergleich mit dem Schalter **Abweichung vom Schnitt** über der Tabelle unter jedem Wert, wie weit er von deinem Durchschnitt abweicht, wie am Mac. Das Teilen-Symbol neben **Zusammenfügen …** gibt den Vergleich als PDF aus (Karte, dann Tabelle). **Abbrechen** neben dem Monat über der Liste beendet das Auswählen.
 
 ---
 Weiter: [Fragen](06-faq.md) · [Inhalt](README.md)
