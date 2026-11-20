@@ -213,7 +213,7 @@ Fahrten mit Motorrad und Auto, auch ohne Gerät, zählen nicht zu den Summen dei
 Ab iPhone 1.2: Hast du neben Bikes auch ein Auto oder Motorrad, oder Fahrten damit, steht in **Übersicht**, **Fahrten** und **Karte** eine Kapsel **Rad ▾**. Ein Tipp darauf wählt **Rad** oder **Fahrzeuge**; die Wahl gilt für alle drei Tabs und bleibt beim nächsten Start. Kacheln, letzte Fahrt, Liste und Karte zeigen dann nur diese Sportart, und der Filter nach Gerät bietet nur ihre Geräte (**Alle Bikes** oder **Alle Fahrzeuge**). Auf der Karte steht nur das Symbol. Jedes iPhone merkt sich seine Wahl selbst; am Mac gibt es dafür den Umschalter oben in der Seitenleiste (siehe [Ansichten](04-views.md)).
 
 ## Highlights am iPhone
-Ab Version 1.5: In der **Übersicht** steht die Kachel **Highlights**. Sie zeigt dein nächstes Ziel, ohne Ziel deine Rekorde. Ein Tipp öffnet drei Teile: **Jahr** mit Kacheln, dem Kalender deiner Fahrtage, den Kilometern je Monat und den Rekorden des Jahres; **Rekorde**; **Ziele**. Mit **+** legst du ein Ziel an, der Stift ändert es. Die Zahlen sind dieselben wie am Mac und am iPad. **PDF teilen** gibt den gewählten Teil als PDF aus.
+Ab Version 1.5: In der **Übersicht** steht die Kachel **Highlights**. Sie zeigt dein nächstes Ziel, ohne Ziel deine Rekorde. Ein Tipp öffnet drei Teile: **Jahr** mit Kacheln, dem Kalender deiner Fahrtage, den Kilometern je Monat und den Rekorden des Jahres; **Rekorde**; **Ziele**. Mit **+** legst du ein Ziel an, der Stift ändert es. Die Zahlen sind dieselben wie am Mac und am iPad. Das Teilen-Symbol oben rechts gibt den gewählten Teil als PDF aus.
 
 ## Zusammengefügte Fahrt trennen
 Ab Version 1.5 geht das auch am iPhone und iPad: In der Fahrt oder in der Liste mit langem Druck **In Originalfahrten trennen**. Nach einer Rückfrage stehen die Originalfahrten wieder einzeln in der Liste.
@@ -224,9 +224,9 @@ Ab Version 1.3 läuft Wattspur auch auf dem iPad. Im Vollbild oder in einem brei
 ### Auswertung, Highlights und Vergleich am iPad
 Ab Version 1.4 kann das iPad, was der Mac kann. In der Seitenleiste stehen nach der Karte **Auswertung** und **Highlights**. Die Auswertung zeigt einen Zeitraum mit den Summen, dem Vergleich zum Zeitraum davor, den Durchschnitten, den Balken und den Trends. Die Highlights zeigen dein Jahr, deine Rekorde und deine Ziele; Ziele legst du mit **Ziel hinzufügen …** an und änderst sie mit dem Stift, über iCloud auch am Mac. Beides gilt für die Sportart oben in der Seitenleiste.
 
-Unter **Fahrten** tippst du über der Liste auf **Auswählen** und dann auf zwei bis vier Fahrten: Rechts erscheint der Vergleich mit Karte, Diagramm und Tabelle. **Zusammenfügen …** macht aus den gewählten Fahrten eine; die Originale bleiben darin, am Mac kannst du sie wieder trennen. FIT- und GPX-Dateien ziehst du aus der Dateien-App (Split View) auf die Liste. Der Teilen-Knopf einer Fahrt bietet **GPX teilen** und **PDF teilen**; das PDF ist eine Seite mit Karte, Kennzahlen, Tempo und Höhe.
+Unter **Fahrten** tippst du neben dem Monat über der Liste auf **Auswählen** und dann auf zwei bis vier Fahrten: Rechts erscheint der Vergleich mit Karte, Diagramm und Tabelle. **Zusammenfügen …** macht aus den gewählten Fahrten eine; die Originale bleiben darin, am Mac kannst du sie wieder trennen. FIT- und GPX-Dateien ziehst du aus der Dateien-App (Split View) auf die Liste. Der Teilen-Knopf einer Fahrt bietet **GPX teilen** und **PDF teilen**; das PDF ist eine Seite mit Karte, Kennzahlen, Tempo und Höhe.
 
-Ab Version 1.5 zeigt der Vergleich mit dem Schalter **Abweichung vom Schnitt** unter jedem Wert, wie weit er von deinem Durchschnitt abweicht, wie am Mac. **PDF teilen** gibt den Vergleich als PDF aus (Karte, dann Tabelle), ebenso die Highlights.
+Ab Version 1.5 zeigt der Vergleich mit dem Schalter **Abweichung vom Schnitt** über der Tabelle unter jedem Wert, wie weit er von deinem Durchschnitt abweicht, wie am Mac. Das Teilen-Symbol neben **Zusammenfügen …** gibt den Vergleich als PDF aus (Karte, dann Tabelle). **Abbrechen** neben dem Monat über der Liste beendet das Auswählen.
 
 ---
 Weiter: [Fragen](06-faq.md) · [Inhalt](README.md)

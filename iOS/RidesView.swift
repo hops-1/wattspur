@@ -107,7 +107,7 @@ struct RidesView: View {
                     }
                 }
                 ForEach(months) { month in
-                    Section(RideFormat.month(month.start)) {
+                    Section {
                         ForEach(month.rides) { ride in
                             Button {
                                 if selecting {
@@ -133,6 +133,17 @@ struct RidesView: View {
                             .contextMenu { actions(for: ride) }
                             .swipeActions(edge: .trailing) { deleteAction(for: ride) }
                         }
+                    } header: {
+                        // "Select" sits beside the first month on the iPad, not in a row of its own.
+                        HStack {
+                            Text(RideFormat.month(month.start))
+                                .lineLimit(1)
+                                .fixedSize()
+                            if isPadLayout, month.id == months.first?.id {
+                                Spacer()
+                                selectControls
+                            }
+                        }
                     }
                 }
             }
@@ -141,10 +152,7 @@ struct RidesView: View {
             .scrollDismissesKeyboard(.immediately)
             .tabBarRoomInLandscape()
             .safeAreaInset(edge: .top, spacing: 0) {
-                VStack(spacing: 0) {
-                    if isPadLayout { selectBar }
-                    filterBar(state, months: months)
-                }
+                filterBar(state, months: months)
             }
             .frame(width: 320)
             .overlay { emptyState(state, months: months) }
@@ -168,21 +176,33 @@ struct RidesView: View {
         selecting ? marked.contains(ride.id) : ride.id == chosen?.id
     }
 
-    /// "Select" above the list on the iPad (B-296): then a tap marks rides to compare or merge.
-    private var selectBar: some View {
-        HStack {
-            if selecting {
-                Text("\(marked.count) selected").font(.subheadline).foregroundStyle(.secondary)
+    /// "Select" in the first month's header on the iPad (B-296): then a tap marks rides to
+    /// compare or merge; while choosing, the count and "Cancel".
+    private var selectControls: some View {
+        // The count only where it fits on the line; the button always does.
+        ViewThatFits(in: .horizontal) {
+            HStack(spacing: 10) {
+                if selecting {
+                    Text("\(marked.count) selected")
+                        .foregroundStyle(.secondary)
+                        .lineLimit(1)
+                        .fixedSize()
+                }
+                selectButton
             }
-            Spacer()
-            Button(selecting ? "Cancel" : "Select") {
-                selecting.toggle()
-                marked = []
-            }
-            .font(.subheadline.weight(.semibold))
+            selectButton
         }
-        .padding(.horizontal, 20)
-        .padding(.top, 8)
+        .textCase(nil)
+    }
+
+    private var selectButton: some View {
+        Button(selecting ? "Cancel" : "Select") {
+            selecting.toggle()
+            marked = []
+        }
+        .font(.subheadline.weight(.semibold))
+        .lineLimit(1)
+        .fixedSize()
     }
 
     /// While choosing: the comparison from two rides on, before that a hint.
@@ -196,9 +216,6 @@ struct RidesView: View {
                 selecting = false
                 marked = []
                 selection = id
-            } onDone: {
-                selecting = false
-                marked = []
             }
         } else {
             ContentUnavailableView("Select Rides", systemImage: "checkmark.circle",

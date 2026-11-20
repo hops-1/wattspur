@@ -213,7 +213,7 @@ Rides on a motorcycle or in a car, also without a device, do not count in the to
 From iPhone 1.2: if you have a car or a motorcycle besides your bikes, or rides with one, **Overview**, **Rides** and **Map** show a capsule **Cycling ▾**. Tap it to choose **Cycling** or **Vehicles**; the choice holds for all three tabs and stays for the next launch. The tiles, the last ride, the list and the map then show only that sport, and the device filter offers only its devices (**All Bikes** or **All Vehicles**). On the map only the symbol shows. Each iPhone keeps its own choice; on the Mac the switch sits at the top of the sidebar (see [Views](04-views.md)).
 
 ## Highlights on the iPhone
-From version 1.5 the **Overview** shows a **Highlights** tile. It shows your next goal, or your records when there is no goal. A tap opens three parts: **Year** with tiles, the calendar of your riding days, the kilometres per month and the records of the year; **Records**; **Goals**. **+** adds a goal, the pencil changes it. The numbers are the same as on the Mac and the iPad. **Share PDF** exports the chosen part as a PDF.
+From version 1.5 the **Overview** shows a **Highlights** tile. It shows your next goal, or your records when there is no goal. A tap opens three parts: **Year** with tiles, the calendar of your riding days, the kilometres per month and the records of the year; **Records**; **Goals**. **+** adds a goal, the pencil changes it. The numbers are the same as on the Mac and the iPad. The share symbol at the top right exports the chosen part as a PDF.
 
 ## Splitting a merged ride
 From version 1.5 this works on the iPhone and iPad too: in the ride, or with a long press in the list, **Split into Original Rides**. After a question the original rides are back in the list one by one.
@@ -224,9 +224,9 @@ From version 1.3 Wattspur runs on the iPad too. Full screen or in a wide window,
 ### Analysis, highlights and comparison on the iPad
 From version 1.4 the iPad does what the Mac does. After the map the sidebar shows **Analysis** and **Highlights**. The analysis shows a period with the totals, the change to the period before, the averages, the bars and the trends. The highlights show your year, your records and your goals; add a goal with **Add Goal…** and change it with the pencil, over iCloud on the Mac too. Both follow the sport at the top of the sidebar.
 
-Under **Rides**, tap **Select** above the list and then two to four rides: the comparison appears on the right with a map, a chart and a table. **Merge…** makes one ride of the chosen ones; the originals stay inside it, and the Mac can split them again. Drag FIT and GPX files from the Files app (Split View) onto the list. The share button of a ride offers **Share GPX** and **Share PDF**; the PDF is one page with the map, the key figures, speed and elevation.
+Under **Rides**, tap **Select** beside the month above the list and then two to four rides: the comparison appears on the right with a map, a chart and a table. **Merge…** makes one ride of the chosen ones; the originals stay inside it, and the Mac can split them again. Drag FIT and GPX files from the Files app (Split View) onto the list. The share button of a ride offers **Share GPX** and **Share PDF**; the PDF is one page with the map, the key figures, speed and elevation.
 
-From version 1.5 the switch **Difference from Average** shows under each value of the comparison how far it is from your average, as on the Mac. **Share PDF** exports the comparison as a PDF (map, then table), and the highlights too.
+From version 1.5 the switch **Difference from Average** above the table shows under each value of the comparison how far it is from your average, as on the Mac. The share symbol beside **Merge…** exports the comparison as a PDF (map, then table). **Cancel** beside the month above the list ends the selection.
 
 ---
 Next: [FAQ](06-faq.md) · [Contents](README.md)

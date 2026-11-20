@@ -39,9 +39,11 @@ struct HighlightsView: View {
                                 isCurrentYear: shownYear == currentYear, records: summary.records, goals: library.goals,
                                 goalRides: all.filter { $0.sport == .cycling }.map(\.highlight),
                                 rides: byID, sport: sport, calendar: calendar)
+        let sharedPDF = (tab == .goals ? library.goals.isEmpty : rides.isEmpty) ? nil : pdf
         ScrollView {
             VStack(alignment: .leading, spacing: 24) {
-                controls(summary, pdf: (tab == .goals ? library.goals.isEmpty : rides.isEmpty) ? nil : pdf)
+                // The iPhone shares from the navigation bar, where the pill would take too much room.
+                controls(summary, pdf: isPadLayout ? sharedPDF : nil)
                 switch tab {
                 case .year:
                     if rides.isEmpty {
@@ -77,6 +79,15 @@ struct HighlightsView: View {
         .navigationBarTitleDisplayMode(.inline)
         // The iPad's detail has its own title in the page; the iPhone needs the bar to go back.
         .toolbar(isPadLayout ? .hidden : .automatic, for: .navigationBar)
+        .toolbar {
+            if !isPadLayout, let sharedPDF {
+                ToolbarItem(placement: .topBarTrailing) {
+                    ShareLink(item: sharedPDF, preview: SharePreview(Text(verbatim: sharedPDF.title))) {
+                        Label("Share PDF", systemImage: "square.and.arrow.up")
+                    }
+                }
+            }
+        }
         .navigationDestination(item: $openedID) { id in
             if let ride = library.state?.rides.first(where: { $0.id == id }) {
                 TourDetailView(ride: ride)
