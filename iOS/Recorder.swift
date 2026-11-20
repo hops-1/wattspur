@@ -33,6 +33,8 @@ final class Recorder {
     private(set) var movement: Movement?
 
     var isRecording: Bool { recording != nil }
+    /// Waiting for the vehicle to move (auto-start, B-311): the track begins above 10 km/h.
+    var isReady: Bool { recording?.isReady == true }
     /// Siri or a shortcut asked to end the ride (B-225): the recording screen opens “Save Ride”.
     var endRequested = false
 
@@ -64,29 +66,39 @@ final class Recorder {
         self.logURL = logURL
         try? FileManager.default.createDirectory(at: logURL.deletingLastPathComponent(), withIntermediateDirectories: true)
         if let data = try? Data(contentsOf: logURL), let recording = RecordingLog.replay(data) {
-            unfinished = recording
+            // A recording that was still ready has nothing in it to continue (B-311).
+            if recording.isReady {
+                try? FileManager.default.removeItem(at: logURL)
+            } else {
+                unfinished = recording
+            }
         }
         // Pause and Resume from the Live Activity (B-223).
         RecordingControl.togglePause = { [weak self] in
             guard let self, let recording = self.recording else { return }
             if recording.isPaused { self.resume() } else { self.pause() }
         }
+        // Cancel “Ready” from the Live Activity (B-311).
+        RecordingControl.cancelReady = { [weak self] in self?.cancelReady() }
     }
 
     /// Starts a recording with `device` (B-286), or the next one (the last device used) without.
-    func start(at date: Date = .now, device: RecordingDevice? = nil) {
+    /// `ready`: auto-start (B-311), the recording waits until the vehicle moves.
+    func start(at date: Date = .now, device: RecordingDevice? = nil, ready: Bool = false) {
         guard recording == nil else { return }
         unfinished = nil
         let device = device ?? nextDevice()
         RecordingChoice.last = device
         let vehicle = device.vehicle
         recording = RideRecording(startDate: date, device: device)
+        if ready { recording?.waitForMovement() }
         logProblem = nil
         FileManager.default.createFile(atPath: logURL.path, contents: nil)
         log = try? FileHandle(forWritingTo: logURL)
         write(.start(date))
         write(.vehicle(vehicle))
         write(.device(device))
+        if ready { write(.ready) }
         startUpdates()
         if let recording { activity.start(recording) }
     }
@@ -124,6 +136,12 @@ final class Recorder {
         write(.resume)
         motion?.record(event: "resume")
         if let recording { activity.update(recording, force: true) }
+    }
+
+    /// Ends “Ready” without a ride (B-311): nothing was recorded, so nothing is asked or kept.
+    func cancelReady() {
+        guard isReady else { return }
+        _ = stop()
     }
 
     /// Ends the recording and hands it back; the log is removed.
@@ -192,8 +210,8 @@ final class Recorder {
             movement = Movement(latitude: location.coordinate.latitude, longitude: location.coordinate.longitude,
                                 course: location.course, courseAccuracy: location.courseAccuracy, speed: location.speed)
             motion?.record(location)
-            // While paused the motion is not part of the ride: the interval starts afresh.
-            if recording?.isPaused == true {
+            // While paused or ready the motion is not part of the ride: the interval starts afresh.
+            if recording?.isPaused == true || isReady {
                 _ = motion?.values(at: location)
                 droppedMotion = nil
             }
@@ -212,10 +230,18 @@ final class Recorder {
         // The motion since the point before; a dropped point hands its values on to the next one.
         let values = motion?.values(at: location)
         fix.motion = droppedMotion.map { $0.merged(with: values) } ?? values
+        let wasReady = isReady
         if recording?.add(fix) == true {
             droppedMotion = nil
             write(.fix(fix))
-            if let recording { activity.update(recording) }
+            if wasReady, let recording {
+                // The ride began (B-311): its time counts from now, and the Live Activity's start
+                // cannot change, so it starts anew.
+                activity.end(nil)
+                activity.start(recording)
+            } else if let recording {
+                activity.update(recording)
+            }
         } else {
             droppedMotion = fix.motion
         }

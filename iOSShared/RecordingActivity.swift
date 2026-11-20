@@ -16,6 +16,8 @@ struct RecordingAttributes: ActivityAttributes {
         /// The lean angle of the last point in degrees, positive to the left (B-289); `nil` for a
         /// bicycle, before the first value and while paused. A car shows it as lateral acceleration.
         var lean: Double? = nil
+        /// Waiting for the vehicle to move (auto-start, B-311); `nil` otherwise.
+        var isReady: Bool? = nil
     }
 
     /// When the recording started; the time counts from here, as in the app.
@@ -40,11 +42,25 @@ struct ToggleRecordingPauseIntent: LiveActivityIntent {
     }
 }
 
-/// What the intent calls; the app sets it when the recorder starts. In the extension it stays
-/// empty, which does not matter: the intent never runs there.
+/// Cancels “Ready” of an auto-start (B-311) from the Live Activity; nothing was recorded yet.
+struct CancelReadyIntent: LiveActivityIntent {
+    static let title: LocalizedStringResource = "Cancel Auto-Start"
+    static let isDiscoverable = false
+
+    init() {}
+
+    func perform() async throws -> some IntentResult {
+        await MainActor.run { RecordingControl.cancelReady() }
+        return .result()
+    }
+}
+
+/// What the intents call; the app sets it when the recorder starts. In the extension it stays
+/// empty, which does not matter: the intents never run there.
 @MainActor
 enum RecordingControl {
     static var togglePause: () -> Void = {}
+    static var cancelReady: () -> Void = {}
 }
 
 /// The side value of the Live Activity as text: “0,23 g” for a car, “23°” for a motorcycle, in the
