@@ -60,6 +60,8 @@ enum PhoneSettingsKey {
     /// The highlights on the iPad (B-295): the tab (`PadHighlightsTab`) and the device (`BikeFilter`).
     static let padHighlightsTab = "padHighlightsTab"
     static let padHighlightsDevice = "padHighlightsDevice"
+    /// The comparison on the iPad (B-334): whether each value shows its difference from the average.
+    static let padCompareShowsDeviation = "padCompareShowsDeviation"
     /// Set by UI tests and screenshots: import the sample ride at launch.
     static let demoRide = "WattspurDemoRide"
 }
