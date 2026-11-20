@@ -161,6 +161,7 @@ Above the ride list:
 - **Period:** this week, this month, this year, the last 30 or 365 days, or all rides.
 - **Distance:** under 10 km, 10–25 km, 25–50 km or over 50 km.
 - **Bike:** only from two bikes on.
+- **Source:** **Bosch FIT** or **GPX**. GPX includes your recordings from the iPhone, because Wattspur saves them as GPX. The menu shows once there is a GPX ride.
 
 Below it you see how many rides match, for example “2 of 40 rides”. ✕ resets everything. A tap on **This Week**, **This Month** or **This Year** in the overview opens the rides of that period. The Mac uses the same rules, so both find the same rides.
 
@@ -211,6 +212,12 @@ Rides on a motorcycle or in a car, also without a device, do not count in the to
 ## Cycling and vehicles apart
 From iPhone 1.2: if you have a car or a motorcycle besides your bikes, or rides with one, **Overview**, **Rides** and **Map** show a capsule **Cycling ▾**. Tap it to choose **Cycling** or **Vehicles**; the choice holds for all three tabs and stays for the next launch. The tiles, the last ride, the list and the map then show only that sport, and the device filter offers only its devices (**All Bikes** or **All Vehicles**). On the map only the symbol shows. Each iPhone keeps its own choice; on the Mac the switch sits at the top of the sidebar (see [Views](04-views.md)).
 
+## Highlights on the iPhone
+From version 1.5 the **Overview** shows a **Highlights** tile. It shows your next goal, or your records when there is no goal. A tap opens three parts: **Year** with tiles, the calendar of your riding days, the kilometres per month and the records of the year; **Records**; **Goals**. **+** adds a goal, the pencil changes it. The numbers are the same as on the Mac and the iPad. **Share PDF** exports the chosen part as a PDF.
+
+## Splitting a merged ride
+From version 1.5 this works on the iPhone and iPad too: in the ride, or with a long press in the list, **Split into Original Rides**. After a question the original rides are back in the list one by one.
+
 ## On the iPad
 From version 1.3 Wattspur runs on the iPad too. Full screen or in a wide window, a sidebar like on the Mac sits on the left: the switch **Cycling · Vehicles** at the top, then **Overview**, **Rides** and **Map**, then Trash, then **Profile** and **Settings**. Settings opens the list with View, Maps, iCloud & Library, Help and About on the right. Under **View** you choose how the charts of a ride stand: **Stacked** to swipe, as on the iPhone, or **One Below the Other**, as on the Mac. The button at the top of the sidebar folds it to the symbols, as on the Mac, and opens it again. Under **Rides** the list and the ride stand side by side, The map stays at the top; the charts and figures scroll below it. Put a finger on a chart, and the map shows the spot. In a narrow window (Split View) Wattspur looks as on the iPhone. The iPad does not record rides yet: record them with the iPhone, and iCloud brings them to the iPad.
 
@@ -218,6 +225,8 @@ From version 1.3 Wattspur runs on the iPad too. Full screen or in a wide window,
 From version 1.4 the iPad does what the Mac does. After the map the sidebar shows **Analysis** and **Highlights**. The analysis shows a period with the totals, the change to the period before, the averages, the bars and the trends. The highlights show your year, your records and your goals; add a goal with **Add Goal…** and change it with the pencil, over iCloud on the Mac too. Both follow the sport at the top of the sidebar.
 
 Under **Rides**, tap **Select** above the list and then two to four rides: the comparison appears on the right with a map, a chart and a table. **Merge…** makes one ride of the chosen ones; the originals stay inside it, and the Mac can split them again. Drag FIT and GPX files from the Files app (Split View) onto the list. The share button of a ride offers **Share GPX** and **Share PDF**; the PDF is one page with the map, the key figures, speed and elevation.
+
+From version 1.5 the switch **Difference from Average** shows under each value of the comparison how far it is from your average, as on the Mac. **Share PDF** exports the comparison as a PDF (map, then table), and the highlights too.
 
 ---
 Next: [FAQ](06-faq.md) · [Contents](README.md)

@@ -161,6 +161,7 @@ Soll sich der Bildschirm nicht drehen, schalte im Kontrollzentrum die Ausrichtun
 - **Zeitraum:** diese Woche, dieser Monat, dieses Jahr, die letzten 30 oder 365 Tage oder alle Fahrten.
 - **Strecke:** unter 10 km, 10–25 km, 25–50 km oder über 50 km.
 - **Bike:** erst ab zwei Bikes.
+- **Quelle:** **Bosch-FIT** oder **GPX**. GPX zeigt auch deine Aufnahmen vom iPhone, denn Wattspur speichert sie als GPX. Das Menü erscheint erst, wenn es eine GPX-Fahrt gibt.
 
 Darunter steht, wie viele Fahrten passen, zum Beispiel „2 von 40 Fahrten“. ✕ setzt alles zurück. Ein Tipp auf **Diese Woche**, **Dieser Monat** oder **Dieses Jahr** in der Übersicht öffnet die Fahrten dieses Zeitraums. Der Mac nutzt dieselben Regeln, beide finden also dieselben Fahrten.
 
@@ -211,6 +212,12 @@ Fahrten mit Motorrad und Auto, auch ohne Gerät, zählen nicht zu den Summen dei
 ## Rad und Fahrzeuge getrennt ansehen
 Ab iPhone 1.2: Hast du neben Bikes auch ein Auto oder Motorrad, oder Fahrten damit, steht in **Übersicht**, **Fahrten** und **Karte** eine Kapsel **Rad ▾**. Ein Tipp darauf wählt **Rad** oder **Fahrzeuge**; die Wahl gilt für alle drei Tabs und bleibt beim nächsten Start. Kacheln, letzte Fahrt, Liste und Karte zeigen dann nur diese Sportart, und der Filter nach Gerät bietet nur ihre Geräte (**Alle Bikes** oder **Alle Fahrzeuge**). Auf der Karte steht nur das Symbol. Jedes iPhone merkt sich seine Wahl selbst; am Mac gibt es dafür den Umschalter oben in der Seitenleiste (siehe [Ansichten](04-views.md)).
 
+## Highlights am iPhone
+Ab Version 1.5: In der **Übersicht** steht die Kachel **Highlights**. Sie zeigt dein nächstes Ziel, ohne Ziel deine Rekorde. Ein Tipp öffnet drei Teile: **Jahr** mit Kacheln, dem Kalender deiner Fahrtage, den Kilometern je Monat und den Rekorden des Jahres; **Rekorde**; **Ziele**. Mit **+** legst du ein Ziel an, der Stift ändert es. Die Zahlen sind dieselben wie am Mac und am iPad. **PDF teilen** gibt den gewählten Teil als PDF aus.
+
+## Zusammengefügte Fahrt trennen
+Ab Version 1.5 geht das auch am iPhone und iPad: In der Fahrt oder in der Liste mit langem Druck **In Originalfahrten trennen**. Nach einer Rückfrage stehen die Originalfahrten wieder einzeln in der Liste.
+
 ## Auf dem iPad
 Ab Version 1.3 läuft Wattspur auch auf dem iPad. Im Vollbild oder in einem breiten Fenster steht links eine Seitenleiste wie am Mac: oben der Umschalter **Rad · Fahrzeuge**, darunter **Übersicht**, **Fahrten** und **Karte**, darunter Papierkorb, dann **Profil** und **Einstellungen**. Einstellungen öffnet rechts die Liste mit Ansicht, Karten, iCloud & Bibliothek, Hilfe und Info. Unter **Ansicht** wählst du, wie die Diagramme einer Fahrt stehen: **Gestapelt** zum Wischen wie am iPhone oder **Untereinander** wie am Mac. Der Knopf oben in der Seitenleiste klappt sie auf die Symbole zusammen, wie am Mac, und wieder auf. Unter **Fahrten** stehen Liste und Fahrt nebeneinander, Die Karte bleibt oben stehen; darunter scrollen die Diagramme und die Werte. Legst du den Finger auf ein Diagramm, zeigt die Karte die Stelle. In einem schmalen Fenster (Split View) sieht Wattspur aus wie auf dem iPhone. Fahrten aufnehmen kann das iPad noch nicht: Nimm sie mit dem iPhone auf, über iCloud kommen sie aufs iPad.
 
@@ -218,6 +225,8 @@ Ab Version 1.3 läuft Wattspur auch auf dem iPad. Im Vollbild oder in einem brei
 Ab Version 1.4 kann das iPad, was der Mac kann. In der Seitenleiste stehen nach der Karte **Auswertung** und **Highlights**. Die Auswertung zeigt einen Zeitraum mit den Summen, dem Vergleich zum Zeitraum davor, den Durchschnitten, den Balken und den Trends. Die Highlights zeigen dein Jahr, deine Rekorde und deine Ziele; Ziele legst du mit **Ziel hinzufügen …** an und änderst sie mit dem Stift, über iCloud auch am Mac. Beides gilt für die Sportart oben in der Seitenleiste.
 
 Unter **Fahrten** tippst du über der Liste auf **Auswählen** und dann auf zwei bis vier Fahrten: Rechts erscheint der Vergleich mit Karte, Diagramm und Tabelle. **Zusammenfügen …** macht aus den gewählten Fahrten eine; die Originale bleiben darin, am Mac kannst du sie wieder trennen. FIT- und GPX-Dateien ziehst du aus der Dateien-App (Split View) auf die Liste. Der Teilen-Knopf einer Fahrt bietet **GPX teilen** und **PDF teilen**; das PDF ist eine Seite mit Karte, Kennzahlen, Tempo und Höhe.
+
+Ab Version 1.5 zeigt der Vergleich mit dem Schalter **Abweichung vom Schnitt** unter jedem Wert, wie weit er von deinem Durchschnitt abweicht, wie am Mac. **PDF teilen** gibt den Vergleich als PDF aus (Karte, dann Tabelle), ebenso die Highlights.
 
 ---
 Weiter: [Fragen](06-faq.md) · [Inhalt](README.md)
