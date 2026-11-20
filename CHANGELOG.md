@@ -9,6 +9,7 @@ Every DMG handed out to testers corresponds to one entry below.
 
 ### Changed
 - iPhone: the highlights share their PDF from the share symbol at the top right instead of a "Share PDF" button that took a lot of room (wish from Nils' test of 1.5 (37)).
+- iPad: the comparison's buttons no longer wrap letter by letter in a narrow column. Share is a symbol beside **Merge…** next to the title (or below it when there is no room), the switch **Difference from Average** sits above the table it changes, and **Done** is gone (**Cancel** above the list ends the selection) (B-334, from Nils' test of 1.5 (37)).
 
 ## [iOS 1.5]
 

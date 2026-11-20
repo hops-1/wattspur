@@ -14,7 +14,6 @@ struct PadCompareView: View {
     let onOpen: (UUID) -> Void
     /// After merging: the new ride.
     let onMerged: (UUID) -> Void
-    let onDone: () -> Void
 
     @Environment(PhoneLibrary.self) private var library
     @State private var rides: [PhoneDatabase.ComparedRide] = []
@@ -37,6 +36,11 @@ struct PadCompareView: View {
                     let comparison = RideComparison(rides: rides.map(\.figures), baseline: baseline)
                     PadCompareMap(rides: rides)
                     PadCompareChart(rides: rides, metric: $metric)
+                    // The switch sits by the table it changes, not among the actions.
+                    Toggle("Difference from Average", isOn: $showsDeviation)
+                        .toggleStyle(.switch)
+                        .fixedSize()
+                        .frame(maxWidth: .infinity, alignment: .trailing)
                     PadCompareTable(rides: rides, comparison: comparison, baselineCount: baseline.count,
                                     showsDeviation: showsDeviation, onOpen: onOpen)
                     Text("★ marks the best value of a row, only for figures where more or less is better. The average is per ride over your \(baseline.count) rides; averages are weighted by ride time as in the analysis.")
@@ -61,47 +65,54 @@ struct PadCompareView: View {
         }
     }
 
+    /// The title with the actions beside it, or below it when the column is narrow; the
+    /// actions keep their size so they never wrap letter by letter.
     private var header: some View {
-        ViewThatFits(in: .horizontal) {
-            HStack(alignment: .lastTextBaseline, spacing: 16) {
-                title
-                Spacer()
-                buttons
+        VStack(alignment: .leading, spacing: 4) {
+            ViewThatFits(in: .horizontal) {
+                HStack(alignment: .firstTextBaseline, spacing: 16) {
+                    title
+                    Spacer(minLength: 0)
+                    actions
+                }
+                VStack(alignment: .leading, spacing: 12) {
+                    title
+                    actions
+                }
             }
-            VStack(alignment: .leading, spacing: 12) {
-                title
-                HStack(spacing: 12) { buttons }
-            }
+            Text("Tap rides in the list to add or remove them (up to 4).")
+                .foregroundStyle(.secondary)
+                .fixedSize(horizontal: false, vertical: true)
         }
     }
 
     private var title: some View {
-        VStack(alignment: .leading, spacing: 4) {
-            Text("Comparing \(rideIDs.count) rides")
-                .font(.largeTitle.bold())
-                .accessibilityAddTraits(.isHeader)
-            Text("Tap rides in the list to add or remove them (up to 4).")
-                .foregroundStyle(.secondary)
-        }
+        Text("Comparing \(rideIDs.count) rides")
+            .font(.largeTitle.bold())
+            .lineLimit(1)
+            .fixedSize()
+            .accessibilityAddTraits(.isHeader)
     }
 
-    @ViewBuilder private var buttons: some View {
-        Toggle("Difference from Average", isOn: $showsDeviation)
-            .toggleStyle(.switch)
-            .fixedSize()
-        // The comparison as a PDF (B-336), as shown: with or without the differences.
-        if rides.count == rideIDs.count, RideComparison.canCompare(count: rides.count) {
-            ShareLink(item: ComparisonPDF(rides: rides, baseline: library.comparisonBaseline(for: rideIDs),
-                                          showsDeviation: showsDeviation),
-                      preview: SharePreview(Text("Comparison"))) {
-                Label("Share PDF", systemImage: "square.and.arrow.up")
+    /// Share as a symbol, as in the ride; "Cancel" above the list ends the selection.
+    private var actions: some View {
+        HStack(spacing: 12) {
+            // The comparison as a PDF (B-336), as shown: with or without the differences.
+            if rides.count == rideIDs.count, RideComparison.canCompare(count: rides.count) {
+                ShareLink(item: ComparisonPDF(rides: rides, baseline: library.comparisonBaseline(for: rideIDs),
+                                              showsDeviation: showsDeviation),
+                          preview: SharePreview(Text("Comparison"))) {
+                    Label("Share PDF", systemImage: "square.and.arrow.up")
+                        .labelStyle(.iconOnly)
+                }
+                .buttonStyle(.glass)
+                .buttonBorderShape(.circle)
+                .help("Share PDF")
             }
-            .buttonStyle(.glass)
+            Button("Merge…", systemImage: "arrow.triangle.merge") { merging = true }
+                .buttonStyle(.glassProminent)
         }
-        Button("Merge…", systemImage: "arrow.triangle.merge") { merging = true }
-            .buttonStyle(.glass)
-        Button("Done", action: onDone)
-            .buttonStyle(.glassProminent)
+        .fixedSize()
     }
 }
 

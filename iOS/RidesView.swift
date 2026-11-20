@@ -196,9 +196,6 @@ struct RidesView: View {
                 selecting = false
                 marked = []
                 selection = id
-            } onDone: {
-                selecting = false
-                marked = []
             }
         } else {
             ContentUnavailableView("Select Rides", systemImage: "checkmark.circle",

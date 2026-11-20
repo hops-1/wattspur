@@ -226,7 +226,7 @@ Ab Version 1.4 kann das iPad, was der Mac kann. In der Seitenleiste stehen nach 
 
 Unter **Fahrten** tippst du über der Liste auf **Auswählen** und dann auf zwei bis vier Fahrten: Rechts erscheint der Vergleich mit Karte, Diagramm und Tabelle. **Zusammenfügen …** macht aus den gewählten Fahrten eine; die Originale bleiben darin, am Mac kannst du sie wieder trennen. FIT- und GPX-Dateien ziehst du aus der Dateien-App (Split View) auf die Liste. Der Teilen-Knopf einer Fahrt bietet **GPX teilen** und **PDF teilen**; das PDF ist eine Seite mit Karte, Kennzahlen, Tempo und Höhe.
 
-Ab Version 1.5 zeigt der Vergleich mit dem Schalter **Abweichung vom Schnitt** unter jedem Wert, wie weit er von deinem Durchschnitt abweicht, wie am Mac. **PDF teilen** gibt den Vergleich als PDF aus (Karte, dann Tabelle), ebenso die Highlights.
+Ab Version 1.5 zeigt der Vergleich mit dem Schalter **Abweichung vom Schnitt** über der Tabelle unter jedem Wert, wie weit er von deinem Durchschnitt abweicht, wie am Mac. Das Teilen-Symbol neben **Zusammenfügen …** gibt den Vergleich als PDF aus (Karte, dann Tabelle). **Abbrechen** über der Liste beendet das Auswählen.
 
 ---
 Weiter: [Fragen](06-faq.md) · [Inhalt](README.md)
