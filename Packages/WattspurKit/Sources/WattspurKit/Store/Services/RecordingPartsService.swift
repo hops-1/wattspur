@@ -42,6 +42,10 @@ struct RecordingPartsService: LibraryService {
         let path = GPSPath.length(of: samples)
         let sum = pieces.reduce(0) { $0 + $1.distance }
         guard path > 0, Self.distanceShare.contains(sum / path) else { return nil }
+        // Overlapping parts (one tour exported twice) cannot be merged: ask before writing anything,
+        // else the parts keep an attached GPX that is not there (S-34).
+        let merges = MergeService(env)
+        guard merges.mergeProblem(pieces) == nil else { return nil }
 
         let imports = ImportService(env)
         for part in parts {
@@ -50,7 +54,7 @@ struct RecordingPartsService: LibraryService {
             part.attachedSourceFormat = RideSource.gpx.rawValue
             if let bike = recording.bike { part.bike = bike }
         }
-        guard let merged = try? MergeService(env).merge(pieces, name: recording.name) else { return nil }
+        guard let merged = try? merges.merge(pieces, name: recording.name) else { return nil }
         if let bike = recording.bike { merged.bike = bike }
         RideService(env).moveToTrash(recording)
         LibrarySave.save(context)
@@ -64,8 +68,9 @@ struct RecordingPartsService: LibraryService {
     /// changes. The opposite of `joinParts`: on 11.11.2026 Bosch Flow saved the way to work and the way
     /// home as one ride, the iPhone as two recordings, and the three stayed apart. Each piece takes the
     /// Bosch values of its time, the recording's name, bike, heart rate and lean angle; the recordings
-    /// go to the trash, where they can be restored. The whole Bosch ride is deleted: its file lives on
-    /// in every piece, and a ride in the trash would come back when the file is imported again.
+    /// go to the trash, where they can be restored. The whole Bosch ride goes to the trash too (S-37);
+    /// it gives its Bosch ID to the pieces, so the file imported again finds a piece and does not bring
+    /// the whole ride back. A name changed by hand on it goes to every piece.
     @discardableResult
     func splitAcrossRecordings(_ ride: Ride) -> [Ride]? {
         guard ride.source == .fit, !ride.isMerged, ride.mergedInto == nil, ride.attachedSourceFormat == nil,
@@ -84,10 +89,11 @@ struct RecordingPartsService: LibraryService {
         let total = samples.count
 
         let imports = ImportService(env)
+        let editedName = Self.nameEditedByHand(ride) ? ride.name : nil
         var rides: [Ride] = []
         for (recording, piece) in zip(recordings, pieces) {
             let parsed = Self.parsed(piece, of: ride, share: Double(piece.count) / Double(total))
-            let part = Ride(name: recording.name, startDate: parsed.startDate)
+            let part = Ride(name: editedName ?? recording.name, startDate: parsed.startDate)
             part.sourceIdentifier = ride.sourceIdentifier
             part.sourceFormat = ride.sourceFormat
             part.apply(parsed)
@@ -102,10 +108,17 @@ struct RecordingPartsService: LibraryService {
             part.attachedSourceFormat = RideSource.gpx.rawValue
             rides.append(part)
         }
-        RideService(env).moveToTrash(recordings)
-        context.delete(ride)
+        ride.sourceIdentifier = ""
+        RideService(env).moveToTrash(recordings + [ride])
         LibrarySave.save(context)
         return rides
+    }
+
+    /// `true` if the ride's name is not the one the import gave it: the title in the Bosch file name.
+    static func nameEditedByHand(_ ride: Ride) -> Bool {
+        guard let fileName = ride.sourceFile?.fileName else { return false }
+        let name = ride.name.trimmingCharacters(in: .whitespacesAndNewlines)
+        return !name.isEmpty && name != ImportService.parseFileName(fileName).title
     }
 
     /// After a recording came in: if a Bosch ride covers it and other recordings, splits that ride
@@ -122,7 +135,8 @@ struct RecordingPartsService: LibraryService {
         })
         let covering = ((try? context.fetch(descriptor)) ?? []).first { candidate in
             guard candidate.source == .fit, candidate.attachedSourceFormat == nil,
-                  candidate.mergedInto == nil, !candidate.isMerged else { return false }
+                  candidate.mergedInto == nil, !candidate.isMerged,
+                  Self.mayEnd(candidate, after: span.upperBound) else { return false }
             let window = Self.window(of: candidate)
             return window.contains(span.lowerBound) && window.contains(span.upperBound)
         }
@@ -140,7 +154,7 @@ struct RecordingPartsService: LibraryService {
         }, sortBy: [SortDescriptor(\.startDate)])
         return ((try? context.fetch(descriptor)) ?? []).filter { candidate in
             guard candidate.id != ride.id, candidate.source == .gpx, candidate.attachedSourceFormat == nil,
-                  candidate.mergedInto == nil, !candidate.isMerged else { return false }
+                  candidate.mergedInto == nil, !candidate.isMerged, Self.mayEnd(candidate, before: to) else { return false }
             let span = Self.span(of: candidate)
             return window.contains(span.lowerBound) && window.contains(span.upperBound)
         }
@@ -197,9 +211,24 @@ struct RecordingPartsService: LibraryService {
         })
         return ((try? context.fetch(descriptor)) ?? []).first { candidate in
             guard candidate.source == .gpx, candidate.attachedSourceFormat == nil,
-                  candidate.mergedInto == nil, !candidate.isMerged else { return false }
-            return Self.window(of: candidate).contains(span.lowerBound) && Self.window(of: candidate).contains(span.upperBound)
+                  candidate.mergedInto == nil, !candidate.isMerged,
+                  Self.mayEnd(candidate, after: span.upperBound) else { return false }
+            let window = Self.window(of: candidate)
+            return window.contains(span.lowerBound) && window.contains(span.upperBound)
         }
+    }
+
+    /// Cheap checks with the stored start and elapsed time, before the time series is read (S-35).
+    /// The last point lies at the start plus the elapsed time or before; without an elapsed time every
+    /// ride may fit.
+    private static func mayEnd(_ ride: Ride, after date: Date) -> Bool {
+        ride.elapsedTime <= 0 || ride.startDate.addingTimeInterval(ride.elapsedTime + spanTolerance) >= date
+    }
+
+    /// For a GPX ride only: its elapsed time ends at its last point (`GPXRideImporter`). A Bosch
+    /// elapsed time may run on after the last point.
+    private static func mayEnd(_ ride: Ride, before date: Date) -> Bool {
+        ride.elapsedTime <= 0 || ride.startDate.addingTimeInterval(ride.elapsedTime) <= date.addingTimeInterval(spanTolerance)
     }
 
     /// The recording's time with the tolerance on both sides.
@@ -218,7 +247,8 @@ struct RecordingPartsService: LibraryService {
             $0.startDate >= from && $0.startDate <= to && $0.deletedAt == nil && !$0.isSample
         }, sortBy: [SortDescriptor(\.startDate)])
         return ((try? context.fetch(descriptor)) ?? []).filter { ride in
-            guard ride.id != recording.id, Self.isBosch(ride) else { return false }
+            guard ride.id != recording.id, Self.isBosch(ride), Self.mayEnd(ride, after: window.lowerBound)
+            else { return false }
             let span = Self.span(of: ride)
             return window.contains(span.lowerBound) && window.contains(span.upperBound)
         }
