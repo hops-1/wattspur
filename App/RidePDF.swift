@@ -20,7 +20,7 @@ struct RideReport {
     /// The route by height, when the ride detail shows it (B-063).
     var elevation: RouteElevation.Result?
 
-    var fileName: String { PDFExport.fileName(ride.name) }
+    var fileName: String { PDFFile.name(ride.name) }
 
     func pdfData() async -> Data {
         let line = PDFExport.MapLine(

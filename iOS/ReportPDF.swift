@@ -41,11 +41,6 @@ enum ReportPDF {
         return data as Data
     }
 
-    /// "Highlights 2026.pdf": without the characters the Files app does not allow.
-    static func fileName(_ title: String) -> String {
-        title.components(separatedBy: CharacterSet(charactersIn: "/:\\?%*|\"<>")).joined(separator: "-") + ".pdf"
-    }
-
     /// The last line of every report.
     static var createdNote: some View {
         Text("Created with Wattspur on \(Date.now.formatted(date: .long, time: .omitted))")

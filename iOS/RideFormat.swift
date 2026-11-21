@@ -84,11 +84,7 @@ enum RideFormat {
 
 extension Color {
     /// The track colour of the Mac app: magenta, lighter in dark mode so it stands out on the map.
-    static let track = Color(UIColor { traits in
-        traits.userInterfaceStyle == .dark
-            ? UIColor(red: 0xFF / 255, green: 0x4F / 255, blue: 0xAE / 255, alpha: 1)
-            : UIColor(red: 0xC2 / 255, green: 0x18 / 255, blue: 0x7A / 255, alpha: 1)
-    })
+    static let track = Color.map(MapPalette.track)
 
     /// The track by lean angle (B-246), from the maps' palette, the same as on the Mac (B-226).
     static func lean(_ band: RideMotion.LeanBand) -> Color { .map(MapPalette.lean(band)) }

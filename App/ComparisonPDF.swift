@@ -19,7 +19,7 @@ struct ComparisonReport {
     /// "Comparison – Morning loop, After-work loop.pdf"
     static func fileName(for rides: [Ride]) -> String {
         let names = rides.map(\.name).formatted(.list(type: .and))
-        return PDFExport.fileName(String(localized: "Comparison – \(names)"))
+        return PDFFile.name(String(localized: "Comparison – \(names)"))
     }
 
     func pdfData() async -> Data {

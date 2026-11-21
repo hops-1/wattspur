@@ -1,6 +1,7 @@
 import Charts
 import SwiftUI
 import WattspurKit
+import WattspurMap
 
 /// The four charts over distance: elevation, speed, cadence, power (B-019, TOUR-04).
 /// In a wide window they are stacked; the carousel for narrow windows follows (TOUR-11).
@@ -295,9 +296,9 @@ private struct ChartCard: View {
 extension Color {
     /// Metric colours from the mockup, with lighter variants for dark mode.
     static let metricElevation = Color.adaptive(light: 0x4F7A5A, dark: 0x7FB58A)
-    static let metricSpeed = Color.adaptive(light: 0x0A6ED1, dark: 0x4DA3FF)
-    static let metricCadence = Color.adaptive(light: 0x7A4FC9, dark: 0xA98BEF)
-    static let metricPower = Color.adaptive(light: 0xC2410C, dark: 0xFF8A4C)
+    static let metricSpeed = Color.map(MapPalette.metricSpeed)
+    static let metricCadence = Color.map(MapPalette.metricCadence)
+    static let metricPower = Color.map(MapPalette.metricPower)
     static let metricLean = Color.adaptive(light: 0x4C51BF, dark: 0x8C93FF)
     /// Bars that are not picked: at least 3:1 against the window background (NFR-16).
     static let chartInactive = Color.adaptive(light: 0x86868B, dark: 0x7C7C80)

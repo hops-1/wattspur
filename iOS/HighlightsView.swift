@@ -801,7 +801,7 @@ struct HighlightsPDF: Transferable {
 
     static var transferRepresentation: some TransferRepresentation {
         DataRepresentation(exportedContentType: .pdf) { pdf in await pdf.render() }
-            .suggestedFileName { ReportPDF.fileName($0.title) }
+            .suggestedFileName { PDFFile.name($0.title) }
     }
 
     /// "Highlights 2026", "Highlights – Records", "Highlights – Goals".

@@ -205,6 +205,6 @@ struct HighlightsView: View {
                 PDFExport.createdNote
             })
         }
-        PDFExport.deliver(PDFExport.document([page]), fileName: PDFExport.fileName(title), to: target)
+        PDFExport.deliver(PDFExport.document([page]), fileName: PDFFile.name(title), to: target)
     }
 }

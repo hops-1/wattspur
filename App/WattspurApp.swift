@@ -95,7 +95,7 @@ struct WattspurApp: App {
         _restoreNotice = State(initialValue: notice)
         var configuration = sync.configuration
         #if DEBUG
-        if LibraryLocation.isBrokenLibraryTest { configuration = LibraryLocation.prepareBrokenLibraryTest() }
+        if LibraryLocation.isBrokenLibraryTest { configuration = LibraryBackup.prepareBrokenLibraryTest(at: LibraryLocation.brokenLibraryTestURL) }
         #endif
         do {
             #if DEBUG

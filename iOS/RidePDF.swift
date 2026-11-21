@@ -24,8 +24,7 @@ struct RidePDF: Transferable {
     /// "Sonntagstour 2026-11-06.pdf"
     var fileName: String {
         let day = ride.startDate.formatted(.iso8601.year().month().day())
-        let name = ride.name.components(separatedBy: CharacterSet(charactersIn: "/:\\?%*|\"<>")).joined(separator: "-")
-        return "\(name) \(day).pdf"
+        return PDFFile.name("\(ride.name) \(day)")
     }
 
     /// A4 in points.
@@ -77,7 +76,7 @@ struct RidePDF: Transferable {
             path.lineWidth = 3
             path.lineJoinStyle = .round
             path.lineCapStyle = .round
-            UIColor(red: 0xC2 / 255, green: 0x18 / 255, blue: 0x7A / 255, alpha: 1).setStroke()
+            UIColor(cgColor: MapPalette.track.cgColor(dark: false)).setStroke()
             path.stroke()
         }
     }
