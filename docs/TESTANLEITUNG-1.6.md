@@ -1,6 +1,6 @@
 # Testanleitung iPhone 1.6 „Im Auto“
 
-Für Nils. Ergebnis je Punkt: ✓, oder ✗ mit kurzer Notiz oder Screenshot. Die Stories: B-311, B-339, dazu B-323. CarPlay (B-327) ist nicht dabei; es kommt erst nach der Freigabe durch Apple.
+Für Nils. Ergebnis je Punkt: ✓, oder ✗ mit kurzer Notiz oder Screenshot. Die Stories: B-311, B-339, B-341, dazu B-323. CarPlay (B-327) ist nicht dabei; es kommt erst nach der Freigabe durch Apple.
 
 Kein neues CloudKit-Feld. Neue Einstellungen je iPhone, nicht synchronisiert: Auto-Start, „Startet mit“ je Gerät, Ende bei Trennung, Ende nach Stillstand und die Minuten. Der Mac bleibt bei 1.10.2.
 
@@ -8,7 +8,7 @@ Bitte nur fahren, wenn es passt, und nichts während der Fahrt am iPhone einstel
 
 ## 0. Vorher
 
-- Am iPhone **1.6 (39)** aus TestFlight.
+- Am iPhone **1.6 (40)** aus TestFlight (ab 1.6 (39) für A–F, ab 1.6 (40) für G).
 - Ein Auto mit CarPlay (z. B. Nugget) und, wenn möglich, das Motorrad mit Headset.
 
 ## A. Einstellen (B-311, B-339)
@@ -52,3 +52,12 @@ Wie in der Anleitung unten auf der Seite:
 
 1. **Fahrt starten** in der Übersicht startet sofort, ohne „Bereit“, auch mit Auto-Start an.
 2. **Auto-Start aus**: Die Automation „Fahrt starten“ startet wie vor 1.6 sofort, „Fahrt beenden“ öffnet **Fahrt speichern**.
+
+## G. Ruhigeres Tempo (B-341)
+
+Ab 1.6 (40).
+
+1. Mit dem eBike aufnehmen und das Tempo in Wattspur neben der Bosch-Anzeige ansehen, auf gleichmäßiger Fahrt.
+2. Dasselbe im Wald: Das Tempo springt weniger als in 1.6 (39), es kommt aber weiter jede Sekunde neu.
+3. Anhalten: Nach etwa 2 s steht 0.
+4. Ist es noch zu unruhig oder zu träge? Kurz notieren, dann passe ich die 2 s an.
