@@ -23,6 +23,24 @@ struct DiagnosticReportTests {
         #expect(text.contains("(no imports)"))
     }
 
+    @Test("Names the operating system it was given (S-53)")
+    func osName() {
+        var iPhone = report()
+        iPhone.osName = "iOS"
+        #expect(iPhone.text.contains("iOS: Version 27.0.1"))
+        #expect(!iPhone.text.contains("macOS:"))
+        #if os(macOS)
+        #expect(report().osName == "macOS")
+        #endif
+    }
+
+    @Test("Says honestly that the import log lists file names (S-52)")
+    func closingSentence() {
+        let text = report().text
+        #expect(text.contains("file names"))
+        #expect(!text.contains("no positions, ride names or other ride data"))
+    }
+
     @Test("Lists the import log newest first")
     func importLog() {
         let old = ImportLogEntry(date: Date(timeIntervalSince1970: 1_792_300_000), fileName: "a.fit", outcome: "imported")

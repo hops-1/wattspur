@@ -36,7 +36,7 @@ struct DiagnosticsView: View {
     var body: some View {
         VStack(alignment: .leading, spacing: 14) {
             Text("Diagnostics").font(.title2.bold())
-            Text("This report helps to find import problems. It contains versions, counts and the import log – no positions, ride names or other ride data. Nothing is sent automatically: save it and send it yourself if you like.")
+            Text("This report helps to find import problems. It contains versions, counts and the import log with file names – no positions or other ride data. File names can contain place or tour names. Nothing is sent automatically: save it and send it yourself if you like.")
                 .foregroundStyle(.secondary)
                 .fixedSize(horizontal: false, vertical: true)
 
