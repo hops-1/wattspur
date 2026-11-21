@@ -8,7 +8,7 @@ Bitte nur fahren, wenn es passt, und nichts während der Fahrt am iPhone einstel
 
 ## 0. Vorher
 
-- Am iPhone **1.6 (39)** aus TestFlight.
+- Am iPhone **1.6 (40)** aus TestFlight (ab 1.6 (39) für A–F, ab 1.6 (40) für G).
 - Ein Auto mit CarPlay (z. B. Nugget) und, wenn möglich, das Motorrad mit Headset.
 
 ## A. Einstellen (B-311, B-339)
@@ -55,7 +55,7 @@ Wie in der Anleitung unten auf der Seite:
 
 ## G. Ruhigeres Tempo (B-341)
 
-Braucht einen Build nach 1.6 (39).
+Ab 1.6 (40).
 
 1. Mit dem eBike aufnehmen und das Tempo in Wattspur neben der Bosch-Anzeige ansehen, auf gleichmäßiger Fahrt.
 2. Dasselbe im Wald: Das Tempo springt weniger als in 1.6 (39), es kommt aber weiter jede Sekunde neu.
