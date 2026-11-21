@@ -7,7 +7,7 @@ Every DMG handed out to testers corresponds to one entry below.
 
 ## [Unreleased]
 
-## [iOS 1.6.2]
+## [iOS 1.6.2] – 2026-11-21
 
 Review of architecture and security: small, safe fixes and no new functions, with the fix for a crash after saving a ride in 1.6. iPhone and iPad 1.6.2 (43); with the Mac 1.10.3. CarPlay (1.6.1) follows once Apple approves it.
 
@@ -25,7 +25,7 @@ Review of architecture and security: small, safe fixes and no new functions, wit
 ### Changed
 - The privacy policy names the place search at Apple: the Mac sends a ride's start for its time zone, the iPhone the start and end of an auto-ended ride for its name (S-47). The line about fetching from the Bosch portal is gone; that function does not exist (S-48).
 
-## [1.10.3]
+## [1.10.3] – 2026-11-21
 
 Review of architecture and security: small, safe fixes and no new functions. With iPhone and iPad 1.6.2.
 
