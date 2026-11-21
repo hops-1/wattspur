@@ -1,6 +1,7 @@
 import AppIntents
 import SwiftData
 import SwiftUI
+import UserNotifications
 import WattspurKit
 import WattspurMap
 import WidgetKit
@@ -30,6 +31,9 @@ struct WattspurApp: App {
     @State private var backup = PhoneBackup()
     /// What happened to a backup staged for this start (B-302).
     @State private var launchRestore: PhoneBackup.LaunchResult?
+
+    /// Kept here: the notification center holds its delegate weakly.
+    private static var notifications: NotificationRouter?
 
     init() {
         // Siri and the shortcuts (B-225) reach the recorder and the app through these two.
@@ -72,6 +76,15 @@ struct WattspurApp: App {
         if UserDefaults.standard.bool(forKey: "WattspurOfflineTiles") { TileLoader.simulatesOffline = true }
         #endif
         _library = State(initialValue: library)
+        // An auto-started ride that ends by itself is saved here, where the library is (B-339).
+        recorder.autoSave = { recording, name in
+            let bikes = (library.state?.bikes ?? []).filter { !$0.isArchived }
+            let device = SaveRecordingSheet.defaultDevice(for: recording, among: bikes, lastRide: library.state?.lastRide)
+            return (try? SaveRecordingSheet.store(recording, name: name, device: device, library: library)) != nil
+        }
+        // A tap on “Ride Saved” opens the ride (B-339).
+        Self.notifications = NotificationRouter(intents: intents)
+        UNUserNotificationCenter.current().delegate = Self.notifications
     }
 
     /// Switches iCloud on or off (B-218); before the store is open, at once.
