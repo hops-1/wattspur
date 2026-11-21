@@ -5,6 +5,7 @@ import SwiftUI
 import UniformTypeIdentifiers
 import WattspurCore
 import WattspurKit
+import WattspurMap
 
 /// A ride as a one-page PDF for the share menu on the iPad (B-297), like "Export as PDF…" on the
 /// Mac: name, date and device, the route on a map, the key figures and the speed and elevation
@@ -71,9 +72,8 @@ struct RidePDF: Transferable {
         guard let snapshot = try? await MKMapSnapshotter(options: options).start() else { return nil }
         return UIGraphicsImageRenderer(size: size).image { _ in
             snapshot.image.draw(at: .zero)
-            let path = UIBezierPath()
-            path.move(to: snapshot.point(for: route[0]))
-            for coordinate in route.dropFirst() { path.addLine(to: snapshot.point(for: coordinate)) }
+            // No line across a gap in the track (B-309), as on the Mac.
+            let path = UIBezierPath(cgPath: TrackGap.path(route) { snapshot.point(for: $0) })
             path.lineWidth = 3
             path.lineJoinStyle = .round
             path.lineCapStyle = .round

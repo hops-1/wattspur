@@ -3,13 +3,12 @@ import SwiftUI
 import WattspurCore
 import WattspurMap
 
-/// Number formats of the iPhone app; units follow the device's region.
+/// Number formats of the iPhone app: always metric like the Mac (speed in km/h, records in km).
 enum RideFormat {
-    /// "21.4 km" (or miles where the region uses them), also for short and zero distances: a
-    /// week without rides reads “0.0 km”, not “0.0 m”.
+    /// "21.4 km", in every region (S-16, decision 21.11.2026), also for short and zero distances:
+    /// a week without rides reads “0.0 km”, not “0.0 m”.
     static func distance(_ metres: Double) -> String {
-        let unit: UnitLength = Locale.current.measurementSystem == .metric ? .kilometers : .miles
-        return Measurement(value: metres, unit: UnitLength.meters).converted(to: unit)
+        Measurement(value: metres, unit: UnitLength.meters).converted(to: .kilometers)
             .formatted(.measurement(width: .abbreviated, usage: .asProvided,
                                     numberFormatStyle: .number.precision(.fractionLength(1))))
     }

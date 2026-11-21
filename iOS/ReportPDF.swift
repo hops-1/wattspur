@@ -1,6 +1,8 @@
 import MapKit
 import SwiftUI
 import UIKit
+import WattspurCore
+import WattspurMap
 
 /// A4 pages from SwiftUI views for the share menu (B-336): the highlights and the comparison, the
 /// way `RidePDF` makes one page of a ride. Each view is laid out at the width of the page; a view
@@ -75,9 +77,8 @@ enum ReportPDF {
         return UIGraphicsImageRenderer(size: size).image { _ in
             snapshot.image.draw(at: .zero)
             for line in lines where line.coordinates.count >= 2 {
-                let path = UIBezierPath()
-                path.move(to: snapshot.point(for: line.coordinates[0]))
-                for coordinate in line.coordinates.dropFirst() { path.addLine(to: snapshot.point(for: coordinate)) }
+                // No line across a gap in the track (B-309), as on the Mac.
+                let path = UIBezierPath(cgPath: TrackGap.path(line.coordinates) { snapshot.point(for: $0) })
                 path.lineWidth = 3
                 path.lineJoinStyle = .round
                 path.lineCapStyle = .round

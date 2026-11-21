@@ -34,6 +34,26 @@ struct WattspurMapTests {
         #expect(hex(MapPalette.curvyRoad(veryCurvy: true).cgColor(dark: false)) == 0xD7263D)
     }
 
+    @Test("A line on a map starts anew after a gap in the track, so nothing crosses it (B-309)")
+    func gapPath() {
+        // Two short stretches about 11 km apart, e.g. a train ride without recording.
+        let route = [CLLocationCoordinate2D(latitude: 50, longitude: 8),
+                     CLLocationCoordinate2D(latitude: 50.001, longitude: 8),
+                     CLLocationCoordinate2D(latitude: 50.1, longitude: 8),
+                     CLLocationCoordinate2D(latitude: 50.101, longitude: 8)]
+        var moves = 0, lines = 0
+        TrackGap.path(route) { CGPoint(x: $0.longitude, y: $0.latitude) }.applyWithBlock { element in
+            switch element.pointee.type {
+            case .moveToPoint: moves += 1
+            case .addLineToPoint: lines += 1
+            default: break
+            }
+        }
+        #expect(moves == 2)
+        #expect(lines == 2)
+        #expect(TrackGap.path([]) { _ in .zero }.isEmpty)
+    }
+
     @Test("Only one colouring at a time, in the order of the ride's map")
     func colouringOrder() {
         let lean = [RideMotion.LeanStretch(band: .slight, latitude: [50, 50.1], longitude: [8, 8.1])]

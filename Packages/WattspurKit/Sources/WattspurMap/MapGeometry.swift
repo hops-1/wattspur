@@ -177,4 +177,16 @@ extension TrackGap {
     public static func split(_ coordinates: [CLLocationCoordinate2D]) -> [[CLLocationCoordinate2D]] {
         split(coordinates) { ($0.latitude, $0.longitude) }
     }
+
+    /// The coordinates as one path for a line on a map, a new stroke after every gap so no line
+    /// crosses it (B-309). `point` places a coordinate on the image.
+    public static func path(_ coordinates: [CLLocationCoordinate2D], point: (CLLocationCoordinate2D) -> CGPoint) -> CGPath {
+        let path = CGMutablePath()
+        for stretch in split(coordinates) {
+            for (i, coordinate) in stretch.enumerated() {
+                if i == 0 { path.move(to: point(coordinate)) } else { path.addLine(to: point(coordinate)) }
+            }
+        }
+        return path
+    }
 }
