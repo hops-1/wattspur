@@ -192,6 +192,16 @@
         }
       }
     },
+    "Helps with the costs of developing Wattspur." : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Hilft bei den Kosten für die Entwicklung von Wattspur."
+          }
+        }
+      }
+    },
     "Last backup before turning sync on: %@." : {
       "localizations" : {
         "de" : {
@@ -288,6 +298,16 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Silber"
+          }
+        }
+      }
+    },
+    "Sponsor" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Unterstützen"
           }
         }
       }

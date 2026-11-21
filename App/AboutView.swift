@@ -34,6 +34,17 @@ struct AboutView: View {
             }
             .frame(maxWidth: 420, alignment: .leading)
 
+            // B-362: the Mac is not sold in the App Store, so it may link to a donation page.
+            VStack(spacing: 6) {
+                Link(destination: HelpLinks.buyMeACoffee) {
+                    Label("Sponsor", systemImage: "heart")
+                }
+                .buttonStyle(.bordered)
+                Text("Helps with the costs of developing Wattspur.")
+                    .font(.caption)
+                    .foregroundStyle(.secondary)
+            }
+
             VStack(spacing: 2) {
                 Text(verbatim: AppInfo.copyright)
                 Text("Open source under the MIT License")

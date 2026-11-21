@@ -55,6 +55,9 @@ Falls `xcode-select` noch auf die Command Line Tools zeigt: Befehlen `DEVELOPER_
 
 Als Nächstes: v1.9 Daten direkt von Bosch, danach ein Bereich „Fahrten“ mit Karte (siehe [Backlog](docs/BACKLOG.md)).
 
+## Unterstützen
+Wattspur ist kostenlos, ohne Werbung und ohne Konto. Die Entwicklung kostet trotzdem Geld, zum Beispiel für den Apple Developer Account und Lizenzen. Wer diese Kosten mittragen möchte, kann das über [GitHub Sponsors](https://github.com/sponsors/hops-1) oder [Buy me a coffee](https://buymeacoffee.com/hops1). Danke!
+
 ## Lizenz
 Code: [MIT](LICENSE) · Dokumentation: [CC BY 4.0](docs/LICENSE.md) · © 2026 Nils Wiese
 
