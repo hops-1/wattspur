@@ -38,6 +38,8 @@ final class PhoneImport {
     private var inboxFiles: [URL: URL] = [:]
     /// Files that could not even be copied; they join the summary.
     private var unreadable: [String] = []
+    /// Files still marked as being read come from a run that ended while reading (S-39); checked once per start.
+    private var checkedInterrupted = false
 
     static let fileExtensions = ImportInbox.fileExtensions
     static let contentTypes: [UTType] = [UTType(filenameExtension: "fit") ?? .data, UTType(filenameExtension: "gpx") ?? .xml]
@@ -71,11 +73,20 @@ final class PhoneImport {
     /// those shared to Wattspur from another app first moved there (B-301).
     func importWaitingFiles(library: PhoneLibrary) {
         let inbox = Self.inbox
+        if !checkedInterrupted {
+            checkedInterrupted = true
+            inbox.moveInterrupted()
+        }
         if let shared = SharedImports.folder { inbox.collectShared(from: shared) }
-        let waiting = inbox.waitingFiles().filter { original in !inboxFiles.values.contains(original) }
+        let waiting = inbox.waitingFiles()
         guard !waiting.isEmpty, library.database != nil else { return }
         var copied: [URL] = []
-        for original in waiting {
+        for waitingFile in waiting {
+            // Marked before it is read: if reading it crashes the app, the next start sends it to “Fehler” (S-39).
+            guard let original = try? inbox.markReading(waitingFile) else {
+                _ = try? inbox.moveAway(waitingFile, failed: true)
+                continue
+            }
             if let copy = copyIn(original) {
                 inboxFiles[copy] = original
                 copied.append(copy)
@@ -125,6 +136,9 @@ final class PhoneImport {
         if !summary.isEmpty { self.summary = summary }
         for copy in copies { try? FileManager.default.removeItem(at: copy) }
         copies = []
+        // Nothing reads any more: files of “Import” never read (a dismissed question) wait there again.
+        for original in inboxFiles.values { _ = try? Self.inbox.unmarkReading(original) }
+        inboxFiles = [:]
     }
 
     // MARK: - Files

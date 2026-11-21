@@ -9,6 +9,8 @@ public struct ImportInbox: Sendable {
     public static let inboxName = "Import"
     public static let importedName = "Importiert"
     public static let failedName = "Fehler"
+    /// Hidden, so the Files app does not show it: files being read wait here (S-39).
+    public static let readingName = ".Lesen"
     public static let fileExtensions: Set<String> = ["fit", "gpx"]
 
     /// The app's documents folder, which holds the three folders.
@@ -21,6 +23,7 @@ public struct ImportInbox: Sendable {
     public var inbox: URL { base.appending(path: Self.inboxName, directoryHint: .isDirectory) }
     public var imported: URL { base.appending(path: Self.importedName, directoryHint: .isDirectory) }
     public var failed: URL { base.appending(path: Self.failedName, directoryHint: .isDirectory) }
+    public var reading: URL { base.appending(path: Self.readingName, directoryHint: .isDirectory) }
 
     /// Makes the inbox, so people find it in the Files app before the first file.
     public func prepare() {
@@ -48,6 +51,35 @@ public struct ImportInbox: Sendable {
         let target = Self.freeName(for: file.lastPathComponent, in: folder)
         try FileManager.default.moveItem(at: file, to: target)
         return target
+    }
+
+    /// Marks a waiting file as being read, before it is read (S-39): it moves to the hidden folder
+    /// `reading`, out of the inbox. Once read, `moveAway` takes it on from there as usual. If the app
+    /// crashes while reading it, the file is still there on the next start, and `moveInterrupted`
+    /// sends it to “Fehler” instead of reading it again, so one bad file cannot crash every start.
+    public func markReading(_ file: URL) throws -> URL {
+        try FileManager.default.createDirectory(at: reading, withIntermediateDirectories: true)
+        let target = Self.freeName(for: file.lastPathComponent, in: reading)
+        try FileManager.default.moveItem(at: file, to: target)
+        return target
+    }
+
+    /// Puts a marked file back into the inbox when it was never read (e.g. the question for the
+    /// bike was dismissed), so it waits for the next start like before.
+    @discardableResult
+    public func unmarkReading(_ file: URL) throws -> URL {
+        prepare()
+        let target = Self.freeName(for: file.lastPathComponent, in: inbox)
+        try FileManager.default.moveItem(at: file, to: target)
+        return target
+    }
+
+    /// Moves files left in `reading` by an earlier run of the app to “Fehler” (S-39). Call it once
+    /// per start, before new files are marked. Returns how many files moved.
+    @discardableResult
+    public func moveInterrupted() -> Int {
+        let files = (try? FileManager.default.contentsOfDirectory(at: reading, includingPropertiesForKeys: nil)) ?? []
+        return files.filter { (try? moveAway($0, failed: true)) != nil }.count
     }
 
     /// Moves what the share extension left in `shared` (B-301) into the inbox, where the import
