@@ -34,6 +34,7 @@ final class RecordingActivityController {
         case .eBike: nil
         }
         activity = try? Activity.request(attributes: RecordingAttributes(startDate: recording.startDate, symbol: recording.device?.symbol,
+                                                                         kind: recording.device?.kind.rawValue,
                                                                          side: side),
                                          content: ActivityContent(state: state, staleDate: nil))
         lastState = state
@@ -45,7 +46,7 @@ final class RecordingActivityController {
         guard let activity else { return }
         let state = Self.state(of: recording)
         guard state != lastState else { return }
-        guard force || state.isPaused != lastState?.isPaused || Date.now.timeIntervalSince(lastUpdate) >= Self.interval else { return }
+        guard force || state.isPaused != lastState?.isPaused || state.isReady != lastState?.isReady || Date.now.timeIntervalSince(lastUpdate) >= Self.interval else { return }
         lastState = state
         lastUpdate = .now
         Self.send(to: activity.id) { await $0.update(ActivityContent(state: state, staleDate: nil)) }
@@ -75,6 +76,7 @@ final class RecordingActivityController {
         let lean = recording.vehicle == .eBike || recording.isPaused ? nil : recording.lastPoint?.fix.motion?.lean.rounded()
         return RecordingAttributes.ContentState(distance: (recording.distance / 10).rounded() * 10,
                                                 speed: (recording.currentSpeed * 36).rounded() / 36,
-                                                isPaused: recording.isPaused, lean: lean)
+                                                isPaused: recording.isPaused, lean: lean,
+                                                isReady: recording.isReady ? true : nil)
     }
 }

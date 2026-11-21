@@ -62,6 +62,16 @@ enum PhoneSettingsKey {
     static let padHighlightsDevice = "padHighlightsDevice"
     /// The comparison on the iPad (B-334): whether each value shows its difference from the average.
     static let padCompareShowsDeviation = "padCompareShowsDeviation"
+    /// Auto-start (B-311): whether “Start Ride” from a shortcut without a device waits as “Ready” for
+    /// the vehicle to move, off by default; and what each device starts with (JSON of
+    /// `[UUID: AutoStart.Trigger]`), kept on this iPhone only.
+    static let autoStart = "autoStart"
+    static let autoStartTriggers = "autoStartTriggers"
+    /// How an auto-started ride ends (B-339): when the connection ends (the second automation runs
+    /// “End Ride”), after standing still, and how many minutes of standing still; both on by default.
+    static let autoStartEndOnDisconnect = "autoStartEndOnDisconnect"
+    static let autoStartEndAfterStandstill = "autoStartEndAfterStandstill"
+    static let autoStartStandstillMinutes = "autoStartStandstillMinutes"
     /// Set by UI tests and screenshots: import the sample ride at launch.
     static let demoRide = "WattspurDemoRide"
 }

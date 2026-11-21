@@ -148,7 +148,7 @@ In der Detailansicht einer Fahrt oben rechts, oder in der Liste mit langem Druck
 
 ## In der Halterung am Lenker (quer)
 Die meisten Halterungen am Lenker halten das iPhone quer. Wattspur läuft auch quer:
-- **Beim Aufnehmen** füllt die Karte den Bildschirm. Links zeigt eine Leiste das Tempo groß, darunter Ø, Strecke, Zeit, Höhe und Anstieg, unten Pause und Stopp.
+- **Beim Aufnehmen** füllt die Karte den Bildschirm. Links zeigt eine Leiste das Tempo groß, darunter Ø, Strecke, Zeit, Höhe und Anstieg, unten Pause und Stopp. Ab iPhone 1.6 ist das Tempo das Mittel der letzten 2 Sekunden: Es kommt weiter jede Sekunde neu, springt aber bei schlechtem GPS (etwa im Wald) weniger.
 - **Die Tab-Leiste** sitzt links unten, in allen Bereichen.
 - **Übersicht:** links die letzte Fahrt, rechts Woche, Monat, Jahr und alle Fahrten.
 - **Fahrten:** links die Liste, rechts die gewählte Fahrt.
@@ -201,6 +201,15 @@ Gut zu wissen:
 - Ist das iPhone gesperrt, fragt iOS manchmal erst nach dem Entsperren.
 - Läuft schon eine Aufnahme, startet keine zweite.
 - Wattspur nimmt das Gerät aus der Aktion. Ohne Gerät nimmt es das der letzten Aufnahme.
+
+### Auto-Start: warten, bis du losfährst (ab iPhone 1.6)
+Schalte unter **Mehr › Aufnahme** den **Auto-Start** ein. Lass in der Automation dann bei **Fahrt starten** das Feld **Gerät** leer. So geht es weiter:
+
+- Beim Verbinden öffnet sich die Aufnahme als **Bereit**. Die Fahrt beginnt erst, wenn du losfährst, ab 10 km/h. Die Zeit zählt ab dann.
+- Welches Gerät es ist, legst du unter **Startet mit** fest: CarPlay oder ein Bluetooth-Gerät, je Auto oder Motorrad. Für ein Bluetooth-Gerät verbinde das iPhone zuerst damit, dann erscheint sein Name. Passt keine Verbindung, nimmt Wattspur das Gerät der letzten Aufnahme.
+- **Abbrechen** beendet „Bereit“ ohne Frage, auch auf dem Sperrbildschirm. Fährst du nicht los, endet „Bereit“ nach der Zeit für den Stillstand.
+- Unter **Ende** wählst du, wann die Fahrt von selbst endet: **Bei Trennung** (mit der zweiten Automation **Trennt › Fahrt beenden**) und **Nach Stillstand** nach 5, 10 oder 20 Minuten (Standard 10).
+- Eine Fahrt, die von selbst endet, sichert Wattspur ohne Frage: mit dem Gerät und den Orten von Start und Ziel als Namen, zum Beispiel „Darmstadt – Frankfurt am Main“. Eine Mitteilung sagt Bescheid; ein Tipp darauf öffnet die Fahrt. Fahrten unter 500 m behält Wattspur nicht.
 
 ## Womit du fährst: Rad, Motorrad, Auto
 Ab iPhone 1.1 wählst du das Gerät beim Start. Ein Tipp auf **Fahrt starten** nimmt das Gerät der letzten Aufnahme. Darunter steht klein „mit Nugget ▾“: Ein Tipp darauf öffnet **Womit fährst du?** mit deinen Bikes, Fahrzeugen und Schuhen. Darunter steht **Fahrzeugart** mit **Fahrrad**, **Auto** und **Motorrad** ohne eigenes Gerät, zum Beispiel für ein geliehenes Rad oder einen Mietwagen (Fahrrad ab iPhone 1.1.1). Ein Tipp auf eine Zeile startet die Fahrt damit. Beim Sichern ist das Gerät schon gewählt, du kannst es dort noch ändern. Die Live-Aktivität zeigt sein Symbol.

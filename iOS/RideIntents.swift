@@ -31,6 +31,8 @@ struct WattspurShortcuts: AppShortcutsProvider {
 
 /// Starts the recording, as “Start Ride” in the overview. The app comes to the front: GPS needs it.
 /// With a device (B-286), e.g. “Start a ride with Nugget”; without one, the device of the last ride.
+/// With auto-start on (B-311) and no device, it is what the automation “When CarPlay connects”
+/// runs: the device comes from the connection, and the recording waits as “Ready” until it moves.
 struct StartRideIntent: AppIntent {
     static let title: LocalizedStringResource = "Start Ride"
     static let description = IntentDescription("Starts recording a ride with GPS.")
@@ -54,6 +56,11 @@ struct StartRideIntent: AppIntent {
         if recorder.unfinished != nil {
             return .result(dialog: .app("Wattspur has an unfinished ride. Continue it or end it first."))
         }
+        if device == nil, AutoStartSettings.isOn {
+            let connected = AutoStartSettings.deviceForConnection(devices: RecordingChoice.cachedDevices)
+            recorder.start(device: connected, ready: true)
+            return .result(dialog: .app("Ready. The ride begins when you drive off."))
+        }
         recorder.start(device: device?.recordingDevice)
         return .result(dialog: .app("Ride started. Have a good ride!"))
     }
@@ -71,6 +78,19 @@ struct EndRideIntent: AppIntent {
     func perform() async throws -> some IntentResult & ProvidesDialog {
         guard recorder.isRecording else {
             return .result(dialog: .app("No ride is being recorded."))
+        }
+        // Auto-start (B-339): “Ready” without a ride just ends; an auto-started ride saves by itself
+        // when the automation for the end of the connection runs this.
+        if recorder.isReady {
+            recorder.cancelReady()
+            return .result(dialog: .app("Auto-start cancelled. No ride was recorded."))
+        }
+        if recorder.isAutoStarted, AutoStartSettings.endsOnDisconnect {
+            let kept = recorder.recording.map(AutoStart.keeps) ?? false
+            await recorder.endAutomatically()
+            if !recorder.isRecording {
+                return .result(dialog: kept ? .app("Ride saved.") : .app("The ride was shorter than 500 m and was not kept."))
+            }
         }
         recorder.endRequested = true
         return .result(dialog: .app("Name the ride and save it."))

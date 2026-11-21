@@ -6445,6 +6445,266 @@
           }
         }
       }
+    },
+    "Ready" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Bereit"
+          }
+        }
+      }
+    },
+    "The ride begins when you drive off, above 10 km/h." : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Die Fahrt beginnt, wenn du losfährst, ab 10 km/h."
+          }
+        }
+      }
+    },
+    "Ready. The ride begins when you drive off." : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Bereit. Die Fahrt beginnt, wenn du losfährst."
+          }
+        }
+      }
+    },
+    "Cancel Auto-Start" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Auto-Start abbrechen"
+          }
+        }
+      }
+    },
+    "Auto-Start" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Auto-Start"
+          }
+        }
+      }
+    },
+    "When a Shortcuts automation runs “Start Ride” without a device, Wattspur waits as “Ready” and begins the ride when you drive off, above 10 km/h. The device comes from the connection below, otherwise it is the last one." : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Startet eine Automation in der App Kurzbefehle „Fahrt starten“ ohne Gerät, wartet Wattspur als „Bereit“ und beginnt die Fahrt, wenn du losfährst, ab 10 km/h. Das Gerät kommt aus der Verbindung unten, sonst ist es das zuletzt genutzte."
+          }
+        }
+      }
+    },
+    "Nothing" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Nichts"
+          }
+        }
+      }
+    },
+    "Connected now" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Jetzt verbunden"
+          }
+        }
+      }
+    },
+    "Starts With" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Startet mit"
+          }
+        }
+      }
+    },
+    "To choose a Bluetooth device, connect the iPhone to it first, e.g. the car's hands-free or the motorcycle headset; its name then shows up here." : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Für ein Bluetooth-Gerät verbinde das iPhone zuerst damit, z. B. mit der Freisprechanlage im Auto oder dem Headset am Motorrad; dann erscheint sein Name hier."
+          }
+        }
+      }
+    },
+    "1. Open the Shortcuts app, then Automation › New Automation." : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "1. Öffne die App Kurzbefehle, dann Automation › Neue Automation."
+          }
+        }
+      }
+    },
+    "3. Choose Run Immediately, then the action Wattspur › Start Ride, without a device." : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "3. Wähle Sofort ausführen, dann die Aktion Wattspur › Fahrt starten, ohne Gerät."
+          }
+        }
+      }
+    },
+    "Setting Up the Automation" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Automation einrichten"
+          }
+        }
+      }
+    },
+    "Ride Saved" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Fahrt gesichert"
+          }
+        }
+      }
+    },
+    "%@, %@. Tap to open it." : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%1$@, %2$@. Tippe, um sie zu öffnen."
+          }
+        }
+      }
+    },
+    "When Disconnected" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Bei Trennung"
+          }
+        }
+      }
+    },
+    "After Standing Still" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Nach Stillstand"
+          }
+        }
+      }
+    },
+    "Standing Still For" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Stillstand"
+          }
+        }
+      }
+    },
+    "The ride is saved by itself, with the device and the places at start and end as its name, and a notification says so. Rides under 500 m are not kept. “Ready” without driving off ends after the time standing still." : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Die Fahrt wird von selbst gesichert, mit dem Gerät und den Orten von Start und Ziel als Namen; eine Mitteilung sagt Bescheid. Fahrten unter 500 m werden nicht behalten. „Bereit“ ohne Losfahren endet nach der Zeit für den Stillstand."
+          }
+        }
+      }
+    },
+    "2. Choose CarPlay or Bluetooth (then your device), and Connects." : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "2. Wähle CarPlay oder Bluetooth (dann dein Gerät) und Verbindet."
+          }
+        }
+      }
+    },
+    "4. For the end: a second automation with Disconnects and Wattspur › End Ride." : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "4. Für das Ende: eine zweite Automation mit Trennt und Wattspur › Fahrt beenden."
+          }
+        }
+      }
+    },
+    "Auto-start cancelled. No ride was recorded." : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Auto-Start abgebrochen. Es wurde keine Fahrt aufgenommen."
+          }
+        }
+      }
+    },
+    "Ride saved." : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Fahrt gesichert."
+          }
+        }
+      }
+    },
+    "The ride was shorter than 500 m and was not kept." : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Die Fahrt war kürzer als 500 m und wurde nicht behalten."
+          }
+        }
+      }
+    },
+    "%lld min" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%lld min"
+          }
+        }
+      }
+    },
+    "End" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ende"
+          }
+        }
+      }
     }
   },
   "version" : "1.1"

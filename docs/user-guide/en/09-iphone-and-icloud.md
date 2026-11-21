@@ -148,7 +148,7 @@ At the top right of a ride's detail, or by touching and holding a ride in the li
 
 ## In the handlebar mount (landscape)
 Most handlebar mounts hold the iPhone sideways. Wattspur works in landscape too:
-- **While recording** the map fills the screen. On the left a bar shows the speed large, with the average, distance, time, height and ascent below it, and Pause and Stop at the bottom.
+- **While recording** the map fills the screen. On the left a bar shows the speed large, with the average, distance, time, height and ascent below it, and Pause and Stop at the bottom. From iPhone 1.6 the speed is the mean of the last 2 seconds: it still updates every second, but jumps less with poor GPS (in a forest, say).
 - **The tab bar** sits at the bottom left, in every section.
 - **Overview:** the last ride on the left, the week, month, year and all rides on the right.
 - **Rides:** the list on the left, the chosen ride on the right.
@@ -201,6 +201,15 @@ Good to know:
 - If the iPhone is locked, iOS may ask you to unlock it first.
 - If a ride is already being recorded, no second one starts.
 - Wattspur uses the device from the action. Without one, it uses the device of the last recording.
+
+### Auto-start: wait until you drive off (iPhone 1.6 and later)
+Switch on **Auto-Start** under **More › Recording**. In the automation, leave the **Device** field of **Start Ride** empty. Then:
+
+- When the iPhone connects, the recording opens as **Ready**. The ride begins only when you drive off, above 10 km/h. The time counts from then.
+- Which device it is, you set under **Starts With**: CarPlay or a Bluetooth device, for each car or motorcycle. For a Bluetooth device, connect the iPhone to it first; its name then shows up. Without a matching connection Wattspur uses the device of the last recording.
+- **Cancel** ends "Ready" without a question, also on the Lock Screen. If you do not drive off, "Ready" ends after the time standing still.
+- Under **End** you choose when the ride ends by itself: **When Disconnected** (with the second automation **Disconnects › End Ride**) and **After Standing Still** for 5, 10 or 20 minutes (10 by default).
+- A ride that ends by itself is saved without a question: with the device and the places at start and end as its name, for example "Darmstadt – Frankfurt am Main". A notification tells you; tap it to open the ride. Rides under 500 m are not kept.
 
 ## What you ride: bike, motorcycle, car
 From iPhone 1.1 you choose the device at the start. A tap on **Start Ride** takes the device of the last recording. Below it, “with Nugget ▾” in small type opens **What Are You Riding?** with your bikes, vehicles and shoes. Below them, **Vehicle Type** offers **Bicycle**, **Car** and **Motorcycle** without a device of your own, e.g. for a hired bike or a rental car (Bicycle from iPhone 1.1.1). A tap on a row starts the ride with it. When you save, the device is already chosen; you can still change it there. The Live Activity shows its symbol.

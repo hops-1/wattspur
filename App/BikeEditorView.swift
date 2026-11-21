@@ -2,6 +2,7 @@ import SwiftData
 import SwiftUI
 import UniformTypeIdentifiers
 import WattspurKit
+import WattspurSymbols
 
 /// Adds a bike or edits one (B-134, PROF-03): name, colour, kind, photo and the data
 /// of the bike. Archiving a bike is offered here, because deleting it would orphan its rides.

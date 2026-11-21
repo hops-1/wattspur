@@ -1,6 +1,8 @@
 import ActivityKit
 import AppIntents
 import SwiftUI
+import WattspurCore
+import WattspurSymbols
 import WidgetKit
 
 /// The widget extension of the iPhone app: the Live Activity of a recording (B-223) and the widget
@@ -48,15 +50,22 @@ struct RecordingLiveActivity: Widget {
                 }
                 DynamicIslandExpandedRegion(.bottom) {
                     HStack(spacing: 12) {
-                        ElapsedTime(start: context.attributes.startDate)
-                            .font(.title2.weight(.bold))
-                            .frame(maxWidth: .infinity, alignment: .leading)
-                        PauseButton(isPaused: context.state.isPaused)
-                            .frame(maxWidth: 160)
+                        if context.state.isReady == true {
+                            ReadyText()
+                                .frame(maxWidth: .infinity, alignment: .leading)
+                            CancelReadyButton()
+                                .frame(maxWidth: 160)
+                        } else {
+                            ElapsedTime(start: context.attributes.startDate)
+                                .font(.title2.weight(.bold))
+                                .frame(maxWidth: .infinity, alignment: .leading)
+                            PauseButton(isPaused: context.state.isPaused)
+                                .frame(maxWidth: 160)
+                        }
                     }
                 }
             } compactLeading: {
-                Image(systemName: context.state.isPaused ? "pause.fill" : context.attributes.symbol ?? "bicycle")
+                ActivitySymbol(context: context)
                     .foregroundStyle(Color.track)
             } compactTrailing: {
                 // Little room beside the island: the number large, the unit small.
@@ -72,10 +81,34 @@ struct RecordingLiveActivity: Widget {
                 .lineLimit(1)
                 .minimumScaleFactor(0.6)
             } minimal: {
-                Image(systemName: context.state.isPaused ? "pause.fill" : context.attributes.symbol ?? "bicycle")
+                ActivitySymbol(context: context)
                     .foregroundStyle(Color.track)
             }
             .keylineTint(Color.track)
+        }
+    }
+
+    /// Pause, an hourglass while ready (B-311), else the device's symbol.
+    static func symbol(_ context: ActivityViewContext<RecordingAttributes>) -> String {
+        if context.state.isReady == true { return "hourglass" }
+        return context.state.isPaused ? "pause.fill" : context.attributes.symbol ?? "bicycle"
+    }
+}
+
+/// The device's drawn symbol, as in the app (B-342); Pause or the hourglass instead while
+/// `showsState` and the recording is paused or ready.
+private struct ActivitySymbol: View {
+    let context: ActivityViewContext<RecordingAttributes>
+    var showsState = true
+
+    var body: some View {
+        if showsState, context.state.isReady == true || context.state.isPaused {
+            Image(systemName: RecordingLiveActivity.symbol(context))
+        } else if let kind = BikeKind(rawValue: context.attributes.kind ?? "") {
+            BikeKindIcon(kind: kind, size: 18)
+        } else {
+            // An activity started by a build before 1.6 (40), or a bicycle.
+            Image(systemName: context.attributes.symbol ?? "bicycle")
         }
     }
 }
@@ -86,11 +119,18 @@ private struct LockScreenView: View {
     var body: some View {
         VStack(alignment: .leading, spacing: 10) {
             HStack {
-                Label("Wattspur", systemImage: context.attributes.symbol ?? "bicycle")
+                Label { Text(verbatim: "Wattspur") } icon: { ActivitySymbol(context: context, showsState: false) }
                     .font(.subheadline.weight(.semibold))
                     .foregroundStyle(Color.track)
                 Spacer()
-                if context.state.isPaused {
+                if context.state.isReady == true {
+                    Text("Ready")
+                        .font(.caption.weight(.semibold))
+                        .padding(.horizontal, 8)
+                        .padding(.vertical, 2)
+                        .background(.blue, in: .capsule)
+                        .foregroundStyle(.white)
+                } else if context.state.isPaused {
                     Text("Paused")
                         .font(.caption.weight(.semibold))
                         .padding(.horizontal, 8)
@@ -99,23 +139,29 @@ private struct LockScreenView: View {
                         .foregroundStyle(.white)
                 }
             }
-            HStack(alignment: .bottom) {
-                VStack(alignment: .leading, spacing: 0) {
-                    Text("Time")
-                        .font(.caption)
-                        .foregroundStyle(.secondary)
-                    ElapsedTime(start: context.attributes.startDate)
-                        .font(.title2.weight(.bold))
+            if context.state.isReady == true {
+                // Auto-start (B-311): no time and no figures until the vehicle moves.
+                ReadyText()
+                CancelReadyButton()
+            } else {
+                HStack(alignment: .bottom) {
+                    VStack(alignment: .leading, spacing: 0) {
+                        Text("Time")
+                            .font(.caption)
+                            .foregroundStyle(.secondary)
+                        ElapsedTime(start: context.attributes.startDate)
+                            .font(.title2.weight(.bold))
+                    }
+                    Spacer()
+                    Figure(title: "Distance", value: ActivityFormat.distance(context.state.distance))
+                    Spacer()
+                    Figure(title: "Speed", value: ActivityFormat.speed(context.state.speed))
                 }
-                Spacer()
-                Figure(title: "Distance", value: ActivityFormat.distance(context.state.distance))
-                Spacer()
-                Figure(title: "Speed", value: ActivityFormat.speed(context.state.speed))
+                if let kind = context.attributes.side {
+                    SideRow(kind: kind, lean: context.state.lean)
+                }
+                PauseButton(isPaused: context.state.isPaused)
             }
-            if let kind = context.attributes.side {
-                SideRow(kind: kind, lean: context.state.lean)
-            }
-            PauseButton(isPaused: context.state.isPaused)
         }
         .padding()
     }
@@ -204,6 +250,29 @@ private struct PauseButton: View {
                 .frame(maxWidth: .infinity)
         }
         .tint(isPaused ? .green : .orange)
+        .buttonStyle(.borderedProminent)
+    }
+}
+
+/// What “Ready” means (B-311).
+private struct ReadyText: View {
+    var body: some View {
+        Text("The ride begins when you drive off.")
+            .font(.subheadline)
+            .lineLimit(2)
+            .minimumScaleFactor(0.8)
+    }
+}
+
+/// Ends “Ready” in the app (`CancelReadyIntent`, B-311).
+private struct CancelReadyButton: View {
+    var body: some View {
+        Button(intent: CancelReadyIntent()) {
+            Label("Cancel", systemImage: "xmark")
+                .font(.subheadline.weight(.semibold))
+                .frame(maxWidth: .infinity)
+        }
+        .tint(.gray)
         .buttonStyle(.borderedProminent)
     }
 }

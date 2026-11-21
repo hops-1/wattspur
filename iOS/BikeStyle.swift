@@ -1,19 +1,21 @@
 import SwiftUI
 import WattspurCore
+import WattspurSymbols
 
 /// A bike from the Mac as a small symbol in its colour. The shades are those of the Mac app
 /// (`App/BikeAppearance.swift`); sharing them without AppKit is B-187.
 struct BikeBadge: View {
     var bike: RideExchange.Bike
+    var size: CGFloat = BikeKind.imageSize
 
     var body: some View {
-        Image(systemName: Self.symbol(BikeKind(rawValue: bike.kind) ?? .bike))
-            .font(.footnote.weight(.semibold))
+        (BikeKind(rawValue: bike.kind) ?? .bike).image(size: size)
             .foregroundStyle(color)
             .accessibilityLabel(bike.name)
     }
 
-    /// The SF Symbol of a kind (B-284): a car, a motorcycle, a shoe or a bicycle.
+    /// The SF Symbol closest to a kind (B-284), only where no drawn symbol can go: Siri and
+    /// Shortcuts. Everywhere else the app shows the drawn symbol of the Mac (`BikeKind.image`, B-342).
     nonisolated static func symbol(_ kind: BikeKind) -> String {
         switch kind {
         case .motorcycle: "motorcycle"
@@ -41,6 +43,29 @@ struct BikeBadge: View {
         }
         return Color(UIColor { $0.userInterfaceStyle == .dark ? .hex(dark) : .hex(light) })
     }
+}
+
+extension BikeKind {
+    /// Points; the size of a symbol beside a line of body text.
+    static let imageSize: CGFloat = 22
+
+    /// The kind's drawn symbol, the same as on the Mac (B-342), as a template image: menus,
+    /// pickers and labels show only images, no shapes. Tint it with `foregroundStyle`.
+    @MainActor func image(size: CGFloat = imageSize) -> Image {
+        let key = "\(rawValue)-\(size)"
+        if let image = BikeKindImages.cache[key] { return image }
+        let renderer = ImageRenderer(content: BikeKindIcon(kind: self, size: size).foregroundStyle(.black))
+        renderer.scale = 3
+        let image = renderer.uiImage.map { Image(uiImage: $0.withRenderingMode(.alwaysTemplate)) }
+            ?? Image(systemName: BikeBadge.symbol(self))
+        BikeKindImages.cache[key] = image
+        return image
+    }
+}
+
+/// Each kind is drawn once per size.
+@MainActor private enum BikeKindImages {
+    static var cache: [String: Image] = [:]
 }
 
 private extension UIColor {

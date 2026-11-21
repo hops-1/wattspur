@@ -7,7 +7,13 @@ Every DMG handed out to testers corresponds to one entry below.
 
 ## [Unreleased]
 
+### Added
+- iPhone: **Auto-start** (B-311). Under **More › Recording** auto-start can be switched on, and each device can start with CarPlay or a Bluetooth device (the car's hands-free, a motorcycle headset). A Shortcuts automation "When CarPlay connects → Start Ride" then opens the recording as **Ready** with the device of that connection; the ride begins when you drive off, above 10 km/h. **Cancel** ends "Ready" without a question, also from the Live Activity.
+- iPhone: an auto-started ride **ends and saves by itself** (B-339): when the connection ends (a second automation runs **End Ride**) and/or after standing still for 5, 10 or 20 minutes, chosen under **More › Recording › End**. It is saved with its device and the places at start and end as its name, e.g. "Darmstadt – Frankfurt am Main", and a notification **Ride Saved** opens it. Rides under 500 m are not kept; "Ready" without driving off ends after the time standing still.
+
 ### Changed
+- iPhone and iPad: devices show the same drawn symbols as on the Mac (B-342), a rider on a bicycle, mountain, road, gravel or cargo bike, an e-scooter, a motorcycle or a car, in lists, menus, the kind picker and the Live Activity. The distance tile in the profile shows the distance symbol instead of the road surface's.
+- iPhone: the speed while recording is calmer (B-341). It still updates every second, but shows the mean of the GPS speed over the last 2 seconds, so poor GPS, e.g. in a forest, makes it jump less, closer to a wheel sensor such as Bosch's. Distance, top speed and the saved ride are unchanged.
 - iPhone: the highlights share their PDF from the share symbol at the top right instead of a "Share PDF" button that took a lot of room (wish from Nils' test of 1.5 (37)).
 - iPad: the comparison's buttons no longer wrap letter by letter in a narrow column. Share is a symbol beside **Merge…** next to the title (or below it when there is no room), the switch **Difference from Average** sits above the table it changes, and **Done** is gone (**Cancel** above the list ends the selection) (B-334, from Nils' test of 1.5 (37)).
 - iPad: **Select** and **Cancel** sit beside the first month above the ride list instead of in a row of their own (wish from Nils' test of 1.5 (37)).
