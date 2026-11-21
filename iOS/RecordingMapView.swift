@@ -91,7 +91,7 @@ private struct RecordingMapRepresentable: UIViewRepresentable {
         var mapType: RideMapType?
         var drawingKey: String?
         /// The zoom the rider chose, in metres from the ground, kept while the map turns.
-        private var distance = 1_500.0
+        private var distance = RecordingMapZoom.standardDistance
         private var turned = false
         private var lastTurn: (heading: Double, latitude: Double, longitude: Double)?
 
@@ -99,6 +99,13 @@ private struct RecordingMapRepresentable: UIViewRepresentable {
         /// the position as MapKit does it.
         func turn(_ map: MKMapView, heading: Double?, center: CLLocationCoordinate2D?) {
             guard let heading, let center else {
+                // North up, still showing the whole world (B-363): after a crash the recording goes on
+                // before MapKit's follow mode zooms in, and the map stayed that wide. Zoom to the position.
+                if !turned, let center, RecordingMapZoom.showsTooMuch(map.camera.centerCoordinateDistance) {
+                    map.setCamera(MKMapCamera(lookingAtCenter: center, fromDistance: RecordingMapZoom.standardDistance,
+                                              pitch: 0, heading: 0), animated: false)
+                    map.setUserTrackingMode(.follow, animated: false)
+                }
                 if turned {
                     turned = false
                     lastTurn = nil
@@ -125,7 +132,8 @@ private struct RecordingMapRepresentable: UIViewRepresentable {
         }
 
         func mapView(_ mapView: MKMapView, regionDidChangeAnimated animated: Bool) {
-            distance = mapView.camera.centerCoordinateDistance
+            // The world view of a fresh map is not a zoom the rider chose (B-363).
+            distance = RecordingMapZoom.distance(mapView.camera.centerCoordinateDistance)
         }
 
         func mapView(_ mapView: MKMapView, rendererFor overlay: any MKOverlay) -> MKOverlayRenderer {
