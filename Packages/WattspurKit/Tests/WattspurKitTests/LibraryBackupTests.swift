@@ -438,4 +438,69 @@ struct LibraryBackupTests {
         let left = try FileManager.default.contentsOfDirectory(at: destination, includingPropertiesForKeys: nil).map(\.lastPathComponent)
         #expect(Set(left) == Set(automatic.suffix(3).map(\.lastPathComponent) + [byHand.lastPathComponent, "Holiday photos"]))
     }
+
+    // MARK: - Half-failed moves and copies (S-30)
+
+    /// Locks a file (`uchg`), so moving it fails like a full disk or a file in use would.
+    private func lock(_ url: URL, _ locked: Bool = true) throws {
+        try FileManager.default.setAttributes([.immutable: locked], ofItemAtPath: url.path)
+    }
+
+    private func names(in folder: URL) throws -> Set<String> {
+        Set(try FileManager.default.contentsOfDirectory(atPath: folder.path))
+    }
+
+    @Test("A swap that fails half-way puts the old files back and drops what was moved in")
+    func failedSwapPutsFilesBack() throws {
+        defer { try? FileManager.default.removeItem(at: root) }
+        _ = try fill(storeURL, importing: 1)
+        try LibraryBackup.stageRestore(from: try backup(), storeURL: storeURL)
+        // Without a library file the restore moves the files in (swap). Left-overs of an old library stay beside it.
+        let fm = FileManager.default
+        let support = LibraryBackup.supportFolder(for: storeURL)
+        try fm.removeItem(at: storeURL)
+        for name in ["-wal", "-shm"] { try? fm.removeItem(atPath: storeURL.path + name) }
+        try? fm.removeItem(at: support)
+        let wal = URL(fileURLWithPath: storeURL.path + "-wal")
+        try Data(repeating: 3, count: 512).write(to: wal)
+        try fm.createDirectory(at: support, withIntermediateDirectories: true)
+        try Data([1, 2, 3]).write(to: support.appending(path: "blob"))
+        let parent = storeURL.deletingLastPathComponent()
+        let before = try names(in: parent)
+        // The staged store moves in first, then the staged "-shm" refuses to move.
+        let pending = LibraryBackup.pendingFolder(for: storeURL)
+        let shm = pending.appending(path: "default.store-shm")
+        try Data([9]).write(to: shm)
+        try lock(shm)
+        defer { try? lock(shm, false) }
+
+        #expect(throws: (any Error).self) { try LibraryBackup.applyPendingRestore(storeURL: storeURL) }
+        #expect(try names(in: parent) == before)
+        #expect(!fm.fileExists(atPath: storeURL.path))
+        #expect(try Data(contentsOf: wal) == Data(repeating: 3, count: 512))
+        #expect(try Data(contentsOf: support.appending(path: "blob")) == Data([1, 2, 3]))
+        #expect(LibraryBackup.keptFolders(storeURL: storeURL).isEmpty)
+    }
+
+    @Test("A backup that fails half-way leaves no folder behind")
+    func failedBackupLeavesNothing() throws {
+        defer { try? FileManager.default.removeItem(at: root) }
+        try Data(repeating: 7, count: 4096).write(to: storeURL)
+        let destination = root.appending(path: "Backups")
+        try FileManager.default.createDirectory(at: destination, withIntermediateDirectories: true)
+        #expect(throws: (any Error).self) {
+            try LibraryBackup.create(storeURL: storeURL, in: destination, appVersion: "1", build: "1", rideCount: nil)
+        }
+        #expect(try names(in: destination).isEmpty)
+        #expect(try Data(contentsOf: storeURL) == Data(repeating: 7, count: 4096))
+    }
+
+    @Test("A library copy that fails half-way leaves no library files at the destination")
+    func failedCopyLeavesNothing() throws {
+        defer { try? FileManager.default.removeItem(at: root) }
+        try Data(repeating: 7, count: 4096).write(to: storeURL)
+        let destination = root.appending(path: "Copy").appending(path: "default.store")
+        #expect(throws: (any Error).self) { try LibraryBackup.copyLibrary(from: storeURL, to: destination) }
+        #expect(try names(in: destination.deletingLastPathComponent()).isEmpty)
+    }
 }

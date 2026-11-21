@@ -119,4 +119,106 @@ final class ImportFlowTests {
         #expect(flow.comparisons.isEmpty)
         #expect(try container.mainContext.fetch(FetchDescriptor<Ride>()).count == 1)
     }
+
+    // MARK: - Writes after a choice (S-29)
+
+    private var rideCount: Int {
+        get throws { try container.mainContext.fetch(FetchDescriptor<Ride>()).count }
+    }
+
+    @Test("Keeping both makes the FIT a ride of its own, on the bike of the GPX ride, and counts it")
+    func importAsNew() throws {
+        let cargo = library.makeBike(name: "Lastenrad", kind: .cargo)
+        flow.start([try gpx], library: library) { _, _ in }
+        flow.confirm(try #require(flow.bikeQuestion), bike: cargo, library: library) { _, _ in }
+        flow.report = nil
+        flow.start([try fit], library: library) { _, _ in }
+        let comparison = try #require(flow.comparisons.first)
+        #expect(comparison.kind == .fitForGPX)
+        #expect(comparison.bikeID == cargo.id)
+        _ = flow.takeSummary()
+
+        var recorded: [String] = []
+        var imported: [UUID] = []
+        flow.onImported = { imported += $0 }
+        flow.importAsNew(comparison, library: library) { result, _ in recorded.append(result.fileName) }
+        #expect(flow.comparisons.isEmpty)
+        #expect(try rideCount == 2)
+        let id = try #require(imported.first)
+        #expect(id != comparison.rideID)
+        let ride = try #require(library.ride(withID: id))
+        #expect(ride.sourceFormat == "fit")
+        #expect(ride.bike?.id == cargo.id)
+        #expect(recorded == [comparison.entry.result.fileName])
+        // The GPX ride stays as it was.
+        #expect(library.ride(withID: comparison.rideID)?.sourceFormat == "gpx")
+        let summary = flow.takeSummary()
+        #expect(summary.newRides == 1)
+        #expect(summary.completed == 0)
+        #expect(summary.duplicates == 0)
+    }
+
+    @Test("Updating plain duplicates takes the file's values into the ride that is there")
+    func updatePlainDuplicates() throws {
+        let url = try fit
+        flow.start([url], library: library) { _, _ in }
+        flow.report = nil
+        let ride = try #require(try container.mainContext.fetch(FetchDescriptor<Ride>()).first)
+        ride.timerTime = 1
+        _ = flow.takeSummary()
+
+        flow.start([url], library: library) { _, _ in }
+        #expect(flow.comparisons.isEmpty)
+        let plain = try #require(flow.plainDuplicates)
+        #expect(plain.duplicates.count == 1)
+        flow.updatePlainDuplicates(plain, library: library)
+        #expect(flow.plainDuplicates == nil)
+        #expect(flow.report == nil)
+        #expect(try rideCount == 1)
+        #expect(ride.timerTime == 2916)
+        let summary = flow.takeSummary()
+        #expect(summary.completed == 1)
+        // Updated, so not counted as a duplicate left out.
+        #expect(summary.duplicates == 0)
+        #expect(summary.failedFileNames.isEmpty)
+    }
+
+    @Test("A duplicate whose file broke before the update is reported as failed, the ride stays")
+    func updatePlainDuplicatesFails() throws {
+        let url = try fit
+        flow.start([url], library: library) { _, _ in }
+        flow.report = nil
+        let ride = try #require(try container.mainContext.fetch(FetchDescriptor<Ride>()).first)
+        flow.start([url], library: library) { _, _ in }
+        let plain = try #require(flow.plainDuplicates)
+        _ = flow.takeSummary()
+        try Data(repeating: 7, count: 64).write(to: url)
+
+        flow.updatePlainDuplicates(plain, library: library)
+        let name = url.lastPathComponent
+        #expect(flow.report?.failedUpdates == [name])
+        #expect(flow.takeSummary().failedFileNames == [name])
+        #expect(try rideCount == 1)
+        #expect(ride.timerTime == 2916)
+    }
+
+    @Test("A comparison whose file broke before the update ends in the report as failed (failedUpdates)")
+    func updateComparisonFails() throws {
+        flow.start([try gpx], library: library) { _, _ in }
+        flow.report = nil
+        let url = try fit
+        flow.start([url], library: library) { _, _ in }
+        let comparison = try #require(flow.comparisons.first)
+        _ = flow.takeSummary()
+        try Data(repeating: 7, count: 64).write(to: url)
+
+        flow.update(comparison, library: library)
+        #expect(flow.comparisons.isEmpty)
+        let name = comparison.entry.result.fileName
+        #expect(flow.report?.failedUpdates == [name])
+        let summary = flow.takeSummary()
+        #expect(summary.failedFileNames == [name])
+        #expect(summary.completed == 0)
+        #expect(library.ride(withID: comparison.rideID)?.sourceFormat == "gpx")
+    }
 }
