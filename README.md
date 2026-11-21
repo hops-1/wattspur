@@ -10,7 +10,7 @@ Auswerte-App für Fahrten mit dem eBike, Rad, Auto und Motorrad, für Mac, iPhon
 - **iPhone und iPad:** Aufnahme mit Karte, Live-Aktivität und Siri, Auto-Start im Auto über eine Kurzbefehl-Automation, Übersicht mit Highlights, Karte aller Fahrten; am iPad dazu Analyse, Highlights und Vergleich wie am Mac. Sync mit dem Mac über das eigene iCloud-Konto.
 
 ## Download
-**iPhone und iPad:** ab iOS 26, über TestFlight; Version 1.5 ist die Version für den App Store. Neue Versionen kommen zuerst in TestFlight.
+**iPhone und iPad:** ab iOS 26, zurzeit über TestFlight. Im App Store ist Wattspur noch nicht; 1.5 soll die erste Version dort werden.
 
 **Mac:** die neueste Version als DMG unter [Releases](https://github.com/hops-1/wattspur/releases/latest), für macOS 26 oder neuer. Ab v1.8.3 ist die App mit Developer ID signiert und von Apple notarisiert und öffnet ohne Rückfrage. Bei Versionen bis v1.8.2 (nicht notarisiert) meldet macOS beim ersten Öffnen, dass die App nicht überprüft werden konnte. Dann unter Systemeinstellungen › Datenschutz & Sicherheit „Dennoch öffnen“ wählen, das ist nur einmal nötig. Schritt für Schritt steht es in „Read Me First.txt“ in der DMG und im [Handbuch](docs/user-guide/README.md).
 
@@ -56,7 +56,7 @@ Falls `xcode-select` noch auf die Command Line Tools zeigt: Befehlen `DEVELOPER_
 ## Status
 **Mac: v1.10.2** (19.11.2026): Analyse, Highlights und Vergleich rechnen mit derselben Logik wie das iPad; E-Scooter, Fahrzeugfarben Schwarz, Silber und Weiß. Davor: v1.10 (Umschalter Rad · Fahrzeuge in der Seitenleiste), v1.9 (Sportarten: Autos und Motorräder als Geräte, Querbeschleunigung), v1.8.x (Kartenstile, Sync mit dem iPhone über iCloud, erste notarisierte Version, Sichern und Teilen), v1.0 bis v1.7 (Import, Auswertung, Highlights, Karte aller Fahrten, ähnliche Strecken).
 
-**iPhone und iPad: 1.5** (Highlights am iPhone, Trennen, PDF, Herkunftsfilter) ist die Version für den App Store; **1.6 „Im Auto“** ist in TestFlight: Auto-Start über CarPlay oder Bluetooth, Siri mit Gerät, ruhigeres Tempo bei der Aufnahme, dieselben Gerätesymbole wie am Mac. CarPlay selbst wartet auf die Freigabe durch Apple.
+**iPhone und iPad: 1.5** (Highlights am iPhone, Trennen, PDF, Herkunftsfilter) soll die erste Version im App Store werden; **1.6 „Im Auto“** ist in TestFlight: Auto-Start über CarPlay oder Bluetooth, Siri mit Gerät, ruhigeres Tempo bei der Aufnahme, dieselben Gerätesymbole wie am Mac. CarPlay selbst wartet auf die Freigabe durch Apple.
 
 **Als Nächstes:** Mac 1.10.3 und iPhone/iPad 1.6.2 mit den Funden aus dem Review zu Architektur und Sicherheit ([Bericht](docs/REVIEW-1.6.2.md)); die Fixes sind schon in `main`. Danach CarPlay. Details im [Changelog](CHANGELOG.md) und im [Backlog](docs/BACKLOG.md), Lern-Notizen in [docs/learning](docs/learning/README.md).
 
