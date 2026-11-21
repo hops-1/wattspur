@@ -45,6 +45,12 @@ if grep -rnE '\b(NS|UI)(Color|Image|Appearance|BezierPath|EdgeInsets|View|Event|
     echo "architecture: WattspurMap must not use AppKit or UIKit types (see docs/ARCHITECTURE.md)" >&2
     exit 1
 fi
+# The drawn symbols (B-342): SwiftUI shapes only, so the iPhone, the Mac and the widgets all use them.
+SYMBOLS="Packages/WattspurKit/Sources/WattspurSymbols"
+if grep -rnE "$(import_of 'AppKit|UIKit|SwiftData|MapKit|Charts')" "$SYMBOLS"; then
+    echo "architecture: WattspurSymbols must hold SwiftUI shapes only, no AppKit, UIKit, SwiftData or MapKit (see docs/ARCHITECTURE.md)" >&2
+    exit 1
+fi
 # Rule 8: no texts for the user in the package; each app words them and keeps the translations (R-48).
 if grep -rnE 'String\(localized|LocalizedStringKey|LocalizedStringResource' Packages/WattspurKit/Sources; then
     echo "architecture: the package must not hold texts for the user; word them in the app (see docs/ARCHITECTURE.md, rule 8)" >&2

@@ -388,7 +388,7 @@ struct StartRideButton: View {
             .controlSize(.extraLarge)
             Button { choosing = true } label: {
                 HStack(spacing: 4) {
-                    Image(systemName: device.symbol)
+                    device.kind.image(size: 16)
                     Text("with \(device.name(in: library.state?.bikes ?? []))")
                     Image(systemName: "chevron.down").font(.caption2.weight(.semibold))
                 }
@@ -437,7 +437,7 @@ struct DeviceChoiceSheet: View {
                 Section {
                     ForEach(RecordingDevice.vehicleTypes, id: \.self) { kind in
                         row(.without(kind)) {
-                            Label { Text(kind.label) } icon: { Image(systemName: BikeBadge.symbol(kind)) }
+                            Label { Text(kind.label) } icon: { kind.image() }
                         }
                     }
                 } header: {

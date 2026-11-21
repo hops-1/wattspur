@@ -37,7 +37,7 @@ struct AutoStartPage: View {
                             Label {
                                 Text(verbatim: device.name)
                             } icon: {
-                                Image(systemName: BikeBadge.symbol(BikeKind(rawValue: device.kind) ?? .bike))
+                                (BikeKind(rawValue: device.kind) ?? .bike).image()
                             }
                         }
                     }

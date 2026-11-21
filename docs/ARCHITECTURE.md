@@ -12,6 +12,8 @@ PDF, Ordner, Sync      Aufnahme, Kurzbefehle     Widget „Diese Woche“
   │       ▼              │        └── iOSShared ────┤  ActivityKit, App Intents, App Group
   │   WattspurMap (MapKit, ohne AppKit/UIKit/SwiftUI): Kacheln, Route und Farben,
   │   Karte aller Fahrten, Marker und Cursor; nutzt nur WattspurCore
+  │   WattspurSymbols (nur SwiftUI-Formen): die gezeichneten Symbole der Gerätearten,
+  │   für Mac, iPhone und Widgets; nutzt nur WattspurCore
   ▼                      ▼                          ▼
 WattspurKit (Store)                              WattspurCore allein
 SwiftData-Modelle, RideLibrary und ihre Dienste, (kein SwiftData)
@@ -22,7 +24,7 @@ WattspurCore (rein)
 FIT und GPX, Werttypen, Analysen, Aufnahme-Rechnung, Austauschformat
 ```
 
-Pfeile zeigen die erlaubte Richtung der Abhängigkeit; zurück darf es nie gehen. `WattspurMap` nutzen beide Apps; am iPhone die Detailkarte, die Kachel „Letzte Fahrt“ und die Aufnahme-Karte (B-226).
+Pfeile zeigen die erlaubte Richtung der Abhängigkeit; zurück darf es nie gehen. `WattspurMap` nutzen beide Apps; am iPhone die Detailkarte, die Kachel „Letzte Fahrt“ und die Aufnahme-Karte (B-226). `WattspurSymbols` nutzen beide Apps und die Widgets, damit jede Geräteart überall gleich aussieht (B-342).
 
 **Größe (8.11.2026):** Mac-App 15 300 Zeilen in 80 Dateien, iPhone-App 4 600 in 30, Widgets und `iOSShared` 440, `WattspurCore` 8 400 in 61, `WattspurKit` 4 300 in 31, Tests 10 900 in 76 (653 Tests).
 
@@ -42,6 +44,7 @@ Die Regeln mit ✓ prüft `scripts/check-architecture.sh` (lokal in `scripts/ci-
 10. ✓ **Gespeichert wird über `LibrarySave.save(_:)`.** Es meldet einen Fehler (`LibrarySave.failedNotification`), und beide Apps zeigen ihn (`SaveFailureAlert.swift`, `.reportsSaveFailures()`). Ein `try? context.save()` würde den Fehler verschlucken (R-31).
 11. **Versionen stehen an einer Stelle:** Mac in `Config/Mac.xcconfig`, iPhone und Widget gemeinsam in `Config/iOS.xcconfig` (`MARKETING_VERSION`, `CURRENT_PROJECT_VERSION`). `scripts/build-dmg.sh` liest die Mac-Version von dort und baut nur aus einem sauberen Stand (R-04, R-12).
 12. ✓ **`WattspurMap` kennt weder AppKit noch UIKit, SwiftUI oder SwiftData** (B-186), auch keine Typen wie `NSColor` oder `UIImage`. Es rechnet und zeichnet mit MapKit und Core Graphics. Farben des Systems (Akzent, Grau, Vergleichsfarben) löst die App für hell oder dunkel auf und gibt sie als `CGColor` hinein (`RouteColors`); die übrigen Kartenfarben stehen als Hex-Werte in `MapPalette`, und die Legenden der App bauen ihre Farben daraus. Bilder (Marker, Cursor) liefert das Modul als `CGImage`; die App verpackt sie in ihren Bildtyp. Was nur eine Plattform kann, bleibt in der App: die `…Representable`-Hülle, Maus und Klick (`TrackingMapView`, `NSClickGestureRecognizer`), Tooltips, der Rand beim Einpassen (`NSEdgeInsets`) und die Quellenangabe als Text.
+13. ✓ **`WattspurSymbols` enthält nur SwiftUI-Formen** (B-342): kein AppKit, UIKit, SwiftData oder MapKit, keine Texte. Am iPhone macht `BikeKind.image(size:)` daraus ein Vorlagenbild, weil Menüs und Picker nur Bilder zeigen.
 
 ## Datenfluss
 

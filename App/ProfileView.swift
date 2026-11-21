@@ -2,6 +2,7 @@ import SwiftData
 import SwiftUI
 import UniformTypeIdentifiers
 import WattspurKit
+import WattspurSymbols
 import os
 
 /// Steps of adding a vehicle, in the system log (B-331: on one Mac "Add Vehicle" opened nothing).

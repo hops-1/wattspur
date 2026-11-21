@@ -61,3 +61,13 @@ Ab 1.6 (40).
 2. Dasselbe im Wald: Das Tempo springt weniger als in 1.6 (39), es kommt aber weiter jede Sekunde neu.
 3. Anhalten: Nach etwa 2 s steht 0.
 4. Ist es noch zu unruhig oder zu träge? Kurz notieren, dann passe ich die 2 s an.
+
+## H. Gerätesymbole wie am Mac (B-342)
+
+Braucht einen Build nach 1.6 (40).
+
+1. iPad, **Profil**: Die Geräte zeigen dieselben Symbole wie am Mac (Fahrer auf dem Rad, Lastenrad mit Kiste, Auto, Motorrad).
+2. Ein Gerät **Bearbeiten**: Der Picker **Art** zeigt beim Lastenrad dasselbe Symbol wie am Mac, ebenso die Liste beim Aufklappen.
+3. **Gerät hinzufügen**: Das Menü zeigt die gezeichneten Symbole.
+4. Am iPhone eine Aufnahme starten: Der Knopf „mit …“ und der Sperrbildschirm zeigen das Symbol des Geräts.
+5. Profil: Die Kachel **Strecke** zeigt das Streckensymbol, nicht den Straßenbelag.

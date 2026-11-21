@@ -34,6 +34,9 @@ targets:
       # The maps, shared with the iPhone from 0.6 on (B-186).
       - package: WattspurKit
         product: WattspurMap
+      # The drawn symbols of the device kinds, the same on the iPhone (B-342).
+      - package: WattspurKit
+        product: WattspurSymbols
     configFiles:
       Debug: Config/Mac.xcconfig
       Release: Config/Mac.xcconfig
@@ -89,6 +92,9 @@ targets:
       # The maps, the same as on the Mac (B-186, B-226).
       - package: WattspurKit
         product: WattspurMap
+      # The drawn symbols of the device kinds, the same as on the Mac (B-342).
+      - package: WattspurKit
+        product: WattspurSymbols
       # Embedded in the app: Live Activity of a recording (B-223) and the widget “This Week” (B-224).
       - target: Wattspur Widgets
       # Embedded in the app: “Share to Wattspur” from Flow, komoot and other trackers (B-301).
@@ -145,6 +151,9 @@ targets:
       # The week math of the widget (B-224, `WeekSnapshot`); no SwiftData in the extension.
       - package: WattspurKit
         product: WattspurCore
+      # The device's symbol in the Live Activity, as in the app (B-342).
+      - package: WattspurKit
+        product: WattspurSymbols
     configFiles:
       Debug: Config/iOS.xcconfig
       Release: Config/iOS.xcconfig

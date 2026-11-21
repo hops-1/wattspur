@@ -2,6 +2,7 @@ import PhotosUI
 import SwiftUI
 import UniformTypeIdentifiers
 import WattspurCore
+import WattspurSymbols
 import WattspurKit
 import WattspurMap
 
@@ -85,7 +86,7 @@ private struct ProfilePage: View {
             Section {
                 Menu {
                     ForEach(BikeKind.selectable, id: \.self) { kind in
-                        Button { adding = kind } label: { Label(kind.label, systemImage: BikeBadge.symbol(kind)) }
+                        Button { adding = kind } label: { Label { Text(kind.label) } icon: { kind.image() } }
                     }
                 } label: {
                     Label("Add Device", systemImage: "plus.circle")
@@ -187,7 +188,7 @@ private struct SportTotalsGrid: View {
 
     var body: some View {
         LazyVGrid(columns: [GridItem(.flexible(), spacing: 8), GridItem(.flexible(), spacing: 8)], spacing: 8) {
-            tile("Distance", RideFormat.distance(totals.distance), "road.lanes")
+            tile("Distance", RideFormat.distance(totals.distance), "point.topleft.down.to.point.bottomright.curvepath")
             tile("Rides", totals.rides.formatted(), "number")
             tile("Ride Time", RideFormat.duration(totals.rideTime), "clock")
             tile("Longest Ride", totals.longest.map { RideFormat.distance($0.value) } ?? "–", "arrow.left.and.right")
@@ -364,7 +365,7 @@ private struct DeviceEditor: View {
                 Section {
                     Picker("Kind", selection: $draft.kind) {
                         ForEach(kinds, id: \.self) { kind in
-                            Label(kind.label, systemImage: BikeBadge.symbol(kind)).tag(kind)
+                            Label { Text(kind.label) } icon: { kind.image() }.tag(kind)
                         }
                     }
                     if draft.kind.sport == .cycling {
@@ -460,8 +461,7 @@ private struct DevicePhoto: View {
             if let photoData, let image = UIImage(data: photoData) {
                 Image(uiImage: image).resizable().scaledToFill()
             } else {
-                Image(systemName: BikeBadge.symbol(kind))
-                    .font(.system(size: 40, weight: .semibold))
+                BikeKindIcon(kind: kind, size: 52)
                     .foregroundStyle(BikeBadge.color(color))
                     .frame(maxWidth: .infinity, maxHeight: .infinity)
                     .background(.quaternary)

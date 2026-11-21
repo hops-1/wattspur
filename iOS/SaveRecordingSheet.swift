@@ -37,7 +37,7 @@ struct SaveRecordingSheet: View {
                                 Label { Text(bike.name) } icon: { BikeBadge(bike: bike) }
                                     .tag(Optional(choice))
                             } else {
-                                Label { Text("\(choice.kind.localizedName) (vehicle type only)") } icon: { Image(systemName: choice.symbol) }
+                                Label { Text("\(choice.kind.localizedName) (vehicle type only)") } icon: { choice.kind.image() }
                                     .tag(Optional(choice))
                             }
                         }
