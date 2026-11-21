@@ -74,26 +74,74 @@ private struct RecordingMapRepresentable: UIViewRepresentable {
             coordinator.mapType = mapType
             map.show(mapType)
         }
-        // The track grows with every fix: drawn again when a point, the colouring or the appearance changes.
-        let drawingKey = "\(segments.map(\.count))|\(colouring.key)|\(dark)"
-        if coordinator.drawingKey != drawingKey {
-            coordinator.drawingKey = drawingKey
-            map.removeOverlays(map.drawnOverlays)
-            if segments.contains(where: { $0.count > 1 }) {
-                map.addOverlay(RideRouteOverlay(segments: segments, colouring: colouring, dark: dark, colors: .phone(dark: dark)),
-                               level: map.drawnOverlayLevel)
-            }
-        }
+        coordinator.draw(map, segments: segments, colouring: colouring, dark: dark)
         coordinator.turn(map, heading: heading, center: center)
     }
 
     final class Coordinator: NSObject, MKMapViewDelegate {
         var mapType: RideMapType?
         var drawingKey: String?
+        /// The track in pieces (B-365), by segment and first point, with the last point each was drawn
+        /// to: the last point of the track may still move (`RideRecording.route` keeps it in any case).
+        private var pieces: [String: (end: Int, last: CLLocationCoordinate2D?, overlay: RideRouteOverlay)] = [:]
+        private var style: String?
+        private var lastDraw = Date.distantPast
         /// The zoom the rider chose, in metres from the ground, kept while the map turns.
         private var distance = RecordingMapZoom.standardDistance
         private var turned = false
         private var lastTurn: (heading: Double, latitude: Double, longitude: Double)?
+
+        /// The track grows with every fix. Plain, only its last piece is drawn again, so MapKit keeps
+        /// the tiles of the rest (B-365); coloured by height the colours come from the whole ride, so
+        /// it is drawn as one line, at most every few seconds. Hidden or hot, the map waits.
+        func draw(_ map: MKMapView, segments: [[CLLocationCoordinate2D]], colouring: RouteColouring, dark: Bool) {
+            guard UIApplication.shared.applicationState == .active else { return }
+            let key = "\(segments.map(\.count))|\(colouring.key)|\(dark)"
+            guard key != drawingKey else { return }
+            let plain = if case .plain = colouring { true } else { false }
+            let style = "\(plain)|\(dark)"
+            let restyled = style != self.style
+            let interval = RecordingMapPace.interval(thermal: ProcessInfo.processInfo.thermalState, plain: plain)
+            guard restyled || Date.now.timeIntervalSince(lastDraw) >= interval else { return }
+            drawingKey = key
+            lastDraw = .now
+            if restyled {
+                self.style = style
+                map.removeOverlays(pieces.values.map(\.overlay))
+                pieces = [:]
+            }
+            let colors = RouteColors.phone(dark: dark)
+            guard plain else {
+                let old = pieces.values.map(\.overlay)
+                pieces = [:]
+                if segments.contains(where: { $0.count > 1 }) {
+                    let overlay = RideRouteOverlay(segments: segments, colouring: colouring, dark: dark, colors: colors)
+                    map.addOverlay(overlay, level: map.drawnOverlayLevel)
+                    pieces["all"] = (0, nil, overlay)
+                }
+                map.removeOverlays(old)
+                return
+            }
+            var wanted = Set<String>()
+            for (index, segment) in segments.enumerated() {
+                for range in RecordingTrackChunks.ranges(count: segment.count) where range.count > 1 {
+                    let id = "\(index)|\(range.lowerBound)"
+                    wanted.insert(id)
+                    let last = segment[range.upperBound - 1]
+                    if let drawn = pieces[id], drawn.end == range.upperBound, drawn.last?.latitude == last.latitude,
+                       drawn.last?.longitude == last.longitude { continue }
+                    if let old = pieces[id] { map.removeOverlay(old.overlay) }
+                    let overlay = RideRouteOverlay(segments: [Array(segment[range])], colouring: .plain, dark: dark,
+                                                   colors: colors, flatEnds: true)
+                    map.addOverlay(overlay, level: map.drawnOverlayLevel)
+                    pieces[id] = (range.upperBound, last, overlay)
+                }
+            }
+            for (id, piece) in pieces where !wanted.contains(id) {
+                map.removeOverlay(piece.overlay)
+                pieces[id] = nil
+            }
+        }
 
         /// Direction of travel up: centre on the position and turn to `heading`. North up again: follow
         /// the position as MapKit does it.
