@@ -43,6 +43,17 @@ case "$DISTRIBUTION" in
     *) echo "error: WATTSPUR_MAC_DISTRIBUTION = '$DISTRIBUTION' in Config/Local.xcconfig; use developer-id or remove the line." >&2; exit 1 ;;
 esac
 
+# The team ID is no secret (it is in every signed app), but it does not belong in logs that sessions
+# keep (S-51): the messages say "the team in Config/Local.xcconfig", and hide_team shortens it in the
+# output of codesign, spctl and notarytool, as the team ID or as "(ABCDE12345)" in a certificate name.
+hide_team() {
+    if [ -n "$TEAM" ]; then
+        sed -E -e "s/${TEAM}/…/g" -e 's/(TeamIdentifier=).*/\1…/' -e 's/\([A-Z0-9]{10}\)/(…)/g'
+    else
+        sed -E -e 's/(TeamIdentifier=).*/\1…/' -e 's/\([A-Z0-9]{10}\)/(…)/g'
+    fi
+}
+
 # The Developer ID certificate of the team in the keychain, e.g. "Developer ID Application: Name (ABCDE12345)".
 developer_id_identity() {
     security find-identity -v -p codesigning 2>/dev/null \
@@ -55,7 +66,7 @@ check_developer_id() {
     if [ -z "$TEAM" ]; then
         echo "  missing: DEVELOPMENT_TEAM in Config/Local.xcconfig" >&2; missing=1
     elif [ -z "$(developer_id_identity)" ]; then
-        echo "  missing: certificate “Developer ID Application: … (${TEAM})” in the keychain (Xcode › Settings › Accounts › Manage Certificates)" >&2; missing=1
+        echo "  missing: certificate “Developer ID Application: …” of the team in Config/Local.xcconfig in the keychain (Xcode › Settings › Accounts › Manage Certificates)" >&2; missing=1
     fi
     if [ -z "$NOTARY_PROFILE" ]; then
         echo "  missing: WATTSPUR_NOTARY_PROFILE in Config/Local.xcconfig" >&2; missing=1
@@ -71,7 +82,7 @@ check_developer_id() {
 if [ "$MODE" = adhoc ]; then
     echo "==> Signing: ad hoc, not notarized (no WATTSPUR_MAC_DISTRIBUTION in Config/Local.xcconfig)"
 else
-    echo "==> Signing: Developer ID for team $TEAM, notarized with profile “${NOTARY_PROFILE}”"
+    echo "==> Signing: Developer ID for the team in Config/Local.xcconfig, notarized with profile “${NOTARY_PROFILE}”"
     if ! check_developer_id; then
         echo "error: the Developer ID way is not ready (see above). Remove WATTSPUR_MAC_DISTRIBUTION for an ad-hoc DMG." >&2
         exit 1
@@ -156,7 +167,7 @@ fi
 
 echo "==> Checking the signature"
 codesign --verify --deep --strict "$APP"
-codesign --display --verbose=2 "$APP" 2>&1 | grep -E '^(Identifier|Authority|Signature|Runtime|TeamIdentifier)' || true
+codesign --display --verbose=2 "$APP" 2>&1 | grep -E '^(Identifier|Authority|Signature|Runtime|TeamIdentifier)' | hide_team || true
 if [ "$MODE" = developer-id ]; then
     # Apple rejects notarization without Hardened Runtime and a secure timestamp; better to fail here.
     SIGNINFO="$(codesign --display --verbose=4 "$APP" 2>&1)"
@@ -172,7 +183,7 @@ notarize() {
     echo "==> Notarizing $(basename "$file") (takes a few minutes)"
     if ! xcrun notarytool submit "$file" --keychain-profile "$NOTARY_PROFILE" --wait --output-format json \
             > "$WORK/notary.json"; then
-        cat "$WORK/notary.json" >&2
+        hide_team < "$WORK/notary.json" >&2
         exit 1
     fi
     local id status
@@ -180,7 +191,7 @@ notarize() {
     status="$(sed -n 's/.*"status" *: *"\([^"]*\)".*/\1/p' "$WORK/notary.json" | head -1)"
     if [ "$status" != "Accepted" ]; then
         echo "error: notarization $status. Apple's log:" >&2
-        xcrun notarytool log "$id" --keychain-profile "$NOTARY_PROFILE" >&2 || true
+        xcrun notarytool log "$id" --keychain-profile "$NOTARY_PROFILE" 2>&1 | hide_team >&2 || true
         exit 1
     fi
     xcrun stapler staple "$staple"
@@ -190,7 +201,7 @@ notarize() {
 if [ "$MODE" = developer-id ]; then
     ditto -c -k --keepParent "$APP" "$WORK/Wattspur.zip"
     notarize "$WORK/Wattspur.zip" "$APP"
-    spctl --assess --type execute --verbose=2 "$APP"
+    spctl --assess --type execute --verbose=2 "$APP" 2>&1 | hide_team
 fi
 
 echo "==> Building the disk image"
@@ -208,7 +219,7 @@ hdiutil create -quiet -volname "Wattspur $VERSION" -srcfolder "$WORK/stage" \
 if [ "$MODE" = developer-id ]; then
     codesign --sign "$(developer_id_identity)" --timestamp "$DIST/$NAME.dmg"
     notarize "$DIST/$NAME.dmg" "$DIST/$NAME.dmg"
-    spctl --assess --type open --context context:primary-signature --verbose=2 "$DIST/$NAME.dmg"
+    spctl --assess --type open --context context:primary-signature --verbose=2 "$DIST/$NAME.dmg" 2>&1 | hide_team
 fi
 
 # Only the file name in the checksum file: it is published, and `shasum -c` works next to the DMG.

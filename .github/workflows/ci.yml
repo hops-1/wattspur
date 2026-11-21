@@ -5,6 +5,10 @@ on:
     branches: [main]
   pull_request:
 
+# The CI only reads the repository; the token gets no write rights, whatever the repo default is (S-54).
+permissions:
+  contents: read
+
 concurrency:
   group: ci-${{ github.ref }}
   cancel-in-progress: true
