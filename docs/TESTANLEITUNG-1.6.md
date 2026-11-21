@@ -8,7 +8,7 @@ Bitte nur fahren, wenn es passt, und nichts während der Fahrt am iPhone einstel
 
 ## 0. Vorher
 
-- Am iPhone **1.6 (40)** aus TestFlight (ab 1.6 (39) für A–F, ab 1.6 (40) für G).
+- Am iPhone **1.6 (41)** aus TestFlight (ab 1.6 (39) für A–F, ab 1.6 (40) für G, ab 1.6 (41) für H).
 - Ein Auto mit CarPlay (z. B. Nugget) und, wenn möglich, das Motorrad mit Headset.
 
 ## A. Einstellen (B-311, B-339)
@@ -64,7 +64,7 @@ Ab 1.6 (40).
 
 ## H. Gerätesymbole wie am Mac (B-342)
 
-Braucht einen Build nach 1.6 (40).
+Ab 1.6 (41).
 
 1. iPad, **Profil**: Die Geräte zeigen dieselben Symbole wie am Mac (Fahrer auf dem Rad, Lastenrad mit Kiste, Auto, Motorrad).
 2. Ein Gerät **Bearbeiten**: Der Picker **Art** zeigt beim Lastenrad dasselbe Symbol wie am Mac, ebenso die Liste beim Aufklappen.
