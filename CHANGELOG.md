@@ -7,6 +7,22 @@ Every DMG handed out to testers corresponds to one entry below.
 
 ## [Unreleased]
 
+## [iOS 1.6.3] – 2026-11-22
+
+Shared texts: the iPad and the iPhone show the analysis, the comparison, the highlights and the PDFs in the same words and formats as the Mac. No new functions. iPhone and iPad 1.6.3 (44); with the Mac 1.10.4. CarPlay (1.6.1) still waits for Apple.
+
+### Changed
+- iPad: the comparison shows times with seconds, as on the Mac, e.g. "00:48:36" instead of "0:48" (B-355). The values stay on one line in a narrow column. Lists and the recording keep the short "0:49".
+- iPhone and iPad: the last line of every PDF (ride, comparison, highlights) is the Mac's, with the time and "Calories and CO₂ are estimates." (B-355).
+- iPhone and iPad: the texts and formats of the analysis, the comparison, the highlights, the message when the library cannot be saved and the import report come from one place shared with the Mac, so they can no longer drift apart (B-355).
+
+## [1.10.4] – 2026-11-22
+
+Shared texts with iPhone and iPad 1.6.3. No visible change on the Mac.
+
+### Changed
+- The texts and formats of the analysis, the comparison, the highlights, the message when the library cannot be saved, the import report and the last line of the PDFs are shared with the iPhone and iPad app (B-355). The Mac looks as before.
+
 ## [iOS 1.6.2] – 2026-11-21
 
 Review of architecture and security: small, safe fixes and no new functions, with the fix for a crash after saving a ride in 1.6. iPhone and iPad 1.6.2 (43); with the Mac 1.10.3. CarPlay (1.6.1) follows once Apple approves it.
