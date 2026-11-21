@@ -7,8 +7,44 @@ Every DMG handed out to testers corresponds to one entry below.
 
 ## [Unreleased]
 
+## [iOS 1.6.2]
+
+Review of architecture and security: small, safe fixes and no new functions, with the fix for a crash after saving a ride in 1.6. iPhone and iPad 1.6.2 (43); with the Mac 1.10.3. CarPlay (1.6.1) follows once Apple approves it.
+
 ### Added
-- Mac: **Sponsor** in **About Wattspur** opens Buy Me a Coffee, to help with the costs of developing Wattspur (B-362). iPhone and iPad: **More › About** links to **Wattspur on GitHub**. The GitHub page shows a **Sponsor** button for GitHub Sponsors and Buy Me a Coffee.
+- iPhone and iPad: **More › About** links to **Wattspur on GitHub**, where a **Sponsor** button leads to GitHub Sponsors and Buy Me a Coffee (B-362).
+
+### Fixed
+- iPhone: iOS no longer ends the app right after a ride is saved (B-366). The library is shared with the widget; when the app went to the background while it was still writing, iOS ended it (`0xdead10cc`, nothing was lost). Saving, renaming, merging, splitting and the trash now ask iOS for a few seconds to finish.
+- iPhone and iPad: the PDF of a ride and of the comparison no longer draws a line across a gap in the track, e.g. a train ride without recording, as on the Mac (S-15).
+- iPhone and iPad: distances are always shown in km, as on the Mac and everywhere else in the app (S-16).
+- A Bosch ride that is split onto several recordings goes to the **trash** instead of being deleted for good; a name changed by hand stays (S-37). When two Bosch parts overlap (the same tour exported twice), nothing is joined any more (S-34).
+- iPhone: a file that crashes the app while it is read is not read again at every start; it goes to **Fehler** in the Files app's Wattspur folder (S-39). FIT files over 50 MB and GPX files over 100 MB or 1 million points are refused as unreadable instead of using up the memory (S-38, S-40); long names in a GPX are shortened to 200 characters (S-41).
+- iPhone and iPad: the diagnostics report says "iOS" instead of "macOS" (S-53).
+
+### Changed
+- The privacy policy names the place search at Apple: the Mac sends a ride's start for its time zone, the iPhone the start and end of an auto-ended ride for its name (S-47). The line about fetching from the Bosch portal is gone; that function does not exist (S-48).
+
+## [1.10.3]
+
+Review of architecture and security: small, safe fixes and no new functions. With iPhone and iPad 1.6.2.
+
+### Added
+- **Sponsor** in **About Wattspur** opens Buy Me a Coffee, to help with the costs of developing Wattspur (B-362). The GitHub page shows a **Sponsor** button for GitHub Sponsors and Buy Me a Coffee. iPhone and iPad: **More › About** links to **Wattspur on GitHub**. The GitHub page shows a **Sponsor** button for GitHub Sponsors and Buy Me a Coffee.
+
+### Fixed
+- A Bosch ride that is split onto several recordings from the iPhone goes to the **trash** instead of being deleted for good; a name changed by hand stays (S-37). When two Bosch parts overlap, nothing is joined any more (S-34).
+- FIT files over 50 MB and GPX files over 100 MB or 1 million points are refused as unreadable instead of using up the memory (S-38, S-40); long names in a GPX are shortened to 200 characters (S-41).
+
+### Changed
+- **Help › Create Diagnostics…** says that the import log contains file names, which can contain places or tour names (S-52).
+- The privacy policy names the place search at Apple for a ride's time zone (S-47).
+
+## [iOS 1.6]
+
+In the car: auto-start and auto-end with a Shortcuts automation, a calmer speed and the device symbols of the Mac. Handed out on TestFlight only, as 1.6 (39) to (42); without CarPlay, which waits for Apple. The Mac stayed at 1.10.2.
+
+### Added
 - iPhone: **Auto-start** (B-311). Under **More › Recording** auto-start can be switched on, and each device can start with CarPlay or a Bluetooth device (the car's hands-free, a motorcycle headset). A Shortcuts automation "When CarPlay connects → Start Ride" then opens the recording as **Ready** with the device of that connection; the ride begins when you drive off, above 10 km/h. **Cancel** ends "Ready" without a question, also from the Live Activity.
 - iPhone: an auto-started ride **ends and saves by itself** (B-339): when the connection ends (a second automation runs **End Ride**) and/or after standing still for 5, 10 or 20 minutes, chosen under **More › Recording › End**. It is saved with its device and the places at start and end as its name, e.g. "Darmstadt – Frankfurt am Main", and a notification **Ride Saved** opens it. Rides under 500 m are not kept; "Ready" without driving off ends after the time standing still.
 
@@ -18,6 +54,10 @@ Every DMG handed out to testers corresponds to one entry below.
 - iPhone: the highlights share their PDF from the share symbol at the top right instead of a "Share PDF" button that took a lot of room (wish from Nils' test of 1.5 (37)).
 - iPad: the comparison's buttons no longer wrap letter by letter in a narrow column. Share is a symbol beside **Merge…** next to the title (or below it when there is no room), the switch **Difference from Average** sits above the table it changes, and **Done** is gone (**Cancel** above the list ends the selection) (B-334, from Nils' test of 1.5 (37)).
 - iPad: **Select** and **Cancel** sit beside the first month above the ride list instead of in a row of their own (wish from Nils' test of 1.5 (37)).
+
+### Fixed
+- iPhone: after the app was restarted during a recording, the map zooms back to 1.5 km around the position instead of showing the whole world (B-363, 1.6 (42)).
+- iPhone: long recordings draw the map in pieces of about 5 km and less often in the background or when the iPhone is hot, so iOS ends the app less often under heat and low memory (B-365, 1.6 (42)).
 
 ## [iOS 1.5]
 
