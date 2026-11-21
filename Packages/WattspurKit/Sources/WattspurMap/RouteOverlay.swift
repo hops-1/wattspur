@@ -100,6 +100,9 @@ public final class RideRouteOverlay: NSObject, MKOverlay, @unchecked Sendable {
     let ticks: [(point: MKMapPoint, across: (dx: Double, dy: Double))]
     let routeColor: CGColor
     let newColor: CGColor
+    /// Flat ends, for a route drawn in pieces (B-365): a round end of the next piece's white outline
+    /// would cover the line of the piece before where they meet.
+    let flatEnds: Bool
     public let boundingMapRect: MKMapRect
     public var coordinate: CLLocationCoordinate2D { MKMapPoint(x: boundingMapRect.midX, y: boundingMapRect.midY).coordinate }
 
@@ -112,7 +115,8 @@ public final class RideRouteOverlay: NSObject, MKOverlay, @unchecked Sendable {
 
     /// The route as one line per recording (the iPhone's `RideExchange.Route`).
     public init(segments: [[CLLocationCoordinate2D]], newStretches: [[RoutePoint]] = [], colouring: RouteColouring,
-                ticks: [JoinTick] = [], dark: Bool, colors: RouteColors) {
+                ticks: [JoinTick] = [], dark: Bool, colors: RouteColors, flatEnds: Bool = false) {
+        self.flatEnds = flatEnds
         // No line across a gap in the track, e.g. a train ride without recording (B-309).
         route = segments.flatMap(TrackGap.split).map { $0.map(MKMapPoint.init) }
         stretches = newStretches.map { $0.map { MKMapPoint(CLLocationCoordinate2D(latitude: $0.latitude, longitude: $0.longitude)) } }
@@ -135,7 +139,7 @@ public final class RideRouteRenderer: MKOverlayRenderer {
     override public func draw(_ mapRect: MKMapRect, zoomScale: MKZoomScale, in context: CGContext) {
         guard let overlay = overlay as? RideRouteOverlay else { return }
         let scale = 1 / zoomScale
-        context.setLineCap(.round)
+        context.setLineCap(overlay.flatEnds ? .butt : .round)
         context.setLineJoin(.round)
         func stroke(_ points: [MKMapPoint], width: CGFloat, color: CGColor) {
             guard points.count > 1 else { return }

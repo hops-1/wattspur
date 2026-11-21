@@ -154,7 +154,12 @@ struct RecordingView: View {
     }
 
     private var map: some View {
-        RecordingMapView(mapType: mapType, segments: trackSegments, colouring: trackColouring,
+        // Worked out once per drawing (B-365): before, the route of the ride so far was built up to
+        // three times for every fix, thousands of points on a long car ride.
+        let route = recorder.recording?.route
+        let elevation = byElevation ? route.flatMap(RouteElevation.stretches) : nil
+        return RecordingMapView(mapType: mapType, segments: Self.segments(of: route),
+                         colouring: elevation.map { .elevation($0.stretches) } ?? .plain,
                          heading: headingUp ? mapHeading : nil,
                          center: recorder.movement.map { CLLocationCoordinate2D(latitude: $0.latitude, longitude: $0.longitude) })
         .onChange(of: recorder.movement) { _, movement in
@@ -197,7 +202,7 @@ struct RecordingView: View {
             .padding(.bottom, creditRoom)
         }
         .overlay(alignment: .bottomLeading) {
-            if byElevation, let route = recorder.recording?.route, let elevation = RouteElevation.stretches(route) {
+            if let elevation {
                 ElevationLegend(scale: elevation.scale)
                     .padding(isLandscape ? 0 : 8)
                     // In landscape the bar with the figures covers the left side, camera side included (B-325).
@@ -217,16 +222,10 @@ struct RecordingView: View {
     private var creditRoom: CGFloat { mapType.tileSource == nil ? 0 : 30 }
 
     /// The track so far, one line per segment.
-    private var trackSegments: [[CLLocationCoordinate2D]] {
-        (recorder.recording?.route.segments ?? []).map { segment in
+    private static func segments(of route: RideExchange.Route?) -> [[CLLocationCoordinate2D]] {
+        (route?.segments ?? []).map { segment in
             zip(segment.latitude, segment.longitude).map { CLLocationCoordinate2D(latitude: $0, longitude: $1) }
         }
-    }
-
-    /// By height (B-283): the scale follows the heights ridden so far; only worked out while on.
-    private var trackColouring: RouteColouring {
-        guard byElevation, let route = recorder.recording?.route, let elevation = RouteElevation.stretches(route) else { return .plain }
-        return .elevation(elevation.stretches)
     }
 
     /// With the direction of travel up, the map turns to the course of the GPS; standing, it keeps its
