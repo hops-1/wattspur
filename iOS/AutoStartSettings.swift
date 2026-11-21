@@ -11,6 +11,22 @@ enum AutoStartSettings {
         set { UserDefaults.standard.set(newValue, forKey: PhoneSettingsKey.autoStart) }
     }
 
+    /// “End Ride” from the automation when the connection ends saves the ride by itself (B-339).
+    static var endsOnDisconnect: Bool {
+        UserDefaults.standard.object(forKey: PhoneSettingsKey.autoStartEndOnDisconnect) as? Bool ?? true
+    }
+
+    /// The ride ends by itself after standing still (B-339).
+    static var endsAfterStandstill: Bool {
+        UserDefaults.standard.object(forKey: PhoneSettingsKey.autoStartEndAfterStandstill) as? Bool ?? true
+    }
+
+    /// Minutes of standing still before the ride ends, and before “Ready” ends without one.
+    static var standstillMinutes: Int {
+        let minutes = UserDefaults.standard.integer(forKey: PhoneSettingsKey.autoStartStandstillMinutes)
+        return AutoStart.standstillChoices.contains(minutes) ? minutes : AutoStart.defaultStandstillMinutes
+    }
+
     static var triggers: [UUID: AutoStart.Trigger] {
         get {
             UserDefaults.standard.data(forKey: PhoneSettingsKey.autoStartTriggers)
