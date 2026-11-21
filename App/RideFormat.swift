@@ -2,27 +2,17 @@ import Foundation
 
 /// Locale-aware formatting of ride values (NFR-10).
 enum RideFormat {
-    /// "00:48:36"
-    static func duration(_ seconds: TimeInterval) -> String {
-        Duration.seconds(seconds.rounded())
-            .formatted(.time(pattern: .hourMinuteSecond(padHourToLength: 2)))
-    }
+    /// "00:48:36", the same as in the shared texts (`ValueFormat`).
+    static func duration(_ seconds: TimeInterval) -> String { ValueFormat.duration(seconds) }
 
     /// "19.5" / "19,5" (kilometres, one decimal)
-    static func distanceValue(_ metres: Double) -> String {
-        (metres / 1000).formatted(.number.precision(.fractionLength(1)))
-    }
+    static func distanceValue(_ metres: Double) -> String { ValueFormat.distanceValue(metres) }
 
     /// "19.5 km"
-    static func distance(_ metres: Double) -> String {
-        "\(distanceValue(metres)) km"
-    }
+    static func distance(_ metres: Double) -> String { ValueFormat.distance(metres) }
 
     /// "24.1" (km/h, one decimal)
-    static func speedValue(_ metresPerSecond: Double?) -> String {
-        guard let metresPerSecond else { return "–" }
-        return (metresPerSecond * 3.6).formatted(.number.precision(.fractionLength(1)))
-    }
+    static func speedValue(_ metresPerSecond: Double?) -> String { ValueFormat.speedValue(metresPerSecond) }
 
     /// "24.1 km/h"
     static func speed(_ metresPerSecond: Double?) -> String {

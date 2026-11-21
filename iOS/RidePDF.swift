@@ -111,9 +111,7 @@ private struct RidePDFPage: View {
             if points.contains(where: { $0.altitude != nil }) {
                 chart(title: "Elevation", unit: "m", value: \.altitude)
             }
-            Text("Created with Wattspur on \(Date.now.formatted(date: .long, time: .omitted))")
-                .font(.system(size: 8))
-                .foregroundStyle(.secondary)
+            ReportPDF.createdNote
         }
         .foregroundStyle(.black)
     }
