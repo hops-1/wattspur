@@ -1,15 +1,18 @@
 # Wattspur
 
-Lokale Auswerte-App für eBike-Fahrten auf dem Mac: Fahrten aus der Bosch eBike Flow App (FIT-Export) und GPX-Dateien von anderen Bikes, Apps und Radcomputern. Alles bleibt auf deinem Rechner, ohne Konto und ohne Telemetrie. Gebaut mit SwiftUI, zuerst für macOS, später für iOS.
+Auswerte-App für Fahrten mit dem eBike, Rad, Auto und Motorrad, für Mac, iPhone und iPad: Fahrten aus der Bosch eBike Flow App (FIT-Export), GPX-Dateien von anderen Bikes, Apps und Radcomputern und eigene Aufnahmen mit dem iPhone. Alles bleibt auf deinen Geräten und, wenn du den Sync einschaltest, in deinem eigenen iCloud-Konto; ohne Konto bei Wattspur und ohne Telemetrie. Gebaut mit SwiftUI.
 
 ## Was Wattspur kann
 - **Import** per Drag & Drop, Dialog oder überwachtem Ordner: Bosch-FIT mit allen Werten der Flow App, GPX 1.0/1.1 (komoot, Strava, Radcomputer) mit geschätzten Summen. Dieselbe Fahrt als FIT und GPX wird erkannt und zusammengeführt.
 - **Fahrten:** Detail mit Karte und verknüpften Diagrammen (Höhe, Geschwindigkeit, Leistung, Trittfrequenz), Fahrten zusammenfügen, Tourenvergleich, PDF- und GPX-Export.
 - **Auswertung** nach Zeitraum oder Auswahl, **Highlights** mit Jahresrückblick, Rekorden und Zielen, **Karte aller Fahrten** mit Heatmap und neuen Wegen.
-- **Profil und mehrere Bikes:** jede Fahrt gehört zu einem Bike, jede Ansicht lässt sich nach Bike und Quelle filtern.
+- **Profil und mehrere Geräte:** jede Fahrt gehört zu einem Gerät (Bikes, E-Scooter, Autos, Motorräder), jede Ansicht lässt sich nach Gerät und Quelle filtern. Fahrzeuge stehen in einer eigenen Rubrik und nicht in den Rad-Summen.
+- **iPhone und iPad:** Aufnahme mit Karte, Live-Aktivität und Siri, Auto-Start im Auto über eine Kurzbefehl-Automation, Übersicht mit Highlights, Karte aller Fahrten; am iPad dazu Analyse, Highlights und Vergleich wie am Mac. Sync mit dem Mac über das eigene iCloud-Konto.
 
 ## Download
-Die neueste Version als DMG unter [Releases](https://github.com/hops-1/wattspur/releases/latest), für macOS 26 oder neuer. Ab v1.8.3 ist die App mit Developer ID signiert und von Apple notarisiert und öffnet ohne Rückfrage. Bei Versionen bis v1.8.2 (nicht notarisiert) meldet macOS beim ersten Öffnen, dass die App nicht überprüft werden konnte. Dann unter Systemeinstellungen › Datenschutz & Sicherheit „Dennoch öffnen“ wählen, das ist nur einmal nötig. Schritt für Schritt steht es in „Read Me First.txt“ in der DMG und im [Handbuch](docs/user-guide/README.md).
+**iPhone und iPad:** ab iOS 26, über TestFlight; Version 1.5 ist die Version für den App Store. Neue Versionen kommen zuerst in TestFlight.
+
+**Mac:** die neueste Version als DMG unter [Releases](https://github.com/hops-1/wattspur/releases/latest), für macOS 26 oder neuer. Ab v1.8.3 ist die App mit Developer ID signiert und von Apple notarisiert und öffnet ohne Rückfrage. Bei Versionen bis v1.8.2 (nicht notarisiert) meldet macOS beim ersten Öffnen, dass die App nicht überprüft werden konnte. Dann unter Systemeinstellungen › Datenschutz & Sicherheit „Dennoch öffnen“ wählen, das ist nur einmal nötig. Schritt für Schritt steht es in „Read Me First.txt“ in der DMG und im [Handbuch](docs/user-guide/README.md).
 
 ## Dokumentation
 - [Benutzerhandbuch](docs/user-guide/README.md) (Englisch und Deutsch): Installation, erster Start, Import, Ansichten, Kennzahlen, FAQ
@@ -51,9 +54,11 @@ scripts/ci-local.sh
 Falls `xcode-select` noch auf die Command Line Tools zeigt: Befehlen `DEVELOPER_DIR=/Applications/Xcode.app/Contents/Developer` voranstellen.
 
 ## Status
-**Aktuell: v1.8.3** (erste von Apple notarisierte Version; Hinweis auf den Radumfang, Höhenmeter ab 2 m, doppelte Fahrten aus FIT und GPX erkannt). Davor: v1.8.2 (Pendelfahrten, die ein paar hundert Meter versetzt starten, zählen wieder als ähnlich; Rekorde bei Steigung und Gefälle ohne Barometer geglättet). Davor: v1.8.1 (Steigung im Höhenprofil, Bike-Art Lastenrad, Kurvigkeit der Fahrten mit Rekord, Ebene „Kurvige Straßen“ von roadcurvature.com, stärkste Steigung und stärkstes Gefälle als Rekorde). Davor: v1.8.0 (Kartenstile: OpenStreetMap, CyclOSM und OpenTopoMap mit Höhenlinien und Schummerung, Fenster „Karte anpassen“, PDFs im selben Stil; Kalendertag als Filter; Doku der Austauschformate). Davor: v1.7.1 (gespeicherte Strecken: wiederkehrende Strecken erkennen, benennen und als Filter nutzen; Mediathek-Backup; Hilfe-Menü), v1.7.0 (ähnliche Strecken: Fahrten auf derselben Strecke finden, filtern, vergleichen und im Verlauf ansehen, dazu vier weitere Rekorde), v1.6.2 (Update-Hinweis), v1.6.1 (Sicherheits-Fix für beschädigte FIT-Dateien und ein aufgeräumter Unterbau), v1.6 mit GPX-Import (Fahrten anderer Bikes, Apps und Radcomputer neben den Bosch-Fahrten), v1.0 (erste Version für Freunde mit DMG, Beispielfahrt, Barrierefreiheit und [Handbuch](docs/user-guide/README.md)), v1.1 (Fahrten zusammenfügen), v1.2 (Tourenvergleich, PDF-Export), v1.3 (Highlights, GPX-Export), v1.4 (Karte aller Fahrten), v1.5 (Profil und mehrere Bikes). Details im [Changelog](CHANGELOG.md), Lern-Notizen in [docs/learning](docs/learning/README.md).
+**Mac: v1.10.2** (19.11.2026): Analyse, Highlights und Vergleich rechnen mit derselben Logik wie das iPad; E-Scooter, Fahrzeugfarben Schwarz, Silber und Weiß. Davor: v1.10 (Umschalter Rad · Fahrzeuge in der Seitenleiste), v1.9 (Sportarten: Autos und Motorräder als Geräte, Querbeschleunigung), v1.8.x (Kartenstile, Sync mit dem iPhone über iCloud, erste notarisierte Version, Sichern und Teilen), v1.0 bis v1.7 (Import, Auswertung, Highlights, Karte aller Fahrten, ähnliche Strecken).
 
-Als Nächstes: v1.9 Daten direkt von Bosch, danach ein Bereich „Fahrten“ mit Karte (siehe [Backlog](docs/BACKLOG.md)).
+**iPhone und iPad: 1.5** (Highlights am iPhone, Trennen, PDF, Herkunftsfilter) ist die Version für den App Store; **1.6 „Im Auto“** ist in TestFlight: Auto-Start über CarPlay oder Bluetooth, Siri mit Gerät, ruhigeres Tempo bei der Aufnahme, dieselben Gerätesymbole wie am Mac. CarPlay selbst wartet auf die Freigabe durch Apple.
+
+**Als Nächstes:** Mac 1.10.3 und iPhone/iPad 1.6.2 mit den Funden aus dem Review zu Architektur und Sicherheit ([Bericht](docs/REVIEW-1.6.2.md)); die Fixes sind schon in `main`. Danach CarPlay. Details im [Changelog](CHANGELOG.md) und im [Backlog](docs/BACKLOG.md), Lern-Notizen in [docs/learning](docs/learning/README.md).
 
 ## Unterstützen
 Wattspur ist kostenlos, ohne Werbung und ohne Konto. Die Entwicklung kostet trotzdem Geld, zum Beispiel für den Apple Developer Account und Lizenzen. Wer diese Kosten mittragen möchte, kann das über [GitHub Sponsors](https://github.com/sponsors/hops-1) oder [Buy me a coffee](https://buymeacoffee.com/hops1). Danke!
