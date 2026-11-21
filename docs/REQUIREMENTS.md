@@ -354,7 +354,7 @@ Auf iOS als Tab-Leiste mit Navigation-Stack.
 - **Bosch-Daten als eigene Schnittstelle:** Der Abruf bei Bosch (MOT, v1.9) hängt hinter Protokollen für HTTP und Anmeldung im Kit, damit er mit aufgezeichneten Antworten getestet wird; Tokens liegen im Schlüsselbund der App, nicht im Kit. Die Felder der Antwort sind Zusatzfelder an `Ride` und `Bike`, die FIT-Daten werden nie überschrieben (eine später importierte FIT-Datei ersetzt höchstens eine aus Bosch-Daten angelegte Fahrt, MOT-13).
 - **Kartenquelle austauschbar:** Protokoll bzw. Abstraktion `MapProvider`. v1.0 enthält nur MapKit; OSM-Stile werden später als weitere Implementierungen ergänzt.
 - **Sync-fähiges Datenmodell:** SwiftData so modellieren, dass ein späterer CloudKit-Sync ohne Migration möglich ist: keine `@Attribute(.unique)`, alle Felder optional oder mit Standardwert, Beziehungen optional, große Zeitreihen und Originaldateien als externe Daten.
-- **Kalorien-Strategie austauschbar:** Protokoll `CalorieEstimator` mit „Arbeit“ (Standard, v1.0) und „Profil“ (v1.x).
+- **Kalorien-Strategie austauschbar:** Wert `CalorieModel` mit „Arbeit“ (Standard, v1.0) und „Profil“ (v1.x). Das frühere Protokoll `CalorieEstimator` ist seit 1.6.2 weg (S-26).
 - **Lokalisierung ab der ersten Zeile:** keine fest eingebauten UI-Texte; Formatierung über `FormatStyle` und `Measurement`.
 
 ## 8. Offene Fragen

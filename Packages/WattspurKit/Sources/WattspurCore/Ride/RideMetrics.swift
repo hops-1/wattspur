@@ -1,24 +1,5 @@
 import Foundation
 
-/// Estimates calories for a ride (Requirements chapter 7: exchangeable strategy).
-public protocol CalorieEstimator: Sendable {
-    func kilocalories(for metrics: RideMetrics) -> Double
-}
-
-/// Work only: kcal ≈ mechanical work (kJ) × factor, without the time share. The app uses
-/// `CalorieModel`, which matches the Flow app (V-01).
-public struct WorkBasedCalorieEstimator: CalorieEstimator {
-    public var factor: Double
-
-    public init(factor: Double = CalorieModel.flowFactor) {
-        self.factor = factor
-    }
-
-    public func kilocalories(for metrics: RideMetrics) -> Double {
-        metrics.workKilojoules * factor
-    }
-}
-
 /// Values Wattspur derives itself because the source file does not contain them.
 public struct RideMetrics: Sendable, Equatable {
     /// Mechanical work of the rider in kJ (Σ power × 1 s per record).

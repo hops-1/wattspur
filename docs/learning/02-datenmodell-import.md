@@ -26,7 +26,7 @@ Löschen setzt nur `deletedAt`. Die Liste zeigt per `#Predicate { $0.deletedAt =
 ## Swift-Konzepte
 - **`@MainActor`** an `RideLibrary`: alles läuft auf dem Haupt-Thread, wie es der `ModelContext` der Oberfläche verlangt.
 - **`#Predicate`** ist ein Makro: Der Swift-Ausdruck wird zur Datenbank-Abfrage übersetzt.
-- **Protokolle** (`RideImporter`, `CalorieEstimator`) beschreiben Fähigkeiten. Weitere Formate (GPX, Apple Health) kommen als neue Typen dazu, ohne den Rest zu ändern.
+- **Protokolle** (z. B. `RideImporter`) beschreiben Fähigkeiten. Weitere Formate (GPX, Apple Health) kommen als neue Typen dazu, ohne den Rest zu ändern.
 - **Tests mit In-Memory-Datenbank** (`ModelConfiguration(isStoredInMemoryOnly: true)`): echte SwiftData-Logik, aber nichts landet auf der Platte.
 
 ## Nachtrag: mehrere Fahrten löschen (Bugfix nach v1.0)
