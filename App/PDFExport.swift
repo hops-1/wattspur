@@ -171,11 +171,6 @@ enum PDFExport {
         }
     }
 
-    /// A file name without characters that Finder does not accept.
-    static func fileName(_ title: String) -> String {
-        title.replacingOccurrences(of: "/", with: "-").replacingOccurrences(of: ":", with: "-") + ".pdf"
-    }
-
     /// "Created with Wattspur on 22 October 2026 at 10:15. …" at the end of every PDF.
     static var createdNote: some View {
         Text("Created with Wattspur on \(Date.now.formatted(date: .long, time: .shortened)). Calories and CO₂ are estimates.")

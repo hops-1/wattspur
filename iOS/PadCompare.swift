@@ -121,12 +121,7 @@ struct PadCompareView: View {
 /// Each column has a colour, a dash pattern and a marker shape, so rides stay apart for
 /// colour-blind readers (NFR-16); colours as on the Mac, dashes and markers from the Kit.
 enum PadCompareStyle {
-    static let colors: [Color] = [
-        .map(MapPalette.Pair(light: 0x0B6BCB, dark: 0x4DA3FF)),
-        .map(MapPalette.Pair(light: 0xC2410C, dark: 0xFF8A4C)),
-        .map(MapPalette.Pair(light: 0x0E7C6B, dark: 0x3CC7A6)),
-        .map(MapPalette.Pair(light: 0x8E44AD, dark: 0xC38BEF)),
-    ]
+    static let colors: [Color] = MapPalette.comparison.map(Color.map)
 
     static func color(_ index: Int) -> Color { colors[index % colors.count] }
     static func dash(_ index: Int) -> [CGFloat] { ComparisonMarks.dash(index).map { CGFloat($0) } }
@@ -403,7 +398,7 @@ struct ComparisonPDF: Transferable {
 
     /// "Comparison – Morning loop and After-work loop.pdf"
     var fileName: String {
-        ReportPDF.fileName(String(localized: "Comparison – \(rides.map(\.name).formatted(.list(type: .and)))"))
+        PDFFile.name(String(localized: "Comparison – \(rides.map(\.name).formatted(.list(type: .and)))"))
     }
 
     @MainActor

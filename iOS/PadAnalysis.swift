@@ -620,7 +620,7 @@ extension BarMetric {
 
 extension Color {
     /// The colours of the Mac's charts, so a metric looks the same on both (B-295).
-    static let metricSpeed = Color.map(MapPalette.Pair(light: 0x0A6ED1, dark: 0x4DA3FF))
-    static let metricCadence = Color.map(MapPalette.Pair(light: 0x7A4FC9, dark: 0xA98BEF))
-    static let metricPower = Color.map(MapPalette.Pair(light: 0xC2410C, dark: 0xFF8A4C))
+    static let metricSpeed = Color.map(MapPalette.metricSpeed)
+    static let metricCadence = Color.map(MapPalette.metricCadence)
+    static let metricPower = Color.map(MapPalette.metricPower)
 }

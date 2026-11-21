@@ -351,7 +351,7 @@ struct AllRidesMapView: View {
                                subtitle: subtitle(overview, interval: interval), inView: inView,
                                total: overview.rides.count, isSelection: showsSelection,
                                newPathsDistance: newPathsDistance(inView))
-        PDFExport.deliver(await report.pdfData(), fileName: PDFExport.fileName(String(localized: "Map")), to: target)
+        PDFExport.deliver(await report.pdfData(), fileName: PDFFile.name(String(localized: "Map")), to: target)
     }
 }
 

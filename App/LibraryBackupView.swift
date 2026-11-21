@@ -23,17 +23,6 @@ enum LibraryLocation {
         FileManager.default.temporaryDirectory.appending(path: "WattspurBrokenLibraryTest/default.store")
     }
 
-    /// Writes a damaged file the first time (nothing there and nothing set aside yet) and returns the
-    /// configuration for the test library, without iCloud.
-    static func prepareBrokenLibraryTest() -> ModelConfiguration {
-        let url = brokenLibraryTestURL
-        let fm = FileManager.default
-        try? fm.createDirectory(at: url.deletingLastPathComponent(), withIntermediateDirectories: true)
-        if !fm.fileExists(atPath: url.path), LibraryBackup.keptFolders(storeURL: url).isEmpty {
-            try? Data(repeating: 7, count: 8192).write(to: url)
-        }
-        return LibrarySync.configuration(requested: false, available: false, url: url)
-    }
     #endif
 }
 

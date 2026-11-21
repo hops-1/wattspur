@@ -32,6 +32,10 @@ struct WattspurMapTests {
         #expect(MapPalette.elevation(-3) == RouteElevation.palette.first)
         #expect(MapPalette.elevation(99) == RouteElevation.palette.last)
         #expect(hex(MapPalette.curvyRoad(veryCurvy: true).cgColor(dark: false)) == 0xD7263D)
+        #expect(MapPalette.comparison.count == 4)
+        #expect(MapPalette.comparison[0] == .init(light: 0x0B6BCB, dark: 0x4DA3FF))
+        #expect(MapPalette.metricPower == .init(light: 0xC2410C, dark: 0xFF8A4C))
+        #expect(MapPalette.track == .init(light: 0xC2187A, dark: 0xFF4FAE))
     }
 
     @Test("A line on a map starts anew after a gap in the track, so nothing crosses it (B-309)")

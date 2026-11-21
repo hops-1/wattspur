@@ -115,16 +115,10 @@ final class PhoneSync {
     /// out damaged, to try the view for a library that does not open (B-264) without touching the real one.
     static var isBrokenLibraryTest: Bool { UserDefaults.standard.bool(forKey: "WattspurBrokenLibraryTest") }
 
-    /// Writes a damaged file the first time (nothing there and nothing set aside yet) and returns the
-    /// configuration for the test library, without iCloud.
+    /// The damaged file is written the first time only, by the Kit, as on the Mac (S-25).
     private static func prepareBrokenLibraryTest() -> ModelConfiguration {
-        let url = FileManager.default.temporaryDirectory.appending(path: "WattspurBrokenLibraryTest/default.store")
-        let fm = FileManager.default
-        try? fm.createDirectory(at: url.deletingLastPathComponent(), withIntermediateDirectories: true)
-        if !fm.fileExists(atPath: url.path), LibraryBackup.keptFolders(storeURL: url).isEmpty {
-            try? Data(repeating: 7, count: 8192).write(to: url)
-        }
-        return LibrarySync.configuration(requested: false, available: false, url: url)
+        LibraryBackup.prepareBrokenLibraryTest(
+            at: FileManager.default.temporaryDirectory.appending(path: "WattspurBrokenLibraryTest/default.store"))
     }
     #endif
 }

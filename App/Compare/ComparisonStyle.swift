@@ -3,6 +3,7 @@ import MapKit
 import SwiftData
 import SwiftUI
 import WattspurKit
+import WattspurMap
 
 // MARK: - Ride identity: colour, dash and shape (NFR-16)
 
@@ -10,12 +11,8 @@ import WattspurKit
 /// for colour-blind readers and in black and white. Colours have at least 4.5:1
 /// against the window background in both modes.
 enum ComparisonStyle {
-    static let colors: [Color] = [
-        .adaptive(light: 0x0B6BCB, dark: 0x4DA3FF),
-        .adaptive(light: 0xC2410C, dark: 0xFF8A4C),
-        .adaptive(light: 0x0E7C6B, dark: 0x3CC7A6),
-        .adaptive(light: 0x8E44AD, dark: 0xC38BEF),
-    ]
+    /// From the Kit (`MapPalette.comparison`), so the iPad uses the same.
+    static let colors: [Color] = MapPalette.comparison.map(Color.map)
 
     static func color(_ index: Int) -> Color { colors[index % colors.count] }
     /// Dashes and markers come from the Kit (`ComparisonMarks`, B-294), so the iPad uses the same.

@@ -60,6 +60,23 @@ public enum MapPalette {
         RouteElevation.palette[min(max(level, 0), RouteElevation.palette.count - 1)]
     }
 
+    /// The colours of the rides in a comparison, one per column (NFR-16): at least 4.5:1 against
+    /// the window background in both modes. Mac and iPad read them here (S-21).
+    public static let comparison: [Pair] = [
+        Pair(light: 0x0B6BCB, dark: 0x4DA3FF),
+        Pair(light: 0xC2410C, dark: 0xFF8A4C),
+        Pair(light: 0x0E7C6B, dark: 0x3CC7A6),
+        Pair(light: 0x8E44AD, dark: 0xC38BEF),
+    ]
+
+    /// The charts' colours for speed, cadence and power, the same on Mac and iPad (B-295, S-21).
+    public static let metricSpeed = Pair(light: 0x0A6ED1, dark: 0x4DA3FF)
+    public static let metricCadence = Pair(light: 0x7A4FC9, dark: 0xA98BEF)
+    public static let metricPower = Pair(light: 0xC2410C, dark: 0xFF8A4C)
+
+    /// The magenta of a ride's track, lighter in dark mode so it stands out on the map.
+    public static let track = Pair(light: 0xC2187A, dark: 0xFF4FAE)
+
     /// Stretches no earlier ride had passed (B-115).
     public static let newPaths = Pair(light: 0xC2410C, dark: 0xFF8A4C)
 
