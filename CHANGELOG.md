@@ -7,7 +7,7 @@ Every DMG handed out to testers corresponds to one entry below.
 
 ## [Unreleased]
 
-## [iOS 1.6.2]
+## [iOS 1.6.2] – 2026-11-21
 
 Review of architecture and security: small, safe fixes and no new functions, with the fix for a crash after saving a ride in 1.6. iPhone and iPad 1.6.2 (43); with the Mac 1.10.3. CarPlay (1.6.1) follows once Apple approves it.
 
