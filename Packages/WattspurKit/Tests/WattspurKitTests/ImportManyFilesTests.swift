@@ -134,4 +134,37 @@ final class ImportManyFilesTests {
         #expect(inbox.waitingFiles().isEmpty)
         #expect(FileManager.default.fileExists(atPath: inbox.inbox.appending(path: "liesmich.txt").path(percentEncoded: false)))
     }
+
+    @Test("A file still marked as being read after a restart goes to Fehler, not back into the import (S-39)")
+    func interruptedRead() throws {
+        let inbox = ImportInbox(base: folder)
+        let file = inbox.inbox.appending(path: "absturz.gpx")
+        inbox.prepare()
+        try Data("x".utf8).write(to: file)
+
+        let reading = try inbox.markReading(file)
+        #expect(inbox.waitingFiles().isEmpty)
+        #expect(reading.lastPathComponent == "absturz.gpx")
+
+        // The app crashed while reading; on the next start the file must not be read again.
+        let restarted = ImportInbox(base: folder)
+        #expect(restarted.moveInterrupted() == 1)
+        #expect(restarted.waitingFiles().isEmpty)
+        #expect(FileManager.default.fileExists(atPath: inbox.failed.appending(path: "absturz.gpx").path(percentEncoded: false)))
+        #expect(restarted.moveInterrupted() == 0)
+
+        // A file read to the end moves on from the marked place as before.
+        try Data("y".utf8).write(to: file)
+        let marked = try inbox.markReading(file)
+        let moved = try inbox.moveAway(marked, failed: false)
+        #expect(moved.deletingLastPathComponent().lastPathComponent == ImportInbox.importedName)
+        #expect(inbox.moveInterrupted() == 0)
+
+        // A file marked but never read (the question was dismissed) waits in the inbox again.
+        try Data("z".utf8).write(to: file)
+        let unread = try inbox.markReading(file)
+        try inbox.unmarkReading(unread)
+        #expect(inbox.waitingFiles().map(\.lastPathComponent) == ["absturz.gpx"])
+        #expect(inbox.moveInterrupted() == 0)
+    }
 }

@@ -7,6 +7,10 @@ public enum FITDecodingError: Error, Equatable, Sendable {
     case truncated(offset: Int)
     case undefinedLocalMessage(localType: UInt8, offset: Int)
     case checksumMismatch(expected: UInt16, actual: UInt16)
+    /// Bigger than `maxFileSize` of the decoder (S-38).
+    case tooLarge
+    /// More messages than `maxMessages` of the decoder (S-38).
+    case tooManyMessages
 }
 
 /// Decodes the binary FIT container format into raw messages.
@@ -17,12 +21,25 @@ public enum FITDecodingError: Error, Equatable, Sendable {
 public struct FITDecoder: Sendable {
     /// When `true` (default), a wrong file checksum is an error.
     public var verifyChecksum: Bool
+    /// Larger files are refused before they are read (S-38): every record becomes a message with
+    /// a dictionary, so 5 MB of FIT took about 1 GB of memory, more than an iPhone allows.
+    public var maxFileSize: Int
+    /// More messages than this are refused (S-38).
+    public var maxMessages: Int
 
-    public init(verifyChecksum: Bool = true) {
+    /// 50 MB; a Bosch tour of a full day is about 2 MB.
+    public static let defaultMaxFileSize = 50 * 1024 * 1024
+    /// 2 million messages; at one record per second that is more than 20 days.
+    public static let defaultMaxMessages = 2_000_000
+
+    public init(verifyChecksum: Bool = true, maxFileSize: Int = defaultMaxFileSize, maxMessages: Int = defaultMaxMessages) {
         self.verifyChecksum = verifyChecksum
+        self.maxFileSize = maxFileSize
+        self.maxMessages = maxMessages
     }
 
     public func decode(_ data: Data) throws(FITDecodingError) -> FITFile {
+        guard data.count <= maxFileSize else { throw .tooLarge }
         let bytes = [UInt8](data)
         guard bytes.count >= 12 else { throw .fileTooShort }
 
@@ -67,6 +84,7 @@ public struct FITDecoder: Sendable {
                 if offset < (lastTimestamp & 0x1F) { timestamp = timestamp &+ 0x20 }
                 lastTimestamp = timestamp
                 message.fields[FITProfile.timestampField] = .unsigned(UInt64(timestamp))
+                guard messages.count < maxMessages else { throw .tooManyMessages }
                 messages.append(message)
                 continue
             }
@@ -82,6 +100,7 @@ public struct FITDecoder: Sendable {
                 if case .unsigned(let t)? = message[FITProfile.timestampField] {
                     lastTimestamp = UInt32(truncatingIfNeeded: t)
                 }
+                guard messages.count < maxMessages else { throw .tooManyMessages }
                 messages.append(message)
             }
         }

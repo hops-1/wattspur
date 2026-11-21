@@ -532,6 +532,53 @@ struct GPXRideImporterTests {
         #expect(try GPXRideImporter(maxPoints: 51).parseTrack(data).pointCount == 51)
     }
 
+    @Test("Default limits fit an iPhone (S-40)")
+    func defaultLimits() {
+        #expect(GPXRideImporter.defaultMaxFileSize == 100 * 1024 * 1024)
+        #expect(GPXRideImporter.defaultMaxPoints == 1_000_000)
+    }
+
+    @Test("Long names and types are cut (S-41)")
+    func longTexts() throws {
+        let long = String(repeating: "x", count: 5_000)
+        let points = (0...20).map { Doc.point($0) }.joined()
+        let xml = "<?xml version=\"1.0\"?><gpx version=\"1.1\" creator=\"\(long)\" xmlns=\"http://www.topografix.com/GPX/1/1\">"
+            + "<metadata><name>\(long)</name></metadata><trk><name>\(long)</name><type>\(long)</type><trkseg>\(points)</trkseg></trk></gpx>"
+        let track = try importer.parseTrack(Data(xml.utf8))
+        #expect(track.name?.count == GPXRideImporter.maxTextLength)
+        #expect(track.activityType?.count == GPXRideImporter.maxTextLength)
+        #expect(track.creator?.count == GPXRideImporter.maxTextLength)
+    }
+
+    @Test("An external entity is not read into the name (S-44)")
+    func externalEntity() throws {
+        let secret = FileManager.default.temporaryDirectory.appending(path: "wattspur-xxe-\(UUID().uuidString).txt")
+        try Data("GEHEIM-XXE".utf8).write(to: secret)
+        defer { try? FileManager.default.removeItem(at: secret) }
+        let points = (0...20).map { Doc.point($0) }.joined()
+        let xml = "<?xml version=\"1.0\"?><!DOCTYPE gpx [<!ENTITY xxe SYSTEM \"\(secret.absoluteString)\">]>"
+            + "<gpx version=\"1.1\" creator=\"Test\" xmlns=\"http://www.topografix.com/GPX/1/1\">"
+            + "<trk><name>A&xxe;B</name><trkseg>\(points)</trkseg></trk></gpx>"
+        if let track = try? importer.parseTrack(Data(xml.utf8)) {
+            #expect(!(track.name ?? "").contains("GEHEIM"))
+        }
+    }
+
+    @Test("An entity bomb is refused quickly (S-44)", .timeLimit(.minutes(1)))
+    func entityBomb() {
+        var entities = "<!ENTITY a0 \"lol\">"
+        for level in 1...10 {
+            entities += "<!ENTITY a\(level) \"" + String(repeating: "&a\(level - 1);", count: 10) + "\">"
+        }
+        let points = (0...20).map { Doc.point($0) }.joined()
+        let xml = "<?xml version=\"1.0\"?><!DOCTYPE gpx [\(entities)]>"
+            + "<gpx version=\"1.1\" creator=\"Test\" xmlns=\"http://www.topografix.com/GPX/1/1\">"
+            + "<trk><name>&a10;</name><trkseg>\(points)</trkseg></trk></gpx>"
+        let start = Date()
+        #expect(throws: GPXImportError.malformedXML) { try importer.parseTrack(Data(xml.utf8)) }
+        #expect(Date().timeIntervalSince(start) < 10)
+    }
+
     // A generous limit: with coverage or on a busy runner a tight one turns red without a change (R-09).
     @Test("Reading a big track is fast", .timeLimit(.minutes(1)))
     func speed() throws {

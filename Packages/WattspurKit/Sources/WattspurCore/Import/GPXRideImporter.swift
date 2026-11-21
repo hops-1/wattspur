@@ -127,10 +127,14 @@ public struct GPXRideImporter: RideImporter {
     /// A point further from the last kept one than this speed allows is a GPS jump (unless the ride was
     /// that fast already), in m/s (150 km/h).
     public static let maxSpeed = 150.0 / 3.6
-    /// Larger files are refused (default of `maxFileSize`).
-    public static let defaultMaxFileSize = 200 * 1024 * 1024
-    /// More track points are refused (default of `maxPoints`).
-    public static let defaultMaxPoints = 5_000_000
+    /// Larger files are refused (default of `maxFileSize`). 100 MB, so an iPhone can read them (S-40):
+    /// 174 MB with 2.5 million points took 3.2 GB.
+    public static let defaultMaxFileSize = 100 * 1024 * 1024
+    /// More track points are refused (default of `maxPoints`); 1 million is 11 days at one per second (S-40).
+    public static let defaultMaxPoints = 1_000_000
+    /// Names, types and the other texts of a file are cut to this many characters (S-41): they end
+    /// up in the list, the widget and the iCloud record.
+    public static let maxTextLength = 200
     /// Share of points without time above which the file is refused.
     public static let maxUntimedShare = 0.05
     /// Share of backward time steps above which the file is refused instead of sorted.
@@ -561,7 +565,7 @@ private final class GPXReader: NSObject, XMLParserDelegate {
         case "gpx":
             if stack.count == 1 {
                 sawRoot = true
-                creator = attributeDict["creator"]
+                creator = attributeDict["creator"].map { String($0.prefix(GPXRideImporter.maxTextLength)) }
             }
         case "trkseg":
             segments.append([])
@@ -601,7 +605,9 @@ private final class GPXReader: NSObject, XMLParserDelegate {
     }
 
     func parser(_ parser: XMLParser, foundCharacters string: String) {
-        if collecting != nil || collectingTrackText != nil { text += string }
+        if collecting != nil { text += string }
+        // Texts are cut anyway (S-41); a little more than the limit leaves room for trimming.
+        else if collectingTrackText != nil, text.utf8.count < GPXRideImporter.maxTextLength * 8 { text += string }
     }
 
     func parser(_ parser: XMLParser, foundCDATA CDATABlock: Data) {
@@ -630,7 +636,7 @@ private final class GPXReader: NSObject, XMLParserDelegate {
 
         if let key = collectingTrackText {
             let trimmed = text.trimmingCharacters(in: .whitespacesAndNewlines)
-            if self[keyPath: key] == nil, !trimmed.isEmpty { self[keyPath: key] = trimmed }
+            if self[keyPath: key] == nil, !trimmed.isEmpty { self[keyPath: key] = String(trimmed.prefix(GPXRideImporter.maxTextLength)) }
             return
         }
 

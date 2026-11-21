@@ -73,4 +73,30 @@ struct FITHostileInputTests {
         _ = RideSeries.chartPoints(from: ride.samples)
         _ = RideSeries.chartPoints(from: ride.samples, axis: .time)
     }
+
+    // MARK: - Limits (S-38)
+
+    @Test func fileAboveTheSizeLimitIsRefused() throws {
+        let b = Self.definition(0, 20, [(253, 4, 0x86)]) + [0x00] + Self.le32(1000)
+        let data = Self.fit(b)
+        #expect(throws: FITDecodingError.tooLarge) { try FITDecoder(maxFileSize: data.count - 1).decode(data) }
+        #expect(try FITDecoder(maxFileSize: data.count).decode(data).messages(20).count == 1)
+        #expect(throws: RideImportError.decoding(.tooLarge)) {
+            try FITRideImporter(decoder: FITDecoder(maxFileSize: 10)).parse(data)
+        }
+    }
+
+    @Test func fileWithTooManyMessagesIsRefused() throws {
+        var b = Self.definition(0, 20, [(253, 4, 0x86)])
+        for second in 0..<10 { b += [0x00] + Self.le32(1000 + UInt32(second)) }
+        let data = Self.fit(b)
+        #expect(throws: FITDecodingError.tooManyMessages) { try FITDecoder(maxMessages: 9).decode(data) }
+        #expect(try FITDecoder(maxMessages: 10).decode(data).messages(20).count == 10)
+    }
+
+    @Test func defaultLimitsFitAnIPhone() {
+        #expect(FITDecoder.defaultMaxFileSize == 50 * 1024 * 1024)
+        #expect(FITDecoder.defaultMaxMessages == 2_000_000)
+        #expect(FITDecoder().maxFileSize == FITDecoder.defaultMaxFileSize)
+    }
 }
