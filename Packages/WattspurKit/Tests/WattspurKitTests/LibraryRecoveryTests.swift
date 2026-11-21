@@ -86,4 +86,21 @@ struct LibraryRecoveryTests {
         let names = LibraryBackup.keptFolders(storeURL: storeURL).map(\.lastPathComponent)
         #expect(names == ["Damaged Library 2026-11-09 1000", "Library Before Restore 2026-11-03 0900", "Wattspur Backup 2026-11-01 0800"])
     }
+
+    @Test("If a move fails half-way, the moved files go back and no folder is left (S-30)")
+    func failedSetAsidePutsFilesBack() throws {
+        defer { try? FileManager.default.removeItem(at: root) }
+        try writeDamagedStore()
+        // The store moves first, then the locked "-wal" refuses to move.
+        let wal = URL(fileURLWithPath: storeURL.path + "-wal")
+        try FileManager.default.setAttributes([.immutable: true], ofItemAtPath: wal.path)
+        defer { try? FileManager.default.setAttributes([.immutable: false], ofItemAtPath: wal.path) }
+
+        #expect(throws: (any Error).self) { try LibraryBackup.setAsideDamaged(storeURL: storeURL) }
+        let fm = FileManager.default
+        #expect(try Data(contentsOf: storeURL) == Data(repeating: 7, count: 8192))
+        #expect(try Data(contentsOf: wal) == Data(repeating: 3, count: 512))
+        #expect(fm.fileExists(atPath: LibraryBackup.supportFolder(for: storeURL).appending(path: "blob").path))
+        #expect(LibraryBackup.keptFolders(storeURL: storeURL).isEmpty)
+    }
 }
