@@ -1,6 +1,6 @@
 # Architektur
 
-Stand: Mac 1.10.3 und iPhone/iPad 1.6.2 (Review Architektur und Sicherheit, B-352). Kurz gefasst, wo was liegt, wie die Daten fließen, welche Regeln gelten und was für die Sicherheit gilt. Die Gründe stehen in den Lern-Notizen [25](learning/25-architektur-aufraeumen.md) (Schichten), [34](learning/34-review.md) (Review 0.5.2) und [35](learning/35-review-sicherheit.md) (Review 1.6.2). Die Funde der Reviews stehen in [REVIEW-0.5.2](REVIEW-0.5.2.md) und [REVIEW-1.6.2](REVIEW-1.6.2.md).
+Stand: Mac 1.10.4 und iPhone/iPad 1.6.3 (Review Architektur und Sicherheit, B-352; gemeinsame Texte in `Shared/`, B-355). Kurz gefasst, wo was liegt, wie die Daten fließen, welche Regeln gelten und was für die Sicherheit gilt. Die Gründe stehen in den Lern-Notizen [25](learning/25-architektur-aufraeumen.md) (Schichten), [34](learning/34-review.md) (Review 0.5.2) und [35](learning/35-review-sicherheit.md) (Review 1.6.2) und [36](learning/36-gemeinsame-texte.md) (gemeinsame Texte). Die Funde der Reviews stehen in [REVIEW-0.5.2](REVIEW-0.5.2.md) und [REVIEW-1.6.2](REVIEW-1.6.2.md).
 
 ## Überblick
 
