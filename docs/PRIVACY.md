@@ -1,10 +1,10 @@
 # Datenschutz · Privacy
 
-Stand: 12. November 2026 · Gilt für Wattspur für Mac und iPhone.
+Stand: 21. November 2026 · Gilt für Wattspur für Mac und iPhone.
 
 ## Deutsch
 
-**Kurz:** Wattspur schickt keine Daten an den Entwickler oder an Dritte. Deine Fahrten liegen auf deinen Geräten und, wenn du den Sync einschaltest, in deinem eigenen iCloud-Konto.
+**Kurz:** Wattspur schickt keine Daten an den Entwickler. Deine Fahrten liegen auf deinen Geräten und, wenn du den Sync einschaltest, in deinem eigenen iCloud-Konto. Nur für Karten, Orte und Updates fragt die App Dienste im Internet (siehe *Verbindungen ins Internet*).
 
 **Welche Daten Wattspur verarbeitet**
 - Fahrten aus FIT- und GPX-Dateien und aus der GPS-Aufnahme auf dem iPhone: Zeit, Strecke, Route (Standorte), Höhe, Tempo und, wenn vorhanden, Leistung, Trittfrequenz und Puls.
@@ -27,10 +27,10 @@ Mit dem Schalter *Rohdaten der Bewegung mitschreiben* in „Mehr“ (aus als Sta
 **Verbindungen ins Internet**
 - Karten: Wattspur lädt Kartenkacheln von Apple (MapKit) und, je nach gewähltem Kartenstil (Mac und iPhone), von OpenStreetMap, CyclOSM oder OpenTopoMap. Dabei gehen der Kartenausschnitt und deine IP-Adresse an den jeweiligen Server, keine Fahrten.
 - Updates (Mac): Einmal am Tag fragt Wattspur bei GitHub, ob es eine neue Version gibt, wenn du das nicht ausgeschaltet hast. Dabei wird nichts über dich oder deine Fahrten gesendet.
-- Bosch (Mac, ab Version 1.9, nur nach deiner Anmeldung): Abruf deiner Fahrten vom Bosch-Portal.
+- Orte und Zeitzonen: Für die Zeitzone einer importierten Fahrt (Mac, mit dem Startpunkt) und den Ortsnamen einer automatisch beendeten Aufnahme (iPhone, mit Start- und Endpunkt) schickt Wattspur nur diese Punkte an den Kartendienst von Apple. Es gilt die Datenschutzrichtlinie von Apple. Die übrige Fahrt geht nicht mit.
 
 **Was Wattspur nicht tut**
-Kein Konto bei Wattspur, kein eigener Server, keine Werbung, keine Analyse, kein Tracking, keine Weitergabe.
+Kein Konto bei Wattspur, kein eigener Server, keine Werbung, keine Analyse, kein Tracking, keine Weitergabe außer den Anfragen oben.
 
 **Löschen**
 Fahrten löschst du in der App (Papierkorb, nach 30 Tagen endgültig). Mit der App löschst du die lokale Mediathek. Daten in iCloud löschst du in den iCloud-Einstellungen deines Geräts (*iCloud › Speicher verwalten › Wattspur*).
@@ -40,7 +40,7 @@ Nils Wiese, über die Issues auf GitHub: https://github.com/hops-1/wattspur/issu
 
 ## English
 
-**In short:** Wattspur sends no data to the developer or to third parties. Your rides stay on your devices and, if you turn on sync, in your own iCloud account.
+**In short:** Wattspur sends no data to the developer. Your rides stay on your devices and, if you turn on sync, in your own iCloud account. Only for maps, places and updates does the app ask services on the internet (see *Connections to the internet*).
 
 **What Wattspur processes**
 - Rides from FIT and GPX files and from GPS recording on the iPhone: time, distance, route (locations), altitude, speed and, if present, power, cadence and heart rate.
@@ -63,10 +63,10 @@ With the switch *Record Raw Motion* in "More" (off by default) a recording also 
 **Connections to the internet**
 - Maps: Wattspur loads map tiles from Apple (MapKit) and, depending on the map style (Mac and iPhone), from OpenStreetMap, CyclOSM or OpenTopoMap. The server receives the map area and your IP address, no rides.
 - Updates (Mac): once a day Wattspur asks GitHub whether a new version is out, unless you turned that off. Nothing about you or your rides is sent.
-- Bosch (Mac, from version 1.9, only after you sign in): fetching your rides from the Bosch portal.
+- Places and time zones: for the time zone of an imported ride (Mac, with its start point) and the place names of an automatically ended recording (iPhone, with its start and end point) Wattspur sends only these points to Apple's map service. Apple's privacy policy applies. The rest of the ride is not sent.
 
 **What Wattspur does not do**
-No Wattspur account, no server of its own, no ads, no analytics, no tracking, no sharing.
+No Wattspur account, no server of its own, no ads, no analytics, no tracking, no sharing beyond the requests above.
 
 **Deleting**
 You delete rides in the app (trash, final after 30 days). Deleting the app deletes the local library. Data in iCloud is deleted in your device's iCloud settings (*iCloud › Manage Storage › Wattspur*).

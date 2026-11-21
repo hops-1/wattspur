@@ -33,7 +33,7 @@ Der Weg in fünf Schritten:
 | Live-Aktivität, Widget, Teilen-Erweiterung | ✓ eingebettet, App Group `group.io.github.hops-1.wattspur` |
 | Health | – Wattspur liest Apple Health noch nicht (B-075). Kein HealthKit-Text nötig. Kommt Health, braucht es neue Texte und neue Datenschutzangaben |
 | Datenschutzerklärung | ✓ `docs/PRIVACY.md` DE/EN, URL `https://github.com/hops-1/wattspur/blob/main/docs/PRIVACY.md` |
-| App-Datenschutz („Nutrition Label“) | ✓ „Keine Daten erhoben“, schon für TestFlight eingetragen |
+| App-Datenschutz („Nutrition Label“) | ✓ „Keine Daten erhoben“, schon für TestFlight eingetragen. Die Ortssuche bei Apple (MapKit, Zeitzone am Mac, Ortsname am iPhone) ändert das nicht: Die Punkte gehen an Apple, nicht an den Entwickler oder einen Partner (geprüft 21.11.2026, S-47) |
 | CloudKit | ✓ Schema in Production |
 | Test-Werkzeuge | ✓ verschwinden im App-Store-Build von selbst (`BuildChannel.showsTestTools()`, B-298), zum Beispiel „Rohdaten der Bewegung“ |
 | Beispielfahrt | ✓ anonymisiert; Prüfer sehen ohne eigene Daten etwas |

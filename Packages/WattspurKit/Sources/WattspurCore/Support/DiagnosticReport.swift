@@ -33,7 +33,8 @@ public struct ImportLogEntry: Sendable, Identifiable, Equatable {
 }
 
 /// Text report for "Create Diagnostics…" (SUP-01). Contains versions, counts and
-/// the import log – never positions, ride names or other personal ride data.
+/// the import log with file names – never positions or other ride data.
+/// File names of GPX tours often hold place names, so the texts say so (S-52).
 /// Nothing is sent automatically; the user saves the report and decides.
 public struct DiagnosticReport: Sendable {
     public var appVersion: String
@@ -43,6 +44,8 @@ public struct DiagnosticReport: Sendable {
     /// Version of the GPX parser (B-141); `parserVersion` stays the FIT parser's.
     public var gpxParserVersion: Int
     public var osVersion: String
+    /// Label of the system line, "macOS" or "iOS" (S-53).
+    public var osName: String
     public var locale: String
     public var rideCount: Int
     public var trashedRideCount: Int
@@ -61,6 +64,7 @@ public struct DiagnosticReport: Sendable {
                 parserVersion: Int = FITRideImporter.parserVersion,
                 gpxParserVersion: Int = GPXRideImporter.parserVersion,
                 osVersion: String = ProcessInfo.processInfo.operatingSystemVersionString,
+                osName: String = DiagnosticReport.currentOSName,
                 locale: String = Locale.current.identifier,
                 rideCount: Int, trashedRideCount: Int, ridesByParserVersion: [Int: Int],
                 gpxRidesByParserVersion: [Int: Int] = [:],
@@ -72,6 +76,7 @@ public struct DiagnosticReport: Sendable {
         self.parserVersion = parserVersion
         self.gpxParserVersion = gpxParserVersion
         self.osVersion = osVersion
+        self.osName = osName
         self.locale = locale
         self.rideCount = rideCount
         self.trashedRideCount = trashedRideCount
@@ -81,6 +86,17 @@ public struct DiagnosticReport: Sendable {
         self.createdAt = createdAt
         self.libraryError = libraryError.map { Self.withoutHome($0) }
         self.damagedTimeSeries = damagedTimeSeries
+    }
+
+    /// The system the app runs on; iPadOS reports as "iOS" like the version string.
+    public static var currentOSName: String {
+        #if os(macOS)
+        "macOS"
+        #elseif os(visionOS)
+        "visionOS"
+        #else
+        "iOS"
+        #endif
     }
 
     /// The text of an error without the user's home folder, which holds the account name.
@@ -104,7 +120,7 @@ public struct DiagnosticReport: Sendable {
             "App version: \(appVersion) (build \(build), commit \(commit))",
             "Parser version: \(parserVersion)",
             "GPX parser version: \(gpxParserVersion)",
-            "macOS: \(osVersion)",
+            "\(osName): \(osVersion)",
             "Locale: \(locale)",
             "",
             libraryLine,
@@ -125,7 +141,7 @@ public struct DiagnosticReport: Sendable {
             }
         }
         lines.append("")
-        lines.append("This report contains no positions, ride names or other ride data.")
+        lines.append("This report contains no positions and no ride data, but the import log lists file names, which may contain place or tour names.")
         return lines.joined(separator: "\n")
     }
 }
