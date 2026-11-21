@@ -79,4 +79,26 @@ final class SharedImportTests {
         #expect(left == [writing.lastPathComponent, mixed.lastPathComponent].sorted())
         #expect(inbox.collectShared(from: folder.appending(path: "nothing")) == 0)
     }
+
+    @Test("A share left half written for more than an hour is deleted; a fresh one waits (S-42)")
+    func staleWritingFolders() throws {
+        let inbox = ImportInbox(base: folder.appending(path: "Documents"))
+        let shared = folder.appending(path: "Shared")
+        let stale = shared.appending(path: ".writing-\(UUID().uuidString)")
+        _ = try write("Alt.gpx", Data("<gpx".utf8), in: stale)
+        let fresh = shared.appending(path: ".writing-\(UUID().uuidString)")
+        _ = try write("Neu.gpx", Data("<gpx".utf8), in: fresh)
+        let now = Date()
+        try FileManager.default.setAttributes([.modificationDate: now.addingTimeInterval(-2 * 3600)],
+                                              ofItemAtPath: stale.path(percentEncoded: false))
+
+        #expect(inbox.collectShared(from: shared, now: now) == 0)
+        let left = try FileManager.default.contentsOfDirectory(atPath: shared.path(percentEncoded: false))
+        #expect(left == [fresh.lastPathComponent])
+        #expect(inbox.waitingFiles().isEmpty)
+
+        // An hour later the fresh one is stale too.
+        #expect(inbox.collectShared(from: shared, now: now.addingTimeInterval(2 * 3600)) == 0)
+        #expect(try FileManager.default.contentsOfDirectory(atPath: shared.path(percentEncoded: false)).isEmpty)
+    }
 }
