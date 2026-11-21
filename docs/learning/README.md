@@ -38,6 +38,7 @@ Zu jeder Story steht hier kurz: **was** gebaut wurde, **warum** so und **welche 
 | [32](32-testflight.md) | TestFlight: App in App Store Connect, Archiv hochladen, Tester einladen, Datenschutzangaben „Keine Daten erhoben“ (vorbereitet) | B-219 |
 | [33](33-iphone-datenbank.md) | Eigene Datenbank auf dem iPhone hinter einem Schalter, Aufnahme wird Fahrt, Papierkorb (vorbereitet) | B-216, B-217 |
 | [34](34-review.md) | Review vor dem nächsten großen Schritt: acht Bereiche, 66 Funde, 18 kleine PRs, was das zweite Gerät ändert | B-250 bis B-261 |
+| [35](35-review-sicherheit.md) | Review Architektur und Sicherheit: 54 Funde, Speicher-Grenzen für Dateien, Kopien zwischen Mac und iPad, Datenschutztext, Abdeckung richtig messen | B-343 bis B-352 |
 
 **Begriffe, die oft vorkommen**
 - **Swift Package (`WattspurKit`)**: ein eigenständiges Code-Modul ohne Oberfläche. Es lässt sich mit `swift test` allein testen und später unverändert in der iOS-App nutzen.
