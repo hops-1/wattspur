@@ -353,8 +353,11 @@ private struct PadCompareTable: View {
             ForEach(values.indices, id: \.self) { index in
                 VStack(alignment: .leading, spacing: 1) {
                     HStack(spacing: 4) {
+                        // One line: durations have seconds now ("01:37:12", B-355) and must not break.
                         Text(verbatim: values[index].map { ComparisonFormat.value($0, metric) } ?? "–")
                             .fontWeight(best.contains(index) ? .semibold : .regular)
+                            .lineLimit(1)
+                            .minimumScaleFactor(0.6)
                         if best.contains(index) {
                             Text(verbatim: "★").foregroundStyle(Color.track).accessibilityLabel(Text("Best"))
                         }
@@ -371,6 +374,8 @@ private struct PadCompareTable: View {
             }
             Text(verbatim: comparison.averages[metric].map { ComparisonFormat.value($0, metric) } ?? "–")
                 .foregroundStyle(.secondary)
+                .lineLimit(1)
+                .minimumScaleFactor(0.6)
                 .monospacedDigit()
                 .frame(maxWidth: .infinity, alignment: .leading)
                 .padding(.horizontal, 10)
