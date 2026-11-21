@@ -280,6 +280,9 @@ struct WattspurApp: App {
         }
         // iCloud may have brought changes while the app was in the background.
         .onChange(of: scenePhase, initial: true) { _, phase in
+            // A few seconds of background time, so the store finishes writing before iOS suspends
+            // the app; suspended with a lock on it, the app would be ended (0xdead10cc, B-366).
+            if phase == .background { LibraryWriteHold.linger() }
             if phase == .active {
                 Task { await library.refresh() }
                 // Files put into “On My iPhone › Wattspur › Import” meanwhile (B-300); not while recording.

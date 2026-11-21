@@ -139,7 +139,7 @@ final class PhoneLibrary {
 
     /// Splits a merged ride into its original rides (B-335), as on the Mac.
     func split(_ ride: RideExchange.Ride) {
-        database?.split(rideID: ride.id)
+        LibraryWriteHold.writing { database?.split(rideID: ride.id) }
         reload()
     }
 
@@ -147,7 +147,7 @@ final class PhoneLibrary {
 
     /// Merges the rides into one (B-296); the new ride's id, `nil` when it did not work.
     func merge(_ ids: Set<UUID>, name: String) -> UUID? {
-        let id = try? database?.merge(ids, name: name)
+        let id = LibraryWriteHold.writing { try? database?.merge(ids, name: name) }
         reload()
         return id
     }
@@ -258,7 +258,8 @@ final class PhoneLibrary {
     func saveRecording(gpx: Data, fileName: String) throws -> UUID {
         guard let database else { throw CocoaError(.featureUnsupported) }
         defer { reload() }
-        switch database.saveRecording(gpx: gpx, fileName: fileName).outcome {
+        // Held, so iOS does not suspend the app while the store writes (B-366).
+        switch LibraryWriteHold.writing({ database.saveRecording(gpx: gpx, fileName: fileName) }).outcome {
         case .imported(let id), .attached(let id), .duplicate(let id), .fitForGPX(let id): return id
         case .unsupported: throw CocoaError(.fileReadCorruptFile)
         case .failed(let error): throw error
@@ -382,22 +383,22 @@ final class PhoneLibrary {
 
     /// Renames a ride and changes its bike (B-240); over iCloud the Mac gets both.
     func edit(_ ride: RideExchange.Ride, name: String, bikeID: UUID?) {
-        guard database?.edit(rideID: ride.id, name: name, bikeID: bikeID) == true else { return }
+        guard LibraryWriteHold.writing({ database?.edit(rideID: ride.id, name: name, bikeID: bikeID) }) == true else { return }
         reload()
     }
 
     func moveToTrash(_ ride: RideExchange.Ride) {
-        database?.moveToTrash(rideID: ride.id)
+        LibraryWriteHold.writing { database?.moveToTrash(rideID: ride.id) }
         reload()
     }
 
     func restore(_ ride: RideExchange.Ride) {
-        database?.restore(rideID: ride.id)
+        LibraryWriteHold.writing { database?.restore(rideID: ride.id) }
         reload()
     }
 
     func deletePermanently(_ ride: RideExchange.Ride) {
-        database?.deletePermanently(rideID: ride.id)
+        LibraryWriteHold.writing { database?.deletePermanently(rideID: ride.id) }
         routes[ride.id.uuidString] = nil
         reload()
     }
