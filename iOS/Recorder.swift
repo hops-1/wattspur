@@ -35,6 +35,16 @@ final class Recorder {
     var isRecording: Bool { recording != nil }
     /// Waiting for the vehicle to move (auto-start, B-311): the track begins above 10 km/h.
     var isReady: Bool { recording?.isReady == true }
+    /// The recording came from auto-start (B-311): it may end and save by itself (B-339).
+    private(set) var isAutoStarted = false
+    /// Saves an auto-ended ride with a name (B-339); set by the app, which has the library. Returns
+    /// whether it was saved: if not, the recording goes on, so nothing is lost.
+    var autoSave: (_ recording: RideRecording, _ name: String) -> Bool = { _, _ in false }
+    /// How long the vehicle has stood (B-339); only for an auto-started recording.
+    private var standstill: AutoStart.Standstill?
+    private var standstillCheck: Task<Void, Never>?
+    /// Set while an automatic end looks up the names of the places, so it runs once.
+    private var isEndingAutomatically = false
     /// Siri or a shortcut asked to end the ride (B-225): the recording screen opens “Save Ride”.
     var endRequested = false
 
@@ -98,7 +108,10 @@ final class Recorder {
         write(.start(date))
         write(.vehicle(vehicle))
         write(.device(device))
-        if ready { write(.ready) }
+        if ready {
+            write(.ready)
+            watchStandstill(since: date)
+        }
         startUpdates()
         if let recording { activity.start(recording) }
     }
@@ -144,9 +157,64 @@ final class Recorder {
         _ = stop()
     }
 
+    /// Ends an auto-started ride by itself (B-339): from the automation when the connection ends, or
+    /// after standing still. Under 500 m it is thrown away; else it is saved with the device and the
+    /// places at start and end as its name, and a notification says so.
+    func endAutomatically() async {
+        guard let recording, isAutoStarted, !isEndingAutomatically else { return }
+        guard AutoStart.keeps(recording) else {
+            _ = stop()
+            return
+        }
+        isEndingAutomatically = true
+        defer { isEndingAutomatically = false }
+        let first = recording.segments.first(where: { !$0.isEmpty })?.first?.fix
+        let last = recording.lastPoint?.fix
+        async let start = PlaceName.of(first)
+        async let end = PlaceName.of(last)
+        let name = AutoStart.rideName(start: await start, end: await end) ?? RecordingView.defaultName(for: recording.startDate)
+        // What was recorded while the names were looked up belongs to the ride too.
+        guard let final = self.recording, autoSave(final, name) else { return }
+        _ = stop()
+        RideSavedNotice.post(name: name, distance: final.distance)
+    }
+
+    /// Checks every 30 s, also while no positions come (iOS pauses them for a parked car).
+    private func watchStandstill(since date: Date) {
+        isAutoStarted = true
+        var limit = TimeInterval(AutoStartSettings.standstillMinutes * 60)
+        #if DEBUG
+        // `-WattspurDemoStandstillSeconds 40`: a short standstill for the simulator.
+        let seconds = UserDefaults.standard.integer(forKey: "WattspurDemoStandstillSeconds")
+        if seconds > 0 { limit = TimeInterval(seconds) }
+        #endif
+        standstill = AutoStart.Standstill(limit: limit, since: date)
+        standstillCheck?.cancel()
+        standstillCheck = Task { [weak self] in
+            while !Task.isCancelled {
+                try? await Task.sleep(for: .seconds(30))
+                await self?.checkStandstill()
+            }
+        }
+    }
+
+    private func checkStandstill() async {
+        guard let standstill, standstill.isOver(at: .now) else { return }
+        if isReady {
+            // Nobody drove off: “Ready” ends without a ride.
+            cancelReady()
+        } else if AutoStartSettings.endsAfterStandstill {
+            await endAutomatically()
+        }
+    }
+
     /// Ends the recording and hands it back; the log is removed.
     func stop() -> RideRecording? {
         endRequested = false
+        isAutoStarted = false
+        standstill = nil
+        standstillCheck?.cancel()
+        standstillCheck = nil
         let finished = recording ?? unfinished
         stopUpdates()
         activity.end(recording)
@@ -231,6 +299,8 @@ final class Recorder {
         let values = motion?.values(at: location)
         fix.motion = droppedMotion.map { $0.merged(with: values) } ?? values
         let wasReady = isReady
+        standstill?.record(fix)
+        if standstill?.isOver(at: fix.date) == true { Task { await checkStandstill() } }
         if recording?.add(fix) == true {
             droppedMotion = nil
             write(.fix(fix))

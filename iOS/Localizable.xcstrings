@@ -6556,16 +6556,6 @@
         }
       }
     },
-    "2. Choose CarPlay › Connects, or Bluetooth › your device › Is Connected." : {
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "2. Wähle CarPlay › Verbindet, oder Bluetooth › dein Gerät › Ist verbunden."
-          }
-        }
-      }
-    },
     "3. Choose Run Immediately, then the action Wattspur › Start Ride, without a device." : {
       "localizations" : {
         "de" : {
@@ -6582,6 +6572,136 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Automation einrichten"
+          }
+        }
+      }
+    },
+    "Ride Saved" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Fahrt gesichert"
+          }
+        }
+      }
+    },
+    "%@, %@. Tap to open it." : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%1$@, %2$@. Tippe, um sie zu öffnen."
+          }
+        }
+      }
+    },
+    "When Disconnected" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Bei Trennung"
+          }
+        }
+      }
+    },
+    "After Standing Still" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Nach Stillstand"
+          }
+        }
+      }
+    },
+    "Standing Still For" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Stillstand"
+          }
+        }
+      }
+    },
+    "The ride is saved by itself, with the device and the places at start and end as its name, and a notification says so. Rides under 500 m are not kept. “Ready” without driving off ends after the time standing still." : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Die Fahrt wird von selbst gesichert, mit dem Gerät und den Orten von Start und Ziel als Namen; eine Mitteilung sagt Bescheid. Fahrten unter 500 m werden nicht behalten. „Bereit“ ohne Losfahren endet nach der Zeit für den Stillstand."
+          }
+        }
+      }
+    },
+    "2. Choose CarPlay or Bluetooth (then your device), and Connects." : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "2. Wähle CarPlay oder Bluetooth (dann dein Gerät) und Verbindet."
+          }
+        }
+      }
+    },
+    "4. For the end: a second automation with Disconnects and Wattspur › End Ride." : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "4. Für das Ende: eine zweite Automation mit Trennt und Wattspur › Fahrt beenden."
+          }
+        }
+      }
+    },
+    "Auto-start cancelled. No ride was recorded." : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Auto-Start abgebrochen. Es wurde keine Fahrt aufgenommen."
+          }
+        }
+      }
+    },
+    "Ride saved." : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Fahrt gesichert."
+          }
+        }
+      }
+    },
+    "The ride was shorter than 500 m and was not kept." : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Die Fahrt war kürzer als 500 m und wurde nicht behalten."
+          }
+        }
+      }
+    },
+    "%lld min" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%lld min"
+          }
+        }
+      }
+    },
+    "End" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ende"
           }
         }
       }

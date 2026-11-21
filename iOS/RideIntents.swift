@@ -79,6 +79,19 @@ struct EndRideIntent: AppIntent {
         guard recorder.isRecording else {
             return .result(dialog: .app("No ride is being recorded."))
         }
+        // Auto-start (B-339): “Ready” without a ride just ends; an auto-started ride saves by itself
+        // when the automation for the end of the connection runs this.
+        if recorder.isReady {
+            recorder.cancelReady()
+            return .result(dialog: .app("Auto-start cancelled. No ride was recorded."))
+        }
+        if recorder.isAutoStarted, AutoStartSettings.endsOnDisconnect {
+            let kept = recorder.recording.map(AutoStart.keeps) ?? false
+            await recorder.endAutomatically()
+            if !recorder.isRecording {
+                return .result(dialog: kept ? .app("Ride saved.") : .app("The ride was shorter than 500 m and was not kept."))
+            }
+        }
         recorder.endRequested = true
         return .result(dialog: .app("Name the ride and save it."))
     }

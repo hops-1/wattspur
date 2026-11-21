@@ -8,6 +8,9 @@ import WattspurCore
 struct AutoStartPage: View {
     @Environment(PhoneLibrary.self) private var library
     @AppStorage(PhoneSettingsKey.autoStart) private var isOn = false
+    @AppStorage(PhoneSettingsKey.autoStartEndOnDisconnect) private var endsOnDisconnect = true
+    @AppStorage(PhoneSettingsKey.autoStartEndAfterStandstill) private var endsAfterStandstill = true
+    @AppStorage(PhoneSettingsKey.autoStartStandstillMinutes) private var standstillMinutes = AutoStart.defaultStandstillMinutes
     @State private var triggers = AutoStartSettings.triggers
     /// The connection now, read again whenever the audio route changes.
     @State private var ports = AutoStartSettings.currentPorts
@@ -45,9 +48,25 @@ struct AutoStartPage: View {
                     Text("To choose a Bluetooth device, connect the iPhone to it first, e.g. the car's hands-free or the motorcycle headset; its name then shows up here.")
                 }
                 Section {
+                    Toggle("When Disconnected", isOn: $endsOnDisconnect)
+                    Toggle("After Standing Still", isOn: $endsAfterStandstill)
+                    if endsAfterStandstill {
+                        Picker("Standing Still For", selection: $standstillMinutes) {
+                            ForEach(AutoStart.standstillChoices, id: \.self) { minutes in
+                                Text("\(minutes) min").tag(minutes)
+                            }
+                        }
+                    }
+                } header: {
+                    Text("End")
+                } footer: {
+                    Text("The ride is saved by itself, with the device and the places at start and end as its name, and a notification says so. Rides under 500 m are not kept. “Ready” without driving off ends after the time standing still.")
+                }
+                Section {
                     Text("1. Open the Shortcuts app, then Automation › New Automation.")
-                    Text("2. Choose CarPlay › Connects, or Bluetooth › your device › Is Connected.")
+                    Text("2. Choose CarPlay or Bluetooth (then your device), and Connects.")
                     Text("3. Choose Run Immediately, then the action Wattspur › Start Ride, without a device.")
+                    Text("4. For the end: a second automation with Disconnects and Wattspur › End Ride.")
                 } header: {
                     Text("Setting Up the Automation")
                 }
@@ -58,6 +77,8 @@ struct AutoStartPage: View {
             ports = AutoStartSettings.currentPorts
         }
         .onAppear { ports = AutoStartSettings.currentPorts }
+        // The notification after an automatic end needs the permission; ask when it is switched on.
+        .onChange(of: isOn) { _, on in if on { RideSavedNotice.requestPermission() } }
     }
 
     private func binding(for id: UUID) -> Binding<AutoStart.Trigger?> {

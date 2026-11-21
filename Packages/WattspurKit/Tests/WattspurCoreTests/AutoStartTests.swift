@@ -114,6 +114,50 @@ struct AutoStartTests {
         #expect(AutoStart.device(for: [AutoStart.AudioPort(kind: .carPlay, name: "CarPlay")], triggers: triggers, devices: [moto]) == nil)
     }
 
+    @Test("Standing still: slow positions and the GPS wandering do not count as moving; 10 min after the last move it is over (B-339)")
+    func standstill() {
+        var watch = AutoStart.Standstill(limit: 600, since: Self.start)
+        watch.record(Self.fix(30, north: 0, speed: 12))
+        #expect(watch.lastMove == Self.start.addingTimeInterval(30))
+        // Parked: the GPS wanders at 1–3 km/h, one inaccurate jump looks fast.
+        for second in stride(from: 31.0, to: 700, by: 1) {
+            watch.record(Self.fix(second, north: 0, speed: 0.6))
+        }
+        watch.record(Self.fix(400, north: 50, speed: 20, accuracy: 80))
+        #expect(watch.lastMove == Self.start.addingTimeInterval(30))
+        #expect(!watch.isOver(at: Self.start.addingTimeInterval(629)))
+        #expect(watch.isOver(at: Self.start.addingTimeInterval(630)))
+    }
+
+    @Test("“Ready” without driving off is over after the standstill time, counted from its start")
+    func readyTimesOut() {
+        let watch = AutoStart.Standstill(limit: 300, since: Self.start)
+        #expect(!watch.isOver(at: Self.start.addingTimeInterval(299)))
+        #expect(watch.isOver(at: Self.start.addingTimeInterval(300)))
+    }
+
+    @Test("Under 500 m, or still ready, an auto-ended ride is not kept")
+    func keeps() {
+        var short = RideRecording(startDate: Self.start, device: .without(.car))
+        for second in 0...30 { short.add(Self.fix(Double(second), north: Double(second) * 10, speed: 10)) }
+        #expect(!AutoStart.keeps(short))
+        var long = RideRecording(startDate: Self.start, device: .without(.car))
+        for second in 0...60 { long.add(Self.fix(Double(second), north: Double(second) * 10, speed: 10)) }
+        #expect(AutoStart.keeps(long))
+        var ready = RideRecording(startDate: Self.start, device: .without(.car))
+        ready.waitForMovement()
+        #expect(!AutoStart.keeps(ready))
+    }
+
+    @Test("The name: start – end, one place for a round trip, none without a start")
+    func rideName() {
+        #expect(AutoStart.rideName(start: "Darmstadt", end: "Frankfurt am Main") == "Darmstadt – Frankfurt am Main")
+        #expect(AutoStart.rideName(start: "Reinheim", end: "Reinheim") == "Reinheim")
+        #expect(AutoStart.rideName(start: "Reinheim", end: nil) == "Reinheim")
+        #expect(AutoStart.rideName(start: nil, end: "Reinheim") == nil)
+        #expect(AutoStart.rideName(start: " ", end: "Reinheim") == nil)
+    }
+
     @Test("A trigger survives JSON, as kept on the iPhone")
     func triggerCoding() throws {
         let id = UUID()

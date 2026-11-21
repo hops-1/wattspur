@@ -67,6 +67,11 @@ enum PhoneSettingsKey {
     /// `[UUID: AutoStart.Trigger]`), kept on this iPhone only.
     static let autoStart = "autoStart"
     static let autoStartTriggers = "autoStartTriggers"
+    /// How an auto-started ride ends (B-339): when the connection ends (the second automation runs
+    /// “End Ride”), after standing still, and how many minutes of standing still; both on by default.
+    static let autoStartEndOnDisconnect = "autoStartEndOnDisconnect"
+    static let autoStartEndAfterStandstill = "autoStartEndAfterStandstill"
+    static let autoStartStandstillMinutes = "autoStartStandstillMinutes"
     /// Set by UI tests and screenshots: import the sample ride at launch.
     static let demoRide = "WattspurDemoRide"
 }
