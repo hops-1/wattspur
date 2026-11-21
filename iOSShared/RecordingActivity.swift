@@ -24,6 +24,8 @@ struct RecordingAttributes: ActivityAttributes {
     var startDate: Date
     /// The symbol of the device recorded with (B-286), e.g. `car`; `nil` is a bicycle.
     var symbol: String? = nil
+    /// The kind of the device recorded with (`BikeKind`), drawn as in the app (B-342); `nil` is a bicycle.
+    var kind: String? = nil
     /// What the side value means (B-289): `lateral` for a car, `lean` for a motorcycle; `nil` shows none.
     var side: String? = nil
 }

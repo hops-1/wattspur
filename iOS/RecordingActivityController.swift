@@ -34,6 +34,7 @@ final class RecordingActivityController {
         case .eBike: nil
         }
         activity = try? Activity.request(attributes: RecordingAttributes(startDate: recording.startDate, symbol: recording.device?.symbol,
+                                                                         kind: recording.device?.kind.rawValue,
                                                                          side: side),
                                          content: ActivityContent(state: state, staleDate: nil))
         lastState = state

@@ -12,6 +12,7 @@ let package = Package(
         .library(name: "WattspurKit", targets: ["WattspurKit"]),
         .library(name: "WattspurCore", targets: ["WattspurCore"]),
         .library(name: "WattspurMap", targets: ["WattspurMap"]),
+        .library(name: "WattspurSymbols", targets: ["WattspurSymbols"]),
         .executable(name: "anonymize-fit", targets: ["anonymize-fit"]),
     ],
     targets: [
@@ -24,6 +25,9 @@ let package = Package(
         // The maps of both apps on MapKit (B-186): tiles, the route and its colours, the map of all
         // rides, the cursor. Free of AppKit, UIKit and SwiftUI; each app adds only its view and input.
         .target(name: "WattspurMap", dependencies: ["WattspurCore"]),
+        // The drawn symbols of the device kinds for both apps and the widgets (B-342): SwiftUI shapes
+        // only, without AppKit, UIKit, SwiftData or texts.
+        .target(name: "WattspurSymbols", dependencies: ["WattspurCore"]),
         // Developer tool that makes the sample ride (V-05): swift run anonymize-fit --help
         .executableTarget(name: "anonymize-fit", dependencies: ["WattspurCore"]),
         // The FIT and GPX files of the tests, shared by both test targets.

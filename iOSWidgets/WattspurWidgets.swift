@@ -1,6 +1,8 @@
 import ActivityKit
 import AppIntents
 import SwiftUI
+import WattspurCore
+import WattspurSymbols
 import WidgetKit
 
 /// The widget extension of the iPhone app: the Live Activity of a recording (B-223) and the widget
@@ -63,7 +65,7 @@ struct RecordingLiveActivity: Widget {
                     }
                 }
             } compactLeading: {
-                Image(systemName: Self.symbol(context))
+                ActivitySymbol(context: context)
                     .foregroundStyle(Color.track)
             } compactTrailing: {
                 // Little room beside the island: the number large, the unit small.
@@ -79,7 +81,7 @@ struct RecordingLiveActivity: Widget {
                 .lineLimit(1)
                 .minimumScaleFactor(0.6)
             } minimal: {
-                Image(systemName: Self.symbol(context))
+                ActivitySymbol(context: context)
                     .foregroundStyle(Color.track)
             }
             .keylineTint(Color.track)
@@ -93,13 +95,31 @@ struct RecordingLiveActivity: Widget {
     }
 }
 
+/// The device's drawn symbol, as in the app (B-342); Pause or the hourglass instead while
+/// `showsState` and the recording is paused or ready.
+private struct ActivitySymbol: View {
+    let context: ActivityViewContext<RecordingAttributes>
+    var showsState = true
+
+    var body: some View {
+        if showsState, context.state.isReady == true || context.state.isPaused {
+            Image(systemName: RecordingLiveActivity.symbol(context))
+        } else if let kind = BikeKind(rawValue: context.attributes.kind ?? "") {
+            BikeKindIcon(kind: kind, size: 18)
+        } else {
+            // An activity started by a build before 1.6 (40), or a bicycle.
+            Image(systemName: context.attributes.symbol ?? "bicycle")
+        }
+    }
+}
+
 private struct LockScreenView: View {
     let context: ActivityViewContext<RecordingAttributes>
 
     var body: some View {
         VStack(alignment: .leading, spacing: 10) {
             HStack {
-                Label("Wattspur", systemImage: context.attributes.symbol ?? "bicycle")
+                Label { Text(verbatim: "Wattspur") } icon: { ActivitySymbol(context: context, showsState: false) }
                     .font(.subheadline.weight(.semibold))
                     .foregroundStyle(Color.track)
                 Spacer()
