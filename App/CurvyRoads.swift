@@ -112,6 +112,8 @@ final class CurvyRoadsStore {
 
     /// The dialog "Import Curvy Roads…", for the menu and the map's window.
     func chooseFiles() {
+        // A new choice starts fresh: the old failure message goes away (S-27).
+        dismissFailure()
         let panel = NSOpenPanel()
         panel.title = String(localized: "Import Curvy Roads")
         panel.message = String(localized: "Choose the KMZ file of your state from roadcurvature.com, the one called “c_300”.")
