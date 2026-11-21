@@ -316,13 +316,13 @@ struct HighlightsTile: View {
 
     @ViewBuilder private func goal(_ progress: GoalProgress, calendar: Calendar) -> some View {
         let metric = progress.metric
-        let unit = HighlightTexts.unit(metric)
-        let target = HighlightTexts.number(metric, progress.current.target)
-        Text(verbatim: "\(HighlightTexts.currentPeriod(progress.period, progress.current.interval, calendar: calendar)) · \(HighlightTexts.title(metric))")
+        let unit = HighlightsFormat.unit(metric)
+        let target = HighlightsFormat.number(metric, progress.current.target)
+        Text(verbatim: "\(HighlightsFormat.currentPeriod(progress.period, progress.current.interval, calendar: calendar)) · \(HighlightsFormat.title(metric))")
             .font(.footnote)
             .foregroundStyle(.secondary)
         HStack(alignment: .firstTextBaseline, spacing: 6) {
-            Text(verbatim: HighlightTexts.number(metric, progress.current.value))
+            Text(verbatim: HighlightsFormat.number(metric, progress.current.value))
                 .font(.title.weight(.bold))
                 .foregroundStyle(Color.track)
             Text(verbatim: String(localized: "of \(unit.isEmpty ? target : "\(target) \(unit)")"))
@@ -350,7 +350,7 @@ struct HighlightsTile: View {
                 .foregroundStyle(Color.track)
             Spacer()
             if let longest = records.first(where: { $0.kind == .longestDistance }) {
-                Text(verbatim: "\(HighlightTexts.title(longest.kind)) \(HighlightTexts.text(longest.kind, longest.value))")
+                Text(verbatim: "\(HighlightsFormat.title(longest.kind)) \(HighlightsFormat.text(longest.kind, longest.value))")
                     .font(.footnote)
                     .foregroundStyle(.secondary)
                     .lineLimit(1)

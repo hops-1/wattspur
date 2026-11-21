@@ -1,8 +1,7 @@
-import Charts
-import SwiftData
-import SwiftUI
+import Foundation
 import WattspurKit
 
+/// The texts of the highlights, the same on the Mac and the iPad (B-355).
 enum HighlightsFormat {
     static func title(_ kind: RecordKind) -> String {
         switch kind {
@@ -25,13 +24,13 @@ enum HighlightsFormat {
     /// Number and unit, e.g. ("101.6", "km") or ("5:36", "h").
     static func value(_ kind: RecordKind, _ value: Double) -> (number: String, unit: String) {
         switch kind {
-        case .longestDistance: (RideFormat.distanceValue(value), "km")
+        case .longestDistance: (ValueFormat.distanceValue(value), "km")
         case .longestDuration:
             (Duration.seconds(value.rounded()).formatted(.time(pattern: .hourMinute)), "h")
         case .mostAscent: (Int(value.rounded()).formatted(), "m")
-        case .highestAverageSpeed: (RideFormat.speedValue(value), "km/h")
+        case .highestAverageSpeed: (ValueFormat.speedValue(value), "km/h")
         case .highestAveragePower: (Int(value.rounded()).formatted(), "W")
-        case .highestSpeed: (RideFormat.speedValue(value), "km/h")
+        case .highestSpeed: (ValueFormat.speedValue(value), "km/h")
         case .highestPower, .bestPower1Min: (Int(value.rounded()).formatted(), "W")
         case .highestCadence: (Int(value.rounded()).formatted(), String(localized: "rpm"))
         case .mostCurves: (Int(value.rounded()).formatted(), String(localized: "per km"))
@@ -102,5 +101,3 @@ enum HighlightsFormat {
         date.formatted(Date.FormatStyle(timeZone: timeZone).day().month(.abbreviated).year())
     }
 }
-
-// MARK: - Year

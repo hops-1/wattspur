@@ -40,9 +40,9 @@ struct PadAnalysisView: View {
             VStack(alignment: .leading, spacing: 24) {
                 controls
                 VStack(alignment: .leading, spacing: 4) {
-                    Text(verbatim: AnalysisTexts.heading(summary))
+                    Text(verbatim: AnalysisFormat.heading(summary))
                         .font(.largeTitle.bold())
-                    Text(verbatim: AnalysisTexts.subheading(summary))
+                    Text(verbatim: AnalysisFormat.subheading(summary))
                         .foregroundStyle(.secondary)
                 }
                 if summary.current.rideCount == 0 {
@@ -141,28 +141,28 @@ private struct PadTotals: View {
 
     var body: some View {
         let c = summary.current
-        let caption = AnalysisTexts.comparisonCaption(summary)
+        let caption = AnalysisFormat.comparisonCaption(summary)
         VStack(alignment: .leading, spacing: 12) {
             Text("Totals").font(.subheadline.weight(.semibold)).foregroundStyle(.secondary)
             LazyVGrid(columns: [GridItem(.adaptive(minimum: 170), spacing: 24, alignment: .leading)],
                       alignment: .leading, spacing: 20) {
                 AnalysisFigure("Rides", value: c.rideCount.formatted(),
                        change: summary.change { Double($0.rideCount) }, caption: caption)
-                AnalysisFigure("Distance", value: AnalysisTexts.number(c.distance / 1000, digits: 1), unit: "km",
+                AnalysisFigure("Distance", value: AnalysisFormat.number(c.distance / 1000, digits: 1), unit: "km",
                        change: summary.change { $0.distance }, caption: caption)
-                AnalysisFigure("Ride time", value: AnalysisTexts.hoursMinutes(c.timerTime),
+                AnalysisFigure("Ride time", value: AnalysisFormat.hoursMinutes(c.timerTime),
                        change: summary.change { $0.timerTime }, caption: caption)
-                AnalysisFigure("Ascent", value: AnalysisTexts.whole(c.ascentIfKnown), unit: "m",
+                AnalysisFigure("Ascent", value: AnalysisFormat.whole(c.ascentIfKnown), unit: "m",
                        change: summary.change { $0.ascentIfKnown }, caption: caption)
                 if sport == .cycling {
-                    AnalysisFigure("Work", value: AnalysisTexts.whole(c.workKilojoulesIfKnown), unit: "kJ",
+                    AnalysisFigure("Work", value: AnalysisFormat.whole(c.workKilojoulesIfKnown), unit: "kJ",
                            change: summary.change { $0.workKilojoulesIfKnown }, caption: caption)
-                    AnalysisFigure("Calories", value: AnalysisTexts.whole(c.kilocaloriesIfKnown), unit: "kcal",
+                    AnalysisFigure("Calories", value: AnalysisFormat.whole(c.kilocaloriesIfKnown), unit: "kcal",
                            change: summary.change { $0.kilocaloriesIfKnown }, caption: caption)
                     AnalysisFigure("CO₂ saved", value: c.co2SavedKilograms.formatted(.number.precision(.fractionLength(1))),
                            unit: "kg", change: summary.change { $0.co2SavedKilograms }, caption: caption)
                 }
-                AnalysisFigure("Avg per ride", value: AnalysisTexts.number((c.distancePerRide ?? 0) / 1000, digits: 1), unit: "km",
+                AnalysisFigure("Avg per ride", value: AnalysisFormat.number((c.distancePerRide ?? 0) / 1000, digits: 1), unit: "km",
                        change: summary.change { $0.distancePerRide }, caption: caption)
             }
         }
@@ -185,15 +185,15 @@ private struct PadAverages: View {
             }
             LazyVGrid(columns: [GridItem(.adaptive(minimum: 150), spacing: 24, alignment: .leading)],
                       alignment: .leading, spacing: 12) {
-                AnalysisFigure("Avg speed", value: AnalysisTexts.number(c.averageSpeed.map { $0 * 3.6 }, digits: 1), unit: "km/h",
+                AnalysisFigure("Avg speed", value: AnalysisFormat.number(c.averageSpeed.map { $0 * 3.6 }, digits: 1), unit: "km/h",
                        dot: .metricSpeed, compact: true, change: summary.change { $0.averageSpeed })
                 if sport == .cycling {
-                    AnalysisFigure("Avg power", value: AnalysisTexts.whole(c.averagePower), unit: "W", dot: .metricPower,
+                    AnalysisFigure("Avg power", value: AnalysisFormat.whole(c.averagePower), unit: "W", dot: .metricPower,
                            compact: true, change: summary.change { $0.averagePower })
-                    AnalysisFigure("Avg cadence", value: AnalysisTexts.whole(c.averageCadence), unit: String(localized: "rpm"),
+                    AnalysisFigure("Avg cadence", value: AnalysisFormat.whole(c.averageCadence), unit: String(localized: "rpm"),
                            dot: .metricCadence, compact: true, change: summary.change { $0.averageCadence })
                 }
-                AnalysisFigure("Avg ride time", value: AnalysisTexts.hoursMinutes(c.timerTimePerRide ?? 0),
+                AnalysisFigure("Avg ride time", value: AnalysisFormat.hoursMinutes(c.timerTimePerRide ?? 0),
                        compact: true, change: summary.change { $0.timerTimePerRide })
             }
         }
@@ -263,7 +263,7 @@ struct PadChangeLabel: View {
                         .foregroundStyle(isIncrease ? AnyShapeStyle(Color.track) : AnyShapeStyle(.secondary))
                         .accessibilityHidden(true)
                 }
-                Text(verbatim: AnalysisTexts.percent(change))
+                Text(verbatim: AnalysisFormat.percent(change))
                 if let caption { Text(verbatim: caption) }
             } else if caption != nil {
                 Text("no comparison")
@@ -338,7 +338,7 @@ private struct PadBarChart: View {
         let bucket = summary.buckets[i]
         let before = i > 0 ? summary.buckets[i - 1] : nil
         return HStack(alignment: .firstTextBaseline, spacing: 10) {
-            Text(verbatim: AnalysisTexts.bucketTitle(bucket.interval, grouping: grouping, calendar: summary.calendar))
+            Text(verbatim: AnalysisFormat.bucketTitle(bucket.interval, grouping: grouping, calendar: summary.calendar))
                 .font(.callout)
                 .foregroundStyle(.secondary)
             Text(verbatim: "\(metric.formatted(bucket.aggregate)) · \(String(localized: "\(bucket.aggregate.rideCount) rides"))")
@@ -347,7 +347,7 @@ private struct PadBarChart: View {
             if let before {
                 PadChangeLabel(
                     change: Change.relative(from: metric.value(before.aggregate), to: metric.value(bucket.aggregate)),
-                    caption: String(localized: "vs \(AnalysisTexts.bucketShort(before.interval.start, grouping: grouping, calendar: summary.calendar, multiYear: false))")
+                    caption: String(localized: "vs \(AnalysisFormat.bucketShort(before.interval.start, grouping: grouping, calendar: summary.calendar, multiYear: false))")
                 )
             }
         }
@@ -366,7 +366,7 @@ private struct PadBarChart: View {
             )
             .foregroundStyle(index == picked ? Color.track : Color.secondary.opacity(0.45))
             .cornerRadius(3)
-            .accessibilityLabel(AnalysisTexts.bucketTitle(bucket.interval, grouping: grouping, calendar: calendar))
+            .accessibilityLabel(AnalysisFormat.bucketTitle(bucket.interval, grouping: grouping, calendar: calendar))
             .accessibilityValue(metric.formatted(bucket.aggregate))
         }
         .chartXSelection(value: $selectedDate)
@@ -374,7 +374,7 @@ private struct PadBarChart: View {
             AxisMarks(values: .automatic(desiredCount: 12)) { mark in
                 AxisValueLabel {
                     if let date = mark.as(Date.self) {
-                        Text(verbatim: AnalysisTexts.bucketShort(date, grouping: grouping, calendar: calendar, multiYear: multiYear))
+                        Text(verbatim: AnalysisFormat.bucketShort(date, grouping: grouping, calendar: calendar, multiYear: multiYear))
                     }
                 }
             }
@@ -432,11 +432,11 @@ private struct PadTrendCard: View {
                 Spacer()
                 VStack(alignment: .trailing, spacing: 2) {
                     Text("Avg in period").font(.caption).foregroundStyle(.secondary)
-                    Text(verbatim: "\(AnalysisTexts.number(average, digits: digits)) \(unit)")
+                    Text(verbatim: "\(AnalysisFormat.number(average, digits: digits)) \(unit)")
                         .font(.title3.weight(.semibold))
                         .monospacedDigit()
                 }
-                if let caption = AnalysisTexts.comparisonCaption(summary), change != nil {
+                if let caption = AnalysisFormat.comparisonCaption(summary), change != nil {
                     VStack(alignment: .trailing, spacing: 2) {
                         Text(verbatim: caption).font(.caption).foregroundStyle(.secondary)
                         PadChangeLabel(change: change).font(.title3.weight(.semibold))
@@ -480,141 +480,6 @@ private struct PadTrendCard: View {
         }
         .frame(height: 150)
         .accessibilityLabel(Text(title))
-    }
-}
-
-// MARK: - Texts
-
-/// The texts of the analysis on the iPad, the same words as on the Mac (rule 8: not in the Kit).
-enum AnalysisTexts {
-    static func heading(_ summary: AnalysisSummary) -> String {
-        guard let interval = summary.interval else { return String(localized: "All Rides") }
-        let range = interval.start..<interval.end.addingTimeInterval(-1)
-        switch summary.kind {
-        case .week:
-            let week = summary.calendar.component(.weekOfYear, from: interval.start)
-            return String(localized: "Week \(week) · \(range.formatted(.interval.day().month(.abbreviated)))")
-        case .month: return interval.start.formatted(.dateTime.month(.wide).year())
-        case .year: return interval.start.formatted(.dateTime.year())
-        case .custom, .all: return range.formatted(.interval.day().month(.abbreviated).year())
-        }
-    }
-
-    static func subheading(_ summary: AnalysisSummary) -> String {
-        let count = summary.current.rideCount
-        if let previousInterval = summary.previousInterval {
-            let name = previousName(kind: summary.kind, interval: previousInterval, calendar: summary.calendar)
-            return String(localized: "\(count) rides · compared with \(name)")
-        }
-        return String(localized: "\(count) rides")
-    }
-
-    /// "vs September" under each figure.
-    static func comparisonCaption(_ summary: AnalysisSummary) -> String? {
-        summary.previousInterval.map {
-            String(localized: "vs \(previousName(kind: summary.kind, interval: $0, calendar: summary.calendar))")
-        }
-    }
-
-    static func previousName(kind: AnalysisPeriodKind, interval: DateInterval, calendar: Calendar) -> String {
-        switch kind {
-        case .week: String(localized: "week \(calendar.component(.weekOfYear, from: interval.start))")
-        case .month: interval.start.formatted(.dateTime.month(.wide))
-        case .year: interval.start.formatted(.dateTime.year())
-        case .custom, .all: String(localized: "the same length before")
-        }
-    }
-
-    /// "38 h 12 min" in the user's locale.
-    static func hoursMinutes(_ seconds: TimeInterval) -> String {
-        Duration.seconds((seconds / 60).rounded() * 60)
-            .formatted(.units(allowed: [.hours, .minutes], width: .abbreviated))
-    }
-
-    static func whole(_ value: Double?) -> String { number(value, digits: 0) }
-
-    static func number(_ value: Double?, digits: Int) -> String {
-        value.map { $0.formatted(.number.precision(.fractionLength(digits))) } ?? "–"
-    }
-
-    /// "+12 %", "−3 %", "±0 %"
-    static func percent(_ change: Double) -> String {
-        let rounded = (change * 100).rounded()
-        let sign = rounded > 0 ? "+" : (rounded < 0 ? "−" : "±")
-        return "\(sign)\(abs(change).formatted(.percent.precision(.fractionLength(0))))"
-    }
-
-    /// Axis label of a bar: "Mon", "W42", "Oct", "2026".
-    static func bucketShort(_ date: Date, grouping: AnalysisGrouping, calendar: Calendar, multiYear: Bool) -> String {
-        switch grouping {
-        case .day: date.formatted(.dateTime.weekday(.abbreviated))
-        case .week: String(localized: "W\(calendar.component(.weekOfYear, from: date))")
-        case .month: multiYear ? date.formatted(.dateTime.month(.abbreviated).year(.twoDigits)) : date.formatted(.dateTime.month(.abbreviated))
-        case .year: date.formatted(.dateTime.year())
-        }
-    }
-
-    /// Title of the picked bar: "Monday, 19 October", "Week 42 (12–18 Oct)", "October 2026", "2026".
-    static func bucketTitle(_ interval: DateInterval, grouping: AnalysisGrouping, calendar: Calendar) -> String {
-        switch grouping {
-        case .day: return interval.start.formatted(.dateTime.weekday(.wide).day().month(.wide))
-        case .week:
-            let week = calendar.component(.weekOfYear, from: interval.start)
-            let range = (interval.start..<interval.end.addingTimeInterval(-1)).formatted(.interval.day().month(.abbreviated))
-            return String(localized: "Week \(week) (\(range))")
-        case .month: return interval.start.formatted(.dateTime.month(.wide).year())
-        case .year: return interval.start.formatted(.dateTime.year())
-        }
-    }
-}
-
-extension AnalysisPeriodKind {
-    var label: LocalizedStringKey {
-        switch self {
-        case .week: "Week"
-        case .month: "Month"
-        case .year: "Year"
-        case .custom: "Custom"
-        case .all: "All"
-        }
-    }
-}
-
-extension AnalysisGrouping {
-    var label: LocalizedStringKey {
-        switch self {
-        case .day: "Day"
-        case .week: "Week"
-        case .month: "Month"
-        case .year: "Year"
-        }
-    }
-
-    var perLabel: LocalizedStringKey {
-        switch self {
-        case .day: "per day"
-        case .week: "per week"
-        case .month: "per month"
-        case .year: "per year"
-        }
-    }
-}
-
-extension BarMetric {
-    var label: LocalizedStringKey {
-        switch self {
-        case .distance: "Distance"
-        case .time: "Ride time"
-        case .ascent: "Ascent"
-        }
-    }
-
-    func formatted(_ aggregate: RideAggregate) -> String {
-        switch self {
-        case .distance: RideFormat.distance(aggregate.distance)
-        case .time: AnalysisTexts.hoursMinutes(aggregate.timerTime)
-        case .ascent: "\(aggregate.ascent.formatted(.number.precision(.fractionLength(0)))) m"
-        }
     }
 }
 
