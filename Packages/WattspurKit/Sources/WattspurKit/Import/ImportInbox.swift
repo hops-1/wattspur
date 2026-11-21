@@ -85,10 +85,13 @@ public struct ImportInbox: Sendable {
     /// Moves what the share extension left in `shared` (B-301) into the inbox, where the import
     /// takes it as any other waiting file. The extension puts each share in its own folder there,
     /// written under a hidden name first and renamed when complete, so a share still being written
-    /// is skipped. The folders go once they are empty. Returns how many files moved.
+    /// is skipped. The folders go once they are empty. A hidden folder older than `staleWriting`
+    /// was left by an extension that ended while writing; it is deleted with the places in it (S-42).
+    /// Returns how many files moved.
     @discardableResult
-    public func collectShared(from shared: URL) -> Int {
+    public func collectShared(from shared: URL, now: Date = Date()) -> Int {
         let fileManager = FileManager.default
+        removeStaleWriting(in: shared, now: now)
         let folders = (try? fileManager.contentsOfDirectory(at: shared, includingPropertiesForKeys: [.isDirectoryKey],
                                                             options: [.skipsHiddenFiles])) ?? []
         guard !folders.isEmpty else { return 0 }
@@ -107,6 +110,19 @@ public struct ImportInbox: Sendable {
             }
         }
         return moved
+    }
+
+    /// A share still being written after this long will never be completed (S-42).
+    public static let staleWriting: TimeInterval = 3600
+
+    private func removeStaleWriting(in shared: URL, now: Date) {
+        let fileManager = FileManager.default
+        let entries = (try? fileManager.contentsOfDirectory(at: shared, includingPropertiesForKeys: [.contentModificationDateKey])) ?? []
+        for entry in entries where entry.lastPathComponent.hasPrefix(".writing-") {
+            guard let date = try? entry.resourceValues(forKeys: [.contentModificationDateKey]).contentModificationDate,
+                  now.timeIntervalSince(date) > Self.staleWriting else { continue }
+            try? fileManager.removeItem(at: entry)
+        }
     }
 
     static func freeName(for name: String, in folder: URL) -> URL {

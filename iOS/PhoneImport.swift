@@ -63,7 +63,10 @@ final class PhoneImport {
         let copied = urls.compactMap { url -> URL? in
             let copy = copyIn(url)
             // Only once the file is safe elsewhere: removed before, a failed copy lost it (R-49).
-            if copy != nil { Self.removeFromInbox(url) }
+            if copy != nil {
+                Self.removeFromInbox(url)
+                Self.removeDroppedCopy(url)
+            }
             return copy
         }
         start(copied, library: library)
@@ -134,7 +137,8 @@ final class PhoneImport {
         summary.failedFileNames = unreadable + summary.failedFileNames
         unreadable = []
         if !summary.isEmpty { self.summary = summary }
-        for copy in copies { try? FileManager.default.removeItem(at: copy) }
+        // Each copy has a folder of its own (`copyIn`); it goes with the copy (S-43).
+        for copy in copies { try? FileManager.default.removeItem(at: copy.deletingLastPathComponent()) }
         copies = []
         // Nothing reads any more: files of “Import” never read (a dismissed question) wait there again.
         for original in inboxFiles.values { _ = try? Self.inbox.unmarkReading(original) }
@@ -161,6 +165,7 @@ final class PhoneImport {
             if let error = coordinationError ?? copyError { throw error }
             return copy
         } catch {
+            try? FileManager.default.removeItem(at: folder)
             unreadable.append(url.lastPathComponent)
             return nil
         }
@@ -172,12 +177,22 @@ final class PhoneImport {
         guard url.deletingLastPathComponent().lastPathComponent == "Inbox" else { return }
         try? FileManager.default.removeItem(at: url)
     }
+
+    /// A file dropped on the iPad was copied to `tmp/Dropped/<UUID>` (`DroppedRideFile`); once copied
+    /// again it can go with its folder, so its places do not stay in `tmp` (S-43).
+    private static func removeDroppedCopy(_ url: URL) {
+        let dropped = FileManager.default.temporaryDirectory.appending(path: DroppedRideFile.folderName).resolvingSymlinksInPath()
+        let folder = url.deletingLastPathComponent()
+        guard folder.deletingLastPathComponent().resolvingSymlinksInPath().path == dropped.path else { return }
+        try? FileManager.default.removeItem(at: folder)
+    }
 }
 
 /// A FIT or GPX file dropped on the list of rides on the iPad (B-297), e.g. from the Files app in
 /// Split View. The system's copy is gone once the drop is handled, so it is copied first; the
 /// import then goes the same way as files from the file picker.
 struct DroppedRideFile: Transferable {
+    static let folderName = "Dropped"
     let url: URL
 
     static var transferRepresentation: some TransferRepresentation {
@@ -186,7 +201,7 @@ struct DroppedRideFile: Transferable {
     }
 
     private static func keep(_ file: URL) throws -> DroppedRideFile {
-        let folder = FileManager.default.temporaryDirectory.appending(path: "Dropped").appending(path: UUID().uuidString)
+        let folder = FileManager.default.temporaryDirectory.appending(path: folderName).appending(path: UUID().uuidString)
         try FileManager.default.createDirectory(at: folder, withIntermediateDirectories: true)
         let copy = folder.appending(path: file.lastPathComponent)
         try FileManager.default.copyItem(at: file, to: copy)
