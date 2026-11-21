@@ -142,6 +142,24 @@ struct RecordingPartsTests {
         #expect(library.ride(withID: recordingID)?.deletedAt != nil)
     }
 
+    @Test("Overlapping Bosch parts (one tour exported twice) change nothing (S-34)")
+    func overlappingPartsChangeNothing() throws {
+        let recorded = library.importFile(data: recording(legs: [(0, 600), (1500, 600)]), fileName: "Harzrunde.gpx")
+        let recordingID = try #require(id(recorded))
+        let first = boschRide(from: 10, seconds: 590, name: "Tour 1")
+        let again = boschRide(from: 300, seconds: 100, name: "Tour 1 noch mal")
+        let second = boschRide(from: 1510, seconds: 590, name: "Tour 2")
+
+        #expect(parts.joinParts(around: second) == nil)
+        for part in [first, again, second] {
+            #expect(!part.isMerged && part.mergedInto == nil)
+            #expect(part.attachedSourceName == nil && part.attachedSourceFormat == nil)
+            #expect(part.bike == nil)
+            #expect(!part.samples.contains { $0.lean != nil })
+        }
+        #expect(library.ride(withID: recordingID)?.deletedAt == nil)
+    }
+
     // MARK: One Bosch ride over several recordings (11.11.2026)
 
     /// A recording of one leg north at 6 m/s from `offset` for `seconds`, with a lean angle of 12°.
@@ -207,7 +225,7 @@ struct RecordingPartsTests {
         #expect(pieces.allSatisfy { $0.sourceFile?.fileName.hasSuffix(".fit") == true })
         #expect(library.ride(withID: morningID)?.deletedAt != nil)
         #expect(library.ride(withID: eveningID)?.deletedAt != nil)
-        #expect(library.ride(withID: boschID) == nil)
+        #expect(library.ride(withID: boschID)?.deletedAt != nil)
     }
 
     @Test("When the second recording comes last, its import splits the Bosch ride already there")
@@ -222,7 +240,7 @@ struct RecordingPartsTests {
             return
         }
         #expect(library.ride(withID: pieceID)?.name == "Zeiss")
-        #expect(library.ride(withID: boschID) == nil)
+        #expect(library.ride(withID: boschID)?.deletedAt != nil)
     }
 
     @Test("A Bosch ride far longer than the recordings stays whole")
@@ -239,5 +257,24 @@ struct RecordingPartsTests {
                                                fileName: "Morgen.gpx")))
         let bosch = boschDay(legs: [(30, 1900)])
         #expect(parts.splitAcrossRecordings(bosch) == nil)
+    }
+
+    @Test("The whole Bosch ride goes to the trash, and only the pieces keep its Bosch ID (S-37)")
+    func splitTrashesWholeRide() throws {
+        _ = try importDayRecordings()
+        let bosch = boschDay(legs: day)
+        let pieces = try #require(parts.splitAcrossRecordings(bosch))
+        #expect(bosch.deletedAt != nil)
+        #expect(bosch.sourceIdentifier.isEmpty)
+        #expect(pieces.allSatisfy { $0.sourceIdentifier == "5e1f0c2a-7b3d-4c8e-9a61-2f4d8b0c3e57" })
+    }
+
+    @Test("A name changed by hand on the Bosch ride goes to every piece (S-37)")
+    func splitKeepsEditedName() throws {
+        _ = try importDayRecordings()
+        let bosch = boschDay(legs: day)
+        bosch.name = "Pendeln im Regen"
+        let pieces = try #require(parts.splitAcrossRecordings(bosch))
+        #expect(pieces.map(\.name) == ["Pendeln im Regen", "Pendeln im Regen"])
     }
 }
