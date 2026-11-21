@@ -909,7 +909,7 @@ private struct HelpPage: View {
 
 // MARK: - About
 
-/// The version, where the maps come from and the privacy policy.
+/// The version, where the maps come from, the privacy policy and the project page.
 private struct AboutPage: View {
     var body: some View {
         Form {
@@ -944,6 +944,10 @@ private struct AboutPage: View {
             Section {
                 Link(destination: HelpLinks.privacy) {
                     Label("Privacy Policy", systemImage: "hand.raised")
+                }
+                // B-362: only the project page, no donation link (App Review 3.1.1).
+                Link(destination: HelpLinks.project) {
+                    Label("Wattspur on GitHub", systemImage: "chevron.left.forwardslash.chevron.right")
                 }
             } footer: {
                 Text("Wattspur has no server and no account. Your rides stay on your devices and in your own iCloud.")

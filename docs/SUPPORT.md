@@ -17,6 +17,9 @@ https://github.com/hops-1/wattspur/blob/main/docs/user-guide/de/06-faq.md
 Schreib ein Issue auf GitHub: https://github.com/hops-1/wattspur/issues
 Hilfreich sind: Gerät, Version von Wattspur (am iPhone unter „Mehr“) und was du gemacht hast. Bitte keine eigenen Fahrten-Dateien öffentlich anhängen, wenn sie zeigen, wo du wohnst.
 
+**Unterstützen**
+Wattspur ist kostenlos und ohne Werbung. Wer die Kosten der Entwicklung (Apple Developer Account, Lizenzen) mittragen möchte: https://github.com/sponsors/hops-1 oder https://buymeacoffee.com/hops1
+
 **Datenschutz**
 Wattspur sendet keine Daten an den Entwickler. Details: https://github.com/hops-1/wattspur/blob/main/docs/PRIVACY.md
 
@@ -34,6 +37,9 @@ https://github.com/hops-1/wattspur/blob/main/docs/user-guide/en/06-faq.md
 **Report a bug, ask a question, suggest a feature**
 Open an issue on GitHub: https://github.com/hops-1/wattspur/issues
 Please include your device, the Wattspur version (on the iPhone under “More”) and what you did. Please don't attach ride files in public if they show where you live.
+
+**Support the project**
+Wattspur is free and has no ads. If you would like to help with the costs of developing it (Apple Developer account, licences): https://github.com/sponsors/hops-1 or https://buymeacoffee.com/hops1
 
 **Privacy**
 Wattspur sends no data to the developer. Details: https://github.com/hops-1/wattspur/blob/main/docs/PRIVACY.md

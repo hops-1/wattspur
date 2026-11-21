@@ -8,6 +8,7 @@ Every DMG handed out to testers corresponds to one entry below.
 ## [Unreleased]
 
 ### Added
+- Mac: **Sponsor** in **About Wattspur** opens Buy Me a Coffee, to help with the costs of developing Wattspur (B-362). iPhone and iPad: **More › About** links to **Wattspur on GitHub**. The GitHub page shows a **Sponsor** button for GitHub Sponsors and Buy Me a Coffee.
 - iPhone: **Auto-start** (B-311). Under **More › Recording** auto-start can be switched on, and each device can start with CarPlay or a Bluetooth device (the car's hands-free, a motorcycle headset). A Shortcuts automation "When CarPlay connects → Start Ride" then opens the recording as **Ready** with the device of that connection; the ride begins when you drive off, above 10 km/h. **Cancel** ends "Ready" without a question, also from the Live Activity.
 - iPhone: an auto-started ride **ends and saves by itself** (B-339): when the connection ends (a second automation runs **End Ride**) and/or after standing still for 5, 10 or 20 minutes, chosen under **More › Recording › End**. It is saved with its device and the places at start and end as its name, e.g. "Darmstadt – Frankfurt am Main", and a notification **Ride Saved** opens it. Rides under 500 m are not kept; "Ready" without driving off ends after the time standing still.
 

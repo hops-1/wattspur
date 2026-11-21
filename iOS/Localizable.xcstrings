@@ -756,6 +756,16 @@
         }
       }
     },
+    "Wattspur on GitHub" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Wattspur auf GitHub"
+          }
+        }
+      }
+    },
     "avg %@ per ride" : {
       "localizations" : {
         "de" : {

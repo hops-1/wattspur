@@ -12,6 +12,12 @@ public enum HelpLinks {
         case iPhone = "09-iphone-and-icloud.md"
     }
 
+    /// The project page on GitHub (B-362; the iPhone and iPad link here, without a donation link).
+    public static let project = URL(string: "https://github.com/hops-1/wattspur")!
+    /// GitHub Sponsors and Buy Me a Coffee (B-362). Only the Mac, outside the App Store, links to a
+    /// donation page; `.github/FUNDING.yml` names both for the repository page.
+    public static let sponsors = URL(string: "https://github.com/sponsors/hops-1")!
+    public static let buyMeACoffee = URL(string: "https://buymeacoffee.com/hops1")!
     public static let releases = URL(string: "https://github.com/hops-1/wattspur/releases")!
     /// The privacy policy, German and English on one page.
     public static let privacy = URL(string: "https://github.com/hops-1/wattspur/blob/main/docs/PRIVACY.md")!
