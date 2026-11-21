@@ -50,7 +50,10 @@ struct RecordingView: View {
             map
             VStack(spacing: 16) {
                 gpsStatus
-                if let recording = recorder.recording {
+                if recorder.isReady {
+                    ReadyPanel()
+                        .frame(height: 210 + Self.dotsRoom)
+                } else if let recording = recorder.recording {
                     // Swipe from the figures to the profile of the ride so far (B-277).
                     // The page dots sit at the bottom: the figures keep room for them below (B-320).
                     TabView(selection: $page) {
@@ -83,7 +86,10 @@ struct RecordingView: View {
             .overlay(alignment: .leading) {
                 VStack(alignment: .leading, spacing: 10) {
                     gpsStatus
-                    if let recording = recorder.recording {
+                    if recorder.isReady {
+                        ReadyPanel()
+                        Spacer(minLength: 0)
+                    } else if let recording = recorder.recording {
                         // Swipe from the figures to a small profile of the ride so far (B-277).
                         TabView(selection: $page) {
                             // Room for the page dots at the bottom, so they cover no figure (B-320).
@@ -139,7 +145,7 @@ struct RecordingView: View {
             Label(status, systemImage: "location.slash")
                 .font(.footnote)
                 .foregroundStyle(.orange)
-        } else if recorder.recording?.isWaitingForGPS == true {
+        } else if recorder.recording?.isWaitingForGPS == true, !recorder.isReady {
             // The first position has to be accurate (RideRecording.startAccuracy).
             Label("GPS is getting more accurate …", systemImage: "location.magnifyingglass")
                 .font(.footnote)
@@ -233,7 +239,13 @@ struct RecordingView: View {
 
     private var buttons: some View {
         HStack(spacing: isLandscape ? 10 : 16) {
-            if recorder.recording?.isPaused == true {
+            if recorder.isReady {
+                // Auto-start (B-311): nothing recorded yet, so Cancel needs no question.
+                Button { recorder.cancelReady() } label: {
+                    Label("Cancel", systemImage: "xmark").frame(maxWidth: .infinity)
+                }
+                .tint(.gray)
+            } else if recorder.recording?.isPaused == true {
                 Button { recorder.resume() } label: {
                     Label("Resume", systemImage: "play.fill").frame(maxWidth: .infinity)
                 }
@@ -244,12 +256,14 @@ struct RecordingView: View {
                 }
                 .tint(.orange)
             }
-            Button {
-                ending = true
-            } label: {
-                Label("Stop", systemImage: "stop.fill").frame(maxWidth: .infinity)
+            if !recorder.isReady {
+                Button {
+                    ending = true
+                } label: {
+                    Label("Stop", systemImage: "stop.fill").frame(maxWidth: .infinity)
+                }
+                .tint(.red)
             }
-            .tint(.red)
         }
         .buttonStyle(.glassProminent)
         // The bar in landscape is narrow: smaller buttons, so “Pause” and “Stop” stay on one line.
@@ -262,6 +276,26 @@ struct RecordingView: View {
     /// “Ride on 2 Nov 2026, 17:05”.
     static func defaultName(for date: Date) -> String {
         String(localized: "Ride on \(date.formatted(date: .abbreviated, time: .shortened))")
+    }
+}
+
+/// Auto-start (B-311): the recording waits as “Ready” for the vehicle to move; time and figures
+/// begin with the ride.
+private struct ReadyPanel: View {
+    var body: some View {
+        VStack(spacing: 10) {
+            Image(systemName: "hourglass")
+                .font(.largeTitle)
+                .foregroundStyle(Color.track)
+            Text("Ready")
+                .font(.title2.weight(.bold))
+            Text("The ride begins when you drive off, above 10 km/h.")
+                .font(.subheadline)
+                .foregroundStyle(.secondary)
+                .multilineTextAlignment(.center)
+        }
+        .frame(maxWidth: .infinity, maxHeight: .infinity)
+        .accessibilityElement(children: .combine)
     }
 }
 

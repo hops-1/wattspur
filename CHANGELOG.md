@@ -7,6 +7,9 @@ Every DMG handed out to testers corresponds to one entry below.
 
 ## [Unreleased]
 
+### Added
+- iPhone: **Auto-start** (B-311). Under **More › Recording** auto-start can be switched on, and each device can start with CarPlay or a Bluetooth device (the car's hands-free, a motorcycle headset). A Shortcuts automation "When CarPlay connects → Start Ride" then opens the recording as **Ready** with the device of that connection; the ride begins when you drive off, above 10 km/h. **Cancel** ends "Ready" without a question, also from the Live Activity.
+
 ### Changed
 - iPhone: the highlights share their PDF from the share symbol at the top right instead of a "Share PDF" button that took a lot of room (wish from Nils' test of 1.5 (37)).
 - iPad: the comparison's buttons no longer wrap letter by letter in a narrow column. Share is a symbol beside **Merge…** next to the title (or below it when there is no room), the switch **Difference from Average** sits above the table it changes, and **Done** is gone (**Cancel** above the list ends the selection) (B-334, from Nils' test of 1.5 (37)).

@@ -86,6 +86,11 @@ public struct RideRecording: Codable, Sendable, Equatable {
     public private(set) var movingTime: TimeInterval = 0
     /// Where the distance last grew.
     private var anchor: Fix?
+    /// Stored as optional, so recordings from before auto-start (B-311) still decode.
+    private var storedReady: Bool?
+    /// Waiting for the vehicle to move (auto-start, B-311): positions are not kept until one is
+    /// faster than `AutoStart.startSpeed`; that one begins the ride and its time becomes the start.
+    public var isReady: Bool { storedReady == true }
 
     public init(startDate: Date, vehicle: RecordingVehicle = .eBike) {
         self.startDate = startDate
@@ -99,11 +104,28 @@ public struct RideRecording: Codable, Sendable, Equatable {
         self.device = device
     }
 
-    /// Adds a position; returns `false` if it was dropped (or the recording is paused).
+    /// Lets the recording wait until the vehicle moves (B-311); only before the first position.
+    public mutating func waitForMovement() {
+        guard isWaitingForGPS else { return }
+        storedReady = true
+    }
+
+    /// Adds a position; returns `false` if it was dropped (or the recording is paused or ready).
     @discardableResult
     public mutating func add(_ fix: Fix) -> Bool {
         guard !isPaused, fix.horizontalAccuracy >= 0, fix.horizontalAccuracy <= Self.maxAccuracy else { return false }
-        if isWaitingForGPS, fix.horizontalAccuracy > Self.startAccuracy,
+        // Ready: the first fast position begins the ride. The GPS has settled while waiting, so it
+        // does not have to meet `startAccuracy`.
+        var begins = false
+        if isReady {
+            // A position from before the start is one iOS kept from earlier, maybe with the speed of
+            // the last drive (seen in the simulator); it says nothing about moving now.
+            guard fix.date >= startDate, AutoStart.begins(with: fix) else { return false }
+            storedReady = nil
+            startDate = fix.date
+            begins = true
+        }
+        if !begins, isWaitingForGPS, fix.horizontalAccuracy > Self.startAccuracy,
            fix.date.timeIntervalSince(startDate) < Self.startTimeout {
             return false
         }
@@ -302,6 +324,8 @@ public enum RecordingLog {
         case fix(RideRecording.Fix)
         case pause
         case resume
+        /// Written right after the start of an auto-start (B-311): the recording waits for movement.
+        case ready
     }
 
     public static func line(_ event: Event) -> Data {
@@ -327,6 +351,7 @@ public enum RecordingLog {
             case .fix(let fix): recording?.add(fix)
             case .pause: recording?.pause()
             case .resume: recording?.resume()
+            case .ready: recording?.waitForMovement()
             }
         }
         return recording

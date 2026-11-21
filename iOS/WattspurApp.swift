@@ -64,7 +64,9 @@ struct WattspurApp: App {
         if UserDefaults.standard.bool(forKey: "WattspurDemoRecord") {
             // `-WattspurDemoRecordKind car`: a car without a device, to see the lateral bar (B-320).
             let kind = UserDefaults.standard.string(forKey: "WattspurDemoRecordKind").flatMap(BikeKind.init(rawValue:))
-            Task { @MainActor in recorder.start(device: kind.map(RecordingDevice.without)) }
+            // `-WattspurDemoReady YES`: as an auto-start, waiting for the vehicle to move (B-311).
+            let ready = UserDefaults.standard.bool(forKey: "WattspurDemoReady")
+            Task { @MainActor in recorder.start(device: kind.map(RecordingDevice.without), ready: ready) }
         }
         // `-WattspurOfflineTiles YES`: the OpenStreetMap tiles fail as without a network (B-226).
         if UserDefaults.standard.bool(forKey: "WattspurOfflineTiles") { TileLoader.simulatesOffline = true }
