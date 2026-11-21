@@ -21,6 +21,42 @@ struct RideRecordingTests {
         #expect(abs(recording.currentSpeed - 5) < 0.1)
     }
 
+    @Test("The shown speed is the mean of the last 2 s of measured speeds, so GPS noise jumps less (B-341)")
+    func smoothedSpeed() {
+        var recording = RideRecording(startDate: Self.start)
+        // 20 km/h on average, the GPS speed jumping between 16 and 24 km/h, as in a forest.
+        let noisy = [16.0, 24, 18, 22, 16, 24].map { $0 / 3.6 }
+        var north = 0.0
+        for (second, speed) in noisy.enumerated() {
+            north += speed
+            var fix = Self.fix(Double(second), north: north)
+            fix.speed = speed
+            recording.add(fix)
+        }
+        // The last two positions: 16 and 24 km/h.
+        #expect(abs(recording.currentSpeed * 3.6 - 20) < 0.01)
+        // A steady speed stays as it is.
+        var steady = RideRecording(startDate: Self.start)
+        for second in 0...5 {
+            var fix = Self.fix(Double(second), north: Double(second) * 5)
+            fix.speed = 5
+            steady.add(fix)
+        }
+        #expect(abs(steady.currentSpeed - 5) < 0.001)
+        // After a gap of a few seconds only the new position counts, not the old one.
+        var fix = Self.fix(10, north: 60)
+        fix.speed = 2
+        steady.add(fix)
+        #expect(abs(steady.currentSpeed - 2) < 0.001)
+    }
+
+    @Test("Positions without a measured speed: the distance over 5 s, as before")
+    func speedWithoutMeasurement() {
+        var recording = RideRecording(startDate: Self.start)
+        for second in 0...10 { recording.add(Self.fix(Double(second), north: Double(second) * 4)) }
+        #expect(abs(recording.currentSpeed - 4) < 0.1)
+    }
+
     @Test("Average speed over the time in motion, ascent from the smoothed heights (B-243)")
     func averageAndAscent() {
         var recording = RideRecording(startDate: Self.start)

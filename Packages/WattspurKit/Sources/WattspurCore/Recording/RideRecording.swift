@@ -195,10 +195,19 @@ public struct RideRecording: Codable, Sendable, Equatable {
 
     public var lastPoint: Point? { segments.last(where: { !$0.isEmpty })?.last }
 
-    /// Metres per second over the last few seconds; 0 while standing or paused.
+    /// Seconds over which the shown speed is averaged (B-341): the GPS speed of one position jumps,
+    /// most in a forest; the mean of the last positions is calmer, like a wheel sensor's.
+    public static let speedWindow: TimeInterval = 2
+
+    /// Metres per second over the last few seconds; 0 while standing or paused. The mean of the
+    /// measured speeds of the positions less than `speedWindow` older than the last one (two at one
+    /// position a second); without measured speeds, the distance over 5 s.
     public var currentSpeed: Double {
         guard !isPaused, let points = segments.last, let last = points.last else { return 0 }
-        if let speed = last.fix.speed, speed >= 0 { return speed }
+        let measured = points.reversed()
+            .prefix { last.fix.date.timeIntervalSince($0.fix.date) < Self.speedWindow }
+            .compactMap { $0.fix.speed.flatMap { $0 >= 0 ? $0 : nil } }
+        if !measured.isEmpty { return measured.reduce(0, +) / Double(measured.count) }
         guard let earlier = points.last(where: { last.fix.date.timeIntervalSince($0.fix.date) >= 5 }) else { return 0 }
         let metres = GPXGeo.distance(earlier.fix.latitude, earlier.fix.longitude, last.fix.latitude, last.fix.longitude)
         return metres / last.fix.date.timeIntervalSince(earlier.fix.date)
