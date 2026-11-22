@@ -66,6 +66,8 @@ Ergebnis der Testfahrt von Nils am 22.11.2026 im Nugget, 1.6.4 (45), nach der au
 | C.1 bis C.5 | ✓ | |
 | D.1, D.2, D.5 | ✓ | |
 | D.3 | offen | nicht getestet |
-| D.4 | offen | nicht getestet; den Namen nach dem Ende in CarPlay deckt C.4 ab, offen ist das Ende von selbst |
-| E.1 bis E.3 | offen | Auto-Start konnte nicht getestet werden |
+| D.4 | ✓ | zweite Testfahrt am Nachmittag: Auto-Start-Fahrten heißen „Ort Rundfahrt – Startzeit“ |
+| E, Start und Ende | ✓ | zweite Testfahrt: Start bei Fahrtantritt und Ende über die Automationen gehen. Dabei meldet Kurzbefehle „Zeitlimit für Kurzbefehl überschritten“ für „Fahrt starten“, die Fahrt ist trotzdem da |
+| E.1, E.2 | offen | Anzeige „Bereit“ in CarPlay und „Abbrechen“ noch nicht gemeldet |
+| E.3 | offen | der Start beim Losfahren geht, der Wechsel der Tafel ist noch nicht gemeldet |
 | F.1 bis F.5 | offen | Abschnitt F stand noch nicht auf der gedruckten Liste |
