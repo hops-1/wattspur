@@ -88,6 +88,27 @@
 			</dict>
 		</dict>
 	</array>
+	<!-- Several windows on the iPad (B-291), and the CarPlay scene of the Driving Task app (B-327);
+	     SwiftUI makes the window scenes itself -->
+	<key>UIApplicationSceneManifest</key>
+	<dict>
+		<key>UIApplicationSupportsMultipleScenes</key>
+		<true/>
+		<key>UISceneConfigurations</key>
+		<dict>
+			<key>CPTemplateApplicationSceneSessionRoleApplication</key>
+			<array>
+				<dict>
+					<key>UISceneClassName</key>
+					<string>CPTemplateApplicationScene</string>
+					<key>UISceneConfigurationName</key>
+					<string>CarPlay</string>
+					<key>UISceneDelegateClassName</key>
+					<string>$(PRODUCT_MODULE_NAME).CarPlaySceneDelegate</string>
+				</dict>
+			</array>
+		</dict>
+	</dict>
 	<!-- The scheme wattspur: the share extension opens the app to read what was shared (B-301) -->
 	<key>CFBundleURLTypes</key>
 	<array>

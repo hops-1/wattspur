@@ -756,6 +756,39 @@
         }
       }
     },
+    "Change Vehicle" : {
+      "comment" : "CarPlay (B-327)",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Fahrzeug wechseln"
+          }
+        }
+      }
+    },
+    "End and save the ride?" : {
+      "comment" : "CarPlay (B-327)",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Fahrt beenden und sichern?"
+          }
+        }
+      }
+    },
+    "Waiting for the vehicle to move" : {
+      "comment" : "CarPlay (B-327)",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Wartet, bis das Fahrzeug fährt"
+          }
+        }
+      }
+    },
     "Wattspur on GitHub" : {
       "localizations" : {
         "de" : {

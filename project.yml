@@ -118,7 +118,7 @@ targets:
         GENERATE_INFOPLIST_FILE: YES
         INFOPLIST_KEY_CFBundleDisplayName: Wattspur
         INFOPLIST_KEY_UILaunchScreen_Generation: YES
-        INFOPLIST_KEY_UIApplicationSceneManifest_Generation: YES
+        # The scene manifest is in Config/iOS-Info.plist: SwiftUI's window scenes plus CarPlay (B-327).
         # Portrait and both landscape sides for handlebar mounts (B-243); not upside down.
         INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone: "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight"
         # The iPad turns every way and runs in Split View and Stage Manager (B-291): no UIRequiresFullScreen.
