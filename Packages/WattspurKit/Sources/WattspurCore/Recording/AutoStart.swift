@@ -55,15 +55,6 @@ public enum AutoStart {
         !recording.isReady && recording.distance >= minDistance && !recording.isTooShort
     }
 
-    /// The name from the places at start and end: “Darmstadt – Frankfurt”, one name for a round
-    /// trip, `nil` without both (the caller takes “Ride on …” then).
-    public static func rideName(start: String?, end: String?) -> String? {
-        let start = start?.trimmingCharacters(in: .whitespaces), end = end?.trimmingCharacters(in: .whitespaces)
-        guard let start, !start.isEmpty else { return nil }
-        guard let end, !end.isEmpty, end != start else { return start }
-        return "\(start) – \(end)"
-    }
-
     /// Watches for the vehicle standing still (B-339): the time since the last position faster than
     /// `movingSpeed`. “Ready” counts from its start, so it also ends when nobody drives off.
     public struct Standstill: Sendable, Equatable {
