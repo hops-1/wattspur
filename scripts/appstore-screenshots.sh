@@ -62,8 +62,12 @@ shot() {
         -AppleMetricUnits YES -AppleMeasurementUnits Centimeters -WattspurDemoRecent 14 \
         -iCloudSyncEnabled NO "$@" >/dev/null
     sleep "$wait"
-    xcrun simctl io "$DEVICE" screenshot --type=png "$OUT/$LOCALE/$file.png" >/dev/null 2>&1
-    echo "   $LOCALE/$file.png"
+    local png="$OUT/$LOCALE/$file.png" jpg="$OUT/$LOCALE/$file.jpg"
+    xcrun simctl io "$DEVICE" screenshot --type=png "$png" >/dev/null 2>&1
+    # JPEG: App Store Connect takes no alpha channel, and the simulator's PNG always has one.
+    sips -s format jpeg -s formatOptions best "$png" --out "$jpg" >/dev/null
+    rm "$png"
+    echo "   $LOCALE/$file.jpg"
 }
 
 for LOCALE in $LOCALES; do
@@ -71,10 +75,18 @@ for LOCALE in $LOCALES; do
     LOCALE_CODE=${LOCALE/-/_}
     echo "== $LOCALE"
     mkdir -p "$OUT/$LOCALE"
-    rm -f "$OUT/$LOCALE"/*.png
+    rm -f "$OUT/$LOCALE"/*.png "$OUT/$LOCALE"/*.jpg
     # A fresh device for each language: no rides but the demo copies, no unfinished recording.
     xcrun simctl shutdown "$DEVICE" >/dev/null 2>&1 || true
     xcrun simctl erase "$DEVICE"
+    xcrun simctl boot "$DEVICE"
+    xcrun simctl bootstatus "$DEVICE" -b >/dev/null
+    # The system's language, not only the app's: the iPad's status bar shows the date. Weeks from
+    # Monday in every language, else "This Week" is empty in English screenshots made on a Sunday.
+    xcrun simctl spawn "$DEVICE" defaults write -g AppleLanguages -array "$LOCALE"
+    xcrun simctl spawn "$DEVICE" defaults write -g AppleLocale -string "$LOCALE_CODE"
+    xcrun simctl spawn "$DEVICE" defaults write -g AppleFirstWeekday -dict gregorian -int 2
+    xcrun simctl shutdown "$DEVICE"
     xcrun simctl boot "$DEVICE"
     xcrun simctl bootstatus "$DEVICE" -b >/dev/null
     xcrun simctl status_bar "$DEVICE" override --time 9:41 --dataNetwork wifi --wifiBars 3 \
@@ -106,7 +118,7 @@ xcrun simctl status_bar "$DEVICE" clear || true
 xcrun simctl shutdown "$DEVICE" >/dev/null 2>&1 || true
 
 # Apple takes 1320 × 2868 for 6.9" and 2064 × 2752 for 13" (portrait).
-for f in "$OUT"/*/*.png; do
+for f in "$OUT"/*/*.jpg; do
     size=$(sips -g pixelWidth -g pixelHeight "$f" | awk '/pixel/ {printf "%s ", $2}')
     [ "$size" = "$SIZE" ] || { echo "wrong size: $f ($size)"; exit 1; }
 done

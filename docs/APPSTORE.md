@@ -1,6 +1,6 @@
 # Wattspur im App Store
 
-Stand: 22.11.2026 (1.6.4 (45) ist gewählt, eingereicht wird erst nach dem Test im Auto. 1.0 (26) kam am 16.11.2026 mit Rückfragen zurück und war nie im Store). Diese Anleitung erklärt, wie die App für iPhone und iPad von TestFlight in den App Store kommt: was schon da ist, welche Version es wird, was Nils in App Store Connect macht und was Claude vorbereitet.
+Stand: 22.11.2026 (1.6.4 (45) ist gewählt, eingereicht wird erst nach bestandenem Test im Auto: CarPlay ist am 22.11. geprüft, offen sind Auto-Start und die Punkte D.3, D.4 und F. 1.0 (26) kam am 16.11.2026 mit Rückfragen zurück und war nie im Store). Diese Anleitung erklärt, wie die App für iPhone und iPad von TestFlight in den App Store kommt: was schon da ist, welche Version es wird, was Nils in App Store Connect macht und was Claude vorbereitet.
 
 Für TestFlight siehe `docs/learning/32-testflight.md`, für den Mac `docs/RELEASE.md`.
 
@@ -22,7 +22,7 @@ Der Weg jetzt:
 
 | Version | Dafür | Dagegen |
 |---|---|---|
-| **1.6.4 (45)** | CarPlay (B-340, B-327), Namensvorschlag (B-368), alle Fixes | Am 22.11.2026 noch nicht im Auto geprüft |
+| **1.6.4 (45)** | CarPlay (B-340, B-327), Namensvorschlag (B-368), alle Fixes | Testfahrt am 22.11.2026: CarPlay bestanden, Auto-Start noch nicht geprüft |
 | 1.6.3 (44) | Gemeinsame Texte, sonst wie 1.6.2 | Kein notiertes Testergebnis, kein CarPlay |
 | 1.6.2 (43) | Letzte im Auto geprüfte Version (lange Fahrt ohne Abbruch, B-363 bis B-366) | Kein CarPlay, kein Namensvorschlag |
 | 1.0 (26) | Schon einmal eingereicht | Ohne iPad, Auto-Start und viele Fixes |

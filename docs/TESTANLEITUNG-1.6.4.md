@@ -55,11 +55,15 @@ Entscheidung vom 22.11.2026: 1.6.4 (45) geht erst in den Store, wenn A bis E und
 
 **Bestanden:** alle fünf ✓. **Nicht bestanden:** ein ✗ bei 1 bis 5, ein Absturz oder eine Fahrt ohne Spur. Dann nicht einreichen. Nils entscheidet: Fix als 1.6.5 oder 1.6.2 (43) ohne CarPlay.
 
+Ergebnis der Testfahrt von Nils am 22.11.2026 im Nugget, 1.6.4 (45), nach der ausgefüllten Liste:
+
 | Punkt | Ergebnis | Notiz |
 |---|---|---|
-| A bis E | | |
-| F.1 | | |
-| F.2 | | |
-| F.3 | | |
-| F.4 | | |
-| F.5 | | |
+| A.1, A.2 | ✓ | |
+| B.1 bis B.4 | ✓ | |
+| C.1 bis C.5 | ✓ | |
+| D.1, D.2, D.5 | ✓ | |
+| D.3 | offen | nicht getestet |
+| D.4 | offen | nicht getestet; den Namen nach dem Ende in CarPlay deckt C.4 ab, offen ist das Ende von selbst |
+| E.1 bis E.3 | offen | Auto-Start konnte nicht getestet werden |
+| F.1 bis F.5 | offen | Abschnitt F stand noch nicht auf der gedruckten Liste |
