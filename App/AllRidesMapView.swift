@@ -211,7 +211,7 @@ struct AllRidesMapView: View {
         } else if showsSelection {
             parts[0] = String(localized: "\(totals.rideCount) selected rides")
         } else {
-            parts.append(AnalysisModel.title(kind: kind, interval: interval, calendar: calendar))
+            parts.append(AnalysisFormat.title(kind: kind, interval: interval, calendar: calendar))
         }
         if overview.withoutGPS > 0 {
             parts.append(String(localized: "\(overview.withoutGPS) without GPS not on the map"))

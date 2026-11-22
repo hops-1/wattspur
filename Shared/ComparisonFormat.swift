@@ -1,12 +1,9 @@
-import Charts
-import MapKit
-import SwiftData
 import SwiftUI
 import WattspurKit
 
 // MARK: - Formatting
 
-/// Titles and locale-aware values for the comparison (NFR-10).
+/// Titles and locale-aware values for the comparison (NFR-10), the same on the Mac and the iPad (B-355).
 enum ComparisonFormat {
     static func title(_ group: ComparisonGroup) -> LocalizedStringKey {
         switch group {
@@ -49,7 +46,7 @@ enum ComparisonFormat {
     /// A value in its display unit, e.g. "24.1 km/h" or "00:48:36".
     static func value(_ v: Double, _ metric: ComparisonMetric) -> String {
         switch metric {
-        case .rideTime, .totalTime, .pausedTime: RideFormat.duration(v)
+        case .rideTime, .totalTime, .pausedTime: ValueFormat.duration(v)
         default: "\(number(v, metric)) \(unit(metric))"
         }
     }
@@ -104,5 +101,15 @@ enum ComparisonFormat {
         let hours = total / 3600
         let minutes = total % 3600 / 60
         return hours > 0 ? String(format: "%d:%02d h", hours, minutes) : "\(minutes) min"
+    }
+}
+
+extension RideMerge.MergeError {
+    var message: LocalizedStringKey {
+        switch self {
+        case .tooFewRides: "Select at least two rides to merge."
+        case .overlapping: "These rides overlap in time and cannot be merged."
+        case .containsSample: "The sample ride cannot be merged."
+        }
     }
 }

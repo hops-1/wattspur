@@ -29,6 +29,8 @@ targets:
       - path: App/Wattspur.icon
         type: file
         buildPhase: resources
+      # Texts and formats shared with the iPhone/iPad app (B-355, rule 6); not in the extensions.
+      - path: Shared
     dependencies:
       - package: WattspurKit
       # The maps, shared with the iPhone from 0.6 on (B-186).
@@ -73,7 +75,8 @@ targets:
           mkdir -p "$DERIVED_FILE_DIR"
           echo "#define WATTSPUR_GIT_COMMIT $COMMIT" > "$DERIVED_FILE_DIR/WattspurGitInfo.h"
   # The iPhone app (B-204, iOS 0.x with its own version numbers). It uses only the package and
-  # resources from App/ (sample ride, icon), never Swift files from App/ (docs/ARCHITECTURE.md).
+  # resources from App/ (sample ride, icon), never Swift files from App/; code for both apps is in
+  # Shared/ (docs/ARCHITECTURE.md).
   Wattspur iOS:
     type: application
     platform: iOS
@@ -81,6 +84,8 @@ targets:
       - path: iOS
       # Shared with the widget extension: the Live Activity's data and its Pause button (B-223).
       - path: iOSShared
+      # Texts and formats shared with the Mac app (B-355, rule 6).
+      - path: Shared
       - path: App/SampleRide.fit
         type: file
         buildPhase: resources

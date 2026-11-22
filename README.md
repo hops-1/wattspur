@@ -54,11 +54,11 @@ scripts/ci-local.sh
 Falls `xcode-select` noch auf die Command Line Tools zeigt: Befehlen `DEVELOPER_DIR=/Applications/Xcode.app/Contents/Developer` voranstellen.
 
 ## Status
-**Mac: v1.10.2** (19.11.2026): Analyse, Highlights und Vergleich rechnen mit derselben Logik wie das iPad; E-Scooter, Fahrzeugfarben Schwarz, Silber und Weiß. Davor: v1.10 (Umschalter Rad · Fahrzeuge in der Seitenleiste), v1.9 (Sportarten: Autos und Motorräder als Geräte, Querbeschleunigung), v1.8.x (Kartenstile, Sync mit dem iPhone über iCloud, erste notarisierte Version, Sichern und Teilen), v1.0 bis v1.7 (Import, Auswertung, Highlights, Karte aller Fahrten, ähnliche Strecken).
+**Mac: v1.10.4** (22.11.2026): Texte und Formate von Analyse, Vergleich und Highlights teilt der Mac jetzt mit dem iPad. Davor: v1.10.3 (Funde aus dem Review zu Architektur und Sicherheit, [Bericht](docs/REVIEW-1.6.2.md)), v1.10.2 (dieselbe Logik wie das iPad, E-Scooter), v1.10 (Umschalter Rad · Fahrzeuge in der Seitenleiste), v1.9 (Sportarten: Autos und Motorräder als Geräte, Querbeschleunigung), v1.8.x (Kartenstile, Sync mit dem iPhone über iCloud, erste notarisierte Version, Sichern und Teilen), v1.0 bis v1.7 (Import, Auswertung, Highlights, Karte aller Fahrten, ähnliche Strecken).
 
-**iPhone und iPad: 1.5** (Highlights am iPhone, Trennen, PDF, Herkunftsfilter) ist die Version für den App Store; **1.6 „Im Auto“** ist in TestFlight: Auto-Start über CarPlay oder Bluetooth, Siri mit Gerät, ruhigeres Tempo bei der Aufnahme, dieselben Gerätesymbole wie am Mac. CarPlay selbst wartet auf die Freigabe durch Apple.
+**iPhone und iPad: 1.5** (Highlights am iPhone, Trennen, PDF, Herkunftsfilter) ist die Version für den App Store; in TestFlight ist **1.6.3**: Auto-Start über CarPlay oder Bluetooth, Siri mit Gerät, ruhigeres Tempo bei der Aufnahme (1.6), die Fixes aus dem Review (1.6.2) und dieselben Texte wie am Mac (1.6.3). CarPlay selbst wartet auf die Freigabe durch Apple.
 
-**Als Nächstes:** Mac 1.10.3 und iPhone/iPad 1.6.2 mit den Funden aus dem Review zu Architektur und Sicherheit ([Bericht](docs/REVIEW-1.6.2.md)); die Fixes sind schon in `main`. Danach CarPlay. Details im [Changelog](CHANGELOG.md) und im [Backlog](docs/BACKLOG.md), Lern-Notizen in [docs/learning](docs/learning/README.md).
+**Als Nächstes:** iPhone/iPad 1.7 mit Mac 1.10.5: Auto-Start erkennt eine Fahrt selbst, dazu der Rest aus dem Review. CarPlay, sobald Apple es freigibt. Details im [Changelog](CHANGELOG.md) und im [Backlog](docs/BACKLOG.md), Lern-Notizen in [docs/learning](docs/learning/README.md).
 
 ## Unterstützen
 Wattspur ist kostenlos, ohne Werbung und ohne Konto. Die Entwicklung kostet trotzdem Geld, zum Beispiel für den Apple Developer Account und Lizenzen. Wer diese Kosten mittragen möchte, kann das über [GitHub Sponsors](https://github.com/sponsors/hops-1) oder [Buy me a coffee](https://buymeacoffee.com/hops1). Danke!

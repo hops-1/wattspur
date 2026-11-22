@@ -71,16 +71,6 @@ struct MergeRidesSheet: View {
     }
 }
 
-extension RideMerge.MergeError {
-    var message: LocalizedStringKey {
-        switch self {
-        case .tooFewRides: "Select at least two rides to merge."
-        case .overlapping: "These rides overlap in time and cannot be merged."
-        case .containsSample: "The sample ride cannot be merged."
-        }
-    }
-}
-
 /// The parts on a time bar; a pause on the same day is drawn to scale,
 /// a gap across days as a short break.
 private struct MergeTimeline: View {

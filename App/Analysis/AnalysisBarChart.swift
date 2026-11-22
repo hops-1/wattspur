@@ -5,34 +5,6 @@ import WattspurKit
 
 // MARK: - Bar chart (AGG-04, TREND-02)
 
-// `BarMetric` with its values and units is in the Kit (B-294); the texts stay here.
-extension BarMetric {
-    var label: LocalizedStringKey {
-        switch self {
-        case .distance: "Distance"
-        case .time: "Ride time"
-        case .ascent: "Ascent"
-        }
-    }
-
-    func formatted(_ aggregate: RideAggregate) -> String {
-        switch self {
-        case .distance: RideFormat.distance(aggregate.distance)
-        case .time: AnalysisFormat.hoursMinutes(aggregate.timerTime)
-        case .ascent: "\(aggregate.ascent.formatted(.number.precision(.fractionLength(0)))) m"
-        }
-    }
-
-    /// The label as a plain string, for VoiceOver's chart description.
-    var title: String {
-        switch self {
-        case .distance: String(localized: "Distance")
-        case .time: String(localized: "Ride time")
-        case .ascent: String(localized: "Ascent")
-        }
-    }
-}
-
 struct BarChartCard: View {
     let model: AnalysisModel
     @Binding var metric: BarMetric

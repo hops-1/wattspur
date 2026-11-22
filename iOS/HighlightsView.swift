@@ -323,14 +323,14 @@ private struct PadYearReview: View {
             ForEach(review.records) { record in
                 HStack(spacing: 10) {
                     Image(systemName: "star").foregroundStyle(Color.track).accessibilityHidden(true)
-                    Text(verbatim: HighlightTexts.title(record.kind))
+                    Text(verbatim: HighlightsFormat.title(record.kind))
                         .lineLimit(1)
                         .minimumScaleFactor(0.8)
                     Spacer(minLength: 8)
-                    Text(verbatim: HighlightTexts.text(record.kind, record.value))
+                    Text(verbatim: HighlightsFormat.text(record.kind, record.value))
                         .fontWeight(.semibold)
                         .monospacedDigit()
-                    Text(verbatim: HighlightTexts.shortDate(record.date, timeZone: calendar.timeZone))
+                    Text(verbatim: HighlightsFormat.shortDate(record.date, timeZone: calendar.timeZone))
                         .font(.caption)
                         .foregroundStyle(.secondary)
                         .frame(width: 64, alignment: .trailing)
@@ -581,12 +581,12 @@ private struct PadRecords: View {
     }
 
     private func card(_ record: RideRecord) -> some View {
-        let value = HighlightTexts.value(record.kind, record.value)
+        let value = HighlightsFormat.value(record.kind, record.value)
         let holder = record.rideIDs.first.flatMap { rides[$0] }
         return VStack(alignment: .leading, spacing: 8) {
             HStack(spacing: 8) {
                 Image(systemName: "star").foregroundStyle(Color.track).accessibilityHidden(true)
-                Text(verbatim: HighlightTexts.title(record.kind)).foregroundStyle(.secondary)
+                Text(verbatim: HighlightsFormat.title(record.kind)).foregroundStyle(.secondary)
                 Spacer(minLength: 0)
                 if isNew(record) {
                     Text("New")
@@ -605,7 +605,7 @@ private struct PadRecords: View {
             .monospacedDigit()
             if let streak = record.streak {
                 let zone = holder?.highlight.timeZone ?? .current
-                Text(verbatim: "\(HighlightTexts.longDate(streak.firstDay, timeZone: zone)) – \(HighlightTexts.longDate(streak.lastDay, timeZone: zone))")
+                Text(verbatim: "\(HighlightsFormat.longDate(streak.firstDay, timeZone: zone)) – \(HighlightsFormat.longDate(streak.lastDay, timeZone: zone))")
                     .font(.callout)
                 let distance = record.rideIDs.compactMap { rides[$0]?.figures.distance }.reduce(0, +)
                 Text(verbatim: "\(String(localized: "\(record.rideIDs.count) rides")) · \(RideFormat.distance(distance))")
@@ -613,7 +613,7 @@ private struct PadRecords: View {
                     .foregroundStyle(.secondary)
             } else if let holder {
                 Text(verbatim: holder.name).font(.callout).lineLimit(1)
-                Text(verbatim: "\(HighlightTexts.longDate(holder.highlight.startDate, timeZone: holder.highlight.timeZone)) · \(detail(record.kind, holder))")
+                Text(verbatim: "\(HighlightsFormat.longDate(holder.highlight.startDate, timeZone: holder.highlight.timeZone)) · \(detail(record.kind, holder))")
                     .font(.caption)
                     .foregroundStyle(.secondary)
                     .monospacedDigit()
@@ -629,7 +629,7 @@ private struct PadRecords: View {
     /// The other main value of the ride: time for distance records, distance otherwise.
     private func detail(_ kind: RecordKind, _ ride: PhoneDatabase.StatsRide) -> String {
         switch kind {
-        case .longestDistance: HighlightTexts.text(.longestDuration, ride.figures.timerTime)
+        case .longestDistance: HighlightsFormat.text(.longestDuration, ride.figures.timerTime)
         default: RideFormat.distance(ride.figures.distance)
         }
     }
@@ -708,9 +708,9 @@ private struct PadGoalCard: View {
     var body: some View {
         VStack(alignment: .leading, spacing: 12) {
             HStack(spacing: 8) {
-                Text(verbatim: HighlightTexts.currentPeriod(progress.period, progress.current.interval, calendar: calendar))
+                Text(verbatim: HighlightsFormat.currentPeriod(progress.period, progress.current.interval, calendar: calendar))
                     .fontWeight(.semibold)
-                Text(verbatim: HighlightTexts.title(metric)).foregroundStyle(.secondary)
+                Text(verbatim: HighlightsFormat.title(metric)).foregroundStyle(.secondary)
                 Spacer()
                 if let onEdit {
                     Button(action: onEdit) { Image(systemName: "pencil") }
@@ -720,15 +720,15 @@ private struct PadGoalCard: View {
             }
             .font(.callout)
             HStack(alignment: .firstTextBaseline, spacing: 6) {
-                Text(verbatim: HighlightTexts.number(metric, progress.current.value))
+                Text(verbatim: HighlightsFormat.number(metric, progress.current.value))
                     .font(.system(size: 30, weight: .semibold))
                 Text(verbatim: ofTarget).foregroundStyle(.secondary)
             }
             .monospacedDigit()
             ProgressView(value: min(1, progress.current.fraction))
                 .tint(Color.track)
-                .accessibilityLabel(Text(verbatim: "\(HighlightTexts.title(progress.period)), \(HighlightTexts.title(metric))"))
-                .accessibilityValue(Text(verbatim: "\(HighlightTexts.number(metric, progress.current.value)) \(ofTarget)"))
+                .accessibilityLabel(Text(verbatim: "\(HighlightsFormat.title(progress.period)), \(HighlightsFormat.title(metric))"))
+                .accessibilityValue(Text(verbatim: "\(HighlightsFormat.number(metric, progress.current.value)) \(ofTarget)"))
             HStack(spacing: 6) {
                 if progress.current.isReached {
                     Image(systemName: "checkmark").fontWeight(.bold).foregroundStyle(Color.track)
@@ -744,16 +744,16 @@ private struct PadGoalCard: View {
     }
 
     private var ofTarget: String {
-        let unit = HighlightTexts.unit(metric)
-        let target = HighlightTexts.number(metric, progress.current.target)
+        let unit = HighlightsFormat.unit(metric)
+        let target = HighlightsFormat.number(metric, progress.current.target)
         return String(localized: "of \(unit.isEmpty ? target : "\(target) \(unit)")")
     }
 
     private var note: String {
         if let reached = progress.reachedAt {
-            return String(localized: "Reached on \(HighlightTexts.shortDate(reached, timeZone: calendar.timeZone))")
+            return String(localized: "Reached on \(HighlightsFormat.shortDate(reached, timeZone: calendar.timeZone))")
         }
-        let remaining = "\(HighlightTexts.number(metric, progress.remaining)) \(HighlightTexts.unit(metric))"
+        let remaining = "\(HighlightsFormat.number(metric, progress.remaining)) \(HighlightsFormat.unit(metric))"
             .trimmingCharacters(in: .whitespaces)
         let left = calendar.dateComponents([.day], from: calendar.startOfDay(for: .now), to: progress.current.interval.end).day ?? 0
         let track = progress.isOnTrack ? String(localized: "on track") : String(localized: "behind")
@@ -874,11 +874,11 @@ struct PadGoalEditor: View {
     var body: some View {
         Form {
             Picker("Period", selection: $period) {
-                ForEach(GoalPeriod.allCases) { Text(verbatim: HighlightTexts.title($0)).tag($0) }
+                ForEach(GoalPeriod.allCases) { Text(verbatim: HighlightsFormat.title($0)).tag($0) }
             }
             Picker("Metric", selection: $metric) {
                 ForEach(GoalMetric.allCases) { m in
-                    Text(verbatim: HighlightTexts.title(m)).tag(m).selectionDisabled(!isFree(period, m))
+                    Text(verbatim: HighlightsFormat.title(m)).tag(m).selectionDisabled(!isFree(period, m))
                 }
             }
             LabeledContent("Goal") {
@@ -888,7 +888,7 @@ struct PadGoalEditor: View {
                         .keyboardType(.decimalPad)
                         .multilineTextAlignment(.trailing)
                         .frame(width: 120)
-                    Text(verbatim: HighlightTexts.unit(metric).isEmpty ? HighlightTexts.title(metric) : HighlightTexts.unit(metric))
+                    Text(verbatim: HighlightsFormat.unit(metric).isEmpty ? HighlightsFormat.title(metric) : HighlightsFormat.unit(metric))
                         .foregroundStyle(.secondary)
                 }
             }
@@ -921,7 +921,7 @@ struct PadGoalEditor: View {
             if let editing {
                 period = editing.period
                 metric = editing.metric
-                value = HighlightTexts.display(editing.metric, editing.target)
+                value = HighlightsFormat.display(editing.metric, editing.target)
             } else if let free = library.freeGoalCombinations.first {
                 period = free.period
                 metric = free.metric
@@ -958,105 +958,5 @@ struct PadGoalEditor: View {
             library.addGoal(metric: metric, period: period, target: target)
         }
         dismiss()
-    }
-}
-
-// MARK: - Texts
-
-/// The texts of the highlights on the iPad, the same words as on the Mac (rule 8: not in the Kit).
-enum HighlightTexts {
-    static func title(_ kind: RecordKind) -> String {
-        switch kind {
-        case .longestDistance: String(localized: "Longest ride")
-        case .longestDuration: String(localized: "Longest ride time")
-        case .mostAscent: String(localized: "Most ascent")
-        case .highestAverageSpeed: String(localized: "Highest avg speed")
-        case .highestAveragePower: String(localized: "Highest avg power")
-        case .highestSpeed: String(localized: "Top speed")
-        case .highestPower: String(localized: "Highest power")
-        case .highestCadence: String(localized: "Highest cadence")
-        case .bestPower1Min: String(localized: "Best 1-minute power")
-        case .mostCurves: String(localized: "Curviest ride")
-        case .steepestClimb: String(localized: "Steepest climb")
-        case .steepestDescent: String(localized: "Steepest descent")
-        case .longestStreak: String(localized: "Longest streak")
-        }
-    }
-
-    /// Number and unit, e.g. ("101,6", "km") or ("5:36", "h").
-    static func value(_ kind: RecordKind, _ value: Double) -> (number: String, unit: String) {
-        switch kind {
-        case .longestDistance: ((value / 1000).formatted(.number.precision(.fractionLength(1))), "km")
-        case .longestDuration: (Duration.seconds(value.rounded()).formatted(.time(pattern: .hourMinute)), "h")
-        case .mostAscent: (Int(value.rounded()).formatted(), "m")
-        case .highestAverageSpeed, .highestSpeed: ((value * 3.6).formatted(.number.precision(.fractionLength(1))), "km/h")
-        case .highestAveragePower, .highestPower, .bestPower1Min: (Int(value.rounded()).formatted(), "W")
-        case .highestCadence: (Int(value.rounded()).formatted(), String(localized: "rpm"))
-        case .mostCurves: (Int(value.rounded()).formatted(), String(localized: "per km"))
-        case .steepestClimb, .steepestDescent: (value.formatted(.number.precision(.fractionLength(1))), "%")
-        case .longestStreak: (Int(value).formatted(), String(localized: "days", comment: "Unit after the number of days of a streak"))
-        }
-    }
-
-    /// "101,6 km", "5 days".
-    static func text(_ kind: RecordKind, _ value: Double) -> String {
-        if kind == .longestStreak { return String(localized: "\(Int(value)) days") }
-        let v = Self.value(kind, value)
-        return "\(v.number) \(v.unit)"
-    }
-
-    static func title(_ metric: GoalMetric) -> String {
-        switch metric {
-        case .distance: String(localized: "Kilometres")
-        case .rides: String(localized: "Rides")
-        case .ascent: String(localized: "Ascent")
-        }
-    }
-
-    static func title(_ period: GoalPeriod) -> String {
-        switch period {
-        case .week: String(localized: "Week")
-        case .month: String(localized: "Month")
-        case .year: String(localized: "Year")
-        }
-    }
-
-    /// The value in the unit the user types: km, rides or m.
-    static func display(_ metric: GoalMetric, _ value: Double) -> Double {
-        metric == .distance ? value / 1000 : value
-    }
-
-    static func unit(_ metric: GoalMetric) -> String {
-        switch metric {
-        case .distance: "km"
-        case .rides: ""
-        case .ascent: "m"
-        }
-    }
-
-    /// "62", "1.284" – kilometres without decimals from 100 km on.
-    static func number(_ metric: GoalMetric, _ value: Double) -> String {
-        let shown = display(metric, value)
-        if metric == .distance && shown < 100 && shown.rounded() != shown {
-            return shown.formatted(.number.precision(.fractionLength(1)))
-        }
-        return Int(shown.rounded()).formatted()
-    }
-
-    /// "This week", "October", "2026".
-    static func currentPeriod(_ period: GoalPeriod, _ interval: DateInterval, calendar: Calendar) -> String {
-        switch period {
-        case .week: String(localized: "This week")
-        case .month: interval.start.formatted(Date.FormatStyle(timeZone: calendar.timeZone).month(.wide))
-        case .year: String(calendar.component(.year, from: interval.start))
-        }
-    }
-
-    static func shortDate(_ date: Date, timeZone: TimeZone = .current) -> String {
-        date.formatted(Date.FormatStyle(timeZone: timeZone).day().month(.abbreviated))
-    }
-
-    static func longDate(_ date: Date, timeZone: TimeZone = .current) -> String {
-        date.formatted(Date.FormatStyle(timeZone: timeZone).day().month(.abbreviated).year())
     }
 }

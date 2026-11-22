@@ -1086,12 +1086,12 @@
         }
       }
     },
-    "Created with Wattspur on %@" : {
+    "Created with Wattspur on %@. Calories and CO₂ are estimates." : {
       "localizations" : {
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Erstellt mit Wattspur am %@"
+            "value" : "Erstellt mit Wattspur am %@. Kalorien und CO₂ sind Schätzwerte."
           }
         }
       }

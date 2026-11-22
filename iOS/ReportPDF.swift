@@ -41,9 +41,9 @@ enum ReportPDF {
         return data as Data
     }
 
-    /// The last line of every report.
+    /// The last line of every report, the same as on the Mac (S-22).
     static var createdNote: some View {
-        Text("Created with Wattspur on \(Date.now.formatted(date: .long, time: .omitted))")
+        Text(verbatim: PDFText.createdNote)
             .font(.system(size: 8))
             .foregroundStyle(.secondary)
     }

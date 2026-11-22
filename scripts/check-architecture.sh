@@ -8,6 +8,9 @@
 # - The package holds no texts for the user (rule 8).
 # - The iPhone app, its widgets and its share extension (iOS*/): no AppKit, nothing from App/ but
 #   resources (B-206); the extensions import no SwiftData (R-06).
+# - Shared/ (texts and formats of both apps, B-355): SwiftUI, Charts, Foundation and the Kit only,
+#   never AppKit or UIKit, and not the RideFormat of one app (rule 6).
+# - No file name stands in both App/ and iOS/, except a short list with reasons (rule 15).
 # - The apps write the library only through RideLibrary, no model context of their own (rule 4);
 #   the package saves only through LibrarySave (rule 10).
 # - The three iPhone targets take their settings from Config/iOS.xcconfig, and the versions stand
@@ -82,6 +85,35 @@ fi
 # snapshot, the share extension nothing; it only hands files to the app (B-301).
 if grep -rnE "$(import_of SwiftData)" iOSWidgets iOSShared iOSShare; then
     echo "architecture: the extensions and the code shared with them must not import SwiftData (see docs/ARCHITECTURE.md)" >&2
+    exit 1
+fi
+
+# Shared/ is compiled into the Mac and the iPhone app (B-355): only frameworks of both platforms and
+# the Kit, and none of the formats of one app (the Mac's duration has seconds, the iPhone's not).
+SHARED_ALLOWED=$(import_of 'SwiftUI|Charts|Foundation|WattspurKit|WattspurCore')
+if grep -rnE "$(import_of '[A-Za-z_][A-Za-z0-9_]*')" Shared | grep -vE "^[^:]+:[0-9]+:${SHARED_ALLOWED#^}"; then
+    echo "architecture: Shared/ imports only SwiftUI, Charts, Foundation and the Kit, no AppKit or UIKit (see docs/ARCHITECTURE.md, rule 6)" >&2
+    exit 1
+fi
+if grep -rnwE 'RideFormat|NS[A-Z][A-Za-z]*|UI[A-Z][A-Za-z]*' Shared | grep -vE '^[^:]+:[0-9]+:[[:space:]]*//'; then
+    echo "architecture: Shared/ must not use an app's RideFormat or AppKit/UIKit types; use ValueFormat (see docs/ARCHITECTURE.md, rule 6)" >&2
+    exit 1
+fi
+
+# Rule 15: a file name in both App/ and iOS/ is usually a copy that drifts apart (S-18). Shared code
+# goes into Shared/ or the package. Allowed, because each platform needs its own, different file:
+# - WattspurApp.swift: the entry point of each app;
+# - Localizable.xcstrings: one string catalog per app;
+# - RideFormat.swift: the formats of lists and recording (the iPhone's duration without seconds);
+# - RidePDF.swift: drawn with AppKit on the Mac, UIKit on the iPhone;
+# - HighlightsView.swift, LibraryErrorView.swift, TrashView.swift: different views per platform;
+# - SampleRide.swift: loaded into SwiftData on the Mac, into the exchange format on the iPhone.
+SAME_NAME_ALLOWED='WattspurApp.swift|Localizable.xcstrings|RideFormat.swift|RidePDF.swift|HighlightsView.swift|LibraryErrorView.swift|TrashView.swift|SampleRide.swift'
+SAME_NAMES=$(comm -12 <(find App -type f | sed 's#.*/##' | sort -u) <(find iOS -type f | sed 's#.*/##' | sort -u) \
+    | grep -vxE "$SAME_NAME_ALLOWED" || true)
+if [ -n "$SAME_NAMES" ]; then
+    echo "$SAME_NAMES"
+    echo "architecture: these file names stand in both App/ and iOS/; move the shared part to Shared/ or rename (see docs/ARCHITECTURE.md, rule 15)" >&2
     exit 1
 fi
 
