@@ -19,6 +19,7 @@ enum PlaceName {
 /// The name Wattspur suggests for every recording (B-368): “Darmstadt – Frankfurt – 14:32”, for a
 /// round trip “Reinheim Round Trip – 14:32”. Without a place (no network, no result) it is
 /// “Ride on …” as before.
+@MainActor
 enum RideNaming {
     static func name(_ route: RideRoute?, startDate: Date) -> String {
         let time = startDate.formatted(date: .omitted, time: .shortened)
