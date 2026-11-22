@@ -28,14 +28,10 @@ final class RecordingActivityController {
     func start(_ recording: RideRecording) {
         guard activity == nil, ActivityAuthorizationInfo().areActivitiesEnabled else { return }
         let state = Self.state(of: recording)
-        let side: String? = switch recording.vehicle {
-        case .car: "lateral"
-        case .motorcycle: "lean"
-        case .eBike: nil
-        }
-        activity = try? Activity.request(attributes: RecordingAttributes(startDate: recording.startDate, symbol: recording.device?.symbol,
-                                                                         kind: recording.device?.kind.rawValue,
-                                                                         side: side),
+        let device = Self.device(of: recording)
+        activity = try? Activity.request(attributes: RecordingAttributes(startDate: recording.startDate, symbol: device.symbol,
+                                                                         kind: device.kind,
+                                                                         side: device.side),
                                          content: ActivityContent(state: state, staleDate: nil))
         lastState = state
         lastUpdate = .now
@@ -77,6 +73,16 @@ final class RecordingActivityController {
         return RecordingAttributes.ContentState(distance: (recording.distance / 10).rounded() * 10,
                                                 speed: (recording.currentSpeed * 36).rounded() / 36,
                                                 isPaused: recording.isPaused, lean: lean,
-                                                isReady: recording.isReady ? true : nil)
+                                                isReady: recording.isReady ? true : nil,
+                                                start: recording.startDate, device: device(of: recording))
+    }
+
+    private static func device(of recording: RideRecording) -> RecordingAttributes.Device {
+        let side: String? = switch recording.vehicle {
+        case .car: "lateral"
+        case .motorcycle: "lean"
+        case .eBike: nil
+        }
+        return RecordingAttributes.Device(symbol: recording.device?.symbol, kind: recording.device?.kind.rawValue, side: side)
     }
 }

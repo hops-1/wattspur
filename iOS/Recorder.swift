@@ -362,21 +362,37 @@ final class Recorder {
         // The motion since the point before; a dropped point hands its values on to the next one.
         let values = motion?.values(at: location)
         fix.motion = droppedMotion.map { $0.merged(with: values) } ?? values
+        if wasReady { takeConnectedDevice() }
         standstill?.record(fix)
         if standstill?.isOver(at: fix.date) == true { Task { await checkStandstill() } }
         if recording?.add(fix) == true {
             droppedMotion = nil
             write(.fix(fix))
-            if wasReady, let recording {
-                // The ride began (B-311): its time counts from now, and the Live Activity's start
-                // cannot change, so it starts anew.
-                activity.end(nil)
-                activity.start(recording)
-            } else if let recording {
-                activity.update(recording)
-            }
+            // When the ride begins (B-311) its time counts from now; the Live Activity takes that in an
+            // update, as an app in the background may not start a new one (B-370).
+            if let recording { activity.update(recording, force: wasReady) }
         } else {
             droppedMotion = fix.motion
+        }
+    }
+
+    /// While ready the connection may still come: the audio route follows CarPlay or the headset a
+    /// moment after the automation ran (B-370). Its device then replaces the last vehicle.
+    private func takeConnectedDevice() {
+        guard let connected = AutoStartSettings.deviceForConnection(devices: RecordingChoice.cachedDevices),
+              connected != recording?.device else { return }
+        recording?.device = connected
+        RecordingChoice.last = connected
+        write(.vehicle(connected.vehicle))
+        write(.device(connected))
+        motion?.stop()
+        let motion = MotionRecorder()
+        motion.start(at: .now, vehicle: connected.vehicle, rawLog: MotionRecorder.writesRawLog)
+        self.motion = motion
+        droppedMotion = nil
+        if let recording {
+            shown = recording
+            activity.update(recording, force: true)
         }
     }
 

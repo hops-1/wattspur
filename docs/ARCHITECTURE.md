@@ -82,7 +82,7 @@ CMDeviceMotion  ──► MotionRecorder ──► MotionFusion (Schräglage, R�
 - `RecordingDiagnostics` schreibt je Minute eine Zeile ohne Orte in „Diagnose“ (`RecordingHealth`).
 - Jeder Punkt geht sofort in eine Protokolldatei. Nach einem Absturz bietet die App an, weiterzufahren oder zu beenden. Scheitert das Speichern, bleibt das Protokoll liegen und die App sagt es (R-51, R-52).
 - Gilt eine Aufnahme als Doppel, wird die vorhandene Fahrt aktualisiert, nicht verworfen (R-53).
-- Live-Aktivität und Knopf „Pause“ kommen über `iOSShared` (`RecordingAttributes`, `ToggleRecordingPauseIntent`); Siri und Kurzbefehle über `iOS/RideIntents.swift`.
+- Live-Aktivität und Knopf „Pause“ kommen über `iOSShared` (`RecordingAttributes`, `ToggleRecordingPauseIntent`); Siri und Kurzbefehle über `iOS/RideIntents.swift`. „Fahrt starten“ öffnet die App, weil GPS mit „Beim Verwenden“ nicht aus dem Hintergrund anläuft; „Fahrt beenden“ läuft im Hintergrund (B-370). Was sich in „Bereit“ ändert (Beginn, Gerät), geht als Update in die Live-Aktivität: Im Hintergrund darf die App keine neue starten.
 
 ### Sync über iCloud (Mac und iPhone)
 

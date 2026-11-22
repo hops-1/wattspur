@@ -10,6 +10,8 @@ Every DMG handed out to testers corresponds to one entry below.
 ### Fixed
 - iPhone: a recording no longer overloads the phone (B-369). Since iOS 1.5 the hidden Highlights tile read every ride again with each GPS point; after a quarter of an hour Wattspur could take a whole CPU core and up to 1 GB, other apps froze and the battery drained. The screen of a recording now also rests while nobody sees it.
 - iPhone: the track keeps its height when positions are handled late or the barometer falls silent (B-369): readings are matched by the time they were measured, and the smoothed GPS height stands in.
+- iPhone: Auto-Start takes the connected or last used car or motorcycle, never the bike used last (B-370). Car rides recorded as a bike had no lateral acceleration and lost every position faster than 100 km/h. CarPlay can be chosen only for cars and motorcycles.
+- iPhone: "End Ride" from a Shortcuts automation works with the iPhone locked: an auto-started ride is saved without opening the app (B-370). The Live Activity also stays when the ride begins after "Ready". Starting still opens the app, so Shortcuts can still report a timeout on a locked iPhone.
 
 ### Added
 - iPhone: a small diagnostics file for each recording, one line a minute without places (Files › On My iPhone › Wattspur › Diagnose); the last ten are kept (B-369).

@@ -22,14 +22,17 @@ struct AutoStartPage: View {
             Section {
                 Toggle("Auto-Start", isOn: $isOn)
             } footer: {
-                Text("When a Shortcuts automation runs “Start Ride” without a device, Wattspur waits as “Ready” and begins the ride when you drive off, above 10 km/h. The device comes from the connection below, otherwise it is the last one.")
+                Text("When a Shortcuts automation runs “Start Ride” without a device, Wattspur waits as “Ready” and begins the ride when you drive off, above 10 km/h. The device comes from the connection below, otherwise it is the car or motorcycle used last.")
             }
             if isOn {
                 Section {
                     ForEach(devices) { device in
                         Picker(selection: binding(for: device.id)) {
                             Text("Nothing").tag(AutoStart.Trigger?.none)
-                            Text(verbatim: "CarPlay").tag(AutoStart.Trigger?.some(.carPlay))
+                            // CarPlay is always a car or motorcycle (B-370).
+                            if canStartWithCarPlay(device.id) {
+                                Text(verbatim: "CarPlay").tag(AutoStart.Trigger?.some(.carPlay))
+                            }
                             ForEach(bluetoothNames(for: device.id), id: \.self) { name in
                                 Text(verbatim: name).tag(AutoStart.Trigger?.some(.bluetooth(name)))
                             }
@@ -65,7 +68,7 @@ struct AutoStartPage: View {
                 Section {
                     Text("1. Open the Shortcuts app, then Automation › New Automation.")
                     Text("2. Choose CarPlay or Bluetooth (then your device), and Connects.")
-                    Text("3. Choose Run Immediately, then the action Wattspur › Start Ride, without a device.")
+                    Text("3. Let it run without asking (Confirm Before Run off, up to iOS 26 Run Immediately), then add the action Wattspur › Start Ride, without a device.")
                     Text("4. For the end: a second automation with Disconnects and Wattspur › End Ride.")
                 } header: {
                     Text("Setting Up the Automation")
@@ -83,11 +86,16 @@ struct AutoStartPage: View {
 
     private func binding(for id: UUID) -> Binding<AutoStart.Trigger?> {
         Binding {
-            triggers[id]
+            triggers[id] == .carPlay && !canStartWithCarPlay(id) ? nil : triggers[id]
         } set: { trigger in
             triggers[id] = trigger
             AutoStartSettings.triggers = triggers
         }
+    }
+
+    private func canStartWithCarPlay(_ id: UUID) -> Bool {
+        guard let device = devices.first(where: { $0.id == id }) else { return false }
+        return AutoStart.canStartWithCarPlay(BikeKind(rawValue: device.kind) ?? .bike)
     }
 
     /// The Bluetooth device connected now and the one chosen before, so the choice stays visible

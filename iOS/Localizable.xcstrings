@@ -6550,12 +6550,12 @@
         }
       }
     },
-    "When a Shortcuts automation runs “Start Ride” without a device, Wattspur waits as “Ready” and begins the ride when you drive off, above 10 km/h. The device comes from the connection below, otherwise it is the last one." : {
+    "When a Shortcuts automation runs “Start Ride” without a device, Wattspur waits as “Ready” and begins the ride when you drive off, above 10 km/h. The device comes from the connection below, otherwise it is the car or motorcycle used last." : {
       "localizations" : {
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Startet eine Automation in der App Kurzbefehle „Fahrt starten“ ohne Gerät, wartet Wattspur als „Bereit“ und beginnt die Fahrt, wenn du losfährst, ab 10 km/h. Das Gerät kommt aus der Verbindung unten, sonst ist es das zuletzt genutzte."
+            "value" : "Startet eine Automation in der App Kurzbefehle „Fahrt starten“ ohne Gerät, wartet Wattspur als „Bereit“ und beginnt die Fahrt, wenn du losfährst, ab 10 km/h. Das Gerät kommt aus der Verbindung unten, sonst ist es das zuletzt genutzte Auto oder Motorrad."
           }
         }
       }
@@ -6610,12 +6610,12 @@
         }
       }
     },
-    "3. Choose Run Immediately, then the action Wattspur › Start Ride, without a device." : {
+    "3. Let it run without asking (Confirm Before Run off, up to iOS 26 Run Immediately), then add the action Wattspur › Start Ride, without a device." : {
       "localizations" : {
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "3. Wähle Sofort ausführen, dann die Aktion Wattspur › Fahrt starten, ohne Gerät."
+            "value" : "3. Lass sie ohne Rückfrage laufen (Vor dem Ausführen bestätigen aus, bis iOS 26 Sofort ausführen), dann füge die Aktion Wattspur › Fahrt starten hinzu, ohne Gerät."
           }
         }
       }
