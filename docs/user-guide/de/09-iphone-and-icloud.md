@@ -211,6 +211,16 @@ Schalte unter **Mehr › Aufnahme** den **Auto-Start** ein. Lass in der Automati
 - Unter **Ende** wählst du, wann die Fahrt von selbst endet: **Bei Trennung** (mit der zweiten Automation **Trennt › Fahrt beenden**) und **Nach Stillstand** nach 5, 10 oder 20 Minuten (Standard 10).
 - Eine Fahrt, die von selbst endet, sichert Wattspur ohne Frage: mit dem Gerät und den Orten von Start und Ziel als Namen, zum Beispiel „Darmstadt – Frankfurt am Main – 14:32“ (die Startzeit ab iPhone 1.6.4). Eine Mitteilung sagt Bescheid; ein Tipp darauf öffnet die Fahrt. Fahrten unter 500 m behält Wattspur nicht.
 
+## CarPlay (ab iPhone 1.6.4)
+Ist das iPhone mit dem Auto verbunden, steht Wattspur in CarPlay. Es ist dieselbe Aufnahme wie am iPhone: Was du an einer Stelle startest oder beendest, gilt auch an der anderen.
+
+- **Ohne Aufnahme** steht dort das Fahrzeug. **Fahrt starten** nimmt es. **Fahrzeug wechseln** zeigt deine Autos und Motorräder, danach Auto und Motorrad ohne eigenes Gerät.
+- **Während der Fahrt** stehen Tempo, Zeit und Strecke, im Auto die Querbeschleunigung und auf dem Motorrad die Schräglage. Die Werte kommen höchstens alle 5 Sekunden neu, damit sie beim Fahren nicht ablenken.
+- **Pause** hält die Fahrt an, **Weiter** setzt sie fort.
+- **Ende** fragt noch einmal nach. **Sichern** sichert die Fahrt ohne das Blatt „Fahrt sichern“, mit Orten und Startzeit als Namen. Das gilt auch für Fahrten unter 500 m.
+- **Bereit** vom Auto-Start lässt sich dort mit **Abbrechen** beenden.
+- Eine Karte oder die Fahrtenliste gibt es in CarPlay nicht. Die Fahrt siehst du danach am iPhone.
+
 ## Womit du fährst: Rad, Motorrad, Auto
 Ab iPhone 1.1 wählst du das Gerät beim Start. Ein Tipp auf **Fahrt starten** nimmt das Gerät der letzten Aufnahme. Darunter steht klein „mit Nugget ▾“: Ein Tipp darauf öffnet **Womit fährst du?** mit deinen Bikes, Fahrzeugen und Schuhen. Darunter steht **Fahrzeugart** mit **Fahrrad**, **Auto** und **Motorrad** ohne eigenes Gerät, zum Beispiel für ein geliehenes Rad oder einen Mietwagen (Fahrrad ab iPhone 1.1.1). Ein Tipp auf eine Zeile startet die Fahrt damit. Beim Sichern ist das Gerät schon gewählt, du kannst es dort noch ändern. Die Live-Aktivität zeigt sein Symbol.
 

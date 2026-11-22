@@ -7,6 +7,16 @@ Every DMG handed out to testers corresponds to one entry below.
 
 ## [Unreleased]
 
+## [iOS 1.6.4] – 2026-11-22
+
+CarPlay: start, pause and end a recording in the car and see its values. iPhone 1.6.4 (45), TestFlight only; the Mac stays 1.10.4.
+
+### Added
+- iPhone: Wattspur in **CarPlay** (B-340, B-327). Without a recording it shows the vehicle with **Start Ride** and **Change Vehicle** (your cars and motorcycles, then car and motorcycle without a device). While recording one panel shows speed, time, distance and the lateral acceleration (car) or lean angle (motorcycle), updated at most every 5 seconds; below it **Pause** or **Resume** and **End**. **End** asks once more and saves the ride without the sheet, also under 500 m. "Ready" from auto-start can be cancelled there. No map, no ride list. It is the same recording as on the iPhone.
+
+### Changed
+- iPhone: every recording suggests the places at start and end with the start time as its name, e.g. "Darmstadt – Frankfurt am Main – 14:32", for a round trip "Reinheim Round Trip – 14:32" (B-368). In the sheet **Save Ride** it is a suggestion you can change; the automatic end and CarPlay use it directly. Without a network it stays "Ride on …". The start and end point of every recording now go to Apple's map service for this (privacy policy updated).
+
 ## [iOS 1.6.3] – 2026-11-22
 
 Shared texts: the iPad and the iPhone show the analysis, the comparison, the highlights and the PDFs in the same words and formats as the Mac. No new functions. iPhone and iPad 1.6.3 (44); with the Mac 1.10.4. CarPlay (1.6.1) still waits for Apple.
