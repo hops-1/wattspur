@@ -4,7 +4,7 @@ import MapKit
 import UserNotifications
 import WattspurCore
 
-/// The town of a position, for the name of an auto-ended ride (B-339): “Darmstadt – Frankfurt”.
+/// The town of a position, for the name of a recorded ride (B-339, B-368).
 /// Apple's map service looks it up; without a network or a result it is `nil`.
 enum PlaceName {
     static func of(_ fix: RideRecording.Fix?) async -> String? {
@@ -13,6 +13,30 @@ enum PlaceName {
         guard let request = MKReverseGeocodingRequest(location: location),
               let item = try? await request.mapItems.first else { return nil }
         return item.addressRepresentations?.cityName ?? item.name
+    }
+}
+
+/// The name Wattspur suggests for every recording (B-368): “Darmstadt – Frankfurt – 14:32”, for a
+/// round trip “Reinheim Round Trip – 14:32”. Without a place (no network, no result) it is
+/// “Ride on …” as before.
+@MainActor
+enum RideNaming {
+    static func name(_ route: RideRoute?, startDate: Date) -> String {
+        let time = startDate.formatted(date: .omitted, time: .shortened)
+        switch route {
+        case let .oneWay(from, to): return "\(from) – \(to) – \(time)"
+        case let .roundTrip(place): return String(localized: "\(place) Round Trip – \(time)")
+        case let .start(place): return "\(place) – \(time)"
+        case nil: return RecordingView.defaultName(for: startDate)
+        }
+    }
+
+    /// Looks up the towns of the first and the last position at Apple's map service.
+    static func suggested(for recording: RideRecording) async -> String {
+        let first = recording.segments.first(where: { !$0.isEmpty })?.first?.fix
+        async let start = PlaceName.of(first)
+        async let end = PlaceName.of(recording.lastPoint?.fix)
+        return name(RideRoute(start: await start, end: await end), startDate: recording.startDate)
     }
 }
 

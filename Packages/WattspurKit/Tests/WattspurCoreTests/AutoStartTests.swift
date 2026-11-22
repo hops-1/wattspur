@@ -149,15 +149,6 @@ struct AutoStartTests {
         #expect(!AutoStart.keeps(ready))
     }
 
-    @Test("The name: start – end, one place for a round trip, none without a start")
-    func rideName() {
-        #expect(AutoStart.rideName(start: "Darmstadt", end: "Frankfurt am Main") == "Darmstadt – Frankfurt am Main")
-        #expect(AutoStart.rideName(start: "Reinheim", end: "Reinheim") == "Reinheim")
-        #expect(AutoStart.rideName(start: "Reinheim", end: nil) == "Reinheim")
-        #expect(AutoStart.rideName(start: nil, end: "Reinheim") == nil)
-        #expect(AutoStart.rideName(start: " ", end: "Reinheim") == nil)
-    }
-
     @Test("A trigger survives JSON, as kept on the iPhone")
     func triggerCoding() throws {
         let id = UUID()

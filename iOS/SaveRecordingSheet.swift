@@ -90,6 +90,12 @@ struct SaveRecordingSheet: View {
             name = RecordingView.defaultName(for: recording.startDate)
             device = Self.defaultDevice(for: recording, among: bikes, lastRide: library.state?.lastRide)
         }
+        .task {
+            // The places come from Apple's map service (B-368); a name typed meanwhile stays.
+            let placeholder = RecordingView.defaultName(for: recording.startDate)
+            let suggested = await RideNaming.suggested(for: recording)
+            if name == placeholder || name.isEmpty { name = suggested }
+        }
     }
 
     init(recording: RideRecording, close: (() -> Void)? = nil) {

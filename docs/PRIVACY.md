@@ -1,6 +1,6 @@
 # Datenschutz · Privacy
 
-Stand: 21. November 2026 · Gilt für Wattspur für Mac und iPhone.
+Stand: 22. November 2026 · Gilt für Wattspur für Mac und iPhone.
 
 ## Deutsch
 
@@ -27,7 +27,7 @@ Mit dem Schalter *Rohdaten der Bewegung mitschreiben* in „Mehr“ (aus als Sta
 **Verbindungen ins Internet**
 - Karten: Wattspur lädt Kartenkacheln von Apple (MapKit) und, je nach gewähltem Kartenstil (Mac und iPhone), von OpenStreetMap, CyclOSM oder OpenTopoMap. Dabei gehen der Kartenausschnitt und deine IP-Adresse an den jeweiligen Server, keine Fahrten.
 - Updates (Mac): Einmal am Tag fragt Wattspur bei GitHub, ob es eine neue Version gibt, wenn du das nicht ausgeschaltet hast. Dabei wird nichts über dich oder deine Fahrten gesendet.
-- Orte und Zeitzonen: Für die Zeitzone einer importierten Fahrt (Mac, mit dem Startpunkt) und den Ortsnamen einer automatisch beendeten Aufnahme (iPhone, mit Start- und Endpunkt) schickt Wattspur nur diese Punkte an den Kartendienst von Apple. Es gilt die Datenschutzrichtlinie von Apple. Die übrige Fahrt geht nicht mit.
+- Orte und Zeitzonen: Für die Zeitzone einer importierten Fahrt (Mac, mit dem Startpunkt) und den vorgeschlagenen Namen einer Aufnahme (iPhone, mit Start- und Endpunkt) schickt Wattspur nur diese Punkte an den Kartendienst von Apple. Es gilt die Datenschutzrichtlinie von Apple. Die übrige Fahrt geht nicht mit.
 - Links: Links wie „Wattspur auf GitHub“ oder „Unterstützen“ (Buy me a coffee, Mac) öffnen den Browser. Wattspur sendet dabei nichts. Was auf diesen Seiten passiert, regeln GitHub und Buy me a coffee.
 
 **Was Wattspur nicht tut**
@@ -64,7 +64,7 @@ With the switch *Record Raw Motion* in "More" (off by default) a recording also 
 **Connections to the internet**
 - Maps: Wattspur loads map tiles from Apple (MapKit) and, depending on the map style (Mac and iPhone), from OpenStreetMap, CyclOSM or OpenTopoMap. The server receives the map area and your IP address, no rides.
 - Updates (Mac): once a day Wattspur asks GitHub whether a new version is out, unless you turned that off. Nothing about you or your rides is sent.
-- Places and time zones: for the time zone of an imported ride (Mac, with its start point) and the place names of an automatically ended recording (iPhone, with its start and end point) Wattspur sends only these points to Apple's map service. Apple's privacy policy applies. The rest of the ride is not sent.
+- Places and time zones: for the time zone of an imported ride (Mac, with its start point) and the suggested name of a recording (iPhone, with its start and end point) Wattspur sends only these points to Apple's map service. Apple's privacy policy applies. The rest of the ride is not sent.
 - Links: links such as "Wattspur on GitHub" or "Sponsor" (Buy Me a Coffee, Mac) open the browser. Wattspur sends nothing. What happens on those pages is up to GitHub and Buy Me a Coffee.
 
 **What Wattspur does not do**

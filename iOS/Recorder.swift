@@ -176,11 +176,7 @@ final class Recorder {
         }
         isEndingAutomatically = true
         defer { isEndingAutomatically = false }
-        let first = recording.segments.first(where: { !$0.isEmpty })?.first?.fix
-        let last = recording.lastPoint?.fix
-        async let start = PlaceName.of(first)
-        async let end = PlaceName.of(last)
-        let name = AutoStart.rideName(start: await start, end: await end) ?? RecordingView.defaultName(for: recording.startDate)
+        let name = await RideNaming.suggested(for: recording)
         // What was recorded while the names were looked up belongs to the ride too.
         guard let final = self.recording, autoSave(final, name) else { return }
         _ = stop()
