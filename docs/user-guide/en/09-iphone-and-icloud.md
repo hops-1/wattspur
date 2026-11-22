@@ -211,6 +211,16 @@ Switch on **Auto-Start** under **More › Recording**. In the automation, leave 
 - Under **End** you choose when the ride ends by itself: **When Disconnected** (with the second automation **Disconnects › End Ride**) and **After Standing Still** for 5, 10 or 20 minutes (10 by default).
 - A ride that ends by itself is saved without a question: with the device and the places at start and end as its name, for example "Darmstadt – Frankfurt am Main – 14:32" (the start time from iPhone 1.6.4). A notification tells you; tap it to open the ride. Rides under 500 m are not kept.
 
+## CarPlay (iPhone 1.6.4 and later)
+When the iPhone is connected to the car, Wattspur shows up in CarPlay. It is the same recording as on the iPhone: what you start or end in one place applies in the other too.
+
+- **Without a recording** it shows the vehicle. **Start Ride** uses it. **Change Vehicle** lists your cars and motorcycles, then car and motorcycle without a device of your own.
+- **While you drive** it shows speed, time and distance, in a car the lateral acceleration and on a motorcycle the lean angle. The values are updated every 5 seconds at most, so they do not distract you while driving.
+- **Pause** pauses the ride, **Resume** continues it.
+- **End** asks once more. **Save** saves the ride without the sheet **Save Ride**, with the places and the start time as its name. This also applies to rides under 500 m.
+- **Ready** from auto-start can be ended there with **Cancel**.
+- CarPlay has no map and no ride list. You see the ride on the iPhone afterwards.
+
 ## What you ride: bike, motorcycle, car
 From iPhone 1.1 you choose the device at the start. A tap on **Start Ride** takes the device of the last recording. Below it, “with Nugget ▾” in small type opens **What Are You Riding?** with your bikes, vehicles and shoes. Below them, **Vehicle Type** offers **Bicycle**, **Car** and **Motorcycle** without a device of your own, e.g. for a hired bike or a rental car (Bicycle from iPhone 1.1.1). A tap on a row starts the ride with it. When you save, the device is already chosen; you can still change it there. The Live Activity shows its symbol.
 
