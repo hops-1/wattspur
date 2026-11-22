@@ -12,6 +12,7 @@ No sign-in, no setup, no credentials needed.
 - Ride details: tap a ride for map, charts, lean angle and the ride's figures. "Share" exports a GPX file.
 - Map: the "Map" tab shows all rides on one map. Map styles are under "More > Maps"; Apple Maps is the default.
 - Widgets: home and lock screen widgets show distance and the last ride.
+- CarPlay (Driving Task, entitlement granted by Apple): connected to CarPlay, Wattspur shows start, pause and stop of a recording, the choice of vehicle, and one panel with speed, time, distance and lateral acceleration (car) or lean angle (motorcycle), updated at most every 5 seconds. No map, no ride list, nothing to read while driving. It is the same recording as on the iPhone.
 - iCloud: "More > iCloud" syncs the rides with the user's Mac (Wattspur for macOS) via the user's private CloudKit database.
 
 4. EXTERNAL SERVICES
