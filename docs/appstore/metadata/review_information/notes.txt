@@ -1,27 +1,28 @@
-1. SCREEN RECORDING
-Attached to this submission: recorded on an iPhone with the latest iOS, starting with the app launch. The app has no accounts, no login, no user-generated content shared with others and no paid content.
+1. SCREEN RECORDING (attached)
+Part A, physical iPhone, latest iOS: launch, location prompt, recording, lock screen, Auto-Start. Part B: CarPlay in a real car. Part C, labeled "Simulator, sample data": list, details, map, import, so no private rides are shown. Personal totals at launch are covered. There is no registration, login or account to delete, no user-generated content shared with others and no paid content.
 
 2. PURPOSE AND AUDIENCE
-Wattspur is a free logbook for e-bike, bicycle and motorcycle rides, made by an individual developer. It is for riders who want to see and keep their own rides without a cloud service account: the GPS track on a map, elevation profile, speed, power, cadence, heart rate, lean angle, and totals per week, month and bike. It records rides with the iPhone's GPS and imports FIT and GPX files from e-bike systems, bike computers and other apps. All data stays on the device and, if the user wants, in their own iCloud. No ads, no tracking, no in-app purchases.
+Free logbook for bicycle, e-bike, motorcycle and car rides, for people who want their own route, charts and totals without an account. No ads, tracking, user content shared in the app or purchases.
 
 3. HOW TO USE IT
-No sign-in, no setup, no credentials needed.
-- Launch: the Overview tab shows an anonymized sample ride until there is a real ride, so every screen has content right away.
-- Record: tap "Start Ride" on the Overview. Allow location "While Using the App" and Motion & Fitness. Walk or ride a few hundred metres, then tap "Stop". The ride appears in "Rides". While recording, location is used in the background (screen locked) and a Live Activity shows the ride; nothing runs in the background when not recording.
-- Import: in "Rides" tap "+" and pick a FIT or GPX file, or share a GPX file to Wattspur from Files or another app. Any GPX file with a track works. A sample FIT file (anonymized e-bike ride) to import: https://github.com/hops-1/wattspur/raw/main/App/SampleRide.fit
-- Ride details: tap a ride for map, charts, lean angle and the ride's figures. "Share" exports a GPX file.
-- Map: the "Map" tab shows all rides on one map. Map styles are under "More > Maps"; Apple Maps is the default.
-- Widgets: home and lock screen widgets show distance and the last ride.
-- CarPlay (Driving Task, entitlement granted by Apple): connected to CarPlay, Wattspur shows start, pause and stop of a recording, the choice of vehicle, and one panel with speed, time, distance and lateral acceleration (car) or lean angle (motorcycle), updated at most every 5 seconds. No map, no ride list, nothing to read while driving. It is the same recording as on the iPhone.
-- iCloud: "More > iCloud" syncs the rides with the user's Mac (Wattspur for macOS) via the user's private CloudKit database.
+No login or demo account needed.
+- Overview shows a sample ride until a ride exists. To fill Rides and Map, import this anonymized file: https://github.com/hops-1/wattspur/raw/main/App/SampleRide.fit (save to Files, then Rides > Import Files).
+- Record (iPhone): Overview > Start Ride, allow location "While Using the App" and Motion & Fitness. Move a few hundred meters, Stop, Save. The name is suggested from the start and end towns.
+- Background location (2.5.4): only during a recording or "Ready" that the user started or set up, so the track continues with the screen locked. A Live Activity and the system indicator show it. Stop or Cancel ends it. "Always" is never requested.
+- Auto-Start (off by default): More > Recording. The user creates a Shortcuts automation (CarPlay or Bluetooth connects > Start Ride). It opens the app as "Ready"; recording begins above 10 km/h, so walking will not trigger it. It ends on disconnect (second automation, End Ride) or after standing still. Notifications only report a saved ride.
+- CarPlay Driving Task (entitlement granted by Apple): allow location on the iPhone first. Start, Pause/Resume, End with confirmation, vehicle list, and one panel (speed, time, distance, lateral acceleration or lean angle) updated at most every 5 s. Apple templates only, no map, ride list or text input. Same recording as on iPhone.
+- iPad: view, import, analyze, compare. No recording or CarPlay.
+- Widget: This Week, Home Screen.
+- iCloud: More > iCloud & Library. Sync to the user's private CloudKit database is on by default and can be turned off.
+- If "Test Tools" appears under More, that is a diagnostic page for sandbox builds (TestFlight). App Store installs hide it.
 
 4. EXTERNAL SERVICES
-- Apple: MapKit (default map), Core Location, Core Motion (barometer altitude, lean angle), CloudKit private database (optional sync), ActivityKit, WidgetKit.
-- Optional map styles, chosen by the user: OpenStreetMap tiles (tile.openstreetmap.org, OpenStreetMap Foundation), CyclOSM (tiles by OpenStreetMap France), OpenTopoMap. Only tiles on screen are loaded, with attribution on every map, following each operator's tile usage policy.
-- No own server, no analytics, no login or payment service, no AI service. No data is collected.
+- Apple: MapKit, Core Location, Core Motion (barometer, lean, acceleration), CloudKit, ActivityKit, WidgetKit, App Intents. For the suggested name only the start and end point go to MapKit reverse geocoding.
+- Optional map styles (More > Maps; default is Apple): OpenStreetMap, CyclOSM (OpenStreetMap France), OpenTopoMap.
+- No own server, analytics, login, payment or AI service. The developer receives no data.
 
 5. REGIONAL DIFFERENCES
-None. The app works the same in all regions. It is localized in English and German and uses the device's units (km or miles).
+None. English and German. Distances and speeds are always in km and km/h.
 
 6. THIRD-PARTY MATERIAL
-Map data © OpenStreetMap contributors (ODbL); map styles CyclOSM and OpenTopoMap (CC BY-SA). Their licenses allow use in apps with attribution, which is shown on every map. The app is not in a regulated industry. Source code: https://github.com/hops-1/wattspur
+Map data © OpenStreetMap contributors (ODbL); CyclOSM and OpenTopoMap styles (CC BY-SA), used with attribution on the map. Not a regulated industry or medical device.

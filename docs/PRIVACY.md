@@ -1,27 +1,30 @@
 # Datenschutz · Privacy
 
-Stand: 22. November 2026 · Gilt für Wattspur für Mac und iPhone.
+Stand: 22. November 2026 · Gilt für Wattspur für Mac, iPhone und iPad.
 
 ## Deutsch
 
-**Kurz:** Wattspur schickt keine Daten an den Entwickler. Deine Fahrten liegen auf deinen Geräten und, wenn du den Sync einschaltest, in deinem eigenen iCloud-Konto. Nur für Karten, Orte und Updates fragt die App Dienste im Internet (siehe *Verbindungen ins Internet*).
+**Kurz:** Wattspur schickt keine Daten an den Entwickler. Deine Fahrten liegen auf deinen Geräten und, solange der Sync an ist, in deinem eigenen iCloud-Konto. Am iPhone und iPad ist er bei einer neuen Installation an, am Mac schaltest du ihn ein. Nur für Karten, Orte und Updates fragt die App Dienste im Internet (siehe *Verbindungen ins Internet*).
 
 **Welche Daten Wattspur verarbeitet**
 - Fahrten aus FIT- und GPX-Dateien und aus der GPS-Aufnahme auf dem iPhone: Zeit, Strecke, Route (Standorte), Höhe, Tempo und, wenn vorhanden, Leistung, Trittfrequenz und Puls.
 - Dein Profil, wenn du es ausfüllst: Name, Gewicht, Größe, Geburtsjahr, Geschlecht, Foto; dazu Bikes, Ziele und gespeicherte Strecken.
 
 **Wo die Daten liegen**
-- Auf deinem Mac bzw. iPhone, in der Mediathek von Wattspur.
-- Mit *Mit iCloud synchronisieren*: zusätzlich in der privaten CloudKit-Datenbank deines iCloud-Kontos. Diese Datenbank gehört dir; der Entwickler hat keinen Zugriff darauf. Für iCloud gilt die Datenschutzrichtlinie von Apple.
+- Auf deinem Mac, iPhone oder iPad, in der Mediathek von Wattspur.
+- Solange *Mit iCloud synchronisieren* an ist (am iPhone und iPad die Voreinstellung, abschaltbar unter „iCloud & Bibliothek“): zusätzlich in der privaten CloudKit-Datenbank deines iCloud-Kontos. Diese Datenbank gehört dir; der Entwickler hat keinen Zugriff darauf. Für iCloud gilt die Datenschutzrichtlinie von Apple.
 - Wenn du einen iCloud-Drive-Ordner für den Import wählst, liegen dort die Dateien, die du selbst hineinlegst.
 
 **Standort**
-Das iPhone fragt nach dem Standort nur für die GPS-Aufnahme, und nur „beim Verwenden der App“. Aufgezeichnet wird nur zwischen „Fahrt starten“ und „Stopp“.
+Das iPhone fragt nach dem Standort nur für die GPS-Aufnahme, und nur „beim Verwenden der App“, nie „Immer“. Es nutzt ihn vom Start bis zum Ende der Aufnahme, auch bei gesperrtem Bildschirm und wenn du in CarPlay startest. Beim Auto-Start (aus als Standard, über eine Automation, die du selbst anlegst) liest Wattspur den Standort schon in „Bereit“, um das Losfahren zu erkennen. Zur Fahrt gehören erst die Punkte ab dem Losfahren. Du kannst die Erlaubnis jederzeit in den iOS-Einstellungen entziehen. Das iPad nimmt keine Fahrten auf.
 
-**Bewegung und Fitness (Barometer)**
-Für die Höhe der Aufnahme fragt das iPhone einmal nach „Bewegung & Fitness“: Wattspur liest dann während der Aufnahme den Luftdruck-Sensor. Der Wert wird nur zur Höhe der Fahrt verrechnet und bleibt wie alle Fahrtdaten bei dir. Ohne die Erlaubnis nimmt Wattspur die Höhe aus dem GPS.
+**Bewegung und Fitness**
+Für die Höhe der Aufnahme fragt das iPhone einmal nach „Bewegung & Fitness“: Wattspur liest dann während der Aufnahme den Luftdruck-Sensor. Außerdem liest es während der Aufnahme und in „Bereit“ die Bewegungssensoren, für Beschleunigung, Schräglage und Belag. Gespeichert werden nur die Werte, die zur Fahrt gehören. Sie bleiben wie alle Fahrtdaten bei dir. Ohne Barometer nimmt Wattspur die Höhe aus dem GPS.
 
-**Bewegungssensoren (Test, ab iOS 0.5.1)**
+**Mitteilungen**
+Wenn du den Auto-Start einschaltest, fragt das iPhone nach Mitteilungen. Wattspur meldet damit nur eine von selbst gesicherte Fahrt. Die Mitteilung entsteht auf dem iPhone, ohne Server.
+
+**Rohdaten der Bewegung (nur in Testversionen)**
 Mit dem Schalter *Rohdaten der Bewegung mitschreiben* in „Mehr“ (aus als Standard) schreibt die Aufnahme zusätzlich Beschleunigung, Drehung und Lage des iPhones und die GPS-Punkte in eine Datei auf dem iPhone (Dateien-App, „Auf meinem iPhone › Wattspur › Bewegung“). Die Datei wird nicht synchronisiert und verlässt das iPhone nur, wenn du sie selbst teilst.
 
 **Verbindungen ins Internet**
@@ -41,24 +44,27 @@ Nils Wiese, über die Issues auf GitHub: https://github.com/hops-1/wattspur/issu
 
 ## English
 
-**In short:** Wattspur sends no data to the developer. Your rides stay on your devices and, if you turn on sync, in your own iCloud account. Only for maps, places and updates does the app ask services on the internet (see *Connections to the internet*).
+**In short:** Wattspur sends no data to the developer. Your rides stay on your devices and, while sync is on, in your own iCloud account. On iPhone and iPad it is on in a new installation; on the Mac you turn it on. Only for maps, places and updates does the app ask services on the internet (see *Connections to the internet*).
 
 **What Wattspur processes**
 - Rides from FIT and GPX files and from GPS recording on the iPhone: time, distance, route (locations), altitude, speed and, if present, power, cadence and heart rate.
 - Your profile, if you fill it in: name, weight, height, year of birth, sex, photo; also bikes, goals and saved routes.
 
 **Where the data is kept**
-- On your Mac or iPhone, in Wattspur's library.
-- With *Sync with iCloud*: also in the private CloudKit database of your iCloud account. That database belongs to you; the developer cannot access it. Apple's privacy policy applies to iCloud.
+- On your Mac, iPhone or iPad, in Wattspur's library.
+- While *Sync with iCloud* is on (the default on iPhone and iPad; turn it off under "iCloud & Library"): also in the private CloudKit database of your iCloud account. That database belongs to you; the developer cannot access it. Apple's privacy policy applies to iCloud.
 - If you choose an iCloud Drive folder for importing, it holds the files you put there yourself.
 
 **Location**
-The iPhone asks for your location only for GPS recording, and only "while using the app". It records only between "Start Ride" and "Stop".
+The iPhone asks for your location only for GPS recording, and only "while using the app", never "always". It uses it from the start to the end of a recording, also with the screen locked and when you start in CarPlay. With Auto-Start (off by default, through an automation you create yourself) Wattspur already reads the location while "Ready", to notice when you drive off. Only the points from then on belong to the ride. You can withdraw the permission at any time in the iOS settings. The iPad does not record rides.
 
-**Motion & Fitness (barometer)**
-For the height of a recording the iPhone asks once for "Motion & Fitness": Wattspur then reads the air pressure sensor while recording. The value only goes into the height of the ride and stays with you like all ride data. Without the permission Wattspur takes the height from GPS.
+**Motion & Fitness**
+For the height of a recording the iPhone asks once for "Motion & Fitness": Wattspur then reads the air pressure sensor while recording. It also reads the motion sensors while recording and while "Ready", for acceleration, lean angle and road surface. Only the values that belong to the ride are saved. They stay with you like all ride data. Without the barometer Wattspur takes the height from GPS.
 
-**Motion sensors (test, from iOS 0.5.1)**
+**Notifications**
+When you turn on Auto-Start, the iPhone asks to allow notifications. Wattspur uses them only to report a ride it saved by itself. The notification is made on the iPhone, without a server.
+
+**Raw motion data (test versions only)**
 With the switch *Record Raw Motion* in "More" (off by default) a recording also writes the iPhone's acceleration, rotation and attitude and the GPS points into a file on the iPhone (Files app, "On My iPhone › Wattspur › Bewegung"). The file is not synced and leaves the iPhone only if you share it yourself.
 
 **Connections to the internet**

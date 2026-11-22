@@ -38,9 +38,16 @@ for locale in de-DE en-US; do
         echo "other brand in keywords: $locale/keywords.txt"; fail=1
     fi
     for url in support_url marketing_url privacy_url; do
+        # The marketing URL is optional: an empty file means "leave the field empty" (B-318).
+        if [ "$url" = marketing_url ] && [ -f "$locale/$url.txt" ] && [ ! -s "$locale/$url.txt" ]; then continue; fi
         grep -qE '^https://' "$locale/$url.txt" || { echo "not https: $locale/$url.txt"; fail=1; }
     done
 done
 check review_information/notes.txt 4000
+# App Store Connect counts the notes in bytes, not in characters.
+notes_bytes=$(printf '%s' "$(cat review_information/notes.txt)" | wc -c | tr -d ' ')
+if [ "$notes_bytes" -gt 4000 ]; then
+    echo "too long: review_information/notes.txt ($notes_bytes of 4000 bytes)"; fail=1
+fi
 
 [ "$fail" -eq 0 ] && echo "App Store texts: ok" || { echo "App Store texts: failed"; exit 1; }

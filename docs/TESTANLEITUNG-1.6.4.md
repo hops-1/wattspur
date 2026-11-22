@@ -42,3 +42,24 @@ Am besten im Nugget mit CarPlay. Fahre nur, wenn es sicher ist; tippe in CarPlay
 1. Mit Auto-Start an: Beim Verbinden steht in CarPlay **Bereit** mit „Wartet, bis das Fahrzeug fährt“.
 2. **Abbrechen** beendet „Bereit“ ohne Fahrt.
 3. Beim Losfahren wechselt die Tafel auf Tempo, Zeit und Strecke.
+
+## F. Vor dem App Store (B-318)
+
+Entscheidung vom 22.11.2026: 1.6.4 (45) geht erst in den Store, wenn A bis E und dieser Abschnitt ✓ sind. Merke dir für den Schluss deine Einstellungen von Standort und Auto-Start. Für 1 bis 4 die Automationen in Kurzbefehle ausschalten.
+
+1. **App beendet, iPhone gesperrt:** Wattspur im App-Umschalter schließen, iPhone sperren, in CarPlay **Fahrt starten**. Fahren (die Begleitung schaut): Tempo und Strecke laufen. Nach dem Ende hat die Fahrt die ganze Spur, ohne Lücke am Anfang.
+2. **App im Hintergrund, iPhone gesperrt:** dasselbe. Die Live-Aktivität erscheint.
+3. **Lange Fahrt:** 30 Minuten aus CarPlay gestartet, mit Navigation im Vordergrund. Kein Abbruch, kein neuer Absturzbericht, die Spur ist vollständig.
+4. **Ohne Standort-Erlaubnis:** Standort auf „Nie“, in CarPlay starten und beenden. Kein Absturz, keine leere Fahrt in der Liste. Am iPhone steht „Zugriff auf den Standort verweigert“. Danach wieder „Beim Verwenden“.
+5. **Auto-Start, iPhone gesperrt:** Automationen an, CarPlay verbinden. Notiere, ob „Bereit“ sofort kommt oder erst nach dem Entsperren. Beides besteht, solange danach beim Losfahren die ganze Fahrt aufgenommen wird.
+
+**Bestanden:** alle fünf ✓. **Nicht bestanden:** ein ✗ bei 1 bis 5, ein Absturz oder eine Fahrt ohne Spur. Dann nicht einreichen. Nils entscheidet: Fix als 1.6.5 oder 1.6.2 (43) ohne CarPlay.
+
+| Punkt | Ergebnis | Notiz |
+|---|---|---|
+| A bis E | | |
+| F.1 | | |
+| F.2 | | |
+| F.3 | | |
+| F.4 | | |
+| F.5 | | |
