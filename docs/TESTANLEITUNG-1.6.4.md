@@ -47,6 +47,8 @@ Vorher, ab iOS 27 (dort gibt es „Sofort ausführen“ nicht mehr): In beiden A
 
 ## F. Vor dem App Store (B-318)
 
+**Überholt seit der Radtour am 22.11.2026 (B-369):** 1.6.4 (45) soll nicht eingereicht werden, es gilt `TESTANLEITUNG-1.6.5.md`. Die Punkte 1, 2, 4 und 5 hier werden dort mit dem neuen Build wiederholt.
+
 Entscheidung vom 22.11.2026: 1.6.4 (45) geht erst in den Store, wenn A bis E und dieser Abschnitt ✓ sind. Merke dir für den Schluss deine Einstellungen von Standort und Auto-Start. Für 1 bis 4 die Automationen in Kurzbefehle ausschalten.
 
 1. **App beendet, iPhone gesperrt:** Wattspur im App-Umschalter schließen, iPhone sperren, in CarPlay **Fahrt starten**. Fahren (die Begleitung schaut): Tempo und Strecke laufen. Nach dem Ende hat die Fahrt die ganze Spur, ohne Lücke am Anfang.

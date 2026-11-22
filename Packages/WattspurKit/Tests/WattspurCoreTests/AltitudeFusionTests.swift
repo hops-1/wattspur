@@ -106,12 +106,36 @@ struct AltitudeFusionTests {
         #expect(abs(before - 201) < 0.1)
         // The barometer is stale for a few seconds; the GPS says 207.
         #expect(fusion.altitude(gps: 207, verticalAccuracy: 5, barometer: nil, at: Self.start.addingTimeInterval(6)) == before)
-        // A barometer gone for longer gives no height rather than a flat line.
+        // A barometer gone for longer: the GPS height takes over, from the held one (B-369).
         let gone = Self.start.addingTimeInterval(7 + AltitudeFusion.barometerHold + 1)
         // Back again: the barometer height, the offset moved only a little towards the GPS.
         let after = fusion.altitude(gps: 207, verticalAccuracy: 5, barometer: 1, at: Self.start.addingTimeInterval(7)) ?? 0
         #expect(abs(after - 201) < 0.1)
-        #expect(fusion.altitude(gps: 207, verticalAccuracy: 5, barometer: nil, at: gone) == nil)
+        let without = fusion.altitude(gps: 207, verticalAccuracy: 5, barometer: nil, at: gone) ?? 0
+        #expect(without > after && without <= 207)
+        // Without any GPS height there is still no height rather than a flat line.
+        let later = gone.addingTimeInterval(AltitudeFusion.barometerHold + 1)
+        #expect(fusion.altitude(gps: nil, verticalAccuracy: -1, barometer: nil, at: later) == nil)
+    }
+
+    @Test("Ten minutes without barometer: the height goes on from the GPS, without jumps or noise as climb (B-369)")
+    func barometerGone() throws {
+        var fusion = AltitudeFusion()
+        var heights: [Double] = []
+        for second in 0..<1500 {
+            // A steady climb of 0.1 m a second; the barometer is silent from 400 to 1000 s.
+            let height = 200 + 0.1 * Double(second)
+            let barometer: Double? = (400..<1000).contains(second) ? nil : height - 200
+            let value = fusion.altitude(gps: height + Self.noise(second), verticalAccuracy: 6, barometer: barometer,
+                                        at: Self.start.addingTimeInterval(Double(second)))
+            if second < 30 { continue }
+            heights.append(try #require(value, "no height at \(second) s"))
+            // The first minute holds the last height; after a short while the GPS has caught up.
+            if !(400..<560).contains(second) { #expect(abs(heights[heights.count - 1] - height) < 6, "at \(second) s") }
+        }
+        let steps = zip(heights, heights.dropFirst()).map { abs($1 - $0) }
+        #expect((steps.max() ?? .infinity) < 2)
+        #expect(abs(Self.ascent(heights) - 147) < 10)
     }
 
     @Test("At a standstill the first seconds give no climb (iPhone test 5.11.2026)")

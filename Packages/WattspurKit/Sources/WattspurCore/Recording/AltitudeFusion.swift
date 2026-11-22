@@ -11,7 +11,9 @@ import Foundation
 /// letting the GPS noise through. Until that first level is found there is no height, so the first
 /// seconds do not jump by metres and count as ascent (seen at a standstill on 5.11.2026). If no GPS
 /// height is that good for `anchorTimeout`, the best of the rougher ones give the level (R-19). Without
-/// a barometer (none, or motion access denied) the GPS height is used as before.
+/// a barometer (none, or motion access denied) the GPS height is used as before. A barometer that
+/// falls silent in the middle of a ride hands over to the smoothed GPS height and takes over again
+/// without a jump (B-369).
 public struct AltitudeFusion: Sendable, Equatable {
     /// GPS heights less accurate than this do not move the offset.
     public static let maxVerticalAccuracy = 15.0
@@ -23,9 +25,12 @@ public struct AltitudeFusion: Sendable, Equatable {
     public static let timeConstant: TimeInterval = 300
     /// Seconds at the start to wait for the first barometer reading instead of taking the GPS height.
     public static let barometerWait: TimeInterval = 10
-    /// Seconds a stale barometer keeps its last height; after that there is no height until it is back,
-    /// rather than a flat line that is not true.
+    /// Seconds a stale barometer keeps its last height; after that the GPS height takes over, and
+    /// without one there is no height, rather than a flat line that is not true.
     public static let barometerHold: TimeInterval = 60
+    /// Seconds over which the height goes over to the GPS when the barometer is gone and back to it
+    /// when it returns (B-369): long enough that GPS noise counts as no climb, short against a hill.
+    public static let handoverTime: TimeInterval = 20
 
     /// Set when the iPhone has a barometer that may be used: then the first seconds wait for it
     /// rather than start with a GPS height that the barometer height would jump away from.
@@ -48,6 +53,14 @@ public struct AltitudeFusion: Sendable, Equatable {
     /// GPS height minus barometer height; `nil` until the first good GPS height.
     public private(set) var offset: Double?
     private var lastCorrection: Date?
+    /// The smoothed GPS height while the barometer is gone (B-369); it starts at the held height.
+    private var substitute: Level?
+    /// How far the height was from the barometer's when that came back; fades out.
+    private var handover: Level?
+    private struct Level: Sendable, Equatable {
+        var metres: Double
+        var date: Date
+    }
 
     public init() {}
 
@@ -67,9 +80,10 @@ public struct AltitudeFusion: Sendable, Equatable {
             // A barometer that is briefly stale keeps its last height: switching to the raw GPS
             // height and back would jump by metres and count as ascent (R-20).
             if sawBarometer {
-                guard let held = lastBarometer, let since = lastBarometerDate,
-                      date.timeIntervalSince(since) <= Self.barometerHold else { return nil }
-                return offset.map { held + $0 }
+                guard let held = lastBarometer, let since = lastBarometerDate else { return nil }
+                let last = offset.map { held + $0 + remainingHandover(at: since) }
+                if date.timeIntervalSince(since) <= Self.barometerHold { return last }
+                return withoutBarometer(gps: gps, verticalAccuracy: verticalAccuracy, from: last, at: date)
             }
             return gps
         }
@@ -103,7 +117,32 @@ public struct AltitudeFusion: Sendable, Equatable {
             offset = Self.median(Array(best))
             lastCorrection = date
         }
-        return offset.map { barometer + $0 }
+        if let substitute {
+            handover = offset.map { Level(metres: substitute.metres - (barometer + $0), date: date) }
+            self.substitute = nil
+        }
+        return offset.map { barometer + $0 + remainingHandover(at: date) }
+    }
+
+    /// The GPS height, smoothed, from the last height on; `nil` when the GPS has none for
+    /// `barometerHold` either.
+    private mutating func withoutBarometer(gps: Double?, verticalAccuracy: Double, from last: Double?, at date: Date) -> Double? {
+        guard let gps, verticalAccuracy > 0 else {
+            guard let substitute, date.timeIntervalSince(substitute.date) <= Self.barometerHold else { return nil }
+            return substitute.metres
+        }
+        let before = substitute ?? Level(metres: last ?? gps, date: date.addingTimeInterval(-1))
+        // A rough GPS height moves it more slowly.
+        let time = Self.handoverTime * max(1, verticalAccuracy / Self.maxVerticalAccuracy)
+        let weight = min(1, max(0, date.timeIntervalSince(before.date)) / time)
+        let metres = before.metres + weight * (gps - before.metres)
+        substitute = Level(metres: metres, date: date)
+        return metres
+    }
+
+    private func remainingHandover(at date: Date) -> Double {
+        guard let handover else { return 0 }
+        return handover.metres * exp(-max(0, date.timeIntervalSince(handover.date)) / Self.handoverTime)
     }
 
     private static func median(_ values: [Double]) -> Double {

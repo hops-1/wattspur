@@ -1,6 +1,6 @@
 # Wattspur im App Store
 
-Stand: 22.11.2026 (1.6.4 (45) ist gewählt, eingereicht wird erst nach bestandenem Test im Auto: CarPlay sowie Start und Ende des Auto-Starts sind am 22.11. geprüft, offen sind D.3, E.1 bis E.3 (Anzeige in CarPlay), F und die Meldung „Zeitlimit“ der Kurzbefehle. 1.0 (26) kam am 16.11.2026 mit Rückfragen zurück, steht in App Store Connect auf „Abgelehnt“ und war nie im Store). Diese Anleitung erklärt, wie die App für iPhone und iPad von TestFlight in den App Store kommt: was schon da ist, welche Version es wird, was Nils in App Store Connect macht und was Claude vorbereitet.
+Stand: 22.11.2026 (**nicht einreichen: 1.6.4 (45) hat B-369, der Fix wird 1.6.5**; davor: 1.6.4 (45) ist gewählt, eingereicht wird erst nach bestandenem Test im Auto: CarPlay sowie Start und Ende des Auto-Starts sind am 22.11. geprüft, offen sind D.3, E.1 bis E.3 (Anzeige in CarPlay), F und die Meldung „Zeitlimit“ der Kurzbefehle. 1.0 (26) kam am 16.11.2026 mit Rückfragen zurück, steht in App Store Connect auf „Abgelehnt“ und war nie im Store). Diese Anleitung erklärt, wie die App für iPhone und iPad von TestFlight in den App Store kommt: was schon da ist, welche Version es wird, was Nils in App Store Connect macht und was Claude vorbereitet.
 
 Für TestFlight siehe `docs/learning/32-testflight.md`, für den Mac `docs/RELEASE.md`.
 
@@ -19,6 +19,8 @@ Der Weg jetzt:
 ## Welche Version
 
 **Entscheidung Nils 22.11.2026: 1.6.4 (45), erst nach bestandenem Test im Auto.**
+
+**Seit der Radtour am 22.11.2026 überholt (B-369):** 1.6.4 (45) überlastet bei Aufnahmen das iPhone und soll nicht eingereicht werden. 1.6.2 (43) enthält denselben Code (seit 1.5), der Rückfall hilft nicht. Nils hat den Fix als 1.6.5 freigegeben; über das Einreichen entscheidet Nils nach dessen Test. Die Schritte unten gelten dann mit der neuen Nummer.
 
 | Version | Dafür | Dagegen |
 |---|---|---|

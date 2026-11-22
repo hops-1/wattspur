@@ -11,6 +11,11 @@ import WattspurKit
 /// It gives them as `RideExchange` values, so the views stay the same as when they showed the Mac's
 /// state from a folder (iOS 0.2 to 0.5, ended with 0.6, B-263). Recordings become rides and rides
 /// can go to the trash (B-217).
+///
+/// What a screen shows is read from the store in `reload()` and kept as values. A view's body must
+/// never fetch from the store (B-369): every fetch hands out new model objects, SwiftUI keeps
+/// watching each of them until the state changes, and a body drawn again with every GPS position
+/// took a whole core and a gigabyte that way (bike tour of 22.11.2026).
 @MainActor @Observable
 final class PhoneLibrary {
     /// The last state read from the store; `nil` before the first reading and when the store did not open.
@@ -78,7 +83,10 @@ final class PhoneLibrary {
         reload()
     }
 
-    func canArchive(deviceID: UUID) -> Bool { database?.canArchive(deviceID: deviceID) ?? false }
+    /// Not the last device that is not archived.
+    func canArchive(deviceID: UUID) -> Bool {
+        (state?.bikes ?? []).contains { !$0.isArchived && $0.id != deviceID }
+    }
 
     /// Deletes an archived device without rides in the list (B-322); over iCloud also on the Mac.
     func deleteDevice(id: UUID) {
@@ -87,7 +95,8 @@ final class PhoneLibrary {
     }
 
     /// The rides in the list that keep a device from being deleted (B-322).
-    func listedRideCount(deviceID: UUID) -> Int { database?.listedRideCount(deviceID: deviceID) ?? 0 }
+    func listedRideCount(deviceID: UUID) -> Int { listedRideCounts[deviceID] ?? 0 }
+    private var listedRideCounts: [UUID: Int] = [:]
 
     /// The device for the next recording (B-286): the last one, else the active bike; always one of
     /// the sport in the capsule (B-324).
@@ -98,9 +107,12 @@ final class PhoneLibrary {
 
     /// The device for the next recording in a sport (B-324).
     func nextRecordingDevice(in sport: Sport) -> RecordingDevice {
-        RecordingChoice.next(for: sport, devices: state?.bikes ?? [], activeID: database?.activeDeviceID(),
+        RecordingChoice.next(for: sport, devices: state?.bikes ?? [], activeID: activeDeviceID,
                                     lastRideDeviceID: state?.only(sport).lastRide?.bikeID)
     }
+
+    /// The active device, read on every reload.
+    private var activeDeviceID: UUID?
 
     /// Saves the profile edited on the iPhone (B-299); iCloud brings it to the Mac.
     func updateRider(_ details: RiderDetails) {
@@ -108,12 +120,9 @@ final class PhoneLibrary {
         reload()
     }
 
-    /// The listed rides as plain values for the analysis and the highlights on the iPad (B-295),
-    /// read from the store when asked; `state` ties the views to every reload.
-    var statsRides: [PhoneDatabase.StatsRide] {
-        _ = state
-        return database?.statsRides() ?? []
-    }
+    /// The listed rides as plain values for the analysis and the highlights (B-295, B-228), read on
+    /// every reload.
+    private(set) var statsRides: [PhoneDatabase.StatsRide] = []
 
     /// The compared rides on the iPad (B-296), oldest first, with figures, charts and routes.
     func comparedRides(_ ids: Set<UUID>) -> [PhoneDatabase.ComparedRide] { database?.comparedRides(ids) ?? [] }
@@ -133,9 +142,9 @@ final class PhoneLibrary {
 
     /// How many rides were merged into this one (B-335); 0 when it is not merged.
     func partCount(of ride: RideExchange.Ride) -> Int {
-        guard mergedRideIDs.contains(ride.id) else { return 0 }
-        return database?.partCount(rideID: ride.id) ?? 0
+        partCounts[ride.id] ?? 0
     }
+    private var partCounts: [UUID: Int] = [:]
 
     /// Splits a merged ride into its original rides (B-335), as on the Mac.
     func split(_ ride: RideExchange.Ride) {
@@ -152,17 +161,11 @@ final class PhoneLibrary {
         return id
     }
 
-    /// The goals for the highlights on the iPad (B-295), in the Mac's order.
-    var goals: [PhoneDatabase.GoalValue] {
-        _ = state
-        return database?.goals() ?? []
-    }
+    /// The goals for the highlights (B-295), in the Mac's order, read on every reload.
+    private(set) var goals: [PhoneDatabase.GoalValue] = []
 
-    /// Combinations of period and metric that have no goal yet.
-    var freeGoalCombinations: [(period: GoalPeriod, metric: GoalMetric)] {
-        _ = state
-        return database?.freeGoalCombinations() ?? []
-    }
+    /// Combinations of period and metric that have no goal yet, read on every reload.
+    private(set) var freeGoalCombinations: [(period: GoalPeriod, metric: GoalMetric)] = []
 
     func addGoal(metric: GoalMetric, period: GoalPeriod, target: Double) {
         database?.addGoal(metric: metric, period: period, target: target)
@@ -191,6 +194,14 @@ final class PhoneLibrary {
         trash = database.trash()
         mergedRideIDs = database.mergedRideIDs()
         rider = database.riderDetails()
+        // Read here, never while a screen draws (B-369).
+        statsRides = database.statsRides()
+        goals = database.goals()
+        freeGoalCombinations = database.freeGoalCombinations()
+        activeDeviceID = database.activeDeviceID()
+        partCounts = Dictionary(uniqueKeysWithValues: mergedRideIDs.map { ($0, database.partCount(rideID: $0)) })
+        listedRideCounts = Dictionary((state?.bikes ?? []).map { ($0.id, database.listedRideCount(deviceID: $0.id)) },
+                                      uniquingKeysWith: { first, _ in first })
         RecordingChoice.cache(devices: state?.bikes ?? [])
     }
 
