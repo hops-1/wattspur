@@ -668,3 +668,22 @@ Ideen von Nils und Claude gesammelt, von Nils geordnet; Stories im BACKLOG „iO
 | iCloud oder Ordner (Entscheidung Nils 4.11.2026) | wer iCloud nicht will oder keinen Platz hat, behält den Ordner-Weg von iOS 0.2 (10.21), auch bei Dropbox oder OneDrive, und „GPX teilen“ per AirDrop; Schalter am iPhone unter Mehr, bisherige Ordner-Nutzer behalten den Ordner und bekommen einmal das Angebot; am Mac ist „Fahrten für das iPhone bereitstellen“ bei Sync ausgeblendet, solange es aus ist | B-218, B-238 |
 | Motorrad (Wunsch eines Freundes, 4.11.2026) | Fahrzeug „Motorrad“ für die Aufnahme (Sprung-Filter 300 statt 100 km/h); Radart „Motorrad“, deren Fahrten in Liste, Karte und Kachel bleiben, aber nicht in Summen, Highlights, Rekorden, Zielen, Vergleichs-Durchschnitt und CO₂ zählen; mit Bike-Filter auf das Motorrad zählen sie dort, CO₂ nie | B-239 |
 | Schema nach Production (5.11.2026) | erst vervollständigen: ein Debug-Build mit `-WattspurInitCloudKitSchema YES` legt alle Typen mit allen Feldern in Development an (die erste Deploy-Liste hatte kein `CD_Goal`), danach Deploy durch Nils; Production kann später nur ergänzen | B-219 |
+
+### 10.23 Geplante Touren und Navigation (22.11.2026)
+
+Wunsch von Nils nach der Radtour vom 22.11.2026, Fragen von Claude, Antworten von Nils; Stories im BACKLOG „Geplante Touren und Navigation“ (B-371 bis B-378, V-22). Betrifft IDEA-26.
+
+| Thema | Entscheidung | Auswirkung |
+|---|---|---|
+| Weg der Tour | Komoot-Tour als GPX mit „Teilen an Wattspur“, nicht über Bosch Flow; Import auch am Mac und iPad, weil Nils dort oft plant; Abgleich über iCloud-Sync, ohne Sync bleibt die Tour auf dem Gerät | B-372, B-373 |
+| Komoot | nur GPX-Austausch, keine Anbindung an Komoot; ein geteilter Link wird mit Hinweis abgelehnt | V-22, B-372 |
+| Rubrik | „Geplante Touren“ mit Karte, km, Höhenmetern, Höhenprofil und „Geplant vs. gefahren“, auf iPhone, iPad und Mac | B-373, B-376 |
+| Umfang der Navigation | Linie vorab in eigener Farbe, Karte in Fahrtrichtung, Rest-km und Rest-Höhenmeter, Abbiegehinweise aus der Form der Linie ohne Straßennamen | B-375 |
+| Hinweise | Banner oben in der App und Live Activity; keine Sprachansage, keine Vibration | B-375, B-376 |
+| Abgekommen | zeigt nur die Karte, ohne Ton und Mitteilung | B-375 |
+| Bosch-Display | zeigt keine Navigation mehr; das iPhone reicht | – |
+| Bildschirm | Schalter in der Navigation, Standard „bleibt an“ | B-375 |
+| Start | „Navigieren“ startet die Aufnahme; die Fahrt wird beim Sichern mit der Tour verknüpft | B-375 |
+| 3D-Karte | geneigte Karte wie in Flow als Option, eigene Story, darf vor der Navigation kommen | B-377 |
+| Neuberechnen | bei Abweichung, eigene Story, darf später kommen; zuerst ohne Dienst, dann Spike zu Radrouten von MapKit | B-378 |
+| Design | vor Teil 1 und vor Teil 2 Designvorschläge im Hoch- und Querformat, Nils wählt | B-371, B-374 |
