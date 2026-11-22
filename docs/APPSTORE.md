@@ -115,6 +115,8 @@ Die Hinweise für die App-Prüfung (Englisch) stehen in `docs/appstore/metadata/
 
 Die Begründung des Hintergrund-Standorts ist wichtig: Apple prüft `UIBackgroundModes = location` genau (Richtlinie 2.5.4). Wattspur fragt nur „beim Verwenden“ und nimmt nur zwischen Start und Stopp auf; das passt.
 
+**CarPlay (ab iOS 1.6.4, B-340, B-327):** Apple hat Wattspur am 22.11.2026 als „CarPlay Driving Task App“ freigegeben. Die Berechtigung `com.apple.developer.carplay-driving-task` steht nur in `iOS/Wattspur-iOS-iCloud.entitlements`, also nur in Builds mit dem Developer-Account. Die automatische Signierung von Xcode holt das passende Profil selbst (geprüft 22.11.2026 mit `xcodebuild archive -allowProvisioningUpdates`); ein manuelles Profil ist nicht nötig. Für die Prüfung gilt: nur Aufgaben während der Fahrt (Start, Pause, Ende, Fahrzeug, eine Tafel mit wenigen Werten), keine Karte, nichts zum Lesen, die Tafel höchstens alle 5 s neu. Der Hinweis für die Prüfer steht in `notes.txt` unter „How to use it“.
+
 ## Häufige Gründe für eine Ablehnung (und wie Wattspur dasteht)
 
 | Richtlinie | Thema | Wattspur |
@@ -124,6 +126,7 @@ Die Begründung des Hintergrund-Standorts ist wichtig: Apple prüft `UIBackgroun
 | 2.5.4 | Hintergrund-Standort ohne klaren Zweck | Nur während der Aufnahme, Live-Aktivität, Hinweis an Prüfer |
 | 5.1.1 | Datenschutz-URL fehlt, Berechtigungstexte unklar | URL da, Texte erklären den Zweck |
 | 5.1.2 | Datenangaben falsch | „Keine Daten erhoben“, stimmt solange kein eigener Dienst dazukommt |
+| CarPlay | App zeigt mehr als die Aufgabe beim Fahren | Nur Steuerung der Aufnahme und eine Tafel, Vorlagen von Apple, keine Karte |
 | ITMS-91053 | Privacy Manifest fehlt | ✓ angelegt, nach dem Upload prüfen |
 
 ## Stories im Backlog

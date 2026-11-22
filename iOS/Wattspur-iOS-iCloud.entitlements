@@ -17,6 +17,10 @@
 	<array>
 		<string>group.io.github.hops-1.wattspur</string>
 	</array>
+	<!-- CarPlay "Driving Task" app (B-340, B-327): granted by Apple on 2026-11-22 for the developer
+	     account, so only in this file; a build without the account cannot carry it. -->
+	<key>com.apple.developer.carplay-driving-task</key>
+	<true/>
 	<!-- Silent pushes when the Mac changed something; Xcode sets "production" for TestFlight. -->
 	<key>aps-environment</key>
 	<string>development</string>
