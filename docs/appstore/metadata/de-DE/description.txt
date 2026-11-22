@@ -1,12 +1,18 @@
-Wattspur zeigt deine Fahrten mit E-Bike, Fahrrad und Motorrad: Strecke, Zeit, Höhenmeter, Tempo und, wenn vorhanden, Leistung, Puls und Trittfrequenz. Ohne Konto, ohne Werbung, ohne Tracking.
+Wattspur zeigt deine Touren mit E-Bike, Fahrrad, Motorrad und Auto: Strecke, Zeit, Höhenmeter, Tempo und, wenn vorhanden, Leistung, Puls und Trittfrequenz. Ohne Konto, ohne Werbung, ohne Tracking.
 
-AUFNEHMEN
+AUFNEHMEN AM IPHONE
 • GPS-Aufnahme mit einem Tipp, auch bei gesperrtem Bildschirm.
 • Live-Aktivität auf dem Sperrbildschirm und in der Dynamic Island, mit Pause.
 • Höhe über das Barometer, viel ruhiger als die GPS-Höhe allein.
-• Schräglage, Beschleunigung und Belag aus den Bewegungssensoren.
+• Schräglage, Querbeschleunigung und Belag aus den Bewegungssensoren.
 • Karte in Fahrtrichtung, Spur nach Höhe gefärbt, Profil wächst mit.
-• Hoch- und Querformat für die Halterung am Lenker.
+• Hoch- und Querformat für die Halterung.
+• Namensvorschlag aus Startort, Zielort und Uhrzeit.
+
+IM AUTO
+• CarPlay: Aufnahme starten, anhalten und beenden, Fahrzeug wählen, wenige Werte auf einer Tafel.
+• Auto-Start über eine Automation in der App Kurzbefehle: Wattspur wartet in „Bereit“ und beginnt, wenn du losfährst.
+• Auto-Ende beim Trennen oder nach Stillstand.
 
 IMPORTIEREN
 • FIT- und GPX-Dateien aus der Dateien-App, auch mehrere auf einmal.
@@ -18,12 +24,21 @@ ANSEHEN
 • Jede Fahrt mit Karte, Höhenprofil und einer Seite pro Messgröße.
 • Finger auf dem Diagramm: Wert und Ort an jeder Stelle.
 • Karte aller Fahrten als Linien oder Wärmekarte.
-• Widget „Diese Woche“ mit Strecke, Fahrten und der letzten Fahrt.
-• Mehrere Bikes, jedes mit eigener Farbe.
+• Highlights mit Jahr, Rekorden und Zielen.
+• Widget „Diese Woche“ für den Home-Bildschirm.
+• Mehrere Bikes und Fahrzeuge, jedes mit eigener Farbe.
+
+AUF DEM IPAD
+• Seitenleiste, dazu Liste und Fahrt nebeneinander.
+• Auswertung nach Zeiträumen, Fahrten vergleichen und zusammenführen.
+• Das iPad nimmt keine Fahrten auf. Aufnahme, Auto-Start und CarPlay gibt es am iPhone.
 
 DEINE DATEN BLEIBEN BEI DIR
-Deine Fahrten liegen auf deinem iPhone. Wenn du willst, synchronisiert Wattspur sie über dein eigenes iCloud mit der Mac-App. Es gibt keinen Server von Wattspur und kein Konto. Wattspur erhebt keine Daten.
+Es gibt keinen Server von Wattspur und kein Konto. Deine Fahrten liegen auf deinen Geräten und in deinem eigenen iCloud, solange „Mit iCloud synchronisieren“ an ist. Das ist am iPhone und iPad die Voreinstellung und lässt sich ausschalten. Wattspur erhebt keine Daten.
 
 Sichern und Zurückholen der Bibliothek in einen Ordner deiner Wahl, auch automatisch einmal pro Woche.
 
-Das Handbuch, die Datenschutzerklärung und Kontakt: github.com/hops-1/wattspur
+GUT ZU WISSEN
+Strecken und Tempo zeigt Wattspur in km und km/h. GPS im Hintergrund kann den Akku deutlich schneller leeren. Bediene iPhone und CarPlay nur, wenn es sicher ist.
+
+Hilfe, Handbuch und Kontakt: https://github.com/hops-1/wattspur/blob/main/docs/SUPPORT.md

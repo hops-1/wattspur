@@ -1,1 +1,1 @@
-ebike,bike,cycling,gps,fit,gpx,ride,elevation,route,pedelec,commute,altimeter,lean,motorbike
+ebike,bicycle,cycling,gps,fit,gpx,route,trip,elevation,pedelec,commute,altimeter,lean,drive

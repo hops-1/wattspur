@@ -2,13 +2,14 @@
 <html lang="de">
 <head>
 <meta charset="utf-8">
-<title>Wattspur – Aufnahme automatisch starten</title>
+<title>Wattspur – Auto-Start einrichten</title>
 <!--
   Quelle der Kurzanleitung (1 Seite A4) für Tester.
   PDF neu erzeugen (aus docs/marketing):
     "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome" --headless=new --no-pdf-header-footer \
       --print-to-pdf=Anleitung-Autostart.pdf Anleitung-Autostart.html
   Gleicher Inhalt wie im Handbuch, Kapitel 9 „Aufnahme automatisch starten“.
+  Die Schalter sind nachgezeichnet (iOS 27, deutsch), damit keine privaten Screenshots ins Repository kommen.
 -->
 <style>
   @page { size: A4; margin: 0; }
@@ -25,63 +26,100 @@
   body {
     font-family: -apple-system, "SF Pro Text", "Helvetica Neue", Arial, sans-serif;
     color: var(--ink);
-    font-size: 11.5pt;
-    line-height: 1.45;
+    font-size: 9.7pt;
+    line-height: 1.3;
   }
-  .page { width: 210mm; height: 297mm; padding: 20mm 20mm 16mm; display: flex; flex-direction: column; }
-  .brand { color: var(--track); font-weight: 700; letter-spacing: .04em; font-size: 10pt; text-transform: uppercase; }
-  h1 { font-size: 24pt; line-height: 1.15; margin: 4mm 0 3mm; }
-  .lead { color: var(--muted); font-size: 12pt; margin-bottom: 7mm; }
-  h2 { font-size: 13.5pt; margin: 6mm 0 3mm; display: flex; align-items: center; gap: 3mm; }
-  h2 .n { width: 7mm; height: 7mm; border-radius: 50%; background: var(--track); color: #fff;
-          font-size: 10.5pt; display: inline-flex; align-items: center; justify-content: center; }
-  ol { margin-left: 6mm; }
-  ol li { margin: 1.6mm 0; padding-left: 1mm; }
+  .page { width: 210mm; height: 296.5mm; overflow: hidden; padding: 11mm 16mm 8mm; display: flex; flex-direction: column; }
+  .brand { color: var(--track); font-weight: 700; letter-spacing: .04em; font-size: 9.5pt; text-transform: uppercase; }
+  h1 { font-size: 21pt; line-height: 1.15; margin: 1.5mm 0 1.5mm; }
+  .lead { color: var(--muted); font-size: 10.3pt; }
+  h2 { font-size: 12.5pt; margin: 4mm 0 1.5mm; display: flex; align-items: center; gap: 2.5mm; }
+  h2 .n { width: 6.5mm; height: 6.5mm; border-radius: 50%; background: var(--track); color: #fff;
+          font-size: 10pt; display: inline-flex; align-items: center; justify-content: center; }
+  ol, ul { margin-left: 5mm; }
+  li { margin: .8mm 0; padding-left: 1mm; }
   b { font-weight: 650; }
-  .box { background: var(--track-soft); border-radius: 3mm; padding: 4mm 5mm; margin-top: 7mm; }
-  .box h3 { font-size: 11.5pt; margin-bottom: 2mm; color: var(--track); }
-  .box ul { margin-left: 5mm; }
-  .box li { margin: 1.2mm 0; }
-  .soon { margin-top: 6mm; color: var(--muted); font-size: 10.5pt; }
-  footer { margin-top: auto; border-top: 1px solid var(--line); padding-top: 3mm; color: var(--muted); font-size: 9pt;
+  .step { display: grid; grid-template-columns: 1fr 76mm; gap: 6mm; align-items: start; }
+  .card { background: #fff; border: 1px solid var(--line); border-radius: 4mm; font-size: 9pt; overflow: hidden; }
+  .card .head { padding: 1.5mm 3.5mm; font-weight: 650; background: #f2f1f5; }
+  .card .head span { color: #2f7de1; }
+  .row { display: flex; justify-content: space-between; align-items: center; padding: 1.1mm 3.5mm; border-top: 1px solid var(--line); }
+  .row em { font-style: normal; color: #2f7de1; }
+  .switch { width: 9mm; height: 5mm; border-radius: 3mm; background: #c6c6c9; position: relative; flex: none; }
+  .switch::after { content: ""; position: absolute; top: .5mm; left: .5mm; width: 4mm; height: 4mm; border-radius: 50%; background: #fff; }
+  .switch.on { background: #34c759; }
+  .switch.on::after { left: 4.5mm; }
+  .box { background: var(--track-soft); border-radius: 3mm; padding: 2.5mm 4.5mm; margin-top: 4mm; }
+  .box h3 { font-size: 11pt; margin-bottom: 1mm; color: var(--track); }
+  footer { margin-top: auto; border-top: 1px solid var(--line); padding-top: 2mm; color: var(--muted); font-size: 8.5pt;
            display: flex; justify-content: space-between; }
 </style>
 </head>
 <body>
 <div class="page">
-  <div class="brand">Wattspur · Kurzanleitung</div>
-  <h1>Aufnahme automatisch starten</h1>
-  <p class="lead">Mit einer Automation in der App Kurzbefehle startet Wattspur die Aufnahme von selbst, sobald sich das iPhone mit dem Auto (CarPlay) oder einem Bluetooth-Gerät verbindet, z.&nbsp;B. der Freisprechanlage oder dem Headset am Motorradhelm. Du brauchst Wattspur ab 0.7.1 und iOS 17 oder neuer.</p>
+  <div class="brand">Wattspur · Kurzanleitung für Tester</div>
+  <h1>Auto-Start einrichten</h1>
+  <p class="lead">Wattspur wartet beim Verbinden mit dem Auto in „Bereit“, nimmt ab 10&nbsp;km/h auf und sichert die Fahrt am Ende selbst. Du brauchst Wattspur 1.6.4 auf dem iPhone und etwa 5&nbsp;Minuten. Richte alles im Stand ein.</p>
 
-  <h2><span class="n">1</span>Fahrzeug einstellen</h2>
-  <p>In Wattspur unter <b>Mehr › Aufnahme › Fahrzeug</b> wählst du <b>E-Bike</b> oder <b>Motorrad</b>. Für das Auto nimmst du bis Wattspur 1.0 „Motorrad“, damit die Grenze für GPS-Sprünge passt; ab 1.1 gibt es das Auto als eigenes Gerät.</p>
-
-  <h2><span class="n">2</span>Automation „Start“ anlegen</h2>
+  <h2><span class="n">1</span>Wattspur vorbereiten</h2>
   <ol>
-    <li>Öffne die App <b>Kurzbefehle</b> und tippe unten auf <b>Automation</b>, dann auf <b>+</b>.</li>
-    <li>Wähle <b>CarPlay</b> oder <b>Bluetooth</b>, dann <b>Verbindet</b>. Bei Bluetooth wählst du dein Gerät aus.</li>
-    <li>Wähle <b>Sofort ausführen</b> und tippe auf <b>Weiter</b>.</li>
-    <li>Wähle <b>Neue leere Automation › Aktion hinzufügen</b>, suche <b>Wattspur</b> und wähle <b>Fahrt starten</b>.</li>
-    <li>Tippe auf <b>Fertig</b>.</li>
+    <li>Starte einmal von Hand eine Fahrt. Erlaube <b>Standort beim Verwenden</b> und <b>Bewegung &amp; Fitness</b>. Dann <b>Stopp › Fahrt verwerfen</b>.</li>
+    <li>Schalte unter <b>Mehr › Aufnahme</b> den <b>Auto-Start</b> ein und erlaube Mitteilungen.</li>
+    <li>Wähle bei <b>Startet mit</b> neben deinem Fahrzeug <b>CarPlay</b> oder den Namen der Bluetooth-Verbindung. Der Name erscheint nur, solange sie verbunden ist. Gib CarPlay nur einem Fahrzeug.</li>
   </ol>
 
-  <h2><span class="n">3</span>Automation „Ende“ anlegen (optional)</h2>
-  <p>Genauso, aber mit <b>Trennt</b> und der Aktion <b>Fahrt beenden</b>. Wattspur öffnet dann <b>Fahrt speichern</b>: Name eingeben, sichern.</p>
+  <h2><span class="n">2</span>Automation für den Start</h2>
+  <div class="step">
+    <ol>
+      <li>Öffne <b>Kurzbefehle</b>, geh zu <b>Automation</b> und tippe auf <b>+</b>.</li>
+      <li>Wähle <b>CarPlay</b> (oder <b>Bluetooth</b> und dein Gerät) und <b>Verbunden wird</b>.</li>
+      <li>Füge die Aktion <b>Wattspur › Fahrt starten</b> hinzu. <b>Gerät leer lassen</b>, dort steht „Auswählen“.</li>
+      <li>Tippe auf den Pfeil neben dem Auslöser und stell die Schalter wie im Bild.</li>
+    </ol>
+    <div class="card">
+      <div class="head">Wenn CarPlay <span>Verbunden wird</span></div>
+      <div class="row">Automation <i class="switch on"></i></div>
+      <div class="row">Benachrichtigen <i class="switch on"></i></div>
+      <div class="row">Vor dem Ausführen bestätigen <i class="switch"></i></div>
+      <div class="head">Fahrt starten</div>
+      <div class="row">Gerät <em>Auswählen</em></div>
+    </div>
+  </div>
+
+  <h2><span class="n">3</span>Automation für das Ende</h2>
+  <div class="step">
+    <ol>
+      <li>Leg genauso eine zweite Automation an, aber mit <b>Getrennt wird</b>.</li>
+      <li>Die Aktion heißt <b>Wattspur › Fahrt beenden</b>.</li>
+      <li>„Benachrichtigen“ hilft beim Testen. Danach kannst du es in beiden Automationen ausschalten.</li>
+    </ol>
+    <div class="card">
+      <div class="head">Wenn CarPlay <span>Getrennt wird</span></div>
+      <div class="row">Automation <i class="switch on"></i></div>
+      <div class="row">Benachrichtigen <i class="switch on"></i></div>
+      <div class="row">Vor dem Ausführen bestätigen <i class="switch"></i></div>
+      <div class="head">Fahrt beenden</div>
+    </div>
+  </div>
+
+  <h2><span class="n">4</span>Ausprobieren</h2>
+  <ol>
+    <li>Verbinde das iPhone mit dem Auto und entsperr es, bevor du losfährst. Wattspur zeigt <b>Bereit</b>.</li>
+    <li>Fahr mehr als 500&nbsp;m. Park, trenn die Verbindung und entsperr das iPhone.</li>
+    <li>Die Fahrt steht unter <b>Fahrten</b>, mit Ort und Startzeit im Namen.</li>
+  </ol>
 
   <div class="box">
     <h3>Gut zu wissen</h3>
     <ul>
-      <li>Die Aufnahme beginnt schon beim Verbinden, oft beim Motorstart. Die Zeit im Stand zählt nicht zur Fahrzeit.</li>
-      <li>Ist das iPhone gesperrt, fragt iOS manchmal erst nach dem Entsperren.</li>
-      <li>Läuft schon eine Aufnahme, startet keine zweite. Gibt es eine unfertige Fahrt, fragt Wattspur erst nach.</li>
-      <li>Wattspur nimmt das Fahrzeug aus Schritt 1. Wechselst du zwischen Fahrzeugen, stelle es vorher um.</li>
-      <li>Auch per Siri: „Fahrt starten mit Wattspur“, „Fahrt beenden mit Wattspur“.</li>
+      <li>Stau oder Pause über 10&nbsp;Minuten beendet die Fahrt. Bis zu 20&nbsp;Minuten stellst du unter <b>Mehr › Aufnahme</b> ein.</li>
+      <li>Fahrten unter 500&nbsp;m, die von selbst enden, werden nicht gesichert.</li>
+      <li>Die Hilfe in der App nennt noch „Sofort ausführen“. Das gibt es nur bis iOS&nbsp;26, dort wählst du es statt der Schalter.</li>
+      <li>Meldet Kurzbefehle „Zeitlimit überschritten“, schau, ob die Fahrt trotzdem da ist, und gib bitte Bescheid.</li>
     </ul>
   </div>
 
-  <p class="soon"><b>Später:</b> Die Aufnahme wartet dann „Bereit“ und beginnt erst bei der Abfahrt. Wattspur erkennt das Fahrzeug an der Verbindung und sichert die Fahrt von selbst.</p>
-
-  <footer><span>Wattspur · Handbuch, Kapitel 9 „Aufnahme automatisch starten“</span><span>Stand 12.11.2026</span></footer>
+  <footer><span>Wattspur · Handbuch, Kapitel 9 „Aufnahme automatisch starten“</span><span>Stand 22.11.2026 · Wattspur 1.6.4, iOS 27</span></footer>
 </div>
 </body>
 </html>

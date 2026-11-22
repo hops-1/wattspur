@@ -39,6 +39,36 @@ Am besten im Nugget mit CarPlay. Fahre nur, wenn es sicher ist; tippe in CarPlay
 
 ## E. Auto-Start mit CarPlay
 
+Vorher, ab iOS 27 (dort gibt es „Sofort ausführen“ nicht mehr): In beiden Automationen am Pfeil neben dem Auslöser **Automation** an, **Benachrichtigen** für den Test an, **Vor dem Ausführen bestätigen** aus. Bei „Fahrt starten“ steht unter **Gerät** „Auswählen“, also kein Gerät. In Wattspur ist **Mehr › Aufnahme › Auto-Start** an, beim Auto steht unter **Startet mit** „CarPlay“.
+
 1. Mit Auto-Start an: Beim Verbinden steht in CarPlay **Bereit** mit „Wartet, bis das Fahrzeug fährt“.
 2. **Abbrechen** beendet „Bereit“ ohne Fahrt.
 3. Beim Losfahren wechselt die Tafel auf Tempo, Zeit und Strecke.
+
+## F. Vor dem App Store (B-318)
+
+Entscheidung vom 22.11.2026: 1.6.4 (45) geht erst in den Store, wenn A bis E und dieser Abschnitt ✓ sind. Merke dir für den Schluss deine Einstellungen von Standort und Auto-Start. Für 1 bis 4 die Automationen in Kurzbefehle ausschalten.
+
+1. **App beendet, iPhone gesperrt:** Wattspur im App-Umschalter schließen, iPhone sperren, in CarPlay **Fahrt starten**. Fahren (die Begleitung schaut): Tempo und Strecke laufen. Nach dem Ende hat die Fahrt die ganze Spur, ohne Lücke am Anfang.
+2. **App im Hintergrund, iPhone gesperrt:** dasselbe. Die Live-Aktivität erscheint.
+3. **Lange Fahrt:** 30 Minuten aus CarPlay gestartet, mit Navigation im Vordergrund. Kein Abbruch, kein neuer Absturzbericht, die Spur ist vollständig.
+4. **Ohne Standort-Erlaubnis:** Standort auf „Nie“, in CarPlay starten und beenden. Kein Absturz, keine leere Fahrt in der Liste. Am iPhone steht „Zugriff auf den Standort verweigert“. Danach wieder „Beim Verwenden“.
+5. **Auto-Start, iPhone gesperrt:** Automationen an, CarPlay verbinden. Notiere, ob „Bereit“ sofort kommt oder erst nach dem Entsperren. Beides besteht, solange danach beim Losfahren die ganze Fahrt aufgenommen wird.
+
+**Bestanden:** alle fünf ✓. **Nicht bestanden:** ein ✗ bei 1 bis 5, ein Absturz oder eine Fahrt ohne Spur. Dann nicht einreichen. Nils entscheidet: Fix als 1.6.5 oder 1.6.2 (43) ohne CarPlay.
+
+Ergebnis der Testfahrt von Nils am 22.11.2026 im Nugget, 1.6.4 (45), nach der ausgefüllten Liste:
+
+| Punkt | Ergebnis | Notiz |
+|---|---|---|
+| A.1, A.2 | ✓ | |
+| B.1 bis B.4 | ✓ | |
+| C.1 bis C.5 | ✓ | |
+| D.1, D.2, D.5 | ✓ | |
+| D.3 | offen | nicht getestet |
+| D.4 | ✓ | zweite Testfahrt am Nachmittag: Auto-Start-Fahrten heißen „Ort Rundfahrt – Startzeit“ |
+| E, Start und Ende | ✓ | zweite Testfahrt: Start bei Fahrtantritt und Ende über die Automationen gehen. Dabei meldet Kurzbefehle „Zeitlimit für Kurzbefehl überschritten“ für „Fahrt starten“, die Fahrt ist trotzdem da |
+| E.1, E.2 | offen | Anzeige „Bereit“ in CarPlay und „Abbrechen“ noch nicht gemeldet |
+| E.3 | offen | der Start beim Losfahren geht, der Wechsel der Tafel ist noch nicht gemeldet |
+| F.1 bis F.4 | offen | Abschnitt F stand noch nicht auf der gedruckten Liste |
+| F.5 | offen | zweite Testfahrt: iPhone beim Verbinden gesperrt, die Fahrt wurde aufgenommen, dazu „Zeitlimit für Kurzbefehl überschritten“. Noch zu beobachten: kommt „Bereit“ vor oder nach dem Entsperren, fehlt am Anfang etwas. Gegenprobe ohne „Beim Ausführen anzeigen“, einmal gesperrt und einmal entsperrt |

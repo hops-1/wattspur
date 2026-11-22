@@ -191,8 +191,10 @@ Mit einer Automation in der App **Kurzbefehle** startet die Aufnahme von selbst,
 
 1. Öffne **Kurzbefehle**, tippe unten auf **Automation** und dann auf **+**.
 2. Wähle **CarPlay** oder **Bluetooth**, dann **Verbindet**. Bei Bluetooth wählst du dein Gerät aus.
-3. Wähle **Sofort ausführen** und tippe auf **Weiter**.
-4. Wähle **Neue leere Automation › Aktion hinzufügen**, suche **Wattspur** und wähle **Fahrt starten**. Tippe in der Aktion auf **Gerät** und wähle dein Auto oder Motorrad. Tippe auf **Fertig**.
+3. Sorge dafür, dass die Automation ohne Rückfrage läuft:
+   - **Ab iOS 27:** Tippe auf den Pfeil neben dem Auslöser („Wenn CarPlay verbunden wird“). **Automation** ist an, **Vor dem Ausführen bestätigen** ist aus. **Benachrichtigen** kannst du wählen, wie du magst.
+   - **Bis iOS 26:** Wähle **Sofort ausführen** und tippe auf **Weiter**.
+4. Füge die Aktion **Wattspur › Fahrt starten** hinzu. Tippe in der Aktion auf **Gerät** und wähle dein Auto oder Motorrad. Mit Auto-Start (siehe unten) lässt du das Feld leer, dort steht dann **Auswählen**.
 
 Für das Ende legst du eine zweite Automation mit **Trennt** und **Fahrt beenden** an. Wattspur öffnet dann **Fahrt speichern**.
 
