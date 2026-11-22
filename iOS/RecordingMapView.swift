@@ -16,10 +16,11 @@ struct RecordingMapView: View {
     /// The position the map centres on while turned.
     var center: CLLocationCoordinate2D?
     @Environment(\.colorScheme) private var colorScheme
+    @Environment(\.scenePhase) private var scenePhase
 
     var body: some View {
         RecordingMapRepresentable(mapType: mapType, segments: segments, colouring: colouring,
-                                  heading: heading, center: center, dark: colorScheme == .dark)
+                                  heading: heading, center: center, dark: colorScheme == .dark, phase: scenePhase)
             .overlay(alignment: .bottomTrailing) {
                 // At the bottom right as on every other map; the buttons and the legend leave room for it.
                 if let source = mapType.tileSource {
@@ -38,6 +39,8 @@ private struct RecordingMapRepresentable: UIViewRepresentable {
     let heading: Double?
     let center: CLLocationCoordinate2D?
     let dark: Bool
+    /// Only here so the map draws at once when the app comes back, also standing without a new position.
+    let phase: ScenePhase
 
     func makeCoordinator() -> Coordinator { Coordinator() }
 

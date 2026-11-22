@@ -27,6 +27,9 @@ Wenn du den Auto-Start einschaltest, fragt das iPhone nach Mitteilungen. Wattspu
 **Rohdaten der Bewegung (nur in Testversionen)**
 Mit dem Schalter *Rohdaten der Bewegung mitschreiben* in „Mehr“ (aus als Standard) schreibt die Aufnahme zusätzlich Beschleunigung, Drehung und Lage des iPhones und die GPS-Punkte in eine Datei auf dem iPhone (Dateien-App, „Auf meinem iPhone › Wattspur › Bewegung“). Die Datei wird nicht synchronisiert und verlässt das iPhone nur, wenn du sie selbst teilst.
 
+**Diagnose der Aufnahme**
+Jede Aufnahme schreibt einmal pro Minute eine Zeile in eine Datei auf dem iPhone (Dateien-App, „Auf meinem iPhone › Wattspur › Diagnose“): Uhrzeit, ob die App sichtbar war, Anzahl und Verzögerung der GPS-Punkte, fehlende Barometerwerte, Last, Speicher, Wärmezustand und Stromsparmodus. Orte, Höhen und Namen stehen nicht darin. Es bleiben die letzten zehn Dateien. Sie werden nicht synchronisiert und gehen nur an andere, wenn du sie selbst teilst.
+
 **Verbindungen ins Internet**
 - Karten: Wattspur lädt Kartenkacheln von Apple (MapKit) und, je nach gewähltem Kartenstil (Mac und iPhone), von OpenStreetMap, CyclOSM oder OpenTopoMap. Dabei gehen der Kartenausschnitt und deine IP-Adresse an den jeweiligen Server, keine Fahrten.
 - Updates (Mac): Einmal am Tag fragt Wattspur bei GitHub, ob es eine neue Version gibt, wenn du das nicht ausgeschaltet hast. Dabei wird nichts über dich oder deine Fahrten gesendet.
@@ -66,6 +69,9 @@ When you turn on Auto-Start, the iPhone asks to allow notifications. Wattspur us
 
 **Raw motion data (test versions only)**
 With the switch *Record Raw Motion* in "More" (off by default) a recording also writes the iPhone's acceleration, rotation and attitude and the GPS points into a file on the iPhone (Files app, "On My iPhone › Wattspur › Bewegung"). The file is not synced and leaves the iPhone only if you share it yourself.
+
+**Recording diagnostics**
+Every recording writes one line a minute into a file on the iPhone (Files app, "On My iPhone › Wattspur › Diagnose"): the time, whether the app was visible, the number and delay of GPS points, missing barometer values, load, memory, thermal state and Low Power Mode. It holds no places, heights or names. The last ten files are kept. They are not synced and reach others only if you share them yourself.
 
 **Connections to the internet**
 - Maps: Wattspur loads map tiles from Apple (MapKit) and, depending on the map style (Mac and iPhone), from OpenStreetMap, CyclOSM or OpenTopoMap. The server receives the map area and your IP address, no rides.

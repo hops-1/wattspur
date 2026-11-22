@@ -151,7 +151,8 @@ struct SaveRecordingSheet: View {
     private func save() {
         let title = name.trimmingCharacters(in: .whitespaces)
         do {
-            try Self.store(recording, name: title.isEmpty ? RecordingView.defaultName(for: recording.startDate) : title,
+            // The recorder's ride is the current one; the sheet shows the screen's copy (B-369).
+            try Self.store(recorder.recording ?? recording, name: title.isEmpty ? RecordingView.defaultName(for: recording.startDate) : title,
                            device: device, library: library)
             if let id = device?.bikeID { Self.lastBikeID = id }
             if let device { RecordingChoice.last = device }

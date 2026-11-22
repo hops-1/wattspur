@@ -49,6 +49,7 @@ Die Regeln mit ✓ prüft `scripts/check-architecture.sh` (lokal in `scripts/ci-
 
 14. ✓ **Keine Build-Dateien und keine Team-ID im Repo** (S-49, S-50). `git ls-files` enthält nichts unter `build/`, `.build/` oder `DerivedData/`, keine `*.xcent` und kein `Config/Local.xcconfig`. Eine Team-ID steht nur in der ignorierten `Config/Local.xcconfig`; die Vorlage `Local.xcconfig.example` hat einen Platzhalter. Die Prüfung nennt nur Dateinamen, nie den Wert.
 15. ✓ **Kein Dateiname steht in `App/` und in `iOS/` zugleich** (B-355). Ein gleicher Name ist meist eine Kopie, die auseinanderläuft (S-18: Dauer „00:48:36“ am Mac, „0:48“ am iPad). Gemeinsames kommt nach `Shared/` oder ins Kit. Erlaubt sind nur Dateien, die es je Plattform geben muss und die verschieden sind: `WattspurApp.swift` (Einstieg), `Localizable.xcstrings` (ein Katalog je App), `RideFormat.swift` (Formate für Listen und Aufnahme; am iPhone die kurze Dauer), `RidePDF.swift` (gezeichnet mit AppKit bzw. UIKit), `HighlightsView.swift`, `LibraryErrorView.swift`, `TrashView.swift` (eigene Views je Plattform) und `SampleRide.swift` (der Mac lädt sie in SwiftData, das iPhone in sein Austauschformat). Eine neue Ausnahme kommt mit Grund in diese Liste und in `scripts/check-architecture.sh`.
+16. **Eine Ansicht holt im `body` nichts aus dem Store** (B-369). Jeder Fetch liefert neue Modell-Objekte, und SwiftUI beobachtet jedes davon weiter. Was die iPhone-Ansichten zeigen, liest `PhoneLibrary.reload()` und hält es als Wert; was nur eine Seite braucht, lädt sie in `.task` oder in einer Aktion. Ebenso liest außerhalb der Aufnahme keine Ansicht einen Wert, der sich mit jedem GPS-Punkt ändert: die Wurzel der App nur `isRecording`, die Aufnahme-Ansicht `shown`. Ältere Stellen außerhalb der Aufnahme stehen bei B-369.
 
 ## Datenfluss
 
@@ -76,6 +77,9 @@ CMDeviceMotion  ──► MotionRecorder ──► MotionFusion (Schräglage, R�
                                                  └──► Protokolldatei je Ereignis (nach Absturz: weiter oder beenden)
 ```
 
+- `Recorder` hat zwei Stände (B-369): `recording` ist immer aktuell und wird nicht beobachtet (Protokoll, Live-Aktivität, CarPlay, Kurzbefehle, Sichern); `shown` sieht die Ansicht und folgt nur, solange das Fenster sichtbar ist, oder bei Start, Ende, Pause und Losfahren (`RecordingDisplay`).
+- Das Barometer schreibt auf einer eigenen Queue in `BarometerHistory`; ein GPS-Punkt nimmt den Wert seiner Messzeit, auch wenn er spät verarbeitet wird.
+- `RecordingDiagnostics` schreibt je Minute eine Zeile ohne Orte in „Diagnose“ (`RecordingHealth`).
 - Jeder Punkt geht sofort in eine Protokolldatei. Nach einem Absturz bietet die App an, weiterzufahren oder zu beenden. Scheitert das Speichern, bleibt das Protokoll liegen und die App sagt es (R-51, R-52).
 - Gilt eine Aufnahme als Doppel, wird die vorhandene Fahrt aktualisiert, nicht verworfen (R-53).
 - Live-Aktivität und Knopf „Pause“ kommen über `iOSShared` (`RecordingAttributes`, `ToggleRecordingPauseIntent`); Siri und Kurzbefehle über `iOS/RideIntents.swift`.
@@ -111,7 +115,7 @@ Die App legt bei jeder Änderung einen `WeekSnapshot` (Core) in die App Group `g
 | `FIT/` | Container-Decoder, Basistypen, Profil, Anonymisierer |
 | `Import/` | `RideImporter` (Protokoll), FIT- und GPX-Importer, `GPXSummary`, `ImportResult` |
 | `Ride/` | `ParsedRide`, Samples, Zusammenführen und Vorschläge, Zeitachse über Teile und Tage (`PartTimeline`), Reihen für Diagramme, GPX-Schreiber, Kalorienmodell, Routen und Routenähnlichkeit, gespeicherte Strecken, beste Minute, Steigung (`RideTrack`), Bewegungswerte einer Fahrt (`RideMotion`), Radumfang (`WheelCheck`) |
-| `Recording/` | Rechnung der Aufnahme ohne Sensoren: `RideRecording` (Punkte, Pausen, Strecke, Anstieg), `AltitudeFusion` (Barometer an GPS-Höhe, grobe GPS-Höhe ohne Barometer), `MotionFusion` (Schräglage, Beschleunigung, Rütteln), `MotionRawLog` (CSV für den Test V-16) |
+| `Recording/` | Rechnung der Aufnahme ohne Sensoren: `RideRecording` (Punkte, Pausen, Strecke, Anstieg), `AltitudeFusion` (Barometer an GPS-Höhe, grobe oder geglättete GPS-Höhe ohne Barometer), `BarometerHistory` (Werte nach Messzeit), `RecordingDisplay` (was die Anzeige erreicht), `RecordingHealth` (Diagnose je Minute), `MotionFusion` (Schräglage, Beschleunigung, Rütteln), `MotionRawLog` (CSV für den Test V-16) |
 | `Analysis/` | Summen und Trends, Rekorde, Vergleich, Karte (Filter, Dichte), neue Wege, Verlauf einer Strecke, Kurvigkeit, `TrackFigures` |
 | `Library/` | Filter, Quellen, Bike-Statistik und -Profil, Fahrer für „Mehr“ am iPhone (`RiderDetails`), Duplikat-Fakten, Tagesfilter, Summen für Woche und Monat, `WeekSnapshot` für das Widget |
 | `Exchange/` | `RideExchange`: das Austauschformat (JSON) und die Werte, die die iPhone-Views zeigen, aus beiden Quellen |

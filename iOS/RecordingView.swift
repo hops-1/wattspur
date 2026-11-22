@@ -31,7 +31,7 @@ struct RecordingView: View {
         // the bar instead (B-243). Only its buttons close it: iOS also closes the sheet when the
         // iPhone turns, and the window has to stay open then.
         .sheet(isPresented: Binding(get: { ending && !isLandscape }, set: { _ in })) {
-            if let recording = recorder.recording {
+            if let recording = recorder.shown {
                 SaveRecordingSheet(recording: recording) { ending = false }
                     .interactiveDismissDisabled()
             }
@@ -53,7 +53,7 @@ struct RecordingView: View {
                 if recorder.isReady {
                     ReadyPanel()
                         .frame(height: 210 + Self.dotsRoom)
-                } else if let recording = recorder.recording {
+                } else if let recording = recorder.shown {
                     // Swipe from the figures to the profile of the ride so far (B-277).
                     // The page dots sit at the bottom: the figures keep room for them below (B-320).
                     TabView(selection: $page) {
@@ -89,7 +89,7 @@ struct RecordingView: View {
                     if recorder.isReady {
                         ReadyPanel()
                         Spacer(minLength: 0)
-                    } else if let recording = recorder.recording {
+                    } else if let recording = recorder.shown {
                         // Swipe from the figures to a small profile of the ride so far (B-277).
                         TabView(selection: $page) {
                             // Room for the page dots at the bottom, so they cover no figure (B-320).
@@ -117,7 +117,7 @@ struct RecordingView: View {
                 .onGeometryChange(for: CGFloat.self) { $0.frame(in: .global).maxX } action: { barEdge = $0 }
             }
             .overlay(alignment: .trailing) {
-                if ending, let recording = recorder.recording {
+                if ending, let recording = recorder.shown {
                     SaveRecordingSheet(recording: recording) { ending = false }
                         .frame(width: 440)
                         .clipShape(.rect(cornerRadius: 30))
@@ -145,7 +145,7 @@ struct RecordingView: View {
             Label(status, systemImage: "location.slash")
                 .font(.footnote)
                 .foregroundStyle(.orange)
-        } else if recorder.recording?.isWaitingForGPS == true, !recorder.isReady {
+        } else if recorder.shown?.isWaitingForGPS == true, !recorder.isReady {
             // The first position has to be accurate (RideRecording.startAccuracy).
             Label("GPS is getting more accurate …", systemImage: "location.magnifyingglass")
                 .font(.footnote)
@@ -156,7 +156,7 @@ struct RecordingView: View {
     private var map: some View {
         // Worked out once per drawing (B-365): before, the route of the ride so far was built up to
         // three times for every fix, thousands of points on a long car ride.
-        let route = recorder.recording?.route
+        let route = recorder.shown?.route
         let elevation = byElevation ? route.flatMap(RouteElevation.stretches) : nil
         return RecordingMapView(mapType: mapType, segments: Self.segments(of: route),
                          colouring: elevation.map { .elevation($0.stretches) } ?? .plain,
@@ -244,7 +244,7 @@ struct RecordingView: View {
                     Label("Cancel", systemImage: "xmark").frame(maxWidth: .infinity)
                 }
                 .tint(.gray)
-            } else if recorder.recording?.isPaused == true {
+            } else if recorder.shown?.isPaused == true {
                 Button { recorder.resume() } label: {
                     Label("Resume", systemImage: "play.fill").frame(maxWidth: .infinity)
                 }
