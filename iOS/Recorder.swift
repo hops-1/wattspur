@@ -161,8 +161,16 @@ final class Recorder {
     /// after standing still. Under 500 m it is thrown away; else it is saved with the device and the
     /// places at start and end as its name, and a notification says so.
     func endAutomatically() async {
-        guard let recording, isAutoStarted, !isEndingAutomatically else { return }
-        guard AutoStart.keeps(recording) else {
+        guard isAutoStarted else { return }
+        await endAndSave(keepsShort: false)
+    }
+
+    /// Ends the ride and saves it without the sheet “Save Ride”: from CarPlay (B-327), where nobody
+    /// should type, and for an automatic end. `keepsShort`: a ride under 500 m is saved too (a
+    /// deliberate end); else it is thrown away (B-339). A recording without a position is dropped.
+    func endAndSave(keepsShort: Bool = true) async {
+        guard let recording, !isEndingAutomatically else { return }
+        guard !recording.isReady, keepsShort ? recording.pointCount > 0 : AutoStart.keeps(recording) else {
             _ = stop()
             return
         }

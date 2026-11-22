@@ -43,6 +43,8 @@ struct WattspurApp: App {
         _intents = State(initialValue: intents)
         AppDependencyManager.shared.add(dependency: recorder)
         AppDependencyManager.shared.add(dependency: intents)
+        // CarPlay (B-327) drives the same recorder.
+        CarPlaySceneDelegate.recorder = recorder
         // iCloud only when the build allows it (`WattspurDatabase` in the Info.plist, from
         // Config/iOS.xcconfig or Local.xcconfig) and the user wants it; else the store without sync (B-218).
         let buildMode = PhoneDatabase.Mode(infoValue: Bundle.main.object(forInfoDictionaryKey: "WattspurDatabase") as? String)
