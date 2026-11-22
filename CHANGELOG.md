@@ -7,6 +7,10 @@ Every DMG handed out to testers corresponds to one entry below.
 
 ## [Unreleased]
 
+## [iOS 1.6.5] – 2026-11-22
+
+Recording without overload, and Auto-Start picks the car. iPhone 1.6.5 (46), TestFlight only until the test on the iPhone has passed; the Mac stays 1.10.4.
+
 ### Fixed
 - iPhone: a recording no longer overloads the phone (B-369). Since iOS 1.5 the hidden Highlights tile read every ride again with each GPS point; after a quarter of an hour Wattspur could take a whole CPU core and up to 1 GB, other apps froze and the battery drained. The screen of a recording now also rests while nobody sees it.
 - iPhone: the track keeps its height when positions are handled late or the barometer falls silent (B-369): readings are matched by the time they were measured, and the smoothed GPS height stands in.

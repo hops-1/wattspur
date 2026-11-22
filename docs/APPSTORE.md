@@ -1,6 +1,6 @@
 # Wattspur im App Store
 
-Stand: 22.11.2026 (**nicht einreichen: 1.6.4 (45) hat B-369, der Fix wird 1.6.5**; davor: 1.6.4 (45) ist gewählt, eingereicht wird erst nach bestandenem Test im Auto: CarPlay sowie Start und Ende des Auto-Starts sind am 22.11. geprüft, offen sind D.3, E.1 bis E.3 (Anzeige in CarPlay), F und die Meldung „Zeitlimit“ der Kurzbefehle. 1.0 (26) kam am 16.11.2026 mit Rückfragen zurück, steht in App Store Connect auf „Abgelehnt“ und war nie im Store). Diese Anleitung erklärt, wie die App für iPhone und iPad von TestFlight in den App Store kommt: was schon da ist, welche Version es wird, was Nils in App Store Connect macht und was Claude vorbereitet.
+Stand: 22.11.2026 (**nicht einreichen: 1.6.4 (45) hat B-369, der Fix ist 1.6.5 (46), eingereicht wird erst nach `TESTANLEITUNG-1.6.5.md`**; davor: 1.6.4 (45) ist gewählt, eingereicht wird erst nach bestandenem Test im Auto: CarPlay sowie Start und Ende des Auto-Starts sind am 22.11. geprüft, offen sind D.3, E.1 bis E.3 (Anzeige in CarPlay), F und die Meldung „Zeitlimit“ der Kurzbefehle. 1.0 (26) kam am 16.11.2026 mit Rückfragen zurück, steht in App Store Connect auf „Abgelehnt“ und war nie im Store). Diese Anleitung erklärt, wie die App für iPhone und iPad von TestFlight in den App Store kommt: was schon da ist, welche Version es wird, was Nils in App Store Connect macht und was Claude vorbereitet.
 
 Für TestFlight siehe `docs/learning/32-testflight.md`, für den Mac `docs/RELEASE.md`.
 
@@ -94,7 +94,7 @@ Das kann nur Nils. Alles unter [appstoreconnect.apple.com](https://appstoreconne
 - [ ] **PR mit diesen Texten mergen lassen.** Datenschutz- und Support-Seite sind erst dann öffentlich.
 - [ ] **Beide Seiten ohne Anmeldung öffnen** (privates Fenster): die zwei URLs aus `docs/appstore/metadata/de-DE/`.
 - [ ] **Video Teil A und C** nach dem Drehbuch (`docs/appstore/REVIEW-VIDEO.html`, dazu Word und PDF).
-- [ ] **Test im Auto:** `TESTANLEITUNG-1.6.4.md`, A bis F. Abschnitt F entscheidet, ob eingereicht wird.
+- [ ] **Test am iPhone:** `TESTANLEITUNG-1.6.5.md`, A bis F mit 1.6.5 (46), Rad und Auto. Sie entscheidet, ob eingereicht wird. Danach überall unten 1.6.4 (45) durch 1.6.5 (46) ersetzen.
 - [ ] **Video Teil B**, danach schneiden und Bild für Bild auf private Daten prüfen.
 
 ### B. Einmal für Konto und App
