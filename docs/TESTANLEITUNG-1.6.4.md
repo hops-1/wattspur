@@ -70,4 +70,5 @@ Ergebnis der Testfahrt von Nils am 22.11.2026 im Nugget, 1.6.4 (45), nach der au
 | E, Start und Ende | ✓ | zweite Testfahrt: Start bei Fahrtantritt und Ende über die Automationen gehen. Dabei meldet Kurzbefehle „Zeitlimit für Kurzbefehl überschritten“ für „Fahrt starten“, die Fahrt ist trotzdem da |
 | E.1, E.2 | offen | Anzeige „Bereit“ in CarPlay und „Abbrechen“ noch nicht gemeldet |
 | E.3 | offen | der Start beim Losfahren geht, der Wechsel der Tafel ist noch nicht gemeldet |
-| F.1 bis F.5 | offen | Abschnitt F stand noch nicht auf der gedruckten Liste |
+| F.1 bis F.4 | offen | Abschnitt F stand noch nicht auf der gedruckten Liste |
+| F.5 | offen | zweite Testfahrt: iPhone beim Verbinden gesperrt, die Fahrt wurde aufgenommen, dazu „Zeitlimit für Kurzbefehl überschritten“. Noch zu beobachten: kommt „Bereit“ vor oder nach dem Entsperren, fehlt am Anfang etwas. Gegenprobe ohne „Beim Ausführen anzeigen“, einmal gesperrt und einmal entsperrt |
