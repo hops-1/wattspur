@@ -39,6 +39,8 @@ Am besten im Nugget mit CarPlay. Fahre nur, wenn es sicher ist; tippe in CarPlay
 
 ## E. Auto-Start mit CarPlay
 
+Vorher, ab iOS 27 (dort gibt es „Sofort ausführen“ nicht mehr): In beiden Automationen am Pfeil neben dem Auslöser **Automation** an, **Benachrichtigen** für den Test an, **Vor dem Ausführen bestätigen** aus. Bei „Fahrt starten“ steht unter **Gerät** „Auswählen“, also kein Gerät. In Wattspur ist **Mehr › Aufnahme › Auto-Start** an, beim Auto steht unter **Startet mit** „CarPlay“.
+
 1. Mit Auto-Start an: Beim Verbinden steht in CarPlay **Bereit** mit „Wartet, bis das Fahrzeug fährt“.
 2. **Abbrechen** beendet „Bereit“ ohne Fahrt.
 3. Beim Losfahren wechselt die Tafel auf Tempo, Zeit und Strecke.

@@ -191,8 +191,10 @@ With an automation in the **Shortcuts** app, recording starts by itself as soon 
 
 1. Open **Shortcuts**, tap **Automation** at the bottom, then **+**.
 2. Choose **CarPlay** or **Bluetooth**, then **Connects**. For Bluetooth, pick your device.
-3. Choose **Run Immediately** and tap **Next**.
-4. Choose **New Blank Automation › Add Action**, search for **Wattspur** and choose **Start Ride**. In the action, tap **Device** and choose your car or motorcycle. Tap **Done**.
+3. Make sure the automation runs without asking:
+   - **iOS 27 and later:** Tap the arrow next to the trigger. **Automation** is on, **Confirm Before Run** is off. Whether it notifies you is up to you.
+   - **Up to iOS 26:** Choose **Run Immediately** and tap **Next**.
+4. Add the action **Wattspur › Start Ride**. In the action, tap **Device** and choose your car or motorcycle. With Auto-Start (see below), leave the field empty.
 
 For the end, add a second automation with **Disconnects** and **End Ride**. Wattspur then opens **Save Ride**.
 
