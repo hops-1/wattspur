@@ -18,7 +18,21 @@ struct RecordingAttributes: ActivityAttributes {
         var lean: Double? = nil
         /// Waiting for the vehicle to move (auto-start, B-311); `nil` otherwise.
         var isReady: Bool? = nil
+        /// When the time counts from, and the device (B-370): both can change while ready, and the
+        /// attributes cannot. `nil` in an activity of an older build.
+        var start: Date? = nil
+        var device: Device? = nil
     }
+
+    struct Device: Codable, Hashable, Sendable {
+        var symbol: String?
+        var kind: String?
+        var side: String?
+    }
+
+    /// The start and the device as they are now (B-370).
+    func start(_ state: ContentState) -> Date { state.start ?? startDate }
+    func device(_ state: ContentState) -> Device { state.device ?? Device(symbol: symbol, kind: kind, side: side) }
 
     /// When the recording started; the time counts from here, as in the app.
     var startDate: Date

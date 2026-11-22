@@ -110,8 +110,89 @@ struct AutoStartTests {
         #expect(AutoStart.device(for: [AutoStart.AudioPort(kind: .bluetooth, name: "AirPods")], triggers: triggers, devices: [moto, old]) == nil)
         #expect(AutoStart.device(for: [AutoStart.AudioPort(kind: .bluetooth, name: "Polo")], triggers: triggers, devices: [moto, old]) == nil)
         #expect(AutoStart.device(for: [AutoStart.AudioPort(kind: .other, name: "Speaker")], triggers: triggers, devices: [moto]) == nil)
-        // CarPlay with no device for it: no match, the recording takes the last device.
+        // CarPlay with no device for it: no match, the recording takes the last car or motorcycle.
         #expect(AutoStart.device(for: [AutoStart.AudioPort(kind: .carPlay, name: "CarPlay")], triggers: triggers, devices: [moto]) == nil)
+    }
+
+    static func bicycle(_ name: String) -> RideExchange.Bike {
+        RideExchange.Bike(id: UUID(), name: name, kind: "bike", color: "blue", isEbike: true, isArchived: false)
+    }
+
+    static func recorded(_ bike: RideExchange.Bike) -> RecordingDevice {
+        RecordingDevice(bikeID: bike.id, kind: BikeKind(rawValue: bike.kind) ?? .bike)
+    }
+
+    @Test("After a bike tour auto-start still takes the car: the last bike is never the fallback (B-370)")
+    func neverTheLastBike() {
+        let bike = Self.bicycle("Cube"), car = Self.car("Nugget")
+        let last = Self.recorded(bike)
+        let device = AutoStart.readyDevice(for: [], triggers: [:], devices: [bike, car], last: last, lastVehicle: nil)
+        #expect(device.bikeID == car.id)
+        #expect(device.vehicle == .car)
+    }
+
+    @Test("Without a match the vehicle used last wins over the other vehicles (B-370)")
+    func lastVehicle() {
+        let bike = Self.bicycle("Cube"), car = Self.car("Nugget"), second = Self.car("Golf")
+        let moto = RideExchange.Bike(id: UUID(), name: "Honda", kind: "motorcycle", color: "red", isEbike: false, isArchived: false)
+        let devices = [bike, car, second, moto]
+        let afterTour = AutoStart.readyDevice(for: [], triggers: [:], devices: devices,
+                                              last: Self.recorded(bike), lastVehicle: Self.recorded(moto))
+        #expect(afterTour.bikeID == moto.id)
+        #expect(afterTour.vehicle == .motorcycle)
+        let afterDrive = AutoStart.readyDevice(for: [], triggers: [:], devices: devices,
+                                               last: Self.recorded(second), lastVehicle: Self.recorded(moto))
+        #expect(afterDrive.bikeID == second.id)
+    }
+
+    @Test("With bikes only, auto-start records a car without a device (B-370)")
+    func onlyBikes() {
+        let bike = Self.bicycle("Cube")
+        let device = AutoStart.readyDevice(for: [AutoStart.AudioPort(kind: .carPlay, name: "CarPlay")], triggers: [:],
+                                           devices: [bike], last: Self.recorded(bike), lastVehicle: nil)
+        #expect(device.bikeID == nil)
+        #expect(device.kind == .car)
+    }
+
+    @Test("CarPlay is always a car or motorcycle, also with a bike set to it or to the car's Bluetooth (B-370)")
+    func carPlayNeverBike() {
+        let bike = Self.bicycle("Cube"), other = Self.bicycle("Haibike"), car = Self.car("Nugget")
+        let triggers: [UUID: AutoStart.Trigger] = [bike.id: .carPlay, other.id: .bluetooth("VW BT 1234")]
+        let ports = [AutoStart.AudioPort(kind: .carPlay, name: "CarPlay"), AutoStart.AudioPort(kind: .bluetooth, name: "VW BT 1234")]
+        #expect(AutoStart.device(for: ports, triggers: triggers, devices: [bike, other, car]) == nil)
+        let device = AutoStart.readyDevice(for: ports, triggers: triggers, devices: [bike, other, car],
+                                           last: Self.recorded(bike), lastVehicle: nil)
+        #expect(device.bikeID == car.id)
+    }
+
+    @Test("A bike's own Bluetooth device still starts the bike (B-370)")
+    func bikeByItsBluetooth() {
+        let bike = Self.bicycle("Cube"), car = Self.car("Nugget")
+        let device = AutoStart.readyDevice(for: [AutoStart.AudioPort(kind: .bluetooth, name: "Helm")],
+                                           triggers: [bike.id: .bluetooth("helm")], devices: [bike, car],
+                                           last: Self.recorded(car), lastVehicle: Self.recorded(car))
+        #expect(device.bikeID == bike.id)
+    }
+
+    @Test("Only a car or motorcycle can be set to start with CarPlay (B-370)")
+    func carPlayChoice() {
+        #expect(AutoStart.canStartWithCarPlay(.car))
+        #expect(AutoStart.canStartWithCarPlay(.motorcycle))
+        #expect(!AutoStart.canStartWithCarPlay(.bike))
+    }
+
+    @Test("The device chosen while ready survives the log, with its speed limit (B-370)")
+    func deviceChangedWhileReady() throws {
+        let car = RecordingDevice.without(.car)
+        var log = Data()
+        for event: RecordingLog.Event in [.start(Self.start), .vehicle(.eBike), .ready, .vehicle(car.vehicle), .device(car),
+                                          .fix(Self.fix(1, north: 0, speed: 40)), .fix(Self.fix(2, north: 40, speed: 40))] {
+            log.append(try RecordingLog.line(event))
+        }
+        let recording = try #require(RecordingLog.replay(log))
+        #expect(recording.vehicle == .car)
+        // 144 km/h: a jump for a bicycle, a motorway for a car.
+        #expect(recording.pointCount == 2)
     }
 
     @Test("Standing still: slow positions and the GPS wandering do not count as moving; 10 min after the last move it is over (B-339)")

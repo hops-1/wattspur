@@ -196,22 +196,22 @@ With an automation in the **Shortcuts** app, recording starts by itself as soon 
    - **Up to iOS 26:** Choose **Run Immediately** and tap **Next**.
 4. Add the action **Wattspur › Start Ride**. In the action, tap **Device** and choose your car or motorcycle. With Auto-Start (see below), leave the field empty.
 
-For the end, add a second automation with **Disconnects** and **End Ride**. Wattspur then opens **Save Ride**.
+For the end, add a second automation with **Disconnects** and **End Ride**. Wattspur then opens **Save Ride**. With the iPhone locked, the sheet waits until you open Wattspur (iPhone 1.6.5 and later).
 
 Good to know:
 - Recording starts when the iPhone connects, often when you start the engine. Time standing still does not count as riding time.
-- If the iPhone is locked, iOS may ask you to unlock it first.
+- If the iPhone is locked, iOS may ask you to unlock it first when starting. Shortcuts can then report that the shortcut timed out, even though the recording runs.
 - If a ride is already being recorded, no second one starts.
-- Wattspur uses the device from the action. Without one, it uses the device of the last recording.
+- Wattspur uses the device from the action. Without one, it uses the device of the last recording, with Auto-Start a car or motorcycle (see below).
 
 ### Auto-start: wait until you drive off (iPhone 1.6 and later)
 Switch on **Auto-Start** under **More › Recording**. In the automation, leave the **Device** field of **Start Ride** empty. Then:
 
 - When the iPhone connects, the recording opens as **Ready**. The ride begins only when you drive off, above 10 km/h. The time counts from then.
-- Which device it is, you set under **Starts With**: CarPlay or a Bluetooth device, for each car or motorcycle. For a Bluetooth device, connect the iPhone to it first; its name then shows up. Without a matching connection Wattspur uses the device of the last recording.
+- Which device it is, you set under **Starts With**: CarPlay or a Bluetooth device, for each car or motorcycle. For a Bluetooth device, connect the iPhone to it first; its name then shows up. CarPlay is offered only for cars and motorcycles. Without a matching connection Wattspur uses the car or motorcycle used last, never a bike (iPhone 1.6.5 and later). A bike starts only with its own Bluetooth device. This also holds when you say "Start a ride with Wattspur" with Auto-Start on: name the bike for a bike tour.
 - **Cancel** ends "Ready" without a question, also on the Lock Screen. If you do not drive off, "Ready" ends after the time standing still.
 - Under **End** you choose when the ride ends by itself: **When Disconnected** (with the second automation **Disconnects › End Ride**) and **After Standing Still** for 5, 10 or 20 minutes (10 by default).
-- A ride that ends by itself is saved without a question: with the device and the places at start and end as its name, for example "Darmstadt – Frankfurt am Main – 14:32" (the start time from iPhone 1.6.4). A notification tells you; tap it to open the ride. Rides under 500 m are not kept.
+- A ride that ends by itself is saved without a question: with the device and the places at start and end as its name, for example "Darmstadt – Frankfurt am Main – 14:32" (the start time from iPhone 1.6.4). This also works with the iPhone locked (1.6.5 and later). A notification tells you; tap it to open the ride. Rides under 500 m are not kept.
 
 ## CarPlay (iPhone 1.6.4 and later)
 When the iPhone is connected to the car, Wattspur shows up in CarPlay. It is the same recording as on the iPhone: what you start or end in one place applies in the other too.

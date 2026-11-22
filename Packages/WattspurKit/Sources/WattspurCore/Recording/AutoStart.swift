@@ -16,12 +16,31 @@ public enum AutoStart {
         return fix.horizontalAccuracy >= 0 && fix.horizontalAccuracy <= RideRecording.maxAccuracy
     }
 
+    /// Whether a kind of device can start with CarPlay: CarPlay is always a car or a motorcycle (B-370).
+    public static func canStartWithCarPlay(_ kind: BikeKind) -> Bool {
+        kind.sport == .vehicle
+    }
+
+    /// What “Ready” records with (B-370): the device of the connection, else the car or motorcycle used
+    /// last, else a car without a device. Never the bike that happened to be used last: a drive recorded
+    /// as a bicycle has no lateral acceleration and loses every position faster than 100 km/h.
+    public static func readyDevice(for ports: [AudioPort], triggers: [UUID: Trigger], devices: [RideExchange.Bike],
+                                   last: RecordingDevice?, lastVehicle: RecordingDevice?) -> RecordingDevice {
+        if let connected = device(for: ports, triggers: triggers, devices: devices) { return connected }
+        let next = RecordingDevice.next(for: .vehicle, last: last, lastOfSport: lastVehicle, lastRideDeviceID: nil,
+                                        devices: devices, activeID: nil)
+        return next.kind.sport == .vehicle ? next : .without(.car)
+    }
+
     /// The device whose connection is there now: CarPlay first (it is the car itself), then a
-    /// Bluetooth device by its name. Only open devices count; `nil` when none matches, and the
-    /// recording takes the last device then.
+    /// Bluetooth device by its name. Only open devices count, and with CarPlay only cars and
+    /// motorcycles (B-370); `nil` when none matches (`readyDevice` then takes the last vehicle).
     public static func device(for ports: [AudioPort], triggers: [UUID: Trigger],
                               devices: [RideExchange.Bike]) -> RecordingDevice? {
-        let open = devices.filter { !$0.isArchived }
+        let hasCarPlay = ports.contains { $0.kind == .carPlay }
+        let open = devices.filter { bike in
+            !bike.isArchived && (!hasCarPlay || canStartWithCarPlay(BikeKind(rawValue: bike.kind) ?? .bike))
+        }
         func first(_ matches: (Trigger) -> Bool) -> RecordingDevice? {
             for bike in open {
                 if let trigger = triggers[bike.id], matches(trigger) {
@@ -30,7 +49,7 @@ public enum AutoStart {
             }
             return nil
         }
-        if ports.contains(where: { $0.kind == .carPlay }), let device = first({ $0 == .carPlay }) {
+        if hasCarPlay, let device = first({ $0 == .carPlay }) {
             return device
         }
         let names = ports.filter { $0.kind == .bluetooth }.map { $0.name }

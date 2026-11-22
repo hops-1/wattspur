@@ -48,6 +48,12 @@ enum AutoStartSettings {
         }
     }
 
+    /// What “Ready” records with now (B-370): the connection's device, else the last car or motorcycle.
+    static func readyDevice(devices: [RideExchange.Bike]) -> RecordingDevice {
+        AutoStart.readyDevice(for: currentPorts, triggers: triggers, devices: devices,
+                              last: RecordingChoice.last, lastVehicle: RecordingChoice.last(of: .vehicle))
+    }
+
     /// The device of the connection there now, if one starts with it.
     static func deviceForConnection(devices: [RideExchange.Bike]) -> RecordingDevice? {
         AutoStart.device(for: currentPorts, triggers: triggers, devices: devices)

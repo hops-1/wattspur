@@ -196,22 +196,22 @@ Mit einer Automation in der App **Kurzbefehle** startet die Aufnahme von selbst,
    - **Bis iOS 26:** Wähle **Sofort ausführen** und tippe auf **Weiter**.
 4. Füge die Aktion **Wattspur › Fahrt starten** hinzu. Tippe in der Aktion auf **Gerät** und wähle dein Auto oder Motorrad. Mit Auto-Start (siehe unten) lässt du das Feld leer, dort steht dann **Auswählen**.
 
-Für das Ende legst du eine zweite Automation mit **Trennt** und **Fahrt beenden** an. Wattspur öffnet dann **Fahrt speichern**.
+Für das Ende legst du eine zweite Automation mit **Trennt** und **Fahrt beenden** an. Wattspur öffnet dann **Fahrt speichern**. Ist das iPhone gesperrt, wartet das Blatt, bis du Wattspur öffnest (ab iPhone 1.6.5).
 
 Gut zu wissen:
 - Die Aufnahme beginnt schon beim Verbinden, oft beim Motorstart. Die Zeit im Stand zählt nicht zur Fahrzeit.
-- Ist das iPhone gesperrt, fragt iOS manchmal erst nach dem Entsperren.
+- Ist das iPhone gesperrt, fragt iOS beim Start manchmal erst nach dem Entsperren. Kurzbefehle kann dann „Zeitlimit für Kurzbefehl überschritten“ melden, auch wenn die Aufnahme läuft.
 - Läuft schon eine Aufnahme, startet keine zweite.
-- Wattspur nimmt das Gerät aus der Aktion. Ohne Gerät nimmt es das der letzten Aufnahme.
+- Wattspur nimmt das Gerät aus der Aktion. Ohne Gerät nimmt es das der letzten Aufnahme, mit Auto-Start ein Auto oder Motorrad (siehe unten).
 
 ### Auto-Start: warten, bis du losfährst (ab iPhone 1.6)
 Schalte unter **Mehr › Aufnahme** den **Auto-Start** ein. Lass in der Automation dann bei **Fahrt starten** das Feld **Gerät** leer. So geht es weiter:
 
 - Beim Verbinden öffnet sich die Aufnahme als **Bereit**. Die Fahrt beginnt erst, wenn du losfährst, ab 10 km/h. Die Zeit zählt ab dann.
-- Welches Gerät es ist, legst du unter **Startet mit** fest: CarPlay oder ein Bluetooth-Gerät, je Auto oder Motorrad. Für ein Bluetooth-Gerät verbinde das iPhone zuerst damit, dann erscheint sein Name. Passt keine Verbindung, nimmt Wattspur das Gerät der letzten Aufnahme.
+- Welches Gerät es ist, legst du unter **Startet mit** fest: CarPlay oder ein Bluetooth-Gerät, je Auto oder Motorrad. Für ein Bluetooth-Gerät verbinde das iPhone zuerst damit, dann erscheint sein Name. CarPlay gibt es nur bei Auto und Motorrad. Passt keine Verbindung, nimmt Wattspur das zuletzt genutzte Auto oder Motorrad, nie ein Rad (ab iPhone 1.6.5). Ein Rad startet nur mit seinem eigenen Bluetooth-Gerät. Das gilt auch, wenn du bei eingeschaltetem Auto-Start „Starte eine Fahrt mit Wattspur“ sagst: Nenne für eine Radtour das Rad.
 - **Abbrechen** beendet „Bereit“ ohne Frage, auch auf dem Sperrbildschirm. Fährst du nicht los, endet „Bereit“ nach der Zeit für den Stillstand.
 - Unter **Ende** wählst du, wann die Fahrt von selbst endet: **Bei Trennung** (mit der zweiten Automation **Trennt › Fahrt beenden**) und **Nach Stillstand** nach 5, 10 oder 20 Minuten (Standard 10).
-- Eine Fahrt, die von selbst endet, sichert Wattspur ohne Frage: mit dem Gerät und den Orten von Start und Ziel als Namen, zum Beispiel „Darmstadt – Frankfurt am Main – 14:32“ (die Startzeit ab iPhone 1.6.4). Eine Mitteilung sagt Bescheid; ein Tipp darauf öffnet die Fahrt. Fahrten unter 500 m behält Wattspur nicht.
+- Eine Fahrt, die von selbst endet, sichert Wattspur ohne Frage: mit dem Gerät und den Orten von Start und Ziel als Namen, zum Beispiel „Darmstadt – Frankfurt am Main – 14:32“ (die Startzeit ab iPhone 1.6.4). Das geht auch bei gesperrtem iPhone (ab 1.6.5). Eine Mitteilung sagt Bescheid; ein Tipp darauf öffnet die Fahrt. Fahrten unter 500 m behält Wattspur nicht.
 
 ## CarPlay (ab iPhone 1.6.4)
 Ist das iPhone mit dem Auto verbunden, steht Wattspur in CarPlay. Es ist dieselbe Aufnahme wie am iPhone: Was du an einer Stelle startest oder beendest, gilt auch an der anderen.

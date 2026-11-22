@@ -56,7 +56,7 @@ struct RecordingLiveActivity: Widget {
                             CancelReadyButton()
                                 .frame(maxWidth: 160)
                         } else {
-                            ElapsedTime(start: context.attributes.startDate)
+                            ElapsedTime(start: context.attributes.start(context.state))
                                 .font(.title2.weight(.bold))
                                 .frame(maxWidth: .infinity, alignment: .leading)
                             PauseButton(isPaused: context.state.isPaused)
@@ -91,7 +91,7 @@ struct RecordingLiveActivity: Widget {
     /// Pause, an hourglass while ready (B-311), else the device's symbol.
     static func symbol(_ context: ActivityViewContext<RecordingAttributes>) -> String {
         if context.state.isReady == true { return "hourglass" }
-        return context.state.isPaused ? "pause.fill" : context.attributes.symbol ?? "bicycle"
+        return context.state.isPaused ? "pause.fill" : context.attributes.device(context.state).symbol ?? "bicycle"
     }
 }
 
@@ -104,11 +104,11 @@ private struct ActivitySymbol: View {
     var body: some View {
         if showsState, context.state.isReady == true || context.state.isPaused {
             Image(systemName: RecordingLiveActivity.symbol(context))
-        } else if let kind = BikeKind(rawValue: context.attributes.kind ?? "") {
+        } else if let kind = BikeKind(rawValue: context.attributes.device(context.state).kind ?? "") {
             BikeKindIcon(kind: kind, size: 18)
         } else {
             // An activity started by a build before 1.6 (40), or a bicycle.
-            Image(systemName: context.attributes.symbol ?? "bicycle")
+            Image(systemName: context.attributes.device(context.state).symbol ?? "bicycle")
         }
     }
 }
@@ -149,7 +149,7 @@ private struct LockScreenView: View {
                         Text("Time")
                             .font(.caption)
                             .foregroundStyle(.secondary)
-                        ElapsedTime(start: context.attributes.startDate)
+                        ElapsedTime(start: context.attributes.start(context.state))
                             .font(.title2.weight(.bold))
                     }
                     Spacer()
@@ -157,7 +157,7 @@ private struct LockScreenView: View {
                     Spacer()
                     Figure(title: "Speed", value: ActivityFormat.speed(context.state.speed))
                 }
-                if let kind = context.attributes.side {
+                if let kind = context.attributes.device(context.state).side {
                     SideRow(kind: kind, lean: context.state.lean)
                 }
                 PauseButton(isPaused: context.state.isPaused)

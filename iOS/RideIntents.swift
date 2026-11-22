@@ -1,6 +1,7 @@
 import AppIntents
 import Foundation
 import Observation
+import UIKit
 import WattspurCore
 
 /// Siri and the Shortcuts app (B-225): start and end a ride, the distance of this week, and the
@@ -32,7 +33,9 @@ struct WattspurShortcuts: AppShortcutsProvider {
 /// Starts the recording, as “Start Ride” in the overview. The app comes to the front: GPS needs it.
 /// With a device (B-286), e.g. “Start a ride with Nugget”; without one, the device of the last ride.
 /// With auto-start on (B-311) and no device, it is what the automation “When CarPlay connects”
-/// runs: the device comes from the connection, and the recording waits as “Ready” until it moves.
+/// runs: a car or motorcycle (B-370), and the recording waits as “Ready” until it moves.
+/// It keeps opening the app: started in the background, iOS stops GPS after a few seconds with
+/// “While Using”, also with a Live Activity (tried for B-370 on 22.11.2026).
 struct StartRideIntent: AppIntent {
     static let title: LocalizedStringResource = "Start Ride"
     static let description = IntentDescription("Starts recording a ride with GPS.")
@@ -57,8 +60,7 @@ struct StartRideIntent: AppIntent {
             return .result(dialog: .app("Wattspur has an unfinished ride. Continue it or end it first."))
         }
         if device == nil, AutoStartSettings.isOn {
-            let connected = AutoStartSettings.deviceForConnection(devices: RecordingChoice.cachedDevices)
-            recorder.start(device: connected, ready: true)
+            recorder.start(device: AutoStartSettings.readyDevice(devices: RecordingChoice.cachedDevices), ready: true)
             return .result(dialog: .app("Ready. The ride begins when you drive off."))
         }
         recorder.start(device: device?.recordingDevice)
@@ -66,11 +68,13 @@ struct StartRideIntent: AppIntent {
     }
 }
 
-/// Ends the recording as Stop does: the app opens “Save Ride” to name it and choose the bike.
+/// Ends the recording as Stop does: the app opens “Save Ride” to name it and choose the bike. An
+/// auto-started ride is saved without opening the app, also on a locked iPhone (B-370); with a ride
+/// started by hand “Save Ride” waits until the app is opened.
 struct EndRideIntent: AppIntent {
     static let title: LocalizedStringResource = "End Ride"
     static let description = IntentDescription("Ends the recording and opens Save Ride.")
-    static let openAppWhenRun = true
+    static let supportedModes: IntentModes = [.background, .foreground(.dynamic)]
 
     @Dependency private var recorder: Recorder
 
@@ -93,7 +97,19 @@ struct EndRideIntent: AppIntent {
             }
         }
         recorder.endRequested = true
+        await comeToFrontIfUnlocked()
         return .result(dialog: .app("Name the ride and save it."))
+    }
+}
+
+private extension AppIntent {
+    /// Opens the app when the iPhone is unlocked. Locked, iOS refuses (“request to open … failed”)
+    /// or waits for the unlock until Shortcuts gives up, so then it is not asked (B-370).
+    @MainActor
+    func comeToFrontIfUnlocked() async {
+        let mode = systemContext.currentMode
+        guard mode == .background, mode.canContinueInForeground, UIApplication.shared.isProtectedDataAvailable else { return }
+        try? await continueInForeground(alwaysConfirm: false)
     }
 }
 
