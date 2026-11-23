@@ -134,6 +134,11 @@ public struct TileMosaic: Sendable {
     /// `nil` when the area would need more than 200 tiles (a bulk download, which the servers
     /// forbid) or a tile could not be loaded: a map with holes is worse than Apple's map.
     public static func make(_ source: TileSource, rect: MKMapRect, pixelWidth: Int, pixelHeight: Int) async -> TileMosaic? {
+        await make(source, rect: rect, pixelWidth: pixelWidth, pixelHeight: pixelHeight, session: TileLoader.session)
+    }
+
+    static func make(_ source: TileSource, rect: MKMapRect, pixelWidth: Int, pixelHeight: Int,
+                     session: URLSession) async -> TileMosaic? {
         let world = MKMapSize.world.width
         let area = MercatorRect(minX: rect.minX / world, minY: rect.minY / world,
                                 maxX: rect.maxX / world, maxY: rect.maxY / world)
@@ -143,7 +148,7 @@ public struct TileMosaic: Sendable {
         let loaded = await withTaskGroup(of: (Tile, CGImage?).self) { group in
             for tile in needed {
                 group.addTask {
-                    let data = try? await TileLoader.data(for: tile, from: source)
+                    let data = try? await TileLoader.data(for: tile, from: source, session: session)
                     return (tile, data.flatMap(TileImage.decode))
                 }
             }

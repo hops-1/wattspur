@@ -165,7 +165,7 @@ Target `Wattspur iOS` (ab iOS 26, Bundle-ID `io.github.hops-1.wattspur.ios`, Ver
 
 ## Tests
 
-`Tests/WattspurCoreTests` (ohne SwiftData), `Tests/WattspurKitTests` (mit In-Memory-Bibliothek), `Tests/TestFixtures` (gemeinsame FIT- und GPX-Dateien). `swift test --no-parallel` im Paket; `--no-parallel`, weil SwiftData beim parallelen Anlegen vieler In-Memory-Container abstürzen kann. Tests, die Ordner anlegen, räumen sie wieder weg. Dazu `Tests/WattspurMapTests` für das Karten-Modul (S-07). **Abdeckung** misst `scripts/coverage.sh` über alle drei Test-Bundles (S-33; `swift test --show-codecov-path` zeigt nur das erste und damit zu viel). Beim Review 1.6.2: 89,1 % der Zeilen, `WattspurCore` 96,4 %, `WattspurKit` 89,5 %, `WattspurMap` 29,6 % (mehr Tests: B-360).
+`Tests/WattspurCoreTests` (ohne SwiftData), `Tests/WattspurKitTests` (mit In-Memory-Bibliothek), `Tests/TestFixtures` (gemeinsame FIT- und GPX-Dateien). `swift test --no-parallel` im Paket; `--no-parallel`, weil SwiftData beim parallelen Anlegen vieler In-Memory-Container abstürzen kann. Tests, die Ordner anlegen, räumen sie wieder weg. Dazu `Tests/WattspurMapTests` für das Karten-Modul (S-07). **Abdeckung** misst `scripts/coverage.sh` über alle drei Test-Bundles (S-33; `swift test --show-codecov-path` zeigt nur das erste und damit zu viel). Beim Review 1.6.2: 89,1 % der Zeilen, `WattspurCore` 96,4 %, `WattspurKit` 89,5 %, `WattspurMap` 29,6 %. Nach B-360 (1.6.6): `WattspurMap` 92,2 %, gesamt 94,4 %; die Kachel-Tests laufen gegen einen Test-Server im Prozess (`FakeTileServer`), nie gegen die echten Server.
 
 ## Entscheidungen (B-259)
 
