@@ -7,6 +7,9 @@ public enum RideImportError: Error, Equatable, Sendable {
     /// The file could not be read at all (no access, not downloaded, gone), with the system's reason;
     /// not a fault of the reader (R-47).
     case unreadable(String)
+    /// The library could not be searched for the same ride (B-354), with the reason. The file is not
+    /// imported, so it does not come in a second time; importing it again later works.
+    case libraryUnreadable(String)
 
     /// The file is a planned route, not a ride (B-301); the apps say so instead of “could not be read”.
     public var isPlannedRoute: Bool {

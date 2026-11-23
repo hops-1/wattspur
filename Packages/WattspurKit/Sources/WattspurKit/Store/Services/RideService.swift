@@ -53,7 +53,7 @@ struct RideService: LibraryService {
     func purgeTrash(olderThan days: Int = 30, now: Date = .now) {
         let cutoff = now.addingTimeInterval(-TimeInterval(days) * 86_400)
         let descriptor = FetchDescriptor<Ride>(predicate: #Predicate { $0.deletedAt != nil })
-        for ride in (try? context.fetch(descriptor)) ?? [] where (ride.deletedAt ?? now) <= cutoff {
+        for ride in fetch(descriptor) where (ride.deletedAt ?? now) <= cutoff {
             context.delete(ride)
         }
         LibrarySave.save(context)
@@ -66,6 +66,6 @@ struct RideService: LibraryService {
     }
 
     func sampleRides() -> [Ride] {
-        (try? context.fetch(FetchDescriptor<Ride>(predicate: #Predicate { $0.isSample }))) ?? []
+        fetch(FetchDescriptor<Ride>(predicate: #Predicate { $0.isSample }))
     }
 }
