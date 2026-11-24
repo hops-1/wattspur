@@ -56,7 +56,7 @@ Falls `xcode-select` noch auf die Command Line Tools zeigt: Befehlen `DEVELOPER_
 ## Status
 **Mac: v1.10.5** (24.11.2026): robuster, ohne sichtbare Änderung: ein Lesefehler der Bibliothek legt keine Fahrt doppelt an und steht im Diagnosebericht. Davor: v1.10.4 (dieselben Texte wie das iPad), v1.10.3 (Funde aus dem Review zu Architektur und Sicherheit, [Bericht](docs/REVIEW-1.6.2.md)), v1.10.2 (dieselbe Logik wie das iPad, E-Scooter), v1.10 (Umschalter Rad · Fahrzeuge in der Seitenleiste), v1.9 (Sportarten: Autos und Motorräder als Geräte, Querbeschleunigung), v1.8.x (Kartenstile, Sync mit dem iPhone über iCloud, erste notarisierte Version, Sichern und Teilen), v1.0 bis v1.7 (Import, Auswertung, Highlights, Karte aller Fahrten, ähnliche Strecken).
 
-**iPhone und iPad: 1.5** (Highlights am iPhone, Trennen, PDF, Herkunftsfilter) ist die Version für den App Store; in TestFlight ist **1.6.6**: CarPlay mit Start, Pause, Ende und Live-Werten (1.6.4), Auto-Start über CarPlay oder Bluetooth (1.6), Aufnahme ohne Überlastung (1.6.5), dazu robuster: Teilen großer GPX-Dateien, die Kachel in CarPlay öffnet die App (1.6.6).
+**iPhone und iPad: 1.5** (Highlights am iPhone, Trennen, PDF, Herkunftsfilter) ist die Version für den App Store; in TestFlight ist **1.6.7**: CarPlay mit Start, Pause, Ende und Live-Werten (1.6.4), Auto-Start über CarPlay oder Bluetooth (1.6), Aufnahme ohne Überlastung (1.6.5), dazu robuster: Teilen großer GPX-Dateien, die Kachel in CarPlay öffnet die App (1.6.6), kein Abbruch mehr beim Fotografieren während der Aufnahme (1.6.7).
 
 **Als Nächstes:** geplante Touren und Navigation (B-372 ff.). Details im [Changelog](CHANGELOG.md) und im [Backlog](docs/BACKLOG.md), Lern-Notizen in [docs/learning](docs/learning/README.md).
 
