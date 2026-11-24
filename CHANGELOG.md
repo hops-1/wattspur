@@ -7,6 +7,15 @@ Every DMG handed out to testers corresponds to one entry below.
 
 ## [Unreleased]
 
+## [iOS 1.6.8] – 2026-11-24
+
+Lighter in the background: the library is read off the main thread, and the maps give memory back during a recording. iPhone and iPad 1.6.8 (49); the Mac stays 1.10.5.
+
+### Changed
+- iPhone and iPad: what iCloud, the sync with the Mac or the return of the app make Wattspur read again is read off the main thread; the screen no longer waits for it, also with a full memory (B-381). After your own change (save, merge, goals) the screen still shows it at once.
+- iPhone: while a ride is recorded and Wattspur is in the background, the recording map gives its memory back and comes back with your zoom (B-382). In the simulator Wattspur then needs about half the memory, so iOS is less likely to end it when the camera needs memory.
+- iPhone: under the recording screen the tabs are not built (B-382). When the ride ends you are back on the same tab, without the pages that were open.
+
 ## [iOS 1.6.7] – 2026-11-24
 
 A photo during a recording no longer ends Wattspur. iPhone and iPad 1.6.7 (48); the Mac stays 1.10.5.
