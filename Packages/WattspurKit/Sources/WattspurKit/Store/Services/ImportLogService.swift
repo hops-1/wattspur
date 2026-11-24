@@ -49,14 +49,14 @@ struct ImportLogService: LibraryService {
         var descriptor = FetchDescriptor<ImportRecord>(
             predicate: #Predicate { $0.fileName == fileName && $0.outcomeRaw == unsupported })
         descriptor.fetchLimit = 1
-        return ((try? context.fetchCount(descriptor)) ?? 0) > 0
+        return LibraryFetch.count(descriptor, in: context) > 0
     }
 
     /// Log entries, newest first.
     func importRecords(limit: Int? = nil) -> [ImportRecord] {
         var descriptor = FetchDescriptor<ImportRecord>(sortBy: [SortDescriptor(\.date, order: .reverse)])
         descriptor.fetchLimit = limit
-        return (try? context.fetch(descriptor)) ?? []
+        return fetch(descriptor)
     }
 
     /// Removes log entries older than `days` (the log is a help, not an archive).
@@ -75,11 +75,11 @@ struct ImportLogService: LibraryService {
         let imported = ImportRecordOutcome.imported.rawValue
         let descriptor = FetchDescriptor<ImportRecord>(
             predicate: #Predicate { $0.outcomeRaw == imported && $0.date > date })
-        let entries = (try? context.fetch(descriptor)) ?? []
+        let entries = fetch(descriptor)
         let importedIDs = Set(entries.compactMap(\.rideID))
         guard !importedIDs.isEmpty else { return [] }
 
-        let counting = ((try? context.fetch(FetchDescriptor<Ride>())) ?? []).filter(\.countsInTotals)
+        let counting = fetch(FetchDescriptor<Ride>()).filter(\.countsInTotals)
         let (fresh, existing) = counting.reduce(into: ([HighlightRide](), [HighlightRide]())) { result, ride in
             if importedIDs.contains(ride.id) { result.0.append(ride.highlightRide) } else { result.1.append(ride.highlightRide) }
         }
@@ -98,6 +98,6 @@ struct ImportLogService: LibraryService {
         var descriptor = FetchDescriptor<ImportRecord>(
             predicate: #Predicate { $0.outcomeRaw == imported }, sortBy: [SortDescriptor(\.date, order: .reverse)])
         descriptor.fetchLimit = 1
-        return (try? context.fetch(descriptor))?.first?.date
+        return fetch(descriptor).first?.date
     }
 }
