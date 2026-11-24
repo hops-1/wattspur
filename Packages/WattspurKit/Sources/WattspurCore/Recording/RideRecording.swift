@@ -91,6 +91,11 @@ public struct RideRecording: Codable, Sendable, Equatable {
     /// Waiting for the vehicle to move (auto-start, B-311): positions are not kept until one is
     /// faster than `AutoStart.startSpeed`; that one begins the ride and its time becomes the start.
     public var isReady: Bool { storedReady == true }
+    /// Stored as optional, so recordings from before B-383 still decode.
+    private var storedStartedReady: Bool?
+    /// Began with “Ready”, so it came from auto-start (B-311); stays after the ride began. A ride
+    /// the app continues after iOS ended it can then still end by itself (B-339, B-383).
+    public var startedReady: Bool { storedStartedReady == true }
 
     public init(startDate: Date, vehicle: RecordingVehicle = .eBike) {
         self.startDate = startDate
@@ -108,6 +113,7 @@ public struct RideRecording: Codable, Sendable, Equatable {
     public mutating func waitForMovement() {
         guard isWaitingForGPS else { return }
         storedReady = true
+        storedStartedReady = true
     }
 
     /// Adds a position; returns `false` if it was dropped (or the recording is paused or ready).

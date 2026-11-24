@@ -74,13 +74,13 @@ Datei (FIT/GPX) ──► ImportFlow ──► RideLibrary.importFile ──► 
 CLLocationUpdate ──► Recorder ──► RideRecording (Core) ──► GPXWriter ──► PhoneDatabase.saveRecording ──► Import wie oben
 CMAltimeter     ──► AltitudeFusion (Höhe)       │
 CMDeviceMotion  ──► MotionRecorder ──► MotionFusion (Schräglage, Rütteln)
-                                                 └──► Protokolldatei je Ereignis (nach Absturz: weiter oder beenden)
+                                                 └──► Protokolldatei je Ereignis (nach Abbruch: läuft weiter oder fragt)
 ```
 
 - `Recorder` hat zwei Stände (B-369): `recording` ist immer aktuell und wird nicht beobachtet (Protokoll, Live-Aktivität, CarPlay, Kurzbefehle, Sichern); `shown` sieht die Ansicht und folgt nur, solange das Fenster sichtbar ist, oder bei Start, Ende, Pause und Losfahren (`RecordingDisplay`).
 - Das Barometer schreibt auf einer eigenen Queue in `BarometerHistory`; ein GPS-Punkt nimmt den Wert seiner Messzeit, auch wenn er spät verarbeitet wird.
 - `RecordingDiagnostics` schreibt je Minute eine Zeile ohne Orte in „Diagnose“ (`RecordingHealth`).
-- Jeder Punkt geht sofort in eine Protokolldatei. Nach einem Absturz bietet die App an, weiterzufahren oder zu beenden. Scheitert das Speichern, bleibt das Protokoll liegen und die App sagt es (R-51, R-52).
+- Jeder Punkt geht sofort in eine Protokolldatei. Hat iOS die App während einer Fahrt beendet (Speicher, Absturz) und ist das Protokoll jünger als 15 min, läuft die Fahrt beim nächsten Start von selbst weiter, auch bei einem Start im Hintergrund: Ortsabfrage und Sitzungen starten sofort, die übrig gebliebene Live-Aktivität wird übernommen, eine Auto-Start-Fahrt endet weiter von selbst (`UnfinishedRecording`, B-383). Bei einem älteren Protokoll bietet die App an, weiterzufahren oder zu beenden; CarPlay bietet dann nur „Aufnahme fortsetzen“. Scheitert das Speichern, bleibt das Protokoll liegen und die App sagt es (R-51, R-52).
 - Gilt eine Aufnahme als Doppel, wird die vorhandene Fahrt aktualisiert, nicht verworfen (R-53).
 - Live-Aktivität und Knopf „Pause“ kommen über `iOSShared` (`RecordingAttributes`, `ToggleRecordingPauseIntent`); Siri und Kurzbefehle über `iOS/RideIntents.swift`. „Fahrt starten“ öffnet die App, weil GPS mit „Beim Verwenden“ nicht aus dem Hintergrund anläuft; „Fahrt beenden“ läuft im Hintergrund (B-370). Was sich in „Bereit“ ändert (Beginn, Gerät), geht als Update in die Live-Aktivität: Im Hintergrund darf die App keine neue starten.
 

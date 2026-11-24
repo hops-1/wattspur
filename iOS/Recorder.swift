@@ -7,7 +7,9 @@ import WattspurCore
 
 /// Records a ride with GPS (B-211): `CLLocationUpdate.liveUpdates(.fitness)` with a
 /// `CLBackgroundActivitySession`, so it goes on with the screen locked (spike V-14). Every event
-/// goes into a log file at once; after a crash the app offers to continue or finish the ride.
+/// goes into a log file at once. After iOS ended the app, a ride from a few minutes ago goes on by
+/// itself at the next launch, also in the background (B-383); for an older one the app asks whether
+/// to continue or finish it.
 /// The height comes from the barometer, lifted to the GPS level (`AltitudeFusion`, B-235).
 ///
 /// Two states (B-369): `recording` is the ride as it is recorded, and no view observes it; `shown`
@@ -85,12 +87,18 @@ final class Recorder {
     init(logURL: URL = .applicationSupportDirectory.appending(path: "Aufnahme.jsonl")) {
         self.logURL = logURL
         try? FileManager.default.createDirectory(at: logURL.deletingLastPathComponent(), withIntermediateDirectories: true)
+        var continuesNow = false
         if let data = try? Data(contentsOf: logURL), let recording = RecordingLog.replay(data) {
-            // A recording that was still ready has nothing in it to continue (B-311).
-            if recording.isReady {
+            let written = (try? FileManager.default.attributesOfItem(atPath: logURL.path))?[.modificationDate] as? Date
+            switch UnfinishedRecording.choice(for: recording, lastWritten: written, now: .now) {
+            case .discard:
+                // A recording that was still ready has nothing in it to continue (B-311).
                 try? FileManager.default.removeItem(at: logURL)
-            } else {
+            case .ask:
                 unfinished = recording
+            case .continueByItself:
+                unfinished = recording
+                continuesNow = true
             }
         }
         // Pause and Resume from the Live Activity (B-223).
@@ -101,6 +109,13 @@ final class Recorder {
         // Cancel “Ready” from the Live Activity (B-311).
         RecordingControl.cancelReady = { [weak self] in self?.cancelReady() }
         watchVisibility()
+        // At once, before any screen: Apple asks an app ended while it received positions to start
+        // them again right at launch, also in the background; iOS then hands over those it kept.
+        if continuesNow {
+            continueUnfinished(byItself: true)
+        } else {
+            activity.endLeftOver()
+        }
     }
 
     // MARK: - What the screen shows (B-369)
@@ -124,7 +139,10 @@ final class Recorder {
     private func setVisible(_ visible: Bool) {
         guard visible != isVisible else { return }
         isVisible = visible
-        if visible { publish() }
+        guard visible else { return }
+        publish()
+        // Continued in the background without an activity left over: one can start only now (B-383).
+        if let recording { activity.start(recording) }
     }
 
     /// Hands the recording to the screen when it is visible or the recording's state changed.
@@ -162,24 +180,50 @@ final class Recorder {
         if let recording { activity.start(recording) }
     }
 
-    /// Continues the recording that was not finished.
+    /// Continues the recording that was not finished, when the rider says so.
     func continueUnfinished() {
+        continueUnfinished(byItself: false)
+    }
+
+    /// `byItself`: right at launch after iOS ended the app (B-383). The ride goes on as it was, a
+    /// pause stays a pause, and the positions iOS kept meanwhile join it; a long gap becomes a new
+    /// stretch by itself (`TrackGap`). Else, after the rider's answer, the time in between is a pause.
+    private func continueUnfinished(byItself: Bool) {
         guard let unfinished, recording == nil else { return }
         recording = unfinished
         self.unfinished = nil
         logProblem = nil
         log = try? FileHandle(forWritingTo: logURL)
         _ = try? log?.seekToEnd()
-        // The time in between is a gap, not riding.
-        if recording?.isPaused == false {
-            recording?.pause()
-            write(.pause)
+        if !byItself {
+            // The time in between is a gap, not riding.
+            if recording?.isPaused == false {
+                recording?.pause()
+                write(.pause)
+            }
+            recording?.resume()
+            write(.resume)
         }
-        recording?.resume()
-        write(.resume)
         publish()
         startUpdates()
-        if let recording { activity.start(recording) }
+        // An auto-started ride can still end by itself when the vehicle stands (B-339).
+        if unfinished.startedReady { watchStandstill(since: .now) }
+        if let recording {
+            if byItself { activity.resume(recording) } else { activity.start(recording) }
+        }
+        if byItself { noteContinued(after: UnfinishedRecording.lastActivity(of: unfinished, lastWritten: nil)) }
+    }
+
+    /// One line in the health log (B-369): that iOS had ended the app, whether it came back in the
+    /// background and how long the gap was; no place. Asked a few seconds later: while launching,
+    /// before its window shows, an app opened by the rider is not in front yet either.
+    private func noteContinued(after last: Date) {
+        let gap = Int(Date.now.timeIntervalSince(last).rounded())
+        Task { @MainActor [weak self] in
+            try? await Task.sleep(for: .seconds(3))
+            let background = UIApplication.shared.applicationState == .background
+            self?.diagnostics?.note("continued after the app was ended; in the background 3 s after launch: \(background ? "yes" : "no"); gap: \(gap) s")
+        }
     }
 
     func pause() {
@@ -285,8 +329,9 @@ final class Recorder {
     // MARK: - Location
 
     private func startUpdates() {
-        // Both sessions must start while the app is in front: the service session asks for
-        // “While Using”, the background session keeps the updates coming when the screen is locked.
+        // Both sessions start while the app is in front: the service session asks for “While
+        // Using”, the background session keeps the updates coming when the screen is locked. After
+        // iOS ended the app during a ride they start again at launch, also in the background (B-383).
         serviceSession = CLServiceSession(authorization: .whenInUse)
         backgroundSession = CLBackgroundActivitySession()
         startBarometer()

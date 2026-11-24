@@ -14,6 +14,9 @@ public struct DrivingPanel: Equatable, Sendable {
         case ready
         case recording
         case paused
+        /// A ride the app could not finish waits for the rider (B-383): CarPlay offers to continue
+        /// it, never a new start, which would throw it away.
+        case unfinished
     }
 
     public static let refreshInterval: TimeInterval = 5
@@ -41,10 +44,15 @@ public struct DrivingPanel: Equatable, Sendable {
         self.lean = lean
     }
 
-    /// The panel for `recording` at `date`; `nil` gives the idle panel.
-    public init(recording: RideRecording?, at date: Date) {
+    /// The panel for `recording` at `date`; `nil` gives the idle panel, or with `unfinished` the
+    /// ride that waits to be continued, with its distance.
+    public init(recording: RideRecording?, unfinished: RideRecording? = nil, at date: Date) {
         guard let recording else {
-            self.init(state: .idle)
+            if let unfinished {
+                self.init(state: .unfinished, distance: unfinished.distance)
+            } else {
+                self.init(state: .idle)
+            }
             return
         }
         let state: State = recording.isReady ? .ready : recording.isPaused ? .paused : .recording
