@@ -21,6 +21,7 @@ struct RecordingLiveActivity: Widget {
         ActivityConfiguration(for: RecordingAttributes.self) { context in
             LockScreenView(context: context)
                 .activityBackgroundTint(nil)
+                .widgetURL(RecordingLink.url)
         } dynamicIsland: { context in
             DynamicIsland {
                 // Beside the camera only one short line fits on each side; the rest goes below.
@@ -85,6 +86,8 @@ struct RecordingLiveActivity: Widget {
                     .foregroundStyle(Color.track)
             }
             .keylineTint(Color.track)
+            // CarPlay draws its tile from the compact views and opens the app only with a link (B-379).
+            .widgetURL(RecordingLink.url)
         }
     }
 

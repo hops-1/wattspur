@@ -176,6 +176,8 @@ struct WattspurApp: App {
         // A FIT from the Flow app or a GPX from the Files app, shared to or opened with Wattspur; or
         // `wattspur://import` from the share extension, whose files wait in the App Group (B-301).
         .onOpenURL { url in
+            // A tap on the Live Activity (B-379): the app comes to the front, nothing else.
+            if RecordingLink.isRecordingURL(url) { return }
             if SharedImports.isOpenURL(url) {
                 if !recorder.isRecording { phoneImport.importWaitingFiles(library: library) }
             } else {
