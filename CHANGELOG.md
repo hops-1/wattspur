@@ -7,6 +7,13 @@ Every DMG handed out to testers corresponds to one entry below.
 
 ## [Unreleased]
 
+## [iOS 1.6.7] – 2026-11-24
+
+A photo during a recording no longer ends Wattspur. iPhone and iPad 1.6.7 (48); the Mac stays 1.10.5.
+
+### Fixed
+- iPhone: while a ride is recorded, Wattspur no longer reads its whole library again after a change from iCloud or when the app comes back (B-380). With the camera open such a reading took more than 10 seconds, and iOS ended the app; the recording went on after the restart. The library is read once when the recording ends.
+
 ## [iOS 1.6.6] – 2026-11-24
 
 Sturdier: the rest of the review of 1.6.2, and the CarPlay tile opens the app. iPhone and iPad 1.6.6 (47); with the Mac 1.10.5.
