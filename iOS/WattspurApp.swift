@@ -198,6 +198,10 @@ struct WattspurApp: App {
         .task(id: ObjectIdentifier(library)) {
             recorder.nextDevice = { [library] in library.nextRecordingDevice }
         }
+        // While a ride is recorded the library is not read again; once at the end (B-380).
+        .onChange(of: HoldKey(recording: recorder.isRecording, library: ObjectIdentifier(library)), initial: true) { _, key in
+            library.holdReloads(key.recording)
+        }
         // The recording covers everything while it runs (B-211).
         .fullScreenCover(isPresented: Binding(get: { recorder.isRecording }, set: { _ in })) {
             RecordingView()
@@ -317,6 +321,13 @@ extension WattspurApp {
             ""
         }
     }
+}
+
+/// Whether a ride is recorded, per library: a new library after the iCloud switch gets the hold
+/// too (B-380).
+private struct HoldKey: Equatable {
+    let recording: Bool
+    let library: ObjectIdentifier
 }
 
 /// Switches iCloud on or off (B-218), for the switch in “More”.

@@ -51,10 +51,20 @@ final class PhoneLibrary {
         }
     }
 
-    /// Reads the store again (at launch, when the app comes back, on pull to refresh).
+    /// Reads the store again (at launch, when the app comes back, on pull to refresh); while a ride
+    /// is recorded only after it (B-380).
     func refresh() async {
         syncMonitor?.refreshAccount()
-        reload()
+        if reloadHold.request() { reload() }
+    }
+
+    /// No reading of the whole store while a ride is recorded (B-380): it runs on the main thread,
+    /// and with the camera open it took more than 10 seconds, so iOS ended the app.
+    private var reloadHold = ReloadHold()
+
+    /// Set by the app while a ride is recorded; at the end the reading that waited runs.
+    func holdReloads(_ holding: Bool) {
+        if reloadHold.set(holding: holding) { reload() }
     }
 
     /// The route of a ride, from this session or the store.
@@ -185,6 +195,7 @@ final class PhoneLibrary {
     /// Reads the rides and the trash from the store again, after every change.
     private func reload() {
         guard let database else { return }
+        reloadHold.didReload()
         do {
             state = try database.snapshot(generator: "Wattspur iOS")
             problem = nil
@@ -249,7 +260,10 @@ final class PhoneLibrary {
     private func startSyncMerge() {
         guard let database else { return }
         let watcher = SyncMergeWatcher(library: database.library)
-        watcher.onMerge = { [weak self] _ in self?.reload() }
+        watcher.onMerge = { [weak self] _ in
+            guard let self, self.reloadHold.request() else { return }
+            self.reload()
+        }
         watcher.start()
         syncMerge = watcher
     }
@@ -258,8 +272,8 @@ final class PhoneLibrary {
         pendingReload?.cancel()
         pendingReload = Task { [weak self] in
             try? await Task.sleep(for: .seconds(1))
-            guard !Task.isCancelled else { return }
-            self?.reload()
+            guard !Task.isCancelled, let self, self.reloadHold.request() else { return }
+            self.reload()
         }
     }
 
