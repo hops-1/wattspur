@@ -72,17 +72,23 @@ final class ShareModel {
     ]
 
     /// Reads every shared item: files and data first; a link only counts when nothing else came.
+    /// Files are copied, never read into memory (B-361): several large GPX files at once were too
+    /// much for the extension (S-45).
     func take(_ providers: [NSItemProvider]) async {
-        var files: [(name: String?, data: Data)] = []
+        // The system deletes the files it hands over after each handler: they are copied here first.
+        let staging = FileManager.default.temporaryDirectory.appending(path: "Share-\(UUID().uuidString)",
+                                                                       directoryHint: .isDirectory)
+        defer { try? FileManager.default.removeItem(at: staging) }
+        var items: [SharedDrop.Item] = []
         var link: URL?
         for provider in providers {
             if let type = provider.registeredContentTypes.first(where: { type in Self.fileTypes.contains { type.conforms(to: $0) } }),
-               let file = await Self.loadFile(provider, type: type) {
-                files.append(file)
+               let item = await Self.loadFile(provider, type: type, staging: staging) {
+                items.append(item)
             } else if provider.hasItemConformingToTypeIdentifier(UTType.url.identifier),
                       let url = await Self.loadURL(provider) {
-                if url.isFileURL, let data = try? Data(contentsOf: url) {
-                    files.append((url.lastPathComponent, data))
+                if url.isFileURL {
+                    items.append(.file(url, suggestedName: url.lastPathComponent))
                 } else if link == nil, SharedItem.linkSource(of: url) != nil {
                     link = url
                 }
@@ -91,15 +97,11 @@ final class ShareModel {
                 link = SharedItem.link(in: text)
             }
         }
-        let readable = files.compactMap { file -> (String, Data)? in
-            guard let ext = SharedItem.fileExtension(of: file.data, suggestedName: file.name) else { return nil }
-            return (SharedItem.fileName(suggestedName: file.name, fileExtension: ext), file.data)
-        }
-        if !readable.isEmpty {
+        if items.contains(where: { SharedDrop.fileExtension(of: $0) != nil }) {
             do {
-                try Self.write(readable)
-                sentCount = readable.count
-                state = .sent(count: readable.count, opened: true)
+                guard let base = SharedImports.folder else { throw CocoaError(.fileNoSuchFile) }
+                sentCount = try SharedDrop.write(items, into: base)
+                state = .sent(count: sentCount, opened: true)
             } catch {
                 state = .failed(error.localizedDescription)
             }
@@ -110,44 +112,36 @@ final class ShareModel {
         }
     }
 
-    /// Writes one share into its own folder under a hidden name, then renames it, so the app never
-    /// reads a share that is half written (`ImportInbox.collectShared`).
-    private static func write(_ files: [(String, Data)]) throws {
-        guard let base = SharedImports.folder else { throw CocoaError(.fileNoSuchFile) }
-        let id = UUID().uuidString
-        let writing = base.appending(path: ".writing-\(id)", directoryHint: .isDirectory)
-        try FileManager.default.createDirectory(at: writing, withIntermediateDirectories: true)
-        var used: Set<String> = []
-        for (name, data) in files {
-            var unique = name
-            var number = 2
-            while used.contains(unique.lowercased()) {
-                unique = "\((name as NSString).deletingPathExtension) \(number).\((name as NSString).pathExtension)"
-                number += 1
-            }
-            used.insert(unique.lowercased())
-            try data.write(to: writing.appending(path: unique))
-        }
-        try FileManager.default.moveItem(at: writing, to: base.appending(path: id, directoryHint: .isDirectory))
-    }
-
     // MARK: Loading
 
-    /// The data of a file or of plain data, read while the system keeps the file (it goes after the
-    /// handler), with its name where the app gave one.
-    private static func loadFile(_ provider: NSItemProvider, type: UTType) async -> (name: String?, data: Data)? {
+    /// A file, copied into `staging` while the system keeps it (it goes after the handler), or plain
+    /// data where the app offers only that; with its name where the app gave one.
+    private static func loadFile(_ provider: NSItemProvider, type: UTType, staging: URL) async -> SharedDrop.Item? {
         let suggested = provider.suggestedName
-        let data: Data? = await withCheckedContinuation { continuation in
+        let copy: URL? = await withCheckedContinuation { continuation in
             _ = provider.loadFileRepresentation(for: type, openInPlace: false) { url, _, _ in
-                continuation.resume(returning: url.flatMap { try? Data(contentsOf: $0) })
+                continuation.resume(returning: url.flatMap { Self.copy($0, into: staging) })
             }
         }
-        if let data { return (suggested, data) }
+        if let copy { return .file(copy, suggestedName: suggested ?? copy.lastPathComponent) }
         // Some apps offer the type only as data, not as a file.
         let plain: Data? = await withCheckedContinuation { continuation in
             _ = provider.loadDataRepresentation(for: type) { data, _ in continuation.resume(returning: data) }
         }
-        return plain.map { (suggested, $0) }
+        return plain.map { .data($0, suggestedName: suggested) }
+    }
+
+    /// Copies a file into a folder of its own in `staging`, so equal names do not collide.
+    nonisolated private static func copy(_ url: URL, into staging: URL) -> URL? {
+        let folder = staging.appending(path: UUID().uuidString, directoryHint: .isDirectory)
+        let target = folder.appending(path: url.lastPathComponent)
+        do {
+            try FileManager.default.createDirectory(at: folder, withIntermediateDirectories: true)
+            try FileManager.default.copyItem(at: url, to: target)
+            return target
+        } catch {
+            return nil
+        }
     }
 
     private static func loadURL(_ provider: NSItemProvider) async -> URL? {

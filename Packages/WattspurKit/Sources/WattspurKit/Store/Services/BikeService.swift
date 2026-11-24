@@ -22,7 +22,7 @@ struct BikeService: LibraryService {
 
     /// The single local profile; created on first use.
     func defaultRider() -> Rider {
-        if let rider = try? context.fetch(FetchDescriptor<Rider>()).first { return rider }
+        if let rider = fetch(FetchDescriptor<Rider>()).first { return rider }
         let rider = Rider()
         context.insert(rider)
         return rider
@@ -34,7 +34,7 @@ struct BikeService: LibraryService {
 
     /// All bikes of the library in the order of the profile (B-134).
     func bikes(includingArchived: Bool = true) -> [Bike] {
-        let all = (try? context.fetch(FetchDescriptor<Bike>())) ?? []
+        let all = fetch(FetchDescriptor<Bike>())
         return Bike.sorted(includingArchived ? all : all.filter { !$0.isArchived })
     }
 
@@ -193,7 +193,7 @@ struct BikeService: LibraryService {
         for change in changes { change.ride.bike = change.bike }
         LibrarySave.save(context)
         registerUndo { service in
-            let bikes = (try? service.context.fetch(FetchDescriptor<Bike>())) ?? []
+            let bikes = service.fetch(FetchDescriptor<Bike>())
             let rides = previous.compactMap { change -> (ride: Ride, bike: Bike?)? in
                 guard let ride = service.ride(withID: change.ride) else { return nil }
                 guard let id = change.bike else { return (ride, nil) }
@@ -243,7 +243,7 @@ struct BikeService: LibraryService {
     /// to the active bike. Returns the number of deleted bikes.
     @discardableResult
     func mergeBikes() -> Int {
-        let bikes = (try? context.fetch(FetchDescriptor<Bike>())) ?? []
+        let bikes = fetch(FetchDescriptor<Bike>())
         let legacy = bikes.filter { $0.serialNumber != nil }
         var deleted = 0
         if !legacy.isEmpty {
@@ -263,7 +263,7 @@ struct BikeService: LibraryService {
             }
         }
         let unassigned = FetchDescriptor<Ride>(predicate: #Predicate { $0.bike == nil })
-        let orphans = (try? context.fetch(unassigned)) ?? []
+        let orphans = fetch(unassigned)
         if !orphans.isEmpty {
             let target = activeBike()
             for ride in orphans { ride.bike = target }

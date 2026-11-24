@@ -14,17 +14,20 @@ public enum TileLoader {
     /// "Wattspur/1.8.0 (+https://github.com/hops-1/wattspur)"
     public static let userAgent = "Wattspur/\(AppInfo.version) (+https://github.com/hops-1/wattspur)"
 
-    static let session: URLSession = {
+    static let session = URLSession(configuration: configuration(
+        cacheDirectory: URL.cachesDirectory.appending(path: "Tiles", directoryHint: .isDirectory)))
+
+    /// The settings of the tile session; the tests add a fake server and their own cache folder.
+    static func configuration(cacheDirectory: URL) -> URLSessionConfiguration {
         let configuration = URLSessionConfiguration.default
-        let directory = URL.cachesDirectory.appending(path: "Tiles", directoryHint: .isDirectory)
-        configuration.urlCache = URLCache(memoryCapacity: 32 << 20, diskCapacity: 300 << 20, directory: directory)
+        configuration.urlCache = URLCache(memoryCapacity: 32 << 20, diskCapacity: 300 << 20, directory: cacheDirectory)
         // Fresh tiles come from the cache; the servers say how long a tile stays fresh.
         configuration.requestCachePolicy = .useProtocolCachePolicy
         configuration.httpAdditionalHeaders = ["User-Agent": userAgent]
         // The volunteer servers ask for restraint.
         configuration.httpMaximumConnectionsPerHost = 4
-        return URLSession(configuration: configuration)
-    }()
+        return configuration
+    }
 
     /// Set by tests and the debug builds' `-WattspurOfflineTiles YES`: every tile fails as without a
     /// network and an empty cache, to see what the maps show then.
@@ -33,6 +36,10 @@ public enum TileLoader {
     /// The tile's image data. Without a network a tile seen before still comes from the
     /// cache, even when the server would want it checked again.
     public static func data(for tile: Tile, from source: TileSource) async throws -> Data {
+        try await data(for: tile, from: source, session: session)
+    }
+
+    static func data(for tile: Tile, from source: TileSource, session: URLSession) async throws -> Data {
         if simulatesOffline { throw URLError(.notConnectedToInternet) }
         let url = source.url(for: tile)
         do {
@@ -42,8 +49,9 @@ public enum TileLoader {
         } catch {
             var request = URLRequest(url: url)
             request.cachePolicy = .returnCacheDataDontLoad
-            let (data, _) = try await session.data(for: request)
-            guard !data.isEmpty else { throw error }
+            let (data, response) = try await session.data(for: request)
+            // A stored error page is no tile.
+            guard !data.isEmpty, (response as? HTTPURLResponse)?.statusCode ?? 200 == 200 else { throw error }
             return data
         }
     }
@@ -83,6 +91,10 @@ public enum TileImage {
 /// it enlarges the matching part of the last tile, so the map does not turn blank.
 public final class CachingTileOverlay: MKTileOverlay, @unchecked Sendable {
     public let source: TileSource
+    /// Where the tiles come from; the tests set a fake server.
+    var session = TileLoader.session
+    /// How long to wait before the second try for a tile.
+    var retryDelay: Duration = .seconds(2)
 
     public init(source: TileSource) {
         self.source = source
@@ -102,17 +114,19 @@ public final class CachingTileOverlay: MKTileOverlay, @unchecked Sendable {
 
     override public func loadTile(at path: MKTileOverlayPath, result: @escaping @Sendable (Data?, (any Error)?) -> Void) {
         let source = source
+        let session = session
+        let retryDelay = retryDelay
         Task { [weak self] in
             let steps = max(0, path.z - source.maxZoom)
             let parent = Tile(zoom: path.z - steps, x: path.x >> steps, y: path.y >> steps)
             do {
                 let data: Data
                 do {
-                    data = try await TileLoader.data(for: parent, from: source)
+                    data = try await TileLoader.data(for: parent, from: source, session: session)
                 } catch {
                     // One more try for a busy server; a failed tile stays empty until the map reloads it.
-                    try await Task.sleep(for: .seconds(2))
-                    data = try await TileLoader.data(for: parent, from: source)
+                    try await Task.sleep(for: retryDelay)
+                    data = try await TileLoader.data(for: parent, from: source, session: session)
                 }
                 result(steps == 0 ? data : Self.enlarge(data, steps: steps, x: path.x, y: path.y, size: source.tileSize), nil)
                 await MainActor.run { [weak self] in

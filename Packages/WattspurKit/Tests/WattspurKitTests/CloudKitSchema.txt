@@ -1,0 +1,102 @@
+# The CloudKit schema in production (rule 2 in docs/ARCHITECTURE.md, B-353): Type.field | data type | optional, default or required.
+# CloudKitSchemaTests fails if a line here is missing from the model (renamed, removed or retyped field).
+# Never change or delete a line. After adding a field (optional or with a default), add its line.
+
+Bike.batteryWh | integer 64 | optional
+Bike.colorRawValue | string | default
+Bike.createdAt | date | default
+Bike.driveUnit | string | default
+Bike.id | uuid | default
+Bike.isArchived | boolean | default
+Bike.isEbike | boolean | default
+Bike.kindRawValue | string | default
+Bike.manufacturer | string | default
+Bike.model | string | default
+Bike.name | string | default
+Bike.photoData | binary | optional
+Bike.purchaseDate | date | optional
+Bike.rider | to-one Rider | optional
+Bike.rides | to-many Ride | optional
+Bike.serialNumber | integer 64 | optional
+Bike.sortOrder | integer 64 | default
+Bike.startKilometers | double | default
+Bike.weightKg | double | optional
+Goal.createdAt | date | default
+Goal.id | uuid | default
+Goal.metricRawValue | string | default
+Goal.periodRawValue | string | default
+Goal.target | double | default
+ImportRecord.date | date | default
+ImportRecord.detail | string | default
+ImportRecord.fileName | string | default
+ImportRecord.id | uuid | default
+ImportRecord.movedTo | string | optional
+ImportRecord.outcomeRaw | string | default
+ImportRecord.recordKindsRaw | string | default
+ImportRecord.rideID | uuid | optional
+ImportRecord.sourceRaw | string | default
+Ride.attachedSourceFormat | string | optional
+Ride.attachedSourceName | string | optional
+Ride.averageCadence | integer 64 | optional
+Ride.averagePower | integer 64 | optional
+Ride.averageSpeed | double | optional
+Ride.bestPower1Min | integer 64 | optional
+Ride.bike | to-one Bike | optional
+Ride.curvaturePerKm | double | optional
+Ride.deletedAt | date | optional
+Ride.deviceSerialNumber | integer 64 | optional
+Ride.distance | double | default
+Ride.elapsedTime | double | default
+Ride.id | uuid | default
+Ride.importedAt | date | default
+Ride.isSample | boolean | default
+Ride.maxAltitude | double | optional
+Ride.maxCadence | integer 64 | optional
+Ride.maxPower | integer 64 | optional
+Ride.maxSpeed | double | optional
+Ride.mergedInto | to-one Ride | optional
+Ride.minAltitude | double | optional
+Ride.name | string | default
+Ride.overviewRouteData | binary | optional
+Ride.overviewRouteVersion | integer 64 | default
+Ride.parserVersion | integer 64 | default
+Ride.parts | to-many Ride | optional
+Ride.peakPowerVersion | integer 64 | default
+Ride.rider | to-one Rider | optional
+Ride.samplesData | binary | optional
+Ride.sourceFile | to-one SourceFile | optional
+Ride.sourceFormat | string | default
+Ride.sourceIdentifier | string | default
+Ride.sportRawValue | string | optional
+Ride.startDate | date | default
+Ride.steepestClimb | double | optional
+Ride.steepestDescent | double | optional
+Ride.summaryEstimatedFromGPS | boolean | default
+Ride.timeZoneIdentifier | string | optional
+Ride.timerTime | double | default
+Ride.totalAscent | integer 64 | optional
+Ride.totalDescent | integer 64 | optional
+Ride.trackFiguresVersion | integer 64 | default
+Ride.workKilojoules | double | default
+Rider.activeBikeID | uuid | optional
+Rider.bikes | to-many Bike | optional
+Rider.birthYear | integer 64 | optional
+Rider.createdAt | date | default
+Rider.heightCm | double | optional
+Rider.id | uuid | default
+Rider.name | string | default
+Rider.photoData | binary | optional
+Rider.rides | to-many Ride | optional
+Rider.sexRawValue | string | default
+Rider.weightKg | double | optional
+RouteGroup.createdAt | date | default
+RouteGroup.id | uuid | default
+RouteGroup.includeReverse | boolean | default
+RouteGroup.name | string | default
+RouteGroup.referenceRideID | uuid | optional
+RouteGroup.referenceRouteData | binary | optional
+RouteGroup.threshold | double | default
+SourceFile.data | binary | optional
+SourceFile.fileName | string | default
+SourceFile.id | uuid | default
+SourceFile.ride | to-one Ride | optional

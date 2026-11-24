@@ -160,6 +160,12 @@ if grep -rnE '\.save\(\)' Packages/WattspurKit/Sources \
     echo "architecture: save the library with LibrarySave.save(_:), not context.save() (see docs/ARCHITECTURE.md, rule 10)" >&2
     exit 1
 fi
+# Rule 10, reading (B-354, S-36): `try? context.fetch` would turn a failed read into "nothing found";
+# the package reads through LibraryFetch (`fetch(_:)` in a service), which logs and counts it.
+if grep -rnE 'try\?.*\.fetch(Count)?\(' Packages/WattspurKit/Sources; then
+    echo "architecture: read the library with fetch(_:) or LibraryFetch, not try? context.fetch (see docs/ARCHITECTURE.md, rule 10)" >&2
+    exit 1
+fi
 
 # Rule 11: the three iPhone targets take version and signing from Config/iOS.xcconfig, so app and
 # extensions keep one version (R-04, S-09). awk prints the target names whose configFiles differ.

@@ -46,7 +46,15 @@ struct ImportService: LibraryService {
         }
 
         let names = Self.parseFileName(fileName)
-        if detectDuplicates, let existing = findDuplicate(sourceIdentifier: names.sourceIdentifier, parsed: parsed) {
+        // A library that cannot be read must not look empty here: the file would come in a second
+        // time (B-354). It is not imported; the log and the diagnostic report have the reason.
+        let duplicate: Ride?
+        do {
+            duplicate = detectDuplicates ? try findDuplicate(sourceIdentifier: names.sourceIdentifier, parsed: parsed) : nil
+        } catch {
+            return ImportResult(fileName: fileName, outcome: .failed(.libraryUnreadable(String(describing: error))))
+        }
+        if let existing = duplicate {
             var result = ImportResult(fileName: fileName, outcome: .duplicate(existingRideID: existing.id))
             // A ride thrown away by mistake and imported again comes back, instead of "already there"
             // for a ride nobody sees that is deleted for good after 30 days (R-44).
@@ -193,7 +201,7 @@ struct ImportService: LibraryService {
                 let descriptor = FetchDescriptor<Ride>(predicate: #Predicate {
                     $0.sourceFormat == format && $0.parserVersion < version
                 })
-                let outdated = (try? context.fetch(descriptor)) ?? []
+                let outdated = fetch(descriptor)
                 for start in stride(from: 0, to: outdated.count, by: max(1, batchSize)) {
                     let batch = Array(outdated[start..<min(start + max(1, batchSize), outdated.count)])
                     let files = batch.map { $0.sourceFile?.data }
@@ -231,7 +239,7 @@ struct ImportService: LibraryService {
                                       progress: (_ done: Int, _ total: Int) -> Void = { _, _ in }) async -> Int {
         let version = OverviewRoute.version
         let descriptor = FetchDescriptor<Ride>(predicate: #Predicate { $0.overviewRouteVersion < version })
-        let outdated = (try? context.fetch(descriptor)) ?? []
+        let outdated = fetch(descriptor)
         guard !outdated.isEmpty else { return 0 }
         // Parts first: a merged ride is put together from its parts' routes.
         let single = outdated.filter { !$0.isMerged }
@@ -271,7 +279,7 @@ struct ImportService: LibraryService {
                           progress: (_ done: Int, _ total: Int) -> Void = { _, _ in }) async -> Int {
         let version = PeakPower.version
         let descriptor = FetchDescriptor<Ride>(predicate: #Predicate { $0.peakPowerVersion < version })
-        let outdated = (try? context.fetch(descriptor)) ?? []
+        let outdated = fetch(descriptor)
         guard !outdated.isEmpty else { return 0 }
         // Parts first: a merged ride takes the best of its parts.
         let single = outdated.filter { !$0.isMerged }
@@ -312,7 +320,7 @@ struct ImportService: LibraryService {
                           progress: (_ done: Int, _ total: Int) -> Void = { _, _ in }) async -> Int {
         let version = TrackFigures.version
         let descriptor = FetchDescriptor<Ride>(predicate: #Predicate { $0.trackFiguresVersion < version })
-        let outdated = (try? context.fetch(descriptor)) ?? []
+        let outdated = fetch(descriptor)
         guard !outdated.isEmpty else { return 0 }
         var done = 0
         progress(0, outdated.count)
@@ -355,17 +363,18 @@ struct ImportService: LibraryService {
         return ride
     }
 
-    private func findDuplicate(sourceIdentifier: String?, parsed: ParsedRide) -> Ride? {
+    /// The ride `parsed` is already in the library as; throws when the library cannot be read.
+    private func findDuplicate(sourceIdentifier: String?, parsed: ParsedRide) throws -> Ride? {
         if let sourceIdentifier {
             var descriptor = FetchDescriptor<Ride>(predicate: #Predicate { $0.sourceIdentifier == sourceIdentifier })
             descriptor.fetchLimit = 1
-            if let match = try? context.fetch(descriptor).first { return match }
+            if let match = try fetchOrThrow(descriptor).first { return match }
         }
         let from = parsed.startDate.addingTimeInterval(-1)
         let to = parsed.startDate.addingTimeInterval(1)
         let distance = parsed.summary.distance
         let descriptor = FetchDescriptor<Ride>(predicate: #Predicate { $0.startDate >= from && $0.startDate <= to })
-        return (try? context.fetch(descriptor))?.first { abs($0.distance - distance) < 1 }
+        return try fetchOrThrow(descriptor).first { abs($0.distance - distance) < 1 }
     }
 
     /// Splits a Bosch export name like "Reinheim Rundfahrt-5e1f0c2a-7b3d-4c8e-9a61-2f4d8b0c3e57.fit"
@@ -401,7 +410,7 @@ struct ImportService: LibraryService {
         let descriptor = FetchDescriptor<Ride>(predicate: #Predicate {
             $0.startDate >= from && $0.startDate <= to && !$0.isSample && $0.deletedAt == nil
         })
-        let candidates = ((try? context.fetch(descriptor)) ?? [])
+        let candidates = fetch(descriptor)
             .filter { $0.mergedInto == nil && !$0.isMerged }
             .filter { bike == nil || $0.bike == nil || $0.bike?.id == bike?.id }
             .filter { !onlyCycling || $0.sport == .cycling }
@@ -435,7 +444,7 @@ struct ImportService: LibraryService {
             $0.deviceSerialNumber == number && $0.deletedAt == nil && !$0.isSample
         }, sortBy: [SortDescriptor(\.startDate, order: .reverse)])
         descriptor.fetchLimit = 20
-        let found = ((try? context.fetch(descriptor)) ?? []).lazy.compactMap(\.bike).first
+        let found = fetch(descriptor).lazy.compactMap(\.bike).first
         guard let found, !found.isArchived, found.kind.sport == .cycling else { return nil }
         return found
     }

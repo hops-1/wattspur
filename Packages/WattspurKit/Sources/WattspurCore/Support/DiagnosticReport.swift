@@ -59,6 +59,8 @@ public struct DiagnosticReport: Sendable {
     public var libraryError: String?
     /// Rides met since the app started whose stored time series cannot be read (B-268).
     public var damagedTimeSeries: Int
+    /// Failed reads of the library since the app started, by model type ("Ride" → 2; B-354).
+    public var failedReads: [String: Int]
 
     public init(appVersion: String, build: String, commit: String,
                 parserVersion: Int = FITRideImporter.parserVersion,
@@ -69,7 +71,7 @@ public struct DiagnosticReport: Sendable {
                 rideCount: Int, trashedRideCount: Int, ridesByParserVersion: [Int: Int],
                 gpxRidesByParserVersion: [Int: Int] = [:],
                 importLog: [ImportLogEntry], createdAt: Date = .now, libraryError: String? = nil,
-                damagedTimeSeries: Int = 0) {
+                damagedTimeSeries: Int = 0, failedReads: [String: Int] = [:]) {
         self.appVersion = appVersion
         self.build = build
         self.commit = commit
@@ -86,6 +88,7 @@ public struct DiagnosticReport: Sendable {
         self.createdAt = createdAt
         self.libraryError = libraryError.map { Self.withoutHome($0) }
         self.damagedTimeSeries = damagedTimeSeries
+        self.failedReads = failedReads
     }
 
     /// The system the app runs on; iPadOS reports as "iOS" like the version string.
@@ -110,6 +113,11 @@ public struct DiagnosticReport: Sendable {
         return "Library: could not be opened: \(libraryError)"
     }
 
+    private var failedReadsLine: String {
+        let counts = failedReads.keys.sorted().map { "\($0): \(failedReads[$0] ?? 0)" }
+        return "Failed reads of the library (since launch): " + (counts.isEmpty ? "–" : counts.joined(separator: ", "))
+    }
+
     /// Plain text, English on purpose so the developer can read every report.
     public var text: String {
         let iso = ISO8601DateFormatter()
@@ -126,6 +134,7 @@ public struct DiagnosticReport: Sendable {
             libraryLine,
             "Rides: \(rideCount) (in trash: \(trashedRideCount))",
             "Rides with an unreadable time series (met since launch): \(damagedTimeSeries)",
+            failedReadsLine,
             "Rides by parser version: " + (ridesByParserVersion.isEmpty ? "–" :
                 ridesByParserVersion.keys.sorted().map { "v\($0): \(ridesByParserVersion[$0] ?? 0)" }.joined(separator: ", ")),
             "GPX rides by parser version: " + (gpxRidesByParserVersion.isEmpty ? "–" :

@@ -44,6 +44,6 @@ extension LibraryService {
     func ride(withID id: UUID) -> Ride? {
         var descriptor = FetchDescriptor<Ride>(predicate: #Predicate { $0.id == id })
         descriptor.fetchLimit = 1
-        return try? context.fetch(descriptor).first
+        return fetch(descriptor).first
     }
 }

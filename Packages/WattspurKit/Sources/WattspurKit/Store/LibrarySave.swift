@@ -1,6 +1,7 @@
 import Foundation
 import os
 import SwiftData
+import Synchronization
 
 /// Saving the library in one place (R-31). A failed save (disk full, a broken store) used to be
 /// swallowed by `try?`, and the change was gone after the next start without a word. Now it is
@@ -15,6 +16,7 @@ public enum LibrarySave {
     @MainActor @discardableResult
     public static func save(_ context: ModelContext) -> Bool {
         do {
+            if failing.withLock({ $0.contains(ObjectIdentifier(context).hashValue) }) { throw InjectedFailure() }
             try context.save()
             return true
         } catch {
@@ -24,4 +26,20 @@ public enum LibrarySave {
             return false
         }
     }
+
+    // MARK: Tests (B-359)
+
+    private static let failing = Mutex<Set<Int>>([])
+
+    struct InjectedFailure: LocalizedError {
+        var errorDescription: String? { "The disk is full (test)." }
+    }
+
+    /// Only for tests: saving `context` fails until `reset()`.
+    static func failSaves(of context: ModelContext) {
+        failing.withLock { _ = $0.insert(ObjectIdentifier(context).hashValue) }
+    }
+
+    /// Only for tests.
+    static func reset() { failing.withLock { $0.removeAll() } }
 }
