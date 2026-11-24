@@ -28,6 +28,18 @@ struct DrivingPanelTests {
         #expect(panel == DrivingPanel(state: .idle))
     }
 
+    @Test("A ride the app could not finish: the panel offers it with its distance, not a new start (B-383)")
+    func unfinished() {
+        let panel = DrivingPanel(recording: nil, unfinished: Self.drive(.without(.car)), at: Self.start.addingTimeInterval(600))
+        #expect(panel.state == .unfinished)
+        #expect(abs(panel.distance - 1200) < 5)
+        #expect(panel.speed == 0)
+        // Once it goes on, the recording counts.
+        let going = DrivingPanel(recording: Self.drive(.without(.car)), unfinished: nil, at: Self.start.addingTimeInterval(61))
+        #expect(going.state == .recording)
+        #expect(going.needsRefresh(since: panel, shownAt: Self.start.addingTimeInterval(60), at: Self.start.addingTimeInterval(61)))
+    }
+
     @Test("A car shows speed, time, distance and the lateral acceleration of the last position")
     func car() {
         let panel = DrivingPanel(recording: Self.drive(.without(.car)), at: Self.start.addingTimeInterval(61))

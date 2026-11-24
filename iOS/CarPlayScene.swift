@@ -79,7 +79,7 @@ final class CarPlaySceneDelegate: UIResponder, CPTemplateApplicationSceneDelegat
     private func refresh(force: Bool = false) {
         guard let panelTemplate else { return }
         let now = Date.now
-        let panel = DrivingPanel(recording: Self.recorder?.recording, at: now)
+        let panel = DrivingPanel(recording: Self.recorder?.recording, unfinished: Self.recorder?.unfinished, at: now)
         guard force || panel.needsRefresh(since: shown, shownAt: shownAt, at: now) else { return }
         shown = panel
         shownAt = now
@@ -91,6 +91,8 @@ final class CarPlaySceneDelegate: UIResponder, CPTemplateApplicationSceneDelegat
         switch panel.state {
         case .idle:
             return [CPInformationItem(title: String(localized: "Vehicle"), detail: nextVehicle.name(in: devices))]
+        case .unfinished:
+            return [CPInformationItem(title: String(localized: "Unfinished Ride"), detail: RideFormat.distance(panel.distance))]
         case .ready:
             return [CPInformationItem(title: String(localized: "Ready"), detail: String(localized: "Waiting for the vehicle to move"))]
         case .recording, .paused:
@@ -122,6 +124,12 @@ final class CarPlaySceneDelegate: UIResponder, CPTemplateApplicationSceneDelegat
                     self?.showVehicles()
                 },
             ]
+        case .unfinished:
+            // Only continue: a new start would throw the ride away. Ending it is asked on the iPhone.
+            return [CPTextButton(title: String(localized: "Continue Recording"), textStyle: .confirm) { [weak self] _ in
+                Self.recorder?.continueUnfinished()
+                self?.refresh(force: true)
+            }]
         case .ready:
             return [CPTextButton(title: String(localized: "Cancel"), textStyle: .cancel) { [weak self] _ in
                 Self.recorder?.cancelReady()

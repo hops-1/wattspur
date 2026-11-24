@@ -34,6 +34,11 @@ final class RecordingDiagnostics {
         if health.isDue(at: now) { writeLine(at: now, isVisible: isVisible) }
     }
 
+    /// A comment line, e.g. that the ride went on after iOS ended the app (B-383); never a place.
+    func note(_ text: String) {
+        try? file.write(contentsOf: Data("# \(text)\n".utf8))
+    }
+
     func stop(isVisible: Bool) {
         writeLine(at: .now, isVisible: isVisible)
         try? file.close()

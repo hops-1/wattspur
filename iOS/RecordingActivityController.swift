@@ -13,16 +13,48 @@ final class RecordingActivityController {
     /// Seconds between two updates while riding.
     private static let interval: TimeInterval = 5
 
+    /// Activities left over from a crash or from iOS ending the app. Only those there at launch:
+    /// Siri may start a ride with the app closed, and its new activity must stay (R-54).
+    private var leftOver: [String]
+
     init() {
-        // An activity left over from a crash or a killed app shows nothing true any more. Only those
-        // there now: Siri may start a ride with the app closed, and its new activity must stay (R-54).
-        let leftOver = Set(Activity<RecordingAttributes>.activities.map(\.id))
-        guard !leftOver.isEmpty else { return }
+        leftOver = Activity<RecordingAttributes>.activities.map(\.id)
+    }
+
+    /// The leftovers show nothing true any more: ended, when the ride is not continued at once.
+    func endLeftOver() {
+        let ids = Set(leftOver)
+        leftOver = []
+        guard !ids.isEmpty else { return }
         Task.detached {
-            for activity in Activity<RecordingAttributes>.activities where leftOver.contains(activity.id) {
+            for activity in Activity<RecordingAttributes>.activities where ids.contains(activity.id) {
                 await activity.end(nil, dismissalPolicy: .immediate)
             }
         }
+    }
+
+    /// The ride goes on after iOS ended the app (B-383): its activity is still on the Lock Screen
+    /// and in CarPlay, and is taken over and brought up to date. A new one only if none is left,
+    /// which works only with the app in front; else `start(_:)` follows when it comes to the front.
+    func resume(_ recording: RideRecording) {
+        guard activity == nil else { return }
+        let ids = leftOver
+        leftOver = []
+        guard let kept = Activity<RecordingAttributes>.activities.first(where: { ids.contains($0.id) }) else {
+            start(recording)
+            return
+        }
+        activity = kept
+        let others = Set(ids).subtracting([kept.id])
+        if !others.isEmpty {
+            Task.detached {
+                for activity in Activity<RecordingAttributes>.activities where others.contains(activity.id) {
+                    await activity.end(nil, dismissalPolicy: .immediate)
+                }
+            }
+        }
+        lastState = nil
+        update(recording, force: true)
     }
 
     func start(_ recording: RideRecording) {
