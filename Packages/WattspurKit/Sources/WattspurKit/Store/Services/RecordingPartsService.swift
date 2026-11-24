@@ -133,7 +133,7 @@ struct RecordingPartsService: LibraryService {
         let descriptor = FetchDescriptor<Ride>(predicate: #Predicate {
             $0.startDate >= from && $0.startDate <= to && $0.deletedAt == nil && !$0.isSample
         })
-        let covering = ((try? context.fetch(descriptor)) ?? []).first { candidate in
+        let covering = fetch(descriptor).first { candidate in
             guard candidate.source == .fit, candidate.attachedSourceFormat == nil,
                   candidate.mergedInto == nil, !candidate.isMerged,
                   Self.mayEnd(candidate, after: span.upperBound) else { return false }
@@ -152,7 +152,7 @@ struct RecordingPartsService: LibraryService {
         let descriptor = FetchDescriptor<Ride>(predicate: #Predicate {
             $0.startDate >= from && $0.startDate <= to && $0.deletedAt == nil && !$0.isSample
         }, sortBy: [SortDescriptor(\.startDate)])
-        return ((try? context.fetch(descriptor)) ?? []).filter { candidate in
+        return fetch(descriptor).filter { candidate in
             guard candidate.id != ride.id, candidate.source == .gpx, candidate.attachedSourceFormat == nil,
                   candidate.mergedInto == nil, !candidate.isMerged, Self.mayEnd(candidate, before: to) else { return false }
             let span = Self.span(of: candidate)
@@ -209,7 +209,7 @@ struct RecordingPartsService: LibraryService {
         let descriptor = FetchDescriptor<Ride>(predicate: #Predicate {
             $0.startDate >= from && $0.startDate <= to && $0.deletedAt == nil && !$0.isSample
         })
-        return ((try? context.fetch(descriptor)) ?? []).first { candidate in
+        return fetch(descriptor).first { candidate in
             guard candidate.source == .gpx, candidate.attachedSourceFormat == nil,
                   candidate.mergedInto == nil, !candidate.isMerged,
                   Self.mayEnd(candidate, after: span.upperBound) else { return false }
@@ -246,7 +246,7 @@ struct RecordingPartsService: LibraryService {
         let descriptor = FetchDescriptor<Ride>(predicate: #Predicate {
             $0.startDate >= from && $0.startDate <= to && $0.deletedAt == nil && !$0.isSample
         }, sortBy: [SortDescriptor(\.startDate)])
-        return ((try? context.fetch(descriptor)) ?? []).filter { ride in
+        return fetch(descriptor).filter { ride in
             guard ride.id != recording.id, Self.isBosch(ride), Self.mayEnd(ride, after: window.lowerBound)
             else { return false }
             let span = Self.span(of: ride)

@@ -11,9 +11,6 @@ struct RecordsContent: View {
     var sport: Sport = .cycling
     var onOpenRides: ([UUID]) -> Void = { _ in }
 
-    /// A record set by a ride imported in the last week is marked "New".
-    private static let newForDays = 7.0
-
     var body: some View {
         VStack(alignment: .leading, spacing: 22) {
             VStack(alignment: .leading, spacing: 4) {
@@ -48,8 +45,7 @@ struct RecordsContent: View {
     }
 
     private func isNew(_ record: RideRecord) -> Bool {
-        let since = Date.now.addingTimeInterval(-Self.newForDays * 86_400)
-        return record.rideIDs.contains { (rides[$0]?.importedAt ?? .distantPast) > since }
+        record.isNew { rides[$0]?.importedAt }
     }
 
     private func card(_ record: RideRecord) -> some View {

@@ -27,7 +27,8 @@ struct DiagnosticsView: View {
             ridesByParserVersion: byParser,
             gpxRidesByParserVersion: gpxByParser,
             importLog: records.prefix(200).reversed().map(\.logEntry),
-            damagedTimeSeries: TimeSeriesDamage.count
+            damagedTimeSeries: TimeSeriesDamage.count,
+            failedReads: LibraryFetch.failures
         )
     }
 

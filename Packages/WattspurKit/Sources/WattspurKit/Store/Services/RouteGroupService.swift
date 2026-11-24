@@ -38,13 +38,13 @@ struct RouteGroupService: LibraryService {
     }
 
     func groups() -> [RouteGroup] {
-        RouteGroup.sorted((try? context.fetch(FetchDescriptor<RouteGroup>())) ?? [])
+        RouteGroup.sorted(fetch(FetchDescriptor<RouteGroup>()))
     }
 
     func group(withID id: UUID) -> RouteGroup? {
         var descriptor = FetchDescriptor<RouteGroup>(predicate: #Predicate { $0.id == id })
         descriptor.fetchLimit = 1
-        return try? context.fetch(descriptor).first
+        return fetch(descriptor).first
     }
 
     /// Saves the route of `ride` as a route with `name`. `nil` for an empty name, or a ride whose

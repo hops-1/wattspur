@@ -50,7 +50,7 @@ struct SyncMergeService: LibraryService {
 
     /// There is one rider: the oldest stays and takes the rides, bikes and what the others know.
     private func mergeRiders() -> Int {
-        let riders = ((try? context.fetch(FetchDescriptor<Rider>())) ?? []).sorted(by: Self.older)
+        let riders = fetch(FetchDescriptor<Rider>()).sorted(by: Self.older)
         guard let keeper = riders.first, riders.count > 1 else { return 0 }
         for other in riders.dropFirst() {
             for ride in other.rides ?? [] { ride.rider = keeper }
@@ -76,7 +76,7 @@ struct SyncMergeService: LibraryService {
     /// goes if an older open bike exists: the user has named theirs, so the names differ.
     private func mergeBikes() -> Int {
         var removed = 0
-        let all = ((try? context.fetch(FetchDescriptor<Bike>())) ?? []).sorted(by: Self.older)
+        let all = fetch(FetchDescriptor<Bike>()).sorted(by: Self.older)
         let groups = Dictionary(grouping: all, by: mergeKey)
         var gone = Set<UUID>()
         for (key, bikes) in groups where key != nil && bikes.count > 1 {
@@ -129,7 +129,7 @@ struct SyncMergeService: LibraryService {
 
     /// One goal per measure and period: the oldest stays with its target.
     private func mergeGoals() -> Int {
-        let goals = ((try? context.fetch(FetchDescriptor<Goal>())) ?? [])
+        let goals = fetch(FetchDescriptor<Goal>())
         var removed = 0
         for group in Dictionary(grouping: goals, by: { "\($0.metricRawValue)|\($0.periodRawValue)" }).values where group.count > 1 {
             for other in group.sorted(by: { Self.older($0.createdAt, $0.id, $1.createdAt, $1.id) }).dropFirst() {
@@ -146,7 +146,7 @@ struct SyncMergeService: LibraryService {
     /// The ride imported first stays. Merged rides and their parts are left alone; the user decides there.
     private func mergeRides() -> Int {
         let descriptor = FetchDescriptor<Ride>(predicate: #Predicate { $0.mergedInto == nil && !$0.isSample })
-        let rides = ((try? context.fetch(descriptor)) ?? []).filter { !$0.isMerged }
+        let rides = fetch(descriptor).filter { !$0.isMerged }
         var removed = 0
         for group in Dictionary(grouping: rides, by: Self.syncKey).values where group.count > 1 {
             let sorted = group.sorted { Self.older($0.importedAt, $0.id, $1.importedAt, $1.id) }
