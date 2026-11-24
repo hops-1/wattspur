@@ -201,16 +201,7 @@ struct YearHeatmap: View {
     }
 
     /// The first Monday on or before 1 January, then whole weeks to 31 December.
-    private var weeks: [[Date?]] {
-        guard let first = calendar.date(from: DateComponents(year: year, month: 1, day: 1)),
-              let next = calendar.date(from: DateComponents(year: year + 1, month: 1, day: 1)) else { return [] }
-        let lead = (calendar.component(.weekday, from: first) - calendar.firstWeekday + 7) % 7
-        let dayCount = calendar.dateComponents([.day], from: first, to: next).day ?? 365
-        var cells: [Date?] = Array(repeating: nil, count: lead)
-        for offset in 0..<dayCount { cells.append(calendar.date(byAdding: .day, value: offset, to: first)) }
-        while cells.count % 7 != 0 { cells.append(nil) }
-        return stride(from: 0, to: cells.count, by: 7).map { Array(cells[$0..<$0 + 7]) }
-    }
+    private var weeks: [[Date?]] { HeatmapCalendar.weeks(year: year, calendar: calendar) }
 
     private func grid(cell: CGFloat) -> some View {
         let byDay = Dictionary(days.map { ($0.date, $0) }, uniquingKeysWith: { a, _ in a })
@@ -254,8 +245,7 @@ struct YearHeatmap: View {
 
     /// The month's short name in the column that holds its first day.
     private func monthLabel(_ week: [Date?]) -> String? {
-        guard let first = week.compactMap({ $0 }).first(where: { calendar.component(.day, from: $0) == 1 }) else { return nil }
-        return calendar.shortMonthSymbols[calendar.component(.month, from: first) - 1]
+        HeatmapCalendar.monthStarting(in: week, calendar: calendar).map { calendar.shortMonthSymbols[$0 - 1] }
     }
 
     @ViewBuilder
