@@ -44,6 +44,7 @@ Zu jeder Story steht hier kurz: **was** gebaut wurde, **warum** so und **welche 
 | [38](38-robuster.md) | Robuster: Schema-Abdruck im Test, Lesefehler statt `try?`, Test-Server für Kartenkacheln, Kopieren in der Teilen-Erweiterung, Link der Live-Aktivität für CarPlay | B-353 bis B-361, B-379 |
 | [39](39-kein-neuladen-bei-aufnahme.md) | Kein Neuladen während der Aufnahme: Watchdog `0x8BADF00D`, Auslöser im sysdiagnose, `ReloadHold` | B-380 |
 | [40](40-leichter-im-hintergrund.md) | Leichter im Hintergrund: `LibraryReading` und `@ModelActor`, Speicher messen mit `footprint`, Karte im Hintergrund abbauen | B-381, B-382 |
+| [41](41-weiter-nach-abbruch.md) | Weiter nach dem Abbruch: Speicherberichte von iOS lesen, Aufnahme beim Start fortsetzen, Live-Aktivität übernehmen, CarPlay Simulator mit dem iPhone am Kabel | B-383, B-384 |
 
 **Begriffe, die oft vorkommen**
 - **Swift Package (`WattspurKit`)**: ein eigenständiges Code-Modul ohne Oberfläche. Es lässt sich mit `swift test` allein testen und später unverändert in der iOS-App nutzen.

@@ -7,8 +7,18 @@ Every DMG handed out to testers corresponds to one entry below.
 
 ## [Unreleased]
 
-- iPhone: after iOS ends Wattspur during a ride (for example when memory runs low), a ride from the last 15 minutes goes on by itself at the next start, also in the background; CarPlay offers only “Continue Recording” for an older one (B-383).
-- iPhone: the link on the Live Activity from 1.6.6 is removed. A tap on the Wattspur tile in CarPlay opens nothing, because Apple keeps Live Activities in CarPlay non-interactive; the handbook and FAQ now say so (B-379, B-384).
+## [iOS 1.6.9] – 2026-11-24
+
+On after an abort: when iOS ends Wattspur during a ride, the recording goes on by itself. iPhone and iPad 1.6.9 (50); the Mac stays 1.10.5.
+
+### Changed
+- iPhone: after iOS ends Wattspur during a ride (for example when memory runs low with CarPlay, navigation and the camera), a ride from the last 15 minutes goes on by itself at the next start, also in the background. The Live Activity stays, no pause is added, and positions iOS kept meanwhile join the ride (B-383).
+- iPhone: an auto-started ride that went on after an abort still ends by itself when the vehicle stands (B-383).
+- CarPlay: for a ride the app could not finish, CarPlay offers only “Continue Recording”. Before, “Start Ride” there would have thrown it away (B-383).
+- The health log in the folder “Diagnose” notes when a ride went on after an abort, with the gap in seconds and no place (B-383).
+
+### Removed
+- iPhone: the link on the Live Activity from 1.6.6. A tap on the Wattspur tile in CarPlay opens nothing, because Apple keeps Live Activities in CarPlay non-interactive. The widget “This Week” left of the Dashboard opens Wattspur in CarPlay; the handbook and FAQ now say so (B-379, B-384).
 
 ## [iOS 1.6.8] – 2026-11-24
 
