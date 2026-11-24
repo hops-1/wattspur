@@ -17,10 +17,24 @@ struct RecordingMapView: View {
     var center: CLLocationCoordinate2D?
     @Environment(\.colorScheme) private var colorScheme
     @Environment(\.scenePhase) private var scenePhase
+    /// The zoom the rider chose, kept while the map is taken down in the background.
+    @State private var distance = RecordingMapZoom.standardDistance
 
     var body: some View {
+        // In the background the map is taken down and gives its memory back (B-382): with its tiles it
+        // was the largest part of the app, and iOS ends the app that holds the most when the camera
+        // needs memory (B-380). It comes back with the rider's zoom when the app is in front again.
+        if scenePhase == .background {
+            Color(.systemBackground)
+        } else {
+            map
+        }
+    }
+
+    private var map: some View {
         RecordingMapRepresentable(mapType: mapType, segments: segments, colouring: colouring,
-                                  heading: heading, center: center, dark: colorScheme == .dark, phase: scenePhase)
+                                  heading: heading, center: center, dark: colorScheme == .dark, phase: scenePhase,
+                                  distance: $distance)
             .overlay(alignment: .bottomTrailing) {
                 // At the bottom right as on every other map; the buttons and the legend leave room for it.
                 if let source = mapType.tileSource {
@@ -41,8 +55,10 @@ private struct RecordingMapRepresentable: UIViewRepresentable {
     let dark: Bool
     /// Only here so the map draws at once when the app comes back, also standing without a new position.
     let phase: ScenePhase
+    /// The rider's zoom in metres from the ground; kept outside the map, which is rebuilt.
+    @Binding var distance: Double
 
-    func makeCoordinator() -> Coordinator { Coordinator() }
+    func makeCoordinator() -> Coordinator { Coordinator(distance: $distance) }
 
     func makeUIView(context: Context) -> MKMapView {
         let map = MKMapView()
@@ -89,8 +105,17 @@ private struct RecordingMapRepresentable: UIViewRepresentable {
         private var pieces: [String: (end: Int, last: CLLocationCoordinate2D?, overlay: RideRouteOverlay)] = [:]
         private var style: String?
         private var lastDraw = Date.distantPast
-        /// The zoom the rider chose, in metres from the ground, kept while the map turns.
-        private var distance = RecordingMapZoom.standardDistance
+        /// The zoom the rider chose, in metres from the ground, kept while the map turns and while it is
+        /// taken down in the background (B-382).
+        private var zoom: Binding<Double>
+        private var distance: Double {
+            get { zoom.wrappedValue }
+            set { if zoom.wrappedValue != newValue { zoom.wrappedValue = newValue } }
+        }
+
+        init(distance: Binding<Double>) {
+            zoom = distance
+        }
         private var turned = false
         private var lastTurn: (heading: Double, latitude: Double, longitude: Double)?
 
@@ -153,7 +178,8 @@ private struct RecordingMapRepresentable: UIViewRepresentable {
                 // North up, still showing the whole world (B-363): after a crash the recording goes on
                 // before MapKit's follow mode zooms in, and the map stayed that wide. Zoom to the position.
                 if !turned, let center, RecordingMapZoom.showsTooMuch(map.camera.centerCoordinateDistance) {
-                    map.setCamera(MKMapCamera(lookingAtCenter: center, fromDistance: RecordingMapZoom.standardDistance,
+                    // The rider's zoom when the map comes back from the background (B-382).
+                    map.setCamera(MKMapCamera(lookingAtCenter: center, fromDistance: distance,
                                               pitch: 0, heading: 0), animated: false)
                     map.setUserTrackingMode(.follow, animated: false)
                 }
@@ -183,8 +209,10 @@ private struct RecordingMapRepresentable: UIViewRepresentable {
         }
 
         func mapView(_ mapView: MKMapView, regionDidChangeAnimated animated: Bool) {
-            // The world view of a fresh map is not a zoom the rider chose (B-363).
-            distance = RecordingMapZoom.distance(mapView.camera.centerCoordinateDistance)
+            // The world view of a fresh map is not a zoom the rider chose (B-363); it keeps the last one,
+            // also the one from before the map was taken down in the background (B-382).
+            let current = mapView.camera.centerCoordinateDistance
+            if !RecordingMapZoom.showsTooMuch(current) { distance = current }
         }
 
         func mapView(_ mapView: MKMapView, rendererFor overlay: any MKOverlay) -> MKOverlayRenderer {

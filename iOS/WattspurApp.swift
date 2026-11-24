@@ -31,6 +31,9 @@ struct WattspurApp: App {
     @State private var backup = PhoneBackup()
     /// What happened to a backup staged for this start (B-302).
     @State private var launchRestore: PhoneBackup.LaunchResult?
+    /// Whether the recording covers the screen; until then the tabs stay, so its cover slides in
+    /// over them (B-382).
+    @State private var recordingCovers = false
 
     /// Kept here: the notification center holds its delegate weakly.
     private static var notifications: NotificationRouter?
@@ -166,11 +169,21 @@ struct WattspurApp: App {
     }
 
     private var mainView: some View {
-        // On an iPad in the regular width a sidebar instead of the tabs (B-292).
-        RootLayout {
-            tabs
-        } pad: {
-            PadRootView(tab: $tab, rideFilter: $rideFilter, openedRideID: $openedRideID)
+        Group {
+            // Under the recording nothing is built (B-382): every map of the tabs (overview, map,
+            // an open ride) cost about 50 MB, and iOS ends the app that holds the most when the
+            // camera needs memory (B-380). When the ride ends the tabs come back on the same tab,
+            // without the pages that were open.
+            if recorder.isRecording && recordingCovers {
+                Color(.systemBackground).ignoresSafeArea()
+            } else {
+                // On an iPad in the regular width a sidebar instead of the tabs (B-292).
+                RootLayout {
+                    tabs
+                } pad: {
+                    PadRootView(tab: $tab, rideFilter: $rideFilter, openedRideID: $openedRideID)
+                }
+            }
         }
         .tint(.track)
         // A FIT from the Flow app or a GPX from the Files app, shared to or opened with Wattspur; or
@@ -207,6 +220,8 @@ struct WattspurApp: App {
             RecordingView()
                 .environment(library)
                 .environment(recorder)
+                .onAppear { recordingCovers = true }
+                .onDisappear { recordingCovers = false }
         }
         // The folder exchange ended with 0.6 (B-263): who still used it hears it once, with the way to iCloud.
         .alert("The Folder Exchange Has Ended", isPresented: Binding(get: { sync.folderGoneNoticePending && !recorder.isRecording },
