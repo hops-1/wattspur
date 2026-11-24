@@ -7,6 +7,32 @@ Every DMG handed out to testers corresponds to one entry below.
 
 ## [Unreleased]
 
+## [iOS 1.6.6] – 2026-11-24
+
+Sturdier: the rest of the review of 1.6.2, and the CarPlay tile opens the app. iPhone and iPad 1.6.6 (47); with the Mac 1.10.5.
+
+### Fixed
+- iPhone: a tap on the Wattspur tile of the Live Activity in the CarPlay dashboard opens Wattspur in CarPlay with its panel (B-379). Before, nothing happened. On the iPhone a tap opens the app as before.
+- iPhone: sharing several large GPX files at once to Wattspur no longer runs the share extension out of memory: the files are copied, not loaded, and only their first 2 KB are read to tell FIT from GPX (B-361).
+- iPhone and iPad: when the library cannot be read, an import stops with a message instead of adding the ride a second time; failed reads go to the log and the diagnostics report (B-354).
+- iPhone and iPad: without network, a map tile that the server had answered with an error page is no longer shown as a tile (B-360).
+
+### Changed
+- iPhone and iPad: the calendar of the year's heatmap, the month names above it and the "New" mark of records come from the Kit, shared with the Mac (B-356). They look as before.
+- Internal: a test keeps the iCloud schema from changing by accident (B-353), tests for failed saves (B-359) and for the map module (B-360), and the large iPhone files are split (B-357).
+
+## [1.10.5] – 2026-11-24
+
+Sturdier, with iPhone and iPad 1.6.6. No visible change on the Mac.
+
+### Fixed
+- When the library cannot be read, an import stops with a message instead of adding the ride a second time; the diagnostics report lists failed reads since launch (B-354).
+- Without network, a map tile that the server had answered with an error page is no longer shown as a tile (B-360).
+
+### Changed
+- The calendar of the year's heatmap and the "New" mark of records come from the Kit, shared with the iPad (B-356). The Mac looks as before.
+- Internal: tests for the iCloud schema (B-353), failed saves (B-359) and the map module (B-360).
+
 ## [iOS 1.6.5] – 2026-11-22
 
 Recording without overload, and Auto-Start picks the car. iPhone 1.6.5 (46), TestFlight only until the test on the iPhone has passed; the Mac stays 1.10.4.
