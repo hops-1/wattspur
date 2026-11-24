@@ -221,6 +221,8 @@ When the iPhone is connected to the car, Wattspur shows up in CarPlay. It is the
 - **Pause** pauses the ride, **Resume** continues it.
 - **End** asks once more. **Save** saves the ride without the sheet **Save Ride**, with the places and the start time as its name. This also applies to rides under 500 m.
 - **Ready** from auto-start can be ended there with **Cancel**.
+- **The tile on the Dashboard:** While recording, the CarPlay Dashboard shows a tile “Wattspur” with the vehicle's symbol and the distance. It only shows values; tapping it opens nothing. This is how Apple handles Live Activities in CarPlay. Open Wattspur with its icon in the bar on the left. The widget **This Week** is quicker: add it on the iPhone under **Settings › General › CarPlay**, in your car's widgets. It then sits left of the Dashboard, and a tap on it opens Wattspur in CarPlay. A long press shows Apple's menu to remove the tile for this drive. It only hides the tile until the end of the drive; the recording goes on.
+- **After the app was ended** (iPhone 1.6.9 and later): if iOS ends Wattspur during the ride, for example when memory runs low, the recording goes on by itself at the next start. If it was interrupted for more than 15 minutes, the iPhone asks whether to continue, and CarPlay offers only **Continue Recording**.
 - CarPlay has no map and no ride list. You see the ride on the iPhone afterwards.
 
 ## What you ride: bike, motorcycle, car

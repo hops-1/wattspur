@@ -10,7 +10,7 @@ Stories: B-353, B-354, B-356, B-357, B-359, B-360, B-361 und B-379 (iOS 1.6.6 + 
 - **Kalender ins Kit (B-356):** `HeatmapCalendar` baut die Wochen eines Jahres und findet die Monatsanfänge; `RideRecord.isNew` entscheidet über „Neu“.
 - **Dateien teilen (B-357):** zwei große iPhone-Dateien je Abschnitt in eigene Dateien; nur verschoben.
 - **Teilen-Erweiterung (B-361):** `SharedDrop` kopiert Dateien, statt sie zu laden, und liest für den Typ nur 2 KB.
-- **CarPlay-Kachel (B-379):** Die Live-Aktivität hat jetzt einen Link (`widgetURL`). Erst damit öffnet CarPlay die App.
+- **CarPlay-Kachel (B-379):** Die Live-Aktivität hat jetzt einen Link (`widgetURL`). Erst damit öffnet CarPlay die App. **Nachtrag 24.11.2026 (B-384):** Im Auto wirkte der Link nicht. Apple macht Live-Aktivitäten in CarPlay nicht interaktiv (WWDC25 „Turbocharge your app for CarPlay“); in 1.6.9 ist der Link wieder entfernt.
 
 ## Was die Stories gelernt haben
 - **`try?` versteckt mehr als den Fehler.** Ein gescheiterter Abruf sah aus wie „nichts gefunden“. Darum legte der Import eine Fahrt neu an, obwohl sie da war. Ein leeres Ergebnis und ein Fehler sind zwei verschiedene Dinge.

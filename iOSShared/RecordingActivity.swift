@@ -117,14 +117,3 @@ enum ActivityFormat {
                                     numberFormatStyle: .number.precision(.fractionLength(1))))
     }
 }
-
-/// Where a tap on the Live Activity leads. CarPlay opens an app from its Live Activity only
-/// through such a link, and only in the app's CarPlay scene (B-379); on the iPhone the app simply
-/// comes to the front, where the recording already covers everything.
-enum RecordingLink {
-    static let url = URL(string: "wattspur://recording")!
-
-    static func isRecordingURL(_ url: URL) -> Bool {
-        url.scheme?.lowercased() == self.url.scheme && url.host() == self.url.host()
-    }
-}

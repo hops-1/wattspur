@@ -7,6 +7,9 @@ Every DMG handed out to testers corresponds to one entry below.
 
 ## [Unreleased]
 
+- iPhone: after iOS ends Wattspur during a ride (for example when memory runs low), a ride from the last 15 minutes goes on by itself at the next start, also in the background; CarPlay offers only “Continue Recording” for an older one (B-383).
+- iPhone: the link on the Live Activity from 1.6.6 is removed. A tap on the Wattspur tile in CarPlay opens nothing, because Apple keeps Live Activities in CarPlay non-interactive; the handbook and FAQ now say so (B-379, B-384).
+
 ## [iOS 1.6.8] – 2026-11-24
 
 Lighter in the background: the library is read off the main thread, and the maps give memory back during a recording. iPhone and iPad 1.6.8 (49); the Mac stays 1.10.5.
