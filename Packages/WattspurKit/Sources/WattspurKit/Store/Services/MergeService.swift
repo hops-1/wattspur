@@ -168,7 +168,7 @@ struct MergeService: LibraryService {
             let descriptor = FetchDescriptor<Ride>(predicate: #Predicate {
                 $0.deletedAt == nil && $0.mergedInto == nil && !$0.isSample && $0.startDate >= from && $0.startDate <= to
             })
-            for ride in (try? context.fetch(descriptor)) ?? [] { candidates[ride.id] = ride }
+            for ride in fetch(descriptor) { candidates[ride.id] = ride }
         }
         let entries = candidates.values.map { ride in
             RideMergeSuggestion.Entry(

@@ -34,6 +34,6 @@ struct GoalService: LibraryService {
     /// Rides whose start has not been looked up for a time zone yet (B-006).
     func ridesWithoutTimeZone() -> [Ride] {
         let descriptor = FetchDescriptor<Ride>(predicate: #Predicate { $0.timeZoneIdentifier == nil })
-        return (try? context.fetch(descriptor)) ?? []
+        return fetch(descriptor)
     }
 }

@@ -33,7 +33,11 @@ let package = Package(
         // The FIT and GPX files of the tests, shared by both test targets.
         .target(name: "TestFixtures", path: "Tests/TestFixtures", resources: [.copy("Fixtures")]),
         .testTarget(name: "WattspurCoreTests", dependencies: ["WattspurCore", "TestFixtures"]),
-        .testTarget(name: "WattspurKitTests", dependencies: ["WattspurKit", "WattspurCore", "TestFixtures"]),
+        .testTarget(
+            name: "WattspurKitTests", dependencies: ["WattspurKit", "WattspurCore", "TestFixtures"],
+            // The CloudKit schema in production, one line per field (B-353).
+            resources: [.copy("CloudKitSchema.txt")]
+        ),
         .testTarget(name: "WattspurMapTests", dependencies: ["WattspurMap", "WattspurCore"]),
     ]
 )

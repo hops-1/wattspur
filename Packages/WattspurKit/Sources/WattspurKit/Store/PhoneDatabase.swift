@@ -158,13 +158,13 @@ public final class PhoneDatabase {
 
     /// The goals in display order: week, month, year, then km, rides, ascent (as on the Mac).
     public func goals() -> [GoalValue] {
-        Goal.sorted((try? context.fetch(FetchDescriptor<Goal>())) ?? [])
+        Goal.sorted(LibraryFetch.fetchOrEmpty(FetchDescriptor<Goal>(), in: context))
             .map { GoalValue(id: $0.id, metric: $0.metric, period: $0.period, target: $0.target) }
     }
 
     /// Combinations of period and metric that have no goal yet.
     public func freeGoalCombinations() -> [(period: GoalPeriod, metric: GoalMetric)] {
-        Goal.freeCombinations(besides: (try? context.fetch(FetchDescriptor<Goal>())) ?? [])
+        Goal.freeCombinations(besides: LibraryFetch.fetchOrEmpty(FetchDescriptor<Goal>(), in: context))
     }
 
     public func addGoal(metric: GoalMetric, period: GoalPeriod, target: Double) {
@@ -182,7 +182,7 @@ public final class PhoneDatabase {
     }
 
     private func goal(_ id: UUID) -> Goal? {
-        try? context.fetch(FetchDescriptor<Goal>(predicate: #Predicate { $0.id == id })).first
+        LibraryFetch.fetchOrEmpty(FetchDescriptor<Goal>(predicate: #Predicate { $0.id == id }), in: context).first
     }
 
     // MARK: - Reading
@@ -366,7 +366,7 @@ public final class PhoneDatabase {
     }
 
     private func oldestRider() -> Rider? {
-        let riders = (try? context.fetch(FetchDescriptor<Rider>())) ?? []
+        let riders = LibraryFetch.fetchOrEmpty(FetchDescriptor<Rider>(), in: context)
         return riders.min { ($0.createdAt, $0.id.uuidString) < ($1.createdAt, $1.id.uuidString) }
     }
 
@@ -453,7 +453,7 @@ public final class PhoneDatabase {
     /// The trash, last trashed first. Merged rides' parts and the sample ride are not in it.
     public func trash() -> [TrashedRide] {
         let descriptor = FetchDescriptor<Ride>(predicate: #Predicate { $0.deletedAt != nil && $0.mergedInto == nil })
-        return ((try? context.fetch(descriptor)) ?? [])
+        return LibraryFetch.fetchOrEmpty(descriptor, in: context)
             .filter { !$0.isSample }
             .compactMap { ride in ride.deletedAt.map { TrashedRide(ride: ride.exchangeRide(routeFile: nil), deletedAt: $0) } }
             .sorted { $0.deletedAt > $1.deletedAt }
