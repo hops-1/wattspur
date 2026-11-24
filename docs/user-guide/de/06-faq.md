@@ -66,6 +66,9 @@ Alles bleibt auf deinem Mac, in `~/Library/Containers/io.github.hops-1.wattspur`
 - Was steht unter **Zuletzt synchronisiert**, am Mac in den Einstellungen und am iPhone unter **Mehr**? Ein Hinweis dort sagt, was fehlt.
 - Das erste Hochladen einer großen Mediathek dauert ein paar Minuten. Mehr in [iPhone und iCloud](09-iphone-and-icloud.md).
 
+### In CarPlay öffnet ein Tipp auf die Kachel „Wattspur“ nichts
+Die Kachel im CarPlay-Dashboard ist die Live-Aktivität der Aufnahme. Apple zeigt dort nur Werte, ein Tipp darauf öffnet nichts. Die Tafel von Wattspur öffnest du mit dem Wattspur-Symbol in der Leiste links. Langes Drücken zeigt Apples Menü **Für diese Fahrt löschen**: Es blendet nur die Kachel bis zum Ende der Autofahrt aus, die Aufnahme läuft weiter. Siehe [CarPlay](09-iphone-and-icloud.md#carplay-ab-iphone-164).
+
 ### Woher weiß ich, dass es eine neue Version gibt?
 Wattspur fragt einmal am Tag bei GitHub nach, ob eine neuere Version erschienen ist. Wenn ja, steht oben im Fenster ein Hinweis; **Auf GitHub ansehen** öffnet die Release-Seite, dort lädst du das DMG und ersetzt die App im Ordner „Programme“. **Später** blendet diese Version aus, bis eine neuere erscheint. **Wattspur › Nach Updates suchen …** fragt sofort nach. Gelesen wird nur die öffentliche Liste der Releases, über dich wird nichts gesendet. Abschalten: **Einstellungen › Allgemein › Nach neuen Versionen suchen**. Wattspur installiert Updates nicht selbst.
 

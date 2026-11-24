@@ -21,7 +21,6 @@ struct RecordingLiveActivity: Widget {
         ActivityConfiguration(for: RecordingAttributes.self) { context in
             LockScreenView(context: context)
                 .activityBackgroundTint(nil)
-                .widgetURL(RecordingLink.url)
         } dynamicIsland: { context in
             DynamicIsland {
                 // Beside the camera only one short line fits on each side; the rest goes below.
@@ -86,8 +85,10 @@ struct RecordingLiveActivity: Widget {
                     .foregroundStyle(Color.track)
             }
             .keylineTint(Color.track)
-            // CarPlay draws its tile from the compact views and opens the app only with a link (B-379).
-            .widgetURL(RecordingLink.url)
+            // CarPlay draws its dashboard tile from the compact views. A tap there opens nothing: Apple
+            // keeps Live Activities in CarPlay non-interactive (WWDC25 “Turbocharge your app for
+            // CarPlay”), and a `widgetURL` did not change that in the car (B-379, B-384). Wattspur in
+            // CarPlay opens from its icon.
         }
     }
 

@@ -42,29 +42,6 @@ final class CarPlaySceneDelegate: UIResponder, CPTemplateApplicationSceneDelegat
         shownAt = nil
     }
 
-    // MARK: - Opened from the Live Activity
-
-    /// A tap on the Live Activity in the CarPlay dashboard opens this scene with `RecordingLink`
-    /// (B-379): back to the panel, whatever list or question was open.
-    func scene(_ scene: UIScene, openURLContexts urlContexts: Set<UIOpenURLContext>) {
-        guard urlContexts.contains(where: { RecordingLink.isRecordingURL($0.url) }) else { return }
-        showPanel()
-    }
-
-    /// The same when the system passes the Live Activity as a user activity instead of the link.
-    func scene(_ scene: UIScene, continue userActivity: NSUserActivity) {
-        showPanel()
-    }
-
-    private func showPanel() {
-        guard let interfaceController else { return }
-        if interfaceController.presentedTemplate != nil {
-            interfaceController.dismissTemplate(animated: false, completion: nil)
-        }
-        interfaceController.popToRootTemplate(animated: false, completion: nil)
-        refresh(force: true)
-    }
-
     // MARK: - Panel
 
     private var devices: [RideExchange.Bike] { RecordingChoice.cachedDevices }
