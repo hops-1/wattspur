@@ -41,6 +41,7 @@ Zu jeder Story steht hier kurz: **was** gebaut wurde, **warum** so und **welche 
 | [35](35-review-sicherheit.md) | Review Architektur und Sicherheit: 54 Funde, Speicher-Grenzen für Dateien, Kopien zwischen Mac und iPad, Datenschutztext, Abdeckung richtig messen | B-343 bis B-352 |
 | [36](36-gemeinsame-texte.md) | Gemeinsame Texte für Mac und iPad: Ordner `Shared/` statt Kopien, eigene Formate statt `RideFormat` der App, Prüfung auf doppelte Dateinamen | B-355 |
 | [37](37-carplay.md) | CarPlay als Driving-Task-App: Berechtigung, zweite Szene, ruhige Tafel; ein Namensvorschlag aus Orten und Startzeit für jede Aufnahme | B-340, B-327, B-368 |
+| [38](38-robuster.md) | Robuster: Schema-Abdruck im Test, Lesefehler statt `try?`, Test-Server für Kartenkacheln, Kopieren in der Teilen-Erweiterung, Link der Live-Aktivität für CarPlay | B-353 bis B-361, B-379 |
 
 **Begriffe, die oft vorkommen**
 - **Swift Package (`WattspurKit`)**: ein eigenständiges Code-Modul ohne Oberfläche. Es lässt sich mit `swift test` allein testen und später unverändert in der iOS-App nutzen.
