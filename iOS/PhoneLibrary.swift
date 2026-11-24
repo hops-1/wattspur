@@ -41,7 +41,8 @@ final class PhoneLibrary {
         self.mode = mode
         // The rides of the Mac's state from iOS 0.2 to 0.5; not read since 0.6 (B-263).
         try? FileManager.default.removeItem(at: .applicationSupportDirectory.appending(path: "Stand vom Mac"))
-        guard database != nil else { return }
+        guard let database else { return }
+        reader = LibraryReader(modelContainer: database.container)
         reload()
         if mode == .iCloud {
             watchICloud()
@@ -55,7 +56,7 @@ final class PhoneLibrary {
     /// is recorded only after it (B-380).
     func refresh() async {
         syncMonitor?.refreshAccount()
-        if reloadHold.request() { reload() }
+        if reloadHold.request() { await reloadInBackground() }
     }
 
     /// No reading of the whole store while a ride is recorded (B-380): it runs on the main thread,
@@ -64,7 +65,7 @@ final class PhoneLibrary {
 
     /// Set by the app while a ride is recorded; at the end the reading that waited runs.
     func holdReloads(_ holding: Bool) {
-        if reloadHold.set(holding: holding) { reload() }
+        if reloadHold.set(holding: holding) { startBackgroundReload() }
     }
 
     /// The route of a ride, from this session or the store.
@@ -192,28 +193,70 @@ final class PhoneLibrary {
         reload()
     }
 
-    /// Reads the rides and the trash from the store again, after every change.
+    /// Reads the library with its own context, off the main thread (B-381).
+    private var reader: LibraryReader?
+    /// Counts the readings, so an older one that finishes late does not overwrite a newer one.
+    private var readingNumber = 0
+    /// The running reading off the main thread.
+    private var backgroundReading: Task<Void, Never>?
+
+    /// Reads the library again at once, after the rider's own change: the screen that made it
+    /// shows the result right away (a merged ride, a saved recording). Once per change, one reading.
     private func reload() {
         guard let database else { return }
         reloadHold.didReload()
+        backgroundReading?.cancel()
+        readingNumber += 1
+        apply(Result { try LibraryReading.read(in: database.context, generator: Self.generator) })
+    }
+
+    /// Reads the library again off the main thread (B-381), for what iCloud, the sync merge or the
+    /// return of the app ask for: the main thread only takes the finished values. A newer reading
+    /// replaces one still running.
+    private func startBackgroundReload() {
+        backgroundReading?.cancel()
+        backgroundReading = Task { [weak self] in await self?.reloadInBackground() }
+    }
+
+    private func reloadInBackground() async {
+        guard let database, let reader else { return }
+        reloadHold.didReload()
+        // The reader sees only what is saved.
+        if database.context.hasChanges { _ = LibrarySave.save(database.context) }
+        readingNumber += 1
+        let number = readingNumber
+        let result: Result<LibraryReading, any Error>
         do {
-            state = try database.snapshot(generator: "Wattspur iOS")
-            problem = nil
+            result = .success(try await reader.read(generator: Self.generator))
         } catch {
+            result = .failure(error)
+        }
+        guard !Task.isCancelled, number == readingNumber else { return }
+        apply(result)
+    }
+
+    private static let generator = "Wattspur iOS"
+
+    /// Takes a reading over in one step.
+    private func apply(_ result: Result<LibraryReading, any Error>) {
+        switch result {
+        case .success(let reading):
+            state = reading.state
+            problem = nil
+            trash = reading.trash
+            mergedRideIDs = reading.mergedRideIDs
+            partCounts = reading.partCounts
+            rider = reading.rider
+            // Read here, never while a screen draws (B-369).
+            statsRides = reading.statsRides
+            goals = reading.goals
+            freeGoalCombinations = reading.freeGoalCombinations.map { (period: $0.period, metric: $0.metric) }
+            activeDeviceID = reading.activeDeviceID
+            listedRideCounts = reading.listedRideCounts
+            RecordingChoice.cache(devices: reading.state.bikes)
+        case .failure(let error):
             problem = error.localizedDescription
         }
-        trash = database.trash()
-        mergedRideIDs = database.mergedRideIDs()
-        rider = database.riderDetails()
-        // Read here, never while a screen draws (B-369).
-        statsRides = database.statsRides()
-        goals = database.goals()
-        freeGoalCombinations = database.freeGoalCombinations()
-        activeDeviceID = database.activeDeviceID()
-        partCounts = Dictionary(uniqueKeysWithValues: mergedRideIDs.map { ($0, database.partCount(rideID: $0)) })
-        listedRideCounts = Dictionary((state?.bikes ?? []).map { ($0.id, database.listedRideCount(deviceID: $0.id)) },
-                                      uniquingKeysWith: { first, _ in first })
-        RecordingChoice.cache(devices: state?.bikes ?? [])
     }
 
     /// The pending reload after changes from iCloud.
@@ -262,7 +305,7 @@ final class PhoneLibrary {
         let watcher = SyncMergeWatcher(library: database.library)
         watcher.onMerge = { [weak self] _ in
             guard let self, self.reloadHold.request() else { return }
-            self.reload()
+            self.startBackgroundReload()
         }
         watcher.start()
         syncMerge = watcher
@@ -273,7 +316,7 @@ final class PhoneLibrary {
         pendingReload = Task { [weak self] in
             try? await Task.sleep(for: .seconds(1))
             guard !Task.isCancelled, let self, self.reloadHold.request() else { return }
-            self.reload()
+            await self.reloadInBackground()
         }
     }
 
