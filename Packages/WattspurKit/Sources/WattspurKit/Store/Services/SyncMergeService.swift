@@ -7,15 +7,18 @@ public struct SyncMergeReport: Equatable, Sendable {
     public var bikes = 0
     public var goals = 0
     public var rides = 0
+    /// Planned tours imported on two devices (B-372).
+    public var plannedRoutes = 0
 
-    public init(riders: Int = 0, bikes: Int = 0, goals: Int = 0, rides: Int = 0) {
+    public init(riders: Int = 0, bikes: Int = 0, goals: Int = 0, rides: Int = 0, plannedRoutes: Int = 0) {
         self.riders = riders
         self.bikes = bikes
         self.goals = goals
         self.rides = rides
+        self.plannedRoutes = plannedRoutes
     }
 
-    public var isEmpty: Bool { riders + bikes + goals + rides == 0 }
+    public var isEmpty: Bool { riders + bikes + goals + rides + plannedRoutes == 0 }
 }
 
 /// Merges what two devices made on their own before they synced (B-216, V-15).
@@ -38,6 +41,7 @@ struct SyncMergeService: LibraryService {
         report.bikes = mergeBikes()
         report.goals = mergeGoals()
         report.rides = mergeRides()
+        report.plannedRoutes = mergePlannedRoutes()
         if !report.isEmpty {
             // The active bike may have been one of the removed ones.
             _ = BikeService(env).activeBike()
@@ -202,6 +206,32 @@ struct SyncMergeService: LibraryService {
     private static func isRecordingKeyed(_ ride: Ride) -> Bool {
         ride.sourceIdentifier == "" && ride.sourceFormat == RideSource.gpx.rawValue && ride.distance > 0
             && ride.deletedAt == nil
+    }
+
+    // MARK: - Planned tours
+
+    /// The same tour file imported on two devices (B-372): the same `contentKey`. The oldest stays and
+    /// takes what the user changed at the other (R-35): its name, and that it is not in the trash. A
+    /// ride that followed the other one follows the keeper.
+    private func mergePlannedRoutes() -> Int {
+        let routes = fetch(FetchDescriptor<PlannedRoute>()).filter { !$0.contentKey.isEmpty }
+        var removed = 0
+        for group in Dictionary(grouping: routes, by: \.contentKey).values where group.count > 1 {
+            let sorted = group.sorted { Self.older($0.createdAt, $0.id, $1.createdAt, $1.id) }
+            let keeper = sorted[0]
+            for other in sorted.dropFirst() {
+                if keeper.name == keeper.originalName, other.name != other.originalName { keeper.name = other.name }
+                if other.deletedAt == nil { keeper.deletedAt = nil }
+                let otherID: UUID? = other.id
+                let keeperID = keeper.id
+                for ride in fetch(FetchDescriptor<Ride>(predicate: #Predicate { $0.plannedRouteID == otherID })) {
+                    ride.plannedRouteID = keeperID
+                }
+                context.delete(other)
+                removed += 1
+            }
+        }
+        return removed
     }
 
     // MARK: - Order

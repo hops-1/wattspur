@@ -7,6 +7,7 @@ extension ImportFlow.Summary {
     var message: String {
         var counts: [String] = []
         if newRides > 0 { counts.append(String(localized: "\(newRides) new")) }
+        if plannedTours > 0 { counts.append(String(localized: "\(plannedTours) planned tours")) }
         if completed > 0 { counts.append(String(localized: "\(completed) completed")) }
         if duplicates > 0 { counts.append(String(localized: "\(duplicates) duplicates")) }
         var lines = counts.isEmpty ? [] : [counts.joined(separator: ", ")]

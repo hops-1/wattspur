@@ -135,6 +135,7 @@ One row per ride, including parts of merged rides and rides in the trash.
 | `ZBIKE` | → `ZBIKE` | The bike |
 | `ZSPORTRAWVALUE` | text | The kind of a ride without a bike, like `ZBIKE.ZKINDRAWVALUE`, e.g. `car` or `motorcycle`; empty for a bicycle. A bike's kind wins (from Mac 1.9 and iPhone 1.1) |
 | `ZRIDER` | → `ZRIDER` | The rider |
+| `ZPLANNEDROUTEID` | UUID | `ZPLANNEDROUTE.ZID` of the planned tour the ride followed; empty otherwise, the tour may be gone (from Mac 1.11 and iPhone 1.7) |
 | `ZMERGEDINTO` | → `ZRIDE` | For a part: the merged ride it belongs to |
 | `ZTIMERTIME` | s | Ride time (moving) |
 | `ZELAPSEDTIME` | s | Total time including pauses |
@@ -223,6 +224,28 @@ A saved route (B-121). Which rides belong to it is computed by Wattspur from the
 | `ZREFERENCERIDEID` | UUID | `ZRIDE.ZID` of the ride it was made from; that ride may be gone |
 | `ZREFERENCEROUTEDATA` | data | The reference route, same internal format as `ZRIDE.ZOVERVIEWROUTEDATA` |
 
+### `ZPLANNEDROUTE`
+
+A planned tour, e.g. from komoot (B-372; from Mac 1.11 and iPhone 1.7). A backup from before has no such table.
+
+| Column | Type | Meaning |
+|---|---|---|
+| `ZID` | UUID | Id |
+| `ZNAME` | text | Name, as shown in the list |
+| `ZORIGINALNAME` | text | The name the file gave the tour |
+| `ZCREATEDAT` | date | When the tour was imported |
+| `ZDELETEDAT` | date | In the trash since; empty otherwise |
+| `ZSOURCERAWVALUE` | text | `komoot` or `gpx` |
+| `ZDISTANCE` | m | Length along the line |
+| `ZASCENT`, `ZDESCENT` | m | Metres up and down from the smoothed heights; empty without heights |
+| `ZPOINTCOUNT` | number | Points of the line |
+| `ZISLOOP` | bool | Ends where it starts (within 200 m) |
+| `ZPOINTSDATA` | data | The points: one version byte (`1`), then per point latitude, longitude and height (NaN for none) as little-endian 64-bit floats |
+| `ZCONTENTKEY` | text | Points, metres and first and last point; the same file gives the same key, used to find duplicates |
+| `ZPARSERVERSION` | number | Version of the reader the figures come from |
+| `ZSOURCEFILENAME` | text | Name of the original GPX file |
+| `ZSOURCEDATA` | data | The original GPX file |
+
 ### `ZIMPORTRECORD`
 
 The import log (**File › Import Log**, ⌥⌘L).
@@ -234,7 +257,7 @@ The import log (**File › Import Log**, ⌥⌘L).
 | `ZFILENAME` | text | File |
 | `ZOUTCOMERAW` | text | `imported`, `updated`, `duplicate`, `unsupported`, `failed` or `attached` |
 | `ZSOURCERAW` | text | `manual` (dropped or opened) or `folder` (watched folder) |
-| `ZDETAIL` | text | Technical reason of a failure |
+| `ZDETAIL` | text | Technical reason of a failure; `plannedTour` for a planned tour (then `ZRIDEID` is empty) |
 | `ZRIDEID` | UUID | `ZRIDE.ZID` of the ride, if one was made |
 | `ZMOVEDTO` | text | Where the file went in the watched folder, e.g. `Failed/x.fit` |
 | `ZRECORDKINDSRAW` | text | Records the ride broke, comma-separated |

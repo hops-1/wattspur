@@ -37,7 +37,7 @@ public struct ImportReport: Identifiable {
     public var hasNews: Bool {
         !failedUpdates.isEmpty || entries.contains { entry in
             switch entry.result.outcome {
-            case .imported, .unsupported, .failed: true
+            case .imported, .unsupported, .failed, .plannedTour, .plannedTourDuplicate: true
             case .duplicate, .attached, .fitForGPX: false
             }
         }
@@ -50,6 +50,16 @@ public struct ImportReport: Identifiable {
     /// Rides the import added.
     public var importedCount: Int {
         entries.filter { if case .imported = $0.result.outcome { true } else { false } }.count
+    }
+
+    /// Planned tours the import saved (B-372).
+    public var plannedTourCount: Int {
+        entries.filter { if case .plannedTour = $0.result.outcome { true } else { false } }.count
+    }
+
+    /// Planned tours that were already there (B-372).
+    public var plannedTourDuplicateCount: Int {
+        entries.filter { if case .plannedTourDuplicate = $0.result.outcome { true } else { false } }.count
     }
 
     /// Files of a type Wattspur does not read.

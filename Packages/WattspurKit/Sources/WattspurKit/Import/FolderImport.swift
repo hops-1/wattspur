@@ -27,6 +27,8 @@ public struct FolderImport {
         public var settling = 0
         /// Duplicates that were in the trash and came back from it (R-44).
         public var restored = 0
+        /// Planned tours saved in this run (B-372); the folder asks nothing and takes the tour.
+        public var plannedTours = 0
         /// IDs of the rides imported in this run.
         public var importedRideIDs: [UUID] = []
 
@@ -113,6 +115,9 @@ public struct FolderImport {
                     library.record(ImportResult(fileName: name, outcome: .failed(.noRideData)), source: .folder,
                                    movedTo: move(url, to: failedFolderName), date: now)
                 }
+            case .plannedTour, .plannedTourDuplicate:
+                if case .plannedTour = result.outcome { summary.plannedTours += 1 } else { summary.duplicates += 1 }
+                library.record(result, source: .folder, movedTo: move(url, to: importedFolderName), date: now)
             case .failed:
                 summary.failed += 1
                 library.record(result, source: .folder, movedTo: move(url, to: failedFolderName), date: now)

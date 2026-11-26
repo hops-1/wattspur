@@ -1,6 +1,6 @@
 # Architektur
 
-Stand: Mac 1.10.5 und iPhone/iPad 1.6.11 (Uhrzeit und Akku quer, B-388; das Fenster liest keinen Zustand, B-389; größere Kachel in CarPlay, B-387; Aufnahme läuft nach einem Abbruch weiter, B-383; Lesen im Hintergrund, B-381; Karten geben Speicher frei, B-382; kein Neuladen während der Aufnahme, B-380; Review Architektur und Sicherheit, B-352; gemeinsame Texte in `Shared/`, B-355; Rest aus dem Review, B-353 bis B-361). Kurz gefasst, wo was liegt, wie die Daten fließen, welche Regeln gelten und was für die Sicherheit gilt. Die Gründe stehen in den Lern-Notizen [25](learning/25-architektur-aufraeumen.md) (Schichten), [34](learning/34-review.md) (Review 0.5.2) und [35](learning/35-review-sicherheit.md) (Review 1.6.2) und [36](learning/36-gemeinsame-texte.md) (gemeinsame Texte). Die Funde der Reviews stehen in [REVIEW-0.5.2](REVIEW-0.5.2.md) und [REVIEW-1.6.2](REVIEW-1.6.2.md).
+Stand: Mac 1.10.5 und iPhone/iPad 1.6.11, dazu für Mac 1.11 und iOS 1.7 geplante Touren empfangen und speichern (B-372) (Uhrzeit und Akku quer, B-388; das Fenster liest keinen Zustand, B-389; größere Kachel in CarPlay, B-387; Aufnahme läuft nach einem Abbruch weiter, B-383; Lesen im Hintergrund, B-381; Karten geben Speicher frei, B-382; kein Neuladen während der Aufnahme, B-380; Review Architektur und Sicherheit, B-352; gemeinsame Texte in `Shared/`, B-355; Rest aus dem Review, B-353 bis B-361). Kurz gefasst, wo was liegt, wie die Daten fließen, welche Regeln gelten und was für die Sicherheit gilt. Die Gründe stehen in den Lern-Notizen [25](learning/25-architektur-aufraeumen.md) (Schichten), [34](learning/34-review.md) (Review 0.5.2) und [35](learning/35-review-sicherheit.md) (Review 1.6.2) und [36](learning/36-gemeinsame-texte.md) (gemeinsame Texte). Die Funde der Reviews stehen in [REVIEW-0.5.2](REVIEW-0.5.2.md) und [REVIEW-1.6.2](REVIEW-1.6.2.md).
 
 ## Überblick
 
@@ -34,7 +34,7 @@ Pfeile zeigen die erlaubte Richtung der Abhängigkeit; zurück darf es nie gehen
 Die Regeln mit ✓ prüft `scripts/check-architecture.sh` (lokal in `scripts/ci-local.sh` und in GitHub Actions).
 
 1. ✓ **`WattspurCore` kennt weder SwiftData noch SwiftUI, AppKit, UIKit, MapKit oder Charts.** Es rechnet auf Werttypen (`RideFigures`, `HighlightRide`, `MapRide`, `ParsedRide`, `RideSample`, `RideExchange`). Die Prüfung erkennt jede Form einer Import-Zeile in Swift 6 (`public import`, `@preconcurrency import`, `import struct …`) und prüft ihre Muster selbst.
-2. **`WattspurKit` behält seinen Namen und alle `@Model`-Klassen** (`Ride`, `Bike`, `Rider`, `Goal`, `RouteGroup`, `SourceFile`, `ImportRecord`). Ein Umzug in ein anderes Modul könnte bestehende Bibliotheken unlesbar machen. **Das CloudKit-Schema ist in Production:** neue Felder und Typen ja, nie umbenennen, löschen oder den Typ ändern; jedes neue Feld braucht einen Standardwert oder ist optional. `CloudKitSchemaTests` vergleicht das Modell mit dem Abdruck `Tests/WattspurKitTests/CloudKitSchema.txt` (Typ, Feld, Datentyp, optional/Standardwert; B-353): Fehlt eine Zeile, wird der Test rot. Ein neues Feld bekommt dort eine neue Zeile.
+2. **`WattspurKit` behält seinen Namen und alle `@Model`-Klassen** (`Ride`, `Bike`, `Rider`, `Goal`, `RouteGroup`, `SourceFile`, `ImportRecord`, seit Mac 1.11 und iOS 1.7 `PlannedRoute`). Ein Umzug in ein anderes Modul könnte bestehende Bibliotheken unlesbar machen. **Das CloudKit-Schema ist in Production:** neue Felder und Typen ja, nie umbenennen, löschen oder den Typ ändern; jedes neue Feld braucht einen Standardwert oder ist optional. `CloudKitSchemaTests` vergleicht das Modell mit dem Abdruck `Tests/WattspurKitTests/CloudKitSchema.txt` (Typ, Feld, Datentyp, optional/Standardwert; B-353): Fehlt eine Zeile, wird der Test rot. Ein neues Feld bekommt dort eine neue Zeile.
 3. **Die Brücken vom Modell zu den Werttypen stehen an wenigen bekannten Orten:** `Store/RideBridges.swift` (dazu `Bike+Statistics.swift` und `DuplicateFacts+Ride.swift`), das Austauschformat in `Store/RideExchange+Store.swift` (`Ride.exchangeRide`, `Bike.exchangeBike`), `Ride.summary` in `Store/Models.swift` und `Ride.isFromiPhone` in `Store/Ride+iPhone.swift` (S-01). Neue Umrechnungen von `Ride` in einen reinen Typ kommen nach `RideBridges.swift`.
 4. ✓ **Die Apps schreiben nur über `RideLibrary`** (am iPhone über `PhoneDatabase`, die `RideLibrary` nutzt). `@Query` zum Lesen ist erlaubt, `modelContext.insert/delete/save` und ein eigener `ModelContext(…)` in der App nicht (S-11). Den Container legen nur `App/WattspurApp.swift` und `iOS/PhoneSync.swift` an. Einzige Ausnahme: `App/DemoMode.swift` füllt eine eigene Demo-Bibliothek für Screenshots.
 5. **Eine Bibliothek je App.** `WattspurApp` erzeugt sie und gibt sie in die Environment (`@Environment(RideLibrary.self)`). Das Rückgängig-Machen gehört zum Fenster: `library.using(undoManager)`. Ein Rückgängig-Schritt merkt sich die **ID** einer Fahrt, nicht das Objekt: Hat der Sync die Fahrt inzwischen gelöscht, tut ⌘Z nichts (R-27).
@@ -62,6 +62,19 @@ Datei (FIT/GPX) ──► ImportFlow ──► RideLibrary.importFile ──► 
                        │                                                         ▼
                        └── ImportReport (Fakten) ──► App formuliert          Ride + SourceFile
 ```
+
+**Geplante Touren (B-372):** Vor dem Import schaut `PlannedTourReader.content(of:)` (Core) auf die ersten Punkte einer GPX-Datei (`GPXContent`):
+
+```
+GPX ──► GPXContent ──┬── ride ─────────────────────► Fahrt wie oben
+                     ├── plannedTour (keine Zeit) ──► PlannedTourReader ──► PlannedTour ──► PlannedRouteService ──► PlannedRoute
+                     └── estimatedTimes ──► ImportFlow fragt „Fahrt oder geplante Tour?“ (komoot: Tour vorgewählt)
+```
+
+- Geschätzte Zeiten erkennt Wattspur wie in V-22: keine Zeit in den Metadaten, Median-Schritt über 3 s, Median-Abstand über 20 m; `creator` komoot wählt die Tour vor. `ImportKind` (`automatic`, `ride`, `plannedTour`) trägt die Antwort zu `RideLibrary.importFile`. Ohne Frage (`automatic`, der überwachte Ordner am Mac) wird eine Datei ohne Zeiten oder eine komoot-Tour zur Tour, alles andere zur Fahrt. Eine iPhone-Aufnahme ist immer eine Fahrt (`PhoneDatabase.saveRecording`).
+- Dieselbe Datei noch einmal ist ein Doppel (`PlannedRoute.contentKey`) und holt die Tour aus dem Papierkorb. Papierkorb und Rückgängig wie bei Fahrten; `SyncMergeService` führt dieselbe Tour von zwei Geräten zusammen. `Ride.plannedRouteID` (eine ID, keine Beziehung) verknüpft später eine gefahrene Tour (Teil 2).
+- Im Import-Protokoll steht eine Tour als `imported` bzw. `duplicate` mit `detail` `plannedTour` und ohne `rideID`, damit eine ältere App am anderen Gerät keinen Fehler zeigt.
+- Das Blatt „Fahrt oder geplante Tour?“ ist `Shared/TourChoiceSheet.swift`; die Karte darin gibt jede App hinein (`Shared/` hat kein MapKit). Ein geteilter komoot-Link zeigt in der Teilen-Erweiterung drei Schritte zur GPX-Datei; Wattspur lädt nichts von komoot.
 
 - `ImportFlow` (Kit) hält nur die Entscheidungen und eine **Warteschlange**: Ein zweiter Import wartet, bis der erste fertig ist (R-46). Jede App zeichnet ihre eigenen Fragen.
 - Am iPhone kommen Dateien über „Öffnen mit“, die Dateiauswahl und den Ordner „Import“ (B-300, `PhoneImport`, `ImportInbox`). `ImportFlow.stepsThroughFiles` liest dort Datei für Datei, damit die Oberfläche nicht hängt, und `ImportFlow.Summary` zählt für die Zusammenfassung am Ende.
@@ -119,6 +132,7 @@ Die App legt bei jeder Änderung einen `WeekSnapshot` (Core) in die App Group `g
 | `Analysis/` | Summen und Trends, Rekorde, Vergleich, Karte (Filter, Dichte), neue Wege, Verlauf einer Strecke, Kurvigkeit, `TrackFigures` |
 | `Library/` | Filter, Quellen, Bike-Statistik und -Profil, Fahrer für „Mehr“ am iPhone (`RiderDetails`), Duplikat-Fakten, Tagesfilter, Summen für Woche und Monat, `WeekSnapshot` für das Widget |
 | `Exchange/` | `RideExchange`: das Austauschformat (JSON) und die Werte, die die iPhone-Views zeigen, aus beiden Quellen |
+| `Tour/` | Geplante Touren (B-372): `PlannedTour` (Name, Punkte mit Höhe, Strecke, Anstieg, Quelle, Schleife, Schlüssel für Doppel, Speicherformat der Punkte) und `PlannedTourReader` auf dem GPX-Leser (`trk` ohne echte Zeiten, `rte`) mit dem schnellen Blick `GPXContent` |
 | `Map/` | Kachelserver und Kachel-Rechnung (Web Mercator); kurvige Straßen von roadcurvature.com mit eigenem Dateiformat und KMZ-Leser |
 | `Support/` | Diagnosebericht, Versionen (`AppVersion`), Version und Commit der laufenden App (`AppInfo`), Links ins Handbuch für beide Apps (`HelpLinks`) |
 
@@ -126,9 +140,9 @@ Die App legt bei jeder Änderung einen `WeekSnapshot` (Core) in die App Group `g
 
 | Teil | Inhalt |
 |---|---|
-| `Store/Models.swift`, `ImportRecord.swift` | SwiftData-Modelle (CloudKit-tauglich: alles optional oder mit Standardwert, keine eindeutigen Schlüssel) |
+| `Store/Models.swift`, `ImportRecord.swift`, `PlannedRoute.swift` | SwiftData-Modelle (CloudKit-tauglich: alles optional oder mit Standardwert, keine eindeutigen Schlüssel) |
 | `Store/RideLibrary.swift` | Die eine Tür für beide Apps; reicht an die Dienste weiter (siehe „Entscheidungen“) |
-| `Store/Services/` | `ImportService`, `RideService`, `MergeService`, `BikeService`, `ImportLogService`, `GoalService`, `RouteGroupService`, `SyncMergeService`, `RecordingPartsService` (Bosch-Teile zu einer iPhone-Aufnahme, B-274), dazu `LibraryService` (gemeinsame Umgebung und Rückgängig) |
+| `Store/Services/` | `ImportService`, `RideService`, `MergeService`, `BikeService`, `ImportLogService`, `GoalService`, `RouteGroupService`, `SyncMergeService`, `RecordingPartsService` (Bosch-Teile zu einer iPhone-Aufnahme, B-274), `PlannedRouteService` (geplante Touren, B-372), dazu `LibraryService` (gemeinsame Umgebung und Rückgängig) |
 | `Store/LibrarySave.swift` | Speichern an einer Stelle, mit Meldung bei Fehlern |
 | `Store/LibraryFetch.swift` | Lesen an einer Stelle: ein Fehler ins Protokoll und in den Diagnosebericht (B-354) |
 | `Store/TimeSeriesDamage.swift` | Zeitreihen, die sich nicht lesen lassen: ins Protokoll und in den Diagnosebericht; das Nachrechnen lässt deren gespeicherte Werte stehen (B-268) |
@@ -144,9 +158,9 @@ Die App legt bei jeder Änderung einen `WeekSnapshot` (Core) in die App Group `g
 | `Store/LibraryMaintenance.swift` | Aufräumen nach dem ersten Fenster, Nachrechnen nach Version, in Paketen |
 | `Store/RideBridges.swift` | Modell → Werttypen |
 | `Store/CurvyRoadLibrary.swift` | Importierte Regionen als Dateien, nicht in SwiftData und nicht im Backup |
-| `Import/` | `FolderImport` (überwachter Ordner), `ImportFlow` (Fragen, Warteschlange, am iPhone Datei für Datei mit Fortschritt und Zusammenfassung), `ImportReport` (Fakten), `ImportInbox` (Ordner „Import“ am iPhone) |
+| `Import/` | `FolderImport` (überwachter Ordner), `ImportKind` (Fahrt oder Tour, B-372), `ImportFlow` (Fragen, Warteschlange, am iPhone Datei für Datei mit Fortschritt und Zusammenfassung), `ImportReport` (Fakten), `ImportInbox` (Ordner „Import“ am iPhone) |
 
-**Dienste:** zustandslose Structs, gebaut aus einer `LibraryEnvironment` (Kontext, Importer, UndoManager, Standard-Bikename). Sie nutzen sich meist in eine Richtung: Import → Zusammenführen → Bikes. Eine Ausnahme ist bekannt (S-05): `ImportService` und `RecordingPartsService` rufen sich gegenseitig, weil eine Bosch-Datei beim Import zu einer Aufnahme passen kann und die Aufnahme-Teile dafür den Import, das Zusammenführen und `RideService` brauchen. Die übrigen stehen für sich.
+**Dienste:** zustandslose Structs, gebaut aus einer `LibraryEnvironment` (Kontext, Importer, UndoManager, Standard-Bikename). Sie nutzen sich meist in eine Richtung: Import → Zusammenführen → Bikes. Eine Ausnahme ist bekannt (S-05): `ImportService` und `RecordingPartsService` rufen sich gegenseitig, weil eine Bosch-Datei beim Import zu einer Aufnahme passen kann und die Aufnahme-Teile dafür den Import, das Zusammenführen und `RideService` brauchen. `ImportService` gibt eine geplante Tour an `PlannedRouteService` weiter (B-372); zurück nutzt dieser nur die statische `ImportService.parseFileName`. Die übrigen stehen für sich.
 
 ## App (macOS)
 

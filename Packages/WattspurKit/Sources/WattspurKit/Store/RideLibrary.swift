@@ -45,13 +45,17 @@ public final class RideLibrary {
     private var log: ImportLogService { ImportLogService(env) }
     private var goals: GoalService { GoalService(env) }
     private var groupService: RouteGroupService { RouteGroupService(env) }
+    private var tours: PlannedRouteService { PlannedRouteService(env) }
 
     // MARK: - Import
 
     /// Imports a file from disk. Handles security-scoped URLs from the open panel.
+    /// A GPX file becomes a planned tour when `kind` says so, or by itself for one without times or a
+    /// komoot tour (`ImportKind.automatic`, B-372).
     @discardableResult
-    public func importFile(at url: URL, bike: Bike? = nil, detectDuplicates: Bool = true) -> ImportResult {
-        imports.importFile(at: url, bike: bike, detectDuplicates: detectDuplicates)
+    public func importFile(at url: URL, bike: Bike? = nil, detectDuplicates: Bool = true,
+                           as kind: ImportKind = .automatic) -> ImportResult {
+        imports.importFile(at: url, bike: bike, detectDuplicates: detectDuplicates, as: kind)
     }
 
     /// Imports file contents for `bike` (default: the active bike). Duplicates are skipped (IMP-02);
@@ -60,8 +64,9 @@ public final class RideLibrary {
     /// off the file becomes a ride of its own ("As new ride" in the duplicate dialog); it then gets
     /// no Bosch ID, so the ID keeps belonging to the first ride.
     @discardableResult
-    public func importFile(data: Data, fileName: String, bike: Bike? = nil, detectDuplicates: Bool = true) -> ImportResult {
-        imports.importFile(data: data, fileName: fileName, bike: bike, detectDuplicates: detectDuplicates)
+    public func importFile(data: Data, fileName: String, bike: Bike? = nil, detectDuplicates: Bool = true,
+                           as kind: ImportKind = .automatic) -> ImportResult {
+        imports.importFile(data: data, fileName: fileName, bike: bike, detectDuplicates: detectDuplicates, as: kind)
     }
 
     /// Refreshes an existing ride from a file on disk (security-scoped URLs allowed).
@@ -140,7 +145,10 @@ public final class RideLibrary {
     public func restore(_ ride: Ride) { rides.restore(ride) }
     public func restore(_ rides: [Ride]) { self.rides.restore(rides) }
     /// Permanently deletes trashed rides older than `days` (LIST-08), including the original file.
-    public func purgeTrash(olderThan days: Int = 30, now: Date = .now) { rides.purgeTrash(olderThan: days, now: now) }
+    public func purgeTrash(olderThan days: Int = 30, now: Date = .now) {
+        rides.purgeTrash(olderThan: days, now: now)
+        tours.purgeTrash(olderThan: days, now: now)
+    }
     /// Deletes the sample ride for good, including its original file.
     public func removeSamples() { rides.removeSamples() }
     public func sampleRides() -> [Ride] { rides.sampleRides() }
@@ -271,6 +279,16 @@ public final class RideLibrary {
 
     /// Dissolves a saved route; its rides stay.
     public func dissolve(_ group: RouteGroup) { groupService.dissolve(group) }
+
+    // MARK: - Planned tours (B-372)
+
+    /// Planned tours, newest first; with `includingTrash` also those in the trash.
+    public func plannedRoutes(includingTrash: Bool = false) -> [PlannedRoute] { tours.routes(includingTrash: includingTrash) }
+    public func plannedRoute(withID id: UUID) -> PlannedRoute? { tours.route(withID: id) }
+    public func rename(_ route: PlannedRoute, to name: String) { tours.rename(route, to: name) }
+    /// Moves tours to the trash with one save; they stay restorable for 30 days, like rides.
+    public func moveToTrash(_ routes: [PlannedRoute], at date: Date = .now) { tours.moveToTrash(routes, at: date) }
+    public func restore(_ routes: [PlannedRoute]) { tours.restore(routes) }
 
     // MARK: - Goals and saving (B-053)
 

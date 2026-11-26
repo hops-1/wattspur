@@ -304,6 +304,10 @@ private struct LogEntryRow: View {
         case .attached:
             let name = rides.first?.name ?? RideLibrary.parseFileName(record.fileName).title
             return String(localized: "Attached to “\(name)” · Bosch values unchanged")
+        case .imported where record.isPlannedTour:
+            return String(localized: "Saved as a planned tour · \(sourceText)")
+        case .duplicate where record.isPlannedTour:
+            return String(localized: "This planned tour is already saved.")
         case .imported, .updated:
             if let ride = rides.first {
                 let action = record.outcome == .updated

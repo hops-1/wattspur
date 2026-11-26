@@ -6,3 +6,4 @@ Herkunft, Zweck und erwartete Ergebnisse stehen in `docs/SPIKE-GPX-FORMATE.md`, 
 - `pair-tour1-bosch-flow.fit` und `.gpx`/`pair-tour1-komoot.gpx`: dieselbe Fahrt aus drei Quellen, mit demselben Versatz (in GPX stehen die gekürzten Punkte mit ihrer Zeit auf dem ersten bzw. letzten gezeigten Punkt). `pair-tour2-bosch-flow.fit`/`.gpx`: zweites Paar, gleicher Versatz.
 - `garmin-*`, `strava-*`: selbst erzeugt nach Schema bzw. Drittquellen, **nicht** nach einer echten Datei.
 - Übrige Dateien: selbst erzeugt (Fehlerfälle, Zeitformate, Stillstand), keine fremden Daten.
+- `komoot-planned-tour.gpx` (B-372): selbst erzeugt im Aufbau einer in komoot geplanten Tour (V-22): `creator` komoot, Name in den Metadaten ohne Zeit, ein `wpt`, ein `trk` mit `type` `e_mtb_easy`, jeder Punkt mit Höhe und einer geschätzten Zeit in unregelmäßigen Schritten (Median 7 s), Punkte weit auseinander (Median etwa 37 m). Erfundene Strecke, keine echte Tour.

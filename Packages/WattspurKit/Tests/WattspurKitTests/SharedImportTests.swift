@@ -5,7 +5,7 @@ import Testing
 @testable import WattspurCore
 
 /// “Share to Wattspur” (B-301): what the share extension leaves goes into the folder “Import”, and a
-/// planned route gets its own line in the summary. Invented files only.
+/// planned route becomes a tour (B-372). Invented files only.
 @MainActor
 @Suite("Shared imports")
 final class SharedImportTests {
@@ -39,7 +39,7 @@ final class SharedImportTests {
         return url
     }
 
-    @Test("A planned route is counted apart from broken files, in the summary and the report")
+    @Test("A planned route is saved as a tour (B-372), apart from broken files, in the summary and the report")
     func plannedRouteInSummary() async throws {
         flow.stepsThroughFiles = true
         let planned = try write("Runde am See.gpx", Self.plannedTour, in: folder.appending(path: "a"))
@@ -47,17 +47,21 @@ final class SharedImportTests {
         flow.start([planned, broken], library: library) { _, _ in }
         while flow.progress != nil { await Task.yield() }
         let summary = flow.takeSummary()
-        #expect(summary.plannedRouteFileNames == ["Runde am See.gpx"])
+        #expect(summary.plannedTours == 1)
+        #expect(summary.plannedRouteFileNames.isEmpty)
         #expect(summary.failedFileNames == ["Kaputt.gpx"])
         #expect(!summary.isEmpty)
+        #expect(library.plannedRoutes().map(\.name) == ["Runde am See"])
 
-        var onlyPlanned = ImportFlow.Summary()
-        onlyPlanned.plannedRouteFileNames = ["x.gpx"]
-        #expect(!onlyPlanned.isEmpty)
+        var onlyTour = ImportFlow.Summary()
+        onlyTour.plannedTours = 1
+        #expect(!onlyTour.isEmpty)
 
         let report = ImportReport(entries: [planned, broken].map { ImportReport.Entry(url: $0, result: library.importFile(at: $0)) })
-        #expect(report.plannedRouteFileNames == ["Runde am See.gpx"])
+        #expect(report.plannedTourDuplicateCount == 1)
+        #expect(report.plannedRouteFileNames.isEmpty)
         #expect(report.unreadableFileNames == ["Kaputt.gpx"])
+        #expect(report.hasNews)
     }
 
     @Test("Shared files move from their folders into the inbox; hidden folders still being written wait")

@@ -27,6 +27,14 @@ struct ImportLogService: LibraryService {
         case .failed(let error):
             record = ImportRecord(fileName: result.fileName, outcome: .failed, source: source, date: date)
             record.detail = "\(error)"
+        // A tour is noted as an import without a ride (B-372), so an older app on the other device
+        // shows it as imported and not as a failure.
+        case .plannedTour:
+            record = ImportRecord(fileName: result.fileName, outcome: .imported, source: source, date: date)
+            record.detail = ImportRecord.plannedTourDetail
+        case .plannedTourDuplicate:
+            record = ImportRecord(fileName: result.fileName, outcome: .duplicate, source: source, date: date)
+            record.detail = ImportRecord.plannedTourDetail
         }
         record.movedTo = movedTo
         context.insert(record)

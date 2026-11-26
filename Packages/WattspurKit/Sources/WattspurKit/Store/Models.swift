@@ -187,6 +187,9 @@ public final class Ride {
     /// without choosing one (B-284). The device's kind wins; `nil` means a bicycle. The name says
     /// sport because the sport follows from the kind (`BikeKind.sport`). Added for 1.1 / 1.9.
     public var sportRawValue: String?
+    /// The planned tour this ride followed (B-372, navigation comes with part 2). A plain id, not a
+    /// relationship, like `Rider.activeBikeID`; the tour may be gone since. Added for 1.7 / 1.11.
+    public var plannedRouteID: UUID?
     @Relationship(deleteRule: .cascade, inverse: \SourceFile.ride)
     public var sourceFile: SourceFile?
 
@@ -462,5 +465,6 @@ public final class RouteGroup {
 public enum WattspurSchema {
     public static let models: [any PersistentModel.Type] = [
         Ride.self, Rider.self, Bike.self, SourceFile.self, ImportRecord.self, Goal.self, RouteGroup.self,
+        PlannedRoute.self,
     ]
 }

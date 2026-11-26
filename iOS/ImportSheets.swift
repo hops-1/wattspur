@@ -1,3 +1,4 @@
+import MapKit
 import SwiftUI
 import WattspurCore
 import WattspurKit
@@ -26,6 +27,22 @@ private struct ImportSheets: ViewModifier {
                     if let store { flow.confirm(question, bike: bike, library: store) { _, _ in } }
                     phoneImport.decided(library: library)
                 }
+            }
+            // “Ride or planned tour?” (B-372): only the buttons close it.
+            .sheet(item: Binding(get: { flow.tourQuestion }, set: { _ in })) { question in
+                ScrollView {
+                    TourChoiceSheet(question: question) {
+                        TourPreviewMap(points: question.tour.points)
+                    } onChoose: { asTour in
+                        flow.answer(question, asTour: asTour)
+                        phoneImport.decided(library: library)
+                    } onCancel: {
+                        flow.skip(question)
+                        phoneImport.decided(library: library)
+                    }
+                }
+                .presentationDetents([.medium, .large])
+                .interactiveDismissDisabled()
             }
             .confirmationDialog(comparisonTitle, isPresented: Binding(get: { flow.comparisons.first != nil },
                                                                       set: { _ in }),
@@ -119,6 +136,20 @@ private struct ImportSheets: ViewModifier {
 
     private static func facts(_ facts: DuplicateFacts) -> String {
         "\(facts.startDate.formatted(date: .abbreviated, time: .shortened)) · \(RideFormat.distance(facts.distance)) · \(RideFormat.duration(facts.rideTime))"
+    }
+}
+
+/// The line of a planned tour on a still map, for the question “Ride or planned tour?” (B-372).
+private struct TourPreviewMap: View {
+    let points: [PlannedTour.Point]
+    @Environment(\.colorScheme) private var scheme
+
+    var body: some View {
+        Map(initialPosition: .automatic, interactionModes: []) {
+            MapPolyline(coordinates: points.map { CLLocationCoordinate2D(latitude: $0.latitude, longitude: $0.longitude) })
+                .stroke(PlannedTourColor.line(scheme), style: StrokeStyle(lineWidth: 4, lineCap: .round, lineJoin: .round))
+        }
+        .mapStyle(.standard(elevation: .flat, pointsOfInterest: .excludingAll))
     }
 }
 

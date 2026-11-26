@@ -15,12 +15,12 @@ struct ImportService: LibraryService {
 
     /// Imports a file from disk. Handles security-scoped URLs from the open panel.
     @discardableResult
-    func importFile(at url: URL, bike: Bike? = nil, detectDuplicates: Bool = true) -> ImportResult {
+    func importFile(at url: URL, bike: Bike? = nil, detectDuplicates: Bool = true, as kind: ImportKind = .automatic) -> ImportResult {
         let accessing = url.startAccessingSecurityScopedResource()
         defer { if accessing { url.stopAccessingSecurityScopedResource() } }
         do {
             let data = try Data(contentsOf: url)
-            return importFile(data: data, fileName: url.lastPathComponent, bike: bike, detectDuplicates: detectDuplicates)
+            return importFile(data: data, fileName: url.lastPathComponent, bike: bike, detectDuplicates: detectDuplicates, as: kind)
         } catch {
             return ImportResult(fileName: url.lastPathComponent, outcome: .failed(.unreadable(error.localizedDescription)))
         }
@@ -32,10 +32,15 @@ struct ImportService: LibraryService {
     /// off the file becomes a ride of its own ("As new ride" in the duplicate dialog); it then gets
     /// no Bosch ID, so the ID keeps belonging to the first ride.
     @discardableResult
-    func importFile(data: Data, fileName: String, bike: Bike? = nil, detectDuplicates: Bool = true) -> ImportResult {
+    func importFile(data: Data, fileName: String, bike: Bike? = nil, detectDuplicates: Bool = true,
+                    as kind: ImportKind = .automatic) -> ImportResult {
         let ext = (fileName as NSString).pathExtension.lowercased()
         guard let importer = importers.first(where: { $0.fileExtensions.contains(ext) }) else {
             return ImportResult(fileName: fileName, outcome: .unsupported)
+        }
+        // A planned tour (B-372): asked for, or a GPX file that is one without asking.
+        if RideSource(fileExtension: ext) == .gpx, kind.takesTour(PlannedTourReader.content(of: data)) {
+            return PlannedRouteService(env).importTour(data: data, fileName: fileName)
         }
 
         let parsed: ParsedRide

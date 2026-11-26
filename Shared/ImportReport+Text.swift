@@ -20,7 +20,13 @@ extension ImportReport {
     }
 
     private var summaryLines: [String] {
-        var lines = entries.isEmpty ? [] : [String(localized: "\(importedCount) rides imported")]
+        let tours = plannedTourCount + plannedTourDuplicateCount
+        // Only tours: no line “0 rides imported” (B-372).
+        var lines = entries.isEmpty || (importedCount == 0 && tours > 0) ? [] : [String(localized: "\(importedCount) rides imported")]
+        if plannedTourCount > 0 { lines.append(String(localized: "\(plannedTourCount) planned tours saved")) }
+        if plannedTourDuplicateCount > 0 {
+            lines.append(String(localized: "\(plannedTourDuplicateCount) planned tours were already there"))
+        }
         let unsupported = unsupportedFileNames
         if !unsupported.isEmpty {
             let types = unsupportedExtensions.map { $0.isEmpty ? String(localized: "no extension") : ".\($0)" }
