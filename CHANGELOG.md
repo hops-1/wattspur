@@ -7,6 +7,14 @@ Every DMG handed out to testers corresponds to one entry below.
 
 ## [Unreleased]
 
+## [iOS 1.6.10] – 2026-11-26
+
+A larger tile in CarPlay. iPhone and iPad 1.6.10 (51); the Mac stays 1.10.5.
+
+### Changed
+- CarPlay: during a recording the Wattspur tile on the Dashboard shows the ride time, the distance and the speed, with “Paused” during a pause and “Ready” with auto-start. Before it showed only the symbol and the distance. A tap on it still opens nothing; Apple keeps Live Activities in CarPlay non-interactive (B-387).
+- Apple Watch: when the Live Activity appears in the Smart Stack, it shows the same tile (B-387).
+
 ## [iOS 1.6.9] – 2026-11-24
 
 On after an abort: when iOS ends Wattspur during a ride, the recording goes on by itself. iPhone and iPad 1.6.9 (50); the Mac stays 1.10.5.
