@@ -767,6 +767,16 @@
         }
       }
     },
+    "Battery %lld %%" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Akku %lld %%"
+          }
+        }
+      }
+    },
     "Change Vehicle" : {
       "comment" : "CarPlay (B-327)",
       "localizations" : {
@@ -774,6 +784,16 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Fahrzeug wechseln"
+          }
+        }
+      }
+    },
+    "Charging" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Lädt"
           }
         }
       }

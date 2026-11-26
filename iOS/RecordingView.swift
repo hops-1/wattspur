@@ -211,10 +211,13 @@ struct RecordingView: View {
             }
         }
         .overlay(alignment: .topTrailing) {
-            // The map style while riding (B-226), at the top right as on every other map; the buttons
-            // for the position and the compass sit below it.
-            MapTypeMenu(mapType: $mapType, size: 44)
-                .padding(12)
+            // The map style while riding (B-226), at the top right as on every other map. In landscape
+            // iOS hides the status bar, so the clock and the battery sit above it (B-388).
+            VStack(alignment: .trailing, spacing: 10) {
+                if isLandscape { DeviceStatusPill() }
+                MapTypeMenu(mapType: $mapType, size: 44)
+            }
+            .padding(12)
         }
     }
 

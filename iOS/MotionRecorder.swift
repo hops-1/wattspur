@@ -50,7 +50,8 @@ final class MotionRecorder: @unchecked Sendable {
         if rawLog, let handle = Self.makeFile(for: date) {
             writesRaw = true
             open(handle, at: date, vehicle: vehicle)
-            UIDevice.current.isBatteryMonitoringEnabled = true
+            // Shared with the clock and battery capsule of the recording (B-388).
+            BatteryMonitoring.acquire()
             batteryTask = Task { @MainActor [weak self] in
                 while !Task.isCancelled {
                     let level = Double(UIDevice.current.batteryLevel)
@@ -92,7 +93,7 @@ final class MotionRecorder: @unchecked Sendable {
         if batteryTask != nil {
             batteryTask?.cancel()
             batteryTask = nil
-            UIDevice.current.isBatteryMonitoringEnabled = false
+            BatteryMonitoring.release()
         }
         manager.stopDeviceMotionUpdates()
         close(MotionRawLog.event("stop", at: .now))

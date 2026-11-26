@@ -149,6 +149,7 @@ In der Detailansicht einer Fahrt oben rechts, oder in der Liste mit langem Druck
 ## In der Halterung am Lenker (quer)
 Die meisten Halterungen am Lenker halten das iPhone quer. Wattspur läuft auch quer:
 - **Beim Aufnehmen** füllt die Karte den Bildschirm. Links zeigt eine Leiste das Tempo groß, darunter Ø, Strecke, Zeit, Höhe und Anstieg, unten Pause und Stopp. Ab iPhone 1.6 ist das Tempo das Mittel der letzten 2 Sekunden: Es kommt weiter jede Sekunde neu, springt aber bei schlechtem GPS (etwa im Wald) weniger.
+- **Uhrzeit und Akku:** Quer blendet iOS die Statusleiste aus. Ab iPhone 1.6.11 zeigt die Aufnahme darum oben rechts eine kleine Kapsel mit der Uhrzeit und dem Akku des iPhones, beim Laden mit einem grünen Blitz. Unter 20 % wird das Akku-Symbol orange. Der Knopf für den Kartenstil sitzt darunter. Hochkant zeigt iOS beides selbst.
 - **Die Tab-Leiste** sitzt links unten, in allen Bereichen.
 - **Übersicht:** links die letzte Fahrt, rechts Woche, Monat, Jahr und alle Fahrten.
 - **Fahrten:** links die Liste, rechts die gewählte Fahrt.
