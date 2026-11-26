@@ -85,11 +85,13 @@ struct RecordingLiveActivity: Widget {
                     .foregroundStyle(Color.track)
             }
             .keylineTint(Color.track)
-            // CarPlay draws its dashboard tile from the compact views. A tap there opens nothing: Apple
-            // keeps Live Activities in CarPlay non-interactive (WWDC25 “Turbocharge your app for
-            // CarPlay”), and a `widgetURL` did not change that in the car (B-379, B-384). Wattspur in
-            // CarPlay opens from its icon.
         }
+        // CarPlay and the Smart Stack of the Apple Watch draw the small family (B-387); without it
+        // CarPlay fell back to the compact views, symbol and distance only. A tap on the CarPlay tile
+        // opens nothing: Apple keeps Live Activities in CarPlay non-interactive (WWDC25 “Turbocharge
+        // your app for CarPlay”), and a `widgetURL` did not change that in the car (B-379, B-384).
+        // Wattspur in CarPlay opens from its icon or the widget “This Week”.
+        .supplementalActivityFamilies([.small])
     }
 
     /// Pause, an hourglass while ready (B-311), else the device's symbol.
@@ -119,8 +121,18 @@ private struct ActivitySymbol: View {
 
 private struct LockScreenView: View {
     let context: ActivityViewContext<RecordingAttributes>
+    @Environment(\.activityFamily) private var family
 
     var body: some View {
+        if family == .small {
+            SmallTile(context: context)
+        } else {
+            medium
+        }
+    }
+
+    /// The Lock Screen and the banner, with the buttons.
+    private var medium: some View {
         VStack(alignment: .leading, spacing: 10) {
             HStack {
                 Label { Text(verbatim: "Wattspur") } icon: { ActivitySymbol(context: context, showsState: false) }
@@ -168,6 +180,55 @@ private struct LockScreenView: View {
             }
         }
         .padding()
+    }
+}
+
+/// The small tile in CarPlay and on the Apple Watch (B-387): time, distance and speed, no buttons,
+/// because CarPlay keeps the tile non-interactive. While ready only the hourglass and the hint.
+private struct SmallTile: View {
+    let context: ActivityViewContext<RecordingAttributes>
+
+    var body: some View {
+        VStack(alignment: .leading, spacing: 2) {
+            HStack(spacing: 4) {
+                ActivitySymbol(context: context)
+                    .foregroundStyle(Color.track)
+                Spacer(minLength: 4)
+                if context.state.isReady == true {
+                    Text("Ready")
+                        .foregroundStyle(.blue)
+                } else if context.state.isPaused {
+                    Text("Paused")
+                        .foregroundStyle(.orange)
+                }
+            }
+            .font(.caption.weight(.semibold))
+            .lineLimit(1)
+            if context.state.isReady == true {
+                ReadyText()
+                    .font(.caption)
+            } else {
+                ElapsedTime(start: context.attributes.start(context.state))
+                    .font(.title3.weight(.bold))
+                    .minimumScaleFactor(0.7)
+                    .accessibilityLabel(Text("Time"))
+                HStack(spacing: 8) {
+                    Text(verbatim: ActivityFormat.distance(context.state.distance))
+                        .accessibilityLabel(Text("Distance"))
+                        .accessibilityValue(Text(verbatim: ActivityFormat.distance(context.state.distance)))
+                    Text(verbatim: ActivityFormat.speed(context.state.speed))
+                        .foregroundStyle(.secondary)
+                        .accessibilityLabel(Text("Speed"))
+                        .accessibilityValue(Text(verbatim: ActivityFormat.speed(context.state.speed)))
+                }
+                .font(.caption.weight(.semibold))
+                .monospacedDigit()
+                .lineLimit(1)
+                .minimumScaleFactor(0.6)
+            }
+        }
+        .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .leading)
+        .padding(.horizontal, 2)
     }
 }
 
