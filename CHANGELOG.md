@@ -7,6 +7,16 @@ Every DMG handed out to testers corresponds to one entry below.
 
 ## [Unreleased]
 
+## [iOS 1.6.11] – 2026-11-26
+
+Clock and battery in landscape, and a fix for a crash at launch. iPhone and iPad 1.6.11 (52); the Mac stays 1.10.5.
+
+### Added
+- Recording in landscape: iOS hides the status bar there, so a small capsule at the top right shows the time and the iPhone's battery, with a green bolt while charging and an orange symbol below 20 %. The map style button sits below it. Portrait is unchanged (B-388).
+
+### Fixed
+- iOS 27: Wattspur could stop right after launch, for example when "Start Ride" opened it while the iPhone turned. SwiftUI rebuilt the app's window off the main thread, and Swift stopped the app there. The window now reads no state itself (B-389).
+
 ## [iOS 1.6.10] – 2026-11-26
 
 A larger tile in CarPlay. iPhone and iPad 1.6.10 (51); the Mac stays 1.10.5.
