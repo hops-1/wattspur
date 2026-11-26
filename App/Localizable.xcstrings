@@ -2,6 +2,16 @@
   "sourceLanguage" : "en",
   "strings" : {
     "" : {},
+    "%@ · %lld m ascent" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%1$@ · %2$lld Hm"
+          }
+        }
+      }
+    },
     "0–%lld km/h" : {
       "localizations" : {
         "de" : {
@@ -1452,6 +1462,86 @@
         }
       }
     },
+    "%lld planned tours saved" : {
+      "localizations" : {
+        "de" : {
+          "variations" : {
+            "plural" : {
+              "one" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "%lld geplante Tour gespeichert"
+                }
+              },
+              "other" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "%lld geplante Touren gespeichert"
+                }
+              }
+            }
+          }
+        },
+        "en" : {
+          "variations" : {
+            "plural" : {
+              "one" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "%lld planned tour saved"
+                }
+              },
+              "other" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "%lld planned tours saved"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "%lld planned tours were already there" : {
+      "localizations" : {
+        "de" : {
+          "variations" : {
+            "plural" : {
+              "one" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "%lld geplante Tour war schon da"
+                }
+              },
+              "other" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "%lld geplante Touren waren schon da"
+                }
+              }
+            }
+          }
+        },
+        "en" : {
+          "variations" : {
+            "plural" : {
+              "one" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "%lld planned tour was already there"
+                }
+              },
+              "other" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "%lld planned tours were already there"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "%lld rides" : {
       "localizations" : {
         "de" : {
@@ -2264,6 +2354,16 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Diese Fahrten auswerten"
+          }
+        }
+      }
+    },
+    "As a ride it counts with the times in the file, on the day they name." : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Als Fahrt zählt sie mit den Zeiten aus der Datei, an dem Tag, den sie nennen."
           }
         }
       }
@@ -4643,6 +4743,16 @@
         }
       }
     },
+    "Import As" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Importieren als"
+          }
+        }
+      }
+    },
     "Import Curvy Roads" : {
       "localizations" : {
         "de" : {
@@ -6495,6 +6605,26 @@
         }
       }
     },
+    "Planned Tour" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Geplante Tour"
+          }
+        }
+      }
+    },
+    "Ride or Planned Tour?" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Fahrt oder geplante Tour?"
+          }
+        }
+      }
+    },
     "optional" : {
       "localizations" : {
         "de" : {
@@ -6551,6 +6681,16 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Pausen"
+          }
+        }
+      }
+    },
+    "Saved as a planned tour · %@" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Als geplante Tour gespeichert · %@"
           }
         }
       }
@@ -8337,6 +8477,16 @@
         }
       }
     },
+    "The times in this file look estimated. As a planned tour it keeps only the line, the distance and the heights." : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Die Zeiten in dieser Datei sehen geschätzt aus. Als geplante Tour behält Wattspur nur die Linie, die Strecke und die Höhen."
+          }
+        }
+      }
+    },
     "The track with time, elevation, power and cadence, e.g. for komoot or a navigation device." : {
       "localizations" : {
         "de" : {
@@ -8477,6 +8627,16 @@
         }
       }
     },
+    "This planned tour is already saved." : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Diese geplante Tour ist schon gespeichert."
+          }
+        }
+      }
+    },
     "This report helps to find import problems. It contains versions, counts and the import log with file names – no positions or other ride data. File names can contain place or tour names. Nothing is sent automatically: save it and send it yourself if you like." : {
       "localizations" : {
         "de" : {
@@ -8513,6 +8673,16 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Diese Fahrt hat keine Route"
+          }
+        }
+      }
+    },
+    "This tour was planned in komoot. Its times are komoot's estimate, so Wattspur keeps it as a planned tour, not as a ride." : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Diese Tour wurde in komoot geplant. Ihre Zeiten schätzt komoot, darum legt Wattspur sie als geplante Tour ab, nicht als Fahrt."
           }
         }
       }

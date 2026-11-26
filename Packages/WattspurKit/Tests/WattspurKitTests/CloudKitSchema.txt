@@ -35,6 +35,22 @@ ImportRecord.outcomeRaw | string | default
 ImportRecord.recordKindsRaw | string | default
 ImportRecord.rideID | uuid | optional
 ImportRecord.sourceRaw | string | default
+PlannedRoute.ascent | integer 64 | optional
+PlannedRoute.contentKey | string | default
+PlannedRoute.createdAt | date | default
+PlannedRoute.deletedAt | date | optional
+PlannedRoute.descent | integer 64 | optional
+PlannedRoute.distance | double | default
+PlannedRoute.id | uuid | default
+PlannedRoute.isLoop | boolean | default
+PlannedRoute.name | string | default
+PlannedRoute.originalName | string | default
+PlannedRoute.parserVersion | integer 64 | default
+PlannedRoute.pointCount | integer 64 | default
+PlannedRoute.pointsData | binary | optional
+PlannedRoute.sourceData | binary | optional
+PlannedRoute.sourceFileName | string | default
+PlannedRoute.sourceRawValue | string | default
 Ride.attachedSourceFormat | string | optional
 Ride.attachedSourceName | string | optional
 Ride.averageCadence | integer 64 | optional
@@ -62,6 +78,7 @@ Ride.overviewRouteVersion | integer 64 | default
 Ride.parserVersion | integer 64 | default
 Ride.parts | to-many Ride | optional
 Ride.peakPowerVersion | integer 64 | default
+Ride.plannedRouteID | uuid | optional
 Ride.rider | to-one Rider | optional
 Ride.samplesData | binary | optional
 Ride.sourceFile | to-one SourceFile | optional

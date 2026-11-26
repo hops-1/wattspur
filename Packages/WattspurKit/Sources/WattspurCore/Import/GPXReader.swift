@@ -49,7 +49,15 @@ final class GPXReader: NSObject, XMLParserDelegate {
     }
 
     let maxPoints: Int
+    /// Stops quietly after this many points (`stoppedEarly`), for a quick look at a file (B-372).
+    let stopAfter: Int?
     var segments: [[RawPoint]] = []
+    /// The points of each `rte`, for planned tours (B-372); the ride importer ignores them.
+    var routes: [[RawPoint]] = []
+    var stoppedEarly = false
+    /// `metadata/time` is there: a recording names when it was made, komoot does not (V-22).
+    var hasMetadataTime = false
+    var routeName: String?
     var sawRoot = false
     var sawRouteOrWaypoint = false
     var exceededPoints = false
@@ -67,8 +75,32 @@ final class GPXReader: NSObject, XMLParserDelegate {
     private var collecting: Value?
     private var collectingTrackText: ReferenceWritableKeyPath<GPXReader, String?>?
 
-    init(maxPoints: Int) {
+    init(maxPoints: Int, stopAfter: Int? = nil) {
         self.maxPoints = maxPoints
+        self.stopAfter = stopAfter
+    }
+
+    private func countPoint(_ parser: XMLParser) {
+        pointCount += 1
+        if let stopAfter, pointCount >= stopAfter {
+            stoppedEarly = true
+            parser.abortParsing()
+        } else if pointCount > maxPoints {
+            exceededPoints = true
+            parser.abortParsing()
+        }
+    }
+
+    private static func position(_ attributes: [String: String]) -> RawPoint {
+        var p = RawPoint()
+        for (key, value) in attributes {
+            switch local(key) {
+            case "lat": p.latitude = Double(value.trimmingCharacters(in: .whitespaces)) ?? .nan
+            case "lon", "lng": p.longitude = Double(value.trimmingCharacters(in: .whitespaces)) ?? .nan
+            default: break
+            }
+        }
+        return p
     }
 
     private static func local(_ name: String) -> String {
@@ -96,21 +128,17 @@ final class GPXReader: NSObject, XMLParserDelegate {
         case "trkpt":
             // A `trkpt` outside a `trkseg` (broken files) still opens a segment.
             if segments.isEmpty || parent != "trkseg" { segments.append([]) }
-            var p = RawPoint()
-            for (key, value) in attributeDict {
-                switch Self.local(key) {
-                case "lat": p.latitude = Double(value.trimmingCharacters(in: .whitespaces)) ?? .nan
-                case "lon", "lng": p.longitude = Double(value.trimmingCharacters(in: .whitespaces)) ?? .nan
-                default: break
-                }
-            }
-            point = p
-            pointCount += 1
-            if pointCount > maxPoints {
-                exceededPoints = true
-                parser.abortParsing()
-            }
-        case "rte", "rtept", "wpt":
+            point = Self.position(attributeDict)
+            countPoint(parser)
+        case "rte":
+            sawRouteOrWaypoint = true
+            routes.append([])
+        case "rtept":
+            sawRouteOrWaypoint = true
+            if routes.isEmpty || parent != "rte" { routes.append([]) }
+            point = Self.position(attributeDict)
+            countPoint(parser)
+        case "wpt":
             sawRouteOrWaypoint = true
         default:
             if point != nil {
@@ -118,6 +146,9 @@ final class GPXReader: NSObject, XMLParserDelegate {
             } else if name == "name" {
                 if parent == "trk" { collectingTrackText = \.trackName }
                 else if parent == "metadata" { collectingTrackText = \.metadataName }
+                else if parent == "rte" { collectingTrackText = \.routeName }
+            } else if name == "time", parent == "metadata" {
+                hasMetadataTime = true
             } else if name == "type", parent == "trk" {
                 collectingTrackText = \.trackType
             } else if name == "bike", parent == "extensions", stack.dropLast(2).last == "metadata" {
@@ -153,6 +184,13 @@ final class GPXReader: NSObject, XMLParserDelegate {
         if name == "trkpt" {
             if let finished = point, !segments.isEmpty {
                 segments[segments.count - 1].append(finished)
+            }
+            point = nil
+            return
+        }
+        if name == "rtept" {
+            if let finished = point, !routes.isEmpty {
+                routes[routes.count - 1].append(finished)
             }
             point = nil
             return

@@ -11,7 +11,7 @@ struct CloudKitSchemaTests {
     func everyType() throws {
         let model = try #require(NSManagedObjectModel.makeManagedObjectModel(for: WattspurSchema.models))
         let names = Set(model.entities.compactMap(\.name))
-        #expect(names == ["Ride", "Rider", "Bike", "SourceFile", "ImportRecord", "Goal", "RouteGroup"])
+        #expect(names == ["Ride", "Rider", "Bike", "SourceFile", "ImportRecord", "Goal", "RouteGroup", "PlannedRoute"])
     }
 
     /// The schema is in production (rule 2 in docs/ARCHITECTURE.md): every field of the snapshot

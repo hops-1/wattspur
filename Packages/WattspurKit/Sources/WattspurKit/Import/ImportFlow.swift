@@ -42,6 +42,18 @@ public final class ImportFlow {
         public let incoming: DuplicateFacts?
     }
 
+    /// A GPX file whose times look estimated (B-372, V-22): ride or planned tour? Sheet A of B-371
+    /// shows the line, name, km and metres of ascent; for a komoot file the tour is preselected.
+    public struct TourQuestion: Identifiable {
+        public let id = UUID()
+        public let url: URL
+        /// The file read as a tour, for the preview.
+        public let tour: PlannedTour
+        /// `true` for a komoot tour: “Planned tour” is preselected, otherwise “Ride”.
+        public let suggestsTour: Bool
+        public var fileName: String { url.lastPathComponent }
+    }
+
     /// The notice after GPX files were attached to rides (mockup "attached").
     public struct Attached: Equatable {
         public var rideIDs: [UUID]
@@ -53,9 +65,17 @@ public final class ImportFlow {
     public var bikeQuestion: BikeQuestion? {
         // Cancelled by the app: the next waiting import may start. Answered, `confirm` starts it after
         // this one has run.
-        didSet { if bikeQuestion == nil, !confirming { startWaitingIfIdle() } }
+        didSet {
+            guard bikeQuestion == nil, !confirming else { return }
+            // Cancelled: the files are left out, and so are the answers kept for them.
+            for url in oldValue?.urls ?? [] { kinds[url] = nil }
+            startWaitingIfIdle()
+        }
     }
     public var comparisons: [Comparison] = []
+    /// The open question “Ride or planned tour?” (B-372); the next ones wait in `tourRun`. Answered
+    /// with `answer(_:asTour:)` or `skip(_:)`.
+    public private(set) var tourQuestion: TourQuestion?
     /// The summary alert.
     public var report: ImportReport?
     /// Duplicates of two FIT files: the old question for all of them at once (IMP-02).
@@ -89,14 +109,16 @@ public final class ImportFlow {
         public var failedFileNames: [String] = []
         /// Files of a type Wattspur does not read.
         public var unsupportedFileNames: [String] = []
-        /// GPX files of a planned route, not a ride (B-301): komoot before the tour is ridden.
+        /// GPX files of a planned route that could not be saved as a tour (B-301).
         public var plannedRouteFileNames: [String] = []
+        /// Planned tours saved (B-372); a tour that was there already counts as a duplicate.
+        public var plannedTours = 0
 
         public init() {}
 
         public var isEmpty: Bool {
             newRides == 0 && completed == 0 && duplicates == 0 && failedFileNames.isEmpty && unsupportedFileNames.isEmpty
-                && plannedRouteFileNames.isEmpty
+                && plannedRouteFileNames.isEmpty && plannedTours == 0
         }
     }
 
@@ -117,9 +139,21 @@ public final class ImportFlow {
     /// answered, so they do not replace it (R-46).
     private var waiting: [() -> Void] = []
     private var confirming = false
+    /// What a file becomes, decided before the run (B-372): a tour without times needs no bike, the
+    /// answer to a `TourQuestion` is kept here. Taken out when the file is imported.
+    private var kinds: [URL: ImportKind] = [:]
+
+    /// The files of a start while its tour questions are open.
+    private struct TourRun {
+        var urls: [URL]
+        var questions: [TourQuestion]
+        let library: RideLibrary
+        let record: ImportRecorder
+    }
+    private var tourRun: TourRun?
 
     /// A question of an import is open.
-    public var isAsking: Bool { bikeQuestion != nil || !comparisons.isEmpty || plainDuplicates != nil }
+    public var isAsking: Bool { bikeQuestion != nil || !comparisons.isEmpty || plainDuplicates != nil || tourQuestion != nil }
 
     /// Something is still running, asking or waiting; the summary is complete once this is `false`.
     public var isBusy: Bool { isAsking || progress != nil || !waiting.isEmpty }
@@ -136,15 +170,92 @@ public final class ImportFlow {
 
     // MARK: - Start
 
-    /// Imports the files, or asks for the bike first when GPX files are among them and there are
-    /// two or more bikes.
+    /// Imports the files. A GPX file with estimated times asks first whether it is a ride or a
+    /// planned tour (B-372); then the bike is asked when GPX rides are among them and there are two
+    /// or more bikes. A GPX file without times becomes a tour without asking.
     public func start(_ urls: [URL], library: RideLibrary, record: @escaping ImportRecorder) {
         guard !urls.isEmpty else { return }
         guard !isAsking, progress == nil else {
             waiting.append { [weak self] in self?.start(urls, library: library, record: record) }
             return
         }
-        let asking = urls.filter(Self.isGPX).contains { !Self.namesKnownBike($0, library: library) }
+        var questions: [TourQuestion] = []
+        var rest: [URL] = []
+        for url in urls {
+            guard Self.isGPX(url) else { rest.append(url); continue }
+            switch Self.content(of: url) {
+            case .estimatedTimes(let komoot):
+                if let tour = Self.tour(at: url) {
+                    questions.append(TourQuestion(url: url, tour: tour, suggestsTour: komoot))
+                } else {
+                    rest.append(url)
+                }
+            case .plannedTour:
+                kinds[url] = .plannedTour
+                rest.append(url)
+            case .ride:
+                rest.append(url)
+            }
+        }
+        guard let first = questions.first else {
+            startRides(rest, library: library, record: record)
+            return
+        }
+        tourRun = TourRun(urls: rest, questions: Array(questions.dropFirst()), library: library, record: record)
+        tourQuestion = first
+    }
+
+    /// Takes the answer to “Ride or planned tour?”; after the last one the files are imported.
+    public func answer(_ question: TourQuestion, asTour: Bool) {
+        guard question.id == tourQuestion?.id else { return }
+        kinds[question.url] = asTour ? .plannedTour : .ride
+        tourRun?.urls.append(question.url)
+        nextTourQuestion()
+    }
+
+    /// Leaves the file of the question out.
+    public func skip(_ question: TourQuestion) {
+        guard question.id == tourQuestion?.id else { return }
+        nextTourQuestion()
+    }
+
+    private func nextTourQuestion() {
+        guard var run = tourRun else { tourQuestion = nil; return }
+        if !run.questions.isEmpty {
+            tourQuestion = run.questions.removeFirst()
+            tourRun = run
+            return
+        }
+        tourRun = nil
+        tourQuestion = nil
+        startRides(run.urls, library: run.library, record: run.record)
+        // Imports that came while asking start once nothing else asks or runs.
+        startWaitingIfIdle()
+    }
+
+    /// What the first points of a GPX file say (`PlannedTourReader.content(of:)`); reads only the start.
+    nonisolated static func content(of url: URL) -> GPXContent {
+        let accessing = url.startAccessingSecurityScopedResource()
+        defer { if accessing { url.stopAccessingSecurityScopedResource() } }
+        guard let handle = try? FileHandle(forReadingFrom: url) else { return .ride }
+        defer { try? handle.close() }
+        guard let head = try? handle.read(upToCount: PlannedTourReader.lookBytes) else { return .ride }
+        return PlannedTourReader.content(of: head)
+    }
+
+    /// The file read as a planned tour, for the question's preview.
+    nonisolated static func tour(at url: URL) -> PlannedTour? {
+        let accessing = url.startAccessingSecurityScopedResource()
+        defer { if accessing { url.stopAccessingSecurityScopedResource() } }
+        guard let data = try? Data(contentsOf: url) else { return nil }
+        return try? PlannedTourReader().read(data)
+    }
+
+    /// The rides of a start: asks for the bike first when GPX rides are among them and there are
+    /// two or more bikes.
+    private func startRides(_ urls: [URL], library: RideLibrary, record: @escaping ImportRecorder) {
+        guard !urls.isEmpty else { return }
+        let asking = urls.filter { Self.isGPX($0) && kinds[$0] != .plannedTour }.contains { !Self.namesKnownBike($0, library: library) }
         if asking, library.bikes(includingArchived: false).count >= 2 {
             bikeQuestion = BikeQuestion(urls: urls)
         } else {
@@ -175,7 +286,8 @@ public final class ImportFlow {
     private func run(_ urls: [URL], gpxBike: Bike?, library: RideLibrary, record: @escaping ImportRecorder) {
         bikeID = gpxBike?.id
         let importOne = { [self] (url: URL) -> ImportReport.Entry in
-            let result = Self.isGPX(url) ? library.importFile(at: url, bike: gpxBike) : library.importFile(at: url)
+            let kind = kinds.removeValue(forKey: url) ?? .automatic
+            let result = Self.isGPX(url) ? library.importFile(at: url, bike: gpxBike, as: kind) : library.importFile(at: url)
             record(result, url)
             library.record(result, source: .manual)
             count(result)
@@ -208,6 +320,8 @@ public final class ImportFlow {
         case .unsupported: summary.unsupportedFileNames.append(result.fileName)
         case .failed(let error) where error.isPlannedRoute: summary.plannedRouteFileNames.append(result.fileName)
         case .failed: summary.failedFileNames.append(result.fileName)
+        case .plannedTour: summary.plannedTours += 1
+        case .plannedTourDuplicate: summary.duplicates += 1
         case .duplicate, .fitForGPX: break
         }
     }
@@ -288,7 +402,7 @@ public final class ImportFlow {
     /// Keep both: the file becomes a ride of its own.
     public func importAsNew(_ comparison: Comparison, library: RideLibrary, record: ImportRecorder) {
         let bike = comparison.bikeID.flatMap { id in library.bikes(includingArchived: false).first { $0.id == id } }
-        let result = library.importFile(at: comparison.entry.url, bike: bike, detectDuplicates: false)
+        let result = library.importFile(at: comparison.entry.url, bike: bike, detectDuplicates: false, as: .ride)
         record(result, comparison.entry.url)
         library.record(result, source: .manual)
         count(result)

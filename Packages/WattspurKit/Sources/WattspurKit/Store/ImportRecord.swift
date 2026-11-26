@@ -37,6 +37,9 @@ public final class ImportRecord {
     public var isPlannedRoute: Bool {
         outcome == .failed && (detail.contains("onlyRoutesOrWaypoints") || detail.contains("noTimestamps"))
     }
+    /// `detail` of a planned tour saved or already there (B-372); `rideID` is then empty.
+    public static let plannedTourDetail = "plannedTour"
+    public var isPlannedTour: Bool { detail == Self.plannedTourDetail }
     public var rideID: UUID?
     /// Where the file is now, relative to the watched folder, e.g. "Failed/x.fit".
     public var movedTo: String?

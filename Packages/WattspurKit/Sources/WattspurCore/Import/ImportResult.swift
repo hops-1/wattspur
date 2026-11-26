@@ -15,6 +15,18 @@ public struct ImportResult: Sendable, Identifiable {
         case fitForGPX(existingRideID: UUID)
         case unsupported
         case failed(RideImportError)
+        /// A planned tour was saved (B-372), not a ride.
+        case plannedTour(routeID: UUID)
+        /// The same planned tour is already there; nothing new was saved (B-372).
+        case plannedTourDuplicate(existingRouteID: UUID)
+
+        /// The tour a `plannedTour` or `plannedTourDuplicate` result refers to.
+        public var plannedRouteID: UUID? {
+            switch self {
+            case .plannedTour(let id), .plannedTourDuplicate(let id): id
+            default: nil
+            }
+        }
 
         /// The ride a `duplicate` or `fitForGPX` result refers to.
         public var existingRideID: UUID? {

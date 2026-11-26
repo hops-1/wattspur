@@ -312,7 +312,8 @@ public final class PhoneDatabase {
     /// its own values and gets them added.
     @discardableResult
     public func saveRecording(gpx: Data, fileName: String) -> ImportResult {
-        let result = library.importFile(data: gpx, fileName: fileName, bike: library.activeBike())
+        // A recording is always a ride, however few points it has (B-372).
+        let result = library.importFile(data: gpx, fileName: fileName, bike: library.activeBike(), as: .ride)
         guard case .duplicate(let id) = result.outcome, let ride = library.ride(withID: id) else { return result }
         do {
             try library.update(ride, with: gpx, fileName: fileName)

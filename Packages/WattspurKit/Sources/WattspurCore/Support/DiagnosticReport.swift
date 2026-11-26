@@ -23,6 +23,8 @@ public struct ImportLogEntry: Sendable, Identifiable, Equatable {
         case .fitForGPX: outcome = "matches a GPX ride"
         case .unsupported: outcome = "unsupported file type"
         case .failed(let error): outcome = "failed: \(error)"
+        case .plannedTour: outcome = "planned tour"
+        case .plannedTourDuplicate: outcome = "planned tour already there"
         }
         self.init(date: date, fileName: result.fileName, outcome: outcome)
     }

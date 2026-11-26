@@ -329,7 +329,8 @@ final class PhoneLibrary {
         // Held, so iOS does not suspend the app while the store writes (B-366).
         switch LibraryWriteHold.writing({ database.saveRecording(gpx: gpx, fileName: fileName) }).outcome {
         case .imported(let id), .attached(let id), .duplicate(let id), .fitForGPX(let id): return id
-        case .unsupported: throw CocoaError(.fileReadCorruptFile)
+        // Recordings are imported as rides (B-372); a tour would be a mistake.
+        case .unsupported, .plannedTour, .plannedTourDuplicate: throw CocoaError(.fileReadCorruptFile)
         case .failed(let error): throw error
         }
     }

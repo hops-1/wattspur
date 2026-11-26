@@ -210,7 +210,9 @@ struct ShareView: View {
         case .sent(_, true): String(localized: "Wattspur opens and imports them.")
         case .sent(_, false): String(localized: "Open Wattspur to import them.")
         case .link(.komoot):
-            String(localized: "In komoot, open the tour you have ridden, export it as a GPX file and share that file to Wattspur. A planned tour has no times and is not a ride.")
+            // Three steps to the file (B-372, V-22: komoot's “Share” sends only a link). Wattspur loads
+            // nothing from komoot itself.
+            String(localized: "1. In komoot, open the tour and tap ⋯.\n2. Choose “Download GPX file”.\n3. Share that file to Wattspur. A planned tour lands under Tours, a ridden one under Rides.")
         case .link(.strava):
             String(localized: "In Strava on the web, open the activity and export it as GPX, then share the file to Wattspur.")
         case .link(.garmin):

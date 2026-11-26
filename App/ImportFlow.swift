@@ -1,3 +1,4 @@
+import MapKit
 import SwiftData
 import SwiftUI
 import WattspurKit
@@ -23,6 +24,18 @@ private struct ImportFlowModifier: ViewModifier {
                 GPXBikeSheet(question: question) { bike in
                     flow.confirm(question, bike: bike, library: library, record: importLog.record)
                 }
+            }
+            // “Ride or planned tour?” (B-372): only the buttons close it; Esc is “Cancel”.
+            .sheet(item: Binding(get: { flow.tourQuestion }, set: { _ in })) { question in
+                TourChoiceSheet(question: question) {
+                    TourPreviewMap(points: question.tour.points)
+                } onChoose: { asTour in
+                    flow.answer(question, asTour: asTour)
+                } onCancel: {
+                    flow.skip(question)
+                }
+                .frame(width: 440)
+                .interactiveDismissDisabled()
             }
             // Only the buttons close it, so a decision is never skipped by accident; Esc is "Skip".
             .sheet(item: Binding(get: { flow.comparisons.first }, set: { _ in })) { comparison in
@@ -57,6 +70,22 @@ private struct ImportFlowModifier: ViewModifier {
                 }
             }
             .animation(.snappy, value: flow.attached)
+    }
+}
+
+// MARK: - Planned tour
+
+/// The line of a planned tour on a still map, for the question “Ride or planned tour?” (B-372).
+private struct TourPreviewMap: View {
+    let points: [PlannedTour.Point]
+    @Environment(\.colorScheme) private var scheme
+
+    var body: some View {
+        Map(initialPosition: .automatic, interactionModes: []) {
+            MapPolyline(coordinates: points.map { CLLocationCoordinate2D(latitude: $0.latitude, longitude: $0.longitude) })
+                .stroke(PlannedTourColor.line(scheme), style: StrokeStyle(lineWidth: 4, lineCap: .round, lineJoin: .round))
+        }
+        .mapStyle(.standard(elevation: .flat, pointsOfInterest: .excludingAll))
     }
 }
 

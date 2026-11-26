@@ -1,6 +1,6 @@
 # Datenschutz · Privacy
 
-Stand: 22. November 2026 · Gilt für Wattspur für Mac, iPhone und iPad.
+Stand: 26. November 2026 · Gilt für Wattspur für Mac, iPhone und iPad.
 
 ## Deutsch
 
@@ -8,6 +8,7 @@ Stand: 22. November 2026 · Gilt für Wattspur für Mac, iPhone und iPad.
 
 **Welche Daten Wattspur verarbeitet**
 - Fahrten aus FIT- und GPX-Dateien und aus der GPS-Aufnahme auf dem iPhone: Zeit, Strecke, Route (Standorte), Höhe, Tempo und, wenn vorhanden, Leistung, Trittfrequenz und Puls.
+- Geplante Touren aus GPX-Dateien, die du selbst importierst (z. B. aus komoot): Name, Linie mit Höhe, Strecke, Anstieg und die Originaldatei. Sie liegen wie Fahrten bei dir und, mit Sync, in deinem iCloud-Konto. Ein geteilter Link auf komoot lädt nichts; Wattspur verbindet sich nie mit komoot.
 - Dein Profil, wenn du es ausfüllst: Name, Gewicht, Größe, Geburtsjahr, Geschlecht, Foto; dazu Bikes, Ziele und gespeicherte Strecken.
 
 **Wo die Daten liegen**
@@ -40,7 +41,7 @@ Jede Aufnahme schreibt einmal pro Minute eine Zeile in eine Datei auf dem iPhone
 Kein Konto bei Wattspur, kein eigener Server, keine Werbung, keine Analyse, kein Tracking, keine Weitergabe außer den Anfragen oben.
 
 **Löschen**
-Fahrten löschst du in der App (Papierkorb, nach 30 Tagen endgültig). Mit der App löschst du die lokale Mediathek. Daten in iCloud löschst du in den iCloud-Einstellungen deines Geräts (*iCloud › Speicher verwalten › Wattspur*).
+Fahrten und geplante Touren löschst du in der App (Papierkorb, nach 30 Tagen endgültig). Mit der App löschst du die lokale Mediathek. Daten in iCloud löschst du in den iCloud-Einstellungen deines Geräts (*iCloud › Speicher verwalten › Wattspur*).
 
 **Kontakt**
 Nils Wiese, über die Issues auf GitHub: https://github.com/hops-1/wattspur/issues
@@ -51,6 +52,7 @@ Nils Wiese, über die Issues auf GitHub: https://github.com/hops-1/wattspur/issu
 
 **What Wattspur processes**
 - Rides from FIT and GPX files and from GPS recording on the iPhone: time, distance, route (locations), altitude, speed and, if present, power, cadence and heart rate.
+- Planned tours from GPX files you import yourself (for example from komoot): name, line with altitude, distance, ascent and the original file. Like rides they stay with you and, with sync, in your iCloud account. A shared komoot link loads nothing; Wattspur never connects to komoot.
 - Your profile, if you fill it in: name, weight, height, year of birth, sex, photo; also bikes, goals and saved routes.
 
 **Where the data is kept**
@@ -83,7 +85,7 @@ Every recording writes one line a minute into a file on the iPhone (Files app, "
 No Wattspur account, no server of its own, no ads, no analytics, no tracking, no sharing beyond the requests above.
 
 **Deleting**
-You delete rides in the app (trash, final after 30 days). Deleting the app deletes the local library. Data in iCloud is deleted in your device's iCloud settings (*iCloud › Manage Storage › Wattspur*).
+You delete rides and planned tours in the app (trash, final after 30 days). Deleting the app deletes the local library. Data in iCloud is deleted in your device's iCloud settings (*iCloud › Manage Storage › Wattspur*).
 
 **Contact**
 Nils Wiese, through the issues on GitHub: https://github.com/hops-1/wattspur/issues
