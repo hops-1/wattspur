@@ -149,6 +149,7 @@ At the top right of a ride's detail, or by touching and holding a ride in the li
 ## In the handlebar mount (landscape)
 Most handlebar mounts hold the iPhone sideways. Wattspur works in landscape too:
 - **While recording** the map fills the screen. On the left a bar shows the speed large, with the average, distance, time, height and ascent below it, and Pause and Stop at the bottom. From iPhone 1.6 the speed is the mean of the last 2 seconds: it still updates every second, but jumps less with poor GPS (in a forest, say).
+- **Clock and battery:** in landscape iOS hides the status bar. From iPhone 1.6.11 the recording therefore shows a small capsule at the top right with the time and the iPhone's battery, with a green bolt while charging. Below 20 % the battery symbol turns orange. The map style button sits below it. In portrait iOS shows both itself.
 - **The tab bar** sits at the bottom left, in every section.
 - **Overview:** the last ride on the left, the week, month, year and all rides on the right.
 - **Rides:** the list on the left, the chosen ride on the right.
