@@ -16,7 +16,7 @@ Geht im Auto oder am Mac im CarPlay Simulator (Device Hub, iPhone am Kabel).
 2. **Pause:** Am iPhone **Pause** tippen. Auf der Kachel steht **Pausiert**. Mit **Weiter** verschwindet das Wort wieder.
 3. **Bereit:** Eine Fahrt per Auto-Start beginnen lassen und noch nicht losfahren. Die Kachel zeigt die Sanduhr, **Bereit** und den Hinweis „Die Fahrt beginnt, wenn du losfährst.“
 4. **Tipp:** Ein kurzer Tipp auf die Kachel tut weiter nichts. So macht es Apple.
-5. **Sperrbildschirm:** Die Live-Aktivität am iPhone sieht aus wie bisher, mit den Knöpfen **Pause** und **Abbrechen**.
+5. **Sperrbildschirm:** Die Live-Aktivität am iPhone sieht aus wie bisher. Während der Fahrt hat sie nur den Knopf **Pause**. **Abbrechen** gibt es nur, solange sie **Bereit** zeigt.
 
 ## B. Apple Watch (optional)
 
