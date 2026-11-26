@@ -12,13 +12,97 @@ import WidgetKit
 struct WattspurApp: App {
     enum Tab: Hashable { case overview, rides, map, more }
 
+    /// What the start built once (B-389): the window's content gets it without reading any state,
+    /// so SwiftUI never has to build the window again.
+    private let start: AppStart
+
+    /// Kept here: the notification center holds its delegate weakly.
+    private static var notifications: NotificationRouter?
+
+    init() {
+        // Siri and the shortcuts (B-225) reach the recorder and the app through these two.
+        let recorder = Recorder()
+        let intents = IntentRouter()
+        AppDependencyManager.shared.add(dependency: recorder)
+        AppDependencyManager.shared.add(dependency: intents)
+        // CarPlay (B-327) drives the same recorder.
+        CarPlaySceneDelegate.recorder = recorder
+        // iCloud only when the build allows it (`WattspurDatabase` in the Info.plist, from
+        // Config/iOS.xcconfig or Local.xcconfig) and the user wants it; else the store without sync (B-218).
+        let buildMode = PhoneDatabase.Mode(infoValue: Bundle.main.object(forInfoDictionaryKey: "WattspurDatabase") as? String)
+        let sync = PhoneSync(buildMode: buildMode, hadFolder: PhoneSync.hadFolder(), hadStore: PhoneSync.storeExists)
+        // A backup chosen under More is swapped in now, before the store opens (B-302).
+        let launchRestore = PhoneBackup.applyAtLaunch(syncOn: sync.mode == .iCloud)
+        let library = sync.makeLibrary()
+        var tab = Tab.overview
+        #if DEBUG
+        if UserDefaults.standard.bool(forKey: PhoneSettingsKey.demoRide) { library.importSampleRideForTesting() }
+        library.importDemoCopiesForTesting(UserDefaults.standard.integer(forKey: "WattspurDemoRides"))
+        // For the App Store screenshots (B-315, scripts/appstore-screenshots.sh): recent rides, a tab,
+        // the newest ride open, or a recording running from the start.
+        library.importRecentDemoRidesForTesting(UserDefaults.standard.integer(forKey: "WattspurDemoRecent"))
+        if UserDefaults.standard.bool(forKey: "WattspurDemoCar") { library.addDemoCarForTesting() }
+        switch UserDefaults.standard.string(forKey: "WattspurDemoTab") {
+        case "rides": tab = .rides
+        case "map": tab = .map
+        case "more": tab = .more
+        default: break
+        }
+        if UserDefaults.standard.bool(forKey: "WattspurDemoOpenLast") { intents.request = .lastRide }
+        if UserDefaults.standard.bool(forKey: "WattspurDemoRecord") {
+            // `-WattspurDemoRecordKind car`: a car without a device, to see the lateral bar (B-320).
+            let kind = UserDefaults.standard.string(forKey: "WattspurDemoRecordKind").flatMap(BikeKind.init(rawValue:))
+            // `-WattspurDemoReady YES`: as an auto-start, waiting for the vehicle to move (B-311).
+            let ready = UserDefaults.standard.bool(forKey: "WattspurDemoReady")
+            Task { @MainActor in recorder.start(device: kind.map(RecordingDevice.without), ready: ready) }
+        }
+        // `-WattspurOfflineTiles YES`: the OpenStreetMap tiles fail as without a network (B-226).
+        if UserDefaults.standard.bool(forKey: "WattspurOfflineTiles") { TileLoader.simulatesOffline = true }
+        #endif
+        // An auto-started ride that ends by itself is saved here, where the library is (B-339).
+        recorder.autoSave = { recording, name in
+            let bikes = (library.state?.bikes ?? []).filter { !$0.isArchived }
+            let device = SaveRecordingSheet.defaultDevice(for: recording, among: bikes, lastRide: library.state?.lastRide)
+            return (try? SaveRecordingSheet.store(recording, name: name, device: device, library: library)) != nil
+        }
+        // A tap on “Ride Saved” opens the ride (B-339).
+        Self.notifications = NotificationRouter(intents: intents)
+        UNUserNotificationCenter.current().delegate = Self.notifications
+        start = AppStart(library: library, sync: sync, recorder: recorder, intents: intents,
+                         launchRestore: launchRestore, tab: tab)
+    }
+
+    var body: some Scene {
+        WindowGroup {
+            // No state is read here (B-389). iOS 27 may build this window again on SwiftUI's render
+            // thread whenever something it read changes, and Swift 6 stops the app there (the start
+            // of a ride while the iPhone turned). `AppRoot` reads the state in its own body.
+            AppRoot(start: start)
+        }
+    }
+}
+
+/// What the start built once and hands to the window (B-389).
+struct AppStart {
+    let library: PhoneLibrary
+    let sync: PhoneSync
+    let recorder: Recorder
+    let intents: IntentRouter
+    let launchRestore: PhoneBackup.LaunchResult?
+    let tab: WattspurApp.Tab
+}
+
+/// The content of the app's window: the tabs, or the way out when the library did not open.
+struct AppRoot: View {
+    typealias Tab = WattspurApp.Tab
+
     @Environment(\.scenePhase) private var scenePhase
     @State private var library: PhoneLibrary
     @State private var sync: PhoneSync
     @State private var recorder: Recorder
     /// What Siri and the shortcuts ask the app to show (B-225).
     @State private var intents: IntentRouter
-    @State private var tab = Tab.overview
+    @State private var tab: Tab
     /// Search and filters of the ride list (B-222); the period tiles of the overview set them.
     @State private var rideFilter = RideFilter()
     /// The ride “Open last ride” shows in the list (B-225).
@@ -35,61 +119,25 @@ struct WattspurApp: App {
     /// over them (B-382).
     @State private var recordingCovers = false
 
-    /// Kept here: the notification center holds its delegate weakly.
-    private static var notifications: NotificationRouter?
+    init(start: AppStart) {
+        _library = State(initialValue: start.library)
+        _sync = State(initialValue: start.sync)
+        _recorder = State(initialValue: start.recorder)
+        _intents = State(initialValue: start.intents)
+        _launchRestore = State(initialValue: start.launchRestore)
+        _tab = State(initialValue: start.tab)
+    }
 
-    init() {
-        // Siri and the shortcuts (B-225) reach the recorder and the app through these two.
-        let recorder = Recorder()
-        let intents = IntentRouter()
-        _recorder = State(initialValue: recorder)
-        _intents = State(initialValue: intents)
-        AppDependencyManager.shared.add(dependency: recorder)
-        AppDependencyManager.shared.add(dependency: intents)
-        // CarPlay (B-327) drives the same recorder.
-        CarPlaySceneDelegate.recorder = recorder
-        // iCloud only when the build allows it (`WattspurDatabase` in the Info.plist, from
-        // Config/iOS.xcconfig or Local.xcconfig) and the user wants it; else the store without sync (B-218).
-        let buildMode = PhoneDatabase.Mode(infoValue: Bundle.main.object(forInfoDictionaryKey: "WattspurDatabase") as? String)
-        let sync = PhoneSync(buildMode: buildMode, hadFolder: PhoneSync.hadFolder(), hadStore: PhoneSync.storeExists)
-        _sync = State(initialValue: sync)
-        // A backup chosen under More is swapped in now, before the store opens (B-302).
-        _launchRestore = State(initialValue: PhoneBackup.applyAtLaunch(syncOn: sync.mode == .iCloud))
-        let library = sync.makeLibrary()
-        #if DEBUG
-        if UserDefaults.standard.bool(forKey: PhoneSettingsKey.demoRide) { library.importSampleRideForTesting() }
-        library.importDemoCopiesForTesting(UserDefaults.standard.integer(forKey: "WattspurDemoRides"))
-        // For the App Store screenshots (B-315, scripts/appstore-screenshots.sh): recent rides, a tab,
-        // the newest ride open, or a recording running from the start.
-        library.importRecentDemoRidesForTesting(UserDefaults.standard.integer(forKey: "WattspurDemoRecent"))
-        if UserDefaults.standard.bool(forKey: "WattspurDemoCar") { library.addDemoCarForTesting() }
-        switch UserDefaults.standard.string(forKey: "WattspurDemoTab") {
-        case "rides": _tab = State(initialValue: .rides)
-        case "map": _tab = State(initialValue: .map)
-        case "more": _tab = State(initialValue: .more)
-        default: break
+    var body: some View {
+        // The library did not open (B-264): the way out instead of the tabs, and nothing that imports or records.
+        if let failure = sync.libraryFailure {
+            LibraryErrorView(error: failure, storeURL: sync.failedStoreURL) {
+                library = sync.makeLibrary()
+                Task { await library.refresh() }
+            }
+        } else {
+            mainView
         }
-        if UserDefaults.standard.bool(forKey: "WattspurDemoOpenLast") { intents.request = .lastRide }
-        if UserDefaults.standard.bool(forKey: "WattspurDemoRecord") {
-            // `-WattspurDemoRecordKind car`: a car without a device, to see the lateral bar (B-320).
-            let kind = UserDefaults.standard.string(forKey: "WattspurDemoRecordKind").flatMap(BikeKind.init(rawValue:))
-            // `-WattspurDemoReady YES`: as an auto-start, waiting for the vehicle to move (B-311).
-            let ready = UserDefaults.standard.bool(forKey: "WattspurDemoReady")
-            Task { @MainActor in recorder.start(device: kind.map(RecordingDevice.without), ready: ready) }
-        }
-        // `-WattspurOfflineTiles YES`: the OpenStreetMap tiles fail as without a network (B-226).
-        if UserDefaults.standard.bool(forKey: "WattspurOfflineTiles") { TileLoader.simulatesOffline = true }
-        #endif
-        _library = State(initialValue: library)
-        // An auto-started ride that ends by itself is saved here, where the library is (B-339).
-        recorder.autoSave = { recording, name in
-            let bikes = (library.state?.bikes ?? []).filter { !$0.isArchived }
-            let device = SaveRecordingSheet.defaultDevice(for: recording, among: bikes, lastRide: library.state?.lastRide)
-            return (try? SaveRecordingSheet.store(recording, name: name, device: device, library: library)) != nil
-        }
-        // A tap on “Ride Saved” opens the ride (B-339).
-        Self.notifications = NotificationRouter(intents: intents)
-        UNUserNotificationCenter.current().delegate = Self.notifications
     }
 
     /// Switches iCloud on or off (B-218); before the store is open, at once.
@@ -110,20 +158,6 @@ struct WattspurApp: App {
                 .map { WeekSnapshot.LastRide(name: $0.name, start: $0.startDate, distance: $0.distance, timeZone: $0.timeZone) }
             return (sport, WeekSnapshot(rides: rides.map { (start: $0.startDate, distance: $0.distance) }, lastRide: last))
         })
-    }
-
-    var body: some Scene {
-        WindowGroup {
-            // The library did not open (B-264): the way out instead of the tabs, and nothing that imports or records.
-            if let failure = sync.libraryFailure {
-                LibraryErrorView(error: failure, storeURL: sync.failedStoreURL) {
-                    library = sync.makeLibrary()
-                    Task { await library.refresh() }
-                }
-            } else {
-                mainView
-            }
-        }
     }
 
     /// The iPhone's four tabs; also the iPad in a narrow window.
@@ -317,7 +351,7 @@ struct WattspurApp: App {
     }
 }
 
-extension WattspurApp {
+extension AppRoot {
     private var launchRestoreTitle: LocalizedStringKey {
         if case .failed = launchRestore { return "Backup Not Restored" }
         return "Backup Restored"

@@ -150,7 +150,7 @@ extension IntentDialog {
     }
 }
 
-/// What an intent asks the app to show; the app reacts and clears it (`WattspurApp`).
+/// What an intent asks the app to show; the app reacts and clears it (`AppRoot`).
 @MainActor @Observable
 final class IntentRouter {
     enum Request: Equatable { case lastRide }
