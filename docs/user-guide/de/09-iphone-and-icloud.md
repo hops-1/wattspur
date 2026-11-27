@@ -85,7 +85,7 @@ Ab 0.7.0 steht **Wattspur** in der Reihe der Apps im Teilen-Menü, auch bei Apps
 Öffnet sich Wattspur nicht von selbst, öffne die App. Sie holt die geteilten Dateien dann ab.
 
 - **Puls, Trittfrequenz und Leistung** liest Wattspur auch aus GPX-Dateien anderer Tracker, wenn die Datei sie hat (Garmin, Wahoo, Strava).
-- **Eine geplante Tour aus komoot** hat keine Zeiten. Wattspur sagt dann: „Das ist eine geplante Route, keine Fahrt.“ Exportiere die Tour noch einmal, nachdem du sie gefahren bist.
+- **Eine geplante Tour aus komoot** wird ab iPhone 1.7 eine geplante Tour im Tab **Touren** (siehe [Geplante Touren](#geplante-touren-ab-iphone-17)). Bis 1.6 sagte Wattspur: „Das ist eine geplante Route, keine Fahrt.“
 - **Ein Link** (zum Beispiel komoot.com/tour/…) ist keine Fahrt. Wattspur lädt keine Links, sagt dir aber, wie du in dieser App die GPX-Datei exportierst.
 
 Diese Apps sind getestet:
@@ -93,7 +93,7 @@ Diese Apps sind getestet:
 | App | Was du teilst | Ergebnis |
 |---|---|---|
 | Bosch eBike Flow | Fahrt als FIT-Datei | geht (geprüft mit 0.7.0); Wattspur öffnet sich und importiert |
-| komoot | gefahrene Tour als GPX-Datei | geht (geprüft mit 0.7.0); eine geplante Tour und ein Link geben den Hinweis |
+| komoot | gefahrene Tour als GPX-Datei | geht (geprüft mit 0.7.0); eine geplante Tour kommt ab 1.7 unter **Touren**, ein Link gibt den Hinweis |
 | Strava | Aktivität als GPX-Datei | noch nicht geprüft |
 | Garmin Connect | Aktivität als GPX- oder FIT-Datei | noch nicht geprüft |
 
@@ -226,6 +226,16 @@ Ist das iPhone mit dem Auto verbunden, steht Wattspur in CarPlay. Es ist dieselb
 - **Nach einem Abbruch** (ab iPhone 1.6.9): Beendet iOS Wattspur während der Fahrt, zum Beispiel weil der Speicher knapp wird, läuft die Aufnahme beim nächsten Start von selbst weiter. War sie länger als 15 Minuten unterbrochen, fragt das iPhone, ob du sie fortsetzen willst, und CarPlay bietet nur **Aufnahme fortsetzen**.
 - Eine Karte oder die Fahrtenliste gibt es in CarPlay nicht. Die Fahrt siehst du danach am iPhone.
 
+## Geplante Touren (ab iPhone 1.7)
+Eine Tour, die du in komoot oder einem anderen Planer geplant hast, liegt im Tab **Touren**, zwischen **Fahrten** und **Karte**.
+
+- **Hinein kommt sie** als GPX-Datei: Exportiere die geplante Tour in komoot als GPX-Datei und teile sie mit **Wattspur**. Oder **+** neben dem Suchfeld öffnet die Dateien-App. Hat die Datei geschätzte Zeiten, fragt Wattspur „Fahrt oder geplante Tour?“; bei einer Datei von komoot ist **Geplante Tour** schon gewählt.
+- **Die Liste** zeigt jede Tour als Karte mit ihrer Linie in Blau, mit Kilometern, Höhenmetern, Rundtour oder **Von A nach B** und der Quelle. Oben suchst du nach dem Namen. Die Pillen **Rundtouren**, **Von A nach B**, **Strecke** und, bei Touren aus mehreren Quellen, **Quelle** grenzen die Liste ein; ✕ setzt sie zurück.
+- **Ein Tipp auf eine Tour** zeigt die Karte mit der Linie, darüber unten das Höhenprofil. Darunter stehen Strecke, Anstieg, Abstieg, Höhe, Art, Quelle und wann du sie importiert hast. **Navigieren** ist schon zu sehen, geht aber erst mit einer späteren Version. **Geplant vs. gefahren** bleibt bis dahin leer.
+- **GPX teilen** gibt die Originaldatei weiter, zum Beispiel an ein Navi. **Umbenennen …** ändert den Namen, **In den Papierkorb** legt die Tour für 30 Tage in den Papierkorb unter **Mehr › Papierkorb**. Dort holst du sie mit einem Wisch nach rechts zurück. Das geht auch mit langem Druck auf eine Tour in der Liste.
+- Quer gehalten stehen Liste und Tour nebeneinander, wie bei den Fahrten.
+- **Mit iCloud** sind die Touren auf iPhone, iPad und Mac dieselben. Ohne iCloud bleiben sie auf dem Gerät.
+
 ## Womit du fährst: Rad, Motorrad, Auto
 Ab iPhone 1.1 wählst du das Gerät beim Start. Ein Tipp auf **Fahrt starten** nimmt das Gerät der letzten Aufnahme. Darunter steht klein „mit Nugget ▾“: Ein Tipp darauf öffnet **Womit fährst du?** mit deinen Bikes, Fahrzeugen und Schuhen. Darunter steht **Fahrzeugart** mit **Fahrrad**, **Auto** und **Motorrad** ohne eigenes Gerät, zum Beispiel für ein geliehenes Rad oder einen Mietwagen (Fahrrad ab iPhone 1.1.1). Ein Tipp auf eine Zeile startet die Fahrt damit. Beim Sichern ist das Gerät schon gewählt, du kannst es dort noch ändern. Die Live-Aktivität zeigt sein Symbol.
 
@@ -249,6 +259,8 @@ Ab Version 1.3 läuft Wattspur auch auf dem iPad. Im Vollbild oder in einem brei
 Ab Version 1.4 kann das iPad, was der Mac kann. In der Seitenleiste stehen nach der Karte **Auswertung** und **Highlights**. Die Auswertung zeigt einen Zeitraum mit den Summen, dem Vergleich zum Zeitraum davor, den Durchschnitten, den Balken und den Trends. Die Highlights zeigen dein Jahr, deine Rekorde und deine Ziele; Ziele legst du mit **Ziel hinzufügen …** an und änderst sie mit dem Stift, über iCloud auch am Mac. Beides gilt für die Sportart oben in der Seitenleiste.
 
 Unter **Fahrten** tippst du neben dem Monat über der Liste auf **Auswählen** und dann auf zwei bis vier Fahrten: Rechts erscheint der Vergleich mit Karte, Diagramm und Tabelle. **Zusammenfügen …** macht aus den gewählten Fahrten eine; die Originale bleiben darin, am Mac kannst du sie wieder trennen. FIT- und GPX-Dateien ziehst du aus der Dateien-App (Split View) auf die Liste. Der Teilen-Knopf einer Fahrt bietet **GPX teilen** und **PDF teilen**; das PDF ist eine Seite mit Karte, Kennzahlen, Tempo und Höhe.
+
+Ab Version 1.7 steht nach **Fahrten** der Eintrag **Geplante Touren**: links die Touren, rechts die gewählte Tour mit Karte, Höhenprofil und Werten, wie am iPhone (siehe [Geplante Touren](#geplante-touren-ab-iphone-17)). Navigiert wird am iPhone, mit einer späteren Version.
 
 Ab Version 1.5 zeigt der Vergleich mit dem Schalter **Abweichung vom Schnitt** über der Tabelle unter jedem Wert, wie weit er von deinem Durchschnitt abweicht, wie am Mac. Das Teilen-Symbol neben **Zusammenfügen …** gibt den Vergleich als PDF aus (Karte, dann Tabelle). **Abbrechen** neben dem Monat über der Liste beendet das Auswählen.
 

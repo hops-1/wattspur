@@ -16,11 +16,16 @@ struct PhoneMapView: View {
     var interactive = false
     /// The area to show first; the track with a margin.
     var area: MKMapRect
+    /// The plain line's colour in place of the track colour: blue for a planned tour (B-373).
+    var accent: Color?
+    /// Points at the bottom the track keeps clear of, e.g. for the elevation profile over the map (B-373).
+    var bottomInset: CGFloat = 0
     @Environment(\.colorScheme) private var colorScheme
 
     var body: some View {
         PhoneMapRepresentable(mapType: mapType, segments: segments, colouring: colouring, marker: marker,
-                              interactive: interactive, area: area, dark: colorScheme == .dark)
+                              interactive: interactive, area: area, dark: colorScheme == .dark, accent: accent,
+                              bottomInset: bottomInset)
             .overlay(alignment: .bottomTrailing) {
                 if let source = mapType.tileSource {
                     TileAttribution(source: source, interactive: interactive)
@@ -32,10 +37,11 @@ struct PhoneMapView: View {
 }
 
 extension RouteColors {
-    /// The track colour of the iPhone and the system grey, resolved for the light or dark appearance.
-    static func phone(dark: Bool) -> RouteColors {
+    /// The track colour of the iPhone (or `accent`) and the system grey, resolved for the light or
+    /// dark appearance.
+    static func phone(dark: Bool, accent: Color? = nil) -> RouteColors {
         let traits = UITraitCollection(userInterfaceStyle: dark ? .dark : .light)
-        return RouteColors(accent: UIColor(Color.track).resolvedColor(with: traits).cgColor,
+        return RouteColors(accent: UIColor(accent ?? Color.track).resolvedColor(with: traits).cgColor,
                            noHeight: UIColor.systemGray.resolvedColor(with: traits).cgColor)
     }
 }
@@ -48,6 +54,8 @@ private struct PhoneMapRepresentable: UIViewRepresentable {
     let interactive: Bool
     let area: MKMapRect
     let dark: Bool
+    let accent: Color?
+    let bottomInset: CGFloat
 
     func makeCoordinator() -> Coordinator { Coordinator() }
 
@@ -70,17 +78,17 @@ private struct PhoneMapRepresentable: UIViewRepresentable {
             coordinator.mapType = mapType
             map.show(mapType)
         }
-        let drawingKey = "\(segments.map(\.count))|\(segments.first?.first.map { "\($0.latitude),\($0.longitude)" } ?? "")|\(colouring.key)|\(dark)"
+        let drawingKey = "\(segments.map(\.count))|\(segments.first?.first.map { "\($0.latitude),\($0.longitude)" } ?? "")|\(colouring.key)|\(dark)|\(accent == nil ? "track" : "accent")"
         if coordinator.drawingKey != drawingKey {
             coordinator.drawingKey = drawingKey
             map.removeOverlays(map.drawnOverlays)
             if segments.contains(where: { $0.count > 1 }) {
-                map.addOverlay(RideRouteOverlay(segments: segments, colouring: colouring, dark: dark, colors: .phone(dark: dark)),
+                map.addOverlay(RideRouteOverlay(segments: segments, colouring: colouring, dark: dark, colors: .phone(dark: dark, accent: accent)),
                                level: map.drawnOverlayLevel)
             }
         }
         // Room below the track for the credit of an OpenStreetMap style.
-        map.bottomRoom = mapType.tileSource == nil ? 0 : (interactive ? 36 : 22)
+        map.bottomRoom = (mapType.tileSource == nil ? 0 : (interactive ? 36 : 22)) + bottomInset
         map.area = area
         coordinator.show(marker, on: map, dark: dark)
     }
