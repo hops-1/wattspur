@@ -59,7 +59,7 @@ struct RootLayout<Tabs: View, Pad: View>: View {
 }
 
 /// The iPad in the regular width (B-292): a sidebar like on the Mac, with the sport switch at the
-/// top, then Overview, Rides and Map, below them the pages of “More”. The screens are the ones of
+/// top, then Overview, Rides, Planned Tours and Map, below them the pages of “More”. The screens are the ones of
 /// the iPhone; only their arrangement is new.
 struct PadRootView: View {
     /// The tab of the iPhone layout, kept by the app: Siri and the overview's tiles set it.
@@ -73,7 +73,7 @@ struct PadRootView: View {
     /// A section only the iPad has (B-295), shown instead of the tab's screen; `nil` for the tabs.
     @State private var padSection: PadSection?
 
-    enum Item: Hashable { case overview, rides, map, page(MorePage), settings, pad(PadSection) }
+    enum Item: Hashable { case overview, rides, tours, map, page(MorePage), settings, pad(PadSection) }
 
     /// The sections of the Mac that come to the iPad in 1.4 (B-295): Analysis and Highlights.
     enum PadSection: Hashable { case analysis, highlights }
@@ -84,6 +84,7 @@ struct PadRootView: View {
             return switch tab {
             case .overview: .overview
             case .rides: .rides
+            case .tours: .tours
             case .map: .map
             case .more: page.map(Item.page) ?? .settings
             }
@@ -97,6 +98,7 @@ struct PadRootView: View {
             case .pad: break
             case .overview: tab = .overview
             case .rides: tab = .rides
+            case .tours: tab = .tours
             case .map: tab = .map
             case .page(let chosen):
                 page = chosen
@@ -161,6 +163,10 @@ struct PadRootView: View {
             }
         case .rides:
             RidesView(filter: $rideFilter, openedRideID: $openedRideID)
+                .hidesTitleBar()
+        case .tours:
+            // Planned tours (B-373): the cards beside the detail; navigated on the iPhone.
+            PlannedToursView()
                 .hidesTitleBar()
         case .map:
             RidesMapScreen()
@@ -233,6 +239,7 @@ private struct PadSidebar: View {
                     header("Media Library")
                     row(.overview, "Overview", "square.grid.2x2")
                     row(.rides, "Rides", "list.bullet")
+                    row(.tours, "Planned Tours", "point.bottomleft.forward.to.point.topright.scurvepath")
                     row(.map, "Map", "map")
                     // After the map, as on the Mac (B-295).
                     row(.pad(.analysis), "Analysis", "chart.bar")

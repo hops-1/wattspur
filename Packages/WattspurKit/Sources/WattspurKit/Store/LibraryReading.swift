@@ -20,6 +20,10 @@ public struct LibraryReading: Sendable {
     public var activeDeviceID: UUID?
     /// The rides in the list per device, which keep it from being deleted (B-322).
     public var listedRideCounts: [UUID: Int]
+    /// Planned tours outside the trash, newest first (B-373).
+    public var plannedTours: [PlannedTourSummary] = []
+    /// Planned tours in the trash, newest first (B-373).
+    public var trashedTours: [TrashedPlannedTour] = []
 
     /// A period and a metric without a goal yet.
     public struct GoalCombination: Sendable, Equatable {
@@ -40,6 +44,9 @@ public struct LibraryReading: Sendable {
         let rider = riders.min { ($0.createdAt, $0.id.uuidString) < ($1.createdAt, $1.id.uuidString) }
         let trashed = LibraryFetch.fetchOrEmpty(
             FetchDescriptor<Ride>(predicate: #Predicate { $0.deletedAt != nil && $0.mergedInto == nil }), in: context)
+
+        let tours = LibraryFetch.fetchOrEmpty(
+            FetchDescriptor<PlannedRoute>(sortBy: [SortDescriptor(\.createdAt, order: .reverse)]), in: context)
 
         return LibraryReading(
             state: RideExchange.Library(
@@ -69,7 +76,10 @@ public struct LibraryReading: Sendable {
             activeDeviceID: rider?.activeBikeID,
             listedRideCounts: Dictionary(bikes.map { bike in
                 (bike.id, (bike.rides ?? []).filter { $0.deletedAt == nil && $0.mergedInto == nil }.count)
-            }, uniquingKeysWith: { first, _ in first }))
+            }, uniquingKeysWith: { first, _ in first }),
+            plannedTours: tours.filter { !$0.isInTrash }.map(\.summary),
+            trashedTours: tours.compactMap { route in route.deletedAt.map { TrashedPlannedTour(tour: route.summary, deletedAt: $0) } }
+                .sorted { $0.deletedAt > $1.deletedAt })
     }
 }
 

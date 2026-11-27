@@ -253,6 +253,8 @@ final class PhoneLibrary {
             freeGoalCombinations = reading.freeGoalCombinations.map { (period: $0.period, metric: $0.metric) }
             activeDeviceID = reading.activeDeviceID
             listedRideCounts = reading.listedRideCounts
+            plannedTours = reading.plannedTours
+            trashedTours = reading.trashedTours
             RecordingChoice.cache(devices: reading.state.bikes)
         case .failure(let error):
             problem = error.localizedDescription
@@ -429,6 +431,44 @@ final class PhoneLibrary {
         reload()
     }
 
+    /// For trying the tab “Tours” (B-373): `-WattspurDemoTours 5` adds that many invented planned tours,
+    /// loops and one-way lines with made-up heights in an invented place, some from “komoot”. Debug
+    /// builds only; tours already there are skipped as duplicates.
+    func importDemoToursForTesting(_ count: Int) {
+        guard count > 0, let database else { return }
+        let german = Locale.preferredLanguages.first?.hasPrefix("de") == true
+        let names = german
+            ? ["Seenrunde", "Über die Höhe", "Zum Aussichtsturm", "Flusstal hinab", "Große Hügelrunde", "Zum Bäcker"]
+            : ["Lakes Loop", "Over the Ridge", "To the Lookout", "Down the River Valley", "Big Hill Loop", "To the Bakery"]
+        for index in 0..<count {
+            let loop = index % 2 == 0
+            let points = 240 + index * 60
+            let size = 0.04 + Double(index % 4) * 0.025
+            // Invented, far from any ride of the library: a wobbly circle, or a curved line.
+            let centre = (lat: 46.30 + Double(index % 3) * 0.12, lon: 10.20 + Double(index / 3) * 0.15)
+            let body = (0..<points).map { i -> String in
+                let t = Double(i) / Double(points - 1)
+                let lat, lon: Double
+                if loop {
+                    let angle = t * 2 * .pi
+                    let wobble = 1 + 0.18 * sin(angle * Double(3 + index))
+                    lat = centre.lat + size * wobble * sin(angle)
+                    lon = centre.lon + size * 1.4 * wobble * cos(angle)
+                } else {
+                    lat = centre.lat + size * 1.6 * t
+                    lon = centre.lon + size * 1.2 * sin(t * .pi * 1.3)
+                }
+                let height = 420 + 180 * sin(t * .pi * Double(1 + index % 3)) + 40 * sin(t * 37)
+                return "<trkpt lat=\"\(lat)\" lon=\"\(lon)\"><ele>\(Int(height))</ele></trkpt>"
+            }.joined()
+            let creator = index % 3 == 2 ? "Planer" : "https://www.komoot.de"
+            let gpx = "<?xml version=\"1.0\" encoding=\"UTF-8\"?><gpx version=\"1.1\" creator=\"\(creator)\" xmlns=\"http://www.topografix.com/GPX/1/1\">"
+                + "<trk><name>\(names[index % names.count])</name><trkseg>\(body)</trkseg></trk></gpx>"
+            database.library.importFile(data: Data(gpx.utf8), fileName: "Demo-Tour \(index + 1).gpx", as: .plannedTour)
+        }
+        reload()
+    }
+
     /// For trying the sport menu (B-289): `-WattspurDemoCar YES` adds a car and puts every third ride
     /// in it, the newest first. Debug builds only.
     func addDemoCarForTesting() {
@@ -470,6 +510,46 @@ final class PhoneLibrary {
         LibraryWriteHold.writing { database?.deletePermanently(rideID: ride.id) }
         routes[ride.id.uuidString] = nil
         reload()
+    }
+
+    // MARK: - Planned tours (B-373)
+
+    /// Planned tours outside the trash, newest first, read on every reload.
+    private(set) var plannedTours: [PlannedTourSummary] = []
+    /// Planned tours in the trash, newest first, read on every reload.
+    private(set) var trashedTours: [TrashedPlannedTour] = []
+
+    /// The whole line and the elevation profile of a tour, for its detail; loaded in `.task`.
+    func plannedTourDetail(_ id: UUID) -> PhoneDatabase.PlannedTourDetail? {
+        database?.plannedTourDetail(id: id)
+    }
+
+    func rename(_ tour: PlannedTourSummary, to name: String) {
+        guard LibraryWriteHold.writing({ database?.renamePlannedTour(id: tour.id, to: name) }) == true else { return }
+        reload()
+    }
+
+    func moveToTrash(_ tour: PlannedTourSummary) {
+        LibraryWriteHold.writing { database?.movePlannedTourToTrash(id: tour.id) }
+        reload()
+    }
+
+    func restore(_ tour: PlannedTourSummary) {
+        LibraryWriteHold.writing { database?.restorePlannedTour(id: tour.id) }
+        reload()
+    }
+
+    func deletePermanently(_ tour: PlannedTourSummary) {
+        LibraryWriteHold.writing { database?.deletePlannedTourPermanently(id: tour.id) }
+        reload()
+    }
+
+    /// The tour's GPX file for the share sheet, read only when the user shares.
+    func sharedGPX(for tour: PlannedTourSummary) -> SharedGPX {
+        SharedGPX(fileName: GPXWriter.fileName(tour.name)) { [weak self] in
+            guard let file = self?.database?.plannedTourGPX(id: tour.id) else { throw CocoaError(.fileNoSuchFile) }
+            return file.data
+        }
     }
 }
 
