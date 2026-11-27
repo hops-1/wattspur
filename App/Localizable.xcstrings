@@ -10336,6 +10336,236 @@
           }
         }
       }
+    },
+    "Planned Tours" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Geplante Touren"
+          }
+        }
+      }
+    },
+    "Import GPX…" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "GPX importieren …"
+          }
+        }
+      }
+    },
+    "Drag GPX files from komoot here" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "GPX-Dateien aus komoot hierher ziehen"
+          }
+        }
+      }
+    },
+    "No Planned Tours" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Keine geplanten Touren"
+          }
+        }
+      }
+    },
+    "Plan a tour in komoot, export it as GPX and drag the file here." : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Plane eine Tour in komoot, exportiere sie als GPX und zieh die Datei hierher."
+          }
+        }
+      }
+    },
+    "Select a Tour" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tour auswählen"
+          }
+        }
+      }
+    },
+    "Rename Tour" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tour umbenennen"
+          }
+        }
+      }
+    },
+    "Share GPX" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "GPX teilen"
+          }
+        }
+      }
+    },
+    "Map of the planned tour" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Karte der geplanten Tour"
+          }
+        }
+      }
+    },
+    "Elevation profile" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Höhenprofil"
+          }
+        }
+      }
+    },
+    "This tour has no elevation data." : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Diese Tour hat keine Höhendaten."
+          }
+        }
+      }
+    },
+    "Navigation comes with a later version, on the iPhone." : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Navigiert wird mit einer späteren Version, am iPhone."
+          }
+        }
+      }
+    },
+    "Rename, share or move the tour to the trash" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tour umbenennen, teilen oder in den Papierkorb legen"
+          }
+        }
+      }
+    },
+    "Rides and tours are deleted for good after 30 days." : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Fahrten und Touren werden nach 30 Tagen endgültig gelöscht."
+          }
+        }
+      }
+    },
+    "Delete all rides and tours in the trash for good?" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Alle Fahrten und Touren im Papierkorb endgültig löschen?"
+          }
+        }
+      }
+    },
+    "%lld tours" : {
+      "localizations" : {
+        "de" : {
+          "variations" : {
+            "plural" : {
+              "one" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "%lld Tour"
+                }
+              },
+              "other" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "%lld Touren"
+                }
+              }
+            }
+          }
+        },
+        "en" : {
+          "variations" : {
+            "plural" : {
+              "one" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "%lld tour"
+                }
+              },
+              "other" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "%lld tours"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "%lld items" : {
+      "localizations" : {
+        "de" : {
+          "variations" : {
+            "plural" : {
+              "one" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "%lld Eintrag"
+                }
+              },
+              "other" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "%lld Einträge"
+                }
+              }
+            }
+          }
+        },
+        "en" : {
+          "variations" : {
+            "plural" : {
+              "one" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "%lld item"
+                }
+              },
+              "other" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "%lld items"
+                }
+              }
+            }
+          }
+        }
+      }
     }
   },
   "version" : "1.0"

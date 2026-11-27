@@ -10,7 +10,7 @@ extension Notification.Name {
 }
 
 enum AppSection: Hashable {
-    case rides, analysis, highlights, map, trash, profile
+    case rides, plannedTours, analysis, highlights, map, trash, profile
 }
 
 /// Main window: sidebar, ride list and detail (B-021).
@@ -23,6 +23,8 @@ struct ContentView: View {
     /// The main window, to bring it forward when Settings asks for the profile.
     @State private var window: NSWindow?
     @State private var selectedRideIDs: Set<UUID> = []
+    /// The tour shown under “Planned Tours” (B-385).
+    @State private var selectedTourID: UUID?
     /// Rides chosen in the list for the analysis (LIST-06); `nil` = analyse by period.
     @State private var analysisSelection: Set<UUID>?
     /// The selected rides are shown side by side (B-100, CMP-01).
@@ -69,6 +71,7 @@ struct ContentView: View {
     /// The sport chosen in the sidebar (B-288); see `shownSport` for the one in effect.
     @AppStorage(SettingsKey.shownSport) private var storedSport: Sport = .cycling
     @Query private var allRides: [Ride]
+    @Query(filter: PlannedRoute.listedPredicate) private var plannedRoutes: [PlannedRoute]
     private var rideCount: Int { allRides.count }
     /// The sports there are: the switch shows from the second one on (B-288).
     private var sports: [Sport] { SportChoice.available(bikes: openBikes, rides: allRides) }
@@ -176,6 +179,12 @@ struct ContentView: View {
                     section = .rides
                 }
                 .frame(maxWidth: .infinity, maxHeight: .infinity)
+            } else if section == .plannedTours {
+                PlannedToursView(selection: $selectedTourID)
+                    .frame(width: listWidth)
+                ColumnResizeHandle(width: $listWidth, range: 260...520, showsDivider: true)
+                plannedTourDetail
+                    .frame(maxWidth: .infinity, maxHeight: .infinity)
             } else if section == .profile {
                 ProfileView(addVehicleRequested: $addVehicleRequested)
                     .frame(maxWidth: .infinity, maxHeight: .infinity)
@@ -314,6 +323,7 @@ struct ContentView: View {
     #if DEBUG
     private func startDemoMode() {
         guard DemoMode.isOn else { return }
+        if DemoMode.dark { NSApplication.shared.appearance = NSAppearance(named: .darkAqua) }
         if let id = DemoMode.rideID { selectedRideIDs = [id] }
         NSApplication.shared.activate()
         if let size = DemoMode.size {
@@ -331,6 +341,8 @@ struct ContentView: View {
         case "records"?: highlightsTab = .records; section = .highlights
         case "goals"?: highlightsTab = .goals; section = .highlights
         case "map"?: section = .map
+        case "tours"?: section = .plannedTours
+        case "trash"?: section = .trash
         case "profile"?: section = .profile
         default: break
         }
@@ -434,6 +446,16 @@ struct ContentView: View {
                 } onCompare: { comparing = true } onMerged: { selectedRideIDs = [$0] }
                 .frame(maxWidth: .infinity, maxHeight: .infinity)
             }
+        }
+    }
+
+    /// The tour selected under “Planned Tours”, or a hint (B-385).
+    @ViewBuilder
+    private var plannedTourDetail: some View {
+        if let id = selectedTourID, let route = plannedRoutes.first(where: { $0.id == id }) {
+            PlannedTourDetailView(route: route)
+        } else {
+            ContentUnavailableView("Select a Tour", systemImage: "point.bottomleft.forward.to.point.topright.scurvepath")
         }
     }
 
@@ -564,6 +586,8 @@ struct SidebarRail: View {
     /// Wide enough that the window's traffic-light buttons sit inside the panel.
     static let compactWidth = 84.0
     @Query(filter: #Predicate<Ride> { $0.deletedAt != nil }) private var trashedRides: [Ride]
+    @Query(filter: #Predicate<PlannedRoute> { $0.deletedAt != nil }) private var trashedTours: [PlannedRoute]
+    private var trashCount: Int { trashedRides.count + trashedTours.count }
     @Query private var riders: [Rider]
 
     var body: some View {
@@ -591,6 +615,9 @@ struct SidebarRail: View {
                 SportSwitch(sports: sports, selection: $sport, compact: compact)
             }
             row("Rides", systemImage: "bicycle", target: .rides, shortcut: "1")
+            // ⌘1 to ⌘6 were taken before the tours came (B-385).
+            row("Planned Tours", systemImage: "point.bottomleft.forward.to.point.topright.scurvepath",
+                target: .plannedTours, shortcut: "7")
             row("Analysis", systemImage: "chart.bar", target: .analysis, shortcut: "2")
             row("Highlights", systemImage: "trophy", target: .highlights, shortcut: "4")
             // ⌘3 stays with the trash.
@@ -599,7 +626,7 @@ struct SidebarRail: View {
             Spacer()
 
             row("Trash", systemImage: "trash", target: .trash, shortcut: "3",
-                badge: trashedRides.isEmpty ? nil : trashedRides.count)
+                badge: trashCount == 0 ? nil : trashCount)
             profileRow
         }
         .padding(10)
@@ -691,7 +718,7 @@ struct SidebarRail: View {
         .keyboardShortcut(shortcut, modifiers: .command)
         // In the icon-only rail the label is not visible, so name the button explicitly.
         .accessibilityLabel(Text(title))
-        .accessibilityValue(badge.map { Text("\($0) rides") } ?? Text(verbatim: ""))
+        .accessibilityValue(badge.map { Text("\($0) items") } ?? Text(verbatim: ""))
         .accessibilityAddTraits(selected ? .isSelected : [])
     }
 }

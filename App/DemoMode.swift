@@ -11,7 +11,7 @@ import WattspurKit
 ///
 /// The extra arguments only mask the stored settings for this launch (argument
 /// domain of `UserDefaults`); nothing is written to the real library or settings.
-/// `-WattspurDemoSection analysis|highlights|records|goals|map|profile` opens that section instead of the rides.
+/// `-WattspurDemoSection analysis|highlights|records|goals|map|tours|trash|profile` opens that section instead of the rides.
 /// `-WattspurDemoRides 2` adds that many copies of the sample ride as ordinary
 /// rides, one week apart, e.g. to try merging rides (B-095).
 /// `-bikesHintDone YES` hides the note "Set up your bikes" after the update to 1.5 (B-138).
@@ -25,6 +25,8 @@ import WattspurKit
 /// `-WattspurDemoSelect "Demo 8"` selects that ride instead of the sample ride.
 /// `-WattspurDemoImport "/path/a.fit,/path/b.gpx"` imports these files into the demo library, in that
 /// order, like a drop in the list (B-145): to try GPX rides without touching the real library.
+/// `-WattspurDemoDark YES` shows the app dark, whatever the Mac is set to (B-385).
+/// `-WattspurDemoTours YES` adds three invented planned tours (B-385), made up here as GPX files.
 @MainActor
 enum DemoMode {
     static var isOn: Bool { UserDefaults.standard.bool(forKey: "WattspurDemo") }
@@ -39,6 +41,7 @@ enum DemoMode {
     }
     static var similar: Bool { UserDefaults.standard.bool(forKey: "WattspurDemoSimilar") }
     static var routeName: String? { UserDefaults.standard.string(forKey: "WattspurDemoRoute") }
+    static var dark: Bool { UserDefaults.standard.bool(forKey: "WattspurDemoDark") }
     static var section: String? { UserDefaults.standard.string(forKey: "WattspurDemoSection") }
 
     /// The sample ride, selected in the list on launch.
@@ -59,6 +62,7 @@ enum DemoMode {
            let ride = try? container.mainContext.fetch(FetchDescriptor<Ride>()).first(where: { $0.name == name }) {
             rideID = ride.id
         }
+        if UserDefaults.standard.bool(forKey: "WattspurDemoTours") { addTours(to: container.mainContext) }
         if UserDefaults.standard.bool(forKey: "WattspurDemoBikes") { addBikes(to: container.mainContext) }
         if UserDefaults.standard.bool(forKey: "WattspurDemoCar") { addCar(to: container.mainContext) }
         if UserDefaults.standard.bool(forKey: "WattspurDemoGoals") {
@@ -99,6 +103,35 @@ enum DemoMode {
             .sorted { $0.startDate < $1.startDate }
         for (index, ride) in rides.enumerated() where index % 3 == 0 { ride.bike = car }
         try? context.save()
+    }
+
+    /// Three invented tours, imported like a GPX file without times (B-385). No real place: loops
+    /// and a line drawn from sine curves.
+    private static func addTours(to context: ModelContext) {
+        let library = RideLibrary(context: context)
+        let tours: [(name: String, creator: String, lat: Double, lon: Double, size: Double, climb: Double, loop: Bool)] = [
+            ("Feierabendrunde", "Demo", 46.62, 11.32, 0.025, 60, true),
+            ("Zum Badesee", "Demo", 46.55, 11.20, 0.06, 25, false),
+            ("Hügeltour Nord", "https://www.komoot.de", 46.70, 11.42, 0.07, 140, true),
+        ]
+        for tour in tours {
+            let count = 400
+            var points = ""
+            for i in 0...count {
+                let t = Double(i) / Double(count)
+                let angle = t * 2 * .pi
+                let lat = tour.loop ? tour.lat + tour.size * 0.6 * sin(angle) + tour.size * 0.12 * sin(3 * angle)
+                    : tour.lat + tour.size * 0.5 * t + tour.size * 0.08 * sin(4 * angle)
+                let lon = tour.loop ? tour.lon + tour.size * cos(angle) : tour.lon + tour.size * 1.4 * t
+                let ele = 180 + tour.climb * (sin(angle * 2) * sin(angle * 2)) + tour.climb * 0.3 * sin(7 * angle)
+                points += String(format: "<trkpt lat=\"%.6f\" lon=\"%.6f\"><ele>%.1f</ele></trkpt>", lat, lon, ele)
+            }
+            let gpx = "<?xml version=\"1.0\" encoding=\"UTF-8\"?><gpx version=\"1.1\" creator=\"\(tour.creator)\">"
+                + "<trk><name>\(tour.name)</name><trkseg>\(points)</trkseg></trk></gpx>"
+            library.importFile(data: Data(gpx.utf8), fileName: "\(tour.name).gpx", as: .plannedTour)
+        }
+        // The trash shows rides and tours together.
+        if section == "trash", let last = library.plannedRoutes().last { library.moveToTrash([last]) }
     }
 
     private static func addCopies(_ count: Int, to context: ModelContext) {
