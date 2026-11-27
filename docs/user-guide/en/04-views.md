@@ -79,6 +79,17 @@ The comparison shows 2 to 4 rides side by side, next to the list. The rides sele
 - **Export PDF** at the top left (⇧⌘E) opens the ride as a PDF in Preview: map, key figures and details on the first page, the charts on the second. The arrow next to it offers **Save as PDF…**.
 - **Export as GPX…** next to it saves the route as a GPX file (GPX 1.1) for komoot, a navigation device or another app: position, elevation and time of every second, plus power and cadence in the extensions that Garmin and Strava use. A merged ride keeps one segment per part, so no straight line is drawn across the gap. The sample ride exports its moved route.
 
+## Planned tours
+From Mac 1.11 the sidebar has the entry **Planned Tours** (⌘7). A planned tour is a route you still want to ride, for example from komoot: the line with heights, without times. It does not count as a ride.
+
+![Planned tours with map and elevation profile](../images/en/planned-tours.png)
+
+- **Import:** drag a GPX file into the list or choose **Import GPX…**. If the file has estimated times, as komoot's do, Wattspur asks “Ride or Planned Tour?”; for komoot **Planned Tour** is preselected. A file without any times becomes a tour without asking. The watched folder does not ask.
+- **List:** name with a small outline of the route, distance, ascent and source (komoot or GPX).
+- **Detail:** the map with the planned line in **blue** (your rides are magenta), distance, ascent, descent and the elevation profile.
+- **Rename, Share GPX, Trash:** with the buttons beside the name or by right-clicking in the list. **Share GPX** passes on the original file. Delete moves the tour to the trash, ⌘Z brings it back.
+- With iCloud the tours appear on the iPhone and iPad too. Navigation comes with a later version, on the iPhone.
+
 ## Analysis
 Choose **Analysis** in the sidebar (⌘2). The ride list on the left shows only the rides in the analysis.
 - **Show on Map** next to the heading shows exactly these rides on the [map](#map).
@@ -141,7 +152,7 @@ The roads are drawn below your route, **orange** from a curvature of 300 and **r
 **Customize Map › Layers** lists the imported regions and removes them. The road data is not part of the library backup; import the files again on a new Mac.
 
 ## Trash
-Rides you delete stay in the trash for 30 days. **Restore** puts a ride back into the list. **Empty Trash…** deletes all rides in the trash for good, including their original files.
+Rides and planned tours you delete stay in the trash for 30 days. **Restore** puts a ride or tour back into its list. **Empty Trash…** deletes everything in the trash for good, including the original files.
 
 ## Profile and settings
 - **Profile** (bottom of the sidebar, ⌘6): your name and body data and your bikes, see [Profile and bikes](07-profile-and-bikes.md).
@@ -155,6 +166,7 @@ Rides you delete stay in the trash for 30 days. **Restore** puts a ride back int
 |---|---|
 | ⌘1, ⌘2, ⌘3 | Rides, Analysis, Trash |
 | ⌘4, ⌘5, ⌘6 | Highlights, Map, Profile |
+| ⌘7 | Planned Tours |
 | ⌘[ | Back to the map, the analysis, Highlights or the history (in the ride detail) |
 | ⌘← / ⌘→ | Previous / next year in Highlights › Year |
 | ⌘O | Import rides |

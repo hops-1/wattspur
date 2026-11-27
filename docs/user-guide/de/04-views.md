@@ -79,6 +79,17 @@ Der Vergleich zeigt 2 bis 4 Fahrten nebeneinander, rechts neben der Liste. Die i
 - **PDF exportieren** oben links (⇧⌘E) öffnet die Fahrt als PDF in Vorschau: Karte, Kennzahlen und Details auf der ersten Seite, die Diagramme auf der zweiten. Der Pfeil daneben bietet **Als PDF sichern …**.
 - **Als GPX exportieren …** daneben sichert die Route als GPX-Datei (GPX 1.1) für komoot, ein Navigationsgerät oder eine andere App: Position, Höhe und Zeit jeder Sekunde, dazu Leistung und Trittfrequenz in den Erweiterungen, die Garmin und Strava verwenden. Eine zusammengefügte Fahrt behält ein Segment je Teil, damit keine gerade Linie über die Lücke entsteht. Die Beispielfahrt exportiert ihre verschobene Route.
 
+## Geplante Touren
+Ab Mac 1.11 hat die Seitenleiste den Eintrag **Geplante Touren** (⌘7). Eine geplante Tour ist eine Strecke, die du noch fahren willst, zum Beispiel aus komoot: die Linie mit Höhen, ohne Zeiten. Sie zählt nicht als Fahrt.
+
+![Geplante Touren mit Karte und Höhenprofil](../images/de/planned-tours.png)
+
+- **Importieren:** Zieh eine GPX-Datei in die Liste oder wähle **GPX importieren …**. Hat die Datei geschätzte Zeiten, wie bei komoot, fragt Wattspur „Fahrt oder geplante Tour?“; bei komoot ist **Geplante Tour** vorgewählt. Eine Datei ganz ohne Zeiten wird ohne Frage eine Tour. Der überwachte Ordner fragt nicht.
+- **Liste:** Name mit kleiner Routenform, Strecke, Anstieg und Quelle (komoot oder GPX).
+- **Detail:** die Karte mit der geplanten Linie in **Blau** (deine Fahrten sind magenta), Strecke, Anstieg, Abstieg und das Höhenprofil.
+- **Umbenennen, GPX teilen, Papierkorb:** mit den Knöpfen neben dem Namen oder per Rechtsklick in der Liste. **GPX teilen** gibt die Originaldatei weiter. Rückschritt legt die Tour in den Papierkorb, ⌘Z holt sie zurück.
+- Mit iCloud erscheinen die Touren auch am iPhone und iPad. Navigiert wird erst mit einer späteren Version, am iPhone.
+
 ## Auswertung
 In der Seitenleiste **Auswertung** wählen (⌘2). Links steht die Fahrtenliste, aber nur mit den Fahrten, die gerade ausgewertet werden.
 - **In der Karte zeigen** neben der Überschrift zeigt genau diese Fahrten auf der [Karte](#karte).
@@ -141,7 +152,7 @@ Die Straßen werden unter deiner Route gezeichnet, **orange** ab einer Kurvigkei
 Unter **Karte anpassen › Ebenen** stehen die importierten Regionen, dort lassen sie sich auch entfernen. Die Straßendaten sind nicht Teil des Backups der Mediathek; auf einem neuen Mac importierst du die Dateien noch einmal.
 
 ## Papierkorb
-Gelöschte Fahrten bleiben 30 Tage im Papierkorb. **Wiederherstellen** holt eine Fahrt zurück in die Liste. **Papierkorb leeren …** löscht alle Fahrten darin endgültig, samt Originaldateien.
+Gelöschte Fahrten und geplante Touren bleiben 30 Tage im Papierkorb. **Wiederherstellen** holt eine Fahrt oder Tour zurück in ihre Liste. **Papierkorb leeren …** löscht alles darin endgültig, samt Originaldateien.
 
 ## Profil und Einstellungen
 - **Profil** (unten in der Seitenleiste, ⌘6): dein Name, deine Körperdaten und deine Bikes, siehe [Profil und Bikes](07-profile-and-bikes.md).
@@ -155,6 +166,7 @@ Gelöschte Fahrten bleiben 30 Tage im Papierkorb. **Wiederherstellen** holt eine
 |---|---|
 | ⌘1, ⌘2, ⌘3 | Fahrten, Auswertung, Papierkorb |
 | ⌘4, ⌘5, ⌘6 | Highlights, Karte, Profil |
+| ⌘7 | Geplante Touren |
 | ⌘[ | Zurück zur Karte, Auswertung, zu Highlights oder zum Verlauf (im Tour-Detail) |
 | ⌘← / ⌘→ | Vorheriges / nächstes Jahr in Highlights › Jahr |
 | ⌘O | Fahrten importieren |
