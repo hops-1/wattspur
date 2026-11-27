@@ -6979,6 +6979,286 @@
           }
         }
       }
+    },
+    "Tours" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Touren"
+          }
+        }
+      }
+    },
+    "Planned Tours" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Geplante Touren"
+          }
+        }
+      }
+    },
+    "Search tours" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Touren suchen"
+          }
+        }
+      }
+    },
+    "Import GPX File …" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "GPX-Datei importieren …"
+          }
+        }
+      }
+    },
+    "No Planned Tours" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Keine geplanten Touren"
+          }
+        }
+      }
+    },
+    "Plan a tour in komoot or another planner, export it as GPX and share it with Wattspur, or import the file here." : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Plane eine Tour in komoot oder einem anderen Planer, exportiere sie als GPX und teile sie mit Wattspur, oder importiere die Datei hier."
+          }
+        }
+      }
+    },
+    "Show All Tours" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Alle Touren zeigen"
+          }
+        }
+      }
+    },
+    "Rename …" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Umbenennen …"
+          }
+        }
+      }
+    },
+    "Loops" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Rundtouren"
+          }
+        }
+      }
+    },
+    "One Way" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Von A nach B"
+          }
+        }
+      }
+    },
+    "Loop" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Rundtour"
+          }
+        }
+      }
+    },
+    "GPX File" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "GPX-Datei"
+          }
+        }
+      }
+    },
+    "%lld of %lld tours" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%1$lld von %2$lld Touren"
+          }
+        }
+      }
+    },
+    "Rename Tour" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tour umbenennen"
+          }
+        }
+      }
+    },
+    "Navigate" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Navigieren"
+          }
+        }
+      }
+    },
+    "Tour" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tour"
+          }
+        }
+      }
+    },
+    "Type" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Art"
+          }
+        }
+      }
+    },
+    "Imported" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Importiert"
+          }
+        }
+      }
+    },
+    "Planned vs. Ridden" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Geplant vs. gefahren"
+          }
+        }
+      }
+    },
+    "No ride of this tour yet" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Noch keine Fahrt zu dieser Tour"
+          }
+        }
+      }
+    },
+    "Later Wattspur shows here how a ride went against the plan." : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Später zeigt Wattspur hier, wie eine Fahrt im Vergleich zum Plan lief."
+          }
+        }
+      }
+    },
+    "Move this tour to the trash?" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Diese Tour in den Papierkorb legen?"
+          }
+        }
+      }
+    },
+    "You can restore it in the trash for 30 days." : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Im Papierkorb kannst du sie 30 Tage lang wiederherstellen."
+          }
+        }
+      }
+    },
+    "Navigation comes with a later version of Wattspur." : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Die Navigation kommt mit einer späteren Version von Wattspur."
+          }
+        }
+      }
+    },
+    "You navigate on the iPhone, with a later version of Wattspur." : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Navigiert wird am iPhone, mit einer späteren Version von Wattspur."
+          }
+        }
+      }
+    },
+    "Delete everything in the trash for good?" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Alles im Papierkorb endgültig löschen?"
+          }
+        }
+      }
+    },
+    "Delete %lld Tours" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%lld Touren löschen"
+          }
+        }
+      }
+    },
+    "Delete %lld Rides and %lld Tours" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%1$lld Fahrten und %2$lld Touren löschen"
+          }
+        }
+      }
     }
   },
   "version" : "1.1"

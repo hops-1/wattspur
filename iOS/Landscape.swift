@@ -47,13 +47,15 @@ private struct TabBarRoomInLandscape: ViewModifier {
     }
 }
 
-/// The tab bar in landscape: a glass capsule at the bottom left with the three tabs. Shows nothing
+/// The tab bar in landscape: a glass capsule at the bottom left with the five tabs. Shows nothing
 /// in portrait, where the system tab bar is at the bottom.
 struct LandscapeTabBar: View {
     @Binding var tab: WattspurApp.Tab
     @Environment(\.isLandscape) private var isLandscape
 
     static let height: CGFloat = 52
+    /// Five tabs (B-373) still leave most of a small iPhone's width in landscape (13 mini: 812 pt).
+    static let itemWidth: CGFloat = 68
 
     var body: some View {
         if isLandscape {
@@ -61,6 +63,7 @@ struct LandscapeTabBar: View {
                 HStack(spacing: 2) {
                     item(.overview, "Overview", systemImage: "square.grid.2x2")
                     item(.rides, "Rides", systemImage: "list.bullet")
+                    item(.tours, "Tours", systemImage: "point.bottomleft.forward.to.point.topright.scurvepath")
                     item(.map, "Map", systemImage: "map")
                     item(.more, "More", systemImage: "ellipsis")
                 }
@@ -86,7 +89,7 @@ struct LandscapeTabBar: View {
                     .font(.caption2.weight(selected ? .semibold : .regular))
                     .lineLimit(1)
             }
-            .frame(width: 74, height: Self.height - 8)
+            .frame(width: Self.itemWidth, height: Self.height - 8)
             .foregroundStyle(selected ? Color.track : Color.primary)
             .background {
                 if selected {

@@ -85,7 +85,7 @@ From 0.7.0 on, **Wattspur** is in the row of apps in the share menu, also for ap
 If Wattspur does not open by itself, open the app. It then picks up the shared files.
 
 - **Heart rate, cadence and power** are read from GPX files of other trackers too, when the file has them (Garmin, Wahoo, Strava).
-- **A planned tour from komoot** has no times. Wattspur then says: “this is a planned route, not a ride”. Export the tour again after you have ridden it.
+- **A planned tour from komoot** becomes a planned tour in the tab **Tours** from iPhone 1.7 (see [Planned tours](#planned-tours-iphone-17-and-later)). Up to 1.6 Wattspur said: “this is a planned route, not a ride”.
 - **A link** (for example komoot.com/tour/…) is not a ride. Wattspur does not load links, but tells you how to export the GPX file in that app.
 
 These apps are tested:
@@ -93,7 +93,7 @@ These apps are tested:
 | App | What you share | Result |
 |---|---|---|
 | Bosch eBike Flow | ride as a FIT file | works (checked with 0.7.0); Wattspur opens and imports |
-| komoot | ridden tour as a GPX file | works (checked with 0.7.0); a planned tour and a link give the hint |
+| komoot | ridden tour as a GPX file | works (checked with 0.7.0); a planned tour goes to **Tours** from 1.7, a link gives the hint |
 | Strava | activity as a GPX file | not checked yet |
 | Garmin Connect | activity as a GPX or FIT file | not checked yet |
 
@@ -226,6 +226,16 @@ When the iPhone is connected to the car, Wattspur shows up in CarPlay. It is the
 - **After the app was ended** (iPhone 1.6.9 and later): if iOS ends Wattspur during the ride, for example when memory runs low, the recording goes on by itself at the next start. If it was interrupted for more than 15 minutes, the iPhone asks whether to continue, and CarPlay offers only **Continue Recording**.
 - CarPlay has no map and no ride list. You see the ride on the iPhone afterwards.
 
+## Planned tours (iPhone 1.7 and later)
+A tour you planned in komoot or another planner is in the tab **Tours**, between **Rides** and **Map**.
+
+- **It comes in** as a GPX file: export the planned tour in komoot as a GPX file and share it with **Wattspur**. Or **+** beside the search field opens the Files app. If the file has estimated times, Wattspur asks “Ride or Planned Tour?”; for a komoot file **Planned Tour** is already chosen.
+- **The list** shows each tour as a card with its line in blue, with kilometres, metres of ascent, loop or **One Way** and the source. At the top you search by name. The pills **Loops**, **One Way**, **Distance** and, with tours from more than one source, **Source** narrow the list; ✕ resets them.
+- **A tap on a tour** shows the map with the line and the elevation profile over its lower edge. Below are distance, ascent, descent, altitude, type, source and when you imported it. **Navigate** is already there but works only with a later version. **Planned vs. Ridden** stays empty until then.
+- **Share GPX** passes on the original file, e.g. to a bike computer. **Rename …** changes the name, **Move to Trash** keeps the tour for 30 days in **More › Trash**. There a swipe to the right brings it back. A long press on a tour in the list offers the same.
+- Held sideways, the list and the tour stand side by side, as with the rides.
+- **With iCloud** the tours are the same on iPhone, iPad and Mac. Without iCloud they stay on the device.
+
 ## What you ride: bike, motorcycle, car
 From iPhone 1.1 you choose the device at the start. A tap on **Start Ride** takes the device of the last recording. Below it, “with Nugget ▾” in small type opens **What Are You Riding?** with your bikes, vehicles and shoes. Below them, **Vehicle Type** offers **Bicycle**, **Car** and **Motorcycle** without a device of your own, e.g. for a hired bike or a rental car (Bicycle from iPhone 1.1.1). A tap on a row starts the ride with it. When you save, the device is already chosen; you can still change it there. The Live Activity shows its symbol.
 
@@ -249,6 +259,8 @@ From version 1.3 Wattspur runs on the iPad too. Full screen or in a wide window,
 From version 1.4 the iPad does what the Mac does. After the map the sidebar shows **Analysis** and **Highlights**. The analysis shows a period with the totals, the change to the period before, the averages, the bars and the trends. The highlights show your year, your records and your goals; add a goal with **Add Goal…** and change it with the pencil, over iCloud on the Mac too. Both follow the sport at the top of the sidebar.
 
 Under **Rides**, tap **Select** beside the month above the list and then two to four rides: the comparison appears on the right with a map, a chart and a table. **Merge…** makes one ride of the chosen ones; the originals stay inside it, and the Mac can split them again. Drag FIT and GPX files from the Files app (Split View) onto the list. The share button of a ride offers **Share GPX** and **Share PDF**; the PDF is one page with the map, the key figures, speed and elevation.
+
+From version 1.7 the sidebar shows **Planned Tours** after **Rides**: the tours on the left, the chosen tour with map, elevation profile and figures on the right, as on the iPhone (see [Planned tours](#planned-tours-iphone-17-and-later)). You navigate on the iPhone, with a later version.
 
 From version 1.5 the switch **Difference from Average** above the table shows under each value of the comparison how far it is from your average, as on the Mac. The share symbol beside **Merge…** exports the comparison as a PDF (map, then table). **Cancel** beside the month above the list ends the selection.
 

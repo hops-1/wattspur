@@ -10,7 +10,7 @@ import WidgetKit
 /// the rides, “More” with iCloud and the trash, and the GPS recording (docs/BACKLOG.md).
 @main
 struct WattspurApp: App {
-    enum Tab: Hashable { case overview, rides, map, more }
+    enum Tab: Hashable { case overview, rides, tours, map, more }
 
     /// What the start built once (B-389): the window's content gets it without reading any state,
     /// so SwiftUI never has to build the window again.
@@ -42,8 +42,10 @@ struct WattspurApp: App {
         // the newest ride open, or a recording running from the start.
         library.importRecentDemoRidesForTesting(UserDefaults.standard.integer(forKey: "WattspurDemoRecent"))
         if UserDefaults.standard.bool(forKey: "WattspurDemoCar") { library.addDemoCarForTesting() }
+        library.importDemoToursForTesting(UserDefaults.standard.integer(forKey: "WattspurDemoTours"))
         switch UserDefaults.standard.string(forKey: "WattspurDemoTab") {
         case "rides": tab = .rides
+        case "tours": tab = .tours
         case "map": tab = .map
         case "more": tab = .more
         default: break
@@ -160,7 +162,7 @@ struct AppRoot: View {
         })
     }
 
-    /// The iPhone's four tabs; also the iPad in a narrow window.
+    /// The iPhone's five tabs; also the iPad in a narrow window.
     private var tabs: some View {
         TabView(selection: $tab) {
             SwiftUI.Tab("Overview", systemImage: "square.grid.2x2", value: Tab.overview) {
@@ -176,6 +178,14 @@ struct AppRoot: View {
             SwiftUI.Tab("Rides", systemImage: "list.bullet", value: Tab.rides) {
                 NavigationStack {
                     RidesView(filter: $rideFilter, openedRideID: $openedRideID)
+                        .hidesTabBarInLandscape()
+                        .hidesTitleBar()
+                }
+            }
+            // Planned tours (B-373, design B of B-371): between the rides and the map.
+            SwiftUI.Tab("Tours", systemImage: "point.bottomleft.forward.to.point.topright.scurvepath", value: Tab.tours) {
+                NavigationStack {
+                    PlannedToursView()
                         .hidesTabBarInLandscape()
                         .hidesTitleBar()
                 }

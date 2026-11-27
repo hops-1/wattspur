@@ -166,7 +166,7 @@ struct RideFilterBar: View {
 }
 
 /// A rounded button with a small arrow, filled in the track colour while its filter is set.
-private struct FilterChip: View {
+struct FilterChip: View {
     private var text: Text
     var active: Bool
 
